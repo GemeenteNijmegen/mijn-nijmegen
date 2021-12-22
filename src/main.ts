@@ -1,11 +1,11 @@
 import { App, Stack, StackProps, Tags, aws_dynamodb as DynamoDB, pipelines, Stage, RemovalPolicy, Environment } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { Statics } from './statics';
 import * as Dotenv from 'dotenv';
+import { Statics } from './statics';
 
 export interface PipelineStackProps extends StackProps{
   branchName: string;
-  deployToEnvironment: Environment
+  deployToEnvironment: Environment;
 }
 
 class PipelineStack extends Stack {
@@ -24,7 +24,7 @@ class PipelineStack extends Stack {
       throw new Error('No CodeStar connection ARN provided');
     }
     const connection: string = process.env.CONNECTION_ARN!;
-    const source = pipelines.CodePipelineSource.connection('GemeenteNijmegen/mijnuitkering', this.branchName, {
+    const source = pipelines.CodePipelineSource.connection('GemeenteNijmegen/mijn-uitkering', this.branchName, {
       connectionArn: connection,
     });
     const pipeline = new pipelines.CodePipeline(this, 'mijnuitkering', {
@@ -35,7 +35,7 @@ class PipelineStack extends Stack {
       synth: new pipelines.ShellStep('Synth', {
         input: source,
         env: {
-          BRANCH_NAME: this.branchName
+          BRANCH_NAME: this.branchName,
         },
         commands: [
           'yarn install --frozen-lockfile', //nodig om projen geinstalleerd te krijgen
@@ -118,7 +118,7 @@ if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'develop
     {
       env: deploymentEnvironment,
       branchName: 'development',
-      deployToEnvironment: sandboxEnvironment
+      deployToEnvironment: sandboxEnvironment,
     },
   );
 } else if (process.env.BRANCH_NAME == 'acceptance') {
@@ -126,7 +126,7 @@ if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'develop
     {
       env: deploymentEnvironment,
       branchName: 'acceptance',
-      deployToEnvironment: acceptanceEnvironment
+      deployToEnvironment: acceptanceEnvironment,
     },
   );
 }
