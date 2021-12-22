@@ -1,6 +1,7 @@
 import { App, Stack, StackProps, Tags, aws_dynamodb as DynamoDB, pipelines, Stage, RemovalPolicy, Environment } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
+import * as Dotenv from 'dotenv';
 
 export interface PipelineStackProps extends StackProps{
   branchName: string;
@@ -96,6 +97,7 @@ const sandboxEnvironment = {
   region: 'eu-west-1',
 };
 
+Dotenv.config();
 const app = new App();
 
 

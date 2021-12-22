@@ -165,8 +165,8 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "sessions-stack",
-                  "TemplatePath": "Synth_Output::assembly-test-sessions/testsessionsstack7D939041.template.json",
+                  "StackName": "sessions-sessions-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-sessions/testsessionssessionsstack45456A72.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
@@ -198,7 +198,7 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "sessions-stack",
+                  "StackName": "sessions-sessions-stack",
                 },
                 "Name": "Deploy",
                 "RoleArn": Object {
