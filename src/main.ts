@@ -86,6 +86,13 @@ export class PipelineStackDevelopment extends PipelineStack {
   }
 }
 
+export class PipelineStackAcceptance extends PipelineStack {
+  constructor(scope: Construct, id: string, props: PipelineStackProps) {
+    super(scope, id, props);
+
+  }
+}
+
 // for development, use sandbox account
 const deploymentEnvironment = {
   account: '418648875085',
@@ -94,6 +101,11 @@ const deploymentEnvironment = {
 
 const sandboxEnvironment = {
   account: '122467643252',
+  region: 'eu-west-1',
+};
+
+const acceptanceEnvironment = {
+  account: '315037222840',
   region: 'eu-west-1',
 };
 
@@ -107,6 +119,14 @@ if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'develop
       env: deploymentEnvironment,
       branchName: 'development',
       deployToEnvironment: sandboxEnvironment
+    },
+  );
+} else if (process.env.BRANCH_NAME == 'acceptance') {
+  new PipelineStackAcceptance(app, 'mijnuitkering-pipeline-acceptance',
+    {
+      env: deploymentEnvironment,
+      branchName: 'acceptance',
+      deployToEnvironment: acceptanceEnvironment
     },
   );
 }
