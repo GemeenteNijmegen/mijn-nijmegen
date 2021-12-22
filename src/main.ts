@@ -1,9 +1,10 @@
-import { App, Stack, StackProps, Tags, aws_dynamodb as DynamoDB, pipelines, Stage, RemovalPolicy } from 'aws-cdk-lib';
+import { App, Stack, StackProps, Tags, aws_dynamodb as DynamoDB, pipelines, Stage, RemovalPolicy, Environment } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
 
 export interface PipelineStackProps extends StackProps{
   branchName: string;
+  deployToEnvironment: Environment
 }
 
 class PipelineStack extends Stack {
@@ -14,7 +15,7 @@ class PipelineStack extends Stack {
     Tags.of(this).add('Project', Statics.projectName);
     this.branchName = props.branchName;
     const pipeline = this.pipeline();
-    pipeline.addStage(new SessionsStage(this, 'sessions'));
+    pipeline.addStage(new SessionsStage(this, 'sessions', { env: props.deployToEnvironment }));
   }
 
   pipeline(): pipelines.CodePipeline {
@@ -44,8 +45,8 @@ class PipelineStack extends Stack {
 }
 
 class SessionsStage extends Stage {
-  constructor(scope: Construct, id: string) {
-    super(scope, id);
+  constructor(scope: Construct, id: string, props: {}) {
+    super(scope, id, props);
     new SessionsStack(this, 'stack');
   }
 }
@@ -84,6 +85,11 @@ export class PipelineStackDevelopment extends PipelineStack {
 }
 
 // for development, use sandbox account
+const deploymentEnvironment = {
+  account: '418648875085',
+  region: 'eu-west-1',
+};
+
 const sandboxEnvironment = {
   account: '122467643252',
   region: 'eu-west-1',
@@ -95,8 +101,9 @@ const app = new App();
 if ('BRANCH_NAME' in process.env == false) {
   new PipelineStackDevelopment(app, 'mijnuitkering-pipeline-development',
     {
-      env: sandboxEnvironment,
+      env: deploymentEnvironment,
       branchName: 'development',
+      deployToEnvironment: sandboxEnvironment
     },
   );
 }

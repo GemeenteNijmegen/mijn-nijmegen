@@ -161,18 +161,7 @@ Object {
                         Object {
                           "Ref": "AWS::Partition",
                         },
-                        ":iam::",
-                        Object {
-                          "Ref": "AWS::AccountId",
-                        },
-                        ":role/cdk-hnb659fds-cfn-exec-role-",
-                        Object {
-                          "Ref": "AWS::AccountId",
-                        },
-                        "-",
-                        Object {
-                          "Ref": "AWS::Region",
-                        },
+                        ":iam::test:role/cdk-hnb659fds-cfn-exec-role-test-eu-west-1",
                       ],
                     ],
                   },
@@ -193,18 +182,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":role/cdk-hnb659fds-deploy-role-",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      "-",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
                     ],
                   ],
                 },
@@ -231,18 +209,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":role/cdk-hnb659fds-deploy-role-",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      "-",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
                     ],
                   ],
                 },
@@ -320,11 +287,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":root",
+                      ":iam::test:root",
                     ],
                   ],
                 },
@@ -346,18 +309,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":role/cdk-hnb659fds-deploy-role-",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      "-",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
                     ],
                   ],
                 },
@@ -418,18 +370,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":role/cdk-hnb659fds-deploy-role-",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      "-",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
                     ],
                   ],
                 },
@@ -566,15 +507,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":logs:",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":log-group:/aws/codebuild/",
+                      ":logs:eu-west-1:test:log-group:/aws/codebuild/",
                       Object {
                         "Ref": "pipelinePipelineBuildSynthCdkBuildProject4237770A",
                       },
@@ -589,15 +522,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":logs:",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":log-group:/aws/codebuild/",
+                      ":logs:eu-west-1:test:log-group:/aws/codebuild/",
                       Object {
                         "Ref": "pipelinePipelineBuildSynthCdkBuildProject4237770A",
                       },
@@ -624,15 +549,7 @@ Object {
                     Object {
                       "Ref": "AWS::Partition",
                     },
-                    ":codebuild:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":report-group/",
+                    ":codebuild:eu-west-1:test:report-group/",
                     Object {
                       "Ref": "pipelinePipelineBuildSynthCdkBuildProject4237770A",
                     },
@@ -733,11 +650,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":root",
+                      ":iam::test:root",
                     ],
                   ],
                 },
@@ -910,18 +823,7 @@ Object {
                     Object {
                       "Ref": "AWS::Partition",
                     },
-                    ":iam::",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":role/cdk-hnb659fds-deploy-role-",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    "-",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
+                    ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
                   ],
                 ],
               },
@@ -954,11 +856,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":root",
+                      ":iam::test:root",
                     ],
                   ],
                 },
@@ -1084,11 +982,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":root",
+                      ":iam::test:root",
                     ],
                   ],
                 },
@@ -1243,15 +1137,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":logs:",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":log-group:/aws/codebuild/",
+                      ":logs:eu-west-1:test:log-group:/aws/codebuild/",
                       Object {
                         "Ref": "pipelineUpdatePipelineSelfMutation14A96D2F",
                       },
@@ -1266,15 +1152,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":logs:",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":log-group:/aws/codebuild/",
+                      ":logs:eu-west-1:test:log-group:/aws/codebuild/",
                       Object {
                         "Ref": "pipelineUpdatePipelineSelfMutation14A96D2F",
                       },
@@ -1301,15 +1179,7 @@ Object {
                     Object {
                       "Ref": "AWS::Partition",
                     },
-                    ":codebuild:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":report-group/",
+                    ":codebuild:eu-west-1:test:report-group/",
                     Object {
                       "Ref": "pipelineUpdatePipelineSelfMutation14A96D2F",
                     },
@@ -1330,18 +1200,7 @@ Object {
                 },
               },
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:*:iam::",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":role/*",
-                  ],
-                ],
-              },
+              "Resource": "arn:*:iam::test:role/*",
             },
             Object {
               "Action": "cloudformation:DescribeStacks",
