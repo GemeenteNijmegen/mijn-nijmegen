@@ -50,7 +50,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "BranchName": "test",
+                  "BranchName": "development",
                   "ConnectionArn": "arn:aws:codestar-connections:eu-west-1:418648875085:connection/4f647929-c982-4f30-94f4-24ff7dbf9766",
                   "FullRepositoryId": "GemeenteNijmegen/mijnuitkering",
                 },
@@ -81,7 +81,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"_PROJECT_CONFIG_HASH\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"1a3e4c96f1aad1d96a8c803ef8a31cdfbdc3a96425d924d59943c7c342f034a8\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"_PROJECT_CONFIG_HASH\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"408c2abba59dfe79726f604b5e4be80679cd98aa85c921835e5a1ab7ac11177f\\"}]",
                   "ProjectName": Object {
                     "Ref": "pipelinePipelineBuildSynthCdkBuildProject4237770A",
                   },
@@ -417,6 +417,13 @@ Object {
         },
         "Environment": Object {
           "ComputeType": "BUILD_GENERAL1_SMALL",
+          "EnvironmentVariables": Array [
+            Object {
+              "Name": "BRANCH_NAME",
+              "Type": "PLAINTEXT",
+              "Value": "development",
+            },
+          ],
           "Image": "aws/codebuild/standard:5.0",
           "ImagePullCredentialsType": "CODEBUILD",
           "PrivilegedMode": true,

@@ -33,6 +33,9 @@ class PipelineStack extends Stack {
       crossAccountKeys: true,
       synth: new pipelines.ShellStep('Synth', {
         input: source,
+        env: {
+          BRANCH_NAME: this.branchName
+        },
         commands: [
           'yarn install --frozen-lockfile', //nodig om projen geinstalleerd te krijgen
           'npx projen build',
@@ -47,18 +50,16 @@ class PipelineStack extends Stack {
 class SessionsStage extends Stage {
   constructor(scope: Construct, id: string, props: {}) {
     super(scope, id, props);
-    new SessionsStack(this, 'stack');
+    new SessionsStack(this, 'sessions-stack');
   }
 }
 
 export class SessionsTable extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
-    new DynamoDB.Table(this, 'sessions', {
+    new DynamoDB.Table(this, 'sessions-table', {
       partitionKey: { name: 'sessionid', type: DynamoDB.AttributeType.STRING },
       billingMode: DynamoDB.BillingMode.PAY_PER_REQUEST,
-      // encryption: dynamodb.TableEncryption.CUSTOMER_MANAGED,
-      // encryptionKey: kmsKeyDynamodbFormSubmissions,
       tableName: 'mijnuitkering-sessions',
       timeToLiveAttribute: 'ttl',
       removalPolicy: RemovalPolicy.RETAIN,
@@ -98,7 +99,7 @@ const sandboxEnvironment = {
 const app = new App();
 
 
-if ('BRANCH_NAME' in process.env == false) {
+if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'development') {
   new PipelineStackDevelopment(app, 'mijnuitkering-pipeline-development',
     {
       env: deploymentEnvironment,
