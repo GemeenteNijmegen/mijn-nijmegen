@@ -31,6 +31,8 @@ jspm_packages/
 *.tgz
 .yarn-integrity
 .cache
+.env
+.vscode
 !/.projenrc.js
 /test-reports/
 junit.xml

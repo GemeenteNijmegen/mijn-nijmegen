@@ -6,8 +6,19 @@ const project = new awscdk.AwsCdkTypeScriptApp({
 
   // deps: [],                /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
-  // devDeps: [],             /* Build dependencies for this module. */
+  devDeps: [
+    'dotenv',
+  ], /* Build dependencies for this module. */
   // packageName: undefined,  /* The "name" in package.json. */
   // release: undefined,      /* Add release management to this project. */
+  jestOptions: {
+    jestConfig: {
+      setupFiles: ['dotenv/config'],
+    },
+  },
+  gitignore: [
+    '.env',
+    '.vscode'
+  ]
 });
 project.synth();
