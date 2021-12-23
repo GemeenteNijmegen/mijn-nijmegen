@@ -529,17 +529,17 @@ Object {
                 "Configuration": Object {
                   "BranchName": "development",
                   "ConnectionArn": "arn:aws:codestar-connections:eu-west-1:418648875085:connection/4f647929-c982-4f30-94f4-24ff7dbf9766",
-                  "FullRepositoryId": "GemeenteNijmegen/mijnuitkering",
+                  "FullRepositoryId": "GemeenteNijmegen/mijn-uitkering",
                 },
-                "Name": "GemeenteNijmegen_mijnuitkering",
+                "Name": "GemeenteNijmegen_mijn-uitkering",
                 "OutputArtifacts": Array [
                   Object {
-                    "Name": "GemeenteNijmegen_mijnuitkering_Source",
+                    "Name": "GemeenteNijmegen_mijn_uitkering_Source",
                   },
                 ],
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "mijnuitkeringPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleF1F54A61",
+                    "mijnuitkeringPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleBF572F45",
                     "Arn",
                   ],
                 },
@@ -565,7 +565,7 @@ Object {
                 },
                 "InputArtifacts": Array [
                   Object {
-                    "Name": "GemeenteNijmegen_mijnuitkering_Source",
+                    "Name": "GemeenteNijmegen_mijn_uitkering_Source",
                   },
                 ],
                 "Name": "Synth",
@@ -794,7 +794,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleF1F54A61",
+                  "mijnuitkeringPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleBF572F45",
                   "Arn",
                 ],
               },
@@ -847,7 +847,45 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mijnuitkeringPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleDefaultPolicy05738A82": Object {
+    "mijnuitkeringPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleBF572F45": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cdkManaged",
+            "Value": "yes",
+          },
+          Object {
+            "Key": "Project",
+            "Value": "mijn-uitkering",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mijnuitkeringPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleDefaultPolicyDB6BD365": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -926,52 +964,14 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "mijnuitkeringPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleDefaultPolicy05738A82",
+        "PolicyName": "mijnuitkeringPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleDefaultPolicyDB6BD365",
         "Roles": Array [
           Object {
-            "Ref": "mijnuitkeringPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleF1F54A61",
+            "Ref": "mijnuitkeringPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleBF572F45",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
-    },
-    "mijnuitkeringPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleF1F54A61": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::test:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cdkManaged",
-            "Value": "yes",
-          },
-          Object {
-            "Key": "Project",
-            "Value": "mijn-uitkering",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
     },
     "mijnuitkeringPipelineUpdatePipelineSelfMutateCodePipelineActionRole8CF38B71": Object {
       "Properties": Object {
