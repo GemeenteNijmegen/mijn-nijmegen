@@ -48,7 +48,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-api/testapiapistackFC7EA607.assets.json\\\\\\" --verbose publish \\\\\\"7968326fb0478ff28346ebb3a3bf2ad3a181888cc75e4a474c7151663c624696:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"7968326fb0478ff28346ebb3a3bf2ad3a181888cc75e4a474c7151663c624696:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -959,8 +959,8 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "sessions-sessions-stack",
-                  "TemplatePath": "Synth_Output::assembly-test-sessions/testsessionssessionsstack45456A72.template.json",
+                  "StackName": "mijn-uitkering-sessions-sessions-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-sessions/testmijnuitkeringsessionssessionsstack428B035C.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
@@ -992,7 +992,7 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "sessions-sessions-stack",
+                  "StackName": "mijn-uitkering-sessions-sessions-stack",
                 },
                 "Name": "Deploy",
                 "RoleArn": Object {
@@ -1010,7 +1010,7 @@ Object {
                 "RunOrder": 2,
               },
             ],
-            "Name": "sessions",
+            "Name": "mijn-uitkering-sessions",
           },
           Object {
             "Actions": Array [
@@ -1037,8 +1037,8 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "api-api-stack",
-                  "TemplatePath": "Synth_Output::assembly-test-api/testapiapistackFC7EA607.template.json",
+                  "StackName": "mijn-uitkering-api-api-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
@@ -1070,7 +1070,7 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "api-api-stack",
+                  "StackName": "mijn-uitkering-api-api-stack",
                 },
                 "Name": "Deploy",
                 "RoleArn": Object {
@@ -1088,7 +1088,7 @@ Object {
                 "RunOrder": 2,
               },
             ],
-            "Name": "api",
+            "Name": "mijn-uitkering-api",
           },
         ],
         "Tags": Array [

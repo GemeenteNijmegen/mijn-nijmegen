@@ -17,8 +17,8 @@ export class PipelineStack extends Stack {
     Tags.of(this).add('Project', Statics.projectName);
     this.branchName = props.branchName;
     const pipeline = this.pipeline();
-    pipeline.addStage(new SessionsStage(this, 'sessions', { env: props.deployToEnvironment }));
-    pipeline.addStage(new ApiStage(this, 'api', { env: props.deployToEnvironment }));
+    pipeline.addStage(new SessionsStage(this, 'mijn-uitkering-sessions', { env: props.deployToEnvironment })); //TODO rename these, they end up as 'api-apistack' in CF
+    pipeline.addStage(new ApiStage(this, 'mijn-uitkering-api', { env: props.deployToEnvironment }));
   }
 
   pipeline(): pipelines.CodePipeline {

@@ -8,7 +8,9 @@ import { Construct } from 'constructs';
 export class ApiStack extends Stack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
-    const api = new apigatewayv2.HttpApi(this, 'httpApi');
+    const api = new apigatewayv2.HttpApi(this, 'mijnuitkering-api', {
+        description: 'Mijn Uitkering webapplicatie'
+    });
 
     const loginLambda = new aws_lambda.Function(this, 'login', {
       runtime: aws_lambda.Runtime.NODEJS_14_X,
