@@ -1,6 +1,7 @@
 import { App } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import * as Dotenv from 'dotenv';
+import { ApiStack } from '../src/ApiStack';
 import { PipelineStackDevelopment } from '../src/PipelineStackDevelopment';
 import { SessionsStack } from '../src/SessionsStack';
 
@@ -35,4 +36,20 @@ test('StackHasSessionsTable', () => {
       },
     ],
   });
+});
+
+test('StackHasApiGateway', () => {
+  const app = new App();
+  const stack = new ApiStack(app, 'test');
+  const template = Template.fromStack(stack);
+  template.resourceCountIs('AWS::ApiGatewayV2::Api', 1);
+});
+
+
+test('StackHasLambda', () => {
+  const app = new App();
+  const stack = new ApiStack(app, 'test');
+  const template = Template.fromStack(stack);
+  template.resourceCountIs('AWS::Lambda::Function', 1);
+  console.log(template.toJSON());
 });
