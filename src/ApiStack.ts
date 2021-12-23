@@ -15,6 +15,7 @@ export class ApiStack extends Stack {
     const loginLambda = new aws_lambda.Function(this, 'login', {
       runtime: aws_lambda.Runtime.NODEJS_14_X,
       handler: 'index.handler',
+      description: 'Login-pagina voor de Mijn Uitkering-applicatie',
       code: aws_lambda.Code.fromAsset(path.join(__dirname, 'app/login')),
     });
 
