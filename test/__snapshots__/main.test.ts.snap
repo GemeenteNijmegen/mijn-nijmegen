@@ -8,6 +8,9 @@ Object {
       "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
+    "connectionArn": Object {
+      "Type": "String",
+    },
   },
   "Resources": Object {
     "mijnuitkeringPipelineArtifactsBucketA36B7DD3": Object {
@@ -528,7 +531,9 @@ Object {
                 },
                 "Configuration": Object {
                   "BranchName": "development",
-                  "ConnectionArn": "arn:aws:codestar-connections:eu-west-1:418648875085:connection/4f647929-c982-4f30-94f4-24ff7dbf9766",
+                  "ConnectionArn": Object {
+                    "Ref": "connectionArn",
+                  },
                   "FullRepositoryId": "GemeenteNijmegen/mijn-uitkering",
                 },
                 "Name": "GemeenteNijmegen_mijn-uitkering",
@@ -892,7 +897,9 @@ Object {
             Object {
               "Action": "codestar-connections:UseConnection",
               "Effect": "Allow",
-              "Resource": "arn:aws:codestar-connections:eu-west-1:418648875085:connection/4f647929-c982-4f30-94f4-24ff7dbf9766",
+              "Resource": Object {
+                "Ref": "connectionArn",
+              },
             },
             Object {
               "Action": Array [

@@ -1,4 +1,4 @@
-import { App, Stack, StackProps, Tags, aws_dynamodb as DynamoDB, pipelines, Stage, RemovalPolicy, Environment } from 'aws-cdk-lib';
+import { App, Stack, StackProps, Tags, aws_dynamodb as DynamoDB, pipelines, Stage, RemovalPolicy, Environment, CfnParameter } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as Dotenv from 'dotenv';
 import { Statics } from './statics';
@@ -20,12 +20,9 @@ class PipelineStack extends Stack {
   }
 
   pipeline(): pipelines.CodePipeline {
-    if (!('CONNECTION_ARN' in process.env)) {
-      throw new Error('No CodeStar connection ARN provided');
-    }
-    const connection: string = process.env.CONNECTION_ARN!;
+    const connectionArn = new CfnParameter(this, 'connectionArn');
     const source = pipelines.CodePipelineSource.connection('GemeenteNijmegen/mijn-uitkering', this.branchName, {
-      connectionArn: connection,
+      connectionArn: connectionArn.valueAsString,
     });
     const pipeline = new pipelines.CodePipeline(this, 'mijnuitkering', {
       pipelineName: 'mijn-uitkering',
