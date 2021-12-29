@@ -52,7 +52,6 @@ test('Unknown session returns login page', async () => {
   expect(result.statusCode).toBe(200);
 });
 
-
 test('DynamoDB error', async () => {
   const ddbMock = mockClient(DynamoDBClient);
   ddbMock.mockImplementation(() => { throw new Error('Not supported!'); });

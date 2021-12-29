@@ -1,7 +1,6 @@
 import { Stack, StackProps, Tags, pipelines, CfnParameter, Environment } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { ApiStage } from './ApiStage';
-import { SessionsStage } from './SessionsStage';
 import { Statics } from './statics';
 
 export interface PipelineStackProps extends StackProps{
@@ -17,7 +16,6 @@ export class PipelineStack extends Stack {
     Tags.of(this).add('Project', Statics.projectName);
     this.branchName = props.branchName;
     const pipeline = this.pipeline();
-    pipeline.addStage(new SessionsStage(this, 'mijn-uitkering-sessions', { env: props.deployToEnvironment })); //TODO rename these, they end up as 'api-apistack' in CF
     pipeline.addStage(new ApiStage(this, 'mijn-uitkering-api', { env: props.deployToEnvironment }));
   }
 

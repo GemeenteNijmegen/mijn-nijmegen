@@ -8,8 +8,10 @@ import { SessionsTable } from './SessionsTable';
  */
 
 export class SessionsStack extends Stack {
+  sessionsTable : SessionsTable;
+
   constructor(scope: Construct, id: string) {
     super(scope, id);
-    new SessionsTable(this, 'sessions-table');
+    this.sessionsTable = new SessionsTable(this, 'sessions-table');
   }
 }

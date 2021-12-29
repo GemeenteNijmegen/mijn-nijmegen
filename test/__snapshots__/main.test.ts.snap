@@ -48,7 +48,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"99261c095d8bbe1017e47071f8ff343708e8f58b861a80f854119b9dfd2c9fa1:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"ce032d84f9644ce136a22d44d3a0ff06e8476771c4288d04683683993df738c4:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -959,15 +959,15 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "mijn-uitkering-sessions-sessions-stack",
-                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-sessions/testmijnuitkeringsessionssessionsstack428B035C.template.json",
+                  "StackName": "mijn-uitkering-api-sessions-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapisessionsstackE5C35BBB.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
                     "Name": "Synth_Output",
                   },
                 ],
-                "Name": "Prepare",
+                "Name": "sessions-stack.Prepare",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -992,9 +992,9 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "mijn-uitkering-sessions-sessions-stack",
+                  "StackName": "mijn-uitkering-api-sessions-stack",
                 },
-                "Name": "Deploy",
+                "Name": "sessions-stack.Deploy",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -1009,11 +1009,6 @@ Object {
                 },
                 "RunOrder": 2,
               },
-            ],
-            "Name": "mijn-uitkering-sessions",
-          },
-          Object {
-            "Actions": Array [
               Object {
                 "ActionTypeId": Object {
                   "Category": "Deploy",
@@ -1045,7 +1040,7 @@ Object {
                     "Name": "Synth_Output",
                   },
                 ],
-                "Name": "Prepare",
+                "Name": "api-stack.Prepare",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -1058,7 +1053,7 @@ Object {
                     ],
                   ],
                 },
-                "RunOrder": 1,
+                "RunOrder": 3,
               },
               Object {
                 "ActionTypeId": Object {
@@ -1072,7 +1067,7 @@ Object {
                   "ChangeSetName": "PipelineChange",
                   "StackName": "mijn-uitkering-api-api-stack",
                 },
-                "Name": "Deploy",
+                "Name": "api-stack.Deploy",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -1085,7 +1080,7 @@ Object {
                     ],
                   ],
                 },
-                "RunOrder": 2,
+                "RunOrder": 4,
               },
             ],
             "Name": "mijn-uitkering-api",
