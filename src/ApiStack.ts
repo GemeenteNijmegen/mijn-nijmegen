@@ -9,7 +9,7 @@ export class ApiStack extends Stack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
     const api = new apigatewayv2.HttpApi(this, 'mijnuitkering-api', {
-        description: 'Mijn Uitkering webapplicatie'
+      description: 'Mijn Uitkering webapplicatie',
     });
 
     const loginLambda = new aws_lambda.Function(this, 'login', {

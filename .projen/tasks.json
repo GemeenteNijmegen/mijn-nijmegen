@@ -105,7 +105,15 @@
       "description": "Runs eslint against the codebase",
       "steps": [
         {
-          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src test build-tools .projenrc.js"
+          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src src/app/login/tests /test /build-tools .projenrc.js"
+        }
+      ]
+    },
+    "install:login": {
+      "name": "install:login",
+      "steps": [
+        {
+          "exec": "cd src/app/login && npm install"
         }
       ]
     },
@@ -119,6 +127,14 @@
       "steps": [
         {
           "spawn": "synth"
+        }
+      ]
+    },
+    "postinstall": {
+      "name": "postinstall",
+      "steps": [
+        {
+          "exec": "npm run install:login"
         }
       ]
     },

@@ -3,7 +3,6 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '2.3.0',
   defaultReleaseBranch: 'main',
   name: 'app2',
-
   deps: [
     'dotenv',
     '@aws-cdk/aws-apigatewayv2-alpha',
@@ -17,7 +16,16 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   jestOptions: {
     jestConfig: {
       setupFiles: ['dotenv/config'],
+      testPathIgnorePatterns: ['/node_modules/', '/cdk.out'],
+      roots: ['src', 'test'],
     },
+  },
+  scripts: {
+    'install:login': 'cd src/app/login && npm install',
+    'postinstall': 'npm run install:login',
+  },
+  eslintOptions: {
+    devdirs: ['src/app/login/tests', '/test', '/build-tools'],
   },
   gitignore: [
     '.env',

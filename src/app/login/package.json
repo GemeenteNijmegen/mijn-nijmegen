@@ -1,0 +1,21 @@
+{
+  "name": "login",
+  "version": "1.0.0",
+  "description": "login lambda",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "npx jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.45.0",
+    "cookie": "^0.4.1"
+  },
+  "devDependencies": {
+    "jest-aws-client-mock": "0.0.24"
+  }
+}
