@@ -1,9 +1,8 @@
-import * as path from 'path';
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import { LambdaToDynamoDB, LambdaToDynamoDBProps } from '@aws-solutions-constructs/aws-lambda-dynamodb';
-import { Stack, aws_lambda, StackProps } from 'aws-cdk-lib';
+import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
+import { ApiFunction } from './ApiFunction';
 import { SessionsTable } from './SessionsTable';
 
 export interface ApiStackProps extends StackProps {
@@ -17,24 +16,15 @@ export class ApiStack extends Stack {
       description: 'Mijn Uitkering webapplicatie',
     });
 
-    const loginLambda = new aws_lambda.Function(this, 'login', {
-      runtime: aws_lambda.Runtime.NODEJS_14_X,
-      handler: 'index.handler',
+    const loginFunction = new ApiFunction(this, 'login-function', {
       description: 'Login-pagina voor de Mijn Uitkering-applicatie.',
-      code: aws_lambda.Code.fromAsset(path.join(__dirname, 'app/login')),
+      codePath: 'app/login',
+      table: props.sessionsTable.table,
+      tablePermissions: 'Read',
     });
 
-    const lambdaProps: LambdaToDynamoDBProps = {
-      existingLambdaObj: loginLambda,
-      existingTableObj: props.sessionsTable.table,
-      tablePermissions: 'Read',
-      tableEnvironmentVariableName: 'SESSION_TABLE',
-    };
-
-    new LambdaToDynamoDB(this, 'login-lambda-with-db', lambdaProps);
-
     api.addRoutes({
-      integration: new HttpLambdaIntegration('login', loginLambda),
+      integration: new HttpLambdaIntegration('login', loginFunction.lambda),
       path: '/login',
       methods: [apigatewayv2.HttpMethod.GET],
     });
