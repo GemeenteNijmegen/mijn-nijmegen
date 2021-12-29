@@ -14,7 +14,7 @@ export class ApiFunction extends Construct {
   lambda: aws_lambda.Function;
   constructor(scope: Construct, id: string, props: ApiFunctionProps) {
     super(scope, id);
-    this.lambda = new aws_lambda.Function(this, '$(this.id)-lambda', {
+    this.lambda = new aws_lambda.Function(this, 'lambda', {
       runtime: aws_lambda.Runtime.NODEJS_14_X,
       handler: 'index.handler',
       description: props.description,
@@ -28,6 +28,6 @@ export class ApiFunction extends Construct {
       tableEnvironmentVariableName: 'SESSION_TABLE',
     };
 
-    new LambdaToDynamoDB(this, '$(this.id)-lambda-with-db', lambdaProps);
+    new LambdaToDynamoDB(this, 'lambda-with-db', lambdaProps);
   }
 }
