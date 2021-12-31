@@ -95,7 +95,7 @@ async function createSession() {
             'sessionid': { S: sessionId },
             'state': { S: state },
             'bsn': { S: '' },
-            'created': { N: ttl },
+            'ttl': { N: ttl },
             'loggedin': { BOOL: false }
         }
     });
