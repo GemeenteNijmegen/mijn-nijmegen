@@ -4,10 +4,18 @@ import * as lambda from '../index';
 
 beforeAll(() => {
   global.console.log = jest.fn();
+  // Set env variables
+  process.env.SESSION_TABLE = 'mijnuitkering-sessions';
+  process.env.AUTH_URL_BASE = 'https://authenticatie-accp.nijmegen.nl';
+  process.env.APPLICATION_URL_BASE = 'https://testing.example.com/';
+  process.env.OIDC_SECRET_ARN = '123';
+  process.env.OIDC_CLIENT_ID = '1234';
+  process.env.OIDC_SCOPE = 'openid';
 });
 
-test('Return login page', async () => {
+test('Return login page with correct link', async () => {
   const result = await lambda.handler({}, {});
+  expect(result.body).toMatch('&scope=openid');
   expect(result.statusCode).toBe(200);
 });
 
@@ -57,5 +65,5 @@ test('DynamoDB error', async () => {
   ddbMock.mockImplementation(() => { throw new Error('Not supported!'); });
   const result = await lambda.handler({ cookies: ['session=12345'] }, {});
   expect(ddbMock).toHaveBeenCalledTimes(1);
-  expect(result.statusCode).toBe(200);
+  expect(result.statusCode).toBe(500);
 });

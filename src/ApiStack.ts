@@ -9,6 +9,11 @@ export interface ApiStackProps extends StackProps {
   sessionsTable: SessionsTable;
 }
 
+/**
+ * The API Stack creates both the API Gateway and the related
+ * lambda's. It requires supporting resources (such as the
+ * DynamoDB sessions table to be provided and thus created first)
+ */
 export class ApiStack extends Stack {
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id);
@@ -21,6 +26,7 @@ export class ApiStack extends Stack {
       codePath: 'app/login',
       table: props.sessionsTable.table,
       tablePermissions: 'Read',
+      applicationUrlBase: api.url,
     });
 
     api.addRoutes({
