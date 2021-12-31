@@ -17,7 +17,7 @@ export class PipelineStack extends Stack {
     Tags.of(this).add('Project', Statics.projectName);
     this.branchName = props.branchName;
     const pipeline = this.pipeline();
-    pipeline.addStage(new ParameterStage(this, 'mijn-uitkering-parameters'));
+    pipeline.addStage(new ParameterStage(this, 'mijn-uitkering-parameters', { env: props.deployToEnvironment }));
     pipeline.addStage(new ApiStage(this, 'mijn-uitkering-api', { env: props.deployToEnvironment }));
   }
 

@@ -1,4 +1,4 @@
-import { Stack, Tags, Stage, aws_ssm as SSM } from 'aws-cdk-lib';
+import { Stack, Tags, Stage, aws_ssm as SSM, StageProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
 
@@ -8,8 +8,8 @@ import { Statics } from './statics';
  */
 
 export class ParameterStage extends Stage {
-  constructor(scope: Construct, id: string) {
-    super(scope, id);
+  constructor(scope: Construct, id: string, props: StageProps) {
+    super(scope, id, props);
     Tags.of(this).add('cdkManaged', 'yes');
     Tags.of(this).add('Project', Statics.projectName);
 

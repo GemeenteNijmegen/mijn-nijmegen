@@ -2,6 +2,7 @@ import { App } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import * as Dotenv from 'dotenv';
 import { ApiStack } from '../src/ApiStack';
+import { ParameterStack } from '../src/ParameterStage';
 import { PipelineStackDevelopment } from '../src/PipelineStackDevelopment';
 import { SessionsStack } from '../src/SessionsStack';
 
@@ -53,5 +54,15 @@ test('StackHasLambda', () => {
   const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable });
   const template = Template.fromStack(stack);
   template.resourceCountIs('AWS::Lambda::Function', 1);
-  console.log(template.toJSON());
+  // console.log(template.toJSON());
+});
+
+
+
+test('StackHasParameters', () => {
+  const app = new App();
+  const stack = new ParameterStack(app, 'test');
+  const template = Template.fromStack(stack);
+  console.debug(template.toJSON());
+  template.resourceCountIs('AWS::SSM::Parameter', 3);
 });
