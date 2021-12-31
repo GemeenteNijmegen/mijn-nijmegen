@@ -1,4 +1,4 @@
-import { Stack, Tags, Stage, aws_ssm as SSM, StageProps } from 'aws-cdk-lib';
+import { Stack, Tags, Stage, aws_ssm as SSM, aws_secretsmanager as SecretsManager, StageProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
 
@@ -61,6 +61,11 @@ export class ssmParamsConstruct extends Construct {
     new SSM.StringParameter(this, 'ssm_auth_3', {
       stringValue: 'openid idp_scoping:simulator idp_scoping:https://was-preprod1.digid.nl/saml/idp/metadata',
       parameterName: Statics.ssmOIDCScope,
+    });
+
+    new SecretsManager.Secret(this, 'secret_1', {
+      secretName: Statics.secretOIDCClientSecret,
+      description: 'OpenIDConnect client secret',
     });
   }
 }

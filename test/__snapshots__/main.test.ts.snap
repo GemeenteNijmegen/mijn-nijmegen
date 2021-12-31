@@ -48,7 +48,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"ce09a1e23982e8c2315602482fae466161f4e7d02d35ad2628c111a9dbb31591:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"e99438bbd9a43a3f374861d8fa18be47dfccec9c93e39bfe67c714c61e4f3e37:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -303,39 +303,6 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":role/cdk-hnb659fds-deploy-role-",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      "-",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
-                    ],
-                  ],
-                },
-              },
-              "Resource": "*",
-            },
-            Object {
-              "Action": Array [
-                "kms:Decrypt",
-                "kms:DescribeKey",
-              ],
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
                       ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
                     ],
                   ],
@@ -381,61 +348,6 @@ Object {
         },
         "PolicyDocument": Object {
           "Statement": Array [
-            Object {
-              "Action": Array [
-                "s3:GetObject*",
-                "s3:GetBucket*",
-                "s3:List*",
-              ],
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":role/cdk-hnb659fds-deploy-role-",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      "-",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
-                    ],
-                  ],
-                },
-              },
-              "Resource": Array [
-                Object {
-                  "Fn::GetAtt": Array [
-                    "mijnuitkeringPipelineArtifactsBucketA36B7DD3",
-                    "Arn",
-                  ],
-                },
-                Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      Object {
-                        "Fn::GetAtt": Array [
-                          "mijnuitkeringPipelineArtifactsBucketA36B7DD3",
-                          "Arn",
-                        ],
-                      },
-                      "/*",
-                    ],
-                  ],
-                },
-              ],
-            },
             Object {
               "Action": Array [
                 "s3:GetObject*",
@@ -1043,18 +955,7 @@ Object {
                         Object {
                           "Ref": "AWS::Partition",
                         },
-                        ":iam::",
-                        Object {
-                          "Ref": "AWS::AccountId",
-                        },
-                        ":role/cdk-hnb659fds-cfn-exec-role-",
-                        Object {
-                          "Ref": "AWS::AccountId",
-                        },
-                        "-",
-                        Object {
-                          "Ref": "AWS::Region",
-                        },
+                        ":iam::test:role/cdk-hnb659fds-cfn-exec-role-test-eu-west-1",
                       ],
                     ],
                   },
@@ -1076,18 +977,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":role/cdk-hnb659fds-deploy-role-",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      "-",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
                     ],
                   ],
                 },
@@ -1114,18 +1004,7 @@ Object {
                       Object {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":role/cdk-hnb659fds-deploy-role-",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      "-",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
                     ],
                   ],
                 },
@@ -1416,33 +1295,6 @@ Object {
                 "Fn::GetAtt": Array [
                   "mijnuitkeringPipelineAssetsFileAsset1CodePipelineActionRole95AACD1F",
                   "Arn",
-                ],
-              },
-            },
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:",
-                    Object {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":iam::",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":role/cdk-hnb659fds-deploy-role-",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    "-",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                  ],
                 ],
               },
             },

@@ -14,4 +14,9 @@ export abstract class Statics {
    * OpenID Connect scope
    */
   static readonly ssmOIDCScope: string = '/cdk/mijn-uitkering/authScope';
+
+  /**
+   * OpenID Connect secret name
+   */
+  static readonly secretOIDCClientSecret: string = '/cdk/mijn-uitkering/oidc-clientsecret';
 }

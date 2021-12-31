@@ -25,7 +25,7 @@ export class ApiStack extends Stack {
       description: 'Login-pagina voor de Mijn Uitkering-applicatie.',
       codePath: 'app/login',
       table: props.sessionsTable.table,
-      tablePermissions: 'Read',
+      tablePermissions: 'ReadWrite',
       applicationUrlBase: api.url,
     });
 
