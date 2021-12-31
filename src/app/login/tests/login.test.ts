@@ -15,7 +15,8 @@ beforeAll(() => {
 
 test('Return login page with correct link', async () => {
   const result = await lambda.handler({}, {});
-  expect(result.body).toMatch('&scope=openid');
+  expect(result.body).toMatch(`${process.env.AUTH_URL_BASE}/broker/sp/oidc/authenticate`);
+  expect(result.body).toMatch(encodeURIComponent(`${process.env.APPLICATION_URL_BASE}auth`));
   expect(result.statusCode).toBe(200);
 });
 

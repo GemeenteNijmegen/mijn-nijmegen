@@ -1,6 +1,7 @@
 const cookie = require('cookie');
 const { Issuer, generators } = require('openid-client');
 const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
+const { url } = require('inspector');
 
 function getOpenIDConnectIssuer(domain_url_part) {
     const issuer = new Issuer({
@@ -21,8 +22,9 @@ function getOpenIDConnectIssuer(domain_url_part) {
 }
 
 function getLoginUrl(state) {
-    const issuer = getOpenIDConnectIssuer(process.env.AUTH_DOMAIN);
-    const redirect_uri = `${process.env.APPLICATION_URL_BASE}/auth`;
+    const issuer = getOpenIDConnectIssuer(process.env.AUTH_URL_BASE);
+    const base_url = new URL(process.env.APPLICATION_URL_BASE);
+    const redirect_uri = new URL('/auth', base_url);
     const client = new issuer.Client({
         client_id: process.env.OIDC_CLIENT_ID,
         redirect_uris: [redirect_uri],
