@@ -3,7 +3,6 @@ const crypto = require('crypto');
 const { generators } = require('openid-client');
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { GetItemCommand, PutItemCommand, UpdateItemCommand } = require("@aws-sdk/client-dynamodb");
-const { dbClient } = require("./index");
 
 class Session {
     sessionId = false;

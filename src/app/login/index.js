@@ -56,7 +56,6 @@ exports.handler = async (event, context) => {
             return redirectToHome();
         } 
         await session.createOrUpdateSession();
-        
         const authUrl = getLoginUrl(session.state);
         const html = `<html><head><title>Login</title></head><body><h1>Login</h1><a href="${authUrl}">Login</a></body></html>`;
         response = {
