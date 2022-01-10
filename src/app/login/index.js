@@ -1,7 +1,7 @@
 const cookie = require('cookie');
 const crypto = require('crypto');
 const { Issuer, generators } = require('openid-client');
-const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
+const { DynamoDBClient, GetItemCommand, PutItemCommand, UpdateItemCommand } = require("@aws-sdk/client-dynamodb");
 
 const dbClient = new DynamoDBClient();
 
@@ -50,21 +50,7 @@ async function getSessionId(event) {
     return false;
 }
 
-async function checkLoginOrCreateSession(event) {
-    if('cookies' in event) {
-        const cookies = cookie.parse(event.cookies.join(';'));
-        if('session' in cookies) { 
-            const session = await getSession(cookies.session);
-            if(session) {
-                return session.loggedin.BOOL;
-            }
-        }
-    }
-    await createSession();
-    return false;
-}
-
-async function isLoggedIn(sessionId) {
+async function getSession(sessionId) {
     const getItemCommand = new GetItemCommand({
         TableName: process.env.SESSION_TABLE,
         Key: {
@@ -74,13 +60,43 @@ async function isLoggedIn(sessionId) {
     try {
         const session = await dbClient.send(getItemCommand);
         if(session.Item) {
-            return session.Item.loggedin.BOOL;
+            return session;
+        } else {
+            return false;
         }
     } catch(err) {
         console.log('Error getting session from DynamoDB: ' + err);
         throw err;
     }
+}
+
+async function isLoggedIn(session) {
+    if(session) {
+        return session.Item.loggedin.BOOL;
+    }
     return false;
+}
+
+async function updateSession(sessionId) {
+    const state = generators.state();
+    const now = new Date();
+    const ttl = Math.floor((now / 1000) + 15 * 60).toString(); // ttl is 15 minutes
+    
+    const command = new UpdateItemCommand({
+        TableName: process.env.SESSION_TABLE,
+        Key: {
+            'sessionid': { S: sessionId }
+        },
+        UpdateExpression: 'SET state = :state, ttl = :ttl, loggedin = :loggedin',
+        ExpressionAttributeValues: {
+            ':state': { S: state },
+            ':ttl': { N: ttl },
+            ':loggedin': { BOOL: false }
+        }
+    });
+    await dbClient.send(command);
+    console.debug('updated session');
+    return { 'sessionId': sessionId, 'state': state };
 }
 
 async function createSession() {
@@ -113,17 +129,27 @@ function redirectToHome() {
 
 exports.handler = async (event, context) => {
     try {
+        // let session = new Session(event);
+        // if(session->isLoggedIn) { redirect to home; }
+        // session->setState(generatedState)
+        // show login->page
         let sessionId = await getSessionId(event);
+        let sessionInfo = false;
+        let session = false;
         if(sessionId) {
-            const loginActive = await isLoggedIn(sessionId);
-            console.debug(loginActive);
+            session = await getSession(sessionId);
+            const loginActive = await isLoggedIn(session);
             if(loginActive === true) {
                 return redirectToHome();
             }
         }
+        if(session) {
+            sessionInfo = await updateSession(sessionId);
+        } else {
+            sessionInfo = await createSession();
+        }
         
-        const session = await createSession();
-        const authUrl = getLoginUrl(session.state);
+        const authUrl = getLoginUrl(sessionInfo.state);
         const html = `<html><head><title>Login</title></head><body><h1>Login</h1><a href="${authUrl}">Login</a></body></html>`;
         response = {
             'statusCode': 200,
@@ -132,7 +158,7 @@ exports.handler = async (event, context) => {
                 'Content-type': 'text/html'
             },
             'cookies': [
-                'session='+ session.sessionId + '; HttpOnly; Secure;',
+                'session='+ sessionInfo.sessionId + '; HttpOnly; Secure;',
             ]
         }
         return response;

@@ -85,6 +85,31 @@ test('Unknown session returns login page', async () => {
   expect(result.statusCode).toBe(200);
 });
 
+test('Known session without login returns login page, without creating new session', async () => {
+  const output: Partial<GetItemCommandOutput> = {
+    Item: {
+      loggedin: {
+        BOOL: false,
+      },
+    },
+  };
+  ddbMock.mockImplementation(() => output);
+  const sessionId = '12345';
+  const result = await lambda.handler({ cookies: [`session=${sessionId}`] }, {});
+  expect(ddbMock).toHaveBeenCalledTimes(2);
+  expect(ddbMock).toHaveBeenCalledWith(
+    expect.objectContaining({
+      input: {
+        Key: {
+          sessionid: { S: sessionId },
+        },
+        TableName: process.env.SESSION_TABLE,
+      },
+    }),
+  );
+  expect(result.statusCode).toBe(200);
+});
+
 test('Request without session returns session cookie', async () => {
   const result = await lambda.handler({}, {});
   expect(result.cookies).toEqual(
