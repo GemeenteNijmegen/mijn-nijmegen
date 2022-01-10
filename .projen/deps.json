@@ -25,6 +25,10 @@
       "type": "build"
     },
     {
+      "name": "copyfiles",
+      "type": "build"
+    },
+    {
       "name": "esbuild",
       "type": "build"
     },

@@ -1,5 +1,5 @@
 const { Issuer } = require('openid-client');
-const { Session } = require("./Session");
+const { Session } = require('./shared/Session');
 
 function getOpenIDConnectIssuer(domain_url_part) {
     const issuer = new Issuer({
@@ -46,12 +46,8 @@ function redirectToHome() {
 
 exports.handler = async (event, context) => {
     try {
-        // let session = new Session(event);
-        // if(session->isLoggedIn) { redirect to home; }
-        // session->setState(generatedState)
-        // show login->page
         let session = new Session(event);
-        await session.getSession();
+        await session.init();
         if(session.isLoggedIn() === true) {
             return redirectToHome();
         } 

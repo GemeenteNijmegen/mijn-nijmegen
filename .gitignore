@@ -33,6 +33,7 @@ jspm_packages/
 .cache
 .env
 .vscode
+src/app/**/shared
 !/.projenrc.js
 /test-reports/
 junit.xml

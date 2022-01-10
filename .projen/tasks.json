@@ -113,7 +113,7 @@
       "name": "install:login",
       "steps": [
         {
-          "exec": "cd src/app/login && npm install"
+          "exec": "copyfiles -f src/shared/Session.js src/app/login/shared && cd src/app/login && npm install"
         }
       ]
     },
@@ -207,7 +207,7 @@
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk esbuild eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit json-schema npm-check-updates ts-jest ts-node typescript @aws-cdk/aws-apigatewayv2-alpha @aws-cdk/aws-apigatewayv2-integrations-alpha @aws-solutions-constructs/aws-lambda-dynamodb aws-cdk-lib constructs dotenv"
+          "exec": "yarn upgrade @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk copyfiles esbuild eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit json-schema npm-check-updates ts-jest ts-node typescript @aws-cdk/aws-apigatewayv2-alpha @aws-cdk/aws-apigatewayv2-integrations-alpha @aws-solutions-constructs/aws-lambda-dynamodb aws-cdk-lib constructs dotenv"
         },
         {
           "exec": "npx projen"

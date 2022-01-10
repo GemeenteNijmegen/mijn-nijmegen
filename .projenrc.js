@@ -11,6 +11,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   ], /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   devDeps: [
+    'copyfiles'
   ], /* Build dependencies for this module. */
   // packageName: undefined,  /* The "name" in package.json. */
   // release: undefined,      /* Add release management to this project. */
@@ -22,7 +23,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     },
   },
   scripts: {
-    'install:login': 'cd src/app/login && npm install',
+    'install:login': 'copyfiles -f src/shared/Session.js src/app/login/shared && cd src/app/login && npm install',
     'postinstall': 'npm run install:login',
   },
   eslintOptions: {
@@ -31,6 +32,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   gitignore: [
     '.env',
     '.vscode',
+    'src/app/**/shared',
   ],
 });
 project.synth();

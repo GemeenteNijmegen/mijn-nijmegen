@@ -21,7 +21,8 @@ class Session {
         return false;
     }
 
-    async getSession() {
+    async init() {
+        console.debug(process.env.AWS_REGION);
         this.dbClient = new DynamoDBClient();
         if (!this.sessionId) { return false; }
         const getItemCommand = new GetItemCommand({
