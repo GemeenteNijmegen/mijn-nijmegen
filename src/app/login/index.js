@@ -1,5 +1,6 @@
 const { Issuer } = require('openid-client');
 const { Session } = require('./shared/Session');
+const { render } = require('./shared/render');
 
 function getOpenIDConnectIssuer(domain_url_part) {
     const issuer = new Issuer({
@@ -51,7 +52,7 @@ exports.handler = async (event, context) => {
         } 
         await session.createOrUpdateSession();
         const authUrl = getLoginUrl(session.state);
-        const html = `<html><head><title>Login</title></head><body><h1>Login</h1><a href="${authUrl}">Login</a></body></html>`;
+        const html = await render({authUrl: authUrl}, __dirname + '/templates/login.mustache');
         response = {
             'statusCode': 200,
             'body': html,

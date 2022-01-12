@@ -113,7 +113,7 @@
       "name": "install:login",
       "steps": [
         {
-          "exec": "copyfiles -f src/shared/Session.js src/app/login/shared && cd src/app/login && npm install"
+          "exec": "copyfiles -f src/shared/*.js src/app/login/shared && cd src/app/login && npm install"
         }
       ]
     },
