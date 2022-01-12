@@ -42,8 +42,6 @@ function redirectToHome() {
     };
     return response;
 }
-
-
 exports.handler = async (event, context) => {
     try {
         let session = new Session(event);

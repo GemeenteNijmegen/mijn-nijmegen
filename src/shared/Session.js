@@ -22,8 +22,9 @@ class Session {
     }
 
     async init() {
-        console.debug(process.env.AWS_REGION);
+        console.debug('init session');
         this.dbClient = new DynamoDBClient();
+        console.debug(this.dbClient);
         if (!this.sessionId) { return false; }
         const getItemCommand = new GetItemCommand({
             TableName: process.env.SESSION_TABLE,
@@ -59,6 +60,7 @@ class Session {
         }
     }
     async updateSession() {
+        console.debug('start session update');
         const state = generators.state();
         const now = new Date();
         const ttl = Math.floor((now / 1000) + 15 * 60).toString(); // ttl is 15 minutes
@@ -77,9 +79,11 @@ class Session {
         });
         await this.dbClient.send(command);
         this.state = state;
+        console.debug('end session update. State: ' + this.state);
     }
 
     async createSession() {
+        console.debug('start session create');
         const state = generators.state();
         const sessionId = crypto.randomUUID();
         const now = new Date();
@@ -98,6 +102,7 @@ class Session {
         await this.dbClient.send(command);
         this.state = state;
         this.sessionId = sessionId;
+        console.debug('end session create. sessId: ' + this.sessionId + ' state: ' + this.state);
     }
 }
 exports.Session = Session;
