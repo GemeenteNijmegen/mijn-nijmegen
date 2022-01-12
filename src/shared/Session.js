@@ -1,8 +1,7 @@
 const cookie = require('cookie');
 const crypto = require('crypto');
 const { generators } = require('openid-client');
-const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-const { GetItemCommand, PutItemCommand, UpdateItemCommand } = require("@aws-sdk/client-dynamodb");
+const { DynamoDBClient, GetItemCommand, PutItemCommand, UpdateItemCommand } = require("@aws-sdk/client-dynamodb");
 
 class Session {
     sessionId = false;
@@ -24,7 +23,6 @@ class Session {
     async init() {
         console.debug('init session');
         this.dbClient = new DynamoDBClient();
-        console.debug(this.dbClient);
         if (!this.sessionId) { return false; }
         const getItemCommand = new GetItemCommand({
             TableName: process.env.SESSION_TABLE,
@@ -41,7 +39,7 @@ class Session {
                 return false;
             }
         } catch (err) {
-            console.log('Error getting session from DynamoDB: ' + err);
+            console.debug('Error getting session from DynamoDB: ' + err);
             throw err;
         }
     }
@@ -54,9 +52,9 @@ class Session {
     }
     async createOrUpdateSession() {
         if (this.session) {
-            this.updateSession();
+            await this.updateSession();
         } else {
-            this.createSession();
+            await this.createSession();
         }
     }
     async updateSession() {
