@@ -89,6 +89,7 @@ class Session {
         const now = new Date();
         const ttl = Math.floor((now / 1000) + 15 * 60).toString(); // ttl is 15 minutes
 
+        console.debug('BEFORE command');
         const command = new PutItemCommand({
             TableName: process.env.SESSION_TABLE,
             Item: {
@@ -99,7 +100,9 @@ class Session {
                 'loggedin': { BOOL: false }
             }
         });
+        console.debug('BEFORE dbClient send');
         await this.dbClient.send(command);
+        console.debug('AFTER dbClient send');
         this.state = state;
         this.sessionId = sessionId;
         console.debug('end session create. sessId: ' + this.sessionId + ' state: ' + this.state);
