@@ -1,9 +1,10 @@
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import { Stack, StackProps } from 'aws-cdk-lib';
+import { aws_secretsmanager, Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
 import { SessionsTable } from './SessionsTable';
+import { Statics } from './statics';
 
 export interface ApiStackProps extends StackProps {
   sessionsTable: SessionsTable;
@@ -29,9 +30,27 @@ export class ApiStack extends Stack {
       applicationUrlBase: api.url,
     });
 
+    const oidcSecretArn = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret).secretArn;
+    const authFunction = new ApiFunction(this, 'auth-function', {
+      description: 'Authenticatie-lambd voor de Mijn Uitkering-applicatie.',
+      codePath: 'app/auth',
+      table: props.sessionsTable.table,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: api.url,
+      environment: {
+        OIDC_SECRET_ARN: oidcSecretArn,
+      },
+    });
+
     api.addRoutes({
       integration: new HttpLambdaIntegration('login', loginFunction.lambda),
       path: '/login',
+      methods: [apigatewayv2.HttpMethod.GET],
+    });
+
+    api.addRoutes({
+      integration: new HttpLambdaIntegration('login', authFunction.lambda),
+      path: '/auth',
       methods: [apigatewayv2.HttpMethod.GET],
     });
   }

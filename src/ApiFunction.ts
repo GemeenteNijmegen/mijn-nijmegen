@@ -10,6 +10,7 @@ export interface ApiFunctionProps {
   table: aws_dynamodb.Table;
   tablePermissions: string;
   applicationUrlBase?: string;
+  environment?: {[key: string]: string};
 }
 
 export class ApiFunction extends Construct {
@@ -26,6 +27,7 @@ export class ApiFunction extends Construct {
         AUTH_URL_BASE: SSM.StringParameter.valueForStringParameter(this, Statics.ssmAuthUrlBaseParameter),
         OIDC_CLIENT_ID: SSM.StringParameter.valueForStringParameter(this, Statics.ssmOIDCClientID),
         OIDC_SCOPE: SSM.StringParameter.valueForStringParameter(this, Statics.ssmOIDCScope),
+        ...props.environment,
       },
     });
 

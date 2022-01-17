@@ -10,6 +10,7 @@
     "destroy": "npx projen destroy",
     "diff": "npx projen diff",
     "eslint": "npx projen eslint",
+    "install:auth": "npx projen install:auth",
     "install:login": "npx projen install:login",
     "package": "npx projen package",
     "post-compile": "npx projen post-compile",

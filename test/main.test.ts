@@ -48,12 +48,12 @@ test('StackHasApiGateway', () => {
 });
 
 
-test('StackHasLambda', () => {
+test('StackHasLambdas', () => {
   const app = new App();
   const sessionsStack = new SessionsStack(app, 'sessions');
   const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable });
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::Lambda::Function', 1);
+  template.resourceCountIs('AWS::Lambda::Function', 2);
   // console.log(template.toJSON());
 });
 
@@ -63,6 +63,13 @@ test('StackHasParameters', () => {
   const app = new App();
   const stack = new ParameterStack(app, 'test');
   const template = Template.fromStack(stack);
-  console.debug(template.toJSON());
   template.resourceCountIs('AWS::SSM::Parameter', 3);
+});
+
+
+test('StackHasSecrets', () => {
+  const app = new App();
+  const stack = new ParameterStack(app, 'test');
+  const template = Template.fromStack(stack);
+  template.resourceCountIs('AWS::SecretsManager::Secret', 1);
 });

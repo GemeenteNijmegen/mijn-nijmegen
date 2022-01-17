@@ -32,8 +32,9 @@ class Session {
         });
         try {
             const session = await this.dbClient.send(getItemCommand);
-            if ('Item' in session) {
+            if (session && 'Item' in session) {
                 this.session = session;
+                this.state = session.Item?.state?.S;
                 return session;
             } else {
                 return false;
@@ -50,16 +51,9 @@ class Session {
         }
         return false;
     }
-    async createOrUpdateSession() {
-        if (this.session) {
-            await this.updateSession();
-        } else {
-            await this.createSession();
-        }
-    }
-    async updateSession() {
+
+    async updateSession(loggedin = false, bsn = '') {
         console.debug('start session update');
-        const state = generators.state();
         const now = new Date();
         const ttl = Math.floor((now / 1000) + 15 * 60).toString(); // ttl is 15 minutes
 
@@ -68,15 +62,20 @@ class Session {
             Key: {
                 'sessionid': { S: this.sessionId }
             },
-            UpdateExpression: 'SET state = :state, ttl = :ttl, loggedin = :loggedin',
+            UpdateExpression: 'SET ttl = :ttl, loggedin = :loggedin, bsn = :bsn',
             ExpressionAttributeValues: {
-                ':state': { S: state },
                 ':ttl': { N: ttl },
-                ':loggedin': { BOOL: false }
+                ':loggedin': { BOOL: false },
+                ':bsn': { S: bsn }
             }
         });
-        await this.dbClient.send(command);
-        this.state = state;
+        try {
+            await this.dbClient.send(command);
+        } 
+        catch (err) {
+            console.debug('Error updating session in DynamoDB: ' + err);
+            throw err;
+        }
         console.debug('end session update. State: ' + this.state);
     }
 
@@ -98,9 +97,7 @@ class Session {
                 'loggedin': { BOOL: false }
             }
         });
-        console.debug('BEFORE dbClient send');
         await this.dbClient.send(command);
-        console.debug('AFTER dbClient send');
         this.state = state;
         this.sessionId = sessionId;
         console.debug('end session create. sessId: ' + this.sessionId + ' state: ' + this.state);

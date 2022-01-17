@@ -1,7 +1,7 @@
 {
-  "name": "login",
+  "name": "auth",
   "version": "1.0.0",
-  "description": "login lambda",
+  "description": "auth lambda",
   "main": "index.js",
   "directories": {
     "test": "tests"
@@ -16,11 +16,10 @@
     "@aws-sdk/client-secrets-manager": "^3.47.0",
     "cookie": "^0.4.1",
     "mustache": "^4.2.0",
-    "openid-client": "^5.1.1",
-    "uid-safe": "^2.1.5"
+    "openid-client": "^5.1.2"
   },
   "devDependencies": {
-    "jest-aws-client-mock": "0.0.24",
+    "jest-aws-client-mock": "0.0.26",
     "@aws-sdk/types": "^3.47.0"
   }
 }
