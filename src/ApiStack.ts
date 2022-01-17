@@ -30,7 +30,7 @@ export class ApiStack extends Stack {
       applicationUrlBase: api.url,
     });
 
-    const oidcSecretArn = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret).secretArn;
+    const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
     const authFunction = new ApiFunction(this, 'auth-function', {
       description: 'Authenticatie-lambd voor de Mijn Uitkering-applicatie.',
       codePath: 'app/auth',
@@ -38,10 +38,11 @@ export class ApiStack extends Stack {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: api.url,
       environment: {
-        OIDC_SECRET_ARN: oidcSecretArn,
+        OIDC_SECRET_ARN: oidcSecret.secretArn,
       },
     });
-
+    oidcSecret.grantRead(authFunction.lambda);
+   
     api.addRoutes({
       integration: new HttpLambdaIntegration('login', loginFunction.lambda),
       path: '/login',
