@@ -65,7 +65,7 @@ class Session {
             UpdateExpression: 'SET ttl = :ttl, loggedin = :loggedin, bsn = :bsn',
             ExpressionAttributeValues: {
                 ':ttl': { N: ttl },
-                ':loggedin': { BOOL: false },
+                ':loggedin': { BOOL: loggedin },
                 ':bsn': { S: bsn }
             }
         });

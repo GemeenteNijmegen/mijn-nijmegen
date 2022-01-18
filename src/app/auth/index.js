@@ -19,7 +19,6 @@ exports.handler = async (event, context) => {
             return response;
         }
         const state = session.state;
-        console.debug(session.state);
         const OIDC = new OpenIDConnect();
         const claims = await OIDC.authorize(event?.queryStringParameters?.code, state);
         if(claims) {
