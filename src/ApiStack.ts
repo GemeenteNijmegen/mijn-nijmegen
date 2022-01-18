@@ -38,7 +38,7 @@ export class ApiStack extends Stack {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: api.url,
       environment: {
-        OIDC_SECRET_ARN: oidcSecret.secretArn,
+        CLIENT_SECRET_ARN: oidcSecret.secretArn,
       },
     });
     oidcSecret.grantRead(authFunction.lambda);
