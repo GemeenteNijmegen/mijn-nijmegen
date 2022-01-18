@@ -32,7 +32,7 @@ class Session {
         });
         try {
             const session = await this.dbClient.send(getItemCommand);
-            if (session && 'Item' in session) {
+            if (session.Item?.loggedin !== undefined) {
                 this.session = session;
                 this.state = session.Item?.state?.S;
                 return session;
