@@ -54,7 +54,7 @@ class Session {
 
     async updateSession(loggedin = false, bsn = '') {
         console.debug('start session update');
-        console.debug({ 'bsn': bsn.substring(0, 2), 'loggedin': loggedin });
+        console.debug({ 'sessid': this.sessionId, 'bsn': bsn.substring(0, 2), 'loggedin': loggedin });
         const now = new Date();
         const ttl = Math.floor((now / 1000) + 15 * 60).toString(); // ttl is 15 minutes
 
