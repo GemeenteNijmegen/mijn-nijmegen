@@ -57,7 +57,6 @@ class Session {
         console.debug({ 'sessid': this.sessionId, 'bsn': bsn.substring(0, 2), 'loggedin': loggedin });
         const now = new Date();
         const ttl = Math.floor((now / 1000) + 15 * 60).toString(); // ttl is 15 minutes
-S
         const command = new UpdateItemCommand({
             TableName: process.env.SESSION_TABLE,
             Key: {
