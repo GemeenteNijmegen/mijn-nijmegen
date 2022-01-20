@@ -1,5 +1,5 @@
 const { SecretsManagerClient, GetSecretValueCommand } = require('@aws-sdk/client-secrets-manager');
-const { Issuer } = require('openid-client');
+const { Issuer, generators } = require('openid-client');
 
 class OpenIDConnect {
     issuer = false;
@@ -106,6 +106,10 @@ class OpenIDConnect {
         console.log(JSON.stringify(claims));
         const bsn = claims.sub;
         return claims;
+    }
+    
+    generateState() {
+        return generators.state();
     }
 }
 exports.OpenIDConnect = OpenIDConnect;

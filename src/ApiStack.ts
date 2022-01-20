@@ -42,7 +42,7 @@ export class ApiStack extends Stack {
       },
     });
     oidcSecret.grantRead(authFunction.lambda);
-   
+
     api.addRoutes({
       integration: new HttpLambdaIntegration('login', loginFunction.lambda),
       path: '/login',

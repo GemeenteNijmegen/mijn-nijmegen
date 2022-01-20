@@ -94,7 +94,7 @@ test('Successful auth updates session', async () => {
     },
   };
   ddbMock.mockImplementation(() => getItemOutput);
-  
+
 
   const result = await lambda.handler({ cookies: [`session=${sessionId}`] }, {});
   expect(ddbMock).toHaveBeenCalledWith(
@@ -107,12 +107,12 @@ test('Successful auth updates session', async () => {
       },
     }),
   );
-  expect(ddbMock).toHaveBeenCalledWith( 
+  expect(ddbMock).toHaveBeenCalledWith(
     expect.objectContaining({
       input: expect.objectContaining({
         ExpressionAttributeValues: expect.objectContaining({
-          ":loggedin": { BOOL: true },
-          ":bsn": { S: '12345' },
+          ':loggedin': { BOOL: true },
+          ':bsn': { S: '12345' },
         }),
         TableName: process.env.SESSION_TABLE,
       }),

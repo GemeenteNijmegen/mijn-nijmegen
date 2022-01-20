@@ -15,8 +15,9 @@ exports.handler = async (event, context) => {
         if(session.isLoggedIn() === true) {
             return redirectToHome();
         } 
-        await session.createSession();
         let OIDC = new OpenIDConnect();
+        const state = OIDC.generateState();
+        await session.createSession(state);
         const authUrl = OIDC.getLoginUrl(session.state);
         const html = await render({authUrl: authUrl}, __dirname + '/templates/login.mustache');
         response = {
