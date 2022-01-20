@@ -5,11 +5,26 @@ const { DynamoDBClient, GetItemCommand, PutItemCommand, UpdateItemCommand } = re
 
 class Session {
     sessionId = false;
+    // state parameter to validate OpenIDConnect response
     state = false;
+    
+    /**
+     * Session handler
+     * 
+     * Construct a session object and pass the lambda event object. 
+     * call init() to get the current session state. create or update 
+     * sessions as needed.
+     * @param {object} event the event object provided to the lambda
+     */
     constructor(event) {
         this.sessionId = this.getSessionId(event);
     }
 
+    /**
+     * Parses the event object for the session id stored in a cookie.
+     * @param {object} event the event object provided to lambda
+     * @returns string | false
+     */
     getSessionId(event) {
         if ('cookies' in event) {
             const cookies = cookie.parse(event.cookies.join(';'));
@@ -20,6 +35,12 @@ class Session {
         return false;
     }
 
+    /**
+     * Get the current session state from dynamodb,
+     * set instance variables on the Session object.
+     * 
+     * @returns dynamodb record | false
+     */
     async init() {
         console.debug('init session');
         this.dbClient = new DynamoDBClient();
@@ -44,7 +65,10 @@ class Session {
             throw err;
         }
     }
-
+    /**
+     * Check the current session state for login state. Call after init()
+     * @returns bool
+     */
     isLoggedIn() {
         if (this.session) {
             return this.session.Item.loggedin.BOOL;
@@ -52,11 +76,22 @@ class Session {
         return false;
     }
 
+    /**
+     * Update the session with login state and / or BSN
+     * 
+     * @param {bool} loggedin set the loggedin state
+     * @param {string} bsn set the current user bsn
+     */
     async updateSession(loggedin = false, bsn = '') {
         console.debug('start session update');
         console.debug({ 'sessid': this.sessionId, 'bsn': bsn.substring(0, 2), 'loggedin': loggedin });
         const now = new Date();
         const ttl = Math.floor((now / 1000) + 15 * 60).toString(); // ttl is 15 minutes
+
+        /**
+         * ttl is a reserved keyword in dynamodb, so we need to set
+         * an alias in the ExpressionAttributeNames
+         */
         const command = new UpdateItemCommand({
             TableName: process.env.SESSION_TABLE,
             Key: {
@@ -82,6 +117,9 @@ class Session {
         console.debug('end session update. State: ' + this.state);
     }
 
+    /**
+     * Create a new session, store in dynamodb
+     */
     async createSession() {
         console.debug('start session create');
         const state = generators.state();

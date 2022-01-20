@@ -4,10 +4,19 @@ const { Issuer } = require('openid-client');
 class OpenIDConnect {
     issuer = false;
     clientSecret = false;
+    
+    /**
+     * Helper class for our OIDC auth flow
+     */
     constructor() {
         this.issuer = this.getIssuer();
     }
 
+    /**
+     * Retrieve client secret from secrets manager
+     * 
+     * @returns string the client secret
+     */
     async getOidcClientSecret() {
         if(!this.clientSecret) { 
             const secretsManagerClient = new SecretsManagerClient();
@@ -23,6 +32,13 @@ class OpenIDConnect {
         return this.clientSecret;
     }
 
+    /**
+     * setup the oidc issuer. For now using env. parameters & hardcoded urls
+     * Issuer could also be discovered based on file in .well-known, this
+     * should be cached somehow.
+     * 
+     * @returns openid-client Issuer
+     */
     getIssuer() {
         const issuer = new Issuer({
             issuer: `${process.env.AUTH_URL_BASE}/broker/sp/oidc`,
@@ -41,6 +57,12 @@ class OpenIDConnect {
         return issuer;
     }
 
+    /**
+     * Get the login url for the OIDC-provider.
+     * @param {string} state A string parameter that gets returned in the auth callback.
+     * This should be checked before accepting the login response.
+     * @returns {string} the login url
+     */
     getLoginUrl(state) {
         const base_url = new URL(process.env.APPLICATION_URL_BASE);
         const redirect_uri = new URL('/auth', base_url);
@@ -57,6 +79,14 @@ class OpenIDConnect {
         return authUrl;
     }
 
+    /**
+     * Use the returned code from the OIDC-provider and stored state param 
+     * to complete the login flow.
+     * 
+     * @param {string} code 
+     * @param {string} state 
+     * @returns {object | false} returns a claims object on succesful auth
+     */
     async authorize(code, state) {
         const base_url = new URL(process.env.APPLICATION_URL_BASE);
         const redirect_uri = new URL('/auth', base_url);
