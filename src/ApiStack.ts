@@ -43,6 +43,14 @@ export class ApiStack extends Stack {
     });
     oidcSecret.grantRead(authFunction.lambda);
 
+    const homeFunction = new ApiFunction(this, 'home-function', {
+      description: 'Home-lambda voor de Mijn Uitkering-applicatie.',
+      codePath: 'app/home',
+      table: props.sessionsTable.table,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: api.url,
+    });
+
     api.addRoutes({
       integration: new HttpLambdaIntegration('login', loginFunction.lambda),
       path: '/login',
@@ -50,8 +58,14 @@ export class ApiStack extends Stack {
     });
 
     api.addRoutes({
-      integration: new HttpLambdaIntegration('login', authFunction.lambda),
+      integration: new HttpLambdaIntegration('auth', authFunction.lambda),
       path: '/auth',
+      methods: [apigatewayv2.HttpMethod.GET],
+    });
+
+    api.addRoutes({
+      integration: new HttpLambdaIntegration('home', homeFunction.lambda),
+      path: '/home',
       methods: [apigatewayv2.HttpMethod.GET],
     });
   }

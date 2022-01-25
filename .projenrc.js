@@ -1,6 +1,6 @@
 const { awscdk } = require('projen');
 const project = new awscdk.AwsCdkTypeScriptApp({
-  cdkVersion: '2.3.0',
+  cdkVersion: '2.8.0',
   defaultReleaseBranch: 'main',
   name: 'app2',
   deps: [
@@ -15,6 +15,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   ], /* Build dependencies for this module. */
   // packageName: undefined,  /* The "name" in package.json. */
   // release: undefined,      /* Add release management to this project. */
+  mutableBuild: true,
   jestOptions: {
     jestConfig: {
       setupFiles: ['dotenv/config'],

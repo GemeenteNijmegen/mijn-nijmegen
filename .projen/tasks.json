@@ -100,6 +100,18 @@
         }
       ]
     },
+    "eject": {
+      "name": "eject",
+      "description": "Remove projen from the project",
+      "env": {
+        "PROJEN_EJECTING": "true"
+      },
+      "steps": [
+        {
+          "spawn": "default"
+        }
+      ]
+    },
     "eslint": {
       "name": "eslint",
       "description": "Runs eslint against the codebase",
@@ -142,9 +154,13 @@
       "description": "Runs after successful compilation",
       "steps": [
         {
-          "spawn": "synth"
+          "spawn": "synth:silent"
         }
       ]
+    },
+    "post-upgrade": {
+      "name": "post-upgrade",
+      "description": "Runs after upgrading dependencies"
     },
     "postinstall": {
       "name": "postinstall",
@@ -160,7 +176,16 @@
     },
     "synth": {
       "name": "synth",
-      "description": "Synthesizes your cdk app into cdk.out (part of \"yarn build\")",
+      "description": "Synthesizes your cdk app into cdk.out",
+      "steps": [
+        {
+          "exec": "cdk synth"
+        }
+      ]
+    },
+    "synth:silent": {
+      "name": "synth:silent",
+      "description": "Synthesizes your cdk app into cdk.out and suppresses the template in stdout (part of \"yarn build\")",
       "steps": [
         {
           "exec": "cdk synth > /dev/null"
@@ -227,6 +252,9 @@
         },
         {
           "exec": "npx projen"
+        },
+        {
+          "spawn": "post-upgrade"
         }
       ]
     },
@@ -260,6 +288,9 @@
         },
         {
           "exec": "npx projen"
+        },
+        {
+          "spawn": "post-upgrade"
         }
       ]
     },
