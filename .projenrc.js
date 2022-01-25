@@ -15,6 +15,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   ], /* Build dependencies for this module. */
   // packageName: undefined,  /* The "name" in package.json. */
   // release: undefined,      /* Add release management to this project. */
+  mutableBuild: true,
   jestOptions: {
     jestConfig: {
       setupFiles: ['dotenv/config'],
