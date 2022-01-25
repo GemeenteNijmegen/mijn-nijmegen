@@ -11,6 +11,7 @@
     "diff": "npx projen diff",
     "eslint": "npx projen eslint",
     "install:auth": "npx projen install:auth",
+    "install:home": "npx projen install:home",
     "install:login": "npx projen install:login",
     "package": "npx projen package",
     "post-compile": "npx projen post-compile",

@@ -146,6 +146,7 @@
         "devDependencies": [
           "**/src/app/login/tests/**",
           "**/src/app/auth/tests/**",
+          "**/src/app/home/tests/**",
           "**//test/**",
           "**//build-tools/**"
         ],

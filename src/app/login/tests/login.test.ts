@@ -2,6 +2,7 @@ import { DynamoDBClient, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'jest-aws-client-mock';
 import * as lambda from '../index';
 
+const ddbMock = mockClient(DynamoDBClient);
 beforeAll(() => {
   global.console.log = jest.fn();
   // Set env variables
@@ -13,7 +14,6 @@ beforeAll(() => {
   process.env.OIDC_SCOPE = 'openid';
 });
 
-const ddbMock = mockClient(DynamoDBClient);
 
 beforeEach(() => {
   ddbMock.mockReset();

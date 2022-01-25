@@ -1,12 +1,11 @@
 const { Session } = require('./shared/Session');
-const { OpenIDConnect } = require('./shared/OpenIDConnect');
 const { render } = require('./shared/render');
 
-function redirectToHome() {
+function redirectToLogin() {
     const response = {
         'statusCode': 302,
         'headers': { 
-            'Location': '/'
+            'Location': '/login'
         }
     };
     return response;
@@ -15,14 +14,12 @@ exports.handler = async (event, context) => {
     try {
         let session = new Session(event);
         await session.init();
-        if(session.isLoggedIn() === true) {
-            return redirectToHome();
+        if(session.isLoggedIn() !== true) {
+            return redirectToLogin();
         } 
-        let OIDC = new OpenIDConnect();
-        const state = OIDC.generateState();
-        await session.createSession(state);
-        const authUrl = OIDC.getLoginUrl(session.state);
-        const html = await render({authUrl: authUrl}, __dirname + '/templates/login.mustache');
+        // Get API data
+        // render page
+        const html = await render({}, __dirname + '/templates/home.mustache');
         response = {
             'statusCode': 200,
             'body': html,

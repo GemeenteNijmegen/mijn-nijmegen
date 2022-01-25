@@ -1,0 +1,23 @@
+{
+  "name": "home",
+  "version": "1.0.0",
+  "description": "home lambda",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "npx jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.47.0",
+    "cookie": "^0.4.1",
+    "mustache": "^4.2.0"
+  },
+  "devDependencies": {
+    "jest-aws-client-mock": "0.0.24",
+    "@aws-sdk/types": "^3.47.0"
+  }
+}
