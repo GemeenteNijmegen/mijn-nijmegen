@@ -18,6 +18,9 @@ Object {
         "Artifacts": Object {
           "Type": "CODEPIPELINE",
         },
+        "Cache": Object {
+          "Type": "NO_CACHE",
+        },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
             "mijnuitkeringPipelineArtifactsBucketEncryptionKey0738E820",
@@ -72,6 +75,9 @@ Object {
       "Properties": Object {
         "Artifacts": Object {
           "Type": "CODEPIPELINE",
+        },
+        "Cache": Object {
+          "Type": "NO_CACHE",
         },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
@@ -250,6 +256,13 @@ Object {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": Object {
+                "Service": "codebuild.amazonaws.com",
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
                 "AWS": Object {
                   "Fn::Join": Array [
                     "",
@@ -262,7 +275,6 @@ Object {
                     ],
                   ],
                 },
-                "Service": "codebuild.amazonaws.com",
               },
             },
           ],
@@ -403,6 +415,40 @@ Object {
         },
         "PolicyDocument": Object {
           "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:SecureTransport": "false",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": Object {
+                "AWS": "*",
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "mijnuitkeringPipelineArtifactsBucketA36B7DD3",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "mijnuitkeringPipelineArtifactsBucketA36B7DD3",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
             Object {
               "Action": Array [
                 "s3:GetObject*",
@@ -593,6 +639,9 @@ Object {
       "Properties": Object {
         "Artifacts": Object {
           "Type": "CODEPIPELINE",
+        },
+        "Cache": Object {
+          "Type": "NO_CACHE",
         },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
@@ -1685,6 +1734,9 @@ Object {
       "Properties": Object {
         "Artifacts": Object {
           "Type": "CODEPIPELINE",
+        },
+        "Cache": Object {
+          "Type": "NO_CACHE",
         },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
