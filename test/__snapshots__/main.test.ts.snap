@@ -21,6 +21,18 @@ Object {
         "Cache": Object {
           "Type": "NO_CACHE",
         },
+        "Description": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "Pipeline step ",
+              Object {
+                "Ref": "mijnuitkeringPipelineE8D06236",
+              },
+              "/Assets/FileAsset1",
+            ],
+          ],
+        },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
             "mijnuitkeringPipelineArtifactsBucketEncryptionKey0738E820",
@@ -46,7 +58,7 @@ Object {
   \\"phases\\": {
     \\"install\\": {
       \\"commands\\": [
-        \\"npm install -g cdk-assets\\"
+        \\"npm install -g cdk-assets@2\\"
       ]
     },
     \\"build\\": {
@@ -79,6 +91,18 @@ Object {
         "Cache": Object {
           "Type": "NO_CACHE",
         },
+        "Description": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "Pipeline step ",
+              Object {
+                "Ref": "mijnuitkeringPipelineE8D06236",
+              },
+              "/Assets/FileAsset2",
+            ],
+          ],
+        },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
             "mijnuitkeringPipelineArtifactsBucketEncryptionKey0738E820",
@@ -104,7 +128,7 @@ Object {
   \\"phases\\": {
     \\"install\\": {
       \\"commands\\": [
-        \\"npm install -g cdk-assets\\"
+        \\"npm install -g cdk-assets@2\\"
       ]
     },
     \\"build\\": {
@@ -137,6 +161,18 @@ Object {
         "Cache": Object {
           "Type": "NO_CACHE",
         },
+        "Description": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "Pipeline step ",
+              Object {
+                "Ref": "mijnuitkeringPipelineE8D06236",
+              },
+              "/Assets/FileAsset3",
+            ],
+          ],
+        },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
             "mijnuitkeringPipelineArtifactsBucketEncryptionKey0738E820",
@@ -162,7 +198,7 @@ Object {
   \\"phases\\": {
     \\"install\\": {
       \\"commands\\": [
-        \\"npm install -g cdk-assets\\"
+        \\"npm install -g cdk-assets@2\\"
       ]
     },
     \\"build\\": {
@@ -769,6 +805,18 @@ Object {
         "Cache": Object {
           "Type": "NO_CACHE",
         },
+        "Description": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "Pipeline step ",
+              Object {
+                "Ref": "mijnuitkeringPipelineE8D06236",
+              },
+              "/Build/Synth",
+            ],
+          ],
+        },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
             "mijnuitkeringPipelineArtifactsBucketEncryptionKey0738E820",
@@ -1179,7 +1227,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"_PROJECT_CONFIG_HASH\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"5bf35113579754e28f72c705fde1a2e02dd0d8d1cfcee326900f3e08ec8f9bf5\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"_PROJECT_CONFIG_HASH\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"3da127aa189deb54d8c0980cc729eac900f60d30510349b54f3361e2131edba9\\"}]",
                   "ProjectName": Object {
                     "Ref": "mijnuitkeringUpdatePipelineSelfMutationABAB1C95",
                   },
@@ -1900,6 +1948,18 @@ Object {
         "Cache": Object {
           "Type": "NO_CACHE",
         },
+        "Description": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "Pipeline step ",
+              Object {
+                "Ref": "mijnuitkeringPipelineE8D06236",
+              },
+              "/UpdatePipeline/SelfMutate",
+            ],
+          ],
+        },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
             "mijnuitkeringPipelineArtifactsBucketEncryptionKey0738E820",
@@ -1926,7 +1986,7 @@ Object {
   \\"phases\\": {
     \\"install\\": {
       \\"commands\\": [
-        \\"npm install -g aws-cdk\\"
+        \\"npm install -g aws-cdk@2\\"
       ]
     },
     \\"build\\": {
