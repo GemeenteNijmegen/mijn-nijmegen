@@ -14,10 +14,12 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.47.0",
     "cookie": "^0.4.1",
-    "mustache": "^4.2.0"
+    "mustache": "^4.2.0",
+    "object-mapper": "^6.2.0",
+    "xml2js": "^0.4.23"
   },
   "devDependencies": {
-    "jest-aws-client-mock": "0.0.24",
-    "@aws-sdk/types": "^3.47.0"
+    "@aws-sdk/types": "^3.47.0",
+    "jest-aws-client-mock": "0.0.24"
   }
 }

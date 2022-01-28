@@ -1,5 +1,6 @@
 const { Session } = require('./shared/Session');
 const { render } = require('./shared/render');
+const { UitkeringsApi, FileConnector } = require('./UitkeringsApi');
 
 function redirectToLogin() {
     const response = {
@@ -18,8 +19,11 @@ exports.handler = async (event, context) => {
             return redirectToLogin();
         } 
         // Get API data
+        const api = new UitkeringsApi(session.getValue('bsn'), FileConnector);
+        const data = await api.getUitkeringen();
+        
         // render page
-        const html = await render({}, __dirname + '/templates/home.mustache');
+        const html = await render(data, __dirname + '/templates/home.mustache');
         response = {
             'statusCode': 200,
             'body': html,
