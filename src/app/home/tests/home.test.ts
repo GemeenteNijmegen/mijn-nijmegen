@@ -21,6 +21,9 @@ beforeEach(() => {
       loggedin: {
         BOOL: true,
       },
+      bsn: {
+        S: '12345678',
+      },
       state: {
         S: '12345',
       },
@@ -37,4 +40,5 @@ test('Returns 200', async () => {
 test('Shows overview page', async () => {
   const result = await lambda.handler({ cookies: ['session=12345'] }, {});
   expect(result.body).toMatch('Mijn Uitkering');
+  expect(result.body).toMatch('Participatiewet');
 });

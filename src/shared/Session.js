@@ -1,6 +1,7 @@
 const cookie = require('cookie');
 const crypto = require('crypto');
 const { DynamoDBClient, GetItemCommand, PutItemCommand, UpdateItemCommand } = require("@aws-sdk/client-dynamodb");
+const { type } = require('os');
 
 class Session {
     sessionId = false;
@@ -73,6 +74,10 @@ class Session {
             return this.session.Item.loggedin.BOOL;
         }
         return false;
+    }
+
+    getValue(key, type = 'S') {
+        return this.session?.Item?.[key]?.[type];
     }
 
     /**
