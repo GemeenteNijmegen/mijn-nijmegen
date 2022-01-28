@@ -120,7 +120,7 @@
                     {{#uitkeringen}}
                         <div class="nav-item">
                             <button class="nav-link {{#selected}}active{{/selected}}" role="tab" {{#selected}}aria-selected="true" {{/selected}} aria-controls="{{uitkeringattr}}-tab" id="{{uitkeringattr}}-tabcontrol">
-                                {{uitkering}}
+                                {{type}}
                             </button>
                         </div>
                     {{/uitkeringen}}
@@ -128,23 +128,22 @@
                     {{#uitkeringen}}
                     <!-- Tab Content -->
                     <div class="tab-content" tabindex="0" role="tabpanel" id="{{uitkeringattr}}-tab" aria-labelledby="{{uitkeringattr}}-tabcontrol">
-                        <h2>{{uitkering}}</h2>
-                    
+                        <h2>{{type}}</h2>
                         <div class="card card-number">
                             <div class="card-body">
-                                <p class="card-title">€ {{betaald-totaal}}</p>
+                                <p class="card-title">€ {{#fieldsByName}} {{betaald-totaal}} {{/fieldsByName}}</p>
                                 <p class="card-text">Totaal betaald</p>
                             </div>
                             <div class="card-body">
-                                <p class="card-title">€	{{betaald-aan-u}}</p>
+                                <p class="card-title">€	{{#fieldsByName}} {{betaald-aan-u}} {{/fieldsByName}}</p>
                                 <p class="card-text">Betaald aan u</p>
                             </div>
                             <div class="card-body">
-                                <p class="card-title">€	{{betaald-aan-derde}}</p>
+                                <p class="card-title">€	{{#fieldsByName}} {{betaald-aan-derde}} {{/fieldsByName}}</p>
                                 <p class="card-text">Betaald aan derde</p>
                             </div>
                             <div class="card-body">
-                                <p class="card-title">{{laatste-betaling}}</p>
+                                <p class="card-title">{{#fieldsByName}} {{laatste-betaling}} {{/fieldsByName}}</p>
                                 <p class="card-text">Betalingsdatum</p>
                             </div>
                         </div>

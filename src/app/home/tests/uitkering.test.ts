@@ -22,5 +22,4 @@ test('returns two uitkeringen', async () => {
   const api = new UitkeringsApi('tweeuitkeringen', FileConnector);
   const result = await api.getUitkeringen();
   expect(result.uitkeringen).toHaveLength(2);
-  console.debug(JSON.stringify(result));
 });

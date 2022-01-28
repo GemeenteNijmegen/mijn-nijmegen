@@ -21,18 +21,6 @@ Object {
         "Cache": Object {
           "Type": "NO_CACHE",
         },
-        "Description": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "Pipeline step ",
-              Object {
-                "Ref": "mijnuitkeringPipelineE8D06236",
-              },
-              "/Assets/FileAsset1",
-            ],
-          ],
-        },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
             "mijnuitkeringPipelineArtifactsBucketEncryptionKey0738E820",
@@ -58,12 +46,12 @@ Object {
   \\"phases\\": {
     \\"install\\": {
       \\"commands\\": [
-        \\"npm install -g cdk-assets@2\\"
+        \\"npm install -g cdk-assets\\"
       ]
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"5bedaf4928a224b922a42c9e4d68aeb19b40e5eb2ffe77e1d0365244bff2082a:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"046b04db0c34d7ce19066f6801fd6c752326b1b77865d472ec9b7535d1c1e0fd:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -91,18 +79,6 @@ Object {
         "Cache": Object {
           "Type": "NO_CACHE",
         },
-        "Description": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "Pipeline step ",
-              Object {
-                "Ref": "mijnuitkeringPipelineE8D06236",
-              },
-              "/Assets/FileAsset2",
-            ],
-          ],
-        },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
             "mijnuitkeringPipelineArtifactsBucketEncryptionKey0738E820",
@@ -128,12 +104,12 @@ Object {
   \\"phases\\": {
     \\"install\\": {
       \\"commands\\": [
-        \\"npm install -g cdk-assets@2\\"
+        \\"npm install -g cdk-assets\\"
       ]
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"529aa1c174b1f525374eacef3c5611b193fa9b760d278b2e9990d991e249c7e6:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"ca5ebc53d21f5a3918e1d9cad207a792a4bb1a857a3364ae5be8464f19077a7f:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -161,18 +137,6 @@ Object {
         "Cache": Object {
           "Type": "NO_CACHE",
         },
-        "Description": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "Pipeline step ",
-              Object {
-                "Ref": "mijnuitkeringPipelineE8D06236",
-              },
-              "/Assets/FileAsset3",
-            ],
-          ],
-        },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
             "mijnuitkeringPipelineArtifactsBucketEncryptionKey0738E820",
@@ -198,12 +162,12 @@ Object {
   \\"phases\\": {
     \\"install\\": {
       \\"commands\\": [
-        \\"npm install -g cdk-assets@2\\"
+        \\"npm install -g cdk-assets\\"
       ]
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"c5161723a4a0fcb5064073ae8a239d9ea66ae5a2462aa85fd4f92e90eee5ebae:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"8320816e8c45baa2a023d54731be54bf257c246ac354144697115a1f6a02b6ac:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -805,18 +769,6 @@ Object {
         "Cache": Object {
           "Type": "NO_CACHE",
         },
-        "Description": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "Pipeline step ",
-              Object {
-                "Ref": "mijnuitkeringPipelineE8D06236",
-              },
-              "/Build/Synth",
-            ],
-          ],
-        },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
             "mijnuitkeringPipelineArtifactsBucketEncryptionKey0738E820",
@@ -1227,7 +1179,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"_PROJECT_CONFIG_HASH\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"3da127aa189deb54d8c0980cc729eac900f60d30510349b54f3361e2131edba9\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"_PROJECT_CONFIG_HASH\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"5bf35113579754e28f72c705fde1a2e02dd0d8d1cfcee326900f3e08ec8f9bf5\\"}]",
                   "ProjectName": Object {
                     "Ref": "mijnuitkeringUpdatePipelineSelfMutationABAB1C95",
                   },
@@ -1948,18 +1900,6 @@ Object {
         "Cache": Object {
           "Type": "NO_CACHE",
         },
-        "Description": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "Pipeline step ",
-              Object {
-                "Ref": "mijnuitkeringPipelineE8D06236",
-              },
-              "/UpdatePipeline/SelfMutate",
-            ],
-          ],
-        },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
             "mijnuitkeringPipelineArtifactsBucketEncryptionKey0738E820",
@@ -1986,7 +1926,7 @@ Object {
   \\"phases\\": {
     \\"install\\": {
       \\"commands\\": [
-        \\"npm install -g aws-cdk@2\\"
+        \\"npm install -g aws-cdk\\"
       ]
     },
     \\"build\\": {

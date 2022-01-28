@@ -13,8 +13,9 @@ class UitkeringsApi {
         let data = await this.connector.requestData();
         const object = await xml2js.parseStringPromise(data);
         const uitkeringsRows =  this.mapUitkeringsRows(object);
-        const uitkeringen = this.mapUitkering(uitkeringsRows);
+        let uitkeringen = this.mapUitkering(uitkeringsRows);
         if(uitkeringen) {
+            uitkeringen = this.addFieldsByName(uitkeringen);
             return uitkeringen;
         }
         return {'uitkeringen': []};
@@ -43,6 +44,19 @@ class UitkeringsApi {
             'uitkeringen.row[].fields[0].field[].value[0]': 'uitkeringen[].fields[].value',
         };
         return ObjectMapper(object, map);
+    }
+
+    addFieldsByName(uitkeringen) {
+        uitkeringen.uitkeringen.forEach((uitkering) => {
+            const fieldsByName = uitkering.fields?.map((field) => {
+                let obj = {};
+                let label = field.label.toLowerCase().replace(/\s+/g, '-');
+                obj[label] = field.value;
+                return obj;
+            });
+            uitkering.fieldsByName = fieldsByName;
+        });
+        return uitkeringen;
     }
 }
 
