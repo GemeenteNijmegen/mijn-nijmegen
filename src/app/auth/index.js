@@ -1,6 +1,15 @@
 const { Session } = require('./shared/Session');
 const { OpenIDConnect } = require('./shared/OpenIDConnect');
 
+function redirectResponse(location, code = 200) {
+    return {
+        'statusCode': code,
+        'body': '',
+        'headers': { 
+            'Location': location
+        }
+    }
+}
 
 exports.handler = async (event, context) => {
     try {
@@ -9,14 +18,7 @@ exports.handler = async (event, context) => {
         await session.init();
         
         if(session.sessionId === false) {
-            response = {
-                'statusCode': 302,
-                'body': '',
-                'headers': { 
-                    'Location': '/login'
-                }
-            }
-            return response;
+            return redirectResponse('/login', 302);
         }
         const state = session.state;
         const OIDC = new OpenIDConnect();
@@ -24,24 +26,10 @@ exports.handler = async (event, context) => {
         if(claims) {
             session.updateSession(true, claims.sub);
         } else {
-            response = {
-                'statusCode': 302,
-                'body': '',
-                'headers': { 
-                    'Location': '/login'
-                }
-            }
-            return response;
+            return redirectResponse('/login', 302);
         }
-        
-        response = {
-            'statusCode': 302,
-            'body': '',
-            'headers': { 
-                'Location': '/'
-            }
-        }
-        return response;
+
+        return redirectResponse('/', 302);
     } catch (err) {
         console.debug(err);
         response = {
