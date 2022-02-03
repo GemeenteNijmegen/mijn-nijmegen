@@ -17,11 +17,14 @@ export class ApiFunction extends Construct {
   lambda: Lambda.Function;
   constructor(scope: Construct, id: string, props: ApiFunctionProps) {
     super(scope, id);
+    // See https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights-extension-versionsx86-64.html
+    const insightsArn = 'arn:aws:lambda:eu-west-1:580247275435:layer:LambdaInsightsExtension:16';
     this.lambda = new Lambda.Function(this, 'lambda', {
       runtime: Lambda.Runtime.NODEJS_14_X,
       handler: 'index.handler',
       description: props.description,
       code: Lambda.Code.fromAsset(path.join(__dirname, props.codePath)),
+      insightsVersion: Lambda.LambdaInsightsVersion.fromInsightVersionArn(insightsArn),
       environment: {
         APPLICATION_URL_BASE: props.applicationUrlBase || '',
         AUTH_URL_BASE: SSM.StringParameter.valueForStringParameter(this, Statics.ssmAuthUrlBaseParameter),
