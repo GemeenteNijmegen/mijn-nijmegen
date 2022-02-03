@@ -1,7 +1,6 @@
 const cookie = require('cookie');
 const crypto = require('crypto');
 const { DynamoDBClient, GetItemCommand, PutItemCommand, UpdateItemCommand } = require("@aws-sdk/client-dynamodb");
-const { type } = require('os');
 
 class Session {
     sessionId = false;
@@ -21,16 +20,15 @@ class Session {
     }
 
     /**
-     * Parses the event object for the session id stored in a cookie.
-     * @param {object} event the event object provided to lambda
+     * Parses the cookie string for the session id.
+     * @param {object} cookiestring a standard cookie header value
      * @returns string | false
      */
-    getSessionId(event) {
-        if ('cookies' in event) {
-            const cookies = cookie.parse(event.cookies.join(';'));
-            if ('session' in cookies) {
-                return cookies.session;
-            }
+    getSessionId(cookieString) {
+        if(!cookieString) { return false; }
+        const cookies = cookie.parse(cookieString);
+        if ('session' in cookies) {
+            return cookies.session;
         }
         return false;
     }
