@@ -1,44 +1,74 @@
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
 import { aws_secretsmanager, Stack, StackProps } from 'aws-cdk-lib';
+import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
 import { SessionsTable } from './SessionsTable';
 import { Statics } from './statics';
+import { Distribution, PriceClass } from 'aws-cdk-lib/aws-cloudfront';
+import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 
 export interface ApiStackProps extends StackProps {
   sessionsTable: SessionsTable;
 }
 
 /**
- * The API Stack creates both the API Gateway and the related
- * lambda's. It requires supporting resources (such as the
+ * The API Stack creates the API Gateway and related
+ * lambda's. It also creates a cloudfront distribution.
+ * It requires supporting resources (such as the
  * DynamoDB sessions table to be provided and thus created first)
  */
 export class ApiStack extends Stack {
-  apiGatewayDomain: string;
+  private api: apigatewayv2.HttpApi;
+  private sessionsTable: Table
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id);
-    const api = new apigatewayv2.HttpApi(this, 'mijnuitkering-api', {
+    this.sessionsTable = props.sessionsTable.table;
+    this.api = new apigatewayv2.HttpApi(this, 'mijnuitkering-api', {
       description: 'Mijn Uitkering webapplicatie',
     });
-    const apiHost = this.cleanDomain(api.url);
-    this.apiGatewayDomain = apiHost;
+    const apiHost = this.cleanDomain(this.api.url);
+    const cloudfrontUrl = this.setCloudfrontStack(apiHost);
+    this.setFunctions(cloudfrontUrl);
+  }
+
+  /**
+   * Create a cloudfront distribution for the application
+   * @param apiGatewayDomain the domain the api gateway can be reached at
+   * @returns the base url for the cloudfront distribution
+   */
+  setCloudfrontStack(apiGatewayDomain: string): string {
+    const distribution = new Distribution(this, 'cf-distribution', {
+      priceClass: PriceClass.PRICE_CLASS_100,
+      defaultBehavior: {
+        origin: new HttpOrigin(apiGatewayDomain),
+      }
+    });
+    return `https://${distribution.distributionDomainName}/`;
+  }
+
+  /**
+   * Create and configure lambda's for all api routes, and
+   * add routes to the gateway.
+   * @param baseUrl the application url
+   */
+  setFunctions(baseUrl: string) {
     const loginFunction = new ApiFunction(this, 'login-function', {
       description: 'Login-pagina voor de Mijn Uitkering-applicatie.',
       codePath: 'app/login',
-      table: props.sessionsTable.table,
+      table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
-      applicationUrlBase: api.url,
+      applicationUrlBase: baseUrl,
     });
 
     const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
     const authFunction = new ApiFunction(this, 'auth-function', {
       description: 'Authenticatie-lambd voor de Mijn Uitkering-applicatie.',
       codePath: 'app/auth',
-      table: props.sessionsTable.table,
+      table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
-      applicationUrlBase: api.url,
+      applicationUrlBase: baseUrl,
       environment: {
         CLIENT_SECRET_ARN: oidcSecret.secretArn,
       },
@@ -48,24 +78,24 @@ export class ApiStack extends Stack {
     const homeFunction = new ApiFunction(this, 'home-function', {
       description: 'Home-lambda voor de Mijn Uitkering-applicatie.',
       codePath: 'app/home',
-      table: props.sessionsTable.table,
+      table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
-      applicationUrlBase: api.url,
+      applicationUrlBase: baseUrl,
     });
 
-    api.addRoutes({
+    this.api.addRoutes({
       integration: new HttpLambdaIntegration('login', loginFunction.lambda),
       path: '/login',
       methods: [apigatewayv2.HttpMethod.GET],
     });
 
-    api.addRoutes({
+    this.api.addRoutes({
       integration: new HttpLambdaIntegration('auth', authFunction.lambda),
       path: '/auth',
       methods: [apigatewayv2.HttpMethod.GET],
     });
 
-    api.addRoutes({
+    this.api.addRoutes({
       integration: new HttpLambdaIntegration('home', homeFunction.lambda),
       path: '/',
       methods: [apigatewayv2.HttpMethod.GET],
