@@ -1,13 +1,13 @@
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
 import { aws_secretsmanager, Stack, StackProps } from 'aws-cdk-lib';
+import { Distribution, PriceClass } from 'aws-cdk-lib/aws-cloudfront';
+import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
 import { SessionsTable } from './SessionsTable';
 import { Statics } from './statics';
-import { Distribution, PriceClass } from 'aws-cdk-lib/aws-cloudfront';
-import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 
 export interface ApiStackProps extends StackProps {
   sessionsTable: SessionsTable;
@@ -21,7 +21,7 @@ export interface ApiStackProps extends StackProps {
  */
 export class ApiStack extends Stack {
   private api: apigatewayv2.HttpApi;
-  private sessionsTable: Table
+  private sessionsTable: Table;
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id);
     this.sessionsTable = props.sessionsTable.table;
@@ -43,7 +43,7 @@ export class ApiStack extends Stack {
       priceClass: PriceClass.PRICE_CLASS_100,
       defaultBehavior: {
         origin: new HttpOrigin(apiGatewayDomain),
-      }
+      },
     });
     return `https://${distribution.distributionDomainName}/`;
   }
