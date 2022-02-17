@@ -5,6 +5,7 @@ import { ApiStack } from '../src/ApiStack';
 import { ParameterStack } from '../src/ParameterStage';
 import { PipelineStackDevelopment } from '../src/PipelineStackDevelopment';
 import { SessionsStack } from '../src/SessionsStack';
+import { CloudfrontStack } from '../src/CloudfrontStack';
 
 beforeAll(() => {
   Dotenv.config();
@@ -57,7 +58,6 @@ test('StackHasLambdas', () => {
 });
 
 
-
 test('StackHasParameters', () => {
   const app = new App();
   const stack = new ParameterStack(app, 'test');
@@ -71,4 +71,13 @@ test('StackHasSecrets', () => {
   const stack = new ParameterStack(app, 'test');
   const template = Template.fromStack(stack);
   template.resourceCountIs('AWS::SecretsManager::Secret', 1);
+});
+
+
+test('StackHasCFDistribution', () => {
+  const app = new App();
+  const stack = new CloudfrontStack(app, 'test', {ApiGatewayDomain: 'test.test'});
+  const template = Template.fromStack(stack);
+  console.log(JSON.stringify(template));
+  template.resourceCountIs('AWS::CloudFront::Distribution', 1);
 });

@@ -16,12 +16,14 @@ export interface ApiStackProps extends StackProps {
  * DynamoDB sessions table to be provided and thus created first)
  */
 export class ApiStack extends Stack {
+  apiGatewayDomain: string;
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id);
     const api = new apigatewayv2.HttpApi(this, 'mijnuitkering-api', {
       description: 'Mijn Uitkering webapplicatie',
     });
-
+    const apiHost = this.cleanDomain(api.url);
+    this.apiGatewayDomain = apiHost;
     const loginFunction = new ApiFunction(this, 'login-function', {
       description: 'Login-pagina voor de Mijn Uitkering-applicatie.',
       codePath: 'app/login',
@@ -68,5 +70,21 @@ export class ApiStack extends Stack {
       path: '/',
       methods: [apigatewayv2.HttpMethod.GET],
     });
+  }
+
+  /**
+   * Clean a url placeholder. apigateway returns a url like
+   * https://${Token[TOKEN.246]}.execute-api.eu-west-1.${Token[AWS.URLSuffix.3]}/
+   * which can't be parsed by the URL class.
+   *
+   * @param url a url-like string optionally containing protocol and trailing slash
+   * @returns a url-like string cleaned of protocol and trailing slash
+   */
+  cleanDomain(url?: string): string {
+    if (!url) { return ''; }
+    let cleanedUrl = url
+      .replace(/^https?:\/\//, '') //protocol
+      .replace(/\/$/, ''); //optional trailing slash
+    return cleanedUrl;
   }
 }
