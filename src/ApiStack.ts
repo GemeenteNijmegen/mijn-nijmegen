@@ -1,7 +1,7 @@
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
 import { aws_secretsmanager, Stack, StackProps } from 'aws-cdk-lib';
-import { Distribution, PriceClass } from 'aws-cdk-lib/aws-cloudfront';
+import { Distribution, OriginRequestPolicy, PriceClass } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
@@ -35,14 +35,15 @@ export class ApiStack extends Stack {
 
   /**
    * Create a cloudfront distribution for the application
-   * @param apiGatewayDomain the domain the api gateway can be reached at
-   * @returns the base url for the cloudfront distribution
+   * @param {string} apiGatewayDomain the domain the api gateway can be reached at
+   * @returns {string} the base url for the cloudfront distribution
    */
   setCloudfrontStack(apiGatewayDomain: string): string {
     const distribution = new Distribution(this, 'cf-distribution', {
       priceClass: PriceClass.PRICE_CLASS_100,
       defaultBehavior: {
         origin: new HttpOrigin(apiGatewayDomain),
+        originRequestPolicy:  OriginRequestPolicy.ALL_VIEWER,
       },
     });
     return `https://${distribution.distributionDomainName}/`;
@@ -51,7 +52,7 @@ export class ApiStack extends Stack {
   /**
    * Create and configure lambda's for all api routes, and
    * add routes to the gateway.
-   * @param baseUrl the application url
+   * @param {string} baseUrl the application url
    */
   setFunctions(baseUrl: string) {
     const loginFunction = new ApiFunction(this, 'login-function', {
