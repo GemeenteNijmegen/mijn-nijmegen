@@ -1,7 +1,7 @@
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import { aws_secretsmanager, Stack, StackProps } from 'aws-cdk-lib';
-import { Distribution, OriginRequestPolicy, PriceClass } from 'aws-cdk-lib/aws-cloudfront';
+import { aws_secretsmanager, Stack, StackProps, Duration } from 'aws-cdk-lib';
+import { Distribution, OriginRequestPolicy, PriceClass, ViewerProtocolPolicy, ResponseHeadersPolicy, HeadersFrameOption, HeadersReferrerPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
@@ -39,14 +39,45 @@ export class ApiStack extends Stack {
    * @returns {string} the base url for the cloudfront distribution
    */
   setCloudfrontStack(apiGatewayDomain: string): string {
+
     const distribution = new Distribution(this, 'cf-distribution', {
       priceClass: PriceClass.PRICE_CLASS_100,
       defaultBehavior: {
         origin: new HttpOrigin(apiGatewayDomain),
-        originRequestPolicy:  OriginRequestPolicy.ALL_VIEWER,
+        originRequestPolicy: OriginRequestPolicy.ALL_VIEWER,
+        viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        responseHeadersPolicy: this.responseHeadersPolicy(),
       },
     });
     return `https://${distribution.distributionDomainName}/`;
+  }
+
+  /**
+   * Get a set of (security) response headers to inject into the response
+   * @returns {ResponseHeadersPolicy} cloudfront responseHeadersPolicy
+   */
+  responseHeadersPolicy() {
+    const cspValues = 'default-src \'self\';\
+    frame-ancestors \'self\';\
+    frame-src \'self\';\
+    connect-src \'self\' https://componenten.nijmegen.nl;\
+    style-src \'self\' https://componenten.nijmegen.nl https://fonts.googleapis.com https://fonts.gstatic.com;\
+    script-src \'self\' https://componenten.nijmegen.nl https://siteimproveanalytics.com;\
+    font-src \'self\' https://componenten.nijmegen.nl https://fonts.gstatic.com;\
+    img-src \'self\' data: https://*.siteimproveanalytics.io;\
+    object-src \'self\';\
+    ';
+    const responseHeadersPolicy = new ResponseHeadersPolicy(this, 'headers', {
+      securityHeadersBehavior: {
+        contentSecurityPolicy: { contentSecurityPolicy: cspValues, override: true },
+        contentTypeOptions: { override: true },
+        frameOptions: { frameOption: HeadersFrameOption.DENY, override: true },
+        referrerPolicy: { referrerPolicy: HeadersReferrerPolicy.NO_REFERRER, override: true },
+        strictTransportSecurity: { accessControlMaxAge: Duration.seconds(600), includeSubdomains: true, override: true },
+        xssProtection: { protection: true, modeBlock: true, reportUri: 'https://example.com/csp-report', override: true },
+      },
+    });
+    return responseHeadersPolicy;
   }
 
   /**
