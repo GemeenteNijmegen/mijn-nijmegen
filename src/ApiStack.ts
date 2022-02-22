@@ -46,7 +46,6 @@ export class ApiStack extends Stack {
         origin: new HttpOrigin(apiGatewayDomain),
         originRequestPolicy: OriginRequestPolicy.ALL_VIEWER,
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        responseHeadersPolicy: ResponseHeadersPolicy.SECURITY_HEADERS,
       },
     });
     return `https://${distribution.distributionDomainName}/`;
