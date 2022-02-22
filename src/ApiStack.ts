@@ -57,16 +57,7 @@ export class ApiStack extends Stack {
    * @returns {ResponseHeadersPolicy} cloudfront responseHeadersPolicy
    */
   responseHeadersPolicy() {
-    const cspValues = 'default-src \'self\';\
-    frame-ancestors \'self\';\
-    frame-src \'self\';\
-    connect-src \'self\' https://componenten.nijmegen.nl;\
-    style-src \'self\' https://componenten.nijmegen.nl https://fonts.googleapis.com https://fonts.gstatic.com;\
-    script-src \'self\' https://componenten.nijmegen.nl https://siteimproveanalytics.com;\
-    font-src \'self\' https://componenten.nijmegen.nl https://fonts.gstatic.com;\
-    img-src \'self\' data: https://*.siteimproveanalytics.io;\
-    object-src \'self\';\
-    ';
+    const cspValues = "default-src 'self';";
     const responseHeadersPolicy = new ResponseHeadersPolicy(this, 'headers', {
       securityHeadersBehavior: {
         contentSecurityPolicy: { contentSecurityPolicy: cspValues, override: true },
