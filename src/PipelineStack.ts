@@ -18,7 +18,7 @@ export class PipelineStack extends Stack {
     this.branchName = props.branchName;
     const pipeline = this.pipeline();
     pipeline.addStage(new ParameterStage(this, 'mijn-uitkering-parameters', { env: props.deployToEnvironment }));
-    pipeline.addStage(new ApiStage(this, 'mijn-uitkering-api', { env: props.deployToEnvironment }));
+    pipeline.addStage(new ApiStage(this, 'mijn-uitkering-api', { env: props.deployToEnvironment, branch: this.branchName }));
   }
 
   pipeline(): pipelines.CodePipeline {
