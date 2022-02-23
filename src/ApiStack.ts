@@ -29,9 +29,9 @@ export class ApiStack extends Stack {
     this.api = new apigatewayv2.HttpApi(this, 'mijnuitkering-api', {
       description: 'Mijn Uitkering webapplicatie'
     });
-    const apiHost = this.cleanDomain(this.api.url);
-    const cloudfrontUrl = this.setCloudfrontStack(apiHost);
-    this.setFunctions(this.api.url);
+    // const apiHost = this.cleanDomain(this.api.url);
+    // const cloudfrontUrl = this.setCloudfrontStack(apiHost);
+    this.setFunctions(this.api.url || '');
   }
 
   /**
