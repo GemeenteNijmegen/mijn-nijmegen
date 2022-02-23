@@ -3,6 +3,7 @@ import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-al
 import { aws_secretsmanager, Stack, StackProps, Duration } from 'aws-cdk-lib';
 import { Distribution, OriginRequestPolicy, PriceClass, ViewerProtocolPolicy, ResponseHeadersPolicy, HeadersFrameOption, HeadersReferrerPolicy, AllowedMethods } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
+import { Bucket, BlockPublicAccess, BucketEncryption } from 'aws-cdk-lib/aws-s3';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
@@ -46,10 +47,30 @@ export class ApiStack extends Stack {
         origin: new HttpOrigin(apiGatewayDomain),
         originRequestPolicy: OriginRequestPolicy.ALL_VIEWER,
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        allowedMethods: AllowedMethods.ALLOW_ALL
+        allowedMethods: AllowedMethods.ALLOW_ALL,
       },
+      logBucket: this.logBucket()
     });
+
     return `https://${distribution.distributionDomainName}/`;
+  }
+
+  logBucket() {
+    /**
+     * bucket voor cloudfront logs
+     */
+     const cfLogBucket = new Bucket(this, 'CloudfrontLogs', {
+      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+      encryption: BucketEncryption.S3_MANAGED,
+      lifecycleRules: [
+        {
+          id: 'delete objects after 180 days',
+          enabled: true,
+          expiration: Duration.days(180),
+        },
+      ],
+    });
+    return cfLogBucket;
   }
 
   /**
