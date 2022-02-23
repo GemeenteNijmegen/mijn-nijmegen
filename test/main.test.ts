@@ -73,11 +73,11 @@ test('StackHasSecrets', () => {
 });
 
 
-test('StackHasCFDistribution', () => {
-  const app = new App();
-  const sessionsStack = new SessionsStack(app, 'sessions');
-  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable });
-  const template = Template.fromStack(stack);
-  console.log(JSON.stringify(template));
-  template.resourceCountIs('AWS::CloudFront::Distribution', 1);
-});
+// test('StackHasCFDistribution', () => {
+//   const app = new App();
+//   const sessionsStack = new SessionsStack(app, 'sessions');
+//   const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable });
+//   const template = Template.fromStack(stack);
+//   console.log(JSON.stringify(template));
+//   template.resourceCountIs('AWS::CloudFront::Distribution', 1);
+// });

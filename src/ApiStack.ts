@@ -3,8 +3,8 @@ import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-al
 import { aws_secretsmanager, Stack, StackProps, Duration } from 'aws-cdk-lib';
 import { Distribution, OriginRequestPolicy, PriceClass, ViewerProtocolPolicy, ResponseHeadersPolicy, HeadersFrameOption, HeadersReferrerPolicy, AllowedMethods } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
-import { Bucket, BlockPublicAccess, BucketEncryption } from 'aws-cdk-lib/aws-s3';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
+import { Bucket, BlockPublicAccess, BucketEncryption } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
 import { SessionsTable } from './SessionsTable';
@@ -27,7 +27,7 @@ export class ApiStack extends Stack {
     super(scope, id);
     this.sessionsTable = props.sessionsTable.table;
     this.api = new apigatewayv2.HttpApi(this, 'mijnuitkering-api', {
-      description: 'Mijn Uitkering webapplicatie'
+      description: 'Mijn Uitkering webapplicatie',
     });
     // const apiHost = this.cleanDomain(this.api.url);
     // const cloudfrontUrl = this.setCloudfrontStack(apiHost);
@@ -49,7 +49,7 @@ export class ApiStack extends Stack {
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         allowedMethods: AllowedMethods.ALLOW_ALL,
       },
-      logBucket: this.logBucket()
+      logBucket: this.logBucket(),
     });
 
     return `https://${distribution.distributionDomainName}/`;
@@ -59,7 +59,7 @@ export class ApiStack extends Stack {
     /**
      * bucket voor cloudfront logs
      */
-     const cfLogBucket = new Bucket(this, 'CloudfrontLogs', {
+    const cfLogBucket = new Bucket(this, 'CloudfrontLogs', {
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       encryption: BucketEncryption.S3_MANAGED,
       lifecycleRules: [
