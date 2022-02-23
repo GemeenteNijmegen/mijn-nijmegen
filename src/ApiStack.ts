@@ -27,11 +27,11 @@ export class ApiStack extends Stack {
     super(scope, id);
     this.sessionsTable = props.sessionsTable.table;
     this.api = new apigatewayv2.HttpApi(this, 'mijnuitkering-api', {
-      description: 'Mijn Uitkering webapplicatie',
+      description: 'Mijn Uitkering webapplicatie'
     });
     const apiHost = this.cleanDomain(this.api.url);
     const cloudfrontUrl = this.setCloudfrontStack(apiHost);
-    this.setFunctions(cloudfrontUrl);
+    this.setFunctions(this.api.url);
   }
 
   /**
