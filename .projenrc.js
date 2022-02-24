@@ -28,10 +28,11 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'install:login': 'copyfiles -f src/shared/*.js src/app/login/shared && cd src/app/login && npm install',
     'install:auth': 'copyfiles -f src/shared/*.js src/app/auth/shared && cd src/app/auth && npm install',
     'install:home': 'copyfiles -f src/shared/*.js src/app/home/shared && cd src/app/home && npm install',
-    'postinstall': 'npm run install:login && npm run install:auth && npm run install:home',
+    'install:logout': 'copyfiles -f src/shared/*.js src/app/logout/shared && cd src/app/logout && npm install',
+    'postinstall': 'npm run install:login && npm run install:auth && npm run install:home && npm run install:logout',
   },
   eslintOptions: {
-    devdirs: ['src/app/login/tests', 'src/app/auth/tests', 'src/app/home/tests', '/test', '/build-tools'],
+    devdirs: ['src/app/login/tests', 'src/app/auth/tests', 'src/app/home/tests', 'src/app/logout/tests', '/test', '/build-tools'],
   },
   gitignore: [
     '.env',

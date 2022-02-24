@@ -106,6 +106,14 @@ export class ApiStack extends Stack {
       applicationUrlBase: baseUrl,
     });
 
+    const logoutFunction = new ApiFunction(this, 'logout-function', {
+      description: 'Uitlog-pagina voor de Mijn Uitkering-applicatie.',
+      codePath: 'app/logout',
+      table: this.sessionsTable,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: baseUrl,
+    });
+
     const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
     const authFunction = new ApiFunction(this, 'auth-function', {
       description: 'Authenticatie-lambd voor de Mijn Uitkering-applicatie.',
@@ -130,6 +138,12 @@ export class ApiStack extends Stack {
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('login', loginFunction.lambda),
       path: '/login',
+      methods: [apigatewayv2.HttpMethod.GET],
+    });
+    
+    this.api.addRoutes({
+      integration: new HttpLambdaIntegration('logout', logoutFunction.lambda),
+      path: '/logout',
       methods: [apigatewayv2.HttpMethod.GET],
     });
 

@@ -145,6 +145,14 @@
         }
       ]
     },
+    "install:logout": {
+      "name": "install:logout",
+      "steps": [
+        {
+          "exec": "copyfiles -f src/shared/*.js src/app/logout/shared && cd src/app/logout && npm install"
+        }
+      ]
+    },
     "package": {
       "name": "package",
       "description": "Creates the distribution package"
@@ -166,7 +174,7 @@
       "name": "postinstall",
       "steps": [
         {
-          "exec": "npm run install:login && npm run install:auth && npm run install:home"
+          "exec": "npm run install:login && npm run install:auth && npm run install:home && npm run install:logout"
         }
       ]
     },
