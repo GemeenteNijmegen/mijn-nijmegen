@@ -99,9 +99,11 @@ class Session {
             Key: {
                 'sessionid': { S: this.sessionId }
             },
-            UpdateExpression: 'SET #ttl = :ttl, loggedin = :loggedin, bsn = :bsn',
+            UpdateExpression: 'SET #ttl = :ttl, #loggedin = :loggedin, #bsn = :bsn',
             ExpressionAttributeNames: {
-                '#ttl': 'ttl'
+                '#ttl': 'ttl',
+                '#loggedin': 'loggedin',
+                '#bsn': 'bsn'
             },
             ExpressionAttributeValues: {
                 ':ttl': { N: ttl },
