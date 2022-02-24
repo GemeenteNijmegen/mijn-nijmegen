@@ -53,7 +53,7 @@ test('StackHasLambdas', () => {
   const sessionsStack = new SessionsStack(app, 'sessions');
   const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable });
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::Lambda::Function', 3);
+  template.resourceCountIs('AWS::Lambda::Function', 4);
 });
 
 
