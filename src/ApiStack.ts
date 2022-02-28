@@ -140,7 +140,7 @@ export class ApiStack extends Stack {
       path: '/login',
       methods: [apigatewayv2.HttpMethod.GET],
     });
-    
+
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('logout', logoutFunction.lambda),
       path: '/logout',

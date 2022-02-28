@@ -17,7 +17,7 @@ beforeEach(() => {
 
 test('Return login page with correct link', async () => {
   const result = await lambda.handler({}, {});
-  expect(result.body).toMatch(`Uitgelogd`);
+  expect(result.body).toMatch('Uitgelogd');
   expect(result.statusCode).toBe(200);
 });
 
