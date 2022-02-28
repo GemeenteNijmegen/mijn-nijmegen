@@ -19,6 +19,11 @@ const acceptanceEnvironment = {
   region: 'eu-west-1',
 };
 
+const productionEnvironment = {
+  account: '196212984627',
+  region: 'eu-west-1',
+};
+
 Dotenv.config();
 const app = new App();
 
@@ -39,6 +44,13 @@ if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'develop
       deployToEnvironment: acceptanceEnvironment,
     },
   );
-}
+} else if (process.env.BRANCH_NAME == 'production') {
+  new PipelineStackAcceptance(app, 'mijnuitkering-pipeline-production',
+    {
+      env: deploymentEnvironment,
+      branchName: 'production',
+      deployToEnvironment: productionEnvironment,
+    },
+  );
 
 app.synth();
