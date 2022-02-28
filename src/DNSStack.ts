@@ -19,7 +19,11 @@ export class DNSStack extends Stack {
     });
 
     const rootZoneId = SSM.StringParameter.valueForStringParameter(this, Statics.cspRootZoneId);
-    const cspRootZone = Route53.HostedZone.fromHostedZoneId(this, 'cspzone', rootZoneId);
+    const rootZoneName = SSM.StringParameter.valueForStringParameter(this, Statics.cspRootZoneName);
+    const cspRootZone = Route53.HostedZone.fromHostedZoneAttributes(this, 'cspzone', {
+      hostedZoneId: rootZoneId,
+      zoneName: rootZoneName
+    });
     
     new Route53.TxtRecord(this, 'test-record', {
       zone: cspRootZone,
