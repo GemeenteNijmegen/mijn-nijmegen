@@ -2,6 +2,7 @@ import { App } from 'aws-cdk-lib';
 import * as Dotenv from 'dotenv';
 import { PipelineStackAcceptance } from './PipelineStackAcceptance';
 import { PipelineStackDevelopment } from './PipelineStackDevelopment';
+import { PipelineStackProduction } from './PipelineStackProduction';
 
 // for development, use sandbox account
 const deploymentEnvironment = {
@@ -45,7 +46,7 @@ if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'develop
     },
   );
 } else if (process.env.BRANCH_NAME == 'production') {
-  new PipelineStackAcceptance(app, 'mijnuitkering-pipeline-production',
+  new PipelineStackProduction(app, 'mijnuitkering-pipeline-production',
     {
       env: deploymentEnvironment,
       branchName: 'production',
