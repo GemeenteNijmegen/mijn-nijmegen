@@ -51,7 +51,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"115689a9c1cf35d6e14a18ba099773d11c86f90493df53e9830741401a9eca3d:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"5fb1a13a9bc0c83bf6c985642dfb4cf567da3a6cbf801232ad3db47df888a182:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -167,7 +167,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"2d3e7a585d44bcb5ea0d90d2814303ba923ad88d29e3ba7fad099903e71eb9a9:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"090dd8e430ea84fac1f5496bb8c9c0c5270a97020310c16cb08a17e73d64b703:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -225,7 +225,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"d31c4dc7184520579f51f043a28c8a109e1e776a1e8148243646ce94ea796d97:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"c1c5147d3c8ddc8acbeacde7649325a8a1201fc845bcce1a010c7739c44ac244:test-eu-west-1\\\\\\"\\"
       ]
     }
   }

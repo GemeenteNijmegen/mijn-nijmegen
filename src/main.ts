@@ -52,5 +52,6 @@ if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'develop
       deployToEnvironment: productionEnvironment,
     },
   );
+}
 
 app.synth();

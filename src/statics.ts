@@ -23,9 +23,9 @@ export abstract class Statics {
   /**
    * Route53 Zone ID and name for csp-nijmegen.nl in this account.
    * NB: This depends on the eform-project existing and having set this parameter!
-   * We need to use this zone for domain validation purposes. We need to be able to 
+   * We need to use this zone for domain validation purposes. We need to be able to
    * set TXT DNS-records on the main domain.
-   * 
+   *
    * We need both because a lookup using fromHostedZoneId fails when adding new records,
    * this returns an incomplete iHostedZone (without name).
    */

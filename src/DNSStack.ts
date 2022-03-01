@@ -17,7 +17,7 @@ export class DNSStack extends Stack {
     new Route53.HostedZone(this, 'mijnuitkering-csp', {
       zoneName: `${subdomain}.csp-nijmegen.nl`,
     });
-    
+
     // this.addDomainValidationRecord();
   }
 
@@ -31,13 +31,13 @@ export class DNSStack extends Stack {
     const rootZoneName = SSM.StringParameter.valueForStringParameter(this, Statics.cspRootZoneName);
     const cspRootZone = Route53.HostedZone.fromHostedZoneAttributes(this, 'cspzone', {
       hostedZoneId: rootZoneId,
-      zoneName: rootZoneName
+      zoneName: rootZoneName,
     });
-    
+
     new Route53.TxtRecord(this, 'validation-record', {
       zone: cspRootZone,
       recordName: 'tstjoost',
-      values: ['ditiseentestvanjoost']
+      values: ['ditiseentestvanjoost'],
     });
   }
 }
