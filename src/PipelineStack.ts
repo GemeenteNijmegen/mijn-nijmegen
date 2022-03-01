@@ -27,7 +27,7 @@ export class PipelineStack extends Stack {
       connectionArn: connectionArn.valueAsString,
     });
     const pipeline = new pipelines.CodePipeline(this, `mijnuitkering-${this.branchName}`, {
-      pipelineName: 'mijn-uitkering',
+      pipelineName: `mijnuitkering-${this.branchName}`,
       dockerEnabledForSelfMutation: true,
       dockerEnabledForSynth: true,
       crossAccountKeys: true,
