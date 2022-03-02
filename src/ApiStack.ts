@@ -48,7 +48,7 @@ export class ApiStack extends Stack {
         originRequestPolicy: OriginRequestPolicy.ALL_VIEWER,
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         allowedMethods: AllowedMethods.ALLOW_ALL,
-        cachePolicy: CachePolicy.CACHING_DISABLED
+        // cachePolicy: CachePolicy.CACHING_DISABLED
       },
       logBucket: this.logBucket(),
     });
