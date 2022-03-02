@@ -18,7 +18,7 @@ export class DNSStack extends Stack {
       zoneName: `${subdomain}.csp-nijmegen.nl`,
     });
 
-    // this.addDomainValidationRecord();
+    this.addDomainValidationRecord();
   }
 
   /**
