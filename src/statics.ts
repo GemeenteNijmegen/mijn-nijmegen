@@ -19,6 +19,11 @@ export abstract class Statics {
    * OpenID Connect secret name
    */
   static readonly secretOIDCClientSecret: string = '/cdk/mijn-uitkering/oidc-clientsecret';
+  
+  /**
+   * Certificate private key for mTLS
+   */
+   static readonly secretMTLSPrivateKey: string = '/cdk/mijn-uitkering/mtls-privatekey';
 
   /**
    * Route53 Zone ID and name for csp-nijmegen.nl in this account.
@@ -31,4 +36,6 @@ export abstract class Statics {
    */
   static readonly cspRootZoneId: string = '/gemeente-nijmegen/formio/hostedzone/id';
   static readonly cspRootZoneName: string = '/gemeente-nijmegen/formFio/hostedzone/name';
+
+  
 }
