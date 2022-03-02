@@ -1,7 +1,7 @@
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
 import { aws_secretsmanager, Stack, StackProps, Duration } from 'aws-cdk-lib';
-import { Distribution, PriceClass, OriginRequestPolicy, ViewerProtocolPolicy, AllowedMethods, ResponseHeadersPolicy, HeadersFrameOption, HeadersReferrerPolicy, CachePolicy } from 'aws-cdk-lib/aws-cloudfront';
+import { Distribution, PriceClass, OriginRequestPolicy, ViewerProtocolPolicy, AllowedMethods, ResponseHeadersPolicy, HeadersFrameOption, HeadersReferrerPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Bucket, BlockPublicAccess, BucketEncryption } from 'aws-cdk-lib/aws-s3';
