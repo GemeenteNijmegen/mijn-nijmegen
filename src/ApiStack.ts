@@ -46,8 +46,8 @@ export class ApiStack extends Stack {
       defaultBehavior: {
         origin: new HttpOrigin(apiGatewayDomain),
         // originRequestPolicy: OriginRequestPolicy.ALL_VIEWER,
-        // viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        // allowedMethods: AllowedMethods.ALLOW_ALL,
+        viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        allowedMethods: AllowedMethods.ALLOW_ALL,
       },
       logBucket: this.logBucket(),
     });

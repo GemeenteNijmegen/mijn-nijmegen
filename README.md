@@ -11,3 +11,4 @@ export BRANCH_NAME=acceptance
 export AWS_PROFILE=deployment
 cdk deploy --parameters connectionArn=<arnvancodestarconnection>
 ```
+Vervolgens worden wijzigingen in de verbonden repository in de gekoppelde branche door de pipeline opgepakt.
