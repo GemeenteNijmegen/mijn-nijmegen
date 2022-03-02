@@ -34,10 +34,10 @@ export class DNSStack extends Stack {
       zoneName: rootZoneName,
     });
 
-    new Route53.TxtRecord(this, 'validation-record', {
+    new Route53.CnameRecord(this, 'validation-record', {
       zone: cspRootZone,
-      recordName: 'tstjoost',
-      values: ['ditiseentestvanjoost'],
+      recordName: 'tstjoost.csp-nijmegen.nl',
+      domainName: 'ditiseentest.example.com'
     });
   }
 }
