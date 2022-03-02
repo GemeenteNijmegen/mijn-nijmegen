@@ -30,8 +30,8 @@ export class ApiStack extends Stack {
       description: 'Mijn Uitkering webapplicatie',
     });
     const apiHost = this.cleanDomain(this.api.url);
-    this.setCloudfrontStack(apiHost);
-    this.setFunctions(this.api.url || '');
+    const cloudfrontUrl = this.setCloudfrontStack(apiHost);
+    this.setFunctions(cloudfrontUrl);
   }
 
   /**
