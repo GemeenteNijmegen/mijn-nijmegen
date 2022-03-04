@@ -1,7 +1,7 @@
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
 import { aws_secretsmanager, Stack, StackProps, Duration } from 'aws-cdk-lib';
-import { Distribution, PriceClass, OriginRequestPolicy, ViewerProtocolPolicy, AllowedMethods, ResponseHeadersPolicy, HeadersFrameOption, HeadersReferrerPolicy, CachePolicy, CacheCookieBehavior } from 'aws-cdk-lib/aws-cloudfront';
+import { Distribution, PriceClass, OriginRequestPolicy, ViewerProtocolPolicy, AllowedMethods, ResponseHeadersPolicy, HeadersFrameOption, HeadersReferrerPolicy, CachePolicy, CacheCookieBehavior, CacheHeaderBehavior, CacheQueryStringBehavior, OriginRequestHeaderBehavior } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Bucket, BlockPublicAccess, BucketEncryption } from 'aws-cdk-lib/aws-s3';
@@ -36,6 +36,11 @@ export class ApiStack extends Stack {
 
   /**
    * Create a cloudfront distribution for the application
+   * 
+   * Do not forward the Host header to API Gateway. This results in 
+   * an HTTP 403 because API Gateway won't be able to find an endpoint
+   * on the cloudfront domain.
+   * 
    * @param {string} apiGatewayDomain the domain the api gateway can be reached at
    * @returns {string} the base url for the cloudfront distribution
    */
@@ -45,12 +50,24 @@ export class ApiStack extends Stack {
       priceClass: PriceClass.PRICE_CLASS_100,
       defaultBehavior: {
         origin: new HttpOrigin(apiGatewayDomain),
-        originRequestPolicy: OriginRequestPolicy.ALL_VIEWER,
+        originRequestPolicy: new OriginRequestPolicy(this, 'cf-originrequestpolicy', {
+          originRequestPolicyName: 'cfOriginRequestPolicyMijnUitkering',
+          headerBehavior: OriginRequestHeaderBehavior.allowList(
+            'Accept-Charset',
+            'Origin',
+            'Accept',
+            'Referer',
+            'Accept-Language',
+            'Accept-Datetime',
+          ),
+        }),
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         allowedMethods: AllowedMethods.ALLOW_ALL,
         cachePolicy: new CachePolicy(this, 'cf-caching', {
           cachePolicyName: 'cfCachingSessionsMijnUitkering',
           cookieBehavior: CacheCookieBehavior.all(),
+          headerBehavior: CacheHeaderBehavior.allowList('Authorization'),
+          queryStringBehavior: CacheQueryStringBehavior.all(),
         }),
       },
       logBucket: this.logBucket(),
@@ -58,11 +75,10 @@ export class ApiStack extends Stack {
 
     return `https://${distribution.distributionDomainName}/`;
   }
-
+  /**
+   * bucket voor cloudfront logs
+   */
   logBucket() {
-    /**
-     * bucket voor cloudfront logs
-     */
     const cfLogBucket = new Bucket(this, 'CloudfrontLogs', {
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       encryption: BucketEncryption.S3_MANAGED,
