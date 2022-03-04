@@ -67,7 +67,7 @@ export class ssmParamsConstruct extends Construct {
       secretName: Statics.secretOIDCClientSecret,
       description: 'OpenIDConnect client secret',
     });
-    
+
     new SecretsManager.Secret(this, 'secret_2', {
       secretName: Statics.secretMTLSPrivateKey,
       description: 'mTLS certificate private key',
