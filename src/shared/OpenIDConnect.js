@@ -98,7 +98,12 @@ class OpenIDConnect {
             response_types: ['code'],
         });
         const params = client.callbackParams(redirect_uri + '/?code=' + code + '&state=' + state);
-        const tokenSet = await client.callback(redirect_uri, params, { state: state }); // => Promise
+        try { 
+            const tokenSet = await client.callback(redirect_uri, params, { state: state }); // => Promise
+        } catch(err) {
+            console.log(`Error: ${err.error} ${err.error_description}`);
+            console.log(err.response);
+        }
         const claims = tokenSet.claims();
         if(claims.aud != process.env.OIDC_CLIENT_ID) { 
             return false;
