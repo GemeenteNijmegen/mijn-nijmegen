@@ -34,10 +34,18 @@ export class DNSStack extends Stack {
       zoneName: rootZoneName,
     });
 
+    //accp
     new Route53.CnameRecord(this, 'validation-record', {
       zone: cspRootZone,
-      recordName: 'tstjoost.csp-nijmegen.nl',
-      domainName: 'ditiseentest.example.com',
+      recordName: '_f7efe25b3a753b7b4054d2dba93a343b.csp-nijmegen.nl',
+      domainName: '1865949c9e0474591398be17540a8383.626b224344a3e3acc3b0f4b67b2a52d3.comodoca.com.',
+    });
+    
+    //csp
+    new Route53.CnameRecord(this, 'validation-record', {
+      zone: cspRootZone,
+      recordName: '_f73d66ee2c385b8dfc18ace27cb99644.csp-nijmegen.nl',
+      domainName: '2e45a999777f5fe42487a28040c9c926.897f69591e347cfdce9e9d66193f750d.comodoca.com.',
     });
   }
 }
