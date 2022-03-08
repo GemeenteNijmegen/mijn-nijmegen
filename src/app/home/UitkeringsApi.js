@@ -1,11 +1,11 @@
 const xml2js = require('xml2js');
-const fs = require('fs');
-const path = require('path');
 const ObjectMapper = require('object-mapper');
+const { FileConnector } = require("./FileConnector");
 
 class UitkeringsApi {
     constructor(bsn, Connector) {
         this.bsn = bsn;
+        console.debug(typeof Connector);
         this.connector = new Connector(bsn);
     }
 
@@ -60,27 +60,4 @@ class UitkeringsApi {
     }
 }
 
-class FileConnector {
-    constructor(bsn) {
-        this.bsn = bsn;
-    }
-
-    async requestData() {
-        const filePath = path.join('tests/responses', this.bsn + '.xml');
-        return await this.getStringFromFilePath(filePath)
-        .then((data) => { return [data] })
-        .catch((err) => { return [] });
-    }
-
-    async getStringFromFilePath(filePath) {
-        return new Promise((res, rej) => {
-            fs.readFile(path.join(__dirname, filePath), (err, data) => {
-                if (err) return rej(err);
-                return res(data.toString());
-            });
-        });
-    }
-}
-
 exports.UitkeringsApi = UitkeringsApi;
-exports.FileConnector = FileConnector;

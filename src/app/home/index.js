@@ -1,6 +1,7 @@
 const { Session } = require('./shared/Session');
 const { render } = require('./shared/render');
-const { UitkeringsApi, FileConnector } = require('./UitkeringsApi');
+const { UitkeringsApi } = require('./UitkeringsApi');
+const { FileConnector } = require('./FileConnector');
 
 function redirectResponse(location, code = 302) {
     return {

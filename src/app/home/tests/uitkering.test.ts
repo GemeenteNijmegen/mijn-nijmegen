@@ -1,4 +1,6 @@
-import { UitkeringsApi, FileConnector } from '../UitkeringsApi';
+import { UitkeringsApi } from '../UitkeringsApi';
+import { FileConnector } from '../FileConnector';
+
 test('returns empty if not found', async () => {
   let api = new UitkeringsApi('00000000', FileConnector);
   const result = await api.getUitkeringen();
