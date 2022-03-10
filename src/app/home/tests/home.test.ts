@@ -1,8 +1,9 @@
 import { DynamoDBClient, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
+import { SecretsManagerClient, GetSecretValueCommandOutput } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'jest-aws-client-mock';
+import { FileConnector } from '../FileConnector';
 import * as lambda from '../index';
 
-const ddbMock = mockClient(DynamoDBClient);
 beforeAll(() => {
   global.console.log = jest.fn();
   // Set env variables
@@ -14,8 +15,13 @@ beforeAll(() => {
   process.env.OIDC_SCOPE = 'openid';
 });
 
+
+const ddbMock = mockClient(DynamoDBClient);
+const secretsMock = mockClient(SecretsManagerClient);
+
 beforeEach(() => {
   ddbMock.mockReset();
+  secretsMock.mockReset();
   const getItemOutput: Partial<GetItemCommandOutput> = {
     Item: {
       loggedin: {
@@ -33,12 +39,22 @@ beforeEach(() => {
 });
 
 test('Returns 200', async () => {
-  const result = await lambda.handler({ cookies: ['session=12345'] }, {});
+  const output: GetSecretValueCommandOutput = {
+    $metadata: {},
+    SecretString: 'ditiseennepgeheim',
+  };
+  secretsMock.mockImplementation(() => output);
+  const result = await lambda.requestHandler('session=12345', FileConnector);
   expect(result.statusCode).toBe(200);
 });
 
 test('Shows overview page', async () => {
-  const result = await lambda.handler({ cookies: ['session=12345'] }, {});
+  const output: GetSecretValueCommandOutput = {
+    $metadata: {},
+    SecretString: 'ditiseennepgeheim',
+  };
+  secretsMock.mockImplementation(() => output);
+  const result = await lambda.requestHandler('session=12345', FileConnector);
   expect(result.body).toMatch('Mijn Uitkering');
   expect(result.body).toMatch('Participatiewet');
 });

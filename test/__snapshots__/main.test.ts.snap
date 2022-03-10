@@ -51,7 +51,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"5fb1a13a9bc0c83bf6c985642dfb4cf567da3a6cbf801232ad3db47df888a182:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"6fb164648306a3e7b328f1b734a2fc5cd4055f00a710add57148957adba37d6d:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -109,7 +109,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"c72e3e3e2949c5170bd71418e5d4f8dfd4b24261fadfa228fb8f54c86822aa1f:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"c6afb509518d5d7c97f78ade41e1e3709af38c69b350fbfe3aa9d15bcdf21c22:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -167,7 +167,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"090dd8e430ea84fac1f5496bb8c9c0c5270a97020310c16cb08a17e73d64b703:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"30f7964c99ff775735c4d3eb15abf1b61af8c1a8c1969efbe99f0a20c054e369:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -225,7 +225,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"c1c5147d3c8ddc8acbeacde7649325a8a1201fc845bcce1a010c7739c44ac244:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"6505a7c6e7d8a0047df3a960d480492b295005f8ce9987824ac916acecd65e90:test-eu-west-1\\\\\\"\\"
       ]
     }
   }

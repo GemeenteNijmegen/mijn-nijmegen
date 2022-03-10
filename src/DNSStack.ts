@@ -40,7 +40,7 @@ export class DNSStack extends Stack {
       recordName: '_f7efe25b3a753b7b4054d2dba93a343b',
       domainName: '1865949c9e0474591398be17540a8383.626b224344a3e3acc3b0f4b67b2a52d3.comodoca.com.',
     });
-    
+
     //csp
     new Route53.CnameRecord(this, 'validation-record-prod', {
       zone: cspRootZone,

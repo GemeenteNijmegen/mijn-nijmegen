@@ -1,6 +1,7 @@
 const { Session } = require('./shared/Session');
 const { render } = require('./shared/render');
-const { UitkeringsApi, FileConnector } = require('./UitkeringsApi');
+const { UitkeringsApi } = require('./UitkeringsApi');
+const { HTTPConnector } = require('./HTTPConnector');
 
 function redirectResponse(location, code = 302) {
     return {
@@ -18,14 +19,15 @@ function parseEvent(event) {
     };
 }
 
-async function requestHandler(cookies) {
+async function requestHandler(cookies, Connector) {
     let session = new Session(cookies);
     await session.init();
     if(session.isLoggedIn() !== true) {
         return redirectResponse('/login');
     } 
     // Get API data
-    const api = new UitkeringsApi(session.getValue('bsn'), FileConnector);
+    const connector = Connector ? Connector : HTTPConnector;
+    const api = new UitkeringsApi(session.getValue('bsn'), connector);
     const data = await api.getUitkeringen();
     
     // render page
@@ -55,3 +57,4 @@ exports.handler = async (event, context) => {
         return response;
     }
 };
+exports.requestHandler = requestHandler;
