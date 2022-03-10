@@ -1,6 +1,6 @@
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import { aws_secretsmanager, Stack, StackProps, Duration } from 'aws-cdk-lib';
+import { aws_secretsmanager, Stack, StackProps, Duration, aws_ssm as SSM } from 'aws-cdk-lib';
 import { Distribution, PriceClass, OriginRequestPolicy, ViewerProtocolPolicy, AllowedMethods, ResponseHeadersPolicy, HeadersFrameOption, HeadersReferrerPolicy, CachePolicy, CacheCookieBehavior, CacheHeaderBehavior, CacheQueryStringBehavior, OriginRequestHeaderBehavior } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
@@ -36,11 +36,11 @@ export class ApiStack extends Stack {
 
   /**
    * Create a cloudfront distribution for the application
-   * 
-   * Do not forward the Host header to API Gateway. This results in 
+   *
+   * Do not forward the Host header to API Gateway. This results in
    * an HTTP 403 because API Gateway won't be able to find an endpoint
    * on the cloudfront domain.
-   * 
+   *
    * @param {string} apiGatewayDomain the domain the api gateway can be reached at
    * @returns {string} the base url for the cloudfront distribution
    */
@@ -147,12 +147,19 @@ export class ApiStack extends Stack {
     });
     oidcSecret.grantRead(authFunction.lambda);
 
+    const secretMTLSPrivateKeyArn = aws_secretsmanager.Secret.fromSecretNameV2(this, 'tls-key-secret', Statics.secretMTLSPrivateKey);
     const homeFunction = new ApiFunction(this, 'home-function', {
       description: 'Home-lambda voor de Mijn Uitkering-applicatie.',
       codePath: 'app/home',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
+      environment: {
+        MTLS_PRIVATE_KEY_ARN: secretMTLSPrivateKeyArn.secretArn,
+        MTLS_CLIENT_CERT: SSM.StringParameter.valueForStringParameter(this, Statics.ssmMTLSClientCert),
+        MTLS_ROOT_CA: SSM.StringParameter.valueForStringParameter(this, Statics.ssmMTLSRootCA),
+        UITKERING_API_URL: SSM.StringParameter.valueForStringParameter(this, Statics.ssmUitkeringsApiEndpointUrl),
+      },
     });
 
     this.api.addRoutes({
