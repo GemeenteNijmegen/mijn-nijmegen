@@ -69,12 +69,12 @@ export class ssmParamsConstruct extends Construct {
     });
     
     new SSM.StringParameter(this, 'ssm_uitkering_2', {
-      stringValue: '',
+      stringValue: '-',
       parameterName: Statics.ssmMTLSClientCert,
     });
 
     new SSM.StringParameter(this, 'ssm_uitkering_3', {
-      stringValue: '',
+      stringValue: '-',
       parameterName: Statics.ssmMTLSRootCA,
     });
 
