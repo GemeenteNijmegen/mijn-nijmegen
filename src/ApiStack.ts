@@ -147,7 +147,7 @@ export class ApiStack extends Stack {
     });
     oidcSecret.grantRead(authFunction.lambda);
 
-    const secretMTLSPrivateKeyArn = aws_secretsmanager.Secret.fromSecretNameV2(this, 'tls-key-secret', Statics.secretMTLSPrivateKey);
+    const secretMTLSPrivateKey = aws_secretsmanager.Secret.fromSecretNameV2(this, 'tls-key-secret', Statics.secretMTLSPrivateKey);
     const homeFunction = new ApiFunction(this, 'home-function', {
       description: 'Home-lambda voor de Mijn Uitkering-applicatie.',
       codePath: 'app/home',
@@ -155,12 +155,13 @@ export class ApiStack extends Stack {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
       environment: {
-        MTLS_PRIVATE_KEY_ARN: secretMTLSPrivateKeyArn.secretArn,
+        MTLS_PRIVATE_KEY_ARN: secretMTLSPrivateKey.secretArn,
         MTLS_CLIENT_CERT: SSM.StringParameter.valueForStringParameter(this, Statics.ssmMTLSClientCert),
         MTLS_ROOT_CA: SSM.StringParameter.valueForStringParameter(this, Statics.ssmMTLSRootCA),
         UITKERING_API_URL: SSM.StringParameter.valueForStringParameter(this, Statics.ssmUitkeringsApiEndpointUrl),
       },
     });
+    secretMTLSPrivateKey.grantRead(homeFunction.lambda);
 
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('login', loginFunction.lambda),
