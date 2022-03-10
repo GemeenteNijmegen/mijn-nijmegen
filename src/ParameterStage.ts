@@ -62,6 +62,21 @@ export class ssmParamsConstruct extends Construct {
       stringValue: 'openid idp_scoping:simulator idp_scoping:https://was-preprod1.digid.nl/saml/idp/metadata',
       parameterName: Statics.ssmOIDCScope,
     });
+    
+    new SSM.StringParameter(this, 'ssm_uitkering_1', {
+      stringValue: 'https://data-test.nijmegen.nl/mijnNijmegenData',
+      parameterName: Statics.ssmUitkeringsApiEndpointUrl,
+    });
+    
+    new SSM.StringParameter(this, 'ssm_uitkering_2', {
+      stringValue: '',
+      parameterName: Statics.ssmMTLSClientCert,
+    });
+
+    new SSM.StringParameter(this, 'ssm_uitkering_3', {
+      stringValue: '',
+      parameterName: Statics.ssmMTLSRootCA,
+    });
 
     new SecretsManager.Secret(this, 'secret_1', {
       secretName: Statics.secretOIDCClientSecret,
