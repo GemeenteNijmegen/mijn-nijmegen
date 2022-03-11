@@ -63,12 +63,7 @@ export class ApiStack extends Stack {
         }),
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         allowedMethods: AllowedMethods.ALLOW_ALL,
-        cachePolicy: new CachePolicy(this, 'cf-caching', {
-          cachePolicyName: 'cfCachingSessionsMijnUitkering',
-          defaultTtl: Duration.seconds(0),
-          minTtl: Duration.seconds(0),
-          maxTtl: Duration.seconds(0)
-        }),
+        cachePolicy: CachePolicy.CACHING_DISABLED
       },
       logBucket: this.logBucket(),
     });
