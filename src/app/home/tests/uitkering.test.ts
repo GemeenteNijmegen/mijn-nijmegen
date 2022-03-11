@@ -2,6 +2,7 @@ import fs from 'fs';
 import { FileConnector } from '../FileConnector';
 import { HTTPConnector } from '../HTTPConnector';
 import { UitkeringsApi } from '../UitkeringsApi';
+import { ApiClient } from '../ApiClient';
 
 
 async function getStringFromFilePath(filePath: string) {
@@ -46,7 +47,8 @@ test('HTTP Connector', async () => {
   const cert = await getStringFromFilePath(process.env.CERTPATH);
   const key = await getStringFromFilePath(process.env.KEYPATH);
   const ca = await getStringFromFilePath(process.env.CAPATH);
-  const connector = await new HTTPConnector(900070341, cert, key, ca);
+  const client = new ApiClient(cert, key, ca);
+  const connector = await new HTTPConnector(900070341, client);
   const result = await connector.requestData();
   expect(result).toContain('<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">');
 });

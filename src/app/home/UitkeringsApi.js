@@ -1,11 +1,9 @@
 const xml2js = require('xml2js');
 const ObjectMapper = require('object-mapper');
-const { FileConnector } = require("./FileConnector");
 
 class UitkeringsApi {
     constructor(bsn, Connector) {
         this.bsn = bsn;
-        console.debug(typeof Connector);
         this.connector = new Connector(bsn);
     }
 
