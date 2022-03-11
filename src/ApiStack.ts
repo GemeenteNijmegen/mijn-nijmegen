@@ -65,9 +65,6 @@ export class ApiStack extends Stack {
         allowedMethods: AllowedMethods.ALLOW_ALL,
         cachePolicy: new CachePolicy(this, 'cf-caching', {
           cachePolicyName: 'cfCachingSessionsMijnUitkering',
-          cookieBehavior: CacheCookieBehavior.all(),
-          headerBehavior: CacheHeaderBehavior.allowList('Authorization'),
-          queryStringBehavior: CacheQueryStringBehavior.all(),
           defaultTtl: Duration.seconds(0),
           minTtl: Duration.seconds(0),
           maxTtl: Duration.seconds(0)
