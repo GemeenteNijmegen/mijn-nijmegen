@@ -68,6 +68,9 @@ export class ApiStack extends Stack {
           cookieBehavior: CacheCookieBehavior.all(),
           headerBehavior: CacheHeaderBehavior.allowList('Authorization'),
           queryStringBehavior: CacheQueryStringBehavior.all(),
+          defaultTtl: Duration.seconds(0),
+          minTtl: Duration.seconds(0),
+          maxTtl: Duration.seconds(0)
         }),
       },
       logBucket: this.logBucket(),
