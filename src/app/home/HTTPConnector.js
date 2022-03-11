@@ -51,8 +51,7 @@ class HTTPConnector {
         const client = new SSMClient;
         const command = new GetParameterCommand({ Name: name });
         const response = await client.send(command);
-        console.log(response);
-        return response.Parameter;
+        return response?.Parameter.Value;
     }
 
     /**
