@@ -109,6 +109,8 @@ class OpenIDConnect {
         } catch(err) {
             console.error(`Error -1: ${err.error} ${err.error_description}`);
             console.error(err.response);
+            console.error(err);
+            console.trace();
             return false;
         }
        
