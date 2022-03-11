@@ -5,7 +5,7 @@ const { ApiClient } = require('./ApiClient');
 class UitkeringsApi {
     constructor(client) {
         this.client = client ? client : new ApiClient(bsn);
-        this.endpoint = process.env.UITKERING_API_URL;
+        this.endpoint = process.env.UITKERING_API_URL ? process.env.UITKERING_API_URL : 'mijnNijmegenData';
     }
 
     async getUitkeringen(bsn) {
