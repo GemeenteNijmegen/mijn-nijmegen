@@ -1,7 +1,3 @@
-const https = require('https');
-const axios = require('axios');
-const { SecretsManagerClient, GetSecretValueCommand } = require('@aws-sdk/client-secrets-manager');
-const { SSMClient, GetParameterCommand } = require("@aws-sdk/client-ssm"); // ES Modules import
 const { ApiClient } = require('./ApiClient');
 
 class HTTPConnector {

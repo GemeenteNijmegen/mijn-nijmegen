@@ -1,7 +1,7 @@
 const { Session } = require('./shared/Session');
 const { render } = require('./shared/render');
 const { UitkeringsApi } = require('./UitkeringsApi');
-const { HTTPConnector } = require('./HTTPConnector');
+const { BrpApi } = require('./BrpApi');
 
 function redirectResponse(location, code = 302) {
     return {
@@ -27,8 +27,13 @@ async function requestHandler(cookies, Connector) {
     } 
     // Get API data
     const connector = Connector ? Connector : HTTPConnector;
-    const api = new UitkeringsApi(session.getValue('bsn'), connector);
-    const data = await api.getUitkeringen();
+    const UitkeringsApi = new UitkeringsApi(session.getValue('bsn'), connector);
+    const data = await UitkeringsApi.getUitkeringen();
+    
+    const brpApi = new BrpApi();
+    const brpData = await brpApi.getBrpData(session.getValue('bsn'));
+
+    data.volledigenaam = brpData?.Naam ? brpData.Naam : 'Onbekende gebruiker';
     
     // render page
     const html = await render(data, __dirname + '/templates/home.mustache');
