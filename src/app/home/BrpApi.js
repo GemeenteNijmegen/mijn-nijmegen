@@ -2,7 +2,7 @@ const { ApiClient } = require('./ApiClient');
 
 class BrpApi {
     constructor(client) {
-        this.endpoint = process.env.BRP_API_URL ? process.env.BRP_API_URL : 'BRP';
+        this.endpoint = process.env.BRP_API_URL ? process.env.BRP_API_URL : 'Irma';
         this.client = client ? client : new ApiClient();
     }
 

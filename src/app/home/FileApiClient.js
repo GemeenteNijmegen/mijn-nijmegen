@@ -24,7 +24,7 @@ class FileApiClient {
         if(endpoint.indexOf('mijnNijmegenData')>=0) {
             file = 'uitkering-12345678.xml'
         }
-        if(endpoint.indexOf('BRP')>=0) {
+        if(endpoint.indexOf('Irma')>=0) {
             file = 'brp-12345678.json'
             parse = 'json';
         }
