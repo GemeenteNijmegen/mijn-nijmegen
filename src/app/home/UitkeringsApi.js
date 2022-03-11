@@ -9,7 +9,7 @@ class UitkeringsApi {
     }
 
     async getUitkeringen(bsn) {
-        const data = await this.client.requestData(this.endpoint, this.body(this.bsn), {
+        const data = await this.client.requestData(this.endpoint, this.body(bsn), {
             'Content-type': 'text/xml',
             'SoapAction': this.endpoint + '/getData'
         });
