@@ -156,12 +156,14 @@ export class ApiStack extends Stack {
       applicationUrlBase: baseUrl,
       environment: {
         MTLS_PRIVATE_KEY_ARN: secretMTLSPrivateKey.secretArn,
-        MTLS_CLIENT_CERT: SSM.StringParameter.valueForStringParameter(this, Statics.ssmMTLSClientCert),
-        MTLS_ROOT_CA: SSM.StringParameter.valueForStringParameter(this, Statics.ssmMTLSRootCA),
+        MTLS_CLIENT_CERT_NAME: Statics.ssmMTLSClientCert,
+        MTLS_ROOT_CA_NAME: Statics.ssmMTLSRootCA,
         UITKERING_API_URL: SSM.StringParameter.valueForStringParameter(this, Statics.ssmUitkeringsApiEndpointUrl),
       },
     });
     secretMTLSPrivateKey.grantRead(homeFunction.lambda);
+    SSM.StringParameter.fromStringParameterName(this, 'tlskey', Statics.ssmMTLSClientCert).grantRead(homeFunction.lambda);
+    SSM.StringParameter.fromStringParameterName(this, 'tlsrootca', Statics.ssmMTLSRootCA).grantRead(homeFunction.lambda);
 
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('login', loginFunction.lambda),

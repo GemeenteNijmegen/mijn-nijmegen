@@ -14,6 +14,7 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "3.47.0",
     "@aws-sdk/client-secrets-manager": "3.47.0",
+    "@aws-sdk/client-ssm": "3.47.0",
     "axios": "^0.26.0",
     "cookie": "^0.4.1",
     "mustache": "^4.2.0",

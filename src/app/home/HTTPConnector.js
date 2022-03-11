@@ -1,6 +1,7 @@
 const https = require('https');
 const axios = require('axios');
 const { SecretsManagerClient, GetSecretValueCommand } = require('@aws-sdk/client-secrets-manager');
+const { SSMClient, GetParameterCommand } = require("@aws-sdk/client-ssm"); // ES Modules import
 
 class HTTPConnector {
     /**
@@ -40,13 +41,28 @@ class HTTPConnector {
     }
 
     /**
+     * Get a parameter from parameter store. This is used
+     * as a workaround for the 4kb limit for environment variables.
+     * 
+     * @param {string} name Name of the ssm param
+     * @returns param value
+     */
+    async getParameterValue(name) {
+        const client = new SSMClient;
+        const command = new GetParameterCommand({ Name: name });
+        const response = await client.send(command);
+        console.log(response);
+        return response.Parameter;
+    }
+
+    /**
      * Request data from the API. 
      * @returns {string} XML string with uitkeringsdata
      */
     async requestData() {
         const key = await this.getPrivateKey();
-        const cert = this.cert ? this.cert : process.env.MTLS_CLIENT_CERT;
-        const ca = this.ca ? this.ca : process.env.MTLS_ROOT_CA;
+        const cert = this.cert ? this.cert : await this.getParameterValue(process.env.MTLS_CLIENT_CERT_NAME);
+        const ca = this.ca ? this.ca : await this.getParameterValue(process.env.MTLS_ROOT_CA_NAME);
         const httpsAgent = new https.Agent({ cert, key, ca });
         const body = this.body(this.bsn);
         const result = await axios.post(this.endpoint, body, { 
@@ -62,7 +78,7 @@ class HTTPConnector {
     body(bsn) {
         return `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
             <soap:Body>
-                <ns2:dataRequest xmlns:ns2="https://data-test.nijmegen.nl/mijnNijmegenData/">
+                <ns2:dataRequest xmlns:ns2="${this.endpoint}/">
                     <identifier>${bsn}</identifier>
                     <contentSource>mijnUitkering</contentSource>
                 </ns2:dataRequest>
