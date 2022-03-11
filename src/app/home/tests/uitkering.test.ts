@@ -1,8 +1,7 @@
 import fs from 'fs';
-import { FileConnector } from '../FileConnector';
-import { HTTPConnector } from '../HTTPConnector';
 import { UitkeringsApi } from '../UitkeringsApi';
 import { ApiClient } from '../ApiClient';
+import { FileApiClient } from '../FileApiClient';
 
 
 async function getStringFromFilePath(filePath: string) {
@@ -14,41 +13,62 @@ async function getStringFromFilePath(filePath: string) {
   });
 }
 
-test('returns empty if not found', async () => {
-  let api = new UitkeringsApi('00000000', FileConnector);
-  const result = await api.getUitkeringen();
-  expect(result.uitkeringen).toHaveLength(0);
-});
+// test('returns empty if not found', async () => {
+//   const client = new FileApiClient();
+//   let api = new UitkeringsApi(client);
+//   const result = await api.getUitkeringen('00000000');
+//   expect(result.uitkeringen).toHaveLength(0);
+// });
 
-test('returns empty if no result', async () => {
-  const api = new UitkeringsApi('empty', FileConnector);
-  const result = await api.getUitkeringen();
-  expect(result.uitkeringen).toHaveLength(0);
-});
+// test('returns empty if no result', async () => {
+//   const client = new FileApiClient();
+//   let api = new UitkeringsApi(client);
+//   const result = await api.getUitkeringen('00000000');
+//   expect(result.uitkeringen).toHaveLength(0);
+// });
 
 test('returns one uitkering', async () => {
-  const api = new UitkeringsApi('12345678', FileConnector);
-  const result = await api.getUitkeringen();
+  const client = new FileApiClient();
+  let api = new UitkeringsApi(client);
+  const result = await api.getUitkeringen('00000000');
   expect(result.uitkeringen).toHaveLength(1);
   expect(result.uitkeringen[0].fields).toBeInstanceOf(Array);
 });
 
-test('returns two uitkeringen', async () => {
-  const api = new UitkeringsApi('tweeuitkeringen', FileConnector);
-  const result = await api.getUitkeringen();
-  expect(result.uitkeringen).toHaveLength(2);
-});
+// test('returns two uitkeringen', async () => {
+//   const client = new FileApiClient();
+//   let api = new UitkeringsApi(client);
+//   const result = await api.getUitkeringen('00000000');
+//   expect(result.uitkeringen).toHaveLength(2);
+// });
 
 // This test doesn't run in CI by default, depends on unavailable secrets
-test('HTTP Connector', async () => {
-  if (!process.env.CERTPATH || !process.env.KEYPATH || !process.env.CAPATH) {
+test('Http Api', async () => {
+  if (
+         !process.env.CERTPATH 
+      || !process.env.KEYPATH 
+      || !process.env.CAPATH 
+      || !process.env.BSN 
+      || process.env.UITKERING_API_URL 
+      || process.env.UITKERING_BSN) {
     return;
   }
   const cert = await getStringFromFilePath(process.env.CERTPATH);
   const key = await getStringFromFilePath(process.env.KEYPATH);
   const ca = await getStringFromFilePath(process.env.CAPATH);
   const client = new ApiClient(cert, key, ca);
-  const connector = await new HTTPConnector(900070341, client);
-  const result = await connector.requestData();
+  const body = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+        <soap:Body>
+            <ns2:dataRequest xmlns:ns2="${process.env.UITKERING_API_URL}/">
+                <identifier>${process.env.UITKERING_BSN}</identifier>
+                <contentSource>mijnUitkering</contentSource>
+            </ns2:dataRequest>
+        </soap:Body>
+    </soap:Envelope>`;
+
+  const result = await client.requestData(process.env.UITKERING_API_URL, body, {
+    'Content-type': 'text/xml',
+    'SoapAction': process.env.UITKERING_API_URL + '/getData'
+  });
   expect(result).toContain('<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">');
 });

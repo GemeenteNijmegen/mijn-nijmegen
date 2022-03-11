@@ -1,14 +1,18 @@
 const xml2js = require('xml2js');
 const ObjectMapper = require('object-mapper');
+const { ApiClient } = require('./ApiClient');
 
 class UitkeringsApi {
-    constructor(bsn, Connector) {
-        this.bsn = bsn;
-        this.connector = new Connector(bsn);
+    constructor(client) {
+        this.client = client ? client : new ApiClient(bsn);
+        this.endpoint = process.env.UITKERING_API_URL;
     }
 
-    async getUitkeringen() {
-        let data = await this.connector.requestData();
+    async getUitkeringen(bsn) {
+        const data = await this.client.requestData(this.endpoint, this.body(this.bsn), {
+            'Content-type': 'text/xml',
+            'SoapAction': this.endpoint + '/getData'
+        });
         const object = await xml2js.parseStringPromise(data);
         const uitkeringsRows =  this.mapUitkeringsRows(object);
         let uitkeringen = this.mapUitkering(uitkeringsRows);
@@ -17,6 +21,17 @@ class UitkeringsApi {
             return uitkeringen;
         }
         return {'uitkeringen': []};
+    }
+
+    body(bsn) {
+        return `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+            <soap:Body>
+                <ns2:dataRequest xmlns:ns2="${this.endpoint}/">
+                    <identifier>${bsn}</identifier>
+                    <contentSource>mijnUitkering</contentSource>
+                </ns2:dataRequest>
+            </soap:Body>
+        </soap:Envelope>`;
     }
 
     mapUitkeringsRows(object) {

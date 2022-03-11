@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { ApiClient } from '../ApiClient';
+import { FileApiClient } from '../FileApiClient';
 import { BrpApi } from '../BrpApi';
 
 
@@ -11,6 +12,17 @@ async function getStringFromFilePath(filePath: string) {
     });
   });
 }
+
+// This test doesn't run in CI by default, depends on unavailable secrets
+test('Mock api', async () => {
+  if (!process.env.CERTPATH || !process.env.KEYPATH || !process.env.CAPATH) {
+    return;
+  }
+  const client = new FileApiClient();
+  const api = new BrpApi(client);
+  const result = await api.getBrpData(12345678);
+  expect(result.Persoon.BSN.BSN).toBe('12345678');
+});
 
 // This test doesn't run in CI by default, depends on unavailable secrets
 test('Api', async () => {

@@ -8,7 +8,6 @@ class BrpApi {
 
     async getBrpData(bsn) {
         let data = await this.client.requestData(this.endpoint, {"bsn": bsn}, {'Content-type': 'application/json'});
-        console.debug(data);
         return data;
     }
 }
