@@ -28,7 +28,7 @@ class HTTPConnector {
      async getPrivateKey() {
         if(!this.privatekey) { 
             const secretsManagerClient = new SecretsManagerClient();
-            const command = new GetSecretValueCommand({ SecretId: process.env.MTLS_SECRET_ARN });
+            const command = new GetSecretValueCommand({ SecretId: process.env.MTLS_PRIVATE_KEY_ARN });
             const data = await secretsManagerClient.send(command);
             // Depending on whether the secret is a string or binary, one of these fields will be populated.
             if ('SecretString' in data) {
