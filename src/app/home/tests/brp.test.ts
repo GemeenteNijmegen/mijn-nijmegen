@@ -36,6 +36,7 @@ test('Api', async () => {
   const api = new BrpApi(client);
   const result = await api.getBrpData(999993653);
   expect(result.Persoon.BSN.BSN).toBe('999993653');
+  expect(result.Persoon.Persoonsgegevens.Naam).toBe('S. Moulin');
 });
 
 // This test doesn't run in CI by default, depends on unavailable secrets
@@ -55,5 +56,5 @@ test('Api', async () => {
   const api = new BrpApi(client);
   const result = await api.getBrpData(12345678);
   console.debug(result);
-  expect(result.message).toContain('Geen gegevens gevonden');
+  expect(result).toBe(false);
 });

@@ -33,8 +33,8 @@ async function requestHandler(cookies, client) {
     
     const brpApi = new BrpApi(client);
     const brpData = await brpApi.getBrpData(session.getValue('bsn'));
-
-    data.volledigenaam = brpData?.Naam ? brpData.Naam : 'Onbekende gebruiker';
+result.Persoon
+    data.volledigenaam = brpData?.Persoon?.Persoonsgegevens?.Naam ? brpData.Persoon.Persoonsgegevens.Naam : 'Onbekende gebruiker';
     
     // render page
     const html = await render(data, __dirname + '/templates/home.mustache');

@@ -68,6 +68,7 @@ class ApiClient {
                 headers
             });
             console.debug('return response from ' + endpoint);
+            console.log(response.data);
             return response.data;
         } catch (error) {
             if (error.response) {
