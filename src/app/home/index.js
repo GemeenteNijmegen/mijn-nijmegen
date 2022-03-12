@@ -28,11 +28,12 @@ async function requestHandler(cookies, client) {
     } 
     // Get API data
     client = client ? client : new ApiClient();
-    const uitkeringsApi = new UitkeringsApi(client);
-    const data = await uitkeringsApi.getUitkeringen(session.getValue('bsn'));
     
+    const bsn = session.getValue('bsn');
     const brpApi = new BrpApi(client);
-    const brpData = await brpApi.getBrpData(session.getValue('bsn'));
+    const uitkeringsApi = new UitkeringsApi(client);
+    const [data, brpData] = await Promise.all([uitkeringsApi.getUitkeringen(bsn), brpApi.getBrpData(bsn)]);
+
     data.volledigenaam = brpData?.Persoon?.Persoonsgegevens?.Naam ? brpData.Persoon.Persoonsgegevens.Naam : 'Onbekende gebruiker';
     
     // render page
