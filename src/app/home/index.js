@@ -33,7 +33,6 @@ async function requestHandler(cookies, client) {
     
     const brpApi = new BrpApi(client);
     const brpData = await brpApi.getBrpData(session.getValue('bsn'));
-result.Persoon
     data.volledigenaam = brpData?.Persoon?.Persoonsgegevens?.Naam ? brpData.Persoon.Persoonsgegevens.Naam : 'Onbekende gebruiker';
     
     // render page
