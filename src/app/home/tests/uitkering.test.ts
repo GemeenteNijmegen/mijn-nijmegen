@@ -49,8 +49,9 @@ test('Http Api', async () => {
       || !process.env.KEYPATH 
       || !process.env.CAPATH 
       || !process.env.BSN 
-      || process.env.UITKERING_API_URL 
-      || process.env.UITKERING_BSN) {
+      || !process.env.UITKERING_API_URL 
+      || !process.env.UITKERING_BSN) {
+    console.debug('skipping live api test');
     return;
   }
   const cert = await getStringFromFilePath(process.env.CERTPATH);
@@ -70,5 +71,40 @@ test('Http Api', async () => {
     'Content-type': 'text/xml',
     'SoapAction': process.env.UITKERING_API_URL + '/getData'
   });
+  console.debug(result);
+  expect(result).toContain('<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">');
+});
+
+
+// This test doesn't run in CI by default, depends on unavailable secrets
+test('Http Api No result', async () => {
+  if (
+         !process.env.CERTPATH 
+      || !process.env.KEYPATH 
+      || !process.env.CAPATH 
+      || !process.env.BSN 
+      || !process.env.UITKERING_API_URL 
+      || !process.env.UITKERING_BSN) {
+    console.debug('skipping live api test');
+    return;
+  }
+  const cert = await getStringFromFilePath(process.env.CERTPATH);
+  const key = await getStringFromFilePath(process.env.KEYPATH);
+  const ca = await getStringFromFilePath(process.env.CAPATH);
+  const client = new ApiClient(cert, key, ca);
+  const body = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+        <soap:Body>
+            <ns2:dataRequest xmlns:ns2="${process.env.UITKERING_API_URL}/">
+                <identifier>12345678</identifier>
+                <contentSource>mijnUitkering</contentSource>
+            </ns2:dataRequest>
+        </soap:Body>
+    </soap:Envelope>`;
+
+  const result = await client.requestData(process.env.UITKERING_API_URL, body, {
+    'Content-type': 'text/xml',
+    'SoapAction': process.env.UITKERING_API_URL + '/getData'
+  });
+  console.debug(result);
   expect(result).toContain('<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">');
 });

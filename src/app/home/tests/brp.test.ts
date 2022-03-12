@@ -37,3 +37,23 @@ test('Api', async () => {
   const result = await api.getBrpData(999993653);
   expect(result.Persoon.BSN.BSN).toBe('999993653');
 });
+
+// This test doesn't run in CI by default, depends on unavailable secrets
+test('Api', async () => {
+  if (
+       !process.env.CERTPATH 
+    || !process.env.KEYPATH 
+    || !process.env.CAPATH
+  ) {
+    console.debug('Skipping live API test');
+    return;
+  }
+  const cert = await getStringFromFilePath(process.env.CERTPATH);
+  const key = await getStringFromFilePath(process.env.KEYPATH);
+  const ca = await getStringFromFilePath(process.env.CAPATH);
+  const client = new ApiClient(cert, key, ca);
+  const api = new BrpApi(client);
+  const result = await api.getBrpData(12345678);
+  console.debug(result);
+  expect(result.message).toContain('Geen gegevens gevonden');
+});

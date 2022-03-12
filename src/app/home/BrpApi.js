@@ -8,7 +8,10 @@ class BrpApi {
 
     async getBrpData(bsn) {
         let data = await this.client.requestData(this.endpoint, {"bsn": bsn}, {'Content-type': 'application/json'});
-        return data;
+        if(data?.Persoon) {
+            return data;
+        }
+        return false;
     }
 }
 
