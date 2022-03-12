@@ -57,6 +57,7 @@ class ApiClient {
      * @returns {string} XML string with uitkeringsdata
      */
     async requestData(endpoint, body, headers) {
+        console.debug('start request to ' + endpoint);
         const key = await this.getPrivateKey();
         const cert = this.cert ? this.cert : await this.getParameterValue(process.env.MTLS_CLIENT_CERT_NAME);
         const ca = this.ca ? this.ca : await this.getParameterValue(process.env.MTLS_ROOT_CA_NAME);
@@ -66,6 +67,7 @@ class ApiClient {
                 httpsAgent: httpsAgent,
                 headers
             });
+            console.debug('return response from ' + endpoint);
             return response.data;
         } catch (error) {
             if (error.response) {
@@ -74,6 +76,7 @@ class ApiClient {
                 console.log(error.response.status);
                 console.log(error.response.headers);
                 return error.response.data;
+                console.debug('return response from ' + endpoint);
               } else if (error.request) {
                 // The request was made but no response was received
                 // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
