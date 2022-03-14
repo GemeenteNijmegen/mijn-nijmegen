@@ -12,8 +12,7 @@ export class CertificateStack extends Stack {
     super(scope, id);
     const subdomain = Statics.subDomain(props.branch);
     this.certificate = new CertificateManager.Certificate(this, 'certificate', {
-      domainName: `${subdomain}.nijmegen.nl`,
-      subjectAlternativeNames: ['cdn.accp.csp-nijmegen.nl', 'www.app6-accp.nijmegen.nl'],
+      domainName: `${subdomain}.csp-nijmegen.nl`,
       validation: CertificateManager.CertificateValidation.fromDns(), // No hosted zones added because records need to be manually added to Nijmegen DNS.
     });
   }
