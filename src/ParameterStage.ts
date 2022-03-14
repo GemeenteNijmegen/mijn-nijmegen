@@ -87,7 +87,7 @@ export class ssmParamsConstruct extends Construct {
       secretName: Statics.secretMTLSPrivateKey,
       description: 'mTLS certificate private key',
     });
-    
+
     new SSM.StringParameter(this, 'ssm_brp_1', {
       stringValue: 'https://data-test.nijmegen.nl/TenT/Bevraging/Irma',
       parameterName: Statics.ssmBrpApiEndpointUrl,

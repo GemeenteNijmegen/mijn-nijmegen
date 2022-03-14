@@ -1,7 +1,7 @@
 import fs from 'fs';
-import { UitkeringsApi } from '../UitkeringsApi';
 import { ApiClient } from '../ApiClient';
 import { FileApiClient } from '../FileApiClient';
+import { UitkeringsApi } from '../UitkeringsApi';
 
 
 async function getStringFromFilePath(filePath: string) {
@@ -45,11 +45,11 @@ test('returns one uitkering', async () => {
 // This test doesn't run in CI by default, depends on unavailable secrets
 test('Http Api', async () => {
   if (
-         !process.env.CERTPATH 
-      || !process.env.KEYPATH 
-      || !process.env.CAPATH 
-      || !process.env.BSN 
-      || !process.env.UITKERING_API_URL 
+    !process.env.CERTPATH
+      || !process.env.KEYPATH
+      || !process.env.CAPATH
+      || !process.env.BSN
+      || !process.env.UITKERING_API_URL
       || !process.env.UITKERING_BSN) {
     console.debug('skipping live api test');
     return;
@@ -69,7 +69,7 @@ test('Http Api', async () => {
 
   const result = await client.requestData(process.env.UITKERING_API_URL, body, {
     'Content-type': 'text/xml',
-    'SoapAction': process.env.UITKERING_API_URL + '/getData'
+    'SoapAction': process.env.UITKERING_API_URL + '/getData',
   });
   console.debug(result);
   expect(result).toContain('<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">');
@@ -79,11 +79,11 @@ test('Http Api', async () => {
 // This test doesn't run in CI by default, depends on unavailable secrets
 test('Http Api No result', async () => {
   if (
-         !process.env.CERTPATH 
-      || !process.env.KEYPATH 
-      || !process.env.CAPATH 
-      || !process.env.BSN 
-      || !process.env.UITKERING_API_URL 
+    !process.env.CERTPATH
+      || !process.env.KEYPATH
+      || !process.env.CAPATH
+      || !process.env.BSN
+      || !process.env.UITKERING_API_URL
       || !process.env.UITKERING_BSN) {
     console.debug('skipping live api test');
     return;
@@ -103,7 +103,7 @@ test('Http Api No result', async () => {
 
   const result = await client.requestData(process.env.UITKERING_API_URL, body, {
     'Content-type': 'text/xml',
-    'SoapAction': process.env.UITKERING_API_URL + '/getData'
+    'SoapAction': process.env.UITKERING_API_URL + '/getData',
   });
   console.debug(result);
   expect(result).toContain('<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">');

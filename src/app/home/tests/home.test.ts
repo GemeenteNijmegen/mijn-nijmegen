@@ -1,8 +1,8 @@
 import { DynamoDBClient, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { SecretsManagerClient, GetSecretValueCommandOutput } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'jest-aws-client-mock';
-import * as lambda from '../index';
 import { FileApiClient } from '../FileApiClient';
+import * as lambda from '../index';
 
 beforeAll(() => {
   global.console.log = jest.fn();

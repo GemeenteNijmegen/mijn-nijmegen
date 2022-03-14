@@ -39,11 +39,11 @@ export abstract class Statics {
    * Uitkeringsgegevens API endpoint
    */
   static readonly ssmUitkeringsApiEndpointUrl: string = '/cdk/mijn-uitkering/uitkerings-api-url';
-  
+
   /**
    * BRP API endpoint
    */
-   static readonly ssmBrpApiEndpointUrl: string = '/cdk/mijn-uitkering/brp-api-url';
+  static readonly ssmBrpApiEndpointUrl: string = '/cdk/mijn-uitkering/brp-api-url';
 
 
   /**
