@@ -137,7 +137,6 @@ export class ApiStack extends Stack {
         frameOptions: { frameOption: HeadersFrameOption.DENY, override: true },
         referrerPolicy: { referrerPolicy: HeadersReferrerPolicy.NO_REFERRER, override: true },
         strictTransportSecurity: { accessControlMaxAge: Duration.seconds(600), includeSubdomains: true, override: true },
-        xssProtection: { protection: true, modeBlock: true, override: true },
       },
     });
     return responseHeadersPolicy;
