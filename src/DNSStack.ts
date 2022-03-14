@@ -41,7 +41,7 @@ export class DNSStack extends Stack {
     new Route53.NsRecord(this, 'ns-record', {
       zone: this.cspRootZone,
       values: this.zone.hostedZoneNameServers,
-      recordName: this.zone.zoneName
+      recordName: Statics.subDomain(this.branch)
     });
   }
 
