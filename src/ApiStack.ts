@@ -1,6 +1,6 @@
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import { aws_secretsmanager, Stack, StackProps, Duration, aws_ssm as SSM, aws_certificatemanager as CertificateManager } from 'aws-cdk-lib';
+import { aws_secretsmanager, Stack, StackProps, Duration, aws_ssm as SSM, aws_certificatemanager as CertificateManager, aws_route53 as Route53, aws_route53_targets as Route53Targets } from 'aws-cdk-lib';
 import {
   Distribution,
   PriceClass,
@@ -19,6 +19,7 @@ import {
 } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
+import { HostedZone } from 'aws-cdk-lib/aws-route53';
 import { Bucket, BlockPublicAccess, BucketEncryption } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
@@ -27,8 +28,9 @@ import { Statics } from './statics';
 
 export interface ApiStackProps extends StackProps {
   sessionsTable: SessionsTable;
-  certificateArn: string;
+  certificateArn?: string;
   branch: string;
+  zone: HostedZone;
 }
 
 /**
@@ -49,9 +51,13 @@ export class ApiStack extends Stack {
       description: 'Mijn Uitkering webapplicatie',
     });
     const apiHost = this.cleanDomain(this.api.url);
-    const subdomain = Statics.subDomain(props.branch);
-    const domains = [`${subdomain}.csp-nijmegen.nl`];
+    let domains;
+    if(props.certificateArn) { 
+      const subdomain = Statics.subDomain(props.branch);
+      domains = [`${subdomain}.csp-nijmegen.nl`];
+    }
     this.cloudfrontDistribution = this.setCloudfrontStack(apiHost, domains, props.certificateArn);
+    this.addDnsRecords(this.cloudfrontDistribution, props.zone);
     const cfDistributionUrl = `https://${this.cloudfrontDistribution.distributionDomainName}/`;
     this.setFunctions(cfDistributionUrl);
   }
@@ -66,8 +72,8 @@ export class ApiStack extends Stack {
    * @param {string} apiGatewayDomain the domain the api gateway can be reached at
    * @returns {Distribution} the cloudfront distribution
    */
-  setCloudfrontStack(apiGatewayDomain: string, domainNames: string[], certificateArn: string): Distribution {
-    const certificate = CertificateManager.Certificate.fromCertificateArn(this, 'certificate', certificateArn);
+  setCloudfrontStack(apiGatewayDomain: string, domainNames?: string[], certificateArn?: string): Distribution {
+    const certificate = (certificateArn) ? CertificateManager.Certificate.fromCertificateArn(this, 'certificate', certificateArn) : undefined;
     const distribution = new Distribution(this, 'cf-distribution', {
       priceClass: PriceClass.PRICE_CLASS_100,
       domainNames,
@@ -104,6 +110,19 @@ export class ApiStack extends Stack {
     });
     return distribution;
   }
+  
+  addDnsRecords(distribution: Distribution, zone: Route53.HostedZone) {
+    new Route53.ARecord(this, 'eform-cdn-record', {
+      zone: zone,
+      target: Route53.RecordTarget.fromAlias(new Route53Targets.CloudFrontTarget(distribution)),
+    });
+
+    new Route53.AaaaRecord(this, 'eform-cdn-record-ipv6', {
+      zone: zone,
+      target: Route53.RecordTarget.fromAlias(new Route53Targets.CloudFrontTarget(distribution)),
+    });
+  }
+
   /**
    * bucket voor cloudfront logs
    */
@@ -127,7 +146,7 @@ export class ApiStack extends Stack {
    * Get a set of (security) response headers to inject into the response
    * @returns {ResponseHeadersPolicy} cloudfront responseHeadersPolicy
    */
-  responseHeadersPolicy() {
+  responseHeadersPolicy(): ResponseHeadersPolicy {
 
     const responseHeadersPolicy = new ResponseHeadersPolicy(this, 'headers', {
       securityHeadersBehavior: {

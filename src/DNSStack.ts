@@ -1,5 +1,4 @@
-import { aws_route53 as Route53, aws_route53_targets as Route53Targets, Stack, StackProps, aws_ssm as SSM } from 'aws-cdk-lib';
-import { Distribution } from 'aws-cdk-lib/aws-cloudfront';
+import { aws_route53 as Route53, Stack, StackProps, aws_ssm as SSM } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
 
@@ -8,6 +7,7 @@ export interface DNSStackProps extends StackProps {
 }
 
 export class DNSStack extends Stack {
+  zone: Route53.HostedZone;
   cspRootZone: Route53.IHostedZone;
   branch: string;
 
@@ -15,16 +15,34 @@ export class DNSStack extends Stack {
     super(scope, id);
     this.branch = props.branch;
     const subdomain = Statics.subDomain(this.branch);
-    new Route53.HostedZone(this, 'mijn-csp', {
+    this.zone = new Route53.HostedZone(this, 'mijn-csp', {
       zoneName: `${subdomain}.csp-nijmegen.nl`,
     });
+
     const rootZoneId = SSM.StringParameter.valueForStringParameter(this, Statics.cspRootZoneId);
     const rootZoneName = SSM.StringParameter.valueForStringParameter(this, Statics.cspRootZoneName);
     this.cspRootZone = Route53.HostedZone.fromHostedZoneAttributes(this, 'cspzone', {
       hostedZoneId: rootZoneId,
       zoneName: rootZoneName,
     });
+    this.addNSToRootCSPzone();
     this.addDomainValidationRecord();
+  }
+
+  /**
+   * Add the Name servers from the newly defined zone to
+   * the root zone for csp-nijmegen.nl. This will only
+   * have an actual effect in the prod. account.
+   * 
+   * @returns null
+   */
+  addNSToRootCSPzone() {
+    if(!this.zone.hostedZoneNameServers) { return; }
+    new Route53.NsRecord(this, 'ns-record', {
+      zone: this.cspRootZone,
+      values: this.zone.hostedZoneNameServers,
+      recordName: this.zone.zoneName
+    });
   }
 
   /**
@@ -46,18 +64,6 @@ export class DNSStack extends Stack {
       zone: this.cspRootZone,
       recordName: '_f73d66ee2c385b8dfc18ace27cb99644',
       domainName: '2e45a999777f5fe42487a28040c9c926.897f69591e347cfdce9e9d66193f750d.comodoca.com.',
-    });
-  }
-
-  addCloudFrontRecords(distribution: Distribution) {
-    new Route53.ARecord(this, 'eform-cdn-record', {
-      zone: this.cspRootZone,
-      target: Route53.RecordTarget.fromAlias(new Route53Targets.CloudFrontTarget(distribution)),
-    });
-
-    new Route53.AaaaRecord(this, 'eform-cdn-record-ipv6', {
-      zone: this.cspRootZone,
-      target: Route53.RecordTarget.fromAlias(new Route53Targets.CloudFrontTarget(distribution)),
     });
   }
 }
