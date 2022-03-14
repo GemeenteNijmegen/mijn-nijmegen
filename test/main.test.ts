@@ -42,7 +42,7 @@ test('StackHasSessionsTable', () => {
 test('StackHasApiGateway', () => {
   const app = new App();
   const sessionsStack = new SessionsStack(app, 'sessions');
-  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable });
+  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'dev', certificateArn: 'arn:123:456:us-east-1:123:123' });
   const template = Template.fromStack(stack);
   template.resourceCountIs('AWS::ApiGatewayV2::Api', 1);
 });
@@ -51,7 +51,7 @@ test('StackHasApiGateway', () => {
 test('StackHasLambdas', () => {
   const app = new App();
   const sessionsStack = new SessionsStack(app, 'sessions');
-  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable });
+  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'dev', certificateArn: 'arn:123:456:us-east-1:123:123' });
   const template = Template.fromStack(stack);
   template.resourceCountIs('AWS::Lambda::Function', 4);
 });

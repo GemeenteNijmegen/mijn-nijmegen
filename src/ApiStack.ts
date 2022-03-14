@@ -1,6 +1,6 @@
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import { aws_secretsmanager, Stack, StackProps, Duration, aws_ssm as SSM } from 'aws-cdk-lib';
+import { aws_secretsmanager, Stack, StackProps, Duration, aws_ssm as SSM, aws_certificatemanager as CertificateManager } from 'aws-cdk-lib';
 import {
   Distribution,
   PriceClass,
@@ -27,6 +27,8 @@ import { Statics } from './statics';
 
 export interface ApiStackProps extends StackProps {
   sessionsTable: SessionsTable;
+  certificateArn: string;
+  branch: string;
 }
 
 /**
@@ -38,6 +40,8 @@ export interface ApiStackProps extends StackProps {
 export class ApiStack extends Stack {
   private api: apigatewayv2.HttpApi;
   private sessionsTable: Table;
+  cloudfrontDistribution: Distribution;
+
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id);
     this.sessionsTable = props.sessionsTable.table;
@@ -45,8 +49,11 @@ export class ApiStack extends Stack {
       description: 'Mijn Uitkering webapplicatie',
     });
     const apiHost = this.cleanDomain(this.api.url);
-    const cloudfrontUrl = this.setCloudfrontStack(apiHost);
-    this.setFunctions(cloudfrontUrl);
+    const subdomain = Statics.subDomain(props.branch);
+    const domains = [`${subdomain}.csp-nijmegen.nl`];
+    this.cloudfrontDistribution = this.setCloudfrontStack(apiHost, domains, props.certificateArn);
+    const cfDistributionUrl = `https://${this.cloudfrontDistribution.distributionDomainName}/`;
+    this.setFunctions(cfDistributionUrl);
   }
 
   /**
@@ -57,12 +64,14 @@ export class ApiStack extends Stack {
    * on the cloudfront domain.
    *
    * @param {string} apiGatewayDomain the domain the api gateway can be reached at
-   * @returns {string} the base url for the cloudfront distribution
+   * @returns {Distribution} the cloudfront distribution
    */
-  setCloudfrontStack(apiGatewayDomain: string): string {
-
+  setCloudfrontStack(apiGatewayDomain: string, domainNames: string[], certificateArn: string): Distribution {
+    const certificate = CertificateManager.Certificate.fromCertificateArn(this, 'certificate', certificateArn);
     const distribution = new Distribution(this, 'cf-distribution', {
       priceClass: PriceClass.PRICE_CLASS_100,
+      domainNames,
+      certificate,
       defaultBehavior: {
         origin: new HttpOrigin(apiGatewayDomain),
         originRequestPolicy: new OriginRequestPolicy(this, 'cf-originrequestpolicy', {
@@ -93,8 +102,7 @@ export class ApiStack extends Stack {
       logBucket: this.logBucket(),
       minimumProtocolVersion: SecurityPolicyProtocol.TLS_V1_2_2019,
     });
-
-    return `https://${distribution.distributionDomainName}/`;
+    return distribution;
   }
   /**
    * bucket voor cloudfront logs
@@ -120,7 +128,7 @@ export class ApiStack extends Stack {
    * @returns {ResponseHeadersPolicy} cloudfront responseHeadersPolicy
    */
   responseHeadersPolicy() {
-    
+
     const responseHeadersPolicy = new ResponseHeadersPolicy(this, 'headers', {
       securityHeadersBehavior: {
         contentSecurityPolicy: { contentSecurityPolicy: this.cspHeaderValue(), override: true },
@@ -134,17 +142,17 @@ export class ApiStack extends Stack {
   }
 
   cspHeaderValue() {
-    const cspValues = `default-src 'self';\
-    frame-ancestors 'self';\
-    frame-src 'self';\
-    connect-src 'self' https://componenten.nijmegen.nl;\
-    style-src 'self' https://componenten.nijmegen.nl https://fonts.googleapis.com https://fonts.gstatic.com \
-    'sha256-hS1LM/30PjUBJK3kBX9Vm9eOAhQNCiNhf/SCDnUqu14=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=' 'sha256-OTeu7NEHDo6qutIWo0F2TmYrDhsKWCzrUgGoxxHGJ8o=';\
-    script-src 'self' https://componenten.nijmegen.nl https://siteimproveanalytics.com;\
-    font-src 'self' https://componenten.nijmegen.nl https://fonts.gstatic.com;\
-    img-src 'self' https://componenten.nijmegen.nl data: https://*.siteimproveanalytics.io;\
-    object-src 'self';\
-    `;
+    const cspValues = 'default-src \'self\';\
+    frame-ancestors \'self\';\
+    frame-src \'self\';\
+    connect-src \'self\' https://componenten.nijmegen.nl;\
+    style-src \'self\' https://componenten.nijmegen.nl https://fonts.googleapis.com https://fonts.gstatic.com \
+    \'sha256-hS1LM/30PjUBJK3kBX9Vm9eOAhQNCiNhf/SCDnUqu14=\' \'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=\' \'sha256-OTeu7NEHDo6qutIWo0F2TmYrDhsKWCzrUgGoxxHGJ8o=\';\
+    script-src \'self\' https://componenten.nijmegen.nl https://siteimproveanalytics.com;\
+    font-src \'self\' https://componenten.nijmegen.nl https://fonts.gstatic.com;\
+    img-src \'self\' https://componenten.nijmegen.nl data: https://*.siteimproveanalytics.io;\
+    object-src \'self\';\
+    ';
     return cspValues.replace(/[ ]+/g, ' ').trim();
   }
 

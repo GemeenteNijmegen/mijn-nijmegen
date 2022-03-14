@@ -51,7 +51,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"7f7ead56356f88bd6411c4c379d9098ac4682aaf9097498e80c6b68b448052dd:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"b68e2fe2f150fccd82c85fe9d06d6652c730e1335830e0a767de4482903b7a9e:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -754,15 +754,15 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "mijn-uitkering-api-mijn-uitkering-dns",
-                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapimijnuitkeringdnsAA431D4C.template.json",
+                  "StackName": "mijn-uitkering-api-cert-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapicertstack17B2025D.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
                     "Name": "Synth_Output",
                   },
                 ],
-                "Name": "mijn-uitkering-dns.Prepare",
+                "Name": "cert-stack.Prepare",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -833,9 +833,9 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "mijn-uitkering-api-mijn-uitkering-dns",
+                  "StackName": "mijn-uitkering-api-cert-stack",
                 },
-                "Name": "mijn-uitkering-dns.Deploy",
+                "Name": "cert-stack.Deploy",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -949,6 +949,79 @@ Object {
                   ],
                 },
                 "RunOrder": 4,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Deploy",
+                  "Owner": "AWS",
+                  "Provider": "CloudFormation",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ActionMode": "CHANGE_SET_REPLACE",
+                  "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                  "ChangeSetName": "PipelineChange",
+                  "RoleArn": Object {
+                    "Fn::Join": Array [
+                      "",
+                      Array [
+                        "arn:",
+                        Object {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":iam::test:role/cdk-hnb659fds-cfn-exec-role-test-eu-west-1",
+                      ],
+                    ],
+                  },
+                  "StackName": "mijn-uitkering-api-mijn-uitkering-dns",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapimijnuitkeringdnsAA431D4C.template.json",
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "Synth_Output",
+                  },
+                ],
+                "Name": "mijn-uitkering-dns.Prepare",
+                "RoleArn": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
+                    ],
+                  ],
+                },
+                "RunOrder": 5,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Deploy",
+                  "Owner": "AWS",
+                  "Provider": "CloudFormation",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ActionMode": "CHANGE_SET_EXECUTE",
+                  "ChangeSetName": "PipelineChange",
+                  "StackName": "mijn-uitkering-api-mijn-uitkering-dns",
+                },
+                "Name": "mijn-uitkering-dns.Deploy",
+                "RoleArn": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
+                    ],
+                  ],
+                },
+                "RunOrder": 6,
               },
             ],
             "Name": "mijn-uitkering-api",
