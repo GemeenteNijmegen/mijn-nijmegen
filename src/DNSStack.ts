@@ -25,8 +25,10 @@ export class DNSStack extends Stack {
     
     const subdomain = Statics.subDomain(this.branch);
     this.zone = new Route53.HostedZone(this, 'mijn-csp', {
-      zoneName: `${subdomain}.csp-nijmegen.nl`,
+      zoneName: `${subdomain}.${this.cspRootZone.zoneName}`,
     });
+
+    
     this.addNSToRootCSPzone();
     this.addDomainValidationRecord();
   }
