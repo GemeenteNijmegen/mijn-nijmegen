@@ -7,7 +7,8 @@ export interface DNSStackProps extends StackProps {
 }
 
 export class DNSStack extends Stack {
-  zone: Route53.HostedZone;
+  private zone: Route53.HostedZone;
+  exportedZone: Route53.IHostedZone;
   cspRootZone: Route53.IHostedZone;
   branch: string;
 
@@ -29,6 +30,11 @@ export class DNSStack extends Stack {
     });
     this.addNSToRootCSPzone();
     this.addDomainValidationRecord();
+
+    this.exportedZone = Route53.HostedZone.fromHostedZoneAttributes(this, 'exportedzone', {
+      hostedZoneId: this.zone.hostedZoneId,
+      zoneName: this.zone.zoneName
+    })
   }
 
   /**

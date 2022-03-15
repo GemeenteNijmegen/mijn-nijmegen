@@ -21,7 +21,7 @@ export class ApiStage extends Stage {
     // const certificate = certificateStack.createCertificate(dnsStack.zone);
     new ApiStack(this, 'api-stack', {
       branch: props.branch,
-      zone: dnsStack.zone,
+      zone: dnsStack.exportedZone,
       sessionsTable: sessionsStack.sessionsTable,
       // certificateArn: certificate.certificateArn,
     });

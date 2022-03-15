@@ -19,7 +19,7 @@ import {
 } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
-import { HostedZone } from 'aws-cdk-lib/aws-route53';
+import { IHostedZone } from 'aws-cdk-lib/aws-route53';
 import { Bucket, BlockPublicAccess, BucketEncryption } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
@@ -30,7 +30,7 @@ export interface ApiStackProps extends StackProps {
   sessionsTable: SessionsTable;
   certificateArn?: string;
   branch: string;
-  zone: HostedZone;
+  zone: IHostedZone;
 }
 
 /**
@@ -111,13 +111,13 @@ export class ApiStack extends Stack {
     return distribution;
   }
   
-  addDnsRecords(distribution: Distribution, zone: Route53.HostedZone) {
-    new Route53.ARecord(this, 'eform-cdn-record', {
+  addDnsRecords(distribution: Distribution, zone: IHostedZone) {
+    new Route53.ARecord(this, 'a-record', {
       zone: zone,
       target: Route53.RecordTarget.fromAlias(new Route53Targets.CloudFrontTarget(distribution)),
     });
 
-    new Route53.AaaaRecord(this, 'eform-cdn-record-ipv6', {
+    new Route53.AaaaRecord(this, 'aaaa-record', {
       zone: zone,
       target: Route53.RecordTarget.fromAlias(new Route53Targets.CloudFrontTarget(distribution)),
     });
