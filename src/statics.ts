@@ -69,7 +69,7 @@ export abstract class Statics {
 
   static subDomain(branch: string) {
     const subdomainMap = {
-      acceptance: 'mijn.acc',
+      acceptance: 'mijn.accp',
       production: 'mijn',
     };
     const subdomain = subdomainMap[branch as keyof typeof subdomainMap] ?? 'mijn-dev';
