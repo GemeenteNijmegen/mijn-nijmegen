@@ -16,12 +16,11 @@ export class ApiStage extends Stage {
   constructor(scope: Construct, id: string, props: ApiStageProps) {
     super(scope, id, props);
     const sessionsStack = new SessionsStack(this, 'sessions-stack');
-    const dnsStack = new DNSStack(this, 'mijn-uitkering-dns', { branch: props.branch });
+    new DNSStack(this, 'mijn-uitkering-dns', { branch: props.branch });
     // const certificateStack = new CertificateStack(this, 'cert-stack', { branch: props.branch, env: { region: 'us-east-1' } });
     // const certificate = certificateStack.createCertificate(dnsStack.zone);
     new ApiStack(this, 'api-stack', {
       branch: props.branch,
-      zone: dnsStack.exportedZone,
       sessionsTable: sessionsStack.sessionsTable,
       // certificateArn: certificate.certificateArn,
     });
