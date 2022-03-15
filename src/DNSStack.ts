@@ -14,16 +14,18 @@ export class DNSStack extends Stack {
   constructor(scope: Construct, id: string, props: DNSStackProps) {
     super(scope, id);
     this.branch = props.branch;
-    const subdomain = Statics.subDomain(this.branch);
-    this.zone = new Route53.HostedZone(this, 'mijn-csp', {
-      zoneName: `${subdomain}.csp-nijmegen.nl`,
-    });
+   
 
     const rootZoneId = SSM.StringParameter.valueForStringParameter(this, Statics.cspRootZoneId);
     const rootZoneName = SSM.StringParameter.valueForStringParameter(this, Statics.cspRootZoneName);
     this.cspRootZone = Route53.HostedZone.fromHostedZoneAttributes(this, 'cspzone', {
       hostedZoneId: rootZoneId,
       zoneName: rootZoneName,
+    });
+    
+    const subdomain = Statics.subDomain(this.branch);
+    this.zone = new Route53.HostedZone(this, 'mijn-csp', {
+      zoneName: `${subdomain}.${this.cspRootZone.zoneName}`,
     });
     this.addNSToRootCSPzone();
     this.addDomainValidationRecord();
