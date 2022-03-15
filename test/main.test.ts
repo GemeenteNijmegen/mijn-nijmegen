@@ -43,7 +43,7 @@ test('StackHasSessionsTable', () => {
 test('StackHasApiGateway', () => {
   const app = new App();
   const sessionsStack = new SessionsStack(app, 'sessions');
-  const dnsStack = new DNSStack(app, 'dns', { branch: 'dev'});
+  new DNSStack(app, 'dns', { branch: 'dev'});
   // const zone = dnsStack.zone;
   const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'dev', certificateArn: 'arn:123:456:us-east-1:123:123' });
   const template = Template.fromStack(stack);
@@ -54,7 +54,7 @@ test('StackHasApiGateway', () => {
 test('StackHasLambdas', () => {
   const app = new App();
   const sessionsStack = new SessionsStack(app, 'sessions');
-  const dnsStack = new DNSStack(app, 'dns', { branch: 'dev'});
+  new DNSStack(app, 'dns', { branch: 'dev'});
   // const zone = dnsStack.zone;
   const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'dev', certificateArn: 'arn:123:456:us-east-1:123:123' });
   const template = Template.fromStack(stack);
