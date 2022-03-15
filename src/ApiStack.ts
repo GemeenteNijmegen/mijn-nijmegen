@@ -42,7 +42,6 @@ export interface ApiStackProps extends StackProps {
 export class ApiStack extends Stack {
   private api: apigatewayv2.HttpApi;
   private sessionsTable: Table;
-  cloudfrontDistribution: Distribution;
 
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id);
@@ -53,11 +52,11 @@ export class ApiStack extends Stack {
     const apiHost = this.cleanDomain(this.api.url);
     let domains;
     const subdomain = Statics.subDomain(props.branch);
-    domains = [`${subdomain}.csp-nijmegen.nl`];
-    this.cloudfrontDistribution = this.setCloudfrontStack(apiHost, domains, props.certificateArn);
-    // this.addDnsRecords(this.cloudfrontDistribution, props.zone);
-    const cfDistributionUrl = `https://${this.cloudfrontDistribution.distributionDomainName}/`;
-    this.setFunctions(cfDistributionUrl);
+    const cspDomain = `${subdomain}.csp-nijmegen.nl`;
+    domains = [cspDomain];
+    const cloudfrontDistribution = this.setCloudfrontStack(apiHost, domains, props.certificateArn);
+    this.addDnsRecords(cloudfrontDistribution);
+    this.setFunctions(`https://${cspDomain}/`);
   }
 
   /**
