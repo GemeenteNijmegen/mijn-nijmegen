@@ -754,15 +754,15 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "mijn-uitkering-api-cert-stack",
-                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapicertstack17B2025D.template.json",
+                  "StackName": "mijn-uitkering-api-mijn-uitkering-dns",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapimijnuitkeringdnsAA431D4C.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
                     "Name": "Synth_Output",
                   },
                 ],
-                "Name": "cert-stack.Prepare",
+                "Name": "mijn-uitkering-dns.Prepare",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -833,9 +833,9 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "mijn-uitkering-api-cert-stack",
+                  "StackName": "mijn-uitkering-api-mijn-uitkering-dns",
                 },
-                "Name": "cert-stack.Deploy",
+                "Name": "mijn-uitkering-dns.Deploy",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -900,15 +900,15 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "mijn-uitkering-api-api-stack",
-                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.template.json",
+                  "StackName": "mijn-uitkering-api-cert-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapicertstack17B2025D.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
                     "Name": "Synth_Output",
                   },
                 ],
-                "Name": "api-stack.Prepare",
+                "Name": "cert-stack.Prepare",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -933,9 +933,9 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "mijn-uitkering-api-api-stack",
+                  "StackName": "mijn-uitkering-api-cert-stack",
                 },
-                "Name": "api-stack.Deploy",
+                "Name": "cert-stack.Deploy",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -973,15 +973,15 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "mijn-uitkering-api-mijn-uitkering-dns",
-                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapimijnuitkeringdnsAA431D4C.template.json",
+                  "StackName": "mijn-uitkering-api-api-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
                     "Name": "Synth_Output",
                   },
                 ],
-                "Name": "mijn-uitkering-dns.Prepare",
+                "Name": "api-stack.Prepare",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -1006,9 +1006,9 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "mijn-uitkering-api-mijn-uitkering-dns",
+                  "StackName": "mijn-uitkering-api-api-stack",
                 },
-                "Name": "mijn-uitkering-dns.Deploy",
+                "Name": "api-stack.Deploy",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",

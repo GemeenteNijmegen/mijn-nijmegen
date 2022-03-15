@@ -14,7 +14,6 @@ export class DNSStack extends Stack {
   constructor(scope: Construct, id: string, props: DNSStackProps) {
     super(scope, id);
     this.branch = props.branch;
-   
 
     const rootZoneId = SSM.StringParameter.valueForStringParameter(this, Statics.cspRootZoneId);
     const rootZoneName = SSM.StringParameter.valueForStringParameter(this, Statics.cspRootZoneName);
@@ -22,30 +21,45 @@ export class DNSStack extends Stack {
       hostedZoneId: rootZoneId,
       zoneName: rootZoneName,
     });
-    
-    const subdomain = Statics.subDomain(this.branch);
+
     this.zone = new Route53.HostedZone(this, 'mijn-csp', {
-      zoneName: `${subdomain}.${this.cspRootZone.zoneName}`,
+      zoneName: `mijn.${this.cspRootZone.zoneName}`,
     });
 
-    
+    this.addZoneIdAndNametoParams();
     this.addNSToRootCSPzone();
     this.addDomainValidationRecord();
+  }
+
+  /**
+   * Export zone id and name to parameter store
+   * for use in other stages (Cloudfront).
+   */
+  private addZoneIdAndNametoParams() {
+    new SSM.StringParameter(this, 'mijn-hostedzone-id', {
+      stringValue: this.zone.hostedZoneId,
+      parameterName: Statics.ssmZoneId,
+    });
+
+    new SSM.StringParameter(this, 'mijn-hostedzone-name', {
+      stringValue: this.zone.zoneName,
+      parameterName: Statics.ssmZoneName,
+    });
   }
 
   /**
    * Add the Name servers from the newly defined zone to
    * the root zone for csp-nijmegen.nl. This will only
    * have an actual effect in the prod. account.
-   * 
+   *
    * @returns null
    */
   addNSToRootCSPzone() {
-    if(!this.zone.hostedZoneNameServers) { return; }
+    if (!this.zone.hostedZoneNameServers) { return; }
     new Route53.NsRecord(this, 'ns-record', {
       zone: this.cspRootZone,
       values: this.zone.hostedZoneNameServers,
-      recordName: Statics.subDomain(this.branch)
+      recordName: 'mijn',
     });
   }
 

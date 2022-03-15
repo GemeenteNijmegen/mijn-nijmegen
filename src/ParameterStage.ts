@@ -28,8 +28,6 @@ export class ParameterStack extends Stack {
     Tags.of(this).add('Project', Statics.projectName);
 
     new ssmParamsConstruct(this, 'plain');
-
-
   }
 }
 /**

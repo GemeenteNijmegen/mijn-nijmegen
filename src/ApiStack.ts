@@ -28,7 +28,7 @@ import { Statics } from './statics';
 
 export interface ApiStackProps extends StackProps {
   sessionsTable: SessionsTable;
-  certificateArn?: string;
+  certificateArn: string;
   branch: string;
   // zone: HostedZone;
 }
@@ -52,10 +52,8 @@ export class ApiStack extends Stack {
     });
     const apiHost = this.cleanDomain(this.api.url);
     let domains;
-    if(props.certificateArn) { 
-      const subdomain = Statics.subDomain(props.branch);
-      domains = [`${subdomain}.csp-nijmegen.nl`];
-    }
+    const subdomain = Statics.subDomain(props.branch);
+    domains = [`${subdomain}.csp-nijmegen.nl`];
     this.cloudfrontDistribution = this.setCloudfrontStack(apiHost, domains, props.certificateArn);
     // this.addDnsRecords(this.cloudfrontDistribution, props.zone);
     const cfDistributionUrl = `https://${this.cloudfrontDistribution.distributionDomainName}/`;
@@ -110,8 +108,15 @@ export class ApiStack extends Stack {
     });
     return distribution;
   }
-  
-  addDnsRecords(distribution: Distribution, zone: Route53.HostedZone) {
+
+  addDnsRecords(distribution: Distribution) {
+    const zoneId = SSM.StringParameter.valueForStringParameter(this, Statics.ssmZoneId);
+    const zoneName = SSM.StringParameter.valueForStringParameter(this, Statics.ssmZoneName);
+    const zone = Route53.HostedZone.fromHostedZoneAttributes(this, 'zone', {
+      hostedZoneId: zoneId,
+      zoneName: zoneName,
+    });
+
     new Route53.ARecord(this, 'a-record', {
       zone: zone,
       target: Route53.RecordTarget.fromAlias(new Route53Targets.CloudFrontTarget(distribution)),

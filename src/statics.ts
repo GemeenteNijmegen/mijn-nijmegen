@@ -59,9 +59,17 @@ export abstract class Statics {
   static readonly cspRootZoneName: string = '/gemeente-nijmegen/formFio/hostedzone/name';
 
 
+  /**
+   * Route53 Zone ID and name for the zone for Mijn Nijmegen. decouples stacks to not pass
+   * the actual zone between stacks. This param is set by DNSStack and should not be modified after.
+   */
+  static readonly ssmZoneId: string = '/cdk/mijn-uitkering/zone-id/';
+  static readonly ssmZoneName: string = '/cdk/mijn-uitkering/zone-name/';
+
+
   static subDomain(branch: string) {
     const subdomainMap = {
-      acceptance: 'mijn-acc',
+      acceptance: 'mijn.acc',
       production: 'mijn',
     };
     const subdomain = subdomainMap[branch as keyof typeof subdomainMap] ?? 'mijn-dev';
