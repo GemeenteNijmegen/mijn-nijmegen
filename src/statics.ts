@@ -66,7 +66,6 @@ export abstract class Statics {
   static readonly ssmZoneId: string = '/cdk/mijn-uitkering/zone-id';
   static readonly ssmZoneName: string = '/cdk/mijn-uitkering/zone-name';
 
-
   static subDomain(branch: string) {
     const subdomainMap = {
       acceptance: 'mijn.accp',
