@@ -10,7 +10,7 @@ export interface CertificateStackProps extends StackProps {
 export class CertificateStack extends Stack {
   private branch: string;
   constructor(scope: Construct, id: string, props: CertificateStackProps) {
-    super(scope, id);
+    super(scope, id, props);
     this.branch = props.branch;
   }
 
