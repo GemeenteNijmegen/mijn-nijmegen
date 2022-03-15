@@ -18,12 +18,13 @@ export class ApiStage extends Stage {
     const sessionsStack = new SessionsStack(this, 'sessions-stack');
     // const certificateStack = new CertificateStack(this, 'cert-stack', { branch: props.branch, env: { region: 'us-east-1' } });
     // const certificate = certificateStack.createCertificate(dnsStack.zone);
-    new ApiStack(this, 'api-stack', {
+    const apiStack = new ApiStack(this, 'api-stack', {
       branch: props.branch,
       sessionsTable: sessionsStack.sessionsTable,
       // certificateArn: certificate.certificateArn,
     });
-    new DNSStack(this, 'mijn-uitkering-dns', { branch: props.branch });
+    const dnsStack = new DNSStack(this, 'mijn-uitkering-dns', { branch: props.branch });
+    dnsStack.addDependency(apiStack);
     
   }
 }
