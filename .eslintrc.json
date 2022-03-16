@@ -147,6 +147,7 @@
           "**/src/app/login/tests/**",
           "**/src/app/auth/tests/**",
           "**/src/app/home/tests/**",
+          "**/src/app/uitkeringen/tests/**",
           "**/src/app/logout/tests/**",
           "**//test/**",
           "**//build-tools/**"

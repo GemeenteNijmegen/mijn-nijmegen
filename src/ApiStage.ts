@@ -23,7 +23,7 @@ export class ApiStage extends Stage {
     new ApiStack(this, 'api-stack', {
       branch: props.branch,
       sessionsTable: sessionsStack.sessionsTable,
-      certificateArn: certificate.certificateArn
+      certificateArn: certificate.certificateArn,
     });
   }
 }

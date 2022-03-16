@@ -214,10 +214,18 @@ export class ApiStack extends Stack {
     });
     oidcSecret.grantRead(authFunction.lambda);
 
-    const secretMTLSPrivateKey = aws_secretsmanager.Secret.fromSecretNameV2(this, 'tls-key-secret', Statics.secretMTLSPrivateKey);
     const homeFunction = new ApiFunction(this, 'home-function', {
       description: 'Home-lambda voor de Mijn Uitkering-applicatie.',
       codePath: 'app/home',
+      table: this.sessionsTable,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: baseUrl,
+    });
+
+    const secretMTLSPrivateKey = aws_secretsmanager.Secret.fromSecretNameV2(this, 'tls-key-secret', Statics.secretMTLSPrivateKey);
+    const uitkeringenFunction = new ApiFunction(this, 'uitkeringen-function', {
+      description: 'Uitkeringen-lambda voor de Mijn Uitkering-applicatie.',
+      codePath: 'app/uitkeringen',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
@@ -229,9 +237,9 @@ export class ApiStack extends Stack {
         BRP_API_URL: SSM.StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
       },
     });
-    secretMTLSPrivateKey.grantRead(homeFunction.lambda);
-    SSM.StringParameter.fromStringParameterName(this, 'tlskey', Statics.ssmMTLSClientCert).grantRead(homeFunction.lambda);
-    SSM.StringParameter.fromStringParameterName(this, 'tlsrootca', Statics.ssmMTLSRootCA).grantRead(homeFunction.lambda);
+    secretMTLSPrivateKey.grantRead(uitkeringenFunction.lambda);
+    SSM.StringParameter.fromStringParameterName(this, 'tlskey', Statics.ssmMTLSClientCert).grantRead(uitkeringenFunction.lambda);
+    SSM.StringParameter.fromStringParameterName(this, 'tlsrootca', Statics.ssmMTLSRootCA).grantRead(uitkeringenFunction.lambda);
 
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('login', loginFunction.lambda),
@@ -253,7 +261,13 @@ export class ApiStack extends Stack {
 
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('home', homeFunction.lambda),
-      path: '/',
+      path: '/home',
+      methods: [apigatewayv2.HttpMethod.GET],
+    });
+
+    this.api.addRoutes({
+      integration: new HttpLambdaIntegration('uitkeringen', homeFunction.lambda),
+      path: '/uitkeringen',
       methods: [apigatewayv2.HttpMethod.GET],
     });
   }
