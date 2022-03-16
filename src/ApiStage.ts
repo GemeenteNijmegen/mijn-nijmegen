@@ -29,7 +29,7 @@ export class ApiStage extends Stage {
 
     new UitkeringsApiStack(this, 'uitkerings-api', {
       branch: props.branch,
-      sessionsTable: sessionsStack.sessionsTable
+      sessionsTable: sessionsStack.sessionsTable,
     });
 
     new CloudfrontStack(this, 'cloudfront-stack', {

@@ -29,7 +29,7 @@ export class ApiStack extends Stack {
     this.api = new apigatewayv2.HttpApi(this, 'mijnuitkering-api', {
       description: 'Mijn Uitkering webapplicatie',
     });
-    
+
     // Store apigateway ID to be used in other stacks
     new SSM.StringParameter(this, 'ssm_api_1', {
       stringValue: this.api.httpApiId,
