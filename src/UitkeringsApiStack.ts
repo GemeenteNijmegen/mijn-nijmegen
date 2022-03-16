@@ -20,7 +20,7 @@ export class UitkeringsApiStack extends Stack {
   constructor(scope: Construct, id: string, props: UitkeringsApiStackProps) {
     super(scope, id);
     this.sessionsTable = props.sessionsTable.table;
-    const apiGatewayId = SSM.StringParameter.fromStringParameterName(this, 'tlskey', Statics.ssmApiGatewayId)
+    const apiGatewayId = SSM.StringParameter.fromStringParameterName(this, 'gatewayid', Statics.ssmApiGatewayId)
     this.api = apigatewayv2.HttpApi.fromHttpApiAttributes(this, 'apigateway', { httpApiId: apiGatewayId.stringValue });
     const subdomain = Statics.subDomain(props.branch);
     const cspDomain = `${subdomain}.csp-nijmegen.nl`;
