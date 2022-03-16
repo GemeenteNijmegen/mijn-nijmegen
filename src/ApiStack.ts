@@ -214,15 +214,24 @@ export class ApiStack extends Stack {
     });
     oidcSecret.grantRead(authFunction.lambda);
 
+    const secretMTLSPrivateKey = aws_secretsmanager.Secret.fromSecretNameV2(this, 'tls-key-secret', Statics.secretMTLSPrivateKey);
     const homeFunction = new ApiFunction(this, 'home-function', {
       description: 'Home-lambda voor de Mijn Uitkering-applicatie.',
       codePath: 'app/home',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
-      applicationUrlBase: baseUrl,
+      applicationUrlBase: baseUrl, environment: {
+        MTLS_PRIVATE_KEY_ARN: secretMTLSPrivateKey.secretArn,
+        MTLS_CLIENT_CERT_NAME: Statics.ssmMTLSClientCert,
+        MTLS_ROOT_CA_NAME: Statics.ssmMTLSRootCA,
+        UITKERING_API_URL: SSM.StringParameter.valueForStringParameter(this, Statics.ssmUitkeringsApiEndpointUrl),
+        BRP_API_URL: SSM.StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
+      },
     });
+    secretMTLSPrivateKey.grantRead(homeFunction.lambda);
+    SSM.StringParameter.fromStringParameterName(this, 'tlskey', Statics.ssmMTLSClientCert).grantRead(homeFunction.lambda);
+    SSM.StringParameter.fromStringParameterName(this, 'tlsrootca', Statics.ssmMTLSRootCA).grantRead(homeFunction.lambda);
 
-    const secretMTLSPrivateKey = aws_secretsmanager.Secret.fromSecretNameV2(this, 'tls-key-secret', Statics.secretMTLSPrivateKey);
     const uitkeringenFunction = new ApiFunction(this, 'uitkeringen-function', {
       description: 'Uitkeringen-lambda voor de Mijn Uitkering-applicatie.',
       codePath: 'app/uitkeringen',
@@ -261,12 +270,12 @@ export class ApiStack extends Stack {
 
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('home', homeFunction.lambda),
-      path: '/home',
+      path: '/',
       methods: [apigatewayv2.HttpMethod.GET],
     });
 
     this.api.addRoutes({
-      integration: new HttpLambdaIntegration('uitkeringen', homeFunction.lambda),
+      integration: new HttpLambdaIntegration('uitkeringen', uitkeringenFunction.lambda),
       path: '/uitkeringen',
       methods: [apigatewayv2.HttpMethod.GET],
     });
