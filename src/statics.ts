@@ -75,4 +75,6 @@ export abstract class Statics {
     return subdomain;
   }
 
+  static readonly ssmApiGatewayId: string = '/cdk/mijn-uitkering/apigateway-id';
+
 }

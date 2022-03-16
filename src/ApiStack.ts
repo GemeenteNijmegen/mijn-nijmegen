@@ -10,20 +10,18 @@ import { Statics } from './statics';
 
 export interface ApiStackProps extends StackProps {
   sessionsTable: SessionsTable;
-  certificateArn: string;
   branch: string;
   // zone: HostedZone;
 }
 
 /**
  * The API Stack creates the API Gateway and related
- * lambda's. It also creates a cloudfront distribution.
- * It requires supporting resources (such as the
+ * lambda's. It requires supporting resources (such as the
  * DynamoDB sessions table to be provided and thus created first)
  */
 export class ApiStack extends Stack {
-  private api: apigatewayv2.HttpApi;
   private sessionsTable: Table;
+  api: apigatewayv2.HttpApi;
 
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id);
@@ -31,6 +29,13 @@ export class ApiStack extends Stack {
     this.api = new apigatewayv2.HttpApi(this, 'mijnuitkering-api', {
       description: 'Mijn Uitkering webapplicatie',
     });
+    
+    // Store apigateway ID to be used in other stacks
+    new SSM.StringParameter(this, 'ssm_api_1', {
+      stringValue: this.api.httpApiId,
+      parameterName: Statics.ssmApiGatewayId,
+    });
+
     const subdomain = Statics.subDomain(props.branch);
     const cspDomain = `${subdomain}.csp-nijmegen.nl`;
     this.setFunctions(`https://${cspDomain}/`);
@@ -93,24 +98,6 @@ export class ApiStack extends Stack {
     tlskeyParam.grantRead(homeFunction.lambda);
     tlsRootCAParam.grantRead(homeFunction.lambda);
 
-    const uitkeringenFunction = new ApiFunction(this, 'uitkeringen-function', {
-      description: 'Uitkeringen-lambda voor de Mijn Uitkering-applicatie.',
-      codePath: 'app/uitkeringen',
-      table: this.sessionsTable,
-      tablePermissions: 'ReadWrite',
-      applicationUrlBase: baseUrl,
-      environment: {
-        MTLS_PRIVATE_KEY_ARN: secretMTLSPrivateKey.secretArn,
-        MTLS_CLIENT_CERT_NAME: Statics.ssmMTLSClientCert,
-        MTLS_ROOT_CA_NAME: Statics.ssmMTLSRootCA,
-        UITKERING_API_URL: SSM.StringParameter.valueForStringParameter(this, Statics.ssmUitkeringsApiEndpointUrl),
-        BRP_API_URL: SSM.StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
-      },
-    });
-    secretMTLSPrivateKey.grantRead(uitkeringenFunction.lambda);
-    tlskeyParam.grantRead(uitkeringenFunction.lambda);
-    tlsRootCAParam.grantRead(uitkeringenFunction.lambda);
-
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('login', loginFunction.lambda),
       path: '/login',
@@ -132,12 +119,6 @@ export class ApiStack extends Stack {
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('home', homeFunction.lambda),
       path: '/',
-      methods: [apigatewayv2.HttpMethod.GET],
-    });
-
-    this.api.addRoutes({
-      integration: new HttpLambdaIntegration('uitkeringen', uitkeringenFunction.lambda),
-      path: '/uitkeringen',
       methods: [apigatewayv2.HttpMethod.GET],
     });
   }
