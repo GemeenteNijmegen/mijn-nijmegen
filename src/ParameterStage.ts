@@ -47,7 +47,7 @@ export class ssmParamsConstruct extends Construct {
      * authentication parameters
      */
     new SSM.StringParameter(this, 'ssm_auth_1', {
-      stringValue: 'https://authenticatie-accp.nijmegen.nl/',
+      stringValue: 'https://authenticatie-accp.nijmegen.nl',
       parameterName: Statics.ssmAuthUrlBaseParameter,
     });
 
