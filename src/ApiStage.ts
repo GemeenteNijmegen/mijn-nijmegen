@@ -17,7 +17,7 @@ export class ApiStage extends Stage {
   constructor(scope: Construct, id: string, props: ApiStageProps) {
     super(scope, id, props);
     const sessionsStack = new SessionsStack(this, 'sessions-stack');
-    const dnsStack = new DNSStack(this, 'mijn-uitkering-dns', { branch: props.branch });
+    const dnsStack = new DNSStack(this, 'dns-stack', { branch: props.branch });
     const certificateStack = new CertificateStack(this, 'cert-stack', { branch: props.branch });
     const certificate = certificateStack.createCertificate(dnsStack.zone);
     certificateStack.addDependency(dnsStack);
