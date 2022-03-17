@@ -51,7 +51,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"b68e2fe2f150fccd82c85fe9d06d6652c730e1335830e0a767de4482903b7a9e:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"b68e2fe2f150fccd82c85fe9d06d6652c730e1335830e0a767de4482903b7a9e:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -109,7 +109,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"1c3fbf160d6db6182a8494b19c9d1fedeb1896a9e47eb7660a8d040b52c0e647:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"1c3fbf160d6db6182a8494b19c9d1fedeb1896a9e47eb7660a8d040b52c0e647:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -167,7 +167,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"3ecba75621c4ed8e00335cf0d99a2ffab1d87ebb9f7d4f9fe54c6433c5a706c4:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"3ecba75621c4ed8e00335cf0d99a2ffab1d87ebb9f7d4f9fe54c6433c5a706c4:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -225,7 +225,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"353f089db965b65dfd4f27a11c579e90dc203d491f39372a4b561141b001eaf3:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"353f089db965b65dfd4f27a11c579e90dc203d491f39372a4b561141b001eaf3:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -283,7 +283,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"c91dc1c8f0514b9275c3f1bf8ca8fa2599c6d0411b2b77f221ce1a456760390d:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicertstack8D5187BE.assets.json\\\\\\" --verbose publish \\\\\\"ad857e1dc697a4d2f1d873cc9b28d8d84d644c068aec90e418133ea0a63e7704:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -341,7 +341,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapicertstack17B2025D.assets.json\\\\\\" --verbose publish \\\\\\"ad857e1dc697a4d2f1d873cc9b28d8d84d644c068aec90e418133ea0a63e7704:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiuitkeringsapi14A41BD4.assets.json\\\\\\" --verbose publish \\\\\\"c91dc1c8f0514b9275c3f1bf8ca8fa2599c6d0411b2b77f221ce1a456760390d:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -922,8 +922,8 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "mijn-uitkering-api-mijn-uitkering-dns",
-                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapimijnuitkeringdnsAA431D4C.template.json",
+                  "StackName": "mijn-api-mijn-uitkering-dns",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-api/testmijnapimijnuitkeringdns683DB1F4.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
@@ -968,8 +968,8 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "mijn-uitkering-api-sessions-stack",
-                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapisessionsstackE5C35BBB.template.json",
+                  "StackName": "mijn-api-sessions-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-api/testmijnapisessionsstackB316A40A.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
@@ -1001,7 +1001,7 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "mijn-uitkering-api-mijn-uitkering-dns",
+                  "StackName": "mijn-api-mijn-uitkering-dns",
                 },
                 "Name": "mijn-uitkering-dns.Deploy",
                 "RoleArn": Object {
@@ -1028,7 +1028,7 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "mijn-uitkering-api-sessions-stack",
+                  "StackName": "mijn-api-sessions-stack",
                 },
                 "Name": "sessions-stack.Deploy",
                 "RoleArn": Object {
@@ -1068,8 +1068,8 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "mijn-uitkering-api-api-stack",
-                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.template.json",
+                  "StackName": "mijn-api-api-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-api/testmijnapiapistackB91CFA18.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
@@ -1114,8 +1114,8 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "mijn-uitkering-api-cert-stack",
-                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapicertstack17B2025D.template.json",
+                  "StackName": "mijn-api-cert-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-api/testmijnapicertstack8D5187BE.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
@@ -1147,7 +1147,7 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "mijn-uitkering-api-api-stack",
+                  "StackName": "mijn-api-api-stack",
                 },
                 "Name": "api-stack.Deploy",
                 "RoleArn": Object {
@@ -1174,7 +1174,7 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "mijn-uitkering-api-cert-stack",
+                  "StackName": "mijn-api-cert-stack",
                 },
                 "Name": "cert-stack.Deploy",
                 "RoleArn": Object {
@@ -1214,8 +1214,8 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "mijn-uitkering-api-cloudfront-stack",
-                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapicloudfrontstack51C83291.template.json",
+                  "StackName": "mijn-api-cloudfront-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
@@ -1247,7 +1247,7 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "mijn-uitkering-api-cloudfront-stack",
+                  "StackName": "mijn-api-cloudfront-stack",
                 },
                 "Name": "cloudfront-stack.Deploy",
                 "RoleArn": Object {
@@ -1263,6 +1263,84 @@ Object {
                   ],
                 },
                 "RunOrder": 6,
+              },
+            ],
+            "Name": "mijn-api",
+          },
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Deploy",
+                  "Owner": "AWS",
+                  "Provider": "CloudFormation",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ActionMode": "CHANGE_SET_REPLACE",
+                  "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                  "ChangeSetName": "PipelineChange",
+                  "RoleArn": Object {
+                    "Fn::Join": Array [
+                      "",
+                      Array [
+                        "arn:",
+                        Object {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":iam::test:role/cdk-hnb659fds-cfn-exec-role-test-eu-west-1",
+                      ],
+                    ],
+                  },
+                  "StackName": "mijn-uitkering-api-uitkerings-api",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapiuitkeringsapi14A41BD4.template.json",
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "Synth_Output",
+                  },
+                ],
+                "Name": "Prepare",
+                "RoleArn": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
+                    ],
+                  ],
+                },
+                "RunOrder": 1,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Deploy",
+                  "Owner": "AWS",
+                  "Provider": "CloudFormation",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ActionMode": "CHANGE_SET_EXECUTE",
+                  "ChangeSetName": "PipelineChange",
+                  "StackName": "mijn-uitkering-api-uitkerings-api",
+                },
+                "Name": "Deploy",
+                "RoleArn": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
+                    ],
+                  ],
+                },
+                "RunOrder": 2,
               },
             ],
             "Name": "mijn-uitkering-api",
