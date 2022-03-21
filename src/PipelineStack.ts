@@ -20,7 +20,6 @@ export class PipelineStack extends Stack {
     const pipeline = this.pipeline();
     pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', { env: props.deployToEnvironment }));
     pipeline.addStage(new ApiStage(this, 'mijn-api', { env: props.deployToEnvironment, branch: this.branchName }));
-    pipeline.addStage(new UitkeringsApiStage(this, 'mijn-uitkering-api', { env: props.deployToEnvironment, branch: this.branchName }));
   }
 
   pipeline(): pipelines.CodePipeline {
