@@ -98,7 +98,7 @@
         </a>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link nav-no-link" href="/logout">Ingelogde gebruiker
+                <a class="nav-link nav-no-link" href="/logout">{{volledigenaam}}
                     <i title="uitloggen" class="mdi mdi-logout"></i>
                 </a>
             </li>
@@ -111,70 +111,20 @@
     <div class="container" id="section-1">
         <div class="row">
             <div class="col-8">
-                <h1>Mijn Uitkering</h1>
+                <h1>Mijn Nijmegen</h1>
                 <p class="lead">Hier vindt u een overzicht van uw uitkeringen.</p>
-                
-                <div class="tabs-wrapper">
-                    <!-- Tab List -->
-                    <div class="nav classic-tabs-no-line" role="tablist" aria-label="Uitkeringen">
-                    {{#uitkeringen}}
-                        <div class="nav-item">
-                            <button class="nav-link {{#selected}}active{{/selected}}" role="tab" {{#selected}}aria-selected="true" {{/selected}} aria-controls="{{uitkeringattr}}-tab" id="{{uitkeringattr}}-tabcontrol">
-                                {{type}}
-                            </button>
-                        </div>
-                    {{/uitkeringen}}
-                    </div>
-                    {{#uitkeringen}}
-                    <!-- Tab Content -->
-                    <div class="tab-content" tabindex="0" role="tabpanel" id="{{uitkeringattr}}-tab" aria-labelledby="{{uitkeringattr}}-tabcontrol">
-                        <h2>{{type}}</h2>
-                        <div class="card card-number">
-                            <div class="card-body">
-                                <p class="card-title">€ {{#fieldsByName}} {{betaald-totaal}} {{/fieldsByName}}</p>
-                                <p class="card-text">Totaal betaald</p>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-title">€	{{#fieldsByName}} {{betaald-aan-u}} {{/fieldsByName}}</p>
-                                <p class="card-text">Betaald aan u</p>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-title">€	{{#fieldsByName}} {{betaald-aan-derde}} {{/fieldsByName}}</p>
-                                <p class="card-text">Betaald aan derde</p>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-title">{{#fieldsByName}} {{laatste-betaling}} {{/fieldsByName}}</p>
-                                <p class="card-text">Betalingsdatum</p>
-                            </div>
-                        </div>
-                        
-                        <h3>Uitkeringsgegevens</h3>
-                        
-                        <table class="responsive-table">
-                            <tbody>
-                                <tr>
-                                    <th>Soort uitkering</td>
-                                    <td>{{uitkering}}</td>
-                                </tr>
-                                {{#fields}}
-                                <tr>
-                                    <th>{{label}}</td>
-                                    <td>{{value}}</td>
-                                </tr>
-                                {{/fields}}
-                            </tbody>
-                        </table>
-                    </div>
-                    {{/uitkeringen}}
-                </div>
-                {{^uitkeringen}}
-                <p>U heeft geen lopende uitkeringen.</p>
-                {{/uitkeringen}}
             </div>
-            <div class="col-4">
-                <h2>Contactinformatie</h2>
-                <strong>Gemeente Nijmegen</strong>
-                <p>Bureau Uitkeringsbeheer</p>
+        </div>
+        <div class="row">
+            <div class="card card-services">
+                <div class="card-body">
+                    <p><i class="mdi mdi-currency-eur" aria-hidden="true"></i></p>
+                    <p class="card-title">Uitkeringen</p>
+                    <p class="card-text">Bekijk uw uitkeringsgegevens op uw persoonlijke gemeentepagina.</p>
+                    <p class="card-read-more text-right mb-0 text-uppercase">
+                        <a href="/uitkeringen" aria-label="Bekijk mijn uitkeringen">Lees meer</a>
+                    </p>
+                </div>
             </div>
         </div>
     </div>

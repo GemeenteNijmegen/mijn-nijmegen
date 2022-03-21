@@ -15,6 +15,7 @@
     "install:home": "npx projen install:home",
     "install:login": "npx projen install:login",
     "install:logout": "npx projen install:logout",
+    "install:uitkeringen": "npx projen install:uitkeringen",
     "package": "npx projen package",
     "post-compile": "npx projen post-compile",
     "post-upgrade": "npx projen post-upgrade",
@@ -46,7 +47,7 @@
     "jest-junit": "^13",
     "json-schema": "^0.4.0",
     "npm-check-updates": "^12",
-    "projen": "^0.52.0",
+    "projen": "0.52.0",
     "ts-jest": "^27.1.3",
     "ts-node": "^9",
     "typescript": "^4.5.5"

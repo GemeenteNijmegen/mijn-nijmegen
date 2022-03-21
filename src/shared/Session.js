@@ -40,7 +40,6 @@ class Session {
      * @returns dynamodb record | false
      */
     async init() {
-        console.debug('init session');
         this.dbClient = new DynamoDBClient();
         if (!this.sessionId) { return false; }
         const getItemCommand = new GetItemCommand({
@@ -59,7 +58,7 @@ class Session {
                 return false;
             }
         } catch (err) {
-            console.debug('Error getting session from DynamoDB: ' + err);
+            console.log('Error getting session from DynamoDB: ' + err);
             throw err;
         }
     }
@@ -85,8 +84,6 @@ class Session {
      * @param {string} bsn set the current user bsn
      */
     async updateSession(loggedin = false, bsn = '') {
-        console.debug('start session update');
-        console.debug({ 'sessid': this.sessionId, 'bsn': bsn.substring(0, 2), 'loggedin': loggedin });
         const now = new Date();
         const ttl = Math.floor((now / 1000) + 15 * 60).toString(); // ttl is 15 minutes
 
@@ -115,22 +112,19 @@ class Session {
             await this.dbClient.send(command);
         } 
         catch (err) {
-            console.debug('Error updating session in DynamoDB: ' + err);
+            console.log('Error updating session in DynamoDB: ' + err);
             throw err;
         }
-        console.debug('end session update. State: ' + this.state);
     }
 
     /**
      * Create a new session, store in dynamodb
      */
     async createSession(state) {
-        console.debug('start session create');
         const sessionId = crypto.randomUUID();
         const now = new Date();
         const ttl = Math.floor((now / 1000) + 15 * 60).toString(); // ttl is 15 minutes
 
-        console.debug('BEFORE command');
         const command = new PutItemCommand({
             TableName: process.env.SESSION_TABLE,
             Item: {
@@ -144,7 +138,6 @@ class Session {
         await this.dbClient.send(command);
         this.state = state;
         this.sessionId = sessionId;
-        console.debug('end session create. sessId: ' + this.sessionId + ' state: ' + this.state);
     }
 }
 exports.Session = Session;

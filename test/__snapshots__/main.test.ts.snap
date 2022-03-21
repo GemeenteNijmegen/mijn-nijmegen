@@ -13,7 +13,7 @@ Object {
     },
   },
   "Resources": Object {
-    "mijnuitkeringdevelopmentAssetsFileAsset17F33B7E1": Object {
+    "mijnnijmegendevelopmentAssetsFileAsset1E8BF26A7": Object {
       "Properties": Object {
         "Artifacts": Object {
           "Type": "CODEPIPELINE",
@@ -23,7 +23,7 @@ Object {
         },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
-            "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKey1738A5E3",
+            "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
             "Arn",
           ],
         },
@@ -36,7 +36,7 @@ Object {
         },
         "ServiceRole": Object {
           "Fn::GetAtt": Array [
-            "mijnuitkeringdevelopmentAssetsFileRole507FF9CE",
+            "mijnnijmegendevelopmentAssetsFileRole8397C4AA",
             "Arn",
           ],
         },
@@ -51,7 +51,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"5fb1a13a9bc0c83bf6c985642dfb4cf567da3a6cbf801232ad3db47df888a182:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"b68e2fe2f150fccd82c85fe9d06d6652c730e1335830e0a767de4482903b7a9e:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -65,13 +65,13 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::CodeBuild::Project",
     },
-    "mijnuitkeringdevelopmentAssetsFileAsset262CCDA56": Object {
+    "mijnnijmegendevelopmentAssetsFileAsset2DA01B8DD": Object {
       "Properties": Object {
         "Artifacts": Object {
           "Type": "CODEPIPELINE",
@@ -81,7 +81,7 @@ Object {
         },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
-            "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKey1738A5E3",
+            "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
             "Arn",
           ],
         },
@@ -94,7 +94,7 @@ Object {
         },
         "ServiceRole": Object {
           "Fn::GetAtt": Array [
-            "mijnuitkeringdevelopmentAssetsFileRole507FF9CE",
+            "mijnnijmegendevelopmentAssetsFileRole8397C4AA",
             "Arn",
           ],
         },
@@ -109,7 +109,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"c72e3e3e2949c5170bd71418e5d4f8dfd4b24261fadfa228fb8f54c86822aa1f:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"1c3fbf160d6db6182a8494b19c9d1fedeb1896a9e47eb7660a8d040b52c0e647:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -123,13 +123,13 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::CodeBuild::Project",
     },
-    "mijnuitkeringdevelopmentAssetsFileAsset30D0C1251": Object {
+    "mijnnijmegendevelopmentAssetsFileAsset3574E1BE8": Object {
       "Properties": Object {
         "Artifacts": Object {
           "Type": "CODEPIPELINE",
@@ -139,7 +139,7 @@ Object {
         },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
-            "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKey1738A5E3",
+            "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
             "Arn",
           ],
         },
@@ -152,7 +152,7 @@ Object {
         },
         "ServiceRole": Object {
           "Fn::GetAtt": Array [
-            "mijnuitkeringdevelopmentAssetsFileRole507FF9CE",
+            "mijnnijmegendevelopmentAssetsFileRole8397C4AA",
             "Arn",
           ],
         },
@@ -167,7 +167,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"090dd8e430ea84fac1f5496bb8c9c0c5270a97020310c16cb08a17e73d64b703:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"3ecba75621c4ed8e00335cf0d99a2ffab1d87ebb9f7d4f9fe54c6433c5a706c4:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -181,13 +181,13 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::CodeBuild::Project",
     },
-    "mijnuitkeringdevelopmentAssetsFileAsset48566A75D": Object {
+    "mijnnijmegendevelopmentAssetsFileAsset4B117640E": Object {
       "Properties": Object {
         "Artifacts": Object {
           "Type": "CODEPIPELINE",
@@ -197,7 +197,7 @@ Object {
         },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
-            "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKey1738A5E3",
+            "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
             "Arn",
           ],
         },
@@ -210,7 +210,7 @@ Object {
         },
         "ServiceRole": Object {
           "Fn::GetAtt": Array [
-            "mijnuitkeringdevelopmentAssetsFileRole507FF9CE",
+            "mijnnijmegendevelopmentAssetsFileRole8397C4AA",
             "Arn",
           ],
         },
@@ -225,7 +225,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.assets.json\\\\\\" --verbose publish \\\\\\"c1c5147d3c8ddc8acbeacde7649325a8a1201fc845bcce1a010c7739c44ac244:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"353f089db965b65dfd4f27a11c579e90dc203d491f39372a4b561141b001eaf3:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -239,13 +239,129 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::CodeBuild::Project",
     },
-    "mijnuitkeringdevelopmentAssetsFileRole507FF9CE": Object {
+    "mijnnijmegendevelopmentAssetsFileAsset5721FAF9D": Object {
+      "Properties": Object {
+        "Artifacts": Object {
+          "Type": "CODEPIPELINE",
+        },
+        "Cache": Object {
+          "Type": "NO_CACHE",
+        },
+        "EncryptionKey": Object {
+          "Fn::GetAtt": Array [
+            "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
+            "Arn",
+          ],
+        },
+        "Environment": Object {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "Image": "aws/codebuild/standard:5.0",
+          "ImagePullCredentialsType": "CODEBUILD",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER",
+        },
+        "ServiceRole": Object {
+          "Fn::GetAtt": Array [
+            "mijnnijmegendevelopmentAssetsFileRole8397C4AA",
+            "Arn",
+          ],
+        },
+        "Source": Object {
+          "BuildSpec": "{
+  \\"version\\": \\"0.2\\",
+  \\"phases\\": {
+    \\"install\\": {
+      \\"commands\\": [
+        \\"npm install -g cdk-assets\\"
+      ]
+    },
+    \\"build\\": {
+      \\"commands\\": [
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicertstack8D5187BE.assets.json\\\\\\" --verbose publish \\\\\\"ad857e1dc697a4d2f1d873cc9b28d8d84d644c068aec90e418133ea0a63e7704:test-eu-west-1\\\\\\"\\"
+      ]
+    }
+  }
+}",
+          "Type": "CODEPIPELINE",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cdkManaged",
+            "Value": "yes",
+          },
+          Object {
+            "Key": "Project",
+            "Value": "mijn-nijmegen",
+          },
+        ],
+      },
+      "Type": "AWS::CodeBuild::Project",
+    },
+    "mijnnijmegendevelopmentAssetsFileAsset62EDB75E4": Object {
+      "Properties": Object {
+        "Artifacts": Object {
+          "Type": "CODEPIPELINE",
+        },
+        "Cache": Object {
+          "Type": "NO_CACHE",
+        },
+        "EncryptionKey": Object {
+          "Fn::GetAtt": Array [
+            "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
+            "Arn",
+          ],
+        },
+        "Environment": Object {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "Image": "aws/codebuild/standard:5.0",
+          "ImagePullCredentialsType": "CODEBUILD",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER",
+        },
+        "ServiceRole": Object {
+          "Fn::GetAtt": Array [
+            "mijnnijmegendevelopmentAssetsFileRole8397C4AA",
+            "Arn",
+          ],
+        },
+        "Source": Object {
+          "BuildSpec": "{
+  \\"version\\": \\"0.2\\",
+  \\"phases\\": {
+    \\"install\\": {
+      \\"commands\\": [
+        \\"npm install -g cdk-assets\\"
+      ]
+    },
+    \\"build\\": {
+      \\"commands\\": [
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-uitkering-api/testmijnuitkeringapiuitkeringsapi14A41BD4.assets.json\\\\\\" --verbose publish \\\\\\"c91dc1c8f0514b9275c3f1bf8ca8fa2599c6d0411b2b77f221ce1a456760390d:test-eu-west-1\\\\\\"\\"
+      ]
+    }
+  }
+}",
+          "Type": "CODEPIPELINE",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cdkManaged",
+            "Value": "yes",
+          },
+          Object {
+            "Key": "Project",
+            "Value": "mijn-nijmegen",
+          },
+        ],
+      },
+      "Type": "AWS::CodeBuild::Project",
+    },
+    "mijnnijmegendevelopmentAssetsFileRole8397C4AA": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -284,13 +400,13 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "mijnuitkeringdevelopmentAssetsFileRoleDefaultPolicyC4F8B9E4": Object {
+    "mijnnijmegendevelopmentAssetsFileRoleDefaultPolicy7B32FB83": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -364,7 +480,7 @@ Object {
               "Resource": Array [
                 Object {
                   "Fn::GetAtt": Array [
-                    "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838",
+                    "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5",
                     "Arn",
                   ],
                 },
@@ -374,7 +490,7 @@ Object {
                     Array [
                       Object {
                         "Fn::GetAtt": Array [
-                          "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838",
+                          "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5",
                           "Arn",
                         ],
                       },
@@ -392,7 +508,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKey1738A5E3",
+                  "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
                   "Arn",
                 ],
               },
@@ -400,33 +516,33 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "mijnuitkeringdevelopmentAssetsFileRoleDefaultPolicyC4F8B9E4",
+        "PolicyName": "mijnnijmegendevelopmentAssetsFileRoleDefaultPolicy7B32FB83",
         "Roles": Array [
           Object {
-            "Ref": "mijnuitkeringdevelopmentAssetsFileRole507FF9CE",
+            "Ref": "mijnnijmegendevelopmentAssetsFileRole8397C4AA",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mijnuitkeringdevelopmentPipeline333F36FB": Object {
+    "mijnnijmegendevelopmentPipeline7ED4B1CB": Object {
       "DependsOn": Array [
-        "mijnuitkeringdevelopmentPipelineRoleDefaultPolicyBF7CA000",
-        "mijnuitkeringdevelopmentPipelineRole061CE2BC",
+        "mijnnijmegendevelopmentPipelineRoleDefaultPolicy136F3079",
+        "mijnnijmegendevelopmentPipelineRoleBE525F7A",
       ],
       "Properties": Object {
         "ArtifactStore": Object {
           "EncryptionKey": Object {
             "Id": Object {
               "Fn::GetAtt": Array [
-                "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKey1738A5E3",
+                "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
                 "Arn",
               ],
             },
             "Type": "KMS",
           },
           "Location": Object {
-            "Ref": "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838",
+            "Ref": "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5",
           },
           "Type": "S3",
         },
@@ -434,7 +550,7 @@ Object {
         "RestartExecutionOnUpdate": true,
         "RoleArn": Object {
           "Fn::GetAtt": Array [
-            "mijnuitkeringdevelopmentPipelineRole061CE2BC",
+            "mijnnijmegendevelopmentPipelineRoleBE525F7A",
             "Arn",
           ],
         },
@@ -463,7 +579,7 @@ Object {
                 ],
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "mijnuitkeringdevelopmentPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleF238BE5A",
+                    "mijnnijmegendevelopmentPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRole9CE3A800",
                     "Arn",
                   ],
                 },
@@ -484,7 +600,7 @@ Object {
                 "Configuration": Object {
                   "EnvironmentVariables": "[{\\"name\\":\\"_PROJECT_CONFIG_HASH\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"408c2abba59dfe79726f604b5e4be80679cd98aa85c921835e5a1ab7ac11177f\\"}]",
                   "ProjectName": Object {
-                    "Ref": "mijnuitkeringdevelopmentPipelineBuildSynthCdkBuildProjectD65A8BC0",
+                    "Ref": "mijnnijmegendevelopmentPipelineBuildSynthCdkBuildProject56235943",
                   },
                 },
                 "InputArtifacts": Array [
@@ -500,7 +616,7 @@ Object {
                 ],
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "mijnuitkeringdevelopmentPipelineBuildSynthCodePipelineActionRole389FFF58",
+                    "mijnnijmegendevelopmentPipelineBuildSynthCodePipelineActionRole9924D4CD",
                     "Arn",
                   ],
                 },
@@ -521,7 +637,7 @@ Object {
                 "Configuration": Object {
                   "EnvironmentVariables": "[{\\"name\\":\\"_PROJECT_CONFIG_HASH\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"5bf35113579754e28f72c705fde1a2e02dd0d8d1cfcee326900f3e08ec8f9bf5\\"}]",
                   "ProjectName": Object {
-                    "Ref": "mijnuitkeringdevelopmentUpdatePipelineSelfMutation32F3E62C",
+                    "Ref": "mijnnijmegendevelopmentUpdatePipelineSelfMutation0B93A731",
                   },
                 },
                 "InputArtifacts": Array [
@@ -532,7 +648,7 @@ Object {
                 "Name": "SelfMutate",
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "mijnuitkeringdevelopmentPipelineUpdatePipelineSelfMutateCodePipelineActionRole3BF03BDF",
+                    "mijnnijmegendevelopmentPipelineUpdatePipelineSelfMutateCodePipelineActionRoleE78ABE89",
                     "Arn",
                   ],
                 },
@@ -552,7 +668,7 @@ Object {
                 },
                 "Configuration": Object {
                   "ProjectName": Object {
-                    "Ref": "mijnuitkeringdevelopmentAssetsFileAsset17F33B7E1",
+                    "Ref": "mijnnijmegendevelopmentAssetsFileAsset1E8BF26A7",
                   },
                 },
                 "InputArtifacts": Array [
@@ -563,7 +679,7 @@ Object {
                 "Name": "FileAsset1",
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "mijnuitkeringdevelopmentPipelineAssetsFileAsset1CodePipelineActionRoleFF46E0EC",
+                    "mijnnijmegendevelopmentPipelineAssetsFileAsset1CodePipelineActionRoleB41A47E2",
                     "Arn",
                   ],
                 },
@@ -578,7 +694,7 @@ Object {
                 },
                 "Configuration": Object {
                   "ProjectName": Object {
-                    "Ref": "mijnuitkeringdevelopmentAssetsFileAsset262CCDA56",
+                    "Ref": "mijnnijmegendevelopmentAssetsFileAsset2DA01B8DD",
                   },
                 },
                 "InputArtifacts": Array [
@@ -589,7 +705,7 @@ Object {
                 "Name": "FileAsset2",
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "mijnuitkeringdevelopmentPipelineAssetsFileAsset2CodePipelineActionRole98B1CB8B",
+                    "mijnnijmegendevelopmentPipelineAssetsFileAsset2CodePipelineActionRole5DCFE2BD",
                     "Arn",
                   ],
                 },
@@ -604,7 +720,7 @@ Object {
                 },
                 "Configuration": Object {
                   "ProjectName": Object {
-                    "Ref": "mijnuitkeringdevelopmentAssetsFileAsset30D0C1251",
+                    "Ref": "mijnnijmegendevelopmentAssetsFileAsset3574E1BE8",
                   },
                 },
                 "InputArtifacts": Array [
@@ -615,7 +731,7 @@ Object {
                 "Name": "FileAsset3",
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "mijnuitkeringdevelopmentPipelineAssetsFileAsset3CodePipelineActionRole73D1502B",
+                    "mijnnijmegendevelopmentPipelineAssetsFileAsset3CodePipelineActionRoleBDD0BF2F",
                     "Arn",
                   ],
                 },
@@ -630,7 +746,7 @@ Object {
                 },
                 "Configuration": Object {
                   "ProjectName": Object {
-                    "Ref": "mijnuitkeringdevelopmentAssetsFileAsset48566A75D",
+                    "Ref": "mijnnijmegendevelopmentAssetsFileAsset4B117640E",
                   },
                 },
                 "InputArtifacts": Array [
@@ -641,7 +757,59 @@ Object {
                 "Name": "FileAsset4",
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "mijnuitkeringdevelopmentPipelineAssetsFileAsset4CodePipelineActionRole3E7C3C96",
+                    "mijnnijmegendevelopmentPipelineAssetsFileAsset4CodePipelineActionRole5F4B9D55",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ProjectName": Object {
+                    "Ref": "mijnnijmegendevelopmentAssetsFileAsset5721FAF9D",
+                  },
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "Synth_Output",
+                  },
+                ],
+                "Name": "FileAsset5",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "mijnnijmegendevelopmentPipelineAssetsFileAsset5CodePipelineActionRoleDF8F0189",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ProjectName": Object {
+                    "Ref": "mijnnijmegendevelopmentAssetsFileAsset62EDB75E4",
+                  },
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "Synth_Output",
+                  },
+                ],
+                "Name": "FileAsset6",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "mijnnijmegendevelopmentPipelineAssetsFileAsset6CodePipelineActionRole14F87172",
                     "Arn",
                   ],
                 },
@@ -675,9 +843,9 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "mijn-uitkering-parameters-params",
-                  "TemplateConfiguration": "Synth_Output::assembly-test-mijn-uitkering-parameters/testmijnuitkeringparametersparamsEF3D5485.template.json.config.json",
-                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-parameters/testmijnuitkeringparametersparamsEF3D5485.template.json",
+                  "StackName": "mijn-nijmegen-parameters-params",
+                  "TemplateConfiguration": "Synth_Output::assembly-test-mijn-nijmegen-parameters/testmijnnijmegenparametersparams071D984E.template.json.config.json",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-nijmegen-parameters/testmijnnijmegenparametersparams071D984E.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
@@ -709,7 +877,7 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "mijn-uitkering-parameters-params",
+                  "StackName": "mijn-nijmegen-parameters-params",
                 },
                 "Name": "Deploy",
                 "RoleArn": Object {
@@ -727,7 +895,7 @@ Object {
                 "RunOrder": 2,
               },
             ],
-            "Name": "mijn-uitkering-parameters",
+            "Name": "mijn-nijmegen-parameters",
           },
           Object {
             "Actions": Array [
@@ -754,15 +922,15 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "mijn-uitkering-api-mijn-uitkering-dns",
-                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapimijnuitkeringdnsAA431D4C.template.json",
+                  "StackName": "mijn-api-dns-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-api/testmijnapidnsstack5FC6CFC9.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
                     "Name": "Synth_Output",
                   },
                 ],
-                "Name": "mijn-uitkering-dns.Prepare",
+                "Name": "dns-stack.Prepare",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -800,8 +968,8 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "mijn-uitkering-api-sessions-stack",
-                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapisessionsstackE5C35BBB.template.json",
+                  "StackName": "mijn-api-sessions-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-api/testmijnapisessionsstackB316A40A.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
@@ -833,9 +1001,9 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "mijn-uitkering-api-mijn-uitkering-dns",
+                  "StackName": "mijn-api-dns-stack",
                 },
-                "Name": "mijn-uitkering-dns.Deploy",
+                "Name": "dns-stack.Deploy",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -860,7 +1028,7 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "mijn-uitkering-api-sessions-stack",
+                  "StackName": "mijn-api-sessions-stack",
                 },
                 "Name": "sessions-stack.Deploy",
                 "RoleArn": Object {
@@ -900,8 +1068,8 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "mijn-uitkering-api-api-stack",
-                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapiapistack7064CFE8.template.json",
+                  "StackName": "mijn-api-api-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-api/testmijnapiapistackB91CFA18.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
@@ -931,9 +1099,55 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
+                  "ActionMode": "CHANGE_SET_REPLACE",
+                  "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                  "ChangeSetName": "PipelineChange",
+                  "RoleArn": Object {
+                    "Fn::Join": Array [
+                      "",
+                      Array [
+                        "arn:",
+                        Object {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":iam::test:role/cdk-hnb659fds-cfn-exec-role-test-eu-west-1",
+                      ],
+                    ],
+                  },
+                  "StackName": "mijn-api-cert-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-api/testmijnapicertstack8D5187BE.template.json",
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "Synth_Output",
+                  },
+                ],
+                "Name": "cert-stack.Prepare",
+                "RoleArn": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
+                    ],
+                  ],
+                },
+                "RunOrder": 3,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Deploy",
+                  "Owner": "AWS",
+                  "Provider": "CloudFormation",
+                  "Version": "1",
+                },
+                "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "mijn-uitkering-api-api-stack",
+                  "StackName": "mijn-api-api-stack",
                 },
                 "Name": "api-stack.Deploy",
                 "RoleArn": Object {
@@ -950,6 +1164,184 @@ Object {
                 },
                 "RunOrder": 4,
               },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Deploy",
+                  "Owner": "AWS",
+                  "Provider": "CloudFormation",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ActionMode": "CHANGE_SET_EXECUTE",
+                  "ChangeSetName": "PipelineChange",
+                  "StackName": "mijn-api-cert-stack",
+                },
+                "Name": "cert-stack.Deploy",
+                "RoleArn": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
+                    ],
+                  ],
+                },
+                "RunOrder": 4,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Deploy",
+                  "Owner": "AWS",
+                  "Provider": "CloudFormation",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ActionMode": "CHANGE_SET_REPLACE",
+                  "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                  "ChangeSetName": "PipelineChange",
+                  "RoleArn": Object {
+                    "Fn::Join": Array [
+                      "",
+                      Array [
+                        "arn:",
+                        Object {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":iam::test:role/cdk-hnb659fds-cfn-exec-role-test-eu-west-1",
+                      ],
+                    ],
+                  },
+                  "StackName": "mijn-api-cloudfront-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.template.json",
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "Synth_Output",
+                  },
+                ],
+                "Name": "cloudfront-stack.Prepare",
+                "RoleArn": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
+                    ],
+                  ],
+                },
+                "RunOrder": 5,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Deploy",
+                  "Owner": "AWS",
+                  "Provider": "CloudFormation",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ActionMode": "CHANGE_SET_EXECUTE",
+                  "ChangeSetName": "PipelineChange",
+                  "StackName": "mijn-api-cloudfront-stack",
+                },
+                "Name": "cloudfront-stack.Deploy",
+                "RoleArn": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
+                    ],
+                  ],
+                },
+                "RunOrder": 6,
+              },
+            ],
+            "Name": "mijn-api",
+          },
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Deploy",
+                  "Owner": "AWS",
+                  "Provider": "CloudFormation",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ActionMode": "CHANGE_SET_REPLACE",
+                  "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                  "ChangeSetName": "PipelineChange",
+                  "RoleArn": Object {
+                    "Fn::Join": Array [
+                      "",
+                      Array [
+                        "arn:",
+                        Object {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":iam::test:role/cdk-hnb659fds-cfn-exec-role-test-eu-west-1",
+                      ],
+                    ],
+                  },
+                  "StackName": "mijn-uitkering-api-uitkerings-api",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-uitkering-api/testmijnuitkeringapiuitkeringsapi14A41BD4.template.json",
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "Synth_Output",
+                  },
+                ],
+                "Name": "Prepare",
+                "RoleArn": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
+                    ],
+                  ],
+                },
+                "RunOrder": 1,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Deploy",
+                  "Owner": "AWS",
+                  "Provider": "CloudFormation",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ActionMode": "CHANGE_SET_EXECUTE",
+                  "ChangeSetName": "PipelineChange",
+                  "StackName": "mijn-uitkering-api-uitkerings-api",
+                },
+                "Name": "Deploy",
+                "RoleArn": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
+                    ],
+                  ],
+                },
+                "RunOrder": 2,
+              },
             ],
             "Name": "mijn-uitkering-api",
           },
@@ -961,13 +1353,13 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::CodePipeline::Pipeline",
     },
-    "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838": Object {
+    "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
         "BucketEncryption": Object {
@@ -976,7 +1368,7 @@ Object {
               "ServerSideEncryptionByDefault": Object {
                 "KMSMasterKeyID": Object {
                   "Fn::GetAtt": Array [
-                    "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKey1738A5E3",
+                    "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
                     "Arn",
                   ],
                 },
@@ -998,14 +1390,14 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
     },
-    "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKey1738A5E3": Object {
+    "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
         "KeyPolicy": Object {
@@ -1061,20 +1453,20 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::KMS::Key",
       "UpdateReplacePolicy": "Delete",
     },
-    "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKeyAliasA955A278": Object {
+    "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyAlias4518696C": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
-        "AliasName": "alias/codepipeline-testmijnuitkeringdevelopmentpipelinecccf1780",
+        "AliasName": "alias/codepipeline-testmijnnijmegendevelopmentpipelinecbf4f29e",
         "TargetKeyId": Object {
           "Fn::GetAtt": Array [
-            "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKey1738A5E3",
+            "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
             "Arn",
           ],
         },
@@ -1082,10 +1474,10 @@ Object {
       "Type": "AWS::KMS::Alias",
       "UpdateReplacePolicy": "Delete",
     },
-    "mijnuitkeringdevelopmentPipelineArtifactsBucketPolicy26D4AC92": Object {
+    "mijnnijmegendevelopmentPipelineArtifactsBucketPolicy219C2AF2": Object {
       "Properties": Object {
         "Bucket": Object {
-          "Ref": "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838",
+          "Ref": "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5",
         },
         "PolicyDocument": Object {
           "Statement": Array [
@@ -1103,7 +1495,7 @@ Object {
               "Resource": Array [
                 Object {
                   "Fn::GetAtt": Array [
-                    "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838",
+                    "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5",
                     "Arn",
                   ],
                 },
@@ -1113,7 +1505,7 @@ Object {
                     Array [
                       Object {
                         "Fn::GetAtt": Array [
-                          "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838",
+                          "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5",
                           "Arn",
                         ],
                       },
@@ -1147,7 +1539,7 @@ Object {
               "Resource": Array [
                 Object {
                   "Fn::GetAtt": Array [
-                    "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838",
+                    "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5",
                     "Arn",
                   ],
                 },
@@ -1157,7 +1549,7 @@ Object {
                     Array [
                       Object {
                         "Fn::GetAtt": Array [
-                          "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838",
+                          "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5",
                           "Arn",
                         ],
                       },
@@ -1173,37 +1565,7 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
-    "mijnuitkeringdevelopmentPipelineAssetsFileAsset1CodePipelineActionRoleDefaultPolicy202CC5FF": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "codebuild:BatchGetBuilds",
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentAssetsFileAsset17F33B7E1",
-                  "Arn",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "mijnuitkeringdevelopmentPipelineAssetsFileAsset1CodePipelineActionRoleDefaultPolicy202CC5FF",
-        "Roles": Array [
-          Object {
-            "Ref": "mijnuitkeringdevelopmentPipelineAssetsFileAsset1CodePipelineActionRoleFF46E0EC",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "mijnuitkeringdevelopmentPipelineAssetsFileAsset1CodePipelineActionRoleFF46E0EC": Object {
+    "mijnnijmegendevelopmentPipelineAssetsFileAsset1CodePipelineActionRoleB41A47E2": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1235,13 +1597,43 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "mijnuitkeringdevelopmentPipelineAssetsFileAsset2CodePipelineActionRole98B1CB8B": Object {
+    "mijnnijmegendevelopmentPipelineAssetsFileAsset1CodePipelineActionRoleDefaultPolicy7211DC9C": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "mijnnijmegendevelopmentAssetsFileAsset1E8BF26A7",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "mijnnijmegendevelopmentPipelineAssetsFileAsset1CodePipelineActionRoleDefaultPolicy7211DC9C",
+        "Roles": Array [
+          Object {
+            "Ref": "mijnnijmegendevelopmentPipelineAssetsFileAsset1CodePipelineActionRoleB41A47E2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "mijnnijmegendevelopmentPipelineAssetsFileAsset2CodePipelineActionRole5DCFE2BD": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1273,13 +1665,13 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "mijnuitkeringdevelopmentPipelineAssetsFileAsset2CodePipelineActionRoleDefaultPolicy263AE2CA": Object {
+    "mijnnijmegendevelopmentPipelineAssetsFileAsset2CodePipelineActionRoleDefaultPolicy45D629FB": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -1292,7 +1684,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentAssetsFileAsset262CCDA56",
+                  "mijnnijmegendevelopmentAssetsFileAsset2DA01B8DD",
                   "Arn",
                 ],
               },
@@ -1300,16 +1692,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "mijnuitkeringdevelopmentPipelineAssetsFileAsset2CodePipelineActionRoleDefaultPolicy263AE2CA",
+        "PolicyName": "mijnnijmegendevelopmentPipelineAssetsFileAsset2CodePipelineActionRoleDefaultPolicy45D629FB",
         "Roles": Array [
           Object {
-            "Ref": "mijnuitkeringdevelopmentPipelineAssetsFileAsset2CodePipelineActionRole98B1CB8B",
+            "Ref": "mijnnijmegendevelopmentPipelineAssetsFileAsset2CodePipelineActionRole5DCFE2BD",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mijnuitkeringdevelopmentPipelineAssetsFileAsset3CodePipelineActionRole73D1502B": Object {
+    "mijnnijmegendevelopmentPipelineAssetsFileAsset3CodePipelineActionRoleBDD0BF2F": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1341,13 +1733,13 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "mijnuitkeringdevelopmentPipelineAssetsFileAsset3CodePipelineActionRoleDefaultPolicyAF8A4B17": Object {
+    "mijnnijmegendevelopmentPipelineAssetsFileAsset3CodePipelineActionRoleDefaultPolicy293A24C1": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -1360,7 +1752,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentAssetsFileAsset30D0C1251",
+                  "mijnnijmegendevelopmentAssetsFileAsset3574E1BE8",
                   "Arn",
                 ],
               },
@@ -1368,16 +1760,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "mijnuitkeringdevelopmentPipelineAssetsFileAsset3CodePipelineActionRoleDefaultPolicyAF8A4B17",
+        "PolicyName": "mijnnijmegendevelopmentPipelineAssetsFileAsset3CodePipelineActionRoleDefaultPolicy293A24C1",
         "Roles": Array [
           Object {
-            "Ref": "mijnuitkeringdevelopmentPipelineAssetsFileAsset3CodePipelineActionRole73D1502B",
+            "Ref": "mijnnijmegendevelopmentPipelineAssetsFileAsset3CodePipelineActionRoleBDD0BF2F",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mijnuitkeringdevelopmentPipelineAssetsFileAsset4CodePipelineActionRole3E7C3C96": Object {
+    "mijnnijmegendevelopmentPipelineAssetsFileAsset4CodePipelineActionRole5F4B9D55": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1409,13 +1801,13 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "mijnuitkeringdevelopmentPipelineAssetsFileAsset4CodePipelineActionRoleDefaultPolicyBF24A58F": Object {
+    "mijnnijmegendevelopmentPipelineAssetsFileAsset4CodePipelineActionRoleDefaultPolicyE44FBB34": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -1428,7 +1820,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentAssetsFileAsset48566A75D",
+                  "mijnnijmegendevelopmentAssetsFileAsset4B117640E",
                   "Arn",
                 ],
               },
@@ -1436,16 +1828,152 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "mijnuitkeringdevelopmentPipelineAssetsFileAsset4CodePipelineActionRoleDefaultPolicyBF24A58F",
+        "PolicyName": "mijnnijmegendevelopmentPipelineAssetsFileAsset4CodePipelineActionRoleDefaultPolicyE44FBB34",
         "Roles": Array [
           Object {
-            "Ref": "mijnuitkeringdevelopmentPipelineAssetsFileAsset4CodePipelineActionRole3E7C3C96",
+            "Ref": "mijnnijmegendevelopmentPipelineAssetsFileAsset4CodePipelineActionRole5F4B9D55",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mijnuitkeringdevelopmentPipelineBuildSynthCdkBuildProjectD65A8BC0": Object {
+    "mijnnijmegendevelopmentPipelineAssetsFileAsset5CodePipelineActionRoleDF8F0189": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cdkManaged",
+            "Value": "yes",
+          },
+          Object {
+            "Key": "Project",
+            "Value": "mijn-nijmegen",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mijnnijmegendevelopmentPipelineAssetsFileAsset5CodePipelineActionRoleDefaultPolicy87ABC38F": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "mijnnijmegendevelopmentAssetsFileAsset5721FAF9D",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "mijnnijmegendevelopmentPipelineAssetsFileAsset5CodePipelineActionRoleDefaultPolicy87ABC38F",
+        "Roles": Array [
+          Object {
+            "Ref": "mijnnijmegendevelopmentPipelineAssetsFileAsset5CodePipelineActionRoleDF8F0189",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "mijnnijmegendevelopmentPipelineAssetsFileAsset6CodePipelineActionRole14F87172": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cdkManaged",
+            "Value": "yes",
+          },
+          Object {
+            "Key": "Project",
+            "Value": "mijn-nijmegen",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mijnnijmegendevelopmentPipelineAssetsFileAsset6CodePipelineActionRoleDefaultPolicy30FCF9E9": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "mijnnijmegendevelopmentAssetsFileAsset62EDB75E4",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "mijnnijmegendevelopmentPipelineAssetsFileAsset6CodePipelineActionRoleDefaultPolicy30FCF9E9",
+        "Roles": Array [
+          Object {
+            "Ref": "mijnnijmegendevelopmentPipelineAssetsFileAsset6CodePipelineActionRole14F87172",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "mijnnijmegendevelopmentPipelineBuildSynthCdkBuildProject56235943": Object {
       "Properties": Object {
         "Artifacts": Object {
           "Type": "CODEPIPELINE",
@@ -1455,7 +1983,7 @@ Object {
         },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
-            "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKey1738A5E3",
+            "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
             "Arn",
           ],
         },
@@ -1475,7 +2003,7 @@ Object {
         },
         "ServiceRole": Object {
           "Fn::GetAtt": Array [
-            "mijnuitkeringdevelopmentPipelineBuildSynthCdkBuildProjectRoleD412EDB1",
+            "mijnnijmegendevelopmentPipelineBuildSynthCdkBuildProjectRole8C3642C3",
             "Arn",
           ],
         },
@@ -1505,13 +2033,13 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::CodeBuild::Project",
     },
-    "mijnuitkeringdevelopmentPipelineBuildSynthCdkBuildProjectRoleD412EDB1": Object {
+    "mijnnijmegendevelopmentPipelineBuildSynthCdkBuildProjectRole8C3642C3": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1532,13 +2060,13 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "mijnuitkeringdevelopmentPipelineBuildSynthCdkBuildProjectRoleDefaultPolicy58353765": Object {
+    "mijnnijmegendevelopmentPipelineBuildSynthCdkBuildProjectRoleDefaultPolicy03A6FBDB": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -1560,7 +2088,7 @@ Object {
                       },
                       ":logs:eu-west-1:test:log-group:/aws/codebuild/",
                       Object {
-                        "Ref": "mijnuitkeringdevelopmentPipelineBuildSynthCdkBuildProjectD65A8BC0",
+                        "Ref": "mijnnijmegendevelopmentPipelineBuildSynthCdkBuildProject56235943",
                       },
                     ],
                   ],
@@ -1575,7 +2103,7 @@ Object {
                       },
                       ":logs:eu-west-1:test:log-group:/aws/codebuild/",
                       Object {
-                        "Ref": "mijnuitkeringdevelopmentPipelineBuildSynthCdkBuildProjectD65A8BC0",
+                        "Ref": "mijnnijmegendevelopmentPipelineBuildSynthCdkBuildProject56235943",
                       },
                       ":*",
                     ],
@@ -1602,7 +2130,7 @@ Object {
                     },
                     ":codebuild:eu-west-1:test:report-group/",
                     Object {
-                      "Ref": "mijnuitkeringdevelopmentPipelineBuildSynthCdkBuildProjectD65A8BC0",
+                      "Ref": "mijnnijmegendevelopmentPipelineBuildSynthCdkBuildProject56235943",
                     },
                     "-*",
                   ],
@@ -1622,7 +2150,7 @@ Object {
               "Resource": Array [
                 Object {
                   "Fn::GetAtt": Array [
-                    "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838",
+                    "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5",
                     "Arn",
                   ],
                 },
@@ -1632,7 +2160,7 @@ Object {
                     Array [
                       Object {
                         "Fn::GetAtt": Array [
-                          "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838",
+                          "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5",
                           "Arn",
                         ],
                       },
@@ -1653,7 +2181,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKey1738A5E3",
+                  "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
                   "Arn",
                 ],
               },
@@ -1668,7 +2196,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKey1738A5E3",
+                  "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
                   "Arn",
                 ],
               },
@@ -1676,16 +2204,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "mijnuitkeringdevelopmentPipelineBuildSynthCdkBuildProjectRoleDefaultPolicy58353765",
+        "PolicyName": "mijnnijmegendevelopmentPipelineBuildSynthCdkBuildProjectRoleDefaultPolicy03A6FBDB",
         "Roles": Array [
           Object {
-            "Ref": "mijnuitkeringdevelopmentPipelineBuildSynthCdkBuildProjectRoleD412EDB1",
+            "Ref": "mijnnijmegendevelopmentPipelineBuildSynthCdkBuildProjectRole8C3642C3",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mijnuitkeringdevelopmentPipelineBuildSynthCodePipelineActionRole389FFF58": Object {
+    "mijnnijmegendevelopmentPipelineBuildSynthCodePipelineActionRole9924D4CD": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1717,13 +2245,13 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "mijnuitkeringdevelopmentPipelineBuildSynthCodePipelineActionRoleDefaultPolicyE0B17397": Object {
+    "mijnnijmegendevelopmentPipelineBuildSynthCodePipelineActionRoleDefaultPolicy12CCB18F": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -1736,7 +2264,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentPipelineBuildSynthCdkBuildProjectD65A8BC0",
+                  "mijnnijmegendevelopmentPipelineBuildSynthCdkBuildProject56235943",
                   "Arn",
                 ],
               },
@@ -1744,16 +2272,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "mijnuitkeringdevelopmentPipelineBuildSynthCodePipelineActionRoleDefaultPolicyE0B17397",
+        "PolicyName": "mijnnijmegendevelopmentPipelineBuildSynthCodePipelineActionRoleDefaultPolicy12CCB18F",
         "Roles": Array [
           Object {
-            "Ref": "mijnuitkeringdevelopmentPipelineBuildSynthCodePipelineActionRole389FFF58",
+            "Ref": "mijnnijmegendevelopmentPipelineBuildSynthCodePipelineActionRole9924D4CD",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mijnuitkeringdevelopmentPipelineRole061CE2BC": Object {
+    "mijnnijmegendevelopmentPipelineRoleBE525F7A": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1774,13 +2302,13 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "mijnuitkeringdevelopmentPipelineRoleDefaultPolicyBF7CA000": Object {
+    "mijnnijmegendevelopmentPipelineRoleDefaultPolicy136F3079": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -1797,7 +2325,7 @@ Object {
               "Resource": Array [
                 Object {
                   "Fn::GetAtt": Array [
-                    "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838",
+                    "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5",
                     "Arn",
                   ],
                 },
@@ -1807,7 +2335,7 @@ Object {
                     Array [
                       Object {
                         "Fn::GetAtt": Array [
-                          "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838",
+                          "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5",
                           "Arn",
                         ],
                       },
@@ -1828,7 +2356,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKey1738A5E3",
+                  "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
                   "Arn",
                 ],
               },
@@ -1838,7 +2366,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleF238BE5A",
+                  "mijnnijmegendevelopmentPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRole9CE3A800",
                   "Arn",
                 ],
               },
@@ -1848,7 +2376,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentPipelineBuildSynthCodePipelineActionRole389FFF58",
+                  "mijnnijmegendevelopmentPipelineBuildSynthCodePipelineActionRole9924D4CD",
                   "Arn",
                 ],
               },
@@ -1858,7 +2386,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentPipelineUpdatePipelineSelfMutateCodePipelineActionRole3BF03BDF",
+                  "mijnnijmegendevelopmentPipelineUpdatePipelineSelfMutateCodePipelineActionRoleE78ABE89",
                   "Arn",
                 ],
               },
@@ -1868,7 +2396,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentPipelineAssetsFileAsset1CodePipelineActionRoleFF46E0EC",
+                  "mijnnijmegendevelopmentPipelineAssetsFileAsset1CodePipelineActionRoleB41A47E2",
                   "Arn",
                 ],
               },
@@ -1878,7 +2406,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentPipelineAssetsFileAsset2CodePipelineActionRole98B1CB8B",
+                  "mijnnijmegendevelopmentPipelineAssetsFileAsset2CodePipelineActionRole5DCFE2BD",
                   "Arn",
                 ],
               },
@@ -1888,7 +2416,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentPipelineAssetsFileAsset3CodePipelineActionRole73D1502B",
+                  "mijnnijmegendevelopmentPipelineAssetsFileAsset3CodePipelineActionRoleBDD0BF2F",
                   "Arn",
                 ],
               },
@@ -1898,7 +2426,27 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentPipelineAssetsFileAsset4CodePipelineActionRole3E7C3C96",
+                  "mijnnijmegendevelopmentPipelineAssetsFileAsset4CodePipelineActionRole5F4B9D55",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "mijnnijmegendevelopmentPipelineAssetsFileAsset5CodePipelineActionRoleDF8F0189",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "mijnnijmegendevelopmentPipelineAssetsFileAsset6CodePipelineActionRole14F87172",
                   "Arn",
                 ],
               },
@@ -1922,16 +2470,54 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "mijnuitkeringdevelopmentPipelineRoleDefaultPolicyBF7CA000",
+        "PolicyName": "mijnnijmegendevelopmentPipelineRoleDefaultPolicy136F3079",
         "Roles": Array [
           Object {
-            "Ref": "mijnuitkeringdevelopmentPipelineRole061CE2BC",
+            "Ref": "mijnnijmegendevelopmentPipelineRoleBE525F7A",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mijnuitkeringdevelopmentPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleDefaultPolicy868D2127": Object {
+    "mijnnijmegendevelopmentPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRole9CE3A800": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cdkManaged",
+            "Value": "yes",
+          },
+          Object {
+            "Key": "Project",
+            "Value": "mijn-nijmegen",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mijnnijmegendevelopmentPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleDefaultPolicyD6C722E8": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -1955,7 +2541,7 @@ Object {
               "Resource": Array [
                 Object {
                   "Fn::GetAtt": Array [
-                    "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838",
+                    "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5",
                     "Arn",
                   ],
                 },
@@ -1965,7 +2551,7 @@ Object {
                     Array [
                       Object {
                         "Fn::GetAtt": Array [
-                          "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838",
+                          "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5",
                           "Arn",
                         ],
                       },
@@ -1986,7 +2572,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKey1738A5E3",
+                  "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
                   "Arn",
                 ],
               },
@@ -2000,7 +2586,7 @@ Object {
                   Array [
                     Object {
                       "Fn::GetAtt": Array [
-                        "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838",
+                        "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5",
                         "Arn",
                       ],
                     },
@@ -2012,92 +2598,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "mijnuitkeringdevelopmentPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleDefaultPolicy868D2127",
+        "PolicyName": "mijnnijmegendevelopmentPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleDefaultPolicyD6C722E8",
         "Roles": Array [
           Object {
-            "Ref": "mijnuitkeringdevelopmentPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleF238BE5A",
+            "Ref": "mijnnijmegendevelopmentPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRole9CE3A800",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mijnuitkeringdevelopmentPipelineSourceGemeenteNijmegenmijnuitkeringCodePipelineActionRoleF238BE5A": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::test:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cdkManaged",
-            "Value": "yes",
-          },
-          Object {
-            "Key": "Project",
-            "Value": "mijn-uitkering",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "mijnuitkeringdevelopmentPipelineUpdatePipelineSelfMutateCodePipelineActionRole3BF03BDF": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::test:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cdkManaged",
-            "Value": "yes",
-          },
-          Object {
-            "Key": "Project",
-            "Value": "mijn-uitkering",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "mijnuitkeringdevelopmentPipelineUpdatePipelineSelfMutateCodePipelineActionRoleDefaultPolicyC0F0257C": Object {
+    "mijnnijmegendevelopmentPipelineUpdatePipelineSelfMutateCodePipelineActionRoleDefaultPolicy036B61E2": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -2110,7 +2620,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentUpdatePipelineSelfMutation32F3E62C",
+                  "mijnnijmegendevelopmentUpdatePipelineSelfMutation0B93A731",
                   "Arn",
                 ],
               },
@@ -2118,16 +2628,54 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "mijnuitkeringdevelopmentPipelineUpdatePipelineSelfMutateCodePipelineActionRoleDefaultPolicyC0F0257C",
+        "PolicyName": "mijnnijmegendevelopmentPipelineUpdatePipelineSelfMutateCodePipelineActionRoleDefaultPolicy036B61E2",
         "Roles": Array [
           Object {
-            "Ref": "mijnuitkeringdevelopmentPipelineUpdatePipelineSelfMutateCodePipelineActionRole3BF03BDF",
+            "Ref": "mijnnijmegendevelopmentPipelineUpdatePipelineSelfMutateCodePipelineActionRoleE78ABE89",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mijnuitkeringdevelopmentUpdatePipelineSelfMutation32F3E62C": Object {
+    "mijnnijmegendevelopmentPipelineUpdatePipelineSelfMutateCodePipelineActionRoleE78ABE89": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cdkManaged",
+            "Value": "yes",
+          },
+          Object {
+            "Key": "Project",
+            "Value": "mijn-nijmegen",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mijnnijmegendevelopmentUpdatePipelineSelfMutation0B93A731": Object {
       "Properties": Object {
         "Artifacts": Object {
           "Type": "CODEPIPELINE",
@@ -2137,7 +2685,7 @@ Object {
         },
         "EncryptionKey": Object {
           "Fn::GetAtt": Array [
-            "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKey1738A5E3",
+            "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
             "Arn",
           ],
         },
@@ -2151,7 +2699,7 @@ Object {
         "Name": "mijnuitkering-development-selfupdate",
         "ServiceRole": Object {
           "Fn::GetAtt": Array [
-            "mijnuitkeringdevelopmentUpdatePipelineSelfMutationRole3F5725B0",
+            "mijnnijmegendevelopmentUpdatePipelineSelfMutationRole0DE2CFA2",
             "Arn",
           ],
         },
@@ -2180,13 +2728,13 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::CodeBuild::Project",
     },
-    "mijnuitkeringdevelopmentUpdatePipelineSelfMutationRole3F5725B0": Object {
+    "mijnnijmegendevelopmentUpdatePipelineSelfMutationRole0DE2CFA2": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -2207,13 +2755,13 @@ Object {
           },
           Object {
             "Key": "Project",
-            "Value": "mijn-uitkering",
+            "Value": "mijn-nijmegen",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "mijnuitkeringdevelopmentUpdatePipelineSelfMutationRoleDefaultPolicyB5BD575F": Object {
+    "mijnnijmegendevelopmentUpdatePipelineSelfMutationRoleDefaultPolicyC6DECEF3": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -2235,7 +2783,7 @@ Object {
                       },
                       ":logs:eu-west-1:test:log-group:/aws/codebuild/",
                       Object {
-                        "Ref": "mijnuitkeringdevelopmentUpdatePipelineSelfMutation32F3E62C",
+                        "Ref": "mijnnijmegendevelopmentUpdatePipelineSelfMutation0B93A731",
                       },
                     ],
                   ],
@@ -2250,7 +2798,7 @@ Object {
                       },
                       ":logs:eu-west-1:test:log-group:/aws/codebuild/",
                       Object {
-                        "Ref": "mijnuitkeringdevelopmentUpdatePipelineSelfMutation32F3E62C",
+                        "Ref": "mijnnijmegendevelopmentUpdatePipelineSelfMutation0B93A731",
                       },
                       ":*",
                     ],
@@ -2277,7 +2825,7 @@ Object {
                     },
                     ":codebuild:eu-west-1:test:report-group/",
                     Object {
-                      "Ref": "mijnuitkeringdevelopmentUpdatePipelineSelfMutation32F3E62C",
+                      "Ref": "mijnnijmegendevelopmentUpdatePipelineSelfMutation0B93A731",
                     },
                     "-*",
                   ],
@@ -2318,7 +2866,7 @@ Object {
               "Resource": Array [
                 Object {
                   "Fn::GetAtt": Array [
-                    "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838",
+                    "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5",
                     "Arn",
                   ],
                 },
@@ -2328,7 +2876,7 @@ Object {
                     Array [
                       Object {
                         "Fn::GetAtt": Array [
-                          "mijnuitkeringdevelopmentPipelineArtifactsBucket77913838",
+                          "mijnnijmegendevelopmentPipelineArtifactsBucketDDA92FA5",
                           "Arn",
                         ],
                       },
@@ -2346,7 +2894,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKey1738A5E3",
+                  "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
                   "Arn",
                 ],
               },
@@ -2361,7 +2909,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "mijnuitkeringdevelopmentPipelineArtifactsBucketEncryptionKey1738A5E3",
+                  "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
                   "Arn",
                 ],
               },
@@ -2369,10 +2917,10 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "mijnuitkeringdevelopmentUpdatePipelineSelfMutationRoleDefaultPolicyB5BD575F",
+        "PolicyName": "mijnnijmegendevelopmentUpdatePipelineSelfMutationRoleDefaultPolicyC6DECEF3",
         "Roles": Array [
           Object {
-            "Ref": "mijnuitkeringdevelopmentUpdatePipelineSelfMutationRole3F5725B0",
+            "Ref": "mijnnijmegendevelopmentUpdatePipelineSelfMutationRole0DE2CFA2",
           },
         ],
       },

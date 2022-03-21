@@ -1,5 +1,4 @@
 import * as path from 'path';
-import { LambdaToDynamoDB, LambdaToDynamoDBProps } from '@aws-solutions-constructs/aws-lambda-dynamodb';
 import { aws_lambda as Lambda, aws_dynamodb, aws_ssm as SSM } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
@@ -7,7 +6,7 @@ import { Statics } from './statics';
 export interface ApiFunctionProps {
   description: string;
   codePath: string;
-  table: aws_dynamodb.Table;
+  table: aws_dynamodb.ITable;
   tablePermissions: string;
   applicationUrlBase?: string;
   environment?: {[key: string]: string};
@@ -30,17 +29,10 @@ export class ApiFunction extends Construct {
         AUTH_URL_BASE: SSM.StringParameter.valueForStringParameter(this, Statics.ssmAuthUrlBaseParameter),
         OIDC_CLIENT_ID: SSM.StringParameter.valueForStringParameter(this, Statics.ssmOIDCClientID),
         OIDC_SCOPE: SSM.StringParameter.valueForStringParameter(this, Statics.ssmOIDCScope),
+        SESSION_TABLE: props.table.tableName,
         ...props.environment,
       },
     });
-
-    const lambdaProps: LambdaToDynamoDBProps = {
-      existingLambdaObj: this.lambda,
-      existingTableObj: props.table,
-      tablePermissions: props.tablePermissions,
-      tableEnvironmentVariableName: 'SESSION_TABLE',
-    };
-
-    new LambdaToDynamoDB(this, 'lambda-with-db', lambdaProps);
+    props.table.grantReadWriteData(this.lambda.grantPrincipal);
   }
 }

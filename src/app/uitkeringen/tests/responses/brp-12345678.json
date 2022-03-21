@@ -1,0 +1,40 @@
+{
+  "Persoon": {
+    "BSN": {
+        "BSN": "12345678"
+    },
+    "Persoonsgegevens": {
+        "Voorletters": "S.",
+        "Voornamen": "Sherlock",
+        "Voorvoegsel": "",
+        "Geslachtsnaam": "Holmes",
+        "Achternaam": "Holmes",
+        "Naam": "S. Holmes",
+        "Geboortedatum": "01-12-1854",
+        "Geslacht": "M",
+        "NederlandseNationaliteit": "Nee",
+        "Geboorteplaats": "London",
+        "Geboorteland": "United Kingdom"
+    },
+    "Adres": {
+        "Straat": "Baker Street",
+        "Huisnummer": "221 B",
+        "Gemeente": "London",
+        "Postcode": "NW1 6XE",
+        "Woonplaats": "London"
+    },
+    "Reisdocument": {
+        "Documentsoort": "",
+        "Documentnummer": "",
+        "Uitgiftedatum": "",
+        "Verloopdatum": ""
+    },
+    "ageLimits": {
+        "over12": "Yes",
+        "over16": "Yes",
+        "over18": "Yes",
+        "over21": "Yes",
+        "over65": "No"
+    }
+}
+}
