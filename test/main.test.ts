@@ -66,7 +66,7 @@ test('StackHasParameters', () => {
   const app = new App();
   const stack = new ParameterStack(app, 'test');
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::SSM::Parameter', 7);
+  template.resourceCountIs('AWS::SSM::Parameter', 4);
 });
 
 
