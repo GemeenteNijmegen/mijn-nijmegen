@@ -65,12 +65,6 @@ export abstract class Statics {
 
   static readonly ssmSessionsTableArn: string = '/cdk/mijn-nijmegen/sessionstable-arn';
 
-  /**
-   * Uitkeringsgegevens API endpoint
-   */
-  static readonly ssmUitkeringsApiEndpointUrl: string = '/cdk/mijn-uitkering/uitkerings-api-url';
-
-
   static subDomain(branch: string) {
     const subdomainMap = {
       acceptance: 'mijn.accp',
