@@ -61,6 +61,16 @@ export class ssmParamsConstruct extends Construct {
       parameterName: Statics.ssmOIDCScope,
     });
 
+    new SSM.StringParameter(this, 'ssm_uitkering_2', {
+      stringValue: '-',
+      parameterName: Statics.ssmMTLSClientCert,
+    });
+
+    new SSM.StringParameter(this, 'ssm_uitkering_3', {
+      stringValue: '-',
+      parameterName: Statics.ssmMTLSRootCA,
+    });
+
     new SecretsManager.Secret(this, 'secret_1', {
       secretName: Statics.secretOIDCClientSecret,
       description: 'OpenIDConnect client secret',
