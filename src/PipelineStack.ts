@@ -3,7 +3,6 @@ import { Construct } from 'constructs';
 import { ApiStage } from './ApiStage';
 import { ParameterStage } from './ParameterStage';
 import { Statics } from './statics';
-import { UitkeringsApiStage } from './UitkeringsApiStage';
 
 export interface PipelineStackProps extends StackProps{
   branchName: string;
