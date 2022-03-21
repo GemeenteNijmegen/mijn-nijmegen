@@ -68,7 +68,7 @@ export abstract class Statics {
   /**
    * Uitkeringsgegevens API endpoint
    */
-   static readonly ssmUitkeringsApiEndpointUrl: string = '/cdk/mijn-uitkering/uitkerings-api-url';
+  static readonly ssmUitkeringsApiEndpointUrl: string = '/cdk/mijn-uitkering/uitkerings-api-url';
 
 
   static subDomain(branch: string) {
