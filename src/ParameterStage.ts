@@ -28,8 +28,6 @@ export class ParameterStack extends Stack {
     Tags.of(this).add('Project', Statics.projectName);
 
     new ssmParamsConstruct(this, 'plain');
-
-
   }
 }
 /**
@@ -49,7 +47,7 @@ export class ssmParamsConstruct extends Construct {
      * authentication parameters
      */
     new SSM.StringParameter(this, 'ssm_auth_1', {
-      stringValue: 'https://authenticatie-accp.nijmegen.nl/',
+      stringValue: 'https://authenticatie-accp.nijmegen.nl',
       parameterName: Statics.ssmAuthUrlBaseParameter,
     });
 
@@ -63,6 +61,21 @@ export class ssmParamsConstruct extends Construct {
       parameterName: Statics.ssmOIDCScope,
     });
 
+    new SSM.StringParameter(this, 'ssm_uitkering_1', {
+      stringValue: 'https://data-test.nijmegen.nl/mijnNijmegenData',
+      parameterName: Statics.ssmUitkeringsApiEndpointUrl,
+    });
+
+    new SSM.StringParameter(this, 'ssm_uitkering_2', {
+      stringValue: '-',
+      parameterName: Statics.ssmMTLSClientCert,
+    });
+
+    new SSM.StringParameter(this, 'ssm_uitkering_3', {
+      stringValue: '-',
+      parameterName: Statics.ssmMTLSRootCA,
+    });
+
     new SecretsManager.Secret(this, 'secret_1', {
       secretName: Statics.secretOIDCClientSecret,
       description: 'OpenIDConnect client secret',
@@ -71,6 +84,11 @@ export class ssmParamsConstruct extends Construct {
     new SecretsManager.Secret(this, 'secret_2', {
       secretName: Statics.secretMTLSPrivateKey,
       description: 'mTLS certificate private key',
+    });
+
+    new SSM.StringParameter(this, 'ssm_brp_1', {
+      stringValue: 'https://data-test.nijmegen.nl/TenT/Bevraging/Irma',
+      parameterName: Statics.ssmBrpApiEndpointUrl,
     });
   }
 }

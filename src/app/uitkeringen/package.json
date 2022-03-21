@@ -1,7 +1,7 @@
 {
-  "name": "home",
+  "name": "uitkeringen",
   "version": "1.0.0",
-  "description": "home lambda",
+  "description": "uitkeringen lambda",
   "main": "index.js",
   "directories": {
     "test": "tests"
@@ -17,7 +17,9 @@
     "@aws-sdk/client-ssm": "3.47.0",
     "axios": "^0.26.0",
     "cookie": "^0.4.1",
-    "mustache": "^4.2.0"
+    "mustache": "^4.2.0",
+    "object-mapper": "^6.2.0",
+    "xml2js": "^0.4.23"
   },
   "devDependencies": {
     "@aws-sdk/types": "3.47.0",

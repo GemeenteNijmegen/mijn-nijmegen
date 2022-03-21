@@ -57,5 +57,6 @@ test('Shows overview page', async () => {
   secretsMock.mockImplementation(() => output);
   const client = new FileApiClient();
   const result = await lambda.requestHandler('session=12345', client);
-  expect(result.body).toMatch('Mijn Nijmegen');
+  expect(result.body).toMatch('Mijn Uitkering');
+  expect(result.body).toMatch('Participatiewet');
 });

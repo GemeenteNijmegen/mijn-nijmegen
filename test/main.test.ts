@@ -5,6 +5,7 @@ import { ApiStack } from '../src/ApiStack';
 import { ParameterStack } from '../src/ParameterStage';
 import { PipelineStackDevelopment } from '../src/PipelineStackDevelopment';
 import { SessionsStack } from '../src/SessionsStack';
+import { DNSStack } from '../src/DNSStack';
 
 beforeAll(() => {
   Dotenv.config();
@@ -42,7 +43,9 @@ test('StackHasSessionsTable', () => {
 test('StackHasApiGateway', () => {
   const app = new App();
   const sessionsStack = new SessionsStack(app, 'sessions');
-  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable });
+  new DNSStack(app, 'dns', { branch: 'dev'});
+  // const zone = dnsStack.zone;
+  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'dev' });
   const template = Template.fromStack(stack);
   template.resourceCountIs('AWS::ApiGatewayV2::Api', 1);
 });
@@ -51,7 +54,9 @@ test('StackHasApiGateway', () => {
 test('StackHasLambdas', () => {
   const app = new App();
   const sessionsStack = new SessionsStack(app, 'sessions');
-  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable });
+  new DNSStack(app, 'dns', { branch: 'dev'});
+  // const zone = dnsStack.zone;
+  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'dev' });
   const template = Template.fromStack(stack);
   template.resourceCountIs('AWS::Lambda::Function', 4);
 });
@@ -61,7 +66,7 @@ test('StackHasParameters', () => {
   const app = new App();
   const stack = new ParameterStack(app, 'test');
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::SSM::Parameter', 3);
+  template.resourceCountIs('AWS::SSM::Parameter', 7);
 });
 
 

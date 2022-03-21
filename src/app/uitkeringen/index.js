@@ -1,5 +1,6 @@
 const { Session } = require('./shared/Session');
 const { render } = require('./shared/render');
+const { UitkeringsApi } = require('./UitkeringsApi');
 const { BrpApi } = require('./BrpApi');
 const { ApiClient } = require('./ApiClient');
 
@@ -30,9 +31,10 @@ async function requestHandler(cookies, client) {
     
     const bsn = session.getValue('bsn');
     const brpApi = new BrpApi(client);
-    const brpData = await brpApi.getBrpData(bsn);
-    const naam = brpData?.Persoon?.Persoonsgegevens?.Naam ? brpData.Persoon.Persoonsgegevens.Naam : 'Onbekende gebruiker';
-    data = { volledigenaam: naam };
+    const uitkeringsApi = new UitkeringsApi(client);
+    const [data, brpData] = await Promise.all([uitkeringsApi.getUitkeringen(bsn), brpApi.getBrpData(bsn)]);
+
+    data.volledigenaam = brpData?.Persoon?.Persoonsgegevens?.Naam ? brpData.Persoon.Persoonsgegevens.Naam : 'Onbekende gebruiker';
     
     // render page
     const html = await render(data, __dirname + '/templates/home.mustache');

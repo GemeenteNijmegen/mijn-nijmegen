@@ -1,16 +1,18 @@
 const xml2js = require('xml2js');
-const fs = require('fs');
-const path = require('path');
 const ObjectMapper = require('object-mapper');
+const { ApiClient } = require('./ApiClient');
 
 class UitkeringsApi {
-    constructor(bsn, Connector) {
-        this.bsn = bsn;
-        this.connector = new Connector(bsn);
+    constructor(client) {
+        this.client = client ? client : new ApiClient(bsn);
+        this.endpoint = process.env.UITKERING_API_URL ? process.env.UITKERING_API_URL : 'mijnNijmegenData';
     }
 
-    async getUitkeringen() {
-        let data = await this.connector.requestData();
+    async getUitkeringen(bsn) {
+        const data = await this.client.requestData(this.endpoint, this.body(bsn), {
+            'Content-type': 'text/xml',
+            'SoapAction': this.endpoint + '/getData'
+        });
         const object = await xml2js.parseStringPromise(data);
         const uitkeringsRows =  this.mapUitkeringsRows(object);
         let uitkeringen = this.mapUitkering(uitkeringsRows);
@@ -19,6 +21,17 @@ class UitkeringsApi {
             return uitkeringen;
         }
         return {'uitkeringen': []};
+    }
+
+    body(bsn) {
+        return `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+            <soap:Body>
+                <ns2:dataRequest xmlns:ns2="${this.endpoint}/">
+                    <identifier>${bsn}</identifier>
+                    <contentSource>mijnUitkering</contentSource>
+                </ns2:dataRequest>
+            </soap:Body>
+        </soap:Envelope>`;
     }
 
     mapUitkeringsRows(object) {
@@ -60,27 +73,4 @@ class UitkeringsApi {
     }
 }
 
-class FileConnector {
-    constructor(bsn) {
-        this.bsn = bsn;
-    }
-
-    async requestData() {
-        const filePath = path.join('tests/responses', this.bsn + '.xml');
-        return await this.getStringFromFilePath(filePath)
-        .then((data) => { return [data] })
-        .catch((err) => { return [] });
-    }
-
-    async getStringFromFilePath(filePath) {
-        return new Promise((res, rej) => {
-            fs.readFile(path.join(__dirname, filePath), (err, data) => {
-                if (err) return rej(err);
-                return res(data.toString());
-            });
-        });
-    }
-}
-
 exports.UitkeringsApi = UitkeringsApi;
-exports.FileConnector = FileConnector;

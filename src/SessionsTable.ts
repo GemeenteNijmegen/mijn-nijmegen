@@ -13,5 +13,7 @@ export class SessionsTable extends Construct {
       timeToLiveAttribute: 'ttl',
       removalPolicy: RemovalPolicy.RETAIN,
     });
+
+
   }
 }
