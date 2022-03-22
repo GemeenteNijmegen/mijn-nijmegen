@@ -61,11 +61,6 @@ export class ssmParamsConstruct extends Construct {
       parameterName: Statics.ssmOIDCScope,
     });
 
-    new SSM.StringParameter(this, 'ssm_uitkering_1', {
-      stringValue: 'https://data-test.nijmegen.nl/mijnNijmegenData',
-      parameterName: Statics.ssmUitkeringsApiEndpointUrl,
-    });
-
     new SSM.StringParameter(this, 'ssm_uitkering_2', {
       stringValue: '-',
       parameterName: Statics.ssmMTLSClientCert,

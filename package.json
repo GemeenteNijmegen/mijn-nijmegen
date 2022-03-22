@@ -1,5 +1,5 @@
 {
-  "name": "app2",
+  "name": "mijnnijmegen",
   "scripts": {
     "build": "npx projen build",
     "bundle": "npx projen bundle",

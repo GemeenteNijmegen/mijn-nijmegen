@@ -3,7 +3,6 @@ import { Construct } from 'constructs';
 import { ApiStage } from './ApiStage';
 import { ParameterStage } from './ParameterStage';
 import { Statics } from './statics';
-import { UitkeringsApiStage } from './UitkeringsApiStage';
 
 export interface PipelineStackProps extends StackProps{
   branchName: string;
@@ -20,7 +19,6 @@ export class PipelineStack extends Stack {
     const pipeline = this.pipeline();
     pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', { env: props.deployToEnvironment }));
     pipeline.addStage(new ApiStage(this, 'mijn-api', { env: props.deployToEnvironment, branch: this.branchName }));
-    pipeline.addStage(new UitkeringsApiStage(this, 'mijn-uitkering-api', { env: props.deployToEnvironment, branch: this.branchName }));
   }
 
   pipeline(): pipelines.CodePipeline {
@@ -29,7 +27,7 @@ export class PipelineStack extends Stack {
       connectionArn: connectionArn.valueAsString,
     });
     const pipeline = new pipelines.CodePipeline(this, `mijnnijmegen-${this.branchName}`, {
-      pipelineName: `mijnuitkering-${this.branchName}`,
+      pipelineName: `mijnnijmegen-${this.branchName}`,
       dockerEnabledForSelfMutation: true,
       dockerEnabledForSynth: true,
       crossAccountKeys: true,
