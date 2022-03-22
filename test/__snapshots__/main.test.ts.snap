@@ -51,7 +51,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"afed851cfdc76f77b524aa7b4c056d73800b8948e7dcd2c79736d421fc0f87be:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicertstack8D5187BE.assets.json\\\\\\" --verbose publish \\\\\\"ad857e1dc697a4d2f1d873cc9b28d8d84d644c068aec90e418133ea0a63e7704:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -109,7 +109,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"1c3fbf160d6db6182a8494b19c9d1fedeb1896a9e47eb7660a8d040b52c0e647:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"afed851cfdc76f77b524aa7b4c056d73800b8948e7dcd2c79736d421fc0f87be:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -167,7 +167,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"3ecba75621c4ed8e00335cf0d99a2ffab1d87ebb9f7d4f9fe54c6433c5a706c4:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"1c3fbf160d6db6182a8494b19c9d1fedeb1896a9e47eb7660a8d040b52c0e647:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -225,7 +225,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"909c2f27b6a5a620000875ffa5227d5148265716365feb090ab833d8937a7bf6:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"3ecba75621c4ed8e00335cf0d99a2ffab1d87ebb9f7d4f9fe54c6433c5a706c4:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -283,7 +283,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicertstack8D5187BE.assets.json\\\\\\" --verbose publish \\\\\\"ad857e1dc697a4d2f1d873cc9b28d8d84d644c068aec90e418133ea0a63e7704:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"909c2f27b6a5a620000875ffa5227d5148265716365feb090ab833d8937a7bf6:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -884,15 +884,15 @@ Object {
                       ],
                     ],
                   },
-                  "StackName": "mijn-api-sessions-stack",
-                  "TemplatePath": "Synth_Output::assembly-test-mijn-api/testmijnapisessionsstackB316A40A.template.json",
+                  "StackName": "mijn-api-key-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-api/testmijnapikeystack3903E17F.template.json",
                 },
                 "InputArtifacts": Array [
                   Object {
                     "Name": "Synth_Output",
                   },
                 ],
-                "Name": "sessions-stack.Prepare",
+                "Name": "key-stack.Prepare",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -944,9 +944,9 @@ Object {
                 "Configuration": Object {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "mijn-api-sessions-stack",
+                  "StackName": "mijn-api-key-stack",
                 },
-                "Name": "sessions-stack.Deploy",
+                "Name": "key-stack.Deploy",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -960,52 +960,6 @@ Object {
                   ],
                 },
                 "RunOrder": 2,
-              },
-              Object {
-                "ActionTypeId": Object {
-                  "Category": "Deploy",
-                  "Owner": "AWS",
-                  "Provider": "CloudFormation",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "ActionMode": "CHANGE_SET_REPLACE",
-                  "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
-                  "ChangeSetName": "PipelineChange",
-                  "RoleArn": Object {
-                    "Fn::Join": Array [
-                      "",
-                      Array [
-                        "arn:",
-                        Object {
-                          "Ref": "AWS::Partition",
-                        },
-                        ":iam::test:role/cdk-hnb659fds-cfn-exec-role-test-eu-west-1",
-                      ],
-                    ],
-                  },
-                  "StackName": "mijn-api-api-stack",
-                  "TemplatePath": "Synth_Output::assembly-test-mijn-api/testmijnapiapistackB91CFA18.template.json",
-                },
-                "InputArtifacts": Array [
-                  Object {
-                    "Name": "Synth_Output",
-                  },
-                ],
-                "Name": "api-stack.Prepare",
-                "RoleArn": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
-                    ],
-                  ],
-                },
-                "RunOrder": 3,
               },
               Object {
                 "ActionTypeId": Object {
@@ -1061,11 +1015,30 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "ActionMode": "CHANGE_SET_EXECUTE",
+                  "ActionMode": "CHANGE_SET_REPLACE",
+                  "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "mijn-api-api-stack",
+                  "RoleArn": Object {
+                    "Fn::Join": Array [
+                      "",
+                      Array [
+                        "arn:",
+                        Object {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":iam::test:role/cdk-hnb659fds-cfn-exec-role-test-eu-west-1",
+                      ],
+                    ],
+                  },
+                  "StackName": "mijn-api-sessions-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-api/testmijnapisessionsstackB316A40A.template.json",
                 },
-                "Name": "api-stack.Deploy",
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "Synth_Output",
+                  },
+                ],
+                "Name": "sessions-stack.Prepare",
                 "RoleArn": Object {
                   "Fn::Join": Array [
                     "",
@@ -1078,7 +1051,7 @@ Object {
                     ],
                   ],
                 },
-                "RunOrder": 4,
+                "RunOrder": 3,
               },
               Object {
                 "ActionTypeId": Object {
@@ -1106,6 +1079,106 @@ Object {
                   ],
                 },
                 "RunOrder": 4,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Deploy",
+                  "Owner": "AWS",
+                  "Provider": "CloudFormation",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ActionMode": "CHANGE_SET_EXECUTE",
+                  "ChangeSetName": "PipelineChange",
+                  "StackName": "mijn-api-sessions-stack",
+                },
+                "Name": "sessions-stack.Deploy",
+                "RoleArn": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
+                    ],
+                  ],
+                },
+                "RunOrder": 4,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Deploy",
+                  "Owner": "AWS",
+                  "Provider": "CloudFormation",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ActionMode": "CHANGE_SET_REPLACE",
+                  "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                  "ChangeSetName": "PipelineChange",
+                  "RoleArn": Object {
+                    "Fn::Join": Array [
+                      "",
+                      Array [
+                        "arn:",
+                        Object {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":iam::test:role/cdk-hnb659fds-cfn-exec-role-test-eu-west-1",
+                      ],
+                    ],
+                  },
+                  "StackName": "mijn-api-api-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-api/testmijnapiapistackB91CFA18.template.json",
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "Synth_Output",
+                  },
+                ],
+                "Name": "api-stack.Prepare",
+                "RoleArn": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
+                    ],
+                  ],
+                },
+                "RunOrder": 5,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Deploy",
+                  "Owner": "AWS",
+                  "Provider": "CloudFormation",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ActionMode": "CHANGE_SET_EXECUTE",
+                  "ChangeSetName": "PipelineChange",
+                  "StackName": "mijn-api-api-stack",
+                },
+                "Name": "api-stack.Deploy",
+                "RoleArn": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-eu-west-1",
+                    ],
+                  ],
+                },
+                "RunOrder": 6,
               },
               Object {
                 "ActionTypeId": Object {
@@ -1151,7 +1224,7 @@ Object {
                     ],
                   ],
                 },
-                "RunOrder": 5,
+                "RunOrder": 7,
               },
               Object {
                 "ActionTypeId": Object {
@@ -1178,7 +1251,7 @@ Object {
                     ],
                   ],
                 },
-                "RunOrder": 6,
+                "RunOrder": 8,
               },
             ],
             "Name": "mijn-api",
