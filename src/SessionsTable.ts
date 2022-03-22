@@ -4,7 +4,7 @@ import { Construct } from 'constructs';
 import { Statics } from './statics';
 
 export interface SessionsTableProps extends StackProps {
-  key: KMS.Key
+  key: KMS.Key;
 }
 
 export class SessionsTable extends Construct {
@@ -18,7 +18,7 @@ export class SessionsTable extends Construct {
       timeToLiveAttribute: 'ttl',
       removalPolicy: RemovalPolicy.RETAIN,
       encryptionKey: props.key,
-      encryption: TableEncryption.CUSTOMER_MANAGED
+      encryption: TableEncryption.CUSTOMER_MANAGED,
     });
   }
 }
