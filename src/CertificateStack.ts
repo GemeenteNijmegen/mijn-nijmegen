@@ -16,12 +16,16 @@ export class CertificateStack extends Stack {
 
   createCertificate(zone: HostedZone) {
     const subdomain = Statics.subDomain(this.branch);
+    const cspDomain = `${subdomain}.csp-nijmegen.nl`;
 
     const certificate = new CertificateManager.DnsValidatedCertificate(this, 'certificate', {
-      domainName: `${subdomain}.csp-nijmegen.nl`,
+      domainName: cspDomain,
       hostedZone: zone,
       subjectAlternativeNames: [`${subdomain}.nijmegen.nl`],
       region: 'us-east-1',
+      validation: CertificateManager.CertificateValidation.fromDnsMultiZone({
+        cspDomain: zone
+      })
     });
     return certificate;
   }
