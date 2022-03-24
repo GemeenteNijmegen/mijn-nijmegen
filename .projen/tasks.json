@@ -153,14 +153,6 @@
         }
       ]
     },
-    "install:uitkeringen": {
-      "name": "install:uitkeringen",
-      "steps": [
-        {
-          "exec": "copyfiles -f src/shared/*.js src/app/uitkeringen/shared && cd src/app/uitkeringen && npm install"
-        }
-      ]
-    },
     "package": {
       "name": "package",
       "description": "Creates the distribution package"
@@ -182,7 +174,7 @@
       "name": "postinstall",
       "steps": [
         {
-          "exec": "npm run install:login && npm run install:auth && npm run install:home && npm run install:logout && npm run install:uitkeringen"
+          "exec": "npm run install:login && npm run install:auth && npm run install:home && npm run install:logout"
         }
       ]
     },
