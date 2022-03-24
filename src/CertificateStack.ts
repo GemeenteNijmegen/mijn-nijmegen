@@ -1,4 +1,4 @@
-import { aws_certificatemanager as CertificateManager, Stack, StackProps } from 'aws-cdk-lib';
+import { aws_certificatemanager as CertificateManager, aws_ssm as SSM, Stack, StackProps } from 'aws-cdk-lib';
 import { HostedZone } from 'aws-cdk-lib/aws-route53';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
@@ -18,16 +18,21 @@ export class CertificateStack extends Stack {
     const subdomain = Statics.subDomain(this.branch);
     const cspDomain = `${subdomain}.csp-nijmegen.nl`;
     const nijmegenDomain = `${subdomain}.nijmegen.nl`;
-    const certificate = new CertificateManager.DnsValidatedCertificate(this, 'certificate', {
+
+    const certificate = new CertificateManager.Certificate(this, 'certificate', {
       domainName: cspDomain,
-      hostedZone: zone,
       subjectAlternativeNames: [nijmegenDomain],
-      region: 'us-east-1',
       validation: CertificateManager.CertificateValidation.fromDnsMultiZone({
         cspDomain: zone,
-        nijmegenDomain: fakeNijmegenZone
-      })
+        nijmegenDomain: fakeNijmegenZone,
+      }),
     });
+
+    new SSM.StringParameter(this, 'certificate-arn', {
+      parameterName: Statics.certificateArn,
+      stringValue: certificate.certificateArn,
+    });
+
     return certificate;
   }
 }

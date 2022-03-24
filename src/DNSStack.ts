@@ -28,9 +28,9 @@ export class DNSStack extends Stack {
     });
 
     const subdomain = Statics.subDomain(this.branch);
-    
+
     this.fakeNijmegenZone = new Route53.HostedZone(this, 'mijn-fake', {
-      zoneName: `mijn.${subdomain}.nijmegen.nl`,
+      zoneName: `${subdomain}.nijmegen.nl`,
     });
 
 

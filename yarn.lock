@@ -1349,6 +1349,11 @@ case@1.6.3, case@^1.6.3:
   resolved "https://registry.npmjs.org/case/-/case-1.6.3.tgz"
   integrity sha512-mzDSXIPaFwVDvZAHqZ9VlbyF4yyXRuX6IvB06WvPYkqJVO24kX1PPhv9bfpKNFZyxYFmmgo03HUiD8iklmJYRQ==
 
+cdk-remote-stack@^2.0.8:
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/cdk-remote-stack/-/cdk-remote-stack-2.0.8.tgz#5fea312285af26c6b445bef70252b155e97afeb6"
+  integrity sha512-o7DwFbnfuGYtbxM1dQn8DbkERpqoz/Y9p7D2fVKA2QTnXaraGOwsJ0ZYauYy7+qHSWWbRsczTx/5Z3NVCYZ1Lw==
+
 chalk@^2.0.0:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"
