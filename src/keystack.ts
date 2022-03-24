@@ -15,20 +15,20 @@ export class KeyStack extends Stack {
   /**
      * key for encrypting logging data
      */
-    // logKey: KMS.Key;
-    constructor(scope: Construct, id: string) {
-        super(scope, id);
-        this.key = new KMS.Key(this, 'kmskey', {
-            enableKeyRotation: true,
-            description: 'encryption key for Mijn Nijmegen',
-            alias: 'mijnnijmegen/userdata'
-        });
-        
-        // Store key arn to be used in other stacks/projects
-        new SSM.StringParameter(this, 'ssm_sessions_1', {
-            stringValue: this.key.keyArn,
-            parameterName: Statics.ssmDataKeyArn,
-        });
+  // logKey: KMS.Key;
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
+    this.key = new KMS.Key(this, 'kmskey', {
+      enableKeyRotation: true,
+      description: 'encryption key for Mijn Nijmegen',
+      alias: 'mijnnijmegen/userdata',
+    });
+
+    // Store key arn to be used in other stacks/projects
+    new SSM.StringParameter(this, 'ssm_sessions_1', {
+      stringValue: this.key.keyArn,
+      parameterName: Statics.ssmDataKeyArn,
+    });
 
     // this.logKey = new KMS.Key(this, 'logkey', {
     //     enableKeyRotation: true,

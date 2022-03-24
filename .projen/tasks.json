@@ -246,19 +246,22 @@
       },
       "steps": [
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='projen'"
+          "exec": "yarn upgrade npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='projen'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='aws-cdk,@aws-solutions-constructs/aws-lambda-dynamodb,aws-cdk-lib,projen'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='projen'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='aws-cdk,@aws-solutions-constructs/aws-lambda-dynamodb,aws-cdk-lib,projen'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='projen'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='aws-cdk,@aws-solutions-constructs/aws-lambda-dynamodb,aws-cdk-lib,projen'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='projen'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='aws-cdk,@aws-solutions-constructs/aws-lambda-dynamodb,aws-cdk-lib,projen'"
+        },
+        {
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='aws-cdk,@aws-solutions-constructs/aws-lambda-dynamodb,aws-cdk-lib,projen'"
         },
         {
           "exec": "yarn install --check-files"
@@ -281,6 +284,9 @@
         "CI": "0"
       },
       "steps": [
+        {
+          "exec": "yarn upgrade npm-check-updates"
+        },
         {
           "exec": "npm-check-updates --dep dev --upgrade --target=minor --filter='projen'"
         },
