@@ -20,7 +20,7 @@ export class CertificateStack extends Stack {
     const certificate = new CertificateManager.DnsValidatedCertificate(this, 'certificate', {
       domainName: `${subdomain}.csp-nijmegen.nl`,
       hostedZone: zone,
-      subjectAlternativeNames: [`${subdomain}.nijmegen.nl`],
+      // subjectAlternativeNames: [`${subdomain}.nijmegen.nl`],
       region: 'us-east-1',
     });
     return certificate;
