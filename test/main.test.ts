@@ -6,6 +6,7 @@ import { ParameterStack } from '../src/ParameterStage';
 import { PipelineStackDevelopment } from '../src/PipelineStackDevelopment';
 import { SessionsStack } from '../src/SessionsStack';
 import { DNSStack } from '../src/DNSStack';
+import { KeyStack } from '../src/keystack';
 
 beforeAll(() => {
   Dotenv.config();
@@ -27,7 +28,8 @@ test('MainPipelineExists', () => {
 
 test('StackHasSessionsTable', () => {
   const app = new App();
-  const stack = new SessionsStack(app, 'test');
+  const keyStack = new KeyStack(app, 'keystack');
+  const stack = new SessionsStack(app, 'test', { key: keyStack.key});
   const template = Template.fromStack(stack);
   template.resourceCountIs('AWS::DynamoDB::Table', 1);
   template.hasResourceProperties('AWS::DynamoDB::Table', {
@@ -42,7 +44,8 @@ test('StackHasSessionsTable', () => {
 
 test('StackHasApiGateway', () => {
   const app = new App();
-  const sessionsStack = new SessionsStack(app, 'sessions');
+  const keyStack = new KeyStack(app, 'keystack');
+  const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key});
   new DNSStack(app, 'dns', { branch: 'dev'});
   // const zone = dnsStack.zone;
   const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'dev' });
@@ -53,12 +56,13 @@ test('StackHasApiGateway', () => {
 
 test('StackHasLambdas', () => {
   const app = new App();
-  const sessionsStack = new SessionsStack(app, 'sessions');
+  const keyStack = new KeyStack(app, 'keystack');
+  const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key});
   new DNSStack(app, 'dns', { branch: 'dev'});
   // const zone = dnsStack.zone;
   const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'dev' });
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::Lambda::Function', 4);
+  template.resourceCountIs('AWS::Lambda::Function', 5);
 });
 
 

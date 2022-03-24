@@ -2,6 +2,7 @@ import * as path from 'path';
 import { aws_lambda as Lambda, aws_dynamodb, aws_ssm as SSM } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
+import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 
 export interface ApiFunctionProps {
   description: string;
@@ -24,6 +25,7 @@ export class ApiFunction extends Construct {
       description: props.description,
       code: Lambda.Code.fromAsset(path.join(__dirname, props.codePath)),
       insightsVersion: Lambda.LambdaInsightsVersion.fromInsightVersionArn(insightsArn),
+      logRetention: RetentionDays.ONE_MONTH,
       environment: {
         APPLICATION_URL_BASE: props.applicationUrlBase || '',
         AUTH_URL_BASE: SSM.StringParameter.valueForStringParameter(this, Statics.ssmAuthUrlBaseParameter),
