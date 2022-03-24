@@ -56,6 +56,7 @@
     "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.17.0-alpha.0",
     "@aws-solutions-constructs/aws-lambda-dynamodb": "2.0.0",
     "aws-cdk-lib": "2.17.0",
+    "cdk-remote-stack": "^2.0.8",
     "constructs": "^10.0.5",
     "dotenv": "^10.0.0"
   },

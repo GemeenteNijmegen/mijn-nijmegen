@@ -58,14 +58,15 @@ export abstract class Statics {
    * Route53 Zone ID and name for the zone for Mijn Nijmegen. decouples stacks to not pass
    * the actual zone between stacks. This param is set by DNSStack and should not be modified after.
    */
-  static readonly ssmZoneId: string = '/cdk/mijn-nijmegen/zone-id';
-  static readonly ssmZoneName: string = '/cdk/mijn-nijmegen/zone-name';
+  static readonly ssmZoneId: string = 'zone-id';
+  static readonly ssmZoneName: string = 'zone-name';
+  static readonly certificateArn: string = 'certificate-arn';
 
-  static readonly ssmApiGatewayId: string = '/cdk/mijn-nijmegen/apigateway-id';
+  static readonly ssmApiGatewayId: string = 'apigateway-id';
 
-  static readonly ssmSessionsTableArn: string = '/cdk/mijn-nijmegen/sessionstable-arn';
+  static readonly ssmSessionsTableArn: string = 'sessionstable-arn';
 
-  static readonly ssmDataKeyArn: string = '/cdk/mijn-nijmegen/kms-datakey-arn';
+  static readonly ssmDataKeyArn: string = 'kms-datakey-arn';
 
   static subDomain(branch: string) {
     const subdomainMap = {
