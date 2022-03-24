@@ -25,11 +25,14 @@ import {
 } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Bucket, BlockPublicAccess, BucketEncryption } from 'aws-cdk-lib/aws-s3';
-import { RemoteParameters } from 'cdk-remote-stack';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
 
 export interface CloudFrontStackProps extends StackProps {
+  /**     
+   * ARN for the TLS certificate
+   */
+  certificateArn: string;
   /**
      * Domain for the default origin (HTTPorigin)
      */
@@ -48,12 +51,7 @@ export class CloudfrontStack extends Stack {
     const cspDomain = `${subdomain}.csp-nijmegen.nl`;
     const mainDomain = `${subdomain}.nijmegen.nl`;
     domains = [cspDomain, mainDomain];
-    const remoteParameters = new RemoteParameters(this, 'remote-params', {
-      region: 'us-east-1',
-      path: '',
-    });
-    const certificateArn = remoteParameters.get(Statics.certificateArn);
-    const cloudfrontDistribution = this.setCloudfrontStack(props.hostDomain, domains, certificateArn);
+    const cloudfrontDistribution = this.setCloudfrontStack(props.hostDomain, domains, props.certificateArn);
     this.addDnsRecords(cloudfrontDistribution);
   }
 
