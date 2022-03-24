@@ -9,6 +9,7 @@ export interface DNSStackProps extends StackProps {
 export class DNSStack extends Stack {
   zone: Route53.HostedZone;
   cspRootZone: Route53.IHostedZone;
+  fakeNijmegenZone: Route53.HostedZone;
   branch: string;
 
   constructor(scope: Construct, id: string, props: DNSStackProps) {
@@ -25,6 +26,13 @@ export class DNSStack extends Stack {
     this.zone = new Route53.HostedZone(this, 'mijn-csp', {
       zoneName: `mijn.${this.cspRootZone.zoneName}`,
     });
+
+    const subdomain = Statics.subDomain(this.branch);
+    
+    this.fakeNijmegenZone = new Route53.HostedZone(this, 'mijn-fake', {
+      zoneName: `mijn.${subdomain}.nijmegen.nl`,
+    });
+
 
     this.addZoneIdAndNametoParams();
     this.addNSToRootCSPzone();
