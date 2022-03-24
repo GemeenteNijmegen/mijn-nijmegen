@@ -24,15 +24,15 @@ export class CertificateStack extends Stack {
       subjectAlternativeNames: [nijmegenDomain],
       validation: CertificateManager.CertificateValidation.fromDnsMultiZone({
         cspDomain: zone,
-        nijmegenDomain: fakeNijmegenZone
-      })
+        nijmegenDomain: fakeNijmegenZone,
+      }),
     });
-    
+
     new SSM.StringParameter(this, 'certificate-arn', {
       parameterName: Statics.certificateArn,
       stringValue: certificate.certificateArn,
     });
-    
+
     return certificate;
   }
 }

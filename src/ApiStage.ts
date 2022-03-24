@@ -25,7 +25,7 @@ export class ApiStage extends Stage {
     certificateStack.addDependency(dnsStack);
     const apistack = new ApiStack(this, 'api-stack', {
       branch: props.branch,
-      sessionsTable: sessionsStack.sessionsTable
+      sessionsTable: sessionsStack.sessionsTable,
     });
 
     const cloudfrontStack = new CloudfrontStack(this, 'cloudfront-stack', {
