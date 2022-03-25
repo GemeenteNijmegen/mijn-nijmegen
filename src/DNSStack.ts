@@ -33,7 +33,6 @@ export class DNSStack extends Stack {
       zoneName: `${subdomain}.nijmegen.nl`,
     });
 
-
     this.addZoneIdAndNametoParams();
     this.addNSToRootCSPzone();
     this.addDomainValidationRecord();
@@ -52,6 +51,16 @@ export class DNSStack extends Stack {
     new SSM.StringParameter(this, 'mijn-hostedzone-name', {
       stringValue: this.zone.zoneName,
       parameterName: Statics.ssmZoneName,
+    });
+
+    new SSM.StringParameter(this, 'mijn-fake-hostedzone-id', {
+      stringValue: this.fakeNijmegenZone.hostedZoneId,
+      parameterName: Statics.ssmNijmegenZoneId,
+    });
+
+    new SSM.StringParameter(this, 'mijn-fake-hostedzone-name', {
+      stringValue: this.fakeNijmegenZone.zoneName,
+      parameterName: Statics.ssmNijmegenZoneName,
     });
   }
 
