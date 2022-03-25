@@ -58,11 +58,15 @@ export abstract class Statics {
    * Route53 Zone ID and name for the zone for Mijn Nijmegen. decouples stacks to not pass
    * the actual zone between stacks. This param is set by DNSStack and should not be modified after.
    */
+  static readonly ssmZonePath: string = '/cdk/mijn-nijmegen/zones';
   static readonly ssmZoneId: string = '/cdk/mijn-nijmegen/zone-id';
   static readonly ssmZoneName: string = '/cdk/mijn-nijmegen/zone-name';
-
+  static readonly ssmZoneIdNew: string = 'csp-id';
+  static readonly ssmZoneNameNew: string = 'csp-name';
   static readonly ssmNijmegenZoneId: string = '/cdk/mijn-nijmegen/nijmegen-zone-id';
+  static readonly ssmNijmegenZoneIdNew: string = 'nijmegennl-zone-id';
   static readonly ssmNijmegenZoneName: string = '/cdk/mijn-nijmegen/nijmegen-zone-name';
+  static readonly ssmNijmegenZoneNameNew: string = 'nijmegennl-zone-name';
 
   static readonly certificateArn: string = '/cdk/mijn-nijmegen/certificate-arn';
 
