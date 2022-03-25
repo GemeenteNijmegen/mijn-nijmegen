@@ -31,10 +31,6 @@ import { Statics } from './statics';
 
 export interface CloudFrontStackProps extends StackProps {
   /**
-   * ARN for the TLS certificate
-   */
-  certificateArn?: string;
-  /**
      * Domain for the default origin (HTTPorigin)
      */
   hostDomain: string;
