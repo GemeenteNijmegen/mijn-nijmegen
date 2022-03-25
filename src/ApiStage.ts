@@ -1,7 +1,6 @@
 import { Stage, StageProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { ApiStack } from './ApiStack';
-import { CertificateStack } from './CertificateStack';
 import { CloudfrontStack } from './CloudfrontStack';
 import { DNSStack } from './DNSStack';
 import { KeyStack } from './keystack';
@@ -21,10 +20,6 @@ export class ApiStage extends Stage {
     const keyStack = new KeyStack(this, 'key-stack');
     const sessionsStack = new SessionsStack(this, 'sessions-stack', { key: keyStack.key });
     const dnsStack = new DNSStack(this, 'dns-stack', { branch: props.branch });
-    const certificateStack = new CertificateStack(this, 'cert-stack', { branch: props.branch });
-    certificateStack.createCertificate(dnsStack.zone);
-
-    certificateStack.addDependency(dnsStack);
 
     const usEastCertificateStack = new UsEastCertificateStack(this, 'us-cert-stack', { branch: props.branch, env: { region: 'us-east-1' } });
     usEastCertificateStack.addDependency(dnsStack);
