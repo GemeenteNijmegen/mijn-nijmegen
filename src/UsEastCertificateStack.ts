@@ -22,7 +22,7 @@ export class UsEastCertificateStack extends Stack {
       this.getZoneAttributesFromEuWest(parameters, Statics.ssmZoneIdNew, Statics.ssmZoneNameNew),
     );
     const nijmegenZone = HostedZone.fromHostedZoneAttributes(this, 'nijmegen-zone',
-      this.getZoneAttributesFromEuWest(parameters, Statics.ssmNijmegenZoneId, Statics.ssmNijmegenZoneName),
+      this.getZoneAttributesFromEuWest(parameters, Statics.ssmNijmegenZoneIdNew, Statics.ssmNijmegenZoneNameNew),
     );
     this.createCertificateWithMultiZone(zone, nijmegenZone);
   }

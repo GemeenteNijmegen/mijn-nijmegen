@@ -61,12 +61,12 @@ export abstract class Statics {
   static readonly ssmZonePath: string = '/cdk/mijn-nijmegen/zones';
   static readonly ssmZoneId: string = '/cdk/mijn-nijmegen/zone-id';
   static readonly ssmZoneName: string = '/cdk/mijn-nijmegen/zone-name';
-  static readonly ssmZoneIdNew: string = 'csp-id';
-  static readonly ssmZoneNameNew: string = 'csp-name';
+  static readonly ssmZoneIdNew: string = '/cdk/mijn-nijmegen/zones/csp-id';
+  static readonly ssmZoneNameNew: string = '/cdk/mijn-nijmegen/zones/csp-name';
   static readonly ssmNijmegenZoneId: string = '/cdk/mijn-nijmegen/nijmegen-zone-id';
-  static readonly ssmNijmegenZoneIdNew: string = 'nijmegennl-zone-id';
   static readonly ssmNijmegenZoneName: string = '/cdk/mijn-nijmegen/nijmegen-zone-name';
-  static readonly ssmNijmegenZoneNameNew: string = 'nijmegennl-zone-name';
+  static readonly ssmNijmegenZoneIdNew: string = '/cdk/mijn-nijmegen/zones/nijmegennl-zone-id';
+  static readonly ssmNijmegenZoneNameNew: string = '/cdk/mijn-nijmegen/zones/nijmegennl-zone-name';
 
   static readonly certificateArn: string = '/cdk/mijn-nijmegen/certificate-arn';
 
