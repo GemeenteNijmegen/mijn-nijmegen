@@ -31,6 +31,10 @@ import { Statics } from './statics';
 
 export interface CloudFrontStackProps extends StackProps {
   /**
+   * ARN for the TLS certificate
+   */
+  certificateArn?: string;
+  /**
      * Domain for the default origin (HTTPorigin)
      */
   hostDomain: string;
@@ -48,7 +52,6 @@ export class CloudfrontStack extends Stack {
     const cspDomain = `${subdomain}.csp-nijmegen.nl`;
     // const mainDomain = `${subdomain}.nijmegen.nl`;
     domains = [cspDomain];
-
     const parameters = new RemoteParameters(this, 'params', {
       path: `${Statics.certificatePath}/`,
       region: 'us-east-1',
