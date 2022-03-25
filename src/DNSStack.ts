@@ -66,22 +66,22 @@ export class DNSStack extends Stack {
     // Temporarily add params twice, with old and new name
     new SSM.StringParameter(this, 'csp-hostedzone-id', {
       stringValue: this.zone.hostedZoneId,
-      parameterName: `${Statics.ssmZonePath}/${Statics.ssmZoneIdNew}`,
+      parameterName: Statics.ssmZoneIdNew,
     });
 
     new SSM.StringParameter(this, 'csp-hostedzone-name', {
       stringValue: this.zone.zoneName,
-      parameterName: `${Statics.ssmZonePath}/${Statics.ssmZoneNameNew}`,
+      parameterName: Statics.ssmZoneNameNew,
     });
 
     new SSM.StringParameter(this, 'nijmegen-hostedzone-id', {
       stringValue: this.fakeNijmegenZone.hostedZoneId,
-      parameterName: `${Statics.ssmZonePath}/${Statics.ssmNijmegenZoneIdNew}`,
+      parameterName: Statics.ssmNijmegenZoneIdNew,
     });
 
     new SSM.StringParameter(this, 'nijmegen-hostedzone-name', {
       stringValue: this.fakeNijmegenZone.zoneName,
-      parameterName: `${Statics.ssmZonePath}/${Statics.ssmNijmegenZoneNameNew}`,
+      parameterName: Statics.ssmNijmegenZoneNameNew,
     });
   }
 
