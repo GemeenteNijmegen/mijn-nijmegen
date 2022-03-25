@@ -68,7 +68,8 @@ export abstract class Statics {
   static readonly ssmNijmegenZoneIdNew: string = '/cdk/mijn-nijmegen/zones/nijmegennl-zone-id';
   static readonly ssmNijmegenZoneNameNew: string = '/cdk/mijn-nijmegen/zones/nijmegennl-zone-name';
 
-  static readonly certificateArn: string = '/cdk/mijn-nijmegen/certificate-arn';
+  static readonly certificatePath: string = '/cdk/mijn-nijmegen/certificates/';
+  static readonly certificateArn: string = '/cdk/mijn-nijmegen/certificates/certificate-arn';
 
   static readonly ssmApiGatewayId: string = '/cdk/mijn-nijmegen/apigateway-id';
 
