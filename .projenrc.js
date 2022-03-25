@@ -39,7 +39,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     '.env',
     '.vscode',
     'src/app/**/shared',
-    '.DS_Store'
+    '.DS_Store',
   ],
 });
 project.synth();

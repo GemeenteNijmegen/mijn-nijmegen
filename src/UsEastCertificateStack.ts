@@ -14,22 +14,27 @@ export class UsEastCertificateStack extends Stack {
   constructor(scope: Construct, id: string, props: UsEastCertificateStackProps) {
     super(scope, id, props);
     this.branch = props.branch;
-    const parameters = new RemoteParameters(this, 'params', {
-      path: '/cdk/mijn-nijmegen',
-      region: 'eu-west-1',
-    });
+
     const zone = HostedZone.fromHostedZoneAttributes(this, 'zone',
-      this.getZoneAttributesFromEuWest(parameters, Statics.ssmZoneId, Statics.ssmZoneName),
+      this.getZoneAttributesFromEuWest(Statics.ssmZoneId, Statics.ssmZoneName),
     );
     const nijmegenZone = HostedZone.fromHostedZoneAttributes(this, 'nijmegen-zone',
-      this.getZoneAttributesFromEuWest(parameters, Statics.ssmNijmegenZoneId, Statics.ssmNijmegenZoneName),
+      this.getZoneAttributesFromEuWest(Statics.ssmNijmegenZoneId, Statics.ssmNijmegenZoneName),
     );
     this.createCertificateWithMultiZone(zone, nijmegenZone);
   }
 
-  getZoneAttributesFromEuWest(parameters: RemoteParameters, id: string, name: string): { hostedZoneId: string; zoneName: string} {
-    const zoneId = parameters.get(id);
-    const zoneName = parameters.get(name);
+  getZoneAttributesFromEuWest(id: string, name: string): { hostedZoneId: string; zoneName: string} {
+    const parameterId = new RemoteParameters(this, `param-${id}`, {
+      path: id,
+      region: 'eu-west-1',
+    });
+    const zoneId = parameterId.get(id);
+    const parameterName = new RemoteParameters(this, `param-${name}`, {
+      path: name,
+      region: 'eu-west-1',
+    });
+    const zoneName = parameterName.get(name);
     return {
       hostedZoneId: zoneId,
       zoneName: zoneName,
