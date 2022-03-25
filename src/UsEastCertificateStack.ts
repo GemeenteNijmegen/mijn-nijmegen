@@ -1,4 +1,4 @@
-import { aws_certificatemanager as CertificateManager, Stack, StackProps } from 'aws-cdk-lib';
+import { aws_certificatemanager as CertificateManager, Stack, StackProps, aws_ssm as SSM } from 'aws-cdk-lib';
 import { HostedZone, IHostedZone } from 'aws-cdk-lib/aws-route53';
 import { RemoteParameters } from 'cdk-remote-stack';
 import { Construct } from 'constructs';
@@ -42,16 +42,17 @@ export class UsEastCertificateStack extends Stack {
 
     const certificate = new CertificateManager.Certificate(this, 'certificate', {
       domainName: cspDomain,
+      subjectAlternativeNames: [`${subdomain}.nijmegen.nl`],
       validation: CertificateManager.CertificateValidation.fromDnsMultiZone({
         [cspDomain]: zone,
         [`${subdomain}.nijmegen.nl`]: nijmegenZone,
       }),
     });
 
-    // new SSM.StringParameter(this, 'cert-arn', {
-    //   stringValue: certificate.certificateArn,
-    //   parameterName: Statics.certificateArn,
-    // });
+    new SSM.StringParameter(this, 'cert-arn', {
+      stringValue: certificate.certificateArn,
+      parameterName: Statics.certificateArn,
+    });
 
     return certificate;
   }
