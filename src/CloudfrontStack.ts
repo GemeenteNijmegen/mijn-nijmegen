@@ -54,11 +54,9 @@ export class CloudfrontStack extends Stack {
       region: 'us-east-1',
     });
     const certificateArn = parameters.get(Statics.certificateArn);
-    
+
     const cloudfrontDistribution = this.setCloudfrontStack(props.hostDomain, domains, certificateArn);
-    if (props.certificateArn) {
-      this.addDnsRecords(cloudfrontDistribution);
-    }
+    this.addDnsRecords(cloudfrontDistribution);
   }
 
   /**
