@@ -6,6 +6,7 @@ import { CloudfrontStack } from './CloudfrontStack';
 import { DNSStack } from './DNSStack';
 import { KeyStack } from './keystack';
 import { SessionsStack } from './SessionsStack';
+import { UsEastCertificateStack } from './UsEastCertificateStack';
 
 export interface ApiStageProps extends StageProps {
   branch: string;
@@ -23,6 +24,10 @@ export class ApiStage extends Stage {
     const certificateStack = new CertificateStack(this, 'cert-stack', { branch: props.branch });
     const certificate = certificateStack.createCertificate(dnsStack.zone);
     certificateStack.addDependency(dnsStack);
+
+    const usEastCertificateStack = new UsEastCertificateStack(this, 'us-cert-stack', { branch: props.branch });
+    usEastCertificateStack.addDependency(dnsStack);
+
     const apistack = new ApiStack(this, 'api-stack', {
       branch: props.branch,
       sessionsTable: sessionsStack.sessionsTable,

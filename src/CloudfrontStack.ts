@@ -29,7 +29,7 @@ import { Construct } from 'constructs';
 import { Statics } from './statics';
 
 export interface CloudFrontStackProps extends StackProps {
-  /**     
+  /**
    * ARN for the TLS certificate
    */
   certificateArn: string;
@@ -52,7 +52,9 @@ export class CloudfrontStack extends Stack {
     // const mainDomain = `${subdomain}.nijmegen.nl`;
     domains = [cspDomain];
     const cloudfrontDistribution = this.setCloudfrontStack(props.hostDomain, domains, props.certificateArn);
-    this.addDnsRecords(cloudfrontDistribution);
+    if (props.certificateArn) {
+      this.addDnsRecords(cloudfrontDistribution);
+    }
   }
 
   /**
@@ -67,6 +69,7 @@ export class CloudfrontStack extends Stack {
    */
   setCloudfrontStack(apiGatewayDomain: string, domainNames?: string[], certificateArn?: string): Distribution {
     const certificate = (certificateArn) ? CertificateManager.Certificate.fromCertificateArn(this, 'certificate', certificateArn) : undefined;
+    if (!certificate) { domainNames = undefined; };
     const distribution = new Distribution(this, 'cf-distribution', {
       priceClass: PriceClass.PRICE_CLASS_100,
       domainNames,
