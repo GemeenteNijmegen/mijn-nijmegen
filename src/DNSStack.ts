@@ -24,15 +24,15 @@ export class DNSStack extends Stack {
     });
 
     // Tijdelijke output zodat certificatestack verwijderd kan worden
-    if(props.branch == 'acceptance') {
+    if (props.branch == 'acceptance') {
       const compat_output = new CfnOutput(this, 'temp-output', {
         value: 'Z03105592Z01S4FRBQZQV',
         exportName: 'mijn-api-dns-stack:ExportsOutputRefmijncspB83B491BB53D10A4',
       });
       compat_output.overrideLogicalId('ExportsOutputRefmijncspB83B491BB53D10A4');
-    } 
-    if(props.branch == 'production') {
-      
+    }
+    if (props.branch == 'production') {
+
     }
 
     this.zone = new Route53.HostedZone(this, 'mijn-csp', {
