@@ -9,6 +9,7 @@ export interface DNSStackProps extends StackProps {
 export class DNSStack extends Stack {
   zone: Route53.HostedZone;
   cspRootZone: Route53.IHostedZone;
+  fakeNijmegenZone: Route53.HostedZone;
   branch: string;
 
   constructor(scope: Construct, id: string, props: DNSStackProps) {
@@ -24,6 +25,12 @@ export class DNSStack extends Stack {
 
     this.zone = new Route53.HostedZone(this, 'mijn-csp', {
       zoneName: `mijn.${this.cspRootZone.zoneName}`,
+    });
+
+    const subdomain = Statics.subDomain(this.branch);
+
+    this.fakeNijmegenZone = new Route53.HostedZone(this, 'mijn-fake', {
+      zoneName: `${subdomain}.nijmegen.nl`,
     });
 
     this.addZoneIdAndNametoParams();
@@ -44,6 +51,37 @@ export class DNSStack extends Stack {
     new SSM.StringParameter(this, 'mijn-hostedzone-name', {
       stringValue: this.zone.zoneName,
       parameterName: Statics.ssmZoneName,
+    });
+
+    new SSM.StringParameter(this, 'mijn-fake-hostedzone-id', {
+      stringValue: this.fakeNijmegenZone.hostedZoneId,
+      parameterName: Statics.ssmNijmegenZoneId,
+    });
+
+    new SSM.StringParameter(this, 'mijn-fake-hostedzone-name', {
+      stringValue: this.fakeNijmegenZone.zoneName,
+      parameterName: Statics.ssmNijmegenZoneName,
+    });
+
+    // Temporarily add params twice, with old and new name
+    new SSM.StringParameter(this, 'csp-hostedzone-id', {
+      stringValue: this.zone.hostedZoneId,
+      parameterName: Statics.ssmZoneIdNew,
+    });
+
+    new SSM.StringParameter(this, 'csp-hostedzone-name', {
+      stringValue: this.zone.zoneName,
+      parameterName: Statics.ssmZoneNameNew,
+    });
+
+    new SSM.StringParameter(this, 'nijmegen-hostedzone-id', {
+      stringValue: this.fakeNijmegenZone.hostedZoneId,
+      parameterName: Statics.ssmNijmegenZoneIdNew,
+    });
+
+    new SSM.StringParameter(this, 'nijmegen-hostedzone-name', {
+      stringValue: this.fakeNijmegenZone.zoneName,
+      parameterName: Statics.ssmNijmegenZoneNameNew,
     });
   }
 

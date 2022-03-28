@@ -4,7 +4,6 @@
 !/.projen/deps.json
 !/.projen/files.json
 !/.github/workflows/pull-request-lint.yml
-!/.github/workflows/stale.yml
 !/package.json
 !/LICENSE
 !/.npmignore
@@ -34,6 +33,7 @@ jspm_packages/
 .env
 .vscode
 src/app/**/shared
+.DS_Store
 !/.projenrc.js
 /test-reports/
 junit.xml

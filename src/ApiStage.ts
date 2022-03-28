@@ -6,6 +6,7 @@ import { CloudfrontStack } from './CloudfrontStack';
 import { DNSStack } from './DNSStack';
 import { KeyStack } from './keystack';
 import { SessionsStack } from './SessionsStack';
+import { UsEastCertificateStack } from './UsEastCertificateStack';
 
 export interface ApiStageProps extends StageProps {
   branch: string;
@@ -21,17 +22,22 @@ export class ApiStage extends Stage {
     const sessionsStack = new SessionsStack(this, 'sessions-stack', { key: keyStack.key });
     const dnsStack = new DNSStack(this, 'dns-stack', { branch: props.branch });
     const certificateStack = new CertificateStack(this, 'cert-stack', { branch: props.branch });
-    const certificate = certificateStack.createCertificate(dnsStack.zone);
+    certificateStack.createCertificate(dnsStack.zone);
+
     certificateStack.addDependency(dnsStack);
+
+    const usEastCertificateStack = new UsEastCertificateStack(this, 'us-cert-stack', { branch: props.branch, env: { region: 'us-east-1' } });
+    usEastCertificateStack.addDependency(dnsStack);
+
     const apistack = new ApiStack(this, 'api-stack', {
       branch: props.branch,
       sessionsTable: sessionsStack.sessionsTable,
     });
 
-    new CloudfrontStack(this, 'cloudfront-stack', {
+    const cloudfrontStack = new CloudfrontStack(this, 'cloudfront-stack', {
       branch: props.branch,
-      certificateArn: certificate.certificateArn,
       hostDomain: apistack.domain(),
     });
+    cloudfrontStack.addDependency(usEastCertificateStack);
   }
 }

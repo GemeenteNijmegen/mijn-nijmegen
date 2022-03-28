@@ -1,8 +1,8 @@
 import * as path from 'path';
 import { aws_lambda as Lambda, aws_dynamodb, aws_ssm as SSM } from 'aws-cdk-lib';
+import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
-import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 
 export interface ApiFunctionProps {
   description: string;
