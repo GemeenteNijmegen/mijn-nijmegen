@@ -23,6 +23,8 @@ export class DNSStack extends Stack {
       zoneName: rootZoneName,
     });
 
+    //TODO Maandag: Hier een tijdelijke cfnOutput maken zodat certstack fatsoenlijk verwijderd kan worden.
+    
     this.zone = new Route53.HostedZone(this, 'mijn-csp', {
       zoneName: `mijn.${this.cspRootZone.zoneName}`,
     });
