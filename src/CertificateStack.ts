@@ -16,7 +16,7 @@ export class CertificateStack extends Stack {
     //Add output to prevent issue deploying since cloudfront stack used to depend on this
     //TODO: Remove after cloudfront stack is updated in prod (to not use the certificate from this stack)
     const compat_output = new CfnOutput(this, 'temp-output', {
-      value: 'arn:aws:acm:us-east-1:315037222840:certificate/46fb27ad-3a5c-4c70-8a62-1ff27573c18f',
+      value: 'arn:aws:acm:us-east-1:196212984627:certificate/61fac0cf-d7f4-4c14-a64e-9b541860af0b',
       exportName: 'mijn-api-cert-stack:ExportsOutputFnGetAttcertificateCertificateRequestorResourceFD86DD58ArnFFEE9192',
     });
     compat_output.overrideLogicalId('ExportsOutputFnGetAttcertificateCertificateRequestorResourceFD86DD58ArnFFEE9192');
