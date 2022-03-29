@@ -133,7 +133,7 @@ export class DNSStack extends Stack {
       zone: this.cspRootZone,
       recordName: subdomain,
       values: [SSM.StringParameter.valueForStringParameter(this, Statics.ssmNijmegenDSRecordValue)],
-      ttl: Duration.seconds(600)
+      ttl: Duration.seconds(600),
     });
   }
 }
