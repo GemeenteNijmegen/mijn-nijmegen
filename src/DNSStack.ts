@@ -36,6 +36,7 @@ export class DNSStack extends Stack {
     this.addZoneIdAndNametoParams();
     this.addNSToRootCSPzone();
     this.addDomainValidationRecord();
+    this.addDsRecord();
   }
 
   /**
