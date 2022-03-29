@@ -52,7 +52,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiuscertstack0E126E31.assets.json\\\\\\" --verbose publish \\\\\\"3803df2f6849acf50bb6577ee095a669940670e799f70a2be34893a399777bc3:test-us-east-1\\\\\\"\\",
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapidnssecstackFC92838A.assets.json\\\\\\" --verbose publish \\\\\\"3803df2f6849acf50bb6577ee095a669940670e799f70a2be34893a399777bc3:test-us-east-1\\\\\\"\\",
         \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.assets.json\\\\\\" --verbose publish \\\\\\"3803df2f6849acf50bb6577ee095a669940670e799f70a2be34893a399777bc3:test-eu-west-1\\\\\\"\\"
       ]
     }
@@ -112,7 +112,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiuscertstack0E126E31.assets.json\\\\\\" --verbose publish \\\\\\"885e74c18034f7d2833ec7129bb76a442e75d84f9c21ce7990bbb3aea67ab779:test-us-east-1\\\\\\"\\",
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapidnssecstackFC92838A.assets.json\\\\\\" --verbose publish \\\\\\"885e74c18034f7d2833ec7129bb76a442e75d84f9c21ce7990bbb3aea67ab779:test-us-east-1\\\\\\"\\",
         \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.assets.json\\\\\\" --verbose publish \\\\\\"885e74c18034f7d2833ec7129bb76a442e75d84f9c21ce7990bbb3aea67ab779:test-eu-west-1\\\\\\"\\"
       ]
     }
@@ -172,7 +172,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiuscertstack0E126E31.assets.json\\\\\\" --verbose publish \\\\\\"558dc75fbdc793c8e2f64f85d2d7ed2cb820c727ec7e9b08666ad1af0103992e:test-us-east-1\\\\\\"\\",
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapidnssecstackFC92838A.assets.json\\\\\\" --verbose publish \\\\\\"558dc75fbdc793c8e2f64f85d2d7ed2cb820c727ec7e9b08666ad1af0103992e:test-us-east-1\\\\\\"\\",
         \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"558dc75fbdc793c8e2f64f85d2d7ed2cb820c727ec7e9b08666ad1af0103992e:test-eu-west-1\\\\\\"\\"
       ]
     }
@@ -1188,6 +1188,53 @@ Object {
                         Object {
                           "Ref": "AWS::Partition",
                         },
+                        ":iam::test:role/cdk-hnb659fds-cfn-exec-role-test-us-east-1",
+                      ],
+                    ],
+                  },
+                  "StackName": "mijn-api-dnssec-stack",
+                  "TemplatePath": "Synth_Output::assembly-test-mijn-api/testmijnapidnssecstackFC92838A.template.json",
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "Synth_Output",
+                  },
+                ],
+                "Name": "dnssec-stack.Prepare",
+                "Region": "us-east-1",
+                "RoleArn": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-us-east-1",
+                    ],
+                  ],
+                },
+                "RunOrder": 3,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Deploy",
+                  "Owner": "AWS",
+                  "Provider": "CloudFormation",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ActionMode": "CHANGE_SET_REPLACE",
+                  "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                  "ChangeSetName": "PipelineChange",
+                  "RoleArn": Object {
+                    "Fn::Join": Array [
+                      "",
+                      Array [
+                        "arn:",
+                        Object {
+                          "Ref": "AWS::Partition",
+                        },
                         ":iam::test:role/cdk-hnb659fds-cfn-exec-role-test-eu-west-1",
                       ],
                     ],
@@ -1261,6 +1308,34 @@ Object {
                   ],
                 },
                 "RunOrder": 3,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Deploy",
+                  "Owner": "AWS",
+                  "Provider": "CloudFormation",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ActionMode": "CHANGE_SET_EXECUTE",
+                  "ChangeSetName": "PipelineChange",
+                  "StackName": "mijn-api-dnssec-stack",
+                },
+                "Name": "dnssec-stack.Deploy",
+                "Region": "us-east-1",
+                "RoleArn": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::test:role/cdk-hnb659fds-deploy-role-test-us-east-1",
+                    ],
+                  ],
+                },
+                "RunOrder": 4,
               },
               Object {
                 "ActionTypeId": Object {
