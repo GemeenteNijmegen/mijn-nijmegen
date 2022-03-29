@@ -101,7 +101,7 @@ export class DNSSECStack extends Stack {
       }),
     });
 
-    dnssecKmsKey.addAlias('eform/dnssec/route53');
+    dnssecKmsKey.addAlias('mijnnijmegen/dnssec');
     return dnssecKmsKey;
   }
 }
