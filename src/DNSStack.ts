@@ -132,7 +132,7 @@ export class DNSStack extends Stack {
     new Route53.DsRecord(this, 'ds-record', {
       zone: this.cspRootZone,
       recordName: 'mijn',
-      values: [SSM.StringParameter.valueForStringParameter(this, Statics.ssmNijmegenDSRecordValue)],
+      values: ['50966 13 2 ADE849F9F37042CE5579FE589103CF5314C54889BE7CAE1C4C5F2AC2D60FC4DB'],
       ttl: Duration.seconds(600),
     });
   }
