@@ -68,6 +68,9 @@ export abstract class Statics {
   static readonly ssmNijmegenZoneIdNew: string = '/cdk/mijn-nijmegen/zones/nijmegennl-zone-id';
   static readonly ssmNijmegenZoneNameNew: string = '/cdk/mijn-nijmegen/zones/nijmegennl-zone-name';
 
+  /** There seems to be no way to get the required ds record value in the CDK/API */
+  static readonly ssmNijmegenDSRecordValue: string = '/cdk/mijn-nijmegen/ds-record-value';
+
   static readonly certificatePath: string = '/cdk/mijn-nijmegen/certificates';
   static readonly certificateArn: string = '/cdk/mijn-nijmegen/certificates/certificate-arn';
 
