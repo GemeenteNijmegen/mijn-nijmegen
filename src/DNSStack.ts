@@ -1,4 +1,4 @@
-import { aws_route53 as Route53, Stack, StackProps, aws_ssm as SSM } from 'aws-cdk-lib';
+import { aws_route53 as Route53, Stack, StackProps, aws_ssm as SSM, Duration } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
 
@@ -120,6 +120,20 @@ export class DNSStack extends Stack {
       zone: this.cspRootZone,
       recordName: '_f73d66ee2c385b8dfc18ace27cb99644',
       domainName: '2e45a999777f5fe42487a28040c9c926.897f69591e347cfdce9e9d66193f750d.comodoca.com.',
+    });
+  }
+
+  /**
+   * Add DS record for the zone to the parent zone
+   * to establish a chain of trust (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring-dnssec-enable-signing.html#dns-configuring-dnssec-chain-of-trust)
+   */
+  addDsRecord() {
+    const subdomain = Statics.subDomain(this.branch);
+    new Route53.DsRecord(this, 'ds-record', {
+      zone: this.cspRootZone,
+      recordName: subdomain,
+      values: [SSM.StringParameter.valueForStringParameter(this, Statics.ssmNijmegenDSRecordValue)],
+      ttl: Duration.seconds(600),
     });
   }
 }
