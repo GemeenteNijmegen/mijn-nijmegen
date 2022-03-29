@@ -129,10 +129,9 @@ export class DNSStack extends Stack {
    * to establish a chain of trust (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring-dnssec-enable-signing.html#dns-configuring-dnssec-chain-of-trust)
    */
   addDsRecord() {
-    const subdomain = Statics.subDomain(this.branch);
     new Route53.DsRecord(this, 'ds-record', {
       zone: this.cspRootZone,
-      recordName: subdomain,
+      recordName: 'mijn',
       values: [SSM.StringParameter.valueForStringParameter(this, Statics.ssmNijmegenDSRecordValue)],
       ttl: Duration.seconds(600),
     });
