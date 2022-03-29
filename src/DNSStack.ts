@@ -1,4 +1,4 @@
-import { aws_route53 as Route53, Stack, StackProps, aws_ssm as SSM } from 'aws-cdk-lib';
+import { aws_route53 as Route53, Stack, StackProps, aws_ssm as SSM, CfnOutput } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
 
@@ -22,6 +22,22 @@ export class DNSStack extends Stack {
       hostedZoneId: rootZoneId,
       zoneName: rootZoneName,
     });
+
+    // Tijdelijke output zodat certificatestack verwijderd kan worden
+    if (props.branch == 'acceptance') {
+      const compat_output = new CfnOutput(this, 'temp-output', {
+        value: 'Z05097821YC7L032VS3KZ',
+        exportName: 'mijn-api-dns-stack:ExportsOutputRefmijncspB83B491BB53D10A4',
+      });
+      compat_output.overrideLogicalId('ExportsOutputRefmijncspB83B491BB53D10A4');
+    }
+    if (props.branch == 'production') {
+      const compat_output = new CfnOutput(this, 'temp-output', {
+        value: 'Z03105592Z01S4FRBQZQV',
+        exportName: 'mijn-api-dns-stack:ExportsOutputRefmijncspB83B491BB53D10A4',
+      });
+      compat_output.overrideLogicalId('ExportsOutputRefmijncspB83B491BB53D10A4');
+    }
 
     this.zone = new Route53.HostedZone(this, 'mijn-csp', {
       zoneName: `mijn.${this.cspRootZone.zoneName}`,

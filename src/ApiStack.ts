@@ -37,8 +37,8 @@ export class ApiStack extends Stack {
     });
 
     const subdomain = Statics.subDomain(props.branch);
-    const cspDomain = `${subdomain}.csp-nijmegen.nl`;
-    this.setFunctions(`https://${cspDomain}/`);
+    const appDomain = `${subdomain}.nijmegen.nl`;
+    this.setFunctions(`https://${appDomain}/`);
   }
 
 
