@@ -1,4 +1,4 @@
-import { aws_route53 as Route53, Stack, StackProps, aws_ssm as SSM, CfnOutput } from 'aws-cdk-lib';
+import { aws_route53 as Route53, Stack, StackProps, aws_ssm as SSM } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
 
