@@ -1,8 +1,9 @@
 import { DynamoDBClient, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'jest-aws-client-mock';
-import * as lambda from '../index';
+import { handleRequest } from '../handleRequest';
 
 const ddbMock = mockClient(DynamoDBClient);
+const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
 beforeAll(() => {
   global.console.log = jest.fn();
   // Set env variables
@@ -20,20 +21,21 @@ beforeEach(() => {
 });
 
 test('Return login page with correct link', async () => {
-  const result = await lambda.handler({}, {});
+  const result = await handleRequest('', dynamoDBClient);
   expect(result.body).toMatch(`${process.env.AUTH_URL_BASE}/broker/sp/oidc/authenticate`);
   expect(result.body).toMatch(encodeURIComponent(`${process.env.APPLICATION_URL_BASE}auth`));
   expect(result.statusCode).toBe(200);
 });
 
 test('No redirect if session cookie doesn\'t exist', async () => {
-  const result = await lambda.handler({ cookies: ['demo=12345'] }, {});
+
+  const result = await handleRequest('demo=12345', dynamoDBClient);
   expect(result.statusCode).toBe(200);
 });
 
 test('Create session if no session exists', async () => {
 
-  await lambda.handler({}, {});
+  await handleRequest('', dynamoDBClient);
 
   expect(ddbMock).toHaveBeenCalledTimes(1);
   expect(ddbMock).toHaveBeenCalledWith(expect.objectContaining({
@@ -61,7 +63,7 @@ test('Redirect to home if already logged in', async () => {
   };
   ddbMock.mockImplementation(() => output);
   const sessionId = '12345';
-  const result = await lambda.handler({ cookies: [`session=${sessionId}`] }, {});
+  const result = await handleRequest(`session=${sessionId}`, dynamoDBClient);
   expect(ddbMock).toHaveBeenCalledTimes(1);
   expect(ddbMock).toHaveBeenCalledWith(
     expect.objectContaining({
@@ -80,7 +82,7 @@ test('Unknown session returns login page', async () => {
   const output: Partial<GetItemCommandOutput> = {}; //empty output
   ddbMock.mockImplementation(() => output);
   const sessionId = '12345';
-  const result = await lambda.handler({ cookies: [`session=${sessionId}`] }, {});
+  const result = await handleRequest(`session=${sessionId}`, dynamoDBClient);
   expect(ddbMock).toHaveBeenCalledTimes(2);
   expect(result.statusCode).toBe(200);
 });
@@ -95,7 +97,7 @@ test('Known session without login returns login page, without creating new sessi
   };
   ddbMock.mockImplementation(() => output);
   const sessionId = '12345';
-  const result = await lambda.handler({ cookies: [`session=${sessionId}`] }, {});
+  const result = await handleRequest(`session=${sessionId}`, dynamoDBClient);
   expect(ddbMock).toHaveBeenCalledTimes(2);
   expect(ddbMock).toHaveBeenCalledWith(
     expect.objectContaining({
@@ -111,7 +113,7 @@ test('Known session without login returns login page, without creating new sessi
 });
 
 test('Request without session returns session cookie', async () => {
-  const result = await lambda.handler({}, {});
+  const result = await handleRequest('', dynamoDBClient);
   expect(result.cookies).toEqual(
     expect.arrayContaining([expect.stringMatching('session=')]),
   );
@@ -119,7 +121,12 @@ test('Request without session returns session cookie', async () => {
 
 test('DynamoDB error', async () => {
   ddbMock.mockImplementation(() => { throw new Error('Not supported!'); });
-  const result = await lambda.handler({ cookies: ['session=12345'] }, {});
+  let failed = false;
+  try {
+    await handleRequest('session=12345', dynamoDBClient);
+  } catch (error) {
+    failed = true;
+  }
   expect(ddbMock).toHaveBeenCalledTimes(1);
-  expect(result.statusCode).toBe(500);
+  expect(failed).toBe(true);
 });

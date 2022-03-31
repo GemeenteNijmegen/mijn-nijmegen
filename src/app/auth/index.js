@@ -1,35 +1,7 @@
-const { Session } = require('./shared/Session');
-const { OpenIDConnect } = require('./shared/OpenIDConnect');
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { handleRequest } = require("./handleRequest");
 
-function redirectResponse(location, code = 302) {
-    return {
-        'statusCode': code,
-        'body': '',
-        'headers': { 
-            'Location': location
-        }
-    }
-}
-
-async function handleRequest(cookies, queryStringParamCode) {
-    let response = {};
-    let session = new Session(cookies);
-    await session.init();
-    
-    if(session.sessionId === false) {
-        return redirectResponse('/login');
-    }
-    const state = session.state;
-    const OIDC = new OpenIDConnect();
-    const claims = await OIDC.authorize(queryStringParamCode, state);
-    if(claims) {
-        session.updateSession(true, claims.sub);
-    } else {
-        return redirectResponse('/login');
-    }
-
-    return redirectResponse('/');
-}
+const dynamoDBClient = new DynamoDBClient();
 
 function parseEvent(event) {
     return { 
@@ -42,7 +14,7 @@ exports.handler = async (event, context) => {
     try {
         console.debug(JSON.stringify(event));
         const params = parseEvent(event);
-        return await handleRequest(params.cookies, params.code);
+        return await handleRequest(params.cookies, params.code, dynamoDBClient);
     } catch (err) {
         console.debug(err);
         response = {

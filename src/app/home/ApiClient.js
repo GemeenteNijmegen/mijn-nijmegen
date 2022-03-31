@@ -19,12 +19,22 @@ class ApiClient {
     }
 
     /**
+     * Init key, cert and ca. If you do not init, you can pass them in the constructor, or
+     * they will be lazily initialized in the first requestData call 
+     */
+    async init() {
+        this.privatekey = await this.getPrivateKey();
+        this.cert = this.cert ? this.cert : await this.getParameterValue(process.env.MTLS_CLIENT_CERT_NAME);
+        this.ca = this.ca ? this.ca : await this.getParameterValue(process.env.MTLS_ROOT_CA_NAME);
+    }
+
+    /**
      * Retrieve certificate private key from secrets manager
      * 
      * @returns string private key
      */
      async getPrivateKey() {
-        if(!this.privatekey) { 
+        if(!this.privatekey && process.env.MTLS_PRIVATE_KEY_ARN) { 
             const secretsManagerClient = new SecretsManagerClient();
             const command = new GetSecretValueCommand({ SecretId: process.env.MTLS_PRIVATE_KEY_ARN });
             const data = await secretsManagerClient.send(command);
@@ -46,7 +56,7 @@ class ApiClient {
      * @returns param value
      */
     async getParameterValue(name) {
-        const client = new SSMClient;
+        const client = new SSMClient();
         const command = new GetParameterCommand({ Name: name });
         const response = await client.send(command);
         return response?.Parameter.Value;
@@ -57,36 +67,35 @@ class ApiClient {
      * @returns {string} XML string with uitkeringsdata
      */
     async requestData(endpoint, body, headers) {
-        console.debug('start request to ' + endpoint);
+        console.time('request to ' + endpoint);
         const key = await this.getPrivateKey();
-        const cert = this.cert ? this.cert : await this.getParameterValue(process.env.MTLS_CLIENT_CERT_NAME);
-        const ca = this.ca ? this.ca : await this.getParameterValue(process.env.MTLS_ROOT_CA_NAME);
+        const cert = this.cert = this.cert ? this.cert : await this.getParameterValue(process.env.MTLS_CLIENT_CERT_NAME);
+        const ca = this.ca = this.ca ? this.ca : await this.getParameterValue(process.env.MTLS_ROOT_CA_NAME);
         const httpsAgent = new https.Agent({ cert, key, ca });
         try {
             const response = await axios.post(endpoint, body, { 
                 httpsAgent: httpsAgent,
-                headers
+                headers,
+                timeout: 2000
             });
-            console.debug('return response from ' + endpoint);
-            console.log(response.data);
+            console.timeEnd('request to ' + endpoint);
             return response.data;
         } catch (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
-                console.log(error.response.status);
-                console.log(error.response.headers);
+                console.log('http status for ' + endpoint + ': ' + error.response.status);
                 return error.response.data;
                 console.debug('return response from ' + endpoint);
               } else if (error.request) {
                 // The request was made but no response was received
                 // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
                 // http.ClientRequest in node.js
-                console.log(error.request);
+                console.error(error?.code);
                 return '';
               } else {
                 // Something happened in setting up the request that triggered an Error
-                console.log('Error', error.message);
+                console.error('Error', error.message);
                 return '';
             }
         }
