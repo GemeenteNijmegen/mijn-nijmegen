@@ -232,7 +232,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"afed851cfdc76f77b524aa7b4c056d73800b8948e7dcd2c79736d421fc0f87be:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"3a635f5236d992b9d949052300f3313d18ea1804485e2c39960e82af7edb27e7:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -291,7 +291,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"1c3fbf160d6db6182a8494b19c9d1fedeb1896a9e47eb7660a8d040b52c0e647:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"c3cc7ba75b5bdc7401d12beeddc8b3e0a2444567d0368cb1bbb4b278ffb4004a:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -350,7 +350,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"3ecba75621c4ed8e00335cf0d99a2ffab1d87ebb9f7d4f9fe54c6433c5a706c4:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"1fc6332663d8bd5567d82849c0cdb7b83c340e27baef972a2957ebc5d185c565:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -409,7 +409,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"909c2f27b6a5a620000875ffa5227d5148265716365feb090ab833d8937a7bf6:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"d825cfe6fd2ca76ed18066ad8dc1a1acaaaa3846023aa5243c82bcecc6ec9e8b:test-eu-west-1\\\\\\"\\"
       ]
     }
   }

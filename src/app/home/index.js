@@ -1,17 +1,19 @@
-const { Session } = require('./shared/Session');
-const { render } = require('./shared/render');
-const { BrpApi } = require('./BrpApi');
 const { ApiClient } = require('./ApiClient');
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { requestHandler } = require("./requestHandler");
 
-function redirectResponse(location, code = 302) {
-    return {
-        'statusCode': code,
-        'body': '',
-        'headers': { 
-            'Location': location
-        }
-    }
+const dynamoDBClient = new DynamoDBClient();
+const apiClient = new ApiClient();
+
+async function init() {
+    console.time('init');
+    console.timeLog('init', 'start init');
+    let promise = apiClient.init();
+    console.timeEnd('init');
+    return promise;
 }
+
+const initPromise = init();
 
 function parseEvent(event) {
     return { 
@@ -19,39 +21,11 @@ function parseEvent(event) {
     };
 }
 
-async function requestHandler(cookies, client) {
-    let session = new Session(cookies);
-    await session.init();
-    if(session.isLoggedIn() !== true) {
-        return redirectResponse('/login');
-    } 
-    // Get API data
-    client = client ? client : new ApiClient();
-    
-    const bsn = session.getValue('bsn');
-    const brpApi = new BrpApi(client);
-    const brpData = await brpApi.getBrpData(bsn);
-    const naam = brpData?.Persoon?.Persoonsgegevens?.Naam ? brpData.Persoon.Persoonsgegevens.Naam : 'Onbekende gebruiker';
-    data = { volledigenaam: naam };
-    
-    // render page
-    const html = await render(data, __dirname + '/templates/home.mustache');
-    response = {
-        'statusCode': 200,
-        'body': html,
-        'headers': { 
-            'Content-type': 'text/html'
-        },
-        'cookies': [
-            'session='+ session.sessionId + '; HttpOnly; Secure;',
-        ]
-    }
-    return response;
-}
 exports.handler = async (event, context) => {
     try {
         const params = parseEvent(event);
-        return await requestHandler(params.cookies);
+        await initPromise;
+        return await requestHandler(params.cookies, apiClient, dynamoDBClient);
     
     } catch (err) {
         console.debug(err);
