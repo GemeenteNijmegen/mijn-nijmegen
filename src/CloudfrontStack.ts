@@ -6,6 +6,9 @@ import {
   aws_route53 as Route53,
   aws_route53_targets as Route53Targets,
   aws_ssm as SSM,
+  aws_s3 as S3,
+  aws_s3_deployment,
+  aws_iam as IAM,
 } from 'aws-cdk-lib';
 import {
   Distribution,
@@ -22,8 +25,9 @@ import {
   CacheHeaderBehavior,
   CacheQueryStringBehavior,
   SecurityPolicyProtocol,
+  OriginAccessIdentity,
 } from 'aws-cdk-lib/aws-cloudfront';
-import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
+import { HttpOrigin, S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Bucket, BlockPublicAccess, BucketEncryption } from 'aws-cdk-lib/aws-s3';
 import { RemoteParameters } from 'cdk-remote-stack';
 import { Construct } from 'constructs';
@@ -43,19 +47,47 @@ export interface CloudFrontStackProps extends StackProps {
 export class CloudfrontStack extends Stack {
   constructor(scope: Construct, id: string, props: CloudFrontStackProps) {
     super(scope, id);
-    let domains;
+
     const subdomain = Statics.subDomain(props.branch);
     const cspDomain = `${subdomain}.csp-nijmegen.nl`;
     const mainDomain = `${subdomain}.nijmegen.nl`;
-    domains = [cspDomain, mainDomain];
+    const domains = [cspDomain, mainDomain];
+
+    const certificateArn = this.certificateArn();
+
+    const cloudfrontDistribution = this.setCloudfrontStack(props.hostDomain, domains, certificateArn);
+    this.addStaticResources(cloudfrontDistribution);
+    this.addDnsRecords(cloudfrontDistribution);
+  }
+
+  /**
+   * Get the certificate ARN from parameter store in us-east-1
+   * @returns string Certificate ARN
+   */
+  private certificateArn() {
     const parameters = new RemoteParameters(this, 'params', {
       path: `${Statics.certificatePath}/`,
       region: 'us-east-1',
     });
     const certificateArn = parameters.get(Statics.certificateArn);
+    return certificateArn;
+  }
 
-    const cloudfrontDistribution = this.setCloudfrontStack(props.hostDomain, domains, certificateArn);
-    this.addDnsRecords(cloudfrontDistribution);
+  /**
+   * Add static contents to cloudfront
+   *
+   * Creates a bucket, deploys contents from a folder and adds it to
+   * the cloudfront distribution.
+   *
+   * @param cloudfrontDistribution the distribution for these resources
+   */
+  private addStaticResources(cloudfrontDistribution: Distribution) {
+    const staticResourcesBucket = this.staticResourcesBucket();
+    const originAccessIdentity = new OriginAccessIdentity(this, 'publicresourcesbucket-oia');
+    this.allowOriginAccessIdentityAccessToBucket(originAccessIdentity, staticResourcesBucket);
+    cloudfrontDistribution.addBehavior('/static/*', new S3Origin(staticResourcesBucket), {
+      viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+    });
   }
 
   /**
@@ -71,6 +103,7 @@ export class CloudfrontStack extends Stack {
   setCloudfrontStack(apiGatewayDomain: string, domainNames?: string[], certificateArn?: string): Distribution {
     const certificate = (certificateArn) ? CertificateManager.Certificate.fromCertificateArn(this, 'certificate', certificateArn) : undefined;
     if (!certificate) { domainNames = undefined; };
+
     const distribution = new Distribution(this, 'cf-distribution', {
       priceClass: PriceClass.PRICE_CLASS_100,
       domainNames,
@@ -108,6 +141,13 @@ export class CloudfrontStack extends Stack {
     return distribution;
   }
 
+  /**
+   * Add DNS records for cloudfront to the Route53 Zone
+   *
+   * Requests to the custom domain will correctly use cloudfront.
+   *
+   * @param distribution the cloudfront distribution
+   */
   addDnsRecords(distribution: Distribution) {
     const zoneId = SSM.StringParameter.valueForStringParameter(this, Statics.ssmZoneId);
     const zoneName = SSM.StringParameter.valueForStringParameter(this, Statics.ssmZoneName);
@@ -128,7 +168,8 @@ export class CloudfrontStack extends Stack {
   }
 
   /**
-   * bucket voor cloudfront logs
+   * Create a bucket to hold cloudfront logs
+   * @returns s3.Bucket
    */
   logBucket() {
     const cfLogBucket = new Bucket(this, 'CloudfrontLogs', {
@@ -164,6 +205,11 @@ export class CloudfrontStack extends Stack {
     return responseHeadersPolicy;
   }
 
+  /**
+   * Get the cleaned, trimmed header values for the csp header
+   *
+   * @returns string csp header values
+   */
   cspHeaderValue() {
     const cspValues = 'default-src \'self\';\
     frame-ancestors \'self\';\
@@ -177,6 +223,64 @@ export class CloudfrontStack extends Stack {
     object-src \'self\';\
     ';
     return cspValues.replace(/[ ]+/g, ' ').trim();
+  }
+
+  /**
+   * Create an s3 bucket to hold static resources.
+   * Must be unencrypted to allow cloudfront to serve
+   * these resources.
+   *
+   * @returns S3.Bucket
+   */
+  staticResourcesBucket() {
+    const bucket = new S3.Bucket(this, 'resources-bucket', {
+      blockPublicAccess: S3.BlockPublicAccess.BLOCK_ALL,
+      encryption: S3.BucketEncryption.UNENCRYPTED,
+    });
+
+    return bucket;
+  }
+
+  /**
+   * Allow listBucket to the origin access identity
+   *
+   * Necessary so cloudfront receives 404's as 404 instead of 403. This also allows
+   * a listing of the bucket if no /index.html is present in the bucket.
+   *
+   * @param originAccessIdentity
+   * @param bucket
+   */
+  allowOriginAccessIdentityAccessToBucket(originAccessIdentity: OriginAccessIdentity, bucket: Bucket) {
+    bucket.addToResourcePolicy(new IAM.PolicyStatement({
+      resources: [
+        `${bucket.bucketArn}`,
+        `${bucket.bucketArn}/*`,
+      ],
+      actions: [
+        's3:GetObject',
+        's3:ListBucket',
+      ],
+      effect: IAM.Effect.ALLOW,
+      principals: [originAccessIdentity.grantPrincipal],
+    }),
+    );
+  }
+
+  /**
+   * Deploy contents of folder to the s3 bucket
+   *
+   * Invalidates the correct cloudfront path
+   * @param bucket s3.Bucket
+   * @param distribution Distribution
+   */
+  deployBucket(bucket: S3.Bucket, distribution: Distribution) {
+    //Deploy static resources to s3
+    new aws_s3_deployment.BucketDeployment(this, 'staticResources', {
+      sources: [aws_s3_deployment.Source.asset('./src/app/static-resources/')],
+      destinationBucket: bucket,
+      distribution: distribution,
+      distributionPaths: ['/static/*'],
+    });
   }
 
 }

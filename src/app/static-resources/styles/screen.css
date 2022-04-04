@@ -1,0 +1,45 @@
+body { 
+    padding-top: 150px; 
+}
+
+.card-number {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.card-number > * {
+    flex-grow: 1;
+    flex-basis: calc((30rem - 100%) * 999);
+}
+
+.card-number .card-body h3, .card-number .card-body h5, .card-number .card-title {
+    font-family: Source Sans Pro;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 35px;
+    margin-bottom: 0;
+}
+
+.card-number .card-body p {
+    margin-top: 8px;
+}
+
+.contact .items {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.contact i.mdi, .contact span.mdi {
+    width: 2rem;
+    color: #a80a2d;
+}
+
+.contact .items p {
+    width: 100%;
+    margin-left: 2rem;
+}
