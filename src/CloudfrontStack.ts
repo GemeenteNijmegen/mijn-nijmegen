@@ -88,6 +88,7 @@ export class CloudfrontStack extends Stack {
     cloudfrontDistribution.addBehavior('/static/*', new S3Origin(staticResourcesBucket), {
       viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
     });
+    this.deployBucket(staticResourcesBucket, cloudfrontDistribution);
   }
 
   /**
@@ -282,5 +283,4 @@ export class CloudfrontStack extends Stack {
       distributionPaths: ['/static/*'],
     });
   }
-
 }
