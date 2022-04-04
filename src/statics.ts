@@ -63,10 +63,6 @@ export abstract class Statics {
   static readonly ssmZoneName: string = '/cdk/mijn-nijmegen/zone-name';
   static readonly ssmZoneIdNew: string = '/cdk/mijn-nijmegen/zones/csp-id';
   static readonly ssmZoneNameNew: string = '/cdk/mijn-nijmegen/zones/csp-name';
-  static readonly ssmNijmegenZoneId: string = '/cdk/mijn-nijmegen/nijmegen-zone-id';
-  static readonly ssmNijmegenZoneName: string = '/cdk/mijn-nijmegen/nijmegen-zone-name';
-  static readonly ssmNijmegenZoneIdNew: string = '/cdk/mijn-nijmegen/zones/nijmegennl-zone-id';
-  static readonly ssmNijmegenZoneNameNew: string = '/cdk/mijn-nijmegen/zones/nijmegennl-zone-name';
 
   /** There seems to be no way to get the required ds record value in the CDK/API */
   static readonly ssmNijmegenDSRecordValue: string = '/cdk/mijn-nijmegen/ds-record-value';
