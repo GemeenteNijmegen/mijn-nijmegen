@@ -13,16 +13,6 @@ export class UsEastCertificateStack extends Stack {
   constructor(scope: Construct, id: string, props: UsEastCertificateStackProps) {
     super(scope, id, props);
     this.branch = props.branch;
-    // const parameters = new RemoteParameters(this, 'params', {
-    //   path: `${Statics.ssmZonePath}/`,
-    //   region: 'eu-west-1',
-    // });
-    // const zone = HostedZone.fromHostedZoneAttributes(this, 'zone',
-    //   this.getZoneAttributesFromEuWest(parameters, Statics.ssmZoneIdNew, Statics.ssmZoneNameNew),
-    // );
-    // const nijmegenZone = HostedZone.fromHostedZoneAttributes(this, 'nijmegen-zone',
-    //   this.getZoneAttributesFromEuWest(parameters, Statics.ssmNijmegenZoneIdNew, Statics.ssmNijmegenZoneNameNew),
-    // );
     this.createCertificate();
   }
 
