@@ -1,7 +1,7 @@
 import { DynamoDBClient, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { SecretsManagerClient, GetSecretValueCommandOutput } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'jest-aws-client-mock';
-import * as lambda from '../index';
+import { handleRequest } from '../handleRequest';
 
 beforeAll(() => {
   global.console.log = jest.fn();
@@ -16,6 +16,8 @@ beforeAll(() => {
 
 const ddbMock = mockClient(DynamoDBClient);
 const secretsMock = mockClient(SecretsManagerClient);
+
+const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
 
 
 jest.mock('openid-client', () => {
@@ -70,7 +72,7 @@ test('Successful auth redirects to home', async () => {
   };
   ddbMock.mockImplementation(() => getItemOutput);
 
-  const result = await lambda.handler({ cookies: [`session=${sessionId}`] }, {});
+  const result = await handleRequest(`session=${sessionId}`, '', dynamoDBClient);
   expect(result.statusCode).toBe(302);
   expect(result.headers.Location).toBe('/');
 });
@@ -96,7 +98,7 @@ test('Successful auth updates session', async () => {
   ddbMock.mockImplementation(() => getItemOutput);
 
 
-  const result = await lambda.handler({ cookies: [`session=${sessionId}`] }, {});
+  const result = await handleRequest(`session=${sessionId}`, '', dynamoDBClient);
   expect(ddbMock).toHaveBeenCalledWith(
     expect.objectContaining({
       input: {
@@ -123,7 +125,7 @@ test('Successful auth updates session', async () => {
 });
 
 test('No session redirects to login', async () => {
-  const result = await lambda.handler({}, {});
+  const result = await handleRequest('', '', dynamoDBClient);
   expect(result.statusCode).toBe(302);
   expect(result.headers.Location).toBe('/login');
 });

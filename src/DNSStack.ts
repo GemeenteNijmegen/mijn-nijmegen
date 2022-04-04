@@ -9,7 +9,7 @@ export interface DNSStackProps extends StackProps {
 export class DNSStack extends Stack {
   zone: Route53.HostedZone;
   cspRootZone: Route53.IHostedZone;
-  fakeNijmegenZone: Route53.HostedZone;
+  // fakeNijmegenZone: Route53.HostedZone;
   branch: string;
 
   constructor(scope: Construct, id: string, props: DNSStackProps) {
@@ -27,11 +27,11 @@ export class DNSStack extends Stack {
       zoneName: `mijn.${this.cspRootZone.zoneName}`,
     });
 
-    const subdomain = Statics.subDomain(this.branch);
+    // const subdomain = Statics.subDomain(this.branch);
 
-    this.fakeNijmegenZone = new Route53.HostedZone(this, 'mijn-fake', {
-      zoneName: `${subdomain}.nijmegen.nl`,
-    });
+    // this.fakeNijmegenZone = new Route53.HostedZone(this, 'mijn-fake', {
+    //   zoneName: `${subdomain}.nijmegen.nl`,
+    // });
 
     this.addZoneIdAndNametoParams();
     this.addNSToRootCSPzone();
@@ -60,15 +60,15 @@ export class DNSStack extends Stack {
       parameterName: Statics.ssmZoneName,
     });
 
-    new SSM.StringParameter(this, 'mijn-fake-hostedzone-id', {
-      stringValue: this.fakeNijmegenZone.hostedZoneId,
-      parameterName: Statics.ssmNijmegenZoneId,
-    });
+    // new SSM.StringParameter(this, 'mijn-fake-hostedzone-id', {
+    //   stringValue: this.fakeNijmegenZone.hostedZoneId,
+    //   parameterName: Statics.ssmNijmegenZoneId,
+    // });
 
-    new SSM.StringParameter(this, 'mijn-fake-hostedzone-name', {
-      stringValue: this.fakeNijmegenZone.zoneName,
-      parameterName: Statics.ssmNijmegenZoneName,
-    });
+    // new SSM.StringParameter(this, 'mijn-fake-hostedzone-name', {
+    //   stringValue: this.fakeNijmegenZone.zoneName,
+    //   parameterName: Statics.ssmNijmegenZoneName,
+    // });
 
     // Temporarily add params twice, with old and new name
     new SSM.StringParameter(this, 'csp-hostedzone-id', {
@@ -81,15 +81,15 @@ export class DNSStack extends Stack {
       parameterName: Statics.ssmZoneNameNew,
     });
 
-    new SSM.StringParameter(this, 'nijmegen-hostedzone-id', {
-      stringValue: this.fakeNijmegenZone.hostedZoneId,
-      parameterName: Statics.ssmNijmegenZoneIdNew,
-    });
+    // new SSM.StringParameter(this, 'nijmegen-hostedzone-id', {
+    //   stringValue: this.fakeNijmegenZone.hostedZoneId,
+    //   parameterName: Statics.ssmNijmegenZoneIdNew,
+    // });
 
-    new SSM.StringParameter(this, 'nijmegen-hostedzone-name', {
-      stringValue: this.fakeNijmegenZone.zoneName,
-      parameterName: Statics.ssmNijmegenZoneNameNew,
-    });
+    // new SSM.StringParameter(this, 'nijmegen-hostedzone-name', {
+    //   stringValue: this.fakeNijmegenZone.zoneName,
+    //   parameterName: Statics.ssmNijmegenZoneNameNew,
+    // });
   }
 
   /**
@@ -135,10 +135,21 @@ export class DNSStack extends Stack {
    * to establish a chain of trust (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring-dnssec-enable-signing.html#dns-configuring-dnssec-chain-of-trust)
    */
   addDsRecord() {
+    let dsValue = '';
+    switch (this.branch) {
+      case 'acceptance':
+        dsValue = '50966 13 2 ADE849F9F37042CE5579FE589103CF5314C54889BE7CAE1C4C5F2AC2D60FC4DB';
+        break;
+      case 'production':
+        dsValue = '64034 13 2 6EBE76977122564DE8678E5F1A4BC11C44BED7485EEEC579D293517ADF269A52';
+        break;
+      default:
+        break;
+    }
     new Route53.DsRecord(this, 'ds-record', {
       zone: this.cspRootZone,
       recordName: 'mijn',
-      values: ['50966 13 2 ADE849F9F37042CE5579FE589103CF5314C54889BE7CAE1C4C5F2AC2D60FC4DB'],
+      values: [dsValue],
       ttl: Duration.seconds(600),
     });
   }
