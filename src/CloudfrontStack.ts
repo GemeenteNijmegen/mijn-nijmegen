@@ -86,13 +86,13 @@ export class CloudfrontStack extends Stack {
     const originAccessIdentity = new OriginAccessIdentity(this, 'publicresourcesbucket-oia');
     this.allowOriginAccessIdentityAccessToBucket(originAccessIdentity, staticResourcesBucket);
     cloudfrontDistribution.addBehavior(
-      '/static/*', 
+      '/static/*',
       new S3Origin(staticResourcesBucket, {
-        originAccessIdentity: originAccessIdentity
-      }), 
+        originAccessIdentity: originAccessIdentity,
+      }),
       {
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-      }
+      },
     );
     this.deployBucket(staticResourcesBucket, cloudfrontDistribution);
   }
