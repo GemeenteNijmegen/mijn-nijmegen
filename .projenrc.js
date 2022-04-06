@@ -2,7 +2,8 @@ const { awscdk } = require('projen');
 const project = new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '2.17.0',
   cdkVersionPinning: true,
-  defaultReleaseBranch: 'main',
+  defaultReleaseBranch: 'production',
+  majorVersion: 1,
   name: 'mijnnijmegen',
   deps: [
     'dotenv',
@@ -15,6 +16,11 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   devDeps: [
     'copyfiles',
   ], /* Build dependencies for this module. */
+  depsUpgradeOptions: {
+    workflowOptions: {
+      branches: ['acceptance'],
+    },
+  },
   // packageName: undefined,  /* The "name" in package.json. */
   // release: undefined,      /* Add release management to this project. */
   mutableBuild: true,
