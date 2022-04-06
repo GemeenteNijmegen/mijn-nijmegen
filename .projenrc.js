@@ -16,6 +16,11 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   devDeps: [
     'copyfiles',
   ], /* Build dependencies for this module. */
+  depsUpgradeOptions: {
+    workflowOptions: {
+      branches: ['acceptance'],
+    },
+  },
   // packageName: undefined,  /* The "name" in package.json. */
   // release: undefined,      /* Add release management to this project. */
   mutableBuild: true,
