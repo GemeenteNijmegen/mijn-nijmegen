@@ -3,6 +3,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '2.17.0',
   cdkVersionPinning: true,
   defaultReleaseBranch: 'production',
+  release: true,
   majorVersion: 1,
   name: 'mijnnijmegen',
   deps: [
