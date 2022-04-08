@@ -76,6 +76,9 @@ export abstract class Statics {
 
   static readonly ssmDataKeyArn: string = '/cdk/mijn-nijmegen/kms-datakey-arn';
 
+  static readonly wafPath: string = '/cdk/mijn-nijmegen/waf';
+  static readonly ssmWafAclId: string = '/cdk/mijn-nijmegen/waf/acl-id';
+
   static subDomain(branch: string) {
     const subdomainMap = {
       acceptance: 'mijn.accp',

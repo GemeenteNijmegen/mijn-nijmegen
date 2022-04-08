@@ -103,7 +103,7 @@
       "type": "runtime"
     },
     {
-      "name": "@aws-solutions-constructs/aws-wafwebacl-cloudfront",
+      "name": "@aws-solutions-constructs/core",
       "type": "runtime"
     },
     {
