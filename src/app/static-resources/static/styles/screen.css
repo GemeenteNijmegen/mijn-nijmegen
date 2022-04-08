@@ -43,3 +43,11 @@ body {
     width: 100%;
     margin-left: 2rem;
 }
+
+table {
+    margin-bottom: 2rem;
+}
+
+table tr th {
+    width: 25%;
+}
