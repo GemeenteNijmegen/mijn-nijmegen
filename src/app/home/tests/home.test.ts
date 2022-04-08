@@ -2,7 +2,7 @@ import { DynamoDBClient, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { SecretsManagerClient, GetSecretValueCommandOutput } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'jest-aws-client-mock';
 import { FileApiClient } from '../FileApiClient';
-import * as lambda from '../index';
+import { requestHandler } from '../requestHandler';
 
 beforeAll(() => {
   global.console.log = jest.fn();
@@ -44,8 +44,11 @@ test('Returns 200', async () => {
     SecretString: 'ditiseennepgeheim',
   };
   secretsMock.mockImplementation(() => output);
-  const client = new FileApiClient();
-  const result = await lambda.requestHandler('session=12345', client);
+
+  const apiClient = new FileApiClient();
+  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
+  const result = await requestHandler('session=12345', apiClient, dynamoDBClient);
+
   expect(result.statusCode).toBe(200);
 });
 
@@ -55,7 +58,8 @@ test('Shows overview page', async () => {
     SecretString: 'ditiseennepgeheim',
   };
   secretsMock.mockImplementation(() => output);
-  const client = new FileApiClient();
-  const result = await lambda.requestHandler('session=12345', client);
+  const apiClient = new FileApiClient();
+  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
+  const result = await requestHandler('session=12345', apiClient, dynamoDBClient);
   expect(result.body).toMatch('Mijn Nijmegen');
 });

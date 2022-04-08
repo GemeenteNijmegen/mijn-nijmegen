@@ -55,6 +55,7 @@
           integrity="sha512-botTrmhHqzwxMOKHh5Z9CuWbhRTw1Cm0VuuAt++yFo1JiZo2ll/HOlvfRYsh5OH0BI7vpW5BS6ZhX1ucImVNVw=="
           crossorigin="anonymous">
     <!-- End: Core styling -->
+    <link rel="stylesheet" href="/static/styles/screen.css">
     <style>
         body { padding-top: 150px; }
 
@@ -116,14 +117,28 @@
             </div>
         </div>
         <div class="row">
-            <div class="card card-services">
-                <div class="card-body">
-                    <p><i class="mdi mdi-currency-eur" aria-hidden="true"></i></p>
-                    <p class="card-title">Uitkeringen</p>
-                    <p class="card-text">Bekijk uw uitkeringsgegevens op uw persoonlijke gemeentepagina.</p>
-                    <p class="card-read-more text-right mb-0 text-uppercase">
-                        <a href="/uitkeringen" aria-label="Bekijk mijn uitkeringen">Lees meer</a>
-                    </p>
+            <div class="col-lg-4">
+                <div class="card card-services">
+                    <div class="card-body">
+                        <p><i class="mdi mdi-account" aria-hidden="true"></i>
+                        <h2 class="card-title">Persoonsgegevens</h2>
+                        <p class="card-text">Bekijk uw persoons- en adresgegevens.</p>
+                        <p class="card-read-more text-right mb-0 text-uppercase">
+                            <a href="/persoonsgegevens" aria-label="Bekijk mijn persoonsgegevens">Lees meer</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card card-services">
+                    <div class="card-body">
+                        <p><i class="mdi mdi-currency-eur" aria-hidden="true"></i></p>
+                        <h2 class="card-title">Uitkeringen</h2>
+                        <p class="card-text">Bekijk uw uitkeringsgegevens.</p>
+                        <p class="card-read-more text-right mb-0 text-uppercase">
+                            <a href="/uitkeringen" aria-label="Bekijk mijn uitkeringen">Lees meer</a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

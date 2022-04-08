@@ -58,8 +58,17 @@ export abstract class Statics {
    * Route53 Zone ID and name for the zone for Mijn Nijmegen. decouples stacks to not pass
    * the actual zone between stacks. This param is set by DNSStack and should not be modified after.
    */
+  static readonly ssmZonePath: string = '/cdk/mijn-nijmegen/zones';
   static readonly ssmZoneId: string = '/cdk/mijn-nijmegen/zone-id';
   static readonly ssmZoneName: string = '/cdk/mijn-nijmegen/zone-name';
+  static readonly ssmZoneIdNew: string = '/cdk/mijn-nijmegen/zones/csp-id';
+  static readonly ssmZoneNameNew: string = '/cdk/mijn-nijmegen/zones/csp-name';
+
+  /** There seems to be no way to get the required ds record value in the CDK/API */
+  static readonly ssmNijmegenDSRecordValue: string = '/cdk/mijn-nijmegen/ds-record-value';
+
+  static readonly certificatePath: string = '/cdk/mijn-nijmegen/certificates';
+  static readonly certificateArn: string = '/cdk/mijn-nijmegen/certificates/certificate-arn';
 
   static readonly ssmApiGatewayId: string = '/cdk/mijn-nijmegen/apigateway-id';
 

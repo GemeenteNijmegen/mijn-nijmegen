@@ -40,7 +40,7 @@ test('Api', async () => {
 });
 
 // This test doesn't run in CI by default, depends on unavailable secrets
-test('Api', async () => {
+test('Api non-existent', async () => {
   if (
     !process.env.CERTPATH
     || !process.env.KEYPATH
@@ -55,6 +55,5 @@ test('Api', async () => {
   const client = new ApiClient(cert, key, ca);
   const api = new BrpApi(client);
   const result = await api.getBrpData(12345678);
-  console.debug(result);
   expect(result).toBe(false);
 });

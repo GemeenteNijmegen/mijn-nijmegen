@@ -72,6 +72,11 @@
       "type": "build"
     },
     {
+      "name": "standard-version",
+      "version": "^9",
+      "type": "build"
+    },
+    {
       "name": "ts-jest",
       "type": "build"
     },
@@ -100,6 +105,10 @@
     {
       "name": "aws-cdk-lib",
       "version": "2.17.0",
+      "type": "runtime"
+    },
+    {
+      "name": "cdk-remote-stack",
       "type": "runtime"
     },
     {

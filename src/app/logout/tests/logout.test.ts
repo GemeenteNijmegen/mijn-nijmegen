@@ -1,4 +1,7 @@
-import * as lambda from '../index';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { handleRequest } from '../handleRequest';
+
+const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
 
 beforeAll(() => {
   global.console.log = jest.fn();
@@ -16,13 +19,13 @@ beforeEach(() => {
 });
 
 test('Return login page with correct link', async () => {
-  const result = await lambda.handler({}, {});
+  const result = await handleRequest('', dynamoDBClient);
   expect(result.body).toMatch('Uitgelogd');
   expect(result.statusCode).toBe(200);
 });
 
 test('Return empty session cookie', async () => {
-  const result = await lambda.handler({}, {});
+  const result = await handleRequest('', dynamoDBClient);
   let cookies = result.cookies.filter((cookie: string) => cookie.indexOf('sessionid=;'));
   expect(cookies.length).toBe(1);
   expect(result.statusCode).toBe(200);
