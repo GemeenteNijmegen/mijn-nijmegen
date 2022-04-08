@@ -7,6 +7,7 @@ import { DNSStack } from './DNSStack';
 import { KeyStack } from './keystack';
 import { SessionsStack } from './SessionsStack';
 import { UsEastCertificateStack } from './UsEastCertificateStack';
+import { WafStack } from './WafStack';
 
 export interface ApiStageProps extends StageProps {
   branch: string;
@@ -37,5 +38,7 @@ export class ApiStage extends Stage {
       hostDomain: apistack.domain(),
     });
     cloudfrontStack.addDependency(usEastCertificateStack);
+
+    new WafStack(this, 'waf-stack', { env: { region: 'us-east-1' } });
   }
 }

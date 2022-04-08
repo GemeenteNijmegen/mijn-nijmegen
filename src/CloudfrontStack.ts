@@ -74,6 +74,19 @@ export class CloudfrontStack extends Stack {
   }
 
   /**
+   * Get the certificate ARN from parameter store in us-east-1
+   * @returns string Certificate ARN
+   */
+  private wafAclId() {
+    const parameters = new RemoteParameters(this, 'waf-params', {
+      path: `${Statics.wafPath}/`,
+      region: 'us-east-1',
+    });
+    const wafAclId = parameters.get(Statics.ssmWafAclArn);
+    return wafAclId;
+  }
+
+  /**
    * Add static contents to cloudfront
    *
    * Creates a bucket, deploys contents from a folder and adds it to
@@ -109,12 +122,14 @@ export class CloudfrontStack extends Stack {
    */
   setCloudfrontStack(apiGatewayDomain: string, domainNames?: string[], certificateArn?: string): Distribution {
     const certificate = (certificateArn) ? CertificateManager.Certificate.fromCertificateArn(this, 'certificate', certificateArn) : undefined;
+    const webAclId = this.wafAclId();
     if (!certificate) { domainNames = undefined; };
 
     const distribution = new Distribution(this, 'cf-distribution', {
       priceClass: PriceClass.PRICE_CLASS_100,
       domainNames,
       certificate,
+      webAclId,
       defaultBehavior: {
         origin: new HttpOrigin(apiGatewayDomain),
         originRequestPolicy: new OriginRequestPolicy(this, 'cf-originrequestpolicy', {
