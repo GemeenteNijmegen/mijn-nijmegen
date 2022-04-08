@@ -1,3 +1,4 @@
+import { WafwebaclToCloudFront } from '@aws-solutions-constructs/aws-wafwebacl-cloudfront';
 import {
   Stack,
   StackProps,
@@ -58,6 +59,10 @@ export class CloudfrontStack extends Stack {
     const cloudfrontDistribution = this.setCloudfrontStack(props.hostDomain, domains, certificateArn);
     this.addStaticResources(cloudfrontDistribution);
     this.addDnsRecords(cloudfrontDistribution);
+
+    new WafwebaclToCloudFront(this, 'test-wafwebacl-cloudfront', {
+      existingCloudFrontWebDistribution: cloudfrontDistribution,
+    });
   }
 
   /**
