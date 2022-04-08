@@ -9,8 +9,8 @@ export class WafStack extends Stack {
     const acl = new aws_wafv2.CfnWebACL(this, 'waf', DefaultWafwebaclProps('CLOUDFRONT'));
 
     new SSM.StringParameter(this, 'mijn-acl-id', {
-      stringValue: acl.attrId,
-      parameterName: Statics.ssmWafAclId,
+      stringValue: acl.attrArn,
+      parameterName: Statics.ssmWafAclArn,
     });
   }
 }

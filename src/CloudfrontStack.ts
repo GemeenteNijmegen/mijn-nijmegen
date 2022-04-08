@@ -82,7 +82,7 @@ export class CloudfrontStack extends Stack {
       path: `${Statics.wafPath}/`,
       region: 'us-east-1',
     });
-    const wafAclId = parameters.get(Statics.ssmWafAclId);
+    const wafAclId = parameters.get(Statics.ssmWafAclArn);
     return wafAclId;
   }
 
