@@ -2,11 +2,16 @@ body {
     padding-top: 150px; 
 }
 
+main {
+    min-height: 50vh;
+}
+
 .card-number {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     gap: .5rem;
+    margin-bottom: 2rem;
 }
 
 .card-number > * {
@@ -49,5 +54,9 @@ table {
 }
 
 table tr th {
-    width: 25%;
+    width: 35%;
+}
+
+footer {
+    margin-bottom: 4rem;
 }
