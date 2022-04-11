@@ -2,6 +2,10 @@ body {
     padding-top: 150px; 
 }
 
+main {
+    min-height: 50vh;
+}
+
 .card-number {
     display: flex;
     flex-direction: row;
