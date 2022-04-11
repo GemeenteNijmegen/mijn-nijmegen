@@ -6,6 +6,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   release: true,
   majorVersion: 1,
   name: 'mijnnijmegen',
+  license: 'EUPL-1.2',
   deps: [
     'dotenv',
     '@aws-cdk/aws-apigatewayv2-alpha',
