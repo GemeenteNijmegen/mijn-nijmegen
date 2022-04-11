@@ -57,6 +57,6 @@ table tr th {
     width: 35%;
 }
 
-footer {
-    margin-bottom: 4rem;
+footer.page-footer {
+    margin-top: 4rem;
 }
