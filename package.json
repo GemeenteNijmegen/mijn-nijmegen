@@ -37,7 +37,7 @@
     "@types/node": "^12",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
-    "aws-cdk": "2.17.0",
+    "aws-cdk": "2.20.0",
     "copyfiles": "^2.4.1",
     "esbuild": "^0.14.34",
     "eslint": "^8",
@@ -59,7 +59,7 @@
     "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.19.0-alpha.0",
     "@aws-solutions-constructs/aws-lambda-dynamodb": "2.0.0",
     "@aws-solutions-constructs/core": "^2.5.0",
-    "aws-cdk-lib": "2.17.0",
+    "aws-cdk-lib": "2.20.0",
     "cdk-remote-stack": "^2.0.8",
     "constructs": "^10.0.5",
     "dotenv": "^10.0.0"
