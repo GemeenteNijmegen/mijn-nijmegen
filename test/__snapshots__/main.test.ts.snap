@@ -52,7 +52,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.assets.json\\\\\\" --verbose publish \\\\\\"65a56a388dc788a3d073fa07dcc268edbd0b8fc672ea822c75bf9f8cd2be1eb6:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.assets.json\\\\\\" --verbose publish \\\\\\"ebfdd96f22063e5bba0b55ab1b46f95918de6ab1309672185f5fec8d58064ce0:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
