@@ -12,7 +12,7 @@ export class WafStack extends Stack {
       stringValue: acl.attrArn,
       parameterName: Statics.ssmWafAclArn,
     });
-    
+
     this.setupWafLogging(acl);
   }
 
@@ -37,9 +37,9 @@ export class WafStack extends Stack {
 
     const logGroupArn = this.formatArn({
       arnFormat: ArnFormat.COLON_RESOURCE_NAME,
-      service: "logs",
-      resource: "log-group",
-      resourceName: logGroup.logGroupName
+      service: 'logs',
+      resource: 'log-group',
+      resourceName: logGroup.logGroupName,
     });
     return logGroupArn;
   }
