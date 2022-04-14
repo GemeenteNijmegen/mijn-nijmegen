@@ -24,7 +24,7 @@ Authenticatie vindt plaats via OpenIDConnect, via [Signicat](https://signicat.co
 Aan de bestaande API Gateway kunnen nieuwe routes gekoppeld worden in externe projecten. Een voorbeeld is [Mijn Uitkering](https://github.com/gemeenteNijmegen/mijn-uitkering). Dit project is verder afhankelijk van een bestaande DNS Zone in AWS.
 
 ## Applicatie-inrichting
-In src/app/zijn de verschillende functies/endpoints opgenomen. Deze worden in [Mijn Uitkering](https://github.com/gemeenteNijmegen/mijn-uitkering) en [Mijn Gegevens](https://github.com/gemeenteNijmegen/mijn-gegevens) uitgebreid volgens dezelfde systematiek.
+De infra-code zit allemaal direct onder /src, in src/app/ is de applicatiecode te vinden. In dit geval de verschillende functies/endpoints. Deze worden in [Mijn Uitkering](https://github.com/gemeenteNijmegen/mijn-uitkering) en [Mijn Gegevens](https://github.com/gemeenteNijmegen/mijn-gegevens) uitgebreid volgens dezelfde systematiek. 
 
 Elk onderdeel dat achter authenticatie zit is op dit moment zelf verantwoordelijk voor de login-check, meestal als volgt als eerste stap in de requestHandler: 
 ```let session = new Session(cookies, dynamoDBClient);
