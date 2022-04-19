@@ -62,7 +62,7 @@ test('StackHasLambdas', () => {
   // const zone = dnsStack.zone;
   const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'dev' });
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::Lambda::Function', 5);
+  template.resourceCountIs('AWS::Lambda::Function', 6);
 });
 
 
