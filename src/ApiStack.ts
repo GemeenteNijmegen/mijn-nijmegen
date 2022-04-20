@@ -52,12 +52,16 @@ export class ApiStack extends Stack {
    * @returns {Lambda.Function} a lambda responsible for monitoring cloudwatch logs
    */
   private monitoringLambda() {
+    let webhookUrl = SSM.StringParameter.valueForStringParameter(this, Statics.ssmSlackWebhookUrl);
     return new Lambda.Function(this, 'lambda', {
       runtime: Lambda.Runtime.NODEJS_14_X,
       handler: 'index.handler',
       description: 'Monitor cloudwatch logs',
       code: Lambda.Code.fromAsset(path.join(__dirname, 'monitoring', 'lambda')),
       logRetention: RetentionDays.ONE_MONTH,
+      environment: {
+        SLACK_WEBHOOK_URL: webhookUrl
+      }
     });
   }
 
