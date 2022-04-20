@@ -11,7 +11,7 @@ function redirectResponse(location, code = 302) {
     };
 }
 
-async function handleRequest(cookies, queryStringParamCode, dynamoDBClient) {
+async function handleRequest(cookies, queryStringParamCode, queryStringParamState, dynamoDBClient) {
     let session = new Session(cookies, dynamoDBClient);
     await session.init();
 
@@ -20,13 +20,17 @@ async function handleRequest(cookies, queryStringParamCode, dynamoDBClient) {
     }
     const state = session.state;
     const OIDC = new OpenIDConnect();
-    const claims = await OIDC.authorize(queryStringParamCode, state);
-    if (claims) {
-        session.updateSession(true, claims.sub);
-    } else {
-        return redirectResponse('/login');
+    try {
+        const claims = await OIDC.authorize(queryStringParamCode, state, queryStringParamState, queryStringParamState);    
+        if (claims) {
+            session.updateSession(true, claims.sub);
+        } else {
+            return redirectResponse('/login');
+        }
+    } catch (error) {
+        console.error(error.message);
+        return redirectResponse('/');
     }
-
     return redirectResponse('/');
 }
 exports.handleRequest = handleRequest;
