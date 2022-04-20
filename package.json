@@ -16,6 +16,7 @@
     "install:home": "npx projen install:home",
     "install:login": "npx projen install:login",
     "install:logout": "npx projen install:logout",
+    "install:monitoring": "npx projen install:monitoring",
     "package": "npx projen package",
     "post-compile": "npx projen post-compile",
     "post-upgrade": "npx projen post-upgrade",
