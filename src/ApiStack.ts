@@ -60,8 +60,8 @@ export class ApiStack extends Stack {
       code: Lambda.Code.fromAsset(path.join(__dirname, 'monitoring', 'lambda')),
       logRetention: RetentionDays.ONE_MONTH,
       environment: {
-        SLACK_WEBHOOK_URL: webhookUrl
-      }
+        SLACK_WEBHOOK_URL: webhookUrl,
+      },
     });
   }
 
