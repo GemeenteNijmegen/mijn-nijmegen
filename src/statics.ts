@@ -79,6 +79,8 @@ export abstract class Statics {
   static readonly wafPath: string = '/cdk/mijn-nijmegen/waf';
   static readonly ssmWafAclArn: string = '/cdk/mijn-nijmegen/waf/acl-arn';
 
+  static readonly ssmSlackWebhookUrl: string = '/cdk/mijn-nijmegen/slack-webhook-url';
+
   static subDomain(branch: string) {
     const subdomainMap = {
       acceptance: 'mijn.accp',

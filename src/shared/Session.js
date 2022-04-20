@@ -58,7 +58,7 @@ class Session {
                 return false;
             }
         } catch (err) {
-            console.log('Error getting session from DynamoDB: ' + err);
+            console.error('Error getting session from DynamoDB: ' + err);
             throw err;
         }
     }
@@ -112,7 +112,7 @@ class Session {
             await this.dbClient.send(command);
         } 
         catch (err) {
-            console.log('Error updating session in DynamoDB: ' + err);
+            console.error('Error updating session in DynamoDB: ' + err);
             throw err;
         }
     }
