@@ -1,0 +1,17 @@
+{
+  "name": "monitoring-lambda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "npx jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.26.1"
+  }
+}
