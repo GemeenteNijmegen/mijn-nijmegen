@@ -25,20 +25,10 @@
         }
     },
     {
-        "type": "divider"
-    },
-    {
-        "type": "actions",
-        "elements": [
-            {
-                "type": "button",
-                "text": {
-                    "type": "plain_text",
-                    "text": "Open log",
-                    "emoji": true
-                },
-                "url": "<URL>"
-            }
-        ]
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": "<<URL>|bekijk logs>"
+        }
     }
 ]

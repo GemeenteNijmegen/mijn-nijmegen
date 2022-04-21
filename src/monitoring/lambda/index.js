@@ -25,14 +25,13 @@ function formatCloudwatchUrl(logGroup, logStream, timestamp) {
 }
 
 function formatCloudwatchUrlString(string) {
-    return string.replace(/\//g, '$252F').replace(/\[/g, '$2524').replace(/]/g, '$255D').replace(/$/g, '$2524');
+    return string.replace(/\$/g, '$2524').replace(/\//g, '$252F').replace(/\[/g, '$255B').replace(/\]/g, '$255D');
 }
 
 function createMessage(logs) {
     const logGroup = logs.logGroup;
     const logStream = logs.logStream;
     const logEvents = logs.logEvents;
-    console.log(logs);
     
     const templateBuffer = fs.readFileSync(path.join(__dirname, 'template.json'));
     const templateString = templateBuffer.toString();
@@ -58,7 +57,7 @@ async function sendMessage(message) {
 }
 
 async function handler(input, context) {
-    const logs = parseData(input.awslogs.data);
+    const logs = parseData(input.awsggs.data);
     const message = createMessage(logs);
     await sendMessage(message);
 };

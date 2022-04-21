@@ -8,8 +8,8 @@ test('Process logs', async () => {
   const file_buffer = fs.readFileSync(path.join(__dirname, filepath));
   const data = file_buffer.toString('base64');
   const logs = parseData(data);
-  expect(logs.logGroup).toContain('CloudTrail');
+  expect(logs.logGroup).toContain('/aws/lambda/mijn-api-api-stack');
 
   const message = createMessage(logs);
-  expect(message.blocks).toHaveLength(15);
+  expect(message.blocks).toHaveLength(5);
 });
