@@ -57,7 +57,7 @@ async function sendMessage(message) {
 }
 
 async function handler(input, context) {
-    const logs = parseData(input.awsggs.data);
+    const logs = parseData(input.awslogs.data);
     const message = createMessage(logs);
     await sendMessage(message);
 };
