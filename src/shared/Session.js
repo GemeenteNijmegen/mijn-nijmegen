@@ -139,5 +139,27 @@ class Session {
         this.state = state;
         this.sessionId = sessionId;
     }
+
+    /**
+     * Create a new session, store in dynamodb
+     */
+     async createLoggedInSession(bsn) {
+        const sessionId = crypto.randomUUID();
+        const now = new Date();
+        const ttl = Math.floor((now / 1000) + 15 * 60).toString(); // ttl is 15 minutes
+
+        const command = new PutItemCommand({
+            TableName: process.env.SESSION_TABLE,
+            Item: {
+                'sessionid': { S: sessionId },
+                'bsn': { S: bsn },
+                'ttl': { N: ttl },
+                'loggedin': { BOOL: true }
+            }
+        });
+        await this.dbClient.send(command);
+        this.sessionId = sessionId;
+        return sessionId;
+    }
 }
 exports.Session = Session;

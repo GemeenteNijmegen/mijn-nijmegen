@@ -1,13 +1,14 @@
 const { Session } = require('./shared/Session');
 const { OpenIDConnect } = require('./shared/OpenIDConnect');
 
-function redirectResponse(location, code = 302) {
+function redirectResponse(location, code = 302, cookies) {
     return {
         'statusCode': code,
         'body': '',
         'headers': {
             'Location': location
-        }
+        },
+        'cookies': cookies
     };
 }
 
@@ -23,14 +24,14 @@ async function handleRequest(cookies, queryStringParamCode, queryStringParamStat
     try {
         const claims = await OIDC.authorize(queryStringParamCode, state, queryStringParamState, queryStringParamState);    
         if (claims) {
-            session.updateSession(true, claims.sub);
+            await session.createLoggedInSession(claims.sub);
         } else {
             return redirectResponse('/login');
         }
     } catch (error) {
         console.error(error.message);
-        return redirectResponse('/');
+        return redirectResponse('/login');
     }
-    return redirectResponse('/');
+    return redirectResponse('/', 302, ['session=' + session.sessionId + '; HttpOnly; Secure;']);
 }
 exports.handleRequest = handleRequest;
