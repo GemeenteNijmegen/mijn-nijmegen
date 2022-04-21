@@ -113,8 +113,8 @@ test('Successful auth creates new session', async () => {
     expect.objectContaining({
       input: {
         Item: expect.objectContaining({
-          'bsn': { S: '12345' },
-          'loggedin': { BOOL: true },
+          bsn: { S: '12345' },
+          loggedin: { BOOL: true },
         }),
         TableName: process.env.SESSION_TABLE,
       },
