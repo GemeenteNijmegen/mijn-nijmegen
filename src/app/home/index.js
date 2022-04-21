@@ -28,7 +28,7 @@ exports.handler = async (event, context) => {
         return await requestHandler(params.cookies, apiClient, dynamoDBClient);
     
     } catch (err) {
-        console.debug(err);
+        console.error(err);
         response = {
             'statusCode': 500
         }

@@ -14,7 +14,7 @@ exports.handler = async (event, context) => {
         const params = parseEvent(event);
         return await handleRequest(params.cookies, dynamoDBClient);
     } catch (err) {
-        console.debug(err);
+        console.error(err);
         response = {
             'statusCode': 500
         }

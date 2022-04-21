@@ -1,17 +1,18 @@
 const { Session } = require('./shared/Session');
 const { OpenIDConnect } = require('./shared/OpenIDConnect');
 
-function redirectResponse(location, code = 302) {
+function redirectResponse(location, code = 302, cookies) {
     return {
         'statusCode': code,
         'body': '',
         'headers': {
             'Location': location
-        }
+        },
+        'cookies': cookies
     };
 }
 
-async function handleRequest(cookies, queryStringParamCode, dynamoDBClient) {
+async function handleRequest(cookies, queryStringParamCode, queryStringParamState, dynamoDBClient) {
     let session = new Session(cookies, dynamoDBClient);
     await session.init();
 
@@ -20,13 +21,17 @@ async function handleRequest(cookies, queryStringParamCode, dynamoDBClient) {
     }
     const state = session.state;
     const OIDC = new OpenIDConnect();
-    const claims = await OIDC.authorize(queryStringParamCode, state);
-    if (claims) {
-        session.updateSession(true, claims.sub);
-    } else {
+    try {
+        const claims = await OIDC.authorize(queryStringParamCode, state, queryStringParamState, queryStringParamState);    
+        if (claims) {
+            await session.createLoggedInSession(claims.sub);
+        } else {
+            return redirectResponse('/login');
+        }
+    } catch (error) {
+        console.error(error.message);
         return redirectResponse('/login');
     }
-
-    return redirectResponse('/');
+    return redirectResponse('/', 302, ['session=' + session.sessionId + '; HttpOnly; Secure;']);
 }
 exports.handleRequest = handleRequest;
