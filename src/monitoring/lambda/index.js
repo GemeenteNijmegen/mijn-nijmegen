@@ -38,7 +38,7 @@ function createMessage(logs) {
 exports.createMessage = createMessage;
 
 function sendMessage(message) {
-    axios.post(process.env.WEBHOOK_URL, message);
+    axios.post(process.env.SLACK_WEBHOOK_URL, message);
 }
 
 async function handler(input, context) {
