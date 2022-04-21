@@ -72,7 +72,7 @@ test('Successful auth redirects to home', async () => {
   };
   ddbMock.mockImplementation(() => getItemOutput);
 
-  const result = await handleRequest(`session=${sessionId}`, '', dynamoDBClient);
+  const result = await handleRequest(`session=${sessionId}`, 'state', '12345', dynamoDBClient);
   expect(result.statusCode).toBe(302);
   expect(result.headers.Location).toBe('/');
 });
@@ -90,7 +90,7 @@ test('Successful auth updates session', async () => {
       loggedin: {
         BOOL: false,
       },
-      bsn: {
+      state: {
         S: '12345',
       },
     },
@@ -98,7 +98,7 @@ test('Successful auth updates session', async () => {
   ddbMock.mockImplementation(() => getItemOutput);
 
 
-  const result = await handleRequest(`session=${sessionId}`, '', dynamoDBClient);
+  const result = await handleRequest(`session=${sessionId}`, 'state', '12345', dynamoDBClient);
   expect(ddbMock).toHaveBeenCalledWith(
     expect.objectContaining({
       input: {
@@ -125,7 +125,33 @@ test('Successful auth updates session', async () => {
 });
 
 test('No session redirects to login', async () => {
-  const result = await handleRequest('', '', dynamoDBClient);
+  const result = await handleRequest('', 'state', 'state', dynamoDBClient);
   expect(result.statusCode).toBe(302);
   expect(result.headers.Location).toBe('/login');
+});
+
+
+test('Incorrect state errors', async () => {
+  const sessionId = '12345';
+  const output: GetSecretValueCommandOutput = {
+    $metadata: {},
+    SecretString: 'ditiseennepgeheim',
+  };
+  secretsMock.mockImplementation(() => output);
+  const getItemOutput: Partial<GetItemCommandOutput> = {
+    Item: {
+      loggedin: {
+        BOOL: false,
+      },
+      state: {
+        S: '12345',
+      },
+    },
+  };
+  ddbMock.mockImplementation(() => getItemOutput);
+  const logSpy = jest.spyOn(console, 'error');
+  const result = await handleRequest(`session=${sessionId}`, '12345', 'returnedstate', dynamoDBClient);
+  expect(result.statusCode).toBe(302);
+  expect(result.headers.Location).toBe('/');
+  expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('state does not match session state'));
 });
