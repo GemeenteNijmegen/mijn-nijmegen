@@ -37,14 +37,14 @@ function createMessage(logs) {
 }
 exports.createMessage = createMessage;
 
-function sendMessage(message) {
-    axios.post(process.env.SLACK_WEBHOOK_URL, message);
+async function sendMessage(message) {
+    await axios.post(process.env.SLACK_WEBHOOK_URL, message);
 }
 
 async function handler(input, context) {
     const logs = parseData(input.awslogs.data);
     const message = createMessage(logs);
-    sendMessage(message);
-
+    await sendMessage(message);
 };
+
 exports.handler = handler;
