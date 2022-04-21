@@ -11,5 +11,5 @@ test('Process logs', async () => {
   expect(logs.logGroup).toContain('/aws/lambda/mijn-api-api-stack');
 
   const message = createMessage(logs);
-  expect(message.blocks).toHaveLength(5);
+  expect(message.blocks).toHaveLength(4);
 });
