@@ -12,6 +12,22 @@ function parseData(data) {
 }
 exports.parseData = parseData;
 
+function formatCloudwatchUrl(logGroup, logStream, timestamp) {
+    const urlBase = 'https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/';
+    let urlString = urlBase + formatCloudwatchUrlString(logGroup) + '/log-events/' + formatCloudwatchUrlString(logStream);
+    if(timestamp) { 
+        const millis = 5000;
+        const timestampStart = timestamp - millis;
+        const timestampEnd = timestamp + millis;
+        urlString = urlString + '$3Fstart$3D' + timestampStart + '$26end$3D' + timestampEnd; 
+    }
+    return urlString;
+}
+
+function formatCloudwatchUrlString(string) {
+    return string.replace(/\$/g, '$2524').replace(/\//g, '$252F').replace(/\[/g, '$255B').replace(/\]/g, '$255D');
+}
+
 function createMessage(logs) {
     const logGroup = logs.logGroup;
     const logStream = logs.logStream;
@@ -27,8 +43,7 @@ function createMessage(logs) {
         let eventMessage = JSON.stringify('```' + event.message + '```');
         
         blockString = blockString.replace('<MESSAGE>', eventMessage);
-        const urlBase = 'https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group';
-        const urlString = urlBase + encodeURIComponent(logGroup) + '/log-events/' + encodeURIComponent(logStream);
+        const urlString = formatCloudwatchUrl(logGroup, logStream, event.timestamp);
         blockString = blockString.replace('<URL>', urlString);
         const block = JSON.parse(blockString);
         message.blocks = message.blocks.concat(block);
