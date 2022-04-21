@@ -32,6 +32,7 @@ function createMessage(logs) {
     const logGroup = logs.logGroup;
     const logStream = logs.logStream;
     const logEvents = logs.logEvents;
+    console.log(logs);
     
     const templateBuffer = fs.readFileSync(path.join(__dirname, 'template.json'));
     const templateString = templateBuffer.toString();
