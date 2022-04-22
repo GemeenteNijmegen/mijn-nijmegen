@@ -53,7 +53,7 @@ export class ApiFunction extends Construct {
    * @param filterPattern Pattern to filter by (default: containing ERROR)
    */
   private monitor(monitoredBy: Lambda.IFunction, filterPattern?: IFilterPattern) {
-    new SubscriptionFilter(this, 'form-container-error-logs-subscription', {
+    new SubscriptionFilter(this, 'error-logs-subscription', {
       logGroup: this.lambda.logGroup,
       destination: new LambdaDestination(monitoredBy),
       filterPattern: filterPattern ?? FilterPattern.anyTerm('ERROR'),
