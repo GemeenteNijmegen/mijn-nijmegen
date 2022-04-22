@@ -25,7 +25,7 @@ export class DNSSECStack extends Stack {
 
   setDNSSEC() {
     this.addDNSSecKey(); // Keep the key (might be deleted if the imported key works later on)
-    
+
     const parameters = new RemoteParameters(this, 'params', {
       path: `${Statics.ssmZonePath}/`,
       region: 'eu-west-1',
