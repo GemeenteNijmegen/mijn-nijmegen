@@ -1,3 +1,5 @@
+import { writeFile } from 'fs';
+import * as path from 'path';
 import { DynamoDBClient, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { SecretsManagerClient, GetSecretValueCommandOutput } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'jest-aws-client-mock';
@@ -62,4 +64,5 @@ test('Shows overview page', async () => {
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   const result = await requestHandler('session=12345', apiClient, dynamoDBClient);
   expect(result.body).toMatch('Mijn Nijmegen');
+  writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => {});
 });

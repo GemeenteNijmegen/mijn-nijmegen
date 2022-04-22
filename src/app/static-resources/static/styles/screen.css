@@ -60,3 +60,20 @@ table tr th {
 footer.page-footer {
     margin-top: 4rem;
 }
+
+/* svg icons for mdi: not part of component library (yet) */
+.card-body svg {
+    fill: #a80a2d;
+}
+
+.footer-content .link-list li svg {
+    font-size: 1.1875rem;
+    padding: .625rem .5rem;
+    width: 35px;
+    height: 40px;
+    fill: white;
+}
+
+.navbar-nav svg {
+    fill: white;
+}

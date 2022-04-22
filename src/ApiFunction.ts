@@ -1,6 +1,5 @@
 import * as path from 'path';
 import { aws_lambda as Lambda, aws_dynamodb, aws_ssm as SSM } from 'aws-cdk-lib';
-import { Function } from 'aws-cdk-lib/aws-lambda';
 import { FilterPattern, IFilterPattern, RetentionDays, SubscriptionFilter } from 'aws-cdk-lib/aws-logs';
 import { LambdaDestination } from 'aws-cdk-lib/aws-logs-destinations';
 import { Construct } from 'constructs';
@@ -13,7 +12,7 @@ export interface ApiFunctionProps {
   tablePermissions: string;
   applicationUrlBase?: string;
   environment?: {[key: string]: string};
-  monitoredBy?: Function;
+  monitoredBy?: Lambda.IFunction;
   monitorFilterPattern?: IFilterPattern;
 }
 
@@ -53,8 +52,8 @@ export class ApiFunction extends Construct {
    * @param monitoredBy Lambda function responsible for monitoring this function
    * @param filterPattern Pattern to filter by (default: containing ERROR)
    */
-  private monitor(monitoredBy: Function, filterPattern?: IFilterPattern) {
-    new SubscriptionFilter(this, 'form-container-error-logs-subscription', {
+  private monitor(monitoredBy: Lambda.IFunction, filterPattern?: IFilterPattern) {
+    new SubscriptionFilter(this, 'error-logs-subscription', {
       logGroup: this.lambda.logGroup,
       destination: new LambdaDestination(monitoredBy),
       filterPattern: filterPattern ?? FilterPattern.anyTerm('ERROR'),
