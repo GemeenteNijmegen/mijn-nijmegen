@@ -1,4 +1,3 @@
-import { DefaultWafwebaclProps } from '@aws-solutions-constructs/core';
 import { ArnFormat, aws_ssm as SSM, aws_wafv2, Stack, StackProps } from 'aws-cdk-lib';
 import { LogGroup } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
@@ -7,7 +6,87 @@ import { Statics } from './statics';
 export class WafStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps) {
     super(scope, id, props);
-    const acl = new aws_wafv2.CfnWebACL(this, 'waf', DefaultWafwebaclProps('CLOUDFRONT'));
+    const acl = new aws_wafv2.CfnWebACL(this, 'waf-mijnNijmegen', {
+      defaultAction: { allow: {} },
+      description: 'used for the mijnNijmegen apps',
+      name: 'mijnNijmegenWaf',
+      visibilityConfig: {
+        sampledRequestsEnabled: true,
+        cloudWatchMetricsEnabled: true,
+        metricName: 'mijnNijmegen-web-acl',
+      },
+      rules: [
+        {
+          priority: 0,
+          overrideAction: { none: {} },
+          visibilityConfig: {
+            sampledRequestsEnabled: true,
+            cloudWatchMetricsEnabled: true,
+            metricName: 'AWS-ManagedRulesBotControlRuleSet',
+          },
+          name: 'AWS-ManagedRulesBotControlRuleSet',
+          statement: {
+            managedRuleGroupStatement: {
+              vendorName: 'AWS',
+              name: 'AWSManagedRulesBotControlRuleSet',
+            },
+          },
+        },
+        {
+          priority: 1,
+          action: { block: {} },
+          visibilityConfig: {
+            sampledRequestsEnabled: true,
+            cloudWatchMetricsEnabled: true,
+            metricName: 'AWS-RateBasedStatement',
+          },
+          name: 'RateBasedStatement',
+          statement: {
+            rateBasedStatement: {
+              aggregateKeyType: 'IP',
+              //Valid Range: Minimum value of 100. Maximum value of 2000000000.
+              limit: 500,
+            },
+          },
+        },
+        {
+          priority: 2,
+          overrideAction: { none: {} },
+          visibilityConfig: {
+            sampledRequestsEnabled: true,
+            cloudWatchMetricsEnabled: true,
+            metricName: 'AWS-AmazonIpReputationList',
+          },
+          name: 'AWS-AmazonIpReputationList',
+          statement: {
+            managedRuleGroupStatement: {
+              vendorName: 'AWS',
+              name: 'AWSManagedRulesAmazonIpReputationList',
+            },
+          },
+        },
+        {
+          priority: 3,
+          overrideAction: { none: {} },
+          visibilityConfig: {
+            sampledRequestsEnabled: true,
+            cloudWatchMetricsEnabled: true,
+            metricName: 'AWS-AWSManagedRulesCommonRuleSet',
+          },
+          name: 'AWS-AWSManagedRulesCommonRuleSet',
+          statement: {
+            managedRuleGroupStatement: {
+              vendorName: 'AWS',
+              name: 'AWSManagedRulesCommonRuleSet',
+            },
+          },
+        },
+      ],
+
+      scope: 'CLOUDFRONT',
+    });
+
+
     new SSM.StringParameter(this, 'mijn-acl-id', {
       stringValue: acl.attrArn,
       parameterName: Statics.ssmWafAclArn,
