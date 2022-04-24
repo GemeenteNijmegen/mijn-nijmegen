@@ -35,6 +35,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     },
   },
   scripts: {
+    'lint': 'cfn-lint cdk.out/**/*.template.json -i W3005 W2001',
     'install:login': 'copyfiles -f src/shared/*.js src/app/login/shared && cd src/app/login && npm install',
     'install:auth': 'copyfiles -f src/shared/*.js src/app/auth/shared && cd src/app/auth && npm install',
     'install:home': 'copyfiles -f src/shared/*.js src/app/home/shared && cd src/app/home && npm install',
@@ -53,4 +54,12 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     '.DS_Store',
   ],
 });
+
+/**
+ * Add cfn-lint step to build after compiling.
+ */
+const postCompile = project.tasks.tryFind('post-compile');
+const lint = project.tasks.tryFind('lint');
+postCompile.spawn(lint);
+
 project.synth();
