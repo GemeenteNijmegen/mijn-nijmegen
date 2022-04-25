@@ -1,3 +1,5 @@
+import { writeFile } from 'fs';
+import * as path from 'path';
 import { DynamoDBClient, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'jest-aws-client-mock';
 import { handleRequest } from '../handleRequest';
@@ -25,6 +27,7 @@ test('Return login page with correct link', async () => {
   expect(result.body).toMatch(`${process.env.AUTH_URL_BASE}/broker/sp/oidc/authenticate`);
   expect(result.body).toMatch(encodeURIComponent(`${process.env.APPLICATION_URL_BASE}auth`));
   expect(result.statusCode).toBe(200);
+  writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => {});
 });
 
 test('No redirect if session cookie doesn\'t exist', async () => {

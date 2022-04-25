@@ -46,7 +46,7 @@
           crossorigin="anonymous">
     <!-- End: Core styling -->
     <link rel="stylesheet" href="/static/styles/screen.css">
-    <title>Mijn Nijmegen</title>
+    <title>Mijn Nijmegen{{#title}} - {{.}} {{/title}}</title>
     </head>
 <body>
 <nav class="navbar fixed-top navbar-expand-lg scrolling-navbar navbar-primary">
@@ -67,6 +67,7 @@
                 <img src="https://componenten.nijmegen.nl/v6.0.0/img/beeldmerkwit.svg" class="logo" aria-hidden="true" alt="">
             </div>
         </a>
+        {{#shownav}}
         <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="navbar-nav mr-auto nijmegen-smooth-scroll">
                 <li class="nav-item">
@@ -87,5 +88,6 @@
                 </li>
             </ul>
         </div>
+        {{/shownav}}
     </div>
 </nav>

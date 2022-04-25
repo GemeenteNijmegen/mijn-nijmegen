@@ -23,7 +23,11 @@ exports.requestHandler = async (cookies, apiClient, dynamoDBClient) => {
     const brpApi = new BrpApi(apiClient);
     const brpData = await brpApi.getBrpData(bsn);
     const naam = brpData?.Persoon?.Persoonsgegevens?.Naam ? brpData.Persoon.Persoonsgegevens.Naam : 'Onbekende gebruiker';
-    data = { volledigenaam: naam };
+    data = { 
+        title: 'overzicht',
+        shownav: true,
+        volledigenaam: naam 
+    };
 
     // render page
     const html = await render(data, __dirname + '/templates/home.mustache', { 
