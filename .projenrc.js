@@ -1,3 +1,4 @@
+const { appendFile } = require('fs');
 const { awscdk } = require('projen');
 const project = new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '2.20.0',
@@ -53,3 +54,5 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     '.DS_Store',
   ],
 });
+
+project.synth();
