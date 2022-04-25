@@ -35,7 +35,6 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     },
   },
   scripts: {
-    'lint': 'cfn-lint cdk.out/**/*.template.json -i W3005 W2001',
     'install:login': 'copyfiles -f src/shared/*.js src/app/login/shared && cd src/app/login && npm install',
     'install:auth': 'copyfiles -f src/shared/*.js src/app/auth/shared && cd src/app/auth && npm install',
     'install:home': 'copyfiles -f src/shared/*.js src/app/home/shared && cd src/app/home && npm install',
