@@ -1,4 +1,4 @@
-/* Disable loading of source sans pro until the component library styles have removed or self hosted them */
+/* Disable loading of source sans pro until the component library styles have removed or self hosted them 
 @font-face {
     font-family: 'Source Sans Pro';
     font-style: italic;
