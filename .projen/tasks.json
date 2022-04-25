@@ -170,6 +170,14 @@
         }
       ]
     },
+    "install:monitoring": {
+      "name": "install:monitoring",
+      "steps": [
+        {
+          "exec": "cd src/monitoring/lambda && npm install"
+        }
+      ]
+    },
     "package": {
       "name": "package",
       "description": "Creates the distribution package"
@@ -191,7 +199,7 @@
       "name": "postinstall",
       "steps": [
         {
-          "exec": "npm run install:login && npm run install:auth && npm run install:home && npm run install:logout"
+          "exec": "npm run install:login && npm run install:auth && npm run install:home && npm run install:logout && npm run install:monitoring"
         }
       ]
     },
@@ -238,7 +246,7 @@
       "description": "Synthesizes your cdk app into cdk.out and suppresses the template in stdout (part of \"yarn build\")",
       "steps": [
         {
-          "exec": "cdk synth > /dev/null"
+          "exec": "cdk synth -q"
         }
       ]
     },

@@ -1,6 +1,6 @@
 const { awscdk } = require('projen');
 const project = new awscdk.AwsCdkTypeScriptApp({
-  cdkVersion: '2.20.0',
+  cdkVersion: '2.21.1',
   cdkVersionPinning: true,
   defaultReleaseBranch: 'production',
   release: true,
@@ -39,7 +39,8 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'install:auth': 'copyfiles -f src/shared/*.js src/app/auth/shared && cd src/app/auth && npm install',
     'install:home': 'copyfiles -f src/shared/*.js src/app/home/shared && cd src/app/home && npm install',
     'install:logout': 'copyfiles -f src/shared/*.js src/app/logout/shared && cd src/app/logout && npm install',
-    'postinstall': 'npm run install:login && npm run install:auth && npm run install:home && npm run install:logout',
+    'install:monitoring': 'cd src/monitoring/lambda && npm install',
+    'postinstall': 'npm run install:login && npm run install:auth && npm run install:home && npm run install:logout && npm run install:monitoring',
   },
   eslintOptions: {
     devdirs: ['src/app/login/tests', 'src/app/auth/tests', 'src/app/home/tests', 'src/app/uitkeringen/tests', 'src/app/logout/tests', '/test', '/build-tools'],
@@ -48,6 +49,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     '.env',
     '.vscode',
     'src/app/**/shared',
+    'src/app/**/tests/output',
     '.DS_Store',
   ],
 });

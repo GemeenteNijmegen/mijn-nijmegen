@@ -72,13 +72,13 @@ test('Successful auth redirects to home', async () => {
   };
   ddbMock.mockImplementation(() => getItemOutput);
 
-  const result = await handleRequest(`session=${sessionId}`, '', dynamoDBClient);
+  const result = await handleRequest(`session=${sessionId}`, 'state', '12345', dynamoDBClient);
   expect(result.statusCode).toBe(302);
   expect(result.headers.Location).toBe('/');
 });
 
 
-test('Successful auth updates session', async () => {
+test('Successful auth creates new session', async () => {
   const sessionId = '12345';
   const output: GetSecretValueCommandOutput = {
     $metadata: {},
@@ -90,7 +90,7 @@ test('Successful auth updates session', async () => {
       loggedin: {
         BOOL: false,
       },
-      bsn: {
+      state: {
         S: '12345',
       },
     },
@@ -98,7 +98,7 @@ test('Successful auth updates session', async () => {
   ddbMock.mockImplementation(() => getItemOutput);
 
 
-  const result = await handleRequest(`session=${sessionId}`, '', dynamoDBClient);
+  const result = await handleRequest(`session=${sessionId}`, 'state', '12345', dynamoDBClient);
   expect(ddbMock).toHaveBeenCalledWith(
     expect.objectContaining({
       input: {
@@ -111,21 +111,48 @@ test('Successful auth updates session', async () => {
   );
   expect(ddbMock).toHaveBeenCalledWith(
     expect.objectContaining({
-      input: expect.objectContaining({
-        ExpressionAttributeValues: expect.objectContaining({
-          ':loggedin': { BOOL: true },
-          ':bsn': { S: '12345' },
+      input: {
+        Item: expect.objectContaining({
+          bsn: { S: '12345' },
+          loggedin: { BOOL: true },
         }),
         TableName: process.env.SESSION_TABLE,
-      }),
+      },
     }),
   );
   expect(result.statusCode).toBe(302);
   expect(result.headers.Location).toBe('/');
+  expect(result.cookies).toContainEqual(expect.stringContaining('session='));
 });
 
 test('No session redirects to login', async () => {
-  const result = await handleRequest('', '', dynamoDBClient);
+  const result = await handleRequest('', 'state', 'state', dynamoDBClient);
   expect(result.statusCode).toBe(302);
   expect(result.headers.Location).toBe('/login');
+});
+
+
+test('Incorrect state errors', async () => {
+  const sessionId = '12345';
+  const output: GetSecretValueCommandOutput = {
+    $metadata: {},
+    SecretString: 'ditiseennepgeheim',
+  };
+  secretsMock.mockImplementation(() => output);
+  const getItemOutput: Partial<GetItemCommandOutput> = {
+    Item: {
+      loggedin: {
+        BOOL: false,
+      },
+      state: {
+        S: '12345',
+      },
+    },
+  };
+  ddbMock.mockImplementation(() => getItemOutput);
+  const logSpy = jest.spyOn(console, 'error');
+  const result = await handleRequest(`session=${sessionId}`, '12345', 'returnedstate', dynamoDBClient);
+  expect(result.statusCode).toBe(302);
+  expect(result.headers.Location).toBe('/login');
+  expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('state does not match session state'));
 });

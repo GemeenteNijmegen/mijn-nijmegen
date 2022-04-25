@@ -157,10 +157,22 @@ export class CloudfrontStack extends Stack {
         }),
         responseHeadersPolicy: this.responseHeadersPolicy(),
       },
+      errorResponses: this.errorResponses(),
       logBucket: this.logBucket(),
-      minimumProtocolVersion: SecurityPolicyProtocol.TLS_V1_2_2019,
+      minimumProtocolVersion: SecurityPolicyProtocol.TLS_V1_2_2021,
     });
     return distribution;
+  }
+
+  private errorResponses() {
+    const errorCodes = [403, 404, 500, 503];
+    return errorCodes.map(code => {
+      return {
+        httpStatus: code,
+        responseHttpStatus: code,
+        responsePagePath: `/static/http-errors/${code}.html`,
+      };
+    });
   }
 
   /**

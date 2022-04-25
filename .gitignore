@@ -33,6 +33,7 @@ jspm_packages/
 .env
 .vscode
 src/app/**/shared
+src/app/**/tests/output
 .DS_Store
 !/.projenrc.js
 /test-reports/

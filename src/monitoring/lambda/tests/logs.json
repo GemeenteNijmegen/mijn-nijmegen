@@ -1,0 +1,16 @@
+{
+    "messageType": "DATA_MESSAGE",
+    "owner": "315037222840",
+    "logGroup": "/aws/lambda/mijn-api-api-stack-authfunctionlambdaCE7349A6-qfpZq3sgnDX2",
+    "logStream": "2022/04/21/[$LATEST]74f2d86ff9754633a4d13afbc3ff4bb0",
+    "subscriptionFilters": [
+        "mijn-api-api-stack-authfunctionformcontainererrorlogssubscription188B2569-10KVHSEGFEW8U"
+    ],
+    "logEvents": [
+        {
+            "id": "36808409967672311736535951693060863243389192962158034947",
+            "timestamp": 1650546187582,
+            "message": "2022-04-21T13:03:07.544Zt9e2958f2-dde7-469e-ae7e-572ed1f96455tERRORtstate does not match session staten"
+        }
+    ]
+}

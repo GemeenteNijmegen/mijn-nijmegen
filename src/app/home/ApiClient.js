@@ -86,7 +86,6 @@ class ApiClient {
                 // that falls out of the range of 2xx
                 console.log('http status for ' + endpoint + ': ' + error.response.status);
                 return error.response.data;
-                console.debug('return response from ' + endpoint);
               } else if (error.request) {
                 // The request was made but no response was received
                 // `error.request` is an instance of XMLHttpRequest in the browser and an instance of

@@ -87,7 +87,7 @@ class OpenIDConnect {
      * @param {string} state 
      * @returns {object | false} returns a claims object on succesful auth
      */
-    async authorize(code, state) {
+    async authorize(code, state, returnedState) {
         const base_url = new URL(process.env.APPLICATION_URL_BASE);
         const redirect_uri = new URL('/auth', base_url);
         const client_secret = await this.getOidcClientSecret();
@@ -97,22 +97,21 @@ class OpenIDConnect {
             client_secret: client_secret,
             response_types: ['code'],
         });
-        const params = client.callbackParams(redirect_uri + '/?code=' + code + '&state=' + state);
-        try { 
-            const tokenSet = await client.callback(redirect_uri, params, { state: state });
-            console.log(tokenSet);
-            const claims = tokenSet.claims();
-            if(claims.aud != process.env.OIDC_CLIENT_ID) { 
-                return false;
-            }
-            return claims;
-        } catch(err) {
-            console.error(`Error -1: ${err.error} ${err.error_description}`);
-            console.error(err.response);
-            console.error(err);
-            console.trace();
-            return false;
+        const params = client.callbackParams(redirect_uri + '/?code=' + code + '&state=' + returnedState);
+        if(state !== returnedState) {
+            throw new Error('state does not match session state');
         }
+        let tokenSet;
+        try {
+            tokenSet = await client.callback(redirect_uri, params, { state: state });
+        } catch(err) {
+            throw new Error(`${err.error} ${err.error_description}`);
+        }
+        const claims = tokenSet.claims();
+        if(claims.aud != process.env.OIDC_CLIENT_ID) { 
+            throw new Error('claims aud does not match client id');
+        }
+        return claims;
        
     }
     

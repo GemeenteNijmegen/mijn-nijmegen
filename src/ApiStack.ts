@@ -1,8 +1,9 @@
+import * as path from 'path';
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import { aws_secretsmanager, Stack, StackProps, aws_ssm as SSM } from 'aws-cdk-lib';
+import { aws_secretsmanager, Stack, StackProps, aws_ssm as SSM, aws_lambda as Lambda } from 'aws-cdk-lib';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
-// import { HostedZone } from 'aws-cdk-lib/aws-route53';
+import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
 import { SessionsTable } from './SessionsTable';
@@ -38,22 +39,51 @@ export class ApiStack extends Stack {
 
     const subdomain = Statics.subDomain(props.branch);
     const appDomain = `${subdomain}.nijmegen.nl`;
-    this.setFunctions(`https://${appDomain}/`);
+
+    const monitoringLambda = this.monitoringLambda();
+
+    this.setFunctions(`https://${appDomain}/`, monitoringLambda);
   }
 
+
+  /**
+   * Create a lambda function to monitor cloudwatch logs
+   *
+   * @returns {Lambda.Function} a lambda responsible for monitoring cloudwatch logs
+   */
+  private monitoringLambda(): Lambda.Function {
+    let webhookUrl = SSM.StringParameter.valueForStringParameter(this, Statics.ssmSlackWebhookUrl);
+    const lambda = new Lambda.Function(this, 'lambda', {
+      runtime: Lambda.Runtime.NODEJS_14_X,
+      handler: 'index.handler',
+      description: 'Monitor Mijn Nijmegen cloudwatch logs',
+      code: Lambda.Code.fromAsset(path.join(__dirname, 'monitoring', 'lambda')),
+      logRetention: RetentionDays.ONE_MONTH,
+      environment: {
+        SLACK_WEBHOOK_URL: webhookUrl,
+      },
+    });
+
+    new SSM.StringParameter(this, 'ssm_slack_1', {
+      stringValue: lambda.functionArn,
+      parameterName: Statics.ssmMonitoringLambdaArn,
+    });
+    return lambda;
+  }
 
   /**
    * Create and configure lambda's for all api routes, and
    * add routes to the gateway.
    * @param {string} baseUrl the application url
    */
-  setFunctions(baseUrl: string) {
+  setFunctions(baseUrl: string, monitoringLambda: Lambda.Function) {
     const loginFunction = new ApiFunction(this, 'login-function', {
       description: 'Login-pagina voor de Mijn Uitkering-applicatie.',
       codePath: 'app/login',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
+      monitoredBy: monitoringLambda,
     });
 
     const logoutFunction = new ApiFunction(this, 'logout-function', {
@@ -62,6 +92,7 @@ export class ApiStack extends Stack {
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
+      monitoredBy: monitoringLambda,
     });
 
     const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
@@ -71,6 +102,7 @@ export class ApiStack extends Stack {
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
+      monitoredBy: monitoringLambda,
       environment: {
         CLIENT_SECRET_ARN: oidcSecret.secretArn,
       },
@@ -86,6 +118,7 @@ export class ApiStack extends Stack {
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
+      monitoredBy: monitoringLambda,
       environment: {
         MTLS_PRIVATE_KEY_ARN: secretMTLSPrivateKey.secretArn,
         MTLS_CLIENT_CERT_NAME: Statics.ssmMTLSClientCert,
