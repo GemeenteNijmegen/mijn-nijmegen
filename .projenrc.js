@@ -54,12 +54,3 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     '.DS_Store',
   ],
 });
-
-/**
- * Add cfn-lint step to build after compiling.
- */
-const postCompile = project.tasks.tryFind('post-compile');
-const lint = project.tasks.tryFind('lint');
-postCompile.spawn(lint);
-
-project.synth();
