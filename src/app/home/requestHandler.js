@@ -26,7 +26,10 @@ exports.requestHandler = async (cookies, apiClient, dynamoDBClient) => {
     data = { volledigenaam: naam };
 
     // render page
-    const html = await render(data, __dirname + '/templates/home.mustache');
+    const html = await render(data, __dirname + '/templates/home.mustache', { 
+        'header': `${__dirname}/shared/header.mustache`,
+        'footer': `${__dirname}/shared/footer.mustache`
+    });
     response = {
         'statusCode': 200,
         'body': html,
