@@ -161,5 +161,13 @@ class Session {
         this.sessionId = sessionId;
         return sessionId;
     }
+
+    getCookie() {
+        const cookieString = cookie.serialize('session', this.sessionId, {
+            httpOnly: true,
+            secure: true
+        });
+        return cookieString;
+    }
 }
 exports.Session = Session;

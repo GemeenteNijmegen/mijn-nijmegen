@@ -32,6 +32,6 @@ async function handleRequest(cookies, queryStringParamCode, queryStringParamStat
         console.error(error.message);
         return redirectResponse('/login');
     }
-    return redirectResponse('/', 302, ['session=' + session.sessionId + '; HttpOnly; Secure;']);
+    return redirectResponse('/', 302, [session.getCookie()]);
 }
 exports.handleRequest = handleRequest;
