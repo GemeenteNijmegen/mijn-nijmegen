@@ -24,7 +24,7 @@ export class DNSSECStack extends Stack {
   }
 
   setDNSSEC() {
-    this.addDNSSecKey(); // Keep the key (might be deleted if the imported key works later on)
+    const key = this.addDNSSecKey(); // Keep the key (might be deleted if the imported key works later on)
 
     const parameters = new RemoteParameters(this, 'params', {
       path: `${Statics.ssmZonePath}/`,
@@ -34,17 +34,24 @@ export class DNSSECStack extends Stack {
 
     const accountDnssecKmsKeyArn = SSM.StringParameter.valueForStringParameter(this, Statics.ssmAccountDnsSecKmsKey);
 
-    const dnssecKeySigning = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key', {
+    new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key', { // Keep the origional KSK for now
       name: 'dnssec_with_kms',
       status: 'ACTIVE',
       hostedZoneId: zoneId,
-      keyManagementServiceArn: accountDnssecKmsKeyArn, // Use the key created in dns-managment repository.
+      keyManagementServiceArn: key.keyArn,
+    });
+
+    const dnssecKeySigning2 = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key-2', { // Create a new KSK using the imported KMS key
+      name: 'mijn_nijmegen_ksk',
+      status: 'ACTIVE',
+      hostedZoneId: zoneId,
+      keyManagementServiceArn: accountDnssecKmsKeyArn,
     });
 
     const dnssec = new Route53.CfnDNSSEC(this, 'dnssec', {
       hostedZoneId: zoneId,
     });
-    dnssec.node.addDependency(dnssecKeySigning);
+    dnssec.node.addDependency(dnssecKeySigning2);
   }
 
   addDNSSecKey() {
