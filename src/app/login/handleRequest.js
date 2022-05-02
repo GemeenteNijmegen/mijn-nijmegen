@@ -42,7 +42,7 @@ async function handleRequest(cookies, dynamoDBClient) {
         'header': `${__dirname}/shared/header.mustache`,
         'footer': `${__dirname}/shared/footer.mustache`
     });
-    const newCookies = ['session=' + session.sessionId + '; HttpOnly; Secure;'];
+    const newCookies = [session.getCookie()];
     return htmlResponse(html, newCookies);
 }
 exports.handleRequest = handleRequest;

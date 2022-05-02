@@ -12,7 +12,7 @@ function redirectResponse(location, code = 302) {
     }
 }
 
-exports.requestHandler = async (cookies, apiClient, dynamoDBClient) => {
+exports.homeRequestHandler = async (cookies, apiClient, dynamoDBClient) => {
     let session = new Session(cookies, dynamoDBClient);
     await session.init();
     if (session.isLoggedIn() !== true) {
@@ -41,7 +41,7 @@ exports.requestHandler = async (cookies, apiClient, dynamoDBClient) => {
             'Content-type': 'text/html'
         },
         'cookies': [
-            'session=' + session.sessionId + '; HttpOnly; Secure;',
+            session.getCookie(),
         ]
     };
     return response;

@@ -4,7 +4,7 @@ import { DynamoDBClient, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { SecretsManagerClient, GetSecretValueCommandOutput } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'jest-aws-client-mock';
 import { FileApiClient } from '../FileApiClient';
-import { requestHandler } from '../requestHandler';
+import { homeRequestHandler } from '../homeRequestHandler';
 
 beforeAll(() => {
   global.console.log = jest.fn();
@@ -49,9 +49,11 @@ test('Returns 200', async () => {
 
   const apiClient = new FileApiClient();
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-  const result = await requestHandler('session=12345', apiClient, dynamoDBClient);
+  const result = await homeRequestHandler('session=12345', apiClient, dynamoDBClient);
 
   expect(result.statusCode).toBe(200);
+  let cookies = result.cookies.filter((cookie: string) => cookie.indexOf('HttpOnly; Secure'));
+  expect(cookies.length).toBe(1);
 });
 
 test('Shows overview page', async () => {
@@ -62,7 +64,7 @@ test('Shows overview page', async () => {
   secretsMock.mockImplementation(() => output);
   const apiClient = new FileApiClient();
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-  const result = await requestHandler('session=12345', apiClient, dynamoDBClient);
+  const result = await homeRequestHandler('session=12345', apiClient, dynamoDBClient);
   expect(result.body).toMatch('Mijn Nijmegen');
   writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => {});
 });

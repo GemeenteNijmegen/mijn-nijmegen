@@ -1,5 +1,6 @@
 const { Session } = require('./shared/Session');
 const { render } = require('./shared/render');
+const cookie = require('cookie');
 
 function htmlResponse(body, cookies) {
     const response = {
@@ -25,7 +26,10 @@ async function handleRequest(cookies, dynamoDBClient) {
         'header': `${__dirname}/shared/header.mustache`,
         'footer': `${__dirname}/shared/footer.mustache`
     });
-    const newCookies = ['session=; HttpOnly; Secure;'];
-    return htmlResponse(html, newCookies);
+    const emptyCookie = cookie.serialize('session', '', {
+        httpOnly: true,
+        secure: true
+    });
+    return htmlResponse(html, [emptyCookie]);
 }
 exports.handleRequest = handleRequest;
