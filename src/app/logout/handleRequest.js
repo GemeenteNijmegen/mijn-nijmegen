@@ -1,5 +1,6 @@
 const { Session } = require('./shared/Session');
 const { render } = require('./shared/render');
+const cookie = require('cookie');
 
 function htmlResponse(body, cookies) {
     const response = {
@@ -20,8 +21,15 @@ async function handleRequest(cookies, dynamoDBClient) {
     if (session.sessionId !== false) {
         await session.updateSession(false);
     }
-    const html = await render({}, __dirname + '/templates/logout.mustache');
-    const newCookies = ['session=; HttpOnly; Secure;'];
-    return htmlResponse(html, newCookies);
+
+    const html = await render({title : 'Uitgelogd'}, __dirname + '/templates/logout.mustache', { 
+        'header': `${__dirname}/shared/header.mustache`,
+        'footer': `${__dirname}/shared/footer.mustache`
+    });
+    const emptyCookie = cookie.serialize('session', '', {
+        httpOnly: true,
+        secure: true
+    });
+    return htmlResponse(html, [emptyCookie]);
 }
 exports.handleRequest = handleRequest;

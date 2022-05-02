@@ -1,3 +1,5 @@
+import { writeFile } from 'fs';
+import * as path from 'path';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { handleRequest } from '../handleRequest';
 
@@ -18,10 +20,11 @@ beforeAll(() => {
 beforeEach(() => {
 });
 
-test('Return login page with correct link', async () => {
+test('Return logout page', async () => {
   const result = await handleRequest('', dynamoDBClient);
   expect(result.body).toMatch('Uitgelogd');
   expect(result.statusCode).toBe(200);
+  writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => {});
 });
 
 test('Return empty session cookie', async () => {

@@ -33,8 +33,16 @@ async function handleRequest(cookies, dynamoDBClient) {
     const state = OIDC.generateState();
     await session.createSession(state);
     const authUrl = OIDC.getLoginUrl(session.state);
-    const html = await render({ authUrl: authUrl }, __dirname + '/templates/login.mustache');
-    const newCookies = ['session=' + session.sessionId + '; HttpOnly; Secure;'];
+    
+    const data = {
+        title: 'Inloggen',
+        authUrl: authUrl
+    }
+    const html = await render(data, __dirname + '/templates/login.mustache', { 
+        'header': `${__dirname}/shared/header.mustache`,
+        'footer': `${__dirname}/shared/footer.mustache`
+    });
+    const newCookies = [session.getCookie()];
     return htmlResponse(html, newCookies);
 }
 exports.handleRequest = handleRequest;
