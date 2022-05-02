@@ -41,7 +41,7 @@ export class DNSSECStack extends Stack {
       keyManagementServiceArn: key.keyArn,
     });
 
-    const dnssecKeySigning2 = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key-2', { // Create a new KSK using the imported KMS key
+    new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key-2', { // Create a new KSK using the imported KMS key
       name: 'mijn_nijmegen_ksk',
       status: 'ACTIVE',
       hostedZoneId: zoneId,
@@ -53,10 +53,6 @@ export class DNSSECStack extends Stack {
     });
     dnssec.node.addDependency(dnssecKeySigning);
 
-    const dnssec2 = new Route53.CfnDNSSEC(this, 'dnssec2', {
-      hostedZoneId: zoneId,
-    });
-    dnssec2.node.addDependency(dnssecKeySigning2);
   }
 
   addDNSSecKey() {
