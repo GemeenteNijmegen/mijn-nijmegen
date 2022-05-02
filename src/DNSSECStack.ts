@@ -34,9 +34,9 @@ export class DNSSECStack extends Stack {
 
     const accountDnssecKmsKeyArn = SSM.StringParameter.valueForStringParameter(this, Statics.ssmAccountDnsSecKmsKey);
 
-    new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key', { // Keep the origional KSK for now
+    const dnssecKeySigning = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key', { // Keep the origional KSK for now
       name: 'dnssec_with_kms',
-      status: 'INACTIVE',
+      status: 'ACTIVE',
       hostedZoneId: zoneId,
       keyManagementServiceArn: key.keyArn,
     });
@@ -51,7 +51,12 @@ export class DNSSECStack extends Stack {
     const dnssec = new Route53.CfnDNSSEC(this, 'dnssec', {
       hostedZoneId: zoneId,
     });
-    dnssec.node.addDependency(dnssecKeySigning2);
+    dnssec.node.addDependency(dnssecKeySigning);
+
+    const dnssec2 = new Route53.CfnDNSSEC(this, 'dnssec2', {
+      hostedZoneId: zoneId,
+    });
+    dnssec2.node.addDependency(dnssecKeySigning2);
   }
 
   addDNSSecKey() {
