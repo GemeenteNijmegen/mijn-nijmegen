@@ -1,4 +1,4 @@
-const { handleRequest } = require("./handleRequest");
+const { handleLoginRequest } = require("./loginRequestHandler");
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 
 const dynamoDBClient = new DynamoDBClient();
@@ -10,7 +10,7 @@ function parseEvent(event) {
 exports.handler = async (event, context) => {
     try {
         const params = parseEvent(event);
-        const response = await handleRequest(params.cookies, dynamoDBClient);
+        const response = await handleLoginRequest(params.cookies, dynamoDBClient);
         return response;
     } catch (err) {
         console.error(err);
