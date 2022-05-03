@@ -23,7 +23,7 @@ function htmlResponse(body, cookies) {
     return response;
 }
 
-async function handleRequest(cookies, dynamoDBClient) {
+async function handleLoginRequest(cookies, dynamoDBClient) {
     let session = new Session(cookies, dynamoDBClient);
     await session.init();
     if (session.isLoggedIn() === true) {
@@ -45,4 +45,4 @@ async function handleRequest(cookies, dynamoDBClient) {
     const newCookies = [session.getCookie()];
     return htmlResponse(html, newCookies);
 }
-exports.handleRequest = handleRequest;
+exports.handleLoginRequest = handleLoginRequest;

@@ -14,7 +14,7 @@ function htmlResponse(body, cookies) {
     return response;
 }
 
-async function handleRequest(cookies, dynamoDBClient) {
+async function handleLogoutRequest(cookies, dynamoDBClient) {
     let session = new Session(cookies, dynamoDBClient);
     await session.init();
 
@@ -32,4 +32,4 @@ async function handleRequest(cookies, dynamoDBClient) {
     });
     return htmlResponse(html, [emptyCookie]);
 }
-exports.handleRequest = handleRequest;
+exports.handleLogoutRequest = handleLogoutRequest;
