@@ -1,4 +1,4 @@
-import { aws_route53 as Route53, Stack, StackProps, aws_kms as KMS, aws_iam as IAM } from 'aws-cdk-lib';
+import { aws_route53 as Route53, Stack, StackProps, aws_kms as KMS, aws_iam as IAM, aws_ssm as SSM } from 'aws-cdk-lib';
 import { RemoteParameters } from 'cdk-remote-stack';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
@@ -24,24 +24,35 @@ export class DNSSECStack extends Stack {
   }
 
   setDNSSEC() {
-    const key = this.addDNSSecKey();
+    const key = this.addDNSSecKey(); // Keep the key (might be deleted if the imported key works later on)
+
     const parameters = new RemoteParameters(this, 'params', {
       path: `${Statics.ssmZonePath}/`,
       region: 'eu-west-1',
     });
     const zoneId = parameters.get(Statics.ssmZoneIdNew);
 
-    const dnssecKeySigning = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key', {
+    const accountDnssecKmsKeyArn = SSM.StringParameter.valueForStringParameter(this, Statics.ssmAccountDnsSecKmsKey);
+
+    const dnssecKeySigning = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key', { // Keep the origional KSK for now
       name: 'dnssec_with_kms',
       status: 'ACTIVE',
       hostedZoneId: zoneId,
       keyManagementServiceArn: key.keyArn,
     });
 
+    new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key-2', { // Create a new KSK using the imported KMS key
+      name: 'mijn_nijmegen_ksk',
+      status: 'ACTIVE',
+      hostedZoneId: zoneId,
+      keyManagementServiceArn: accountDnssecKmsKeyArn,
+    });
+
     const dnssec = new Route53.CfnDNSSEC(this, 'dnssec', {
       hostedZoneId: zoneId,
     });
     dnssec.node.addDependency(dnssecKeySigning);
+
   }
 
   addDNSSecKey() {

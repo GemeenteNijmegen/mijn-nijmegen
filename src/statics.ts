@@ -82,6 +82,10 @@ export abstract class Statics {
   static readonly ssmMonitoringLambdaArn: string = '/cdk/mijn-nijmegen/monitoring-lambda-arn';
   static readonly ssmSlackWebhookUrl: string = '/cdk/mijn-nijmegen/slack-webhook-url';
 
+  // The KSM key parameters for each account
+  static readonly ssmAccountDnsSecKmsKey: string = '/gemeente-nijmegen/account/dnssec/kmskey/arn';
+
+
   static subDomain(branch: string) {
     const subdomainMap = {
       acceptance: 'mijn.accp',
