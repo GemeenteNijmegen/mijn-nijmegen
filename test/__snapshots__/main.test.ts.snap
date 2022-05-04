@@ -645,7 +645,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.assets.json\\\\\\" --verbose publish \\\\\\"8d3b79272239b065efbb84acdd6d020f9717b6c0191a7e2a97d9d855f4e4021a:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.assets.json\\\\\\" --verbose publish \\\\\\"db6b1b1d10ac786ce3eb5f326510da62c14c0e4477065964c4cdf7a54439f131:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
