@@ -111,10 +111,10 @@ export class DNSStack extends Stack {
     let dsValue = '';
     switch (this.branch) {
       case 'acceptance':
-        dsValue = '50966 13 2 ADE849F9F37042CE5579FE589103CF5314C54889BE7CAE1C4C5F2AC2D60FC4DB';
+        dsValue = '52561 13 2 90CF3C35FDDC30AF42FB4BCCDCCB1123500050D70F1D4886D6DE25502F3BC50A';
         break;
       case 'production':
-        dsValue = '64034 13 2 6EBE76977122564DE8678E5F1A4BC11C44BED7485EEEC579D293517ADF269A52';
+        dsValue = '50491 13 2 635246E6A05CCB40EC910725E9CF98307ACE5C1435D67FF482B2CFA23E0955E6';
         break;
       default:
         break;
