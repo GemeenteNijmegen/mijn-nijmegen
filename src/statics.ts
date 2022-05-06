@@ -5,7 +5,7 @@ export abstract class Statics {
   /**
    * IAM params
    */
-  static readonly ssmIamAccountId: string = '/cdk/mijn-nijmegen/iam-account-id';
+  static readonly iamAccountId: string = '098799052470';
   static readonly ssmReadOnlyRoleArn: string = '/cdk/mijn-nijmegen/role-readonly-arn';
 
   /**
@@ -27,7 +27,7 @@ export abstract class Statics {
   static readonly secretOIDCClientSecret: string = '/cdk/mijn-nijmegen/oidc-clientsecret';
 
   /**
-   * Certificate private key for mTLS
+   * Certificate private key for m  
    */
   static readonly secretMTLSPrivateKey: string = '/cdk/mijn-nijmegen/mtls-privatekey';
 

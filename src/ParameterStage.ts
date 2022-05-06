@@ -43,11 +43,6 @@ export class ssmParamsConstruct extends Construct {
     Tags.of(this).add('cdkManaged', 'yes');
     Tags.of(this).add('Project', Statics.projectName);
 
-    new SSM.StringParameter(this, 'ssm_general_1', {
-      stringValue: '-',
-      parameterName: Statics.ssmIamAccountId,
-    });
-
     /**
      * authentication parameters
      */
