@@ -20,7 +20,6 @@ export interface ApiStageProps extends StageProps {
 export class ApiStage extends Stage {
   constructor(scope: Construct, id: string, props: ApiStageProps) {
     super(scope, id, props);
-    const iamStack = new IAMStack(this, 'iam-stack');
     const keyStack = new KeyStack(this, 'key-stack');
     const sessionsStack = new SessionsStack(this, 'sessions-stack', { key: keyStack.key });
     const dnsStack = new DNSStack(this, 'dns-stack', { branch: props.branch });
