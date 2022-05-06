@@ -31,13 +31,3 @@ test('No session cookie will not update session', async () => {
   }
   expect(ddbMock).toHaveBeenCalledTimes(0);
 });
-
-test('No session cookie will not update session', async () => {
-  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-  const session = new Session('', dynamoDBClient);
-  await session.init();
-  if (session.sessionId !== false) {
-    await session.updateSession(false);
-  }
-  expect(ddbMock).toHaveBeenCalledTimes(0);
-});
