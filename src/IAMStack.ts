@@ -7,11 +7,10 @@ export class IAMStack extends Stack {
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
-    const accountId = aws_ssm.StringParameter.fromStringParameterName(this, 'iamaccount', Statics.iamAccountId);
     const readOnlyRole = new Role(this, 'read-only-role', {
       roleName: 'mijnnijmegen-full-read',
       description: 'Read-only role for Mijn Nijmegen with access to lambdas, logging, session store',
-      assumedBy: new aws_iam.AccountPrincipal(accountId),
+      assumedBy: new aws_iam.AccountPrincipal(Statics.iamAccountId),
     });
     new aws_ssm.StringParameter(this, 'ssm_readonly_role', {
       stringValue: readOnlyRole.roleArn,
