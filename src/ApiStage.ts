@@ -4,7 +4,6 @@ import { ApiStack } from './ApiStack';
 import { CloudfrontStack } from './CloudfrontStack';
 import { DNSSECStack } from './DNSSECStack';
 import { DNSStack } from './DNSStack';
-import { IAMStack } from './IAMStack';
 import { KeyStack } from './keystack';
 import { SessionsStack } from './SessionsStack';
 import { UsEastCertificateStack } from './UsEastCertificateStack';
@@ -33,7 +32,6 @@ export class ApiStage extends Stage {
       branch: props.branch,
       sessionsTable: sessionsStack.sessionsTable,
     });
-    apistack.addDependency(iamStack);
     const cloudfrontStack = new CloudfrontStack(this, 'cloudfront-stack', {
       branch: props.branch,
       hostDomain: apistack.domain(),
