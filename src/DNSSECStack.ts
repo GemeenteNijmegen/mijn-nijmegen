@@ -36,7 +36,7 @@ export class DNSSECStack extends Stack {
 
     const dnssecKeySigning = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key', { // Keep the origional KSK for now
       name: 'dnssec_with_kms',
-      status: 'ACTIVE',
+      status: 'INACTIVE',
       hostedZoneId: zoneId,
       keyManagementServiceArn: key.keyArn,
     });
