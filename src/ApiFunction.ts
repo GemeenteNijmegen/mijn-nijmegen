@@ -1,8 +1,10 @@
 import * as path from 'path';
 import { aws_lambda as Lambda, aws_dynamodb, aws_ssm as SSM } from 'aws-cdk-lib';
+import { Role } from 'aws-cdk-lib/aws-iam';
 import { FilterPattern, IFilterPattern, RetentionDays, SubscriptionFilter } from 'aws-cdk-lib/aws-logs';
 import { LambdaDestination } from 'aws-cdk-lib/aws-logs-destinations';
 import { Construct } from 'constructs';
+import { LambdaReadOnlyPolicy } from './iam/lambda-readonly-policy';
 import { Statics } from './statics';
 
 export interface ApiFunctionProps {
@@ -43,6 +45,7 @@ export class ApiFunction extends Construct {
     if (props.monitoredBy) {
       this.monitor(props.monitoredBy, props.monitorFilterPattern);
     }
+    this.allowAccessToReadOnlyRole();
   }
 
   /**
@@ -58,5 +61,16 @@ export class ApiFunction extends Construct {
       destination: new LambdaDestination(monitoredBy),
       filterPattern: filterPattern ?? FilterPattern.anyTerm('ERROR'),
     });
+  }
+
+  private allowAccessToReadOnlyRole() {
+    const roleArn = SSM.StringParameter.fromStringParameterName(this, 'readonly-role', Statics.ssmReadOnlyRoleArn);
+    const role = Role.fromRoleArn(this, 'read-only-role', roleArn.stringValue);
+    role.addManagedPolicy(
+      new LambdaReadOnlyPolicy(this, 'read-policy', {
+        functionArn: this.lambda.functionArn,
+        logGroupArn: this.lambda.logGroup.logGroupArn,
+      }),
+    );
   }
 }
