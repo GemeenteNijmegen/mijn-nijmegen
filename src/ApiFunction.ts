@@ -16,6 +16,7 @@ export interface ApiFunctionProps {
   environment?: {[key: string]: string};
   monitoredBy?: Lambda.IFunction;
   monitorFilterPattern?: IFilterPattern;
+  readOnlyRole: Role;
 }
 
 export class ApiFunction extends Construct {
@@ -45,7 +46,7 @@ export class ApiFunction extends Construct {
     if (props.monitoredBy) {
       this.monitor(props.monitoredBy, props.monitorFilterPattern);
     }
-    this.allowAccessToReadOnlyRole();
+    this.allowAccessToReadOnlyRole(props.readOnlyRole);
   }
 
   /**
@@ -63,9 +64,7 @@ export class ApiFunction extends Construct {
     });
   }
 
-  private allowAccessToReadOnlyRole() {
-    const roleArn = SSM.StringParameter.fromStringParameterName(this, 'readonly-role', Statics.ssmReadOnlyRoleArn);
-    const role = Role.fromRoleArn(this, 'read-only-role', roleArn.stringValue);
+  private allowAccessToReadOnlyRole(role: Role) {
     role.addManagedPolicy(
       new LambdaReadOnlyPolicy(this, 'read-policy', {
         functionArn: this.lambda.functionArn,
