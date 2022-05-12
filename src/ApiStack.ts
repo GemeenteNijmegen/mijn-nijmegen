@@ -3,13 +3,13 @@ import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
 import { aws_secretsmanager, Stack, StackProps, aws_ssm as SSM, aws_lambda as Lambda } from 'aws-cdk-lib';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
+import { AccountPrincipal, Role } from 'aws-cdk-lib/aws-iam';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
+import { DynamoDbReadOnlyPolicy } from './iam/dynamodb-readonly-policy';
 import { SessionsTable } from './SessionsTable';
 import { Statics } from './statics';
-import { AccountPrincipal, Role } from 'aws-cdk-lib/aws-iam';
-import { DynamoDbReadOnlyPolicy } from './iam/dynamodb-readonly-policy';
 
 export interface ApiStackProps extends StackProps {
   sessionsTable: SessionsTable;
@@ -87,7 +87,7 @@ export class ApiStack extends Stack {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
       monitoredBy: monitoringLambda,
-      readOnlyRole
+      readOnlyRole,
     });
 
     const logoutFunction = new ApiFunction(this, 'logout-function', {
@@ -97,7 +97,7 @@ export class ApiStack extends Stack {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
       monitoredBy: monitoringLambda,
-      readOnlyRole
+      readOnlyRole,
     });
 
     const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
@@ -179,8 +179,8 @@ export class ApiStack extends Stack {
   }
   /**
    * Create a role with read-only access to the application
-   * 
-   * @returns Role 
+   *
+   * @returns Role
    */
   readOnlyRole(): Role {
     const readOnlyRole = new Role(this, 'read-only-role', {

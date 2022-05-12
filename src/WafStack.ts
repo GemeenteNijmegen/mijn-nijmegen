@@ -3,9 +3,19 @@ import { LogGroup } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
 
+export interface WafStackProps extends StackProps {
+  branch: string;
+}
+
 export class WafStack extends Stack {
-  constructor(scope: Construct, id: string, props: StackProps) {
+  constructor(scope: Construct, id: string, props: WafStackProps) {
     super(scope, id, props);
+
+    let rateBasedStatementAction: object = { block: {} };
+    if (props.branch == 'acceptance') {
+      rateBasedStatementAction = { count: {} };
+    }
+
     const acl = new aws_wafv2.CfnWebACL(this, 'waf-mijnNijmegen', {
       defaultAction: { allow: {} },
       description: 'used for the mijnNijmegen apps',
@@ -34,7 +44,7 @@ export class WafStack extends Stack {
         },
         {
           priority: 1,
-          action: { block: {} },
+          action: rateBasedStatementAction,
           visibilityConfig: {
             sampledRequestsEnabled: true,
             cloudWatchMetricsEnabled: true,
@@ -85,7 +95,6 @@ export class WafStack extends Stack {
 
       scope: 'CLOUDFRONT',
     });
-
 
     new SSM.StringParameter(this, 'mijn-acl-id', {
       stringValue: acl.attrArn,

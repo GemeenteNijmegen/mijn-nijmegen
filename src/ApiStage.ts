@@ -38,6 +38,6 @@ export class ApiStage extends Stage {
     });
     cloudfrontStack.addDependency(usEastCertificateStack);
 
-    new WafStack(this, 'waf-stack', { env: { region: 'us-east-1' } });
+    new WafStack(this, 'waf-stack', { env: { region: 'us-east-1' }, branch: props.branch });
   }
 }
