@@ -3,7 +3,7 @@ import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
 import { aws_secretsmanager, Stack, StackProps, aws_ssm as SSM, aws_lambda as Lambda } from 'aws-cdk-lib';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
-import { AccountPrincipal, Role } from 'aws-cdk-lib/aws-iam';
+import { AccountPrincipal, PrincipalWithConditions, Role } from 'aws-cdk-lib/aws-iam';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
@@ -186,7 +186,14 @@ export class ApiStack extends Stack {
     const readOnlyRole = new Role(this, 'read-only-role', {
       roleName: 'mijnnijmegen-full-read',
       description: 'Read-only role for Mijn Nijmegen with access to lambdas, logging, session store',
-      assumedBy: new AccountPrincipal(Statics.iamAccountId),
+      assumedBy: new PrincipalWithConditions(
+        new AccountPrincipal(Statics.iamAccountId), //IAM account
+        {
+          Bool: {
+            'aws:MultiFactorAuthPresent': true,
+          },
+        },
+      ),
     });
     return readOnlyRole;
   }
