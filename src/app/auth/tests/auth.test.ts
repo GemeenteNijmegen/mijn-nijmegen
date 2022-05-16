@@ -4,7 +4,13 @@ import { mockClient } from 'jest-aws-client-mock';
 import { handleRequest } from '../handleRequest';
 
 beforeAll(() => {
-  global.console.log = jest.fn();
+
+  if (process.env.VERBOSETESTS!='True') {
+    global.console.error = jest.fn();
+    global.console.time = jest.fn();
+    global.console.log = jest.fn();
+  }
+
   // Set env variables
   process.env.SESSION_TABLE = 'mijnuitkering-sessions';
   process.env.AUTH_URL_BASE = 'https://authenticatie-accp.nijmegen.nl';

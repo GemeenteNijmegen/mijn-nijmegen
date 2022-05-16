@@ -13,6 +13,14 @@ async function getStringFromFilePath(filePath: string) {
   });
 }
 
+beforeAll(() => {
+  if (process.env.VERBOSETESTS!='True') {
+    global.console.error = jest.fn();
+    global.console.time = jest.fn();
+    global.console.log = jest.fn();
+  }
+});
+
 // This test doesn't run in CI by default, depends on unavailable secrets
 test('Mock api', async () => {
   if (!process.env.CERTPATH || !process.env.KEYPATH || !process.env.CAPATH) {
