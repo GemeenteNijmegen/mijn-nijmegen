@@ -64,8 +64,8 @@ test('Redirect to home if already logged in', async () => {
           loggedin: {
             BOOL: true,
           },
-        }
-      }
+        },
+      },
     },
   };
   ddbMock.mockImplementation(() => output);
