@@ -15,13 +15,14 @@
     "@aws-sdk/client-dynamodb": "3.47.0",
     "@aws-sdk/client-secrets-manager": "3.47.0",
     "@aws-sdk/client-ssm": "3.47.0",
+    "@gemeentenijmegen/session": "^0.0.0",
     "axios": "^0.26.0",
     "cookie": "^0.4.1",
     "mustache": "^4.2.0"
   },
   "devDependencies": {
     "@aws-sdk/types": "3.47.0",
-    "jest-aws-client-mock": "0.0.24",
-    "dotenv": "^16.0.0"
+    "dotenv": "^16.0.0",
+    "jest-aws-client-mock": "0.0.24"
   }
 }

@@ -31,14 +31,12 @@ beforeEach(() => {
   secretsMock.mockReset();
   const getItemOutput: Partial<GetItemCommandOutput> = {
     Item: {
-      loggedin: {
-        BOOL: true,
-      },
-      bsn: {
-        S: '12345678',
-      },
-      state: {
-        S: '12345',
+      data: {
+        M: {
+          loggedin: { BOOL: true },
+          bsn: { S: '12345678' },
+          state: { S: '12345' },
+        },
       },
     },
   };

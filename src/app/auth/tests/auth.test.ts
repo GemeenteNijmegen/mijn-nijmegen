@@ -68,11 +68,12 @@ test('Successful auth redirects to home', async () => {
   secretsMock.mockImplementation(() => output);
   const getItemOutput: Partial<GetItemCommandOutput> = {
     Item: {
-      loggedin: {
-        BOOL: false,
-      },
-      state: {
-        S: '12345',
+      data: {
+        M: {
+          loggedin: { BOOL: true },
+          bsn: { S: '12345678' },
+          state: { S: '12345' },
+        },
       },
     },
   };
@@ -93,11 +94,11 @@ test('Successful auth creates new session', async () => {
   secretsMock.mockImplementation(() => output);
   const getItemOutput: Partial<GetItemCommandOutput> = {
     Item: {
-      loggedin: {
-        BOOL: false,
-      },
-      state: {
-        S: '12345',
+      data: {
+        M: {
+          loggedin: { BOOL: false },
+          state: { S: '12345' },
+        },
       },
     },
   };
@@ -111,17 +112,6 @@ test('Successful auth creates new session', async () => {
         Key: {
           sessionid: { S: sessionId },
         },
-        TableName: process.env.SESSION_TABLE,
-      },
-    }),
-  );
-  expect(ddbMock).toHaveBeenCalledWith(
-    expect.objectContaining({
-      input: {
-        Item: expect.objectContaining({
-          bsn: { S: '12345' },
-          loggedin: { BOOL: true },
-        }),
         TableName: process.env.SESSION_TABLE,
       },
     }),
