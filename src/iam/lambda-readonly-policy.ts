@@ -24,7 +24,7 @@ export class LambdaReadOnlyPolicy extends ManagedPolicy {
           'lambda:Get*',
           'lambda:List*',
         ],
-        resources: [props.functionArn],
+        resources: ['*'],
       },
     ));
 
@@ -41,6 +41,17 @@ export class LambdaReadOnlyPolicy extends ManagedPolicy {
           'logs:FilterLogEvents',
         ],
         resources: [props.logGroupArn],
+      },
+    ));
+
+    this.addStatements(new PolicyStatement(
+      {
+        effect: Effect.ALLOW,
+        actions: [
+          'logs:Describe*',
+          'logs:List*',
+        ],
+        resources: ['*'],
       },
     ));
   }
