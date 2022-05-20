@@ -22,6 +22,7 @@ export class LambdaReadOnlyPolicy extends ManagedPolicy {
         effect: Effect.ALLOW,
         actions: [
           'lambda:List*',
+          'lambda:GetAccountSettings'
         ],
         resources: ['*'],
       },
