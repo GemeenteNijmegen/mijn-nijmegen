@@ -193,7 +193,11 @@
     },
     "post-upgrade": {
       "name": "post-upgrade",
-      "description": "Runs after upgrading dependencies"
+      "steps": [
+        {
+          "exec": "       (cd src/app/login && npx npm-check-updates -u && npm install)       && (cd src/app/home && npx npm-check-updates -u && npm install)       && (cd src/app/login && npx npm-check-updates -u && npm install)       && (cd src/app/logout && npx npm-check-updates -u && npm install)"
+        }
+      ]
     },
     "postinstall": {
       "name": "postinstall",
