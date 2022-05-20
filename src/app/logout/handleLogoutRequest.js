@@ -20,7 +20,7 @@ async function handleLogoutRequest(cookies, dynamoDBClient) {
 
     if (session.sessionId !== false) {
         await session.updateSession({
-            'loggedin': false
+            loggedin: { BOOL: false },
         });
     }
 
