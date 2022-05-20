@@ -27,7 +27,7 @@ export abstract class Statics {
   static readonly secretOIDCClientSecret: string = '/cdk/mijn-nijmegen/oidc-clientsecret';
 
   /**
-   * Certificate private key for m  
+   * Certificate private key for m
    */
   static readonly secretMTLSPrivateKey: string = '/cdk/mijn-nijmegen/mtls-privatekey';
 

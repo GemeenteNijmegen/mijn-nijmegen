@@ -1,6 +1,6 @@
-const { Session } = require('./shared/Session');
 const { render } = require('./shared/render');
 const cookie = require('cookie');
+const { Session } = require('@gemeentenijmegen/session');
 
 function htmlResponse(body, cookies) {
     const response = {
@@ -19,7 +19,9 @@ async function handleLogoutRequest(cookies, dynamoDBClient) {
     await session.init();
 
     if (session.sessionId !== false) {
-        await session.updateSession(false);
+        await session.updateSession({
+            'loggedin': false
+        });
     }
 
     const html = await render({title : 'Uitgelogd'}, __dirname + '/templates/logout.mustache', { 
