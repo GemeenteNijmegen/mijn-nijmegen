@@ -21,10 +21,19 @@ export class LambdaReadOnlyPolicy extends ManagedPolicy {
       {
         effect: Effect.ALLOW,
         actions: [
-          'lambda:Get*',
           'lambda:List*',
         ],
         resources: ['*'],
+      },
+    ));
+
+    this.addStatements(new PolicyStatement(
+      {
+        effect: Effect.ALLOW,
+        actions: [
+          'lambda:Get*',
+        ],
+        resources: [props.functionArn],
       },
     ));
 
