@@ -3,9 +3,11 @@ import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
 import { aws_secretsmanager, Stack, StackProps, aws_ssm as SSM, aws_lambda as Lambda } from 'aws-cdk-lib';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
+import { AccountPrincipal, PrincipalWithConditions, Role } from 'aws-cdk-lib/aws-iam';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
+import { DynamoDbReadOnlyPolicy } from './iam/dynamodb-readonly-policy';
 import { SessionsTable } from './SessionsTable';
 import { Statics } from './statics';
 
@@ -41,8 +43,9 @@ export class ApiStack extends Stack {
     const appDomain = `${subdomain}.nijmegen.nl`;
 
     const monitoringLambda = this.monitoringLambda();
-
-    this.setFunctions(`https://${appDomain}/`, monitoringLambda);
+    const readOnlyRole = this.readOnlyRole();
+    this.setFunctions(`https://${appDomain}/`, monitoringLambda, readOnlyRole);
+    this.allowReadAccessToTable(readOnlyRole, this.sessionsTable);
   }
 
 
@@ -76,7 +79,7 @@ export class ApiStack extends Stack {
    * add routes to the gateway.
    * @param {string} baseUrl the application url
    */
-  setFunctions(baseUrl: string, monitoringLambda: Lambda.Function) {
+  setFunctions(baseUrl: string, monitoringLambda: Lambda.Function, readOnlyRole: Role) {
     const loginFunction = new ApiFunction(this, 'login-function', {
       description: 'Login-pagina voor de Mijn Uitkering-applicatie.',
       codePath: 'app/login',
@@ -84,6 +87,7 @@ export class ApiStack extends Stack {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
       monitoredBy: monitoringLambda,
+      readOnlyRole,
     });
 
     const logoutFunction = new ApiFunction(this, 'logout-function', {
@@ -93,6 +97,7 @@ export class ApiStack extends Stack {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
       monitoredBy: monitoringLambda,
+      readOnlyRole,
     });
 
     const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
@@ -103,6 +108,7 @@ export class ApiStack extends Stack {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
       monitoredBy: monitoringLambda,
+      readOnlyRole,
       environment: {
         CLIENT_SECRET_ARN: oidcSecret.secretArn,
       },
@@ -119,6 +125,7 @@ export class ApiStack extends Stack {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
       monitoredBy: monitoringLambda,
+      readOnlyRole,
       environment: {
         MTLS_PRIVATE_KEY_ARN: secretMTLSPrivateKey.secretArn,
         MTLS_CLIENT_CERT_NAME: Statics.ssmMTLSClientCert,
@@ -169,5 +176,33 @@ export class ApiStack extends Stack {
       .replace(/^https?:\/\//, '') //protocol
       .replace(/\/$/, ''); //optional trailing slash
     return cleanedUrl;
+  }
+  /**
+   * Create a role with read-only access to the application
+   *
+   * @returns Role
+   */
+  readOnlyRole(): Role {
+    const readOnlyRole = new Role(this, 'read-only-role', {
+      roleName: 'mijnnijmegen-full-read',
+      description: 'Read-only role for Mijn Nijmegen with access to lambdas, logging, session store',
+      assumedBy: new PrincipalWithConditions(
+        new AccountPrincipal(Statics.iamAccountId), //IAM account
+        {
+          Bool: {
+            'aws:MultiFactorAuthPresent': true,
+          },
+        },
+      ),
+    });
+    return readOnlyRole;
+  }
+
+  allowReadAccessToTable(role: Role, table: Table) {
+    role.addManagedPolicy(
+      new DynamoDbReadOnlyPolicy(this, 'read-policy', {
+        tableArn: table.tableArn,
+      }),
+    );
   }
 }

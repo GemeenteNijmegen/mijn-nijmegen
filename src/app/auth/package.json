@@ -14,12 +14,13 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.47.0",
     "@aws-sdk/client-secrets-manager": "^3.47.0",
-    "cookie": "^0.4.1",
+    "@gemeentenijmegen/session": "~0.0.0",
+    "cookie": "^0.5.0",
     "mustache": "^4.2.0",
     "openid-client": "^5.1.2"
   },
   "devDependencies": {
-    "jest-aws-client-mock": "0.0.26",
-    "@aws-sdk/types": "^3.47.0"
+    "@aws-sdk/types": "^3.47.0",
+    "jest-aws-client-mock": "0.0.26"
   }
 }

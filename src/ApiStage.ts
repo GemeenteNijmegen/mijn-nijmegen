@@ -32,13 +32,12 @@ export class ApiStage extends Stage {
       branch: props.branch,
       sessionsTable: sessionsStack.sessionsTable,
     });
-
     const cloudfrontStack = new CloudfrontStack(this, 'cloudfront-stack', {
       branch: props.branch,
       hostDomain: apistack.domain(),
     });
     cloudfrontStack.addDependency(usEastCertificateStack);
 
-    new WafStack(this, 'waf-stack', { env: { region: 'us-east-1' } });
+    new WafStack(this, 'waf-stack', { env: { region: 'us-east-1' }, branch: props.branch });
   }
 }

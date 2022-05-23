@@ -28,7 +28,7 @@ class Session {
     getSessionId(cookieString) {
         if(!cookieString) { return false; }
         const cookies = cookie.parse(cookieString);
-        if ('session' in cookies) {
+        if(cookies?.session != '') {
             return cookies.session;
         }
         return false;
@@ -84,6 +84,9 @@ class Session {
      * @param {string} bsn set the current user bsn
      */
     async updateSession(loggedin = false, bsn = '') {
+        if(!this.sessionId) { 
+            throw new Error('no sessionid, cannot update empty session'); 
+        }
         const now = new Date();
         const ttl = Math.floor((now / 1000) + 15 * 60).toString(); // ttl is 15 minutes
 

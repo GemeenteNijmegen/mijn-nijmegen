@@ -1,4 +1,4 @@
-const { Session } = require('./shared/Session');
+const { Session } = require('@gemeentenijmegen/session');
 const { OpenIDConnect } = require('./shared/OpenIDConnect');
 const { render } = require('./shared/render');
 
@@ -27,12 +27,16 @@ async function handleLoginRequest(cookies, dynamoDBClient) {
     let session = new Session(cookies, dynamoDBClient);
     await session.init();
     if (session.isLoggedIn() === true) {
+        console.debug('redirect to home');
         return redirectResponse('/');
     }
     let OIDC = new OpenIDConnect();
     const state = OIDC.generateState();
-    await session.createSession(state);
-    const authUrl = OIDC.getLoginUrl(session.state);
+    await session.createSession({ 
+        loggedin: { BOOL: false },
+        state: { S: state }
+    });
+    const authUrl = OIDC.getLoginUrl(state);
     
     const data = {
         title: 'Inloggen',

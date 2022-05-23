@@ -3,6 +3,12 @@ export abstract class Statics {
   static readonly sessionTableName: string = 'mijn-nijmegen-sessions';
 
   /**
+   * IAM params
+   */
+  static readonly iamAccountId: string = '098799052470';
+  static readonly ssmReadOnlyRoleArn: string = '/cdk/mijn-nijmegen/role-readonly-arn';
+
+  /**
    * Authentication URL base, used in auth and login lambda
    */
   static readonly ssmAuthUrlBaseParameter: string = '/cdk/mijn-nijmegen/authUrlBase';

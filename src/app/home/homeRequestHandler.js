@@ -1,6 +1,6 @@
-const { Session } = require('./shared/Session');
 const { render } = require('./shared/render');
 const { BrpApi } = require('./BrpApi');
+const { Session } = require('@gemeentenijmegen/session');
 
 function redirectResponse(location, code = 302) {
     return {

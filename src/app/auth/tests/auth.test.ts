@@ -4,7 +4,13 @@ import { mockClient } from 'jest-aws-client-mock';
 import { handleRequest } from '../handleRequest';
 
 beforeAll(() => {
-  global.console.log = jest.fn();
+
+  if (process.env.VERBOSETESTS!='True') {
+    global.console.error = jest.fn();
+    global.console.time = jest.fn();
+    global.console.log = jest.fn();
+  }
+
   // Set env variables
   process.env.SESSION_TABLE = 'mijnuitkering-sessions';
   process.env.AUTH_URL_BASE = 'https://authenticatie-accp.nijmegen.nl';
@@ -62,11 +68,12 @@ test('Successful auth redirects to home', async () => {
   secretsMock.mockImplementation(() => output);
   const getItemOutput: Partial<GetItemCommandOutput> = {
     Item: {
-      loggedin: {
-        BOOL: false,
-      },
-      state: {
-        S: '12345',
+      data: {
+        M: {
+          loggedin: { BOOL: true },
+          bsn: { S: '12345678' },
+          state: { S: '12345' },
+        },
       },
     },
   };
@@ -87,11 +94,11 @@ test('Successful auth creates new session', async () => {
   secretsMock.mockImplementation(() => output);
   const getItemOutput: Partial<GetItemCommandOutput> = {
     Item: {
-      loggedin: {
-        BOOL: false,
-      },
-      state: {
-        S: '12345',
+      data: {
+        M: {
+          loggedin: { BOOL: false },
+          state: { S: '12345' },
+        },
       },
     },
   };
@@ -105,17 +112,6 @@ test('Successful auth creates new session', async () => {
         Key: {
           sessionid: { S: sessionId },
         },
-        TableName: process.env.SESSION_TABLE,
-      },
-    }),
-  );
-  expect(ddbMock).toHaveBeenCalledWith(
-    expect.objectContaining({
-      input: {
-        Item: expect.objectContaining({
-          bsn: { S: '12345' },
-          loggedin: { BOOL: true },
-        }),
         TableName: process.env.SESSION_TABLE,
       },
     }),
