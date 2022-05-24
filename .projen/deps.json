@@ -1,6 +1,10 @@
 {
   "dependencies": [
     {
+      "name": "@playwright/test",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "type": "build"
     },

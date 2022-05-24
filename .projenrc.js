@@ -16,6 +16,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   devDeps: [
     'copyfiles',
+    '@playwright/test',
   ], /* Build dependencies for this module. */
   depsUpgradeOptions: {
     workflowOptions: {
@@ -28,7 +29,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   jestOptions: {
     jestConfig: {
       setupFiles: ['dotenv/config'],
-      testPathIgnorePatterns: ['/node_modules/', '/cdk.out'],
+      testPathIgnorePatterns: ['/node_modules/', '/cdk.out', '/test/playwright'],
       roots: ['src', 'test'],
     },
   },
@@ -49,6 +50,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'src/app/**/shared',
     'src/app/**/tests/output',
     '.DS_Store',
+    'test/playwright/report',
   ],
 });
 

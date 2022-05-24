@@ -35,6 +35,7 @@ jspm_packages/
 src/app/**/shared
 src/app/**/tests/output
 .DS_Store
+test/playwright/report
 !/.projenrc.js
 /test-reports/
 junit.xml
