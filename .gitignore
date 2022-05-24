@@ -36,7 +36,6 @@ src/app/**/shared
 src/app/**/tests/output
 .DS_Store
 test/playwright/report
-test/playwright/screenshots
 !/.projenrc.js
 /test-reports/
 junit.xml

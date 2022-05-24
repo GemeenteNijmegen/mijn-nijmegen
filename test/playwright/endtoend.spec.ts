@@ -39,7 +39,7 @@ test('Visiting main page with valid BSN shows cards', async () => {
   // Click text=Hier vindt u een overzicht van uw uitkeringen.
   const cards =  page.locator('.card');
   await expect(cards).toContainText(['Persoonsgegevens', 'Uitkeringen']);
-  await page.screenshot({ path: 'test/playwright/screenshots/home.png', fullPage: true });
+  await page.screenshot({ path: 'test/playwright/report/screenshots/home.png', fullPage: true });
 
 });
 
@@ -52,7 +52,7 @@ test('Visiting uitkeringen-page with valid BSN shows info', async () => {
   // Click text=Hier vindt u een overzicht van uw uitkeringen.
   const table =  page.locator('table tbody');
   await expect(table).toContainText('BSN van klant');
-  await page.screenshot({ path: 'test/playwright/screenshots/uitkering.png', fullPage: true });
+  await page.screenshot({ path: 'test/playwright/report/screenshots/uitkering.png', fullPage: true });
 
 });
 
@@ -66,6 +66,6 @@ test('Visiting persoonsgegevens-page with valid BSN shows info', async () => {
   // Click text=Hier vindt u een overzicht van uw uitkeringen.
   const table =  page.locator('h2');
   await expect(table).toContainText(['Persoonsgegevens', 'Adresgegevens']);
-  await page.screenshot({ path: 'test/playwright/screenshots/persoonsgegevens.png', fullPage: true });
+  await page.screenshot({ path: 'test/playwright/report/screenshots/persoonsgegevens.png', fullPage: true });
 
 });
