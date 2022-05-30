@@ -34,6 +34,7 @@
     "projen": "npx projen"
   },
   "devDependencies": {
+    "@playwright/test": "^1.22.2",
     "@types/jest": "^27.5.1",
     "@types/node": "^14",
     "@typescript-eslint/eslint-plugin": "^5",
@@ -72,7 +73,8 @@
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "/cdk.out"
+      "/cdk.out",
+      "/test/playwright"
     ],
     "roots": [
       "src",
@@ -94,7 +96,8 @@
     "coverageDirectory": "coverage",
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/cdk.out"
+      "/cdk.out",
+      "/test/playwright"
     ],
     "watchPathIgnorePatterns": [
       "/node_modules/"
