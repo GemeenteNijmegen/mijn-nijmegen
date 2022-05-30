@@ -88,7 +88,6 @@
     },
     {
       "name": "ts-node",
-      "version": "^9",
       "type": "build"
     },
     {
@@ -105,7 +104,6 @@
     },
     {
       "name": "@aws-solutions-constructs/aws-lambda-dynamodb",
-      "version": "2.0.0",
       "type": "runtime"
     },
     {
