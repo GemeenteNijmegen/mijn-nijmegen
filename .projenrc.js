@@ -45,6 +45,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
       && (cd src/app/home && npx npm-check-updates -u && npm install) \
       && (cd src/app/login && npx npm-check-updates -u && npm install) \
       && (cd src/app/logout && npx npm-check-updates -u && npm install)',
+    'playwright': 'npx playwright test'
   },
   eslintOptions: {
     devdirs: ['src/app/login/tests', 'src/app/auth/tests', 'src/app/home/tests', 'src/app/uitkeringen/tests', 'src/app/logout/tests', '/test', '/build-tools'],

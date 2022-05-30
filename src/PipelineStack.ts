@@ -39,7 +39,10 @@ export class PipelineStack extends Stack {
     // run a script that was transpiled from TypeScript during synthesis
     apiStage.addPost(new ShellStep('validate', {
       input: synthStep,
-      commands: ['npx projen playwright']
+      commands: [
+        'npx playwright install --with-deps',
+        'npx projen playwright'
+      ],
     }));
   }
 
@@ -50,7 +53,7 @@ export class PipelineStack extends Stack {
       dockerEnabledForSelfMutation: true,
       dockerEnabledForSynth: true,
       crossAccountKeys: true,
-      synth: synthStep
+      synth: synthStep,
     });
     return pipeline;
   }

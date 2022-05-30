@@ -182,6 +182,14 @@
       "name": "package",
       "description": "Creates the distribution package"
     },
+    "playwright": {
+      "name": "playwright",
+      "steps": [
+        {
+          "exec": "npx playwright test"
+        }
+      ]
+    },
     "post-compile": {
       "name": "post-compile",
       "description": "Runs after successful compilation",
