@@ -3,6 +3,7 @@ import { Construct } from 'constructs';
 import { ApiStage } from './ApiStage';
 import { ParameterStage } from './ParameterStage';
 import { Statics } from './statics';
+import { TestStage } from './TestStage';
 
 export interface PipelineStackProps extends StackProps{
   branchName: string;
@@ -16,16 +17,17 @@ export class PipelineStack extends Stack {
     Tags.of(this).add('cdkManaged', 'yes');
     Tags.of(this).add('Project', Statics.projectName);
     this.branchName = props.branchName;
-    const pipeline = this.pipeline();
+
+    const connectionArn = new CfnParameter(this, 'connectionArn');
+    const source = this.connectionSource(connectionArn);
+    const pipeline = this.pipeline(source);
     pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', { env: props.deployToEnvironment }));
     pipeline.addStage(new ApiStage(this, 'mijn-api', { env: props.deployToEnvironment, branch: this.branchName }));
+    pipeline.addStage(new TestStage(this, 'tests', { branch: this.branchName, sourceArn: connectionArn.valueAsString }));
   }
 
-  pipeline(): pipelines.CodePipeline {
-    const connectionArn = new CfnParameter(this, 'connectionArn');
-    const source = pipelines.CodePipelineSource.connection('GemeenteNijmegen/mijn-nijmegen', this.branchName, {
-      connectionArn: connectionArn.valueAsString,
-    });
+  pipeline(source: pipelines.CodePipelineSource): pipelines.CodePipeline {
+
     const pipeline = new pipelines.CodePipeline(this, `mijnnijmegen-${this.branchName}`, {
       pipelineName: `mijnnijmegen-${this.branchName}`,
       dockerEnabledForSelfMutation: true,
@@ -44,5 +46,11 @@ export class PipelineStack extends Stack {
       }),
     });
     return pipeline;
+  }
+
+  private connectionSource(connectionArn: CfnParameter): pipelines.CodePipelineSource {
+    return pipelines.CodePipelineSource.connection('GemeenteNijmegen/mijn-nijmegen', this.branchName, {
+      connectionArn: connectionArn.valueAsString,
+    });
   }
 }
