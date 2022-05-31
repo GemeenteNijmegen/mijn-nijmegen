@@ -409,7 +409,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"7aaa874338ad2bee052eba36eec41c528aad7423548a03651110dbf3c8c915db:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"d116c7b7df8bf5ed5264671d4a77f843a1d84032366bb26cb138d3266142493a:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -468,7 +468,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"2d2dfa24fdabaa9fb7f43ccbb8f74d571062f8601da5ef5e9cbe0349ad3400af:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"d550a75b80f94d3792effe4b126e5ba8cab0432f4508e7c4d4c47d2740e457ad:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -527,7 +527,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"ce236bfbbc9db2951f49e45946852594f0623dc2e4d5a8cd771faa8f908d08fc:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"cb8603ef7df456631f65b9f2edb44965533dd21dfce9c8dd916b91c656c3ed86:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -586,7 +586,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"aa3909d14e7cfa72e897c88473d3ceab32aa8760825cd331677c4604c5047527:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"52e8623143c5450ea9be72d4d7b1f93e9702f0cb968e9f1bd5df0935abc029cc:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -1967,7 +1967,7 @@ Object {
                 },
                 "InputArtifacts": Array [
                   Object {
-                    "Name": "Synth_Output",
+                    "Name": "GemeenteNijmegen_mijn_nijmegen_Source",
                   },
                 ],
                 "Name": "validate",
@@ -3830,7 +3830,10 @@ Object {
   \\"phases\\": {
     \\"build\\": {
       \\"commands\\": [
-        \\"npx projen playwright\\"
+        \\"yarn install --frozen-lockfile\\",
+        \\"npx playwright install\\",
+        \\"npx playwright install-deps\\",
+        \\"npx playwright test\\"
       ]
     }
   }

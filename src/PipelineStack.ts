@@ -46,8 +46,12 @@ export class PipelineStack extends Stack {
    * @param source the source repo in which to run
    */
   private runValidationChecks(apiStage: pipelines.StageDeployment, source: pipelines.CodePipelineSource) {
+    if(this.branchName != 'acceptance') { return; }
     apiStage.addPost(new ShellStep('validate', {
       input: source,
+      env: {
+        'CI': 'true'
+      },
       commands: [
         'yarn install --frozen-lockfile',
         'npx playwright install',
