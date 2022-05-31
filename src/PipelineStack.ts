@@ -20,7 +20,7 @@ export class PipelineStack extends Stack {
 
     const connectionArn = new CfnParameter(this, 'connectionArn');
     const source = this.connectionSource(connectionArn);
-    
+
     const pipeline = this.pipeline(source);
     pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', { env: props.deployToEnvironment }));
 
@@ -31,12 +31,12 @@ export class PipelineStack extends Stack {
 
   /**
    * Run validation checks on the finished deployment (for now this runs playwright e2e tests)
-   * 
+   *
    * @param stage stage after which to run
    * @param source the source repo in which to run
    */
   private runValidationChecks(stage: pipelines.StageDeployment, source: pipelines.CodePipelineSource) {
-    if(this.branchName != 'acceptance') { return; }
+    if (this.branchName != 'acceptance') { return; }
     stage.addPost(new ShellStep('validate', {
       input: source,
       env: {
