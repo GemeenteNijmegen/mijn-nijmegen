@@ -18,7 +18,6 @@
     "install:logout": "npx projen install:logout",
     "install:monitoring": "npx projen install:monitoring",
     "package": "npx projen package",
-    "playwright": "npx projen playwright",
     "post-compile": "npx projen post-compile",
     "post-upgrade": "npx projen post-upgrade",
     "postinstall": "npx projen postinstall",

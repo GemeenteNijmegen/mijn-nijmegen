@@ -20,18 +20,8 @@ export class PipelineStack extends Stack {
 
     const connectionArn = new CfnParameter(this, 'connectionArn');
     const source = this.connectionSource(connectionArn);
-    const synthStep = new pipelines.ShellStep('Synth', {
-      input: source,
-      env: {
-        BRANCH_NAME: this.branchName,
-      },
-      commands: [
-        'yarn install --frozen-lockfile',
-        'npx projen build',
-        'npx projen synth',
-      ],
-    });
-    const pipeline = this.pipeline(synthStep);
+    
+    const pipeline = this.pipeline(source);
     pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', { env: props.deployToEnvironment }));
    
     const apiStage = pipeline.addStage(new ApiStage(this, 'mijn-api', { env: props.deployToEnvironment, branch: this.branchName }));
@@ -42,12 +32,12 @@ export class PipelineStack extends Stack {
   /**
    * Run validation checks on the finished deployment (for now this runs playwright e2e tests)
    * 
-   * @param apiStage stage after which to run
+   * @param stage stage after which to run
    * @param source the source repo in which to run
    */
-  private runValidationChecks(apiStage: pipelines.StageDeployment, source: pipelines.CodePipelineSource) {
+  private runValidationChecks(stage: pipelines.StageDeployment, source: pipelines.CodePipelineSource) {
     if(this.branchName != 'acceptance') { return; }
-    apiStage.addPost(new ShellStep('validate', {
+    stage.addPost(new ShellStep('validate', {
       input: source,
       env: {
         'CI': 'true'
@@ -61,7 +51,18 @@ export class PipelineStack extends Stack {
     }));
   }
 
-  pipeline(synthStep: ShellStep): pipelines.CodePipeline {
+  pipeline(source: pipelines.CodePipelineSource): pipelines.CodePipeline {
+    const synthStep = new pipelines.ShellStep('Synth', {
+      input: source,
+      env: {
+        BRANCH_NAME: this.branchName,
+      },
+      commands: [
+        'yarn install --frozen-lockfile',
+        'npx projen build',
+        'npx projen synth',
+      ],
+    });
 
     const pipeline = new pipelines.CodePipeline(this, `mijnnijmegen-${this.branchName}`, {
       pipelineName: `mijnnijmegen-${this.branchName}`,
