@@ -35,10 +35,11 @@ export class PipelineStack extends Stack {
     const pipeline = this.pipeline(synthStep);
     const paramStage = pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', { env: props.deployToEnvironment }));
     paramStage.addPost(new ShellStep('validate', {
-      input: synthStep,
+      input: source,
       commands: [
-        'ls -la',
-        'npx projen test'
+        'yarn install --frozen-lockfile',
+        'npx playwright install',
+        'npx playwright test'
       ],
     }));
     pipeline.addStage(new ApiStage(this, 'mijn-api', { env: props.deployToEnvironment, branch: this.branchName }));
