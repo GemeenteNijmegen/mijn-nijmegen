@@ -33,15 +33,15 @@ export class PipelineStack extends Stack {
       ],
     });
     const pipeline = this.pipeline(synthStep);
-    pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', { env: props.deployToEnvironment }));
-    pipeline.addPost(new ShellStep('validate', {
+    const paramStage = pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', { env: props.deployToEnvironment }));
+    paramStage.addPost(new ShellStep('validate', {
       input: synthStep,
       commands: [
         'ls -la',
         'npx projen test'
       ],
     }));
-    const apiStage = pipeline.addStage(new ApiStage(this, 'mijn-api', { env: props.deployToEnvironment, branch: this.branchName }));
+    pipeline.addStage(new ApiStage(this, 'mijn-api', { env: props.deployToEnvironment, branch: this.branchName }));
     // pipeline.addStage(new TestStage(this, 'tests', { branch: this.branchName, sourceArn: connectionArn.valueAsString }));
     // run a script that was transpiled from TypeScript during synthesis
     
