@@ -3,6 +3,13 @@ export abstract class Statics {
   static readonly sessionTableName: string = 'mijn-nijmegen-sessions';
 
   /**
+   * Repo information
+   */
+
+  static readonly repository: string = 'mijn-nijmegen';
+  static readonly repositoryOwner: string = 'GemeenteNijmegen';
+
+  /**
    * IAM params
    */
   static readonly iamAccountId: string = '098799052470';

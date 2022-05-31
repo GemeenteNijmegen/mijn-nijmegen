@@ -1,4 +1,5 @@
 import { Stack, StackProps, Tags, pipelines, CfnParameter, Environment } from 'aws-cdk-lib';
+import { ShellStep } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
 import { ApiStage } from './ApiStage';
 import { ParameterStage } from './ParameterStage';
@@ -16,33 +17,66 @@ export class PipelineStack extends Stack {
     Tags.of(this).add('cdkManaged', 'yes');
     Tags.of(this).add('Project', Statics.projectName);
     this.branchName = props.branchName;
-    const pipeline = this.pipeline();
+
+    const connectionArn = new CfnParameter(this, 'connectionArn');
+    const source = this.connectionSource(connectionArn);
+
+    const pipeline = this.pipeline(source);
     pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', { env: props.deployToEnvironment }));
-    pipeline.addStage(new ApiStage(this, 'mijn-api', { env: props.deployToEnvironment, branch: this.branchName }));
+
+    const apiStage = pipeline.addStage(new ApiStage(this, 'mijn-api', { env: props.deployToEnvironment, branch: this.branchName }));
+    this.runValidationChecks(apiStage, source);
+
   }
 
-  pipeline(): pipelines.CodePipeline {
-    const connectionArn = new CfnParameter(this, 'connectionArn');
-    const source = pipelines.CodePipelineSource.connection('GemeenteNijmegen/mijn-nijmegen', this.branchName, {
-      connectionArn: connectionArn.valueAsString,
+  /**
+   * Run validation checks on the finished deployment (for now this runs playwright e2e tests)
+   *
+   * @param stage stage after which to run
+   * @param source the source repo in which to run
+   */
+  private runValidationChecks(stage: pipelines.StageDeployment, source: pipelines.CodePipelineSource) {
+    if (this.branchName != 'acceptance') { return; }
+    stage.addPost(new ShellStep('validate', {
+      input: source,
+      env: {
+        CI: 'true',
+      },
+      commands: [
+        'yarn install --frozen-lockfile',
+        'npx playwright install',
+        'npx playwright install-deps',
+        'npx playwright test',
+      ],
+    }));
+  }
+
+  pipeline(source: pipelines.CodePipelineSource): pipelines.CodePipeline {
+    const synthStep = new pipelines.ShellStep('Synth', {
+      input: source,
+      env: {
+        BRANCH_NAME: this.branchName,
+      },
+      commands: [
+        'yarn install --frozen-lockfile',
+        'npx projen build',
+        'npx projen synth',
+      ],
     });
+
     const pipeline = new pipelines.CodePipeline(this, `mijnnijmegen-${this.branchName}`, {
       pipelineName: `mijnnijmegen-${this.branchName}`,
       dockerEnabledForSelfMutation: true,
       dockerEnabledForSynth: true,
       crossAccountKeys: true,
-      synth: new pipelines.ShellStep('Synth', {
-        input: source,
-        env: {
-          BRANCH_NAME: this.branchName,
-        },
-        commands: [
-          'yarn install --frozen-lockfile',
-          'npx projen build',
-          'npx projen synth',
-        ],
-      }),
+      synth: synthStep,
     });
     return pipeline;
+  }
+
+  private connectionSource(connectionArn: CfnParameter): pipelines.CodePipelineSource {
+    return pipelines.CodePipelineSource.connection('GemeenteNijmegen/mijn-nijmegen', this.branchName, {
+      connectionArn: connectionArn.valueAsString,
+    });
   }
 }

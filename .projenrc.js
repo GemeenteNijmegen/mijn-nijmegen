@@ -10,12 +10,13 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'dotenv',
     '@aws-cdk/aws-apigatewayv2-alpha',
     '@aws-cdk/aws-apigatewayv2-integrations-alpha',
-    '@aws-solutions-constructs/aws-lambda-dynamodb@2.0.0',
+    '@aws-solutions-constructs/aws-lambda-dynamodb',
     'cdk-remote-stack',
   ], /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   devDeps: [
     'copyfiles',
+    '@playwright/test',
   ], /* Build dependencies for this module. */
   depsUpgradeOptions: {
     workflowOptions: {
@@ -28,7 +29,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   jestOptions: {
     jestConfig: {
       setupFiles: ['dotenv/config'],
-      testPathIgnorePatterns: ['/node_modules/', '/cdk.out'],
+      testPathIgnorePatterns: ['/node_modules/', '/cdk.out', '/test/playwright'],
       roots: ['src', 'test'],
     },
   },
@@ -39,6 +40,11 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'install:logout': 'copyfiles -f src/shared/* src/app/logout/shared && cd src/app/logout && npm install',
     'install:monitoring': 'cd src/monitoring/lambda && npm install',
     'postinstall': 'npm run install:login && npm run install:auth && npm run install:home && npm run install:logout && npm run install:monitoring',
+    'post-upgrade': ' \
+      (cd src/app/login && npx npm-check-updates -u && npm install) \
+      && (cd src/app/home && npx npm-check-updates -u && npm install) \
+      && (cd src/app/login && npx npm-check-updates -u && npm install) \
+      && (cd src/app/logout && npx npm-check-updates -u && npm install)',
   },
   eslintOptions: {
     devdirs: ['src/app/login/tests', 'src/app/auth/tests', 'src/app/home/tests', 'src/app/uitkeringen/tests', 'src/app/logout/tests', '/test', '/build-tools'],
@@ -49,6 +55,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'src/app/**/shared',
     'src/app/**/tests/output',
     '.DS_Store',
+    'test/playwright/report',
   ],
 });
 
