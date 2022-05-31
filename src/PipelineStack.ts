@@ -23,10 +23,10 @@ export class PipelineStack extends Stack {
     
     const pipeline = this.pipeline(source);
     pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', { env: props.deployToEnvironment }));
-   
+
     const apiStage = pipeline.addStage(new ApiStage(this, 'mijn-api', { env: props.deployToEnvironment, branch: this.branchName }));
     this.runValidationChecks(apiStage, source);
-    
+
   }
 
   /**
@@ -40,13 +40,13 @@ export class PipelineStack extends Stack {
     stage.addPost(new ShellStep('validate', {
       input: source,
       env: {
-        'CI': 'true'
+        CI: 'true',
       },
       commands: [
         'yarn install --frozen-lockfile',
         'npx playwright install',
         'npx playwright install-deps',
-        'npx playwright test'
+        'npx playwright test',
       ],
     }));
   }
