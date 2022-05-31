@@ -33,30 +33,30 @@ export class PipelineStack extends Stack {
     });
     const pipeline = this.pipeline(synthStep);
     pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', { env: props.deployToEnvironment }));
-   
+
     const apiStage = pipeline.addStage(new ApiStage(this, 'mijn-api', { env: props.deployToEnvironment, branch: this.branchName }));
     this.runValidationChecks(apiStage, source);
-    
+
   }
 
   /**
    * Run validation checks on the finished deployment (for now this runs playwright e2e tests)
-   * 
+   *
    * @param apiStage stage after which to run
    * @param source the source repo in which to run
    */
   private runValidationChecks(apiStage: pipelines.StageDeployment, source: pipelines.CodePipelineSource) {
-    if(this.branchName != 'acceptance') { return; }
+    if (this.branchName != 'acceptance') { return; }
     apiStage.addPost(new ShellStep('validate', {
       input: source,
       env: {
-        'CI': 'true'
+        CI: 'true',
       },
       commands: [
         'yarn install --frozen-lockfile',
         'npx playwright install',
         'npx playwright install-deps',
-        'npx playwright test'
+        'npx playwright test',
       ],
     }));
   }
