@@ -4,7 +4,6 @@ import { Construct } from 'constructs';
 import { ApiStage } from './ApiStage';
 import { ParameterStage } from './ParameterStage';
 import { Statics } from './statics';
-// import { TestStage } from './TestStage';
 
 export interface PipelineStackProps extends StackProps{
   branchName: string;
@@ -33,19 +32,29 @@ export class PipelineStack extends Stack {
       ],
     });
     const pipeline = this.pipeline(synthStep);
-    const paramStage = pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', { env: props.deployToEnvironment }));
-    paramStage.addPost(new ShellStep('validate', {
+    pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', { env: props.deployToEnvironment }));
+   
+    const apiStage = pipeline.addStage(new ApiStage(this, 'mijn-api', { env: props.deployToEnvironment, branch: this.branchName }));
+    this.runValidationChecks(apiStage, source);
+    
+  }
+
+  /**
+   * Run validation checks on the finished deployment (for now this runs playwright e2e tests)
+   * 
+   * @param apiStage stage after which to run
+   * @param source the source repo in which to run
+   */
+  private runValidationChecks(apiStage: pipelines.StageDeployment, source: pipelines.CodePipelineSource) {
+    apiStage.addPost(new ShellStep('validate', {
       input: source,
       commands: [
         'yarn install --frozen-lockfile',
         'npx playwright install',
+        'npx playwright install-deps',
         'npx playwright test'
       ],
     }));
-    pipeline.addStage(new ApiStage(this, 'mijn-api', { env: props.deployToEnvironment, branch: this.branchName }));
-    // pipeline.addStage(new TestStage(this, 'tests', { branch: this.branchName, sourceArn: connectionArn.valueAsString }));
-    // run a script that was transpiled from TypeScript during synthesis
-    
   }
 
   pipeline(synthStep: ShellStep): pipelines.CodePipeline {
