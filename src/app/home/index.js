@@ -1,4 +1,4 @@
-const { ApiClient } = require('./ApiClient');
+const { ApiClient } = require('@gemeentenijmegen/apiclient');
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const { homeRequestHandler } = require("./homeRequestHandler");
 
