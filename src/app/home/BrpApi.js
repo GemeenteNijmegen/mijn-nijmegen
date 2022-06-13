@@ -1,4 +1,4 @@
-const { ApiClient } = require('./ApiClient');
+const { ApiClient } = require("@gemeentenijmegen/apiclient");
 
 class BrpApi {
     constructor(client) {
