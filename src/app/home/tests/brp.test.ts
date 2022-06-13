@@ -63,5 +63,5 @@ test('Api non-existent', async () => {
   const client = new ApiClient(cert, key, ca);
   const api = new BrpApi(client);
   const result = await api.getBrpData(12345678);
-  expect(result).toBe(false);
+  expect(result.error).toBe('Het ophalen van gegevens is misgegaan.');
 });
