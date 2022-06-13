@@ -56,6 +56,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'src/app/**/tests/output',
     '.DS_Store',
     'test/playwright/report',
+    'test/playwright/screenshots'
   ],
 });
 
