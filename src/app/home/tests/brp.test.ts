@@ -1,10 +1,9 @@
 import fs from 'fs';
-import { ApiClient } from '../ApiClient';
+import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { BrpApi } from '../BrpApi';
-import { FileApiClient } from '../FileApiClient';
 
 
-async function getStringFromFilePath(filePath: string) {
+async function getStringFromFilePath(filePath: string): Promise<string> {
   return new Promise((res, rej) => {
     fs.readFile(filePath, (err, data) => {
       if (err) {return rej(err);}
@@ -19,17 +18,6 @@ beforeAll(() => {
     global.console.time = jest.fn();
     global.console.log = jest.fn();
   }
-});
-
-// This test doesn't run in CI by default, depends on unavailable secrets
-test('Mock api', async () => {
-  if (!process.env.CERTPATH || !process.env.KEYPATH || !process.env.CAPATH) {
-    return;
-  }
-  const client = new FileApiClient();
-  const api = new BrpApi(client);
-  const result = await api.getBrpData(12345678);
-  expect(result.Persoon.BSN.BSN).toBe('12345678');
 });
 
 // This test doesn't run in CI by default, depends on unavailable secrets
@@ -63,5 +51,5 @@ test('Api non-existent', async () => {
   const client = new ApiClient(cert, key, ca);
   const api = new BrpApi(client);
   const result = await api.getBrpData(12345678);
-  expect(result).toBe(false);
+  expect(result.error).toBe('Het ophalen van gegevens is misgegaan.');
 });

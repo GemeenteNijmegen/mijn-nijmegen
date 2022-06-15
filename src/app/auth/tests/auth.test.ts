@@ -106,16 +106,6 @@ test('Successful auth creates new session', async () => {
 
 
   const result = await handleRequest(`session=${sessionId}`, 'state', '12345', dynamoDBClient);
-  expect(ddbMock).toHaveBeenCalledWith(
-    expect.objectContaining({
-      input: {
-        Key: {
-          sessionid: { S: sessionId },
-        },
-        TableName: process.env.SESSION_TABLE,
-      },
-    }),
-  );
   expect(result.statusCode).toBe(302);
   expect(result.headers.Location).toBe('/');
   expect(result.cookies).toContainEqual(expect.stringContaining('session='));

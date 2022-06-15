@@ -96,16 +96,6 @@ test('Known session without login returns login page, without creating new sessi
   const sessionId = '12345';
   const result = await handleLoginRequest(`session=${sessionId}`, dynamoDBClient);
   expect(ddbMock).toHaveBeenCalledTimes(2);
-  expect(ddbMock).toHaveBeenCalledWith(
-    expect.objectContaining({
-      input: {
-        Key: {
-          sessionid: { S: sessionId },
-        },
-        TableName: process.env.SESSION_TABLE,
-      },
-    }),
-  );
   expect(result.statusCode).toBe(200);
 });
 
