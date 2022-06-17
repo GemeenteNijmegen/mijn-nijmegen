@@ -134,6 +134,10 @@ table tr th {
     width: 35%;
 }
 
+.verwerkingen table tr th {
+    width: auto;
+}
+
 footer.page-footer {
     margin-top: 4rem;
 }
@@ -154,3 +158,8 @@ footer.page-footer {
 .navbar-nav svg {
     fill: white;
 }
+
+.md-form label {
+    left: initial;
+}
+
