@@ -2,7 +2,6 @@ import fs from 'fs';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { BrpApi } from '../BrpApi';
 
-
 async function getStringFromFilePath(filePath: string): Promise<string> {
   return new Promise((res, rej) => {
     fs.readFile(filePath, (err, data) => {
@@ -30,7 +29,7 @@ test('Api', async () => {
   const ca = await getStringFromFilePath(process.env.CAPATH);
   const client = new ApiClient(cert, key, ca);
   const api = new BrpApi(client);
-  const result = await api.getBrpData(999993653);
+  const result = await api.getBrpData('999993653');
   expect(result.Persoon.BSN.BSN).toBe('999993653');
   expect(result.Persoon.Persoonsgegevens.Naam).toBe('S. Moulin');
 });
@@ -50,6 +49,7 @@ test('Api non-existent', async () => {
   const ca = await getStringFromFilePath(process.env.CAPATH);
   const client = new ApiClient(cert, key, ca);
   const api = new BrpApi(client);
-  const result = await api.getBrpData(12345678);
+  const result = await api.getBrpData('000000097');
+  console.debug(result);
   expect(result.error).toBe('Het ophalen van gegevens is misgegaan.');
 });
