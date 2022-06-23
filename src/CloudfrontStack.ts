@@ -1,3 +1,4 @@
+import { Bucket } from '@gemeentenijmegen/aws-constructs';
 import {
   Stack,
   StackProps,
@@ -28,7 +29,6 @@ import {
   OriginAccessIdentity,
 } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin, S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
-import { Bucket, BlockPublicAccess, BucketEncryption } from 'aws-cdk-lib/aws-s3';
 import { RemoteParameters } from 'cdk-remote-stack';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
@@ -207,8 +207,7 @@ export class CloudfrontStack extends Stack {
    */
   logBucket() {
     const cfLogBucket = new Bucket(this, 'CloudfrontLogs', {
-      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-      encryption: BucketEncryption.S3_MANAGED,
+      encryption: S3.BucketEncryption.S3_MANAGED,
       lifecycleRules: [
         {
           id: 'delete objects after 180 days',
@@ -267,8 +266,7 @@ export class CloudfrontStack extends Stack {
    * @returns S3.Bucket
    */
   staticResourcesBucket() {
-    const bucket = new S3.Bucket(this, 'resources-bucket', {
-      blockPublicAccess: S3.BlockPublicAccess.BLOCK_ALL,
+    const bucket = new Bucket(this, 'resources-bucket', {
       encryption: S3.BucketEncryption.UNENCRYPTED,
     });
 
