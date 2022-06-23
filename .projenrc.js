@@ -12,6 +12,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     '@aws-cdk/aws-apigatewayv2-integrations-alpha',
     '@aws-solutions-constructs/aws-lambda-dynamodb',
     'cdk-remote-stack',
+    '@gemeentenijmegen/aws-constructs',
   ], /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   devDeps: [
