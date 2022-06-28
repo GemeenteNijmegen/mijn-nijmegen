@@ -1,8 +1,8 @@
 import { writeFile } from 'fs';
 import * as path from 'path';
-import { DynamoDBClient, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
-import { SecretsManagerClient, GetSecretValueCommandOutput } from '@aws-sdk/client-secrets-manager';
-import { mockClient } from 'jest-aws-client-mock';
+import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
+import { SecretsManagerClient, GetSecretValueCommandOutput, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
+import { mockClient } from 'aws-sdk-client-mock';
 import { FileApiClient } from '../FileApiClient';
 import { homeRequestHandler } from '../homeRequestHandler';
 
@@ -27,8 +27,8 @@ const ddbMock = mockClient(DynamoDBClient);
 const secretsMock = mockClient(SecretsManagerClient);
 
 beforeEach(() => {
-  ddbMock.mockReset();
-  secretsMock.mockReset();
+  ddbMock.reset();
+  secretsMock.reset();
   const getItemOutput: Partial<GetItemCommandOutput> = {
     Item: {
       data: {
@@ -40,7 +40,7 @@ beforeEach(() => {
       },
     },
   };
-  ddbMock.mockImplementation(() => getItemOutput);
+  ddbMock.on(GetItemCommand).resolves(getItemOutput);
 });
 
 test('Returns 200', async () => {
@@ -48,8 +48,7 @@ test('Returns 200', async () => {
     $metadata: {},
     SecretString: 'ditiseennepgeheim',
   };
-  secretsMock.mockImplementation(() => output);
-
+  secretsMock.on(GetSecretValueCommand).resolves(output);
   const apiClient = new FileApiClient();
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   const result = await homeRequestHandler('session=12345', apiClient, dynamoDBClient);
@@ -64,7 +63,7 @@ test('Shows overview page', async () => {
     $metadata: {},
     SecretString: 'ditiseennepgeheim',
   };
-  secretsMock.mockImplementation(() => output);
+  secretsMock.on(GetSecretValueCommand).resolves(output);
   const apiClient = new FileApiClient();
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   const result = await homeRequestHandler('session=12345', apiClient, dynamoDBClient);
