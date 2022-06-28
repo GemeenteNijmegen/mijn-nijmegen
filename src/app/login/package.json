@@ -12,9 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.118.1",
-    "@aws-sdk/client-secrets-manager": "^3.118.1",
-    "@gemeentenijmegen/session": "^0.0.3",
+    "@aws-sdk/client-dynamodb": "3.118.1",
+    "@aws-sdk/client-secrets-manager": "3.118.1",
+    "@gemeentenijmegen/session": "0.0.3",
     "cookie": "^0.5.0",
     "mustache": "^4.2.0",
     "openid-client": "^5.1.7",
