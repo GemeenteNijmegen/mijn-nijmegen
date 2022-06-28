@@ -22,6 +22,6 @@
   },
   "devDependencies": {
     "jest-aws-client-mock": "0.0.26",
-    "@aws-sdk/types": "^3.110.0"
+    "@aws-sdk/types": "3.110.0"
   }
 }
