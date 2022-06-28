@@ -1,6 +1,6 @@
-import { DynamoDBClient, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
-import { SecretsManagerClient, GetSecretValueCommandOutput } from '@aws-sdk/client-secrets-manager';
-import { mockClient } from 'jest-aws-client-mock';
+import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
+import { SecretsManagerClient, GetSecretValueCommandOutput, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
+import { mockClient } from 'aws-sdk-client-mock';
 import { handleRequest } from '../handleRequest';
 
 beforeAll(() => {
@@ -18,6 +18,13 @@ beforeAll(() => {
   process.env.CLIENT_SECRET_ARN = '123';
   process.env.OIDC_CLIENT_ID = '1234';
   process.env.OIDC_SCOPE = 'openid';
+
+  const output: GetSecretValueCommandOutput = {
+    $metadata: {},
+    SecretString: 'ditiseennepgeheim',
+  };
+  secretsMock.on(GetSecretValueCommand).resolves(output);
+
 });
 
 const ddbMock = mockClient(DynamoDBClient);
@@ -55,17 +62,11 @@ jest.mock('openid-client', () => {
 });
 
 beforeEach(() => {
-  ddbMock.mockReset();
-  secretsMock.mockReset();
+  ddbMock.reset();
 });
 
 test('Successful auth redirects to home', async () => {
   const sessionId = '12345';
-  const output: GetSecretValueCommandOutput = {
-    $metadata: {},
-    SecretString: 'ditiseennepgeheim',
-  };
-  secretsMock.mockImplementation(() => output);
   const getItemOutput: Partial<GetItemCommandOutput> = {
     Item: {
       data: {
@@ -77,7 +78,7 @@ test('Successful auth redirects to home', async () => {
       },
     },
   };
-  ddbMock.mockImplementation(() => getItemOutput);
+  ddbMock.on(GetItemCommand).resolves(getItemOutput);
 
   const result = await handleRequest(`session=${sessionId}`, 'state', '12345', dynamoDBClient);
   expect(result.statusCode).toBe(302);
@@ -87,11 +88,6 @@ test('Successful auth redirects to home', async () => {
 
 test('Successful auth creates new session', async () => {
   const sessionId = '12345';
-  const output: GetSecretValueCommandOutput = {
-    $metadata: {},
-    SecretString: 'ditiseennepgeheim',
-  };
-  secretsMock.mockImplementation(() => output);
   const getItemOutput: Partial<GetItemCommandOutput> = {
     Item: {
       data: {
@@ -102,7 +98,7 @@ test('Successful auth creates new session', async () => {
       },
     },
   };
-  ddbMock.mockImplementation(() => getItemOutput);
+  ddbMock.on(GetItemCommand).resolves(getItemOutput);
 
 
   const result = await handleRequest(`session=${sessionId}`, 'state', '12345', dynamoDBClient);
@@ -120,11 +116,6 @@ test('No session redirects to login', async () => {
 
 test('Incorrect state errors', async () => {
   const sessionId = '12345';
-  const output: GetSecretValueCommandOutput = {
-    $metadata: {},
-    SecretString: 'ditiseennepgeheim',
-  };
-  secretsMock.mockImplementation(() => output);
   const getItemOutput: Partial<GetItemCommandOutput> = {
     Item: {
       loggedin: {
@@ -135,7 +126,7 @@ test('Incorrect state errors', async () => {
       },
     },
   };
-  ddbMock.mockImplementation(() => getItemOutput);
+  ddbMock.on(GetItemCommand).resolves(getItemOutput);
   const logSpy = jest.spyOn(console, 'error');
   const result = await handleRequest(`session=${sessionId}`, '12345', 'returnedstate', dynamoDBClient);
   expect(result.statusCode).toBe(302);
