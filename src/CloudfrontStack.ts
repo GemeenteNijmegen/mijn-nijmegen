@@ -28,7 +28,6 @@ import {
   OriginAccessIdentity,
 } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin, S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
-import { Bucket, BlockPublicAccess, BucketEncryption } from 'aws-cdk-lib/aws-s3';
 import { RemoteParameters } from 'cdk-remote-stack';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
@@ -206,9 +205,11 @@ export class CloudfrontStack extends Stack {
    * @returns s3.Bucket
    */
   logBucket() {
-    const cfLogBucket = new Bucket(this, 'CloudfrontLogs', {
-      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-      encryption: BucketEncryption.S3_MANAGED,
+    const cfLogBucket = new S3.Bucket(this, 'CloudfrontLogs', {
+      blockPublicAccess: S3.BlockPublicAccess.BLOCK_ALL,
+      eventBridgeEnabled: true,
+      enforceSSL: true,
+      encryption: S3.BucketEncryption.S3_MANAGED,
       lifecycleRules: [
         {
           id: 'delete objects after 180 days',
@@ -269,6 +270,8 @@ export class CloudfrontStack extends Stack {
   staticResourcesBucket() {
     const bucket = new S3.Bucket(this, 'resources-bucket', {
       blockPublicAccess: S3.BlockPublicAccess.BLOCK_ALL,
+      eventBridgeEnabled: true,
+      enforceSSL: true,
       encryption: S3.BucketEncryption.UNENCRYPTED,
     });
 
@@ -284,7 +287,7 @@ export class CloudfrontStack extends Stack {
    * @param originAccessIdentity
    * @param bucket
    */
-  allowOriginAccessIdentityAccessToBucket(originAccessIdentity: OriginAccessIdentity, bucket: Bucket) {
+  allowOriginAccessIdentityAccessToBucket(originAccessIdentity: OriginAccessIdentity, bucket: S3.Bucket) {
     bucket.addToResourcePolicy(new IAM.PolicyStatement({
       resources: [
         `${bucket.bucketArn}`,

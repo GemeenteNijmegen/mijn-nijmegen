@@ -1,4 +1,5 @@
 const { ApiClient } = require("@gemeentenijmegen/apiclient");
+const { Bsn } = require('@gemeentenijmegen/utils');
 
 class BrpApi {
     constructor(client) {
@@ -8,7 +9,8 @@ class BrpApi {
 
     async getBrpData(bsn) {
         try {
-            let data = await this.client.requestData(this.endpoint, {"bsn": bsn}, {'Content-type': 'application/json'});
+            const aBsn = new Bsn(bsn);
+            let data = await this.client.requestData(this.endpoint, {"bsn": aBsn.bsn}, {'Content-type': 'application/json'});
             if(data?.Persoon) {
                 return data;
             } else {
