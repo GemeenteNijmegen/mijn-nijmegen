@@ -1,12 +1,13 @@
 import { writeFile } from 'fs';
 import * as path from 'path';
-import { DynamoDBClient, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
-import { mockClient } from 'jest-aws-client-mock';
+import { DynamoDBClient, GetItemCommandOutput, GetItemCommand } from '@aws-sdk/client-dynamodb';
+import { mockClient } from 'aws-sdk-client-mock';
 import { handler } from '../index.js';
 import { handleLoginRequest } from '../loginRequestHandler.js';
 
 const ddbMock = mockClient(DynamoDBClient);
 const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
+
 beforeAll(() => {
   if (process.env.VERBOSETESTS != 'True') {
     global.console.error = jest.fn();
@@ -25,7 +26,7 @@ beforeAll(() => {
 
 
 beforeEach(() => {
-  ddbMock.mockReset();
+  ddbMock.reset();
 });
 
 
@@ -53,7 +54,7 @@ test('Create session if no session exists', async () => {
 
   await handleLoginRequest('', dynamoDBClient);
 
-  expect(ddbMock).toHaveBeenCalledTimes(1);
+  expect(ddbMock.calls().length).toBe(1);
 });
 
 test('Redirect to home if already logged in', async () => {
@@ -68,7 +69,7 @@ test('Redirect to home if already logged in', async () => {
       },
     },
   };
-  ddbMock.mockImplementation(() => output);
+  ddbMock.on(GetItemCommand).resolves(output);
   const sessionId = '12345';
   const result = await handleLoginRequest(`session=${sessionId}`, dynamoDBClient);
   expect(result.headers.Location).toBe('/');
@@ -77,10 +78,10 @@ test('Redirect to home if already logged in', async () => {
 
 test('Unknown session returns login page', async () => {
   const output: Partial<GetItemCommandOutput> = {}; //empty output
-  ddbMock.mockImplementation(() => output);
+  ddbMock.on(GetItemCommand).resolves(output);
   const sessionId = '12345';
   const result = await handleLoginRequest(`session=${sessionId}`, dynamoDBClient);
-  expect(ddbMock).toHaveBeenCalledTimes(2);
+  expect(ddbMock.calls().length).toBe(2);
   expect(result.statusCode).toBe(200);
 });
 
@@ -92,10 +93,10 @@ test('Known session without login returns login page, without creating new sessi
       },
     },
   };
-  ddbMock.mockImplementation(() => output);
+  ddbMock.on(GetItemCommand).resolves(output);
   const sessionId = '12345';
   const result = await handleLoginRequest(`session=${sessionId}`, dynamoDBClient);
-  expect(ddbMock).toHaveBeenCalledTimes(2);
+  expect(ddbMock.calls().length).toBe(2);
   expect(result.statusCode).toBe(200);
 });
 
@@ -107,13 +108,13 @@ test('Request without session returns session cookie', async () => {
 });
 
 test('DynamoDB error', async () => {
-  ddbMock.mockImplementation(() => { throw new Error('Not supported!'); });
+  ddbMock.on(GetItemCommand).rejects(new Error('Not supported!'));
   let failed = false;
   try {
     await handleLoginRequest('session=12345', dynamoDBClient);
   } catch (error) {
     failed = true;
   }
-  expect(ddbMock).toHaveBeenCalledTimes(1);
+  expect(ddbMock.calls().length).toBe(1);
   expect(failed).toBe(true);
 });
