@@ -21,6 +21,7 @@
     "uid-safe": "^2.1.5"
   },
   "devDependencies": {
-    "aws-sdk-client-mock": "^1.0.0"
+    "aws-sdk-client-mock": "^1.0.0",
+    "@aws-sdk/types": "3.110.0"
   }
 }
