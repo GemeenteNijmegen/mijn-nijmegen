@@ -30,8 +30,6 @@ beforeAll(() => {
 const ddbMock = mockClient(DynamoDBClient);
 const secretsMock = mockClient(SecretsManagerClient);
 
-const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-
 
 jest.mock('openid-client', () => {
   const originalClient = jest.requireActual('openid-client');
@@ -66,6 +64,7 @@ beforeEach(() => {
 });
 
 test('Successful auth redirects to home', async () => {
+  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   const sessionId = '12345';
   const getItemOutput: Partial<GetItemCommandOutput> = {
     Item: {
@@ -87,6 +86,7 @@ test('Successful auth redirects to home', async () => {
 
 
 test('Successful auth creates new session', async () => {
+  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   const sessionId = '12345';
   const getItemOutput: Partial<GetItemCommandOutput> = {
     Item: {
@@ -108,6 +108,7 @@ test('Successful auth creates new session', async () => {
 });
 
 test('No session redirects to login', async () => {
+  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   const result = await handleRequest('', 'state', 'state', dynamoDBClient);
   expect(result.statusCode).toBe(302);
   expect(result.headers.Location).toBe('/login');
@@ -115,6 +116,7 @@ test('No session redirects to login', async () => {
 
 
 test('Incorrect state errors', async () => {
+  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   const sessionId = '12345';
   const getItemOutput: Partial<GetItemCommandOutput> = {
     Item: {
