@@ -23,7 +23,6 @@
     "mustache": "^4.2.0"
   },
   "devDependencies": {
-    "@aws-sdk/types": "3.110.0",
     "aws-sdk-client-mock": "^1.0.0",
     "dotenv": "^16.0.1"
   }

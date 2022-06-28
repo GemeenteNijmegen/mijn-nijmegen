@@ -20,7 +20,6 @@
     "openid-client": "^5.1.6"
   },
   "devDependencies": {
-    "@aws-sdk/types": "^3.78.0",
     "aws-sdk-client-mock": "^1.0.0"
   }
 }
