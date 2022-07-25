@@ -468,7 +468,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"9af06f1556b4ab89405ca9d6f07a5aab7a6fec1269ddd4a93b3a4cee4f7e00a2:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"e2419b8dd0ca0bbae946d629e2d037964ec1e72c298f17488e1dc7256c13ae43:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
