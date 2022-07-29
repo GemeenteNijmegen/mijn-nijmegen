@@ -111,7 +111,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.assets.json\\\\\\" --verbose publish \\\\\\"ed3f23491c20cbbef10aa8f3b800e9e0d38099c7a16a1c3589cfa3d2696ebbae:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.assets.json\\\\\\" --verbose publish \\\\\\"fb8bdf1e138af2fb7eb5de2e1df2e571a104f14f86bac3e1d9cba5ccb9710e88:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -230,8 +230,8 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapidnssecstackFC92838A.assets.json\\\\\\" --verbose publish \\\\\\"eaeb69bc290b516fe3b049f89d6118b22249df682fbabf56af300cf345198574:test-us-east-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.assets.json\\\\\\" --verbose publish \\\\\\"eaeb69bc290b516fe3b049f89d6118b22249df682fbabf56af300cf345198574:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapidnssecstackFC92838A.assets.json\\\\\\" --verbose publish \\\\\\"e7c95e1a12d903d913ebdd526c735f1ac58b2024882a5562110221fe685ebe85:test-us-east-1\\\\\\"\\",
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.assets.json\\\\\\" --verbose publish \\\\\\"e7c95e1a12d903d913ebdd526c735f1ac58b2024882a5562110221fe685ebe85:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -290,8 +290,8 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapidnssecstackFC92838A.assets.json\\\\\\" --verbose publish \\\\\\"4cd567bf52e0f31674ae9e960efae8855b8b1249fa9997799ae47dc9f80e9ff8:test-us-east-1\\\\\\"\\",
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"4cd567bf52e0f31674ae9e960efae8855b8b1249fa9997799ae47dc9f80e9ff8:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapidnssecstackFC92838A.assets.json\\\\\\" --verbose publish \\\\\\"ae967c277459e8936ac565a71d34ea5dcff7b98e556466c36a4d6da023a2d9aa:test-us-east-1\\\\\\"\\",
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"ae967c277459e8936ac565a71d34ea5dcff7b98e556466c36a4d6da023a2d9aa:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -350,7 +350,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"10cb4be03ddfd5aad3b81fc7163219ce8c6578f441c7a8f0947c7041868f7cb3:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"409ea6319a3e3590b0e39750270479f077dcd44dbf28a7884d6f965d4f8e99d3:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -409,7 +409,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"a425591f649c502f24ea8f24adfd791e0b1a3bdc9da3fca1f08b93e083db6440:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"8824f38db5e58738dc44bcca9dac9c299714ca015cf777fd4582780799fb9a30:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -468,7 +468,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"9af06f1556b4ab89405ca9d6f07a5aab7a6fec1269ddd4a93b3a4cee4f7e00a2:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"8491c054a6ff6c368d430ac11c517fe6f16ec68a537299e7f3ec0b3fd9053f84:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -527,7 +527,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"ee6f131346b0fd2f17cc8756cdb35b97dfdbbe40182026e5785d67f659b8061f:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"15ca06454636de9d7b31db47a197ececf79a9bc91bc0e38ee3ece9cd8c47d5e5:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -586,7 +586,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"042311ebc0bd3deadb03608909977a3d06ff89b63e05ddff5c7abcb3f2562b30:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"9ad50cd722dce38f35c29953b3e70b64c6087389f23e02604806d0ba91afc555:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -645,7 +645,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.assets.json\\\\\\" --verbose publish \\\\\\"b7f327b4415410f319943b754edb274645a9d6850369ae4da9ba209858099210:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.assets.json\\\\\\" --verbose publish \\\\\\"d21f8b6ad7cafde52be800b4bc2704085a5402ea7401fa71bd8f1e3f995c6068:test-eu-west-1\\\\\\"\\"
       ]
     }
   }

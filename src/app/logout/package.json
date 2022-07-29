@@ -19,6 +19,6 @@
     "mustache": "^4.2.0"
   },
   "devDependencies": {
-    "@aws-sdk/types": "3.110.0"
+    "@aws-sdk/types": "3.127.0"
   }
 }
