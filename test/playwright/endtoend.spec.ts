@@ -50,7 +50,7 @@ test('Visiting uitkeringen-page with valid BSN shows info', async () => {
   await expect(page).toHaveURL('https://mijn.accp.nijmegen.nl/uitkeringen');
 
   // Click text=Hier vindt u een overzicht van uw uitkeringen.
-  const table =  page.locator('table tbody');
+  const table =  page.locator('table tbody').first();
   await expect(table).toContainText('BSN van klant');
   await page.screenshot({ path: 'test/playwright/screenshots/uitkering.png', fullPage: true });
 

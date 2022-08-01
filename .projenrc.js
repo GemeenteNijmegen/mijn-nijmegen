@@ -41,10 +41,10 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'install:monitoring': 'cd src/monitoring/lambda && npm install',
     'postinstall': 'npm run install:login && npm run install:auth && npm run install:home && npm run install:logout && npm run install:monitoring',
     'post-upgrade': ' \
-      (cd src/app/login && npx npm-check-updates -u --dep prod && npm install) \
-      && (cd src/app/home && npx npm-check-updates -u --dep prod && npm install) \
-      && (cd src/app/login && npx npm-check-updates -u --dep prod && npm install) \
-      && (cd src/app/logout && npx npm-check-updates -u --dep prod && npm install)',
+      (cd src/app/login && npx npm-check-updates -u --dep prod,dev && npm install) \
+      && (cd src/app/home && npx npm-check-updates -u --dep prod,dev && npm install) \
+      && (cd src/app/login && npx npm-check-updates -u --dep prod,dev && npm install) \
+      && (cd src/app/logout && npx npm-check-updates -u --dep prod,dev && npm install)',
   },
   eslintOptions: {
     devdirs: ['src/app/login/tests', 'src/app/auth/tests', 'src/app/home/tests', 'src/app/uitkeringen/tests', 'src/app/logout/tests', '/test', '/build-tools'],
