@@ -16,9 +16,7 @@ function htmlResponse(body, cookies) {
 
 async function handleLogoutRequest(cookies, dynamoDBClient) {
     let session = new Session(cookies, dynamoDBClient);
-    await session.init();
-
-    if (session.sessionId !== false) {
+    if(await session.init()) {
         await session.updateSession({
             loggedin: { BOOL: false },
         });
