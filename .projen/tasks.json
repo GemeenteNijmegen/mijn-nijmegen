@@ -195,7 +195,7 @@
       "name": "post-upgrade",
       "steps": [
         {
-          "exec": "       (cd src/app/login && npx npm-check-updates -u --dep prod && npm install)       && (cd src/app/home && npx npm-check-updates -u --dep prod && npm install)       && (cd src/app/login && npx npm-check-updates -u --dep prod && npm install)       && (cd src/app/logout && npx npm-check-updates -u --dep prod && npm install)"
+          "exec": "       (cd src/app/login && npx npm-check-updates -u --dep prod,dev && npm install)       && (cd src/app/home && npx npm-check-updates -u --dep prod,dev && npm install)       && (cd src/app/login && npx npm-check-updates -u --dep prod,dev && npm install)       && (cd src/app/logout && npx npm-check-updates -u --dep prod,dev && npm install)"
         }
       ]
     },
