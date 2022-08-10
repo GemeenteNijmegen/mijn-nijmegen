@@ -8,22 +8,27 @@ export interface DNSStackProps extends StackProps {
 
 export class DNSStack extends Stack {
   zone: Route53.HostedZone;
-  cspRootZone: Route53.IHostedZone;
+  accountRootZone: Route53.IHostedZone;
   branch: string;
 
   constructor(scope: Construct, id: string, props: DNSStackProps) {
     super(scope, id);
     this.branch = props.branch;
 
-    const rootZoneId = SSM.StringParameter.valueForStringParameter(this, Statics.cspRootZoneId);
-    const rootZoneName = SSM.StringParameter.valueForStringParameter(this, Statics.cspRootZoneName);
-    this.cspRootZone = Route53.HostedZone.fromHostedZoneAttributes(this, 'cspzone', {
+    var rootZoneId = SSM.StringParameter.valueForStringParameter(this, Statics.cspRootZoneId);
+    var rootZoneName = SSM.StringParameter.valueForStringParameter(this, Statics.cspRootZoneName);
+    if (this.branch == 'acceptance') {
+      rootZoneId = SSM.StringParameter.valueForStringParameter(this, Statics.accountRootHostedZoneId); // Using the new generic parameter (managed in dns-management)
+      rootZoneName = SSM.StringParameter.valueForStringParameter(this, Statics.accountRootHostedZoneName); // Using the new generic parameter (managed in dns-management)
+    }
+
+    this.accountRootZone = Route53.HostedZone.fromHostedZoneAttributes(this, 'cspzone', {
       hostedZoneId: rootZoneId,
       zoneName: rootZoneName,
     });
 
     this.zone = new Route53.HostedZone(this, 'mijn-csp', {
-      zoneName: `mijn.${this.cspRootZone.zoneName}`,
+      zoneName: `mijn.${this.accountRootZone.zoneName}`,
     });
 
     this.addZoneIdAndNametoParams();
@@ -75,7 +80,7 @@ export class DNSStack extends Stack {
   addNSToRootCSPzone() {
     if (!this.zone.hostedZoneNameServers) { return; }
     new Route53.NsRecord(this, 'ns-record', {
-      zone: this.cspRootZone,
+      zone: this.accountRootZone,
       values: this.zone.hostedZoneNameServers,
       recordName: 'mijn',
     });
@@ -90,14 +95,14 @@ export class DNSStack extends Stack {
 
     //accp
     new Route53.CnameRecord(this, 'validation-record-accp', {
-      zone: this.cspRootZone,
+      zone: this.accountRootZone,
       recordName: '_f7efe25b3a753b7b4054d2dba93a343b',
       domainName: '1865949c9e0474591398be17540a8383.626b224344a3e3acc3b0f4b67b2a52d3.comodoca.com.',
     });
 
     //csp
     new Route53.CnameRecord(this, 'validation-record-prod', {
-      zone: this.cspRootZone,
+      zone: this.accountRootZone,
       recordName: '_f73d66ee2c385b8dfc18ace27cb99644',
       domainName: '2e45a999777f5fe42487a28040c9c926.897f69591e347cfdce9e9d66193f750d.comodoca.com.',
     });
@@ -120,7 +125,7 @@ export class DNSStack extends Stack {
         break;
     }
     new Route53.DsRecord(this, 'ds-record', {
-      zone: this.cspRootZone,
+      zone: this.accountRootZone,
       recordName: 'mijn',
       values: [dsValue],
       ttl: Duration.seconds(600),
