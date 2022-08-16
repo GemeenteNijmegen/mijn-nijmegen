@@ -20,10 +20,10 @@ export class DNSSECStack extends Stack {
      */
   constructor(scope: Construct, id: string, props: DNSSECStackProps) {
     super(scope, id, props);
-    this.setDNSSEC();
+    this.setDNSSEC(props);
   }
 
-  setDNSSEC() {
+  setDNSSEC(props: DNSSECStackProps) {
 
     const parameters = new RemoteParameters(this, 'params', {
       path: `${Statics.ssmZonePath}/`,
@@ -31,7 +31,12 @@ export class DNSSECStack extends Stack {
     });
     const zoneId = parameters.get(Statics.ssmZoneIdNew);
 
-    const accountDnssecKmsKeyArn = SSM.StringParameter.valueForStringParameter(this, Statics.ssmAccountDnsSecKmsKey);
+    var paramName = Statics.ssmAccountDnsSecKmsKey;
+    if (props.branch === 'production') {
+      // TODO moved temprarely to another parameter so that a new KMS key can be created
+      paramName += '/moving';
+    }
+    const accountDnssecKmsKeyArn = SSM.StringParameter.valueForStringParameter(this, paramName);
 
     const dnssecKeySigning = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key-2', {
       name: 'mijn_nijmegen_ksk',
