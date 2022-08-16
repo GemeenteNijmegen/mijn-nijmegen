@@ -31,40 +31,49 @@ export class DNSSECStack extends Stack {
     });
     const zoneId = parameters.get(Statics.ssmZoneIdNew);
 
-    /**
-     * After switching to the new ksk below this can be removed
-     * This is duplicate for acceptance, however, by creating a new ksk for both accp and prod the code will stay the same.
-     */
-    var paramName = Statics.ssmAccountDnsSecKmsKey;
-    if (props.branch === 'production') {
-      // TODO moved temprarely to another parameter so that a new KMS key can be created
-      paramName += '/moving';
-    }
-    const accountDnssecKmsKeyArn = SSM.StringParameter.valueForStringParameter(this, paramName);
-    const dnssecKeySigning = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key-2', {
-      name: 'mijn_nijmegen_ksk',
-      status: 'ACTIVE',
-      hostedZoneId: zoneId,
-      keyManagementServiceArn: accountDnssecKmsKeyArn,
-    });
-
-    /**
-     * New ksk
-     */
-    const accountKmsKeyArnForDnsSec = SSM.StringParameter.valueForStringParameter(this, Statics.ssmAccountDnsSecKmsKey);
-    const keySigningKey = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key', {
-      name: 'mijn_nijmegen_key_signing_key',
-      status: 'ACTIVE',
-      hostedZoneId: zoneId,
-      keyManagementServiceArn: accountKmsKeyArnForDnsSec,
-    });
-
-
     const dnssec = new Route53.CfnDNSSEC(this, 'dnssec', {
       hostedZoneId: zoneId,
     });
-    dnssec.node.addDependency(dnssecKeySigning);
-    dnssec.node.addDependency(keySigningKey);
+
+    /**
+     * New ksk in prod only
+     */
+    if (props.branch === 'production') {
+
+      // We want to create this one using the new kms key (this is not allowed in acceptance as we would create two ksks in the same hosted zone using the same kms key)
+      const accountKmsKeyArnForDnsSec = SSM.StringParameter.valueForStringParameter(this, Statics.ssmAccountDnsSecKmsKey);
+      const dnssecKeySigningNew = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key', {
+        name: 'mijn_nijmegen_key_signing_key',
+        status: 'ACTIVE',
+        hostedZoneId: zoneId,
+        keyManagementServiceArn: accountKmsKeyArnForDnsSec,
+      });
+      dnssec.node.addDependency(dnssecKeySigningNew);
+
+      // This key is the alrealy existing one in production using the old kms key (can be removed after switching to the new kms key above)
+      const accountDnssecKmsKeyArn = SSM.StringParameter.valueForStringParameter(this, Statics.ssmAccountDnsSecKmsKey + '/moving');
+      const dnssecKeySigning = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key-2', {
+        name: 'mijn_nijmegen_ksk',
+        status: 'ACTIVE',
+        hostedZoneId: zoneId,
+        keyManagementServiceArn: accountDnssecKmsKeyArn,
+      });
+      dnssec.node.addDependency(dnssecKeySigning);
+
+    } else {
+
+      // For acceptance keep the original ksk
+      const accountDnssecKmsKeyArn = SSM.StringParameter.valueForStringParameter(this, Statics.ssmAccountDnsSecKmsKey);
+      const dnssecKeySigning = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key-2', {
+        name: 'mijn_nijmegen_ksk',
+        status: 'ACTIVE',
+        hostedZoneId: zoneId,
+        keyManagementServiceArn: accountDnssecKmsKeyArn,
+      });
+      dnssec.node.addDependency(dnssecKeySigning);
+
+    }
+
 
   }
 
