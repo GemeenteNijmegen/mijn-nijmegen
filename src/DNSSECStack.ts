@@ -39,8 +39,7 @@ export class DNSSECStack extends Stack {
      * New ksk in prod only
      */
     if (props.branch === 'production') {
-
-      // We want to create this one using the new kms key (this is not allowed in acceptance as we would create two ksks in the same hosted zone using the same kms key)
+      // Production KSK
       const accountKmsKeyArnForDnsSec = SSM.StringParameter.valueForStringParameter(this, Statics.ssmAccountDnsSecKmsKey);
       const dnssecKeySigningNew = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key', {
         name: 'mijn_nijmegen_key_signing_key',
@@ -49,20 +48,8 @@ export class DNSSECStack extends Stack {
         keyManagementServiceArn: accountKmsKeyArnForDnsSec,
       });
       dnssec.node.addDependency(dnssecKeySigningNew);
-
-      // This key is the alrealy existing one in production using the old kms key (can be removed after switching to the new kms key above)
-      const accountDnssecKmsKeyArn = SSM.StringParameter.valueForStringParameter(this, Statics.ssmAccountDnsSecKmsKey + '/moving');
-      const dnssecKeySigning = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key-2', {
-        name: 'mijn_nijmegen_ksk',
-        status: 'INACTIVE',
-        hostedZoneId: zoneId,
-        keyManagementServiceArn: accountDnssecKmsKeyArn,
-      });
-      dnssec.node.addDependency(dnssecKeySigning);
-
     } else {
-
-      // For acceptance keep the original ksk
+      // Acceptance KSK
       const accountDnssecKmsKeyArn = SSM.StringParameter.valueForStringParameter(this, Statics.ssmAccountDnsSecKmsKey);
       const dnssecKeySigning = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key-2', {
         name: 'mijn_nijmegen_ksk',
@@ -71,7 +58,6 @@ export class DNSSECStack extends Stack {
         keyManagementServiceArn: accountDnssecKmsKeyArn,
       });
       dnssec.node.addDependency(dnssecKeySigning);
-
     }
 
 
