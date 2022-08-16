@@ -66,6 +66,14 @@ export abstract class Statics {
   static readonly cspRootZoneId: string = '/gemeente-nijmegen/formio/hostedzone/id';
   static readonly cspRootZoneName: string = '/gemeente-nijmegen/formFio/hostedzone/name';
 
+  // Managed in dns-managment project:
+  // Below references the new hosted zone separeted from webformulieren
+  static readonly accountRootHostedZonePath: string = '/gemeente-nijmegen/account/hostedzone';
+  static readonly accountRootHostedZoneId: string = '/gemeente-nijmegen/account/hostedzone/id';
+  static readonly accountRootHostedZoneName: string = '/gemeente-nijmegen/account/hostedzone/name';
+  // The KSM key parameters for each account
+  static readonly ssmAccountDnsSecKmsKey: string = '/gemeente-nijmegen/account/dnssec/kmskey/arn';
+
 
   /**
    * Route53 Zone ID and name for the zone for Mijn Nijmegen. decouples stacks to not pass
@@ -94,9 +102,6 @@ export abstract class Statics {
 
   static readonly ssmMonitoringLambdaArn: string = '/cdk/mijn-nijmegen/monitoring-lambda-arn';
   static readonly ssmSlackWebhookUrl: string = '/cdk/mijn-nijmegen/slack-webhook-url';
-
-  // The KSM key parameters for each account
-  static readonly ssmAccountDnsSecKmsKey: string = '/gemeente-nijmegen/account/dnssec/kmskey/arn';
 
 
   static subDomain(branch: string) {
