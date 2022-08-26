@@ -15,12 +15,8 @@ export class DNSStack extends Stack {
     super(scope, id);
     this.branch = props.branch;
 
-    var rootZoneId = SSM.StringParameter.valueForStringParameter(this, Statics.cspRootZoneId);
-    var rootZoneName = SSM.StringParameter.valueForStringParameter(this, Statics.cspRootZoneName);
-    if (this.branch == 'acceptance') {
-      rootZoneId = SSM.StringParameter.valueForStringParameter(this, Statics.accountRootHostedZoneId); // Using the new generic parameter (managed in dns-management)
-      rootZoneName = SSM.StringParameter.valueForStringParameter(this, Statics.accountRootHostedZoneName); // Using the new generic parameter (managed in dns-management)
-    }
+    const rootZoneId = SSM.StringParameter.valueForStringParameter(this, Statics.accountRootHostedZoneId);
+    const rootZoneName = SSM.StringParameter.valueForStringParameter(this, Statics.accountRootHostedZoneName);
 
     this.accountRootZone = Route53.HostedZone.fromHostedZoneAttributes(this, 'cspzone', {
       hostedZoneId: rootZoneId,

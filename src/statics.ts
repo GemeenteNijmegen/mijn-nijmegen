@@ -112,4 +112,13 @@ export abstract class Statics {
     const subdomain = subdomainMap[branch as keyof typeof subdomainMap] ?? 'mijn-dev';
     return subdomain;
   }
+
+  static cspSubDomain(branch: string) {
+    const subdomainMap = {
+      acceptance: 'mijn.accp',
+      production: 'mijn.auth-prod',
+    };
+    const subdomain = subdomainMap[branch as keyof typeof subdomainMap] ?? 'mijn-dev';
+    return subdomain;
+  }
 }
