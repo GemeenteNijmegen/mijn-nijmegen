@@ -32,17 +32,28 @@ export class UsEastCertificateStack extends Stack {
     const oldCspDomain = `${subdomain}.csp-nijmegen.nl`;
     const cspDomain = `${cspSubdomain}.csp-nijmegen.nl`;
 
-    const certificate = new CertificateManager.Certificate(this, 'certificate', {
+    new CertificateManager.Certificate(this, 'certificate', { // TODO remove after succesfull deploy of certificate below
       domainName: oldCspDomain,
-      subjectAlternativeNames: [appDomain, cspDomain],
+      subjectAlternativeNames: [appDomain],
+      validation: CertificateManager.CertificateValidation.fromDns(),
+    });
+
+    // On accp old and new csp domain are the same (temp solution until oldCspDomain is decommissioned)
+    var subjectAlternativeNames = [cspDomain, oldCspDomain];
+    if (cspDomain === oldCspDomain) {
+      subjectAlternativeNames = [cspDomain];
+    }
+
+    const mijnCcertificate = new CertificateManager.Certificate(this, 'mijn-certificate', {
+      domainName: appDomain,
+      subjectAlternativeNames: subjectAlternativeNames,
       validation: CertificateManager.CertificateValidation.fromDns(),
     });
 
     new SSM.StringParameter(this, 'cert-arn', {
-      stringValue: certificate.certificateArn,
+      stringValue: mijnCcertificate.certificateArn,
       parameterName: Statics.certificateArn,
     });
 
-    return certificate;
   }
 }
