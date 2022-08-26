@@ -27,11 +27,14 @@ export class UsEastCertificateStack extends Stack {
 
   createCertificate() {
     const subdomain = Statics.subDomain(this.branch);
-    const cspDomain = `${subdomain}.csp-nijmegen.nl`;
+    const cspSubdomain = Statics.subDomain(this.branch);
+    const appDomain = `${subdomain}.nijmegen.nl`;
+    const oldCspDomain = `${subdomain}.csp-nijmegen.nl`;
+    const cspDomain = `${cspSubdomain}.csp-nijmegen.nl`;
 
     const certificate = new CertificateManager.Certificate(this, 'certificate', {
-      domainName: cspDomain,
-      subjectAlternativeNames: [`${subdomain}.nijmegen.nl`],
+      domainName: oldCspDomain,
+      subjectAlternativeNames: [appDomain, cspDomain],
       validation: CertificateManager.CertificateValidation.fromDns(),
     });
 
