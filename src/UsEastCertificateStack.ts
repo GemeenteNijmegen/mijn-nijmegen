@@ -27,7 +27,7 @@ export class UsEastCertificateStack extends Stack {
 
   createCertificate() {
     const subdomain = Statics.subDomain(this.branch);
-    const cspSubdomain = Statics.subDomain(this.branch);
+    const cspSubdomain = Statics.cspSubDomain(this.branch);
     const appDomain = `${subdomain}.nijmegen.nl`;
     const oldCspDomain = `${subdomain}.csp-nijmegen.nl`;
     const cspDomain = `${cspSubdomain}.csp-nijmegen.nl`;
