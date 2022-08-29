@@ -27,16 +27,10 @@ export class UsEastCertificateStack extends Stack {
 
   createCertificate() {
     const subdomain = Statics.subDomain(this.branch);
-    const cspSubdomain = Statics.subDomain(this.branch);
+    const cspSubdomain = Statics.cspSubDomain(this.branch);
     const appDomain = `${subdomain}.nijmegen.nl`;
     const oldCspDomain = `${subdomain}.csp-nijmegen.nl`;
     const cspDomain = `${cspSubdomain}.csp-nijmegen.nl`;
-
-    new CertificateManager.Certificate(this, 'certificate', { // TODO remove after succesfull deploy of certificate below
-      domainName: oldCspDomain,
-      subjectAlternativeNames: [appDomain],
-      validation: CertificateManager.CertificateValidation.fromDns(),
-    });
 
     // On accp old and new csp domain are the same (temp solution until oldCspDomain is decommissioned)
     var subjectAlternativeNames = [cspDomain, oldCspDomain];
