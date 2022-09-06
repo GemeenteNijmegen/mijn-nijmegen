@@ -37,15 +37,20 @@ export class UsEastCertificateStack extends Stack {
     if (cspDomain === oldCspDomain) {
       subjectAlternativeNames = [cspDomain];
     }
-
-    const mijnCcertificate = new CertificateManager.Certificate(this, 'mijn-certificate', {
+    new CertificateManager.Certificate(this, 'mijn-certificate', { // Prepare for removal
       domainName: appDomain,
       subjectAlternativeNames: subjectAlternativeNames,
       validation: CertificateManager.CertificateValidation.fromDns(),
     });
 
+    const certificate = new CertificateManager.Certificate(this, 'certificate', {
+      domainName: appDomain,
+      subjectAlternativeNames: [cspDomain],
+      validation: CertificateManager.CertificateValidation.fromDns(),
+    });
+
     new SSM.StringParameter(this, 'cert-arn', {
-      stringValue: mijnCcertificate.certificateArn,
+      stringValue: certificate.certificateArn,
       parameterName: Statics.certificateArn,
     });
 
