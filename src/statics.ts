@@ -100,6 +100,8 @@ export abstract class Statics {
   static readonly wafPath: string = '/cdk/mijn-nijmegen/waf';
   static readonly ssmWafAclArn: string = '/cdk/mijn-nijmegen/waf/acl-arn';
 
+  static readonly ssmReadonlyRoleArn: string = '/cdk/mijn-nijmegen/readonly-role-arn';
+
   static readonly ssmMonitoringLambdaArn: string = '/cdk/mijn-nijmegen/monitoring-lambda-arn';
   static readonly ssmSlackWebhookUrl: string = '/cdk/mijn-nijmegen/slack-webhook-url';
 
