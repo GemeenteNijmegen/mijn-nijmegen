@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { aws_lambda as Lambda, aws_dynamodb, aws_ssm as SSM } from 'aws-cdk-lib';
 import { Role } from 'aws-cdk-lib/aws-iam';
-import { FilterPattern, IFilterPattern, RetentionDays, SubscriptionFilter } from 'aws-cdk-lib/aws-logs';
+import { FilterPattern, IFilterPattern, MetricFilter, RetentionDays, SubscriptionFilter } from 'aws-cdk-lib/aws-logs';
 import { LambdaDestination } from 'aws-cdk-lib/aws-logs-destinations';
 import { Construct } from 'constructs';
 import { LambdaReadOnlyPolicy } from './iam/lambda-readonly-policy';
@@ -58,6 +58,14 @@ export class ApiFunction extends Construct {
    * @param filterPattern Pattern to filter by (default: containing ERROR)
    */
   private monitor(monitoredBy: Lambda.IFunction, filterPattern?: IFilterPattern) {
+    new MetricFilter(this, 'MetricFilter', {
+      logGroup: this.lambda.logGroup,
+      metricNamespace: `${Statics.projectName}/${this.node.id}`,
+      metricName: 'Errors',
+      filterPattern: filterPattern ?? FilterPattern.anyTerm('ERROR'),
+      metricValue: "1",
+    });
+
     new SubscriptionFilter(this, 'error-logs-subscription', {
       logGroup: this.lambda.logGroup,
       destination: new LambdaDestination(monitoredBy),
