@@ -1,12 +1,12 @@
 import * as path from 'path';
 import { aws_lambda as Lambda, aws_dynamodb, aws_ssm as SSM, RemovalPolicy, Duration } from 'aws-cdk-lib';
+import { Alarm } from 'aws-cdk-lib/aws-cloudwatch';
 import { Role } from 'aws-cdk-lib/aws-iam';
 import { FilterPattern, IFilterPattern, MetricFilter, RetentionDays, SubscriptionFilter } from 'aws-cdk-lib/aws-logs';
 import { LambdaDestination } from 'aws-cdk-lib/aws-logs-destinations';
 import { Construct } from 'constructs';
 import { LambdaReadOnlyPolicy } from './iam/lambda-readonly-policy';
 import { Statics } from './statics';
-import { Alarm } from 'aws-cdk-lib/aws-cloudwatch';
 
 export interface ApiFunctionProps {
   description: string;
@@ -64,14 +64,14 @@ export class ApiFunction extends Construct {
       metricNamespace: `${Statics.projectName}/${this.node.id}`,
       metricName: 'Errors',
       filterPattern: filterPattern ?? FilterPattern.anyTerm('ERROR'),
-      metricValue: "1",
+      metricValue: '1',
     });
     filter.applyRemovalPolicy(RemovalPolicy.DESTROY);
-    
+
     const alarm = new Alarm(this, `${Statics.projectName}-${this.node.id}-alarm`, {
       metric: filter.metric({
         statistic: 'sum',
-        period: Duration.minutes(5)
+        period: Duration.minutes(5),
       }),
       evaluationPeriods: 3,
       threshold: 5,
