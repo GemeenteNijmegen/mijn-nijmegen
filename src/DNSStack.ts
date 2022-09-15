@@ -29,7 +29,6 @@ export class DNSStack extends Stack {
 
     this.addZoneIdAndNametoParams();
     this.addNSToRootCSPzone();
-    this.addDomainValidationRecord();
     this.addDsRecord();
 
     const compat_output = new CfnOutput(this, 'temp-output', {
@@ -79,28 +78,6 @@ export class DNSStack extends Stack {
       zone: this.accountRootZone,
       values: this.zone.hostedZoneNameServers,
       recordName: 'mijn',
-    });
-  }
-
-  /**
-   * Import the zone for csp-nijmegen.nl and add
-   * the necessary txt-record for proving domain
-   * ownership.
-   */
-  addDomainValidationRecord() {
-
-    //accp
-    new Route53.CnameRecord(this, 'validation-record-accp', {
-      zone: this.accountRootZone,
-      recordName: '_f7efe25b3a753b7b4054d2dba93a343b',
-      domainName: '1865949c9e0474591398be17540a8383.626b224344a3e3acc3b0f4b67b2a52d3.comodoca.com.',
-    });
-
-    //csp
-    new Route53.CnameRecord(this, 'validation-record-prod', {
-      zone: this.accountRootZone,
-      recordName: '_f73d66ee2c385b8dfc18ace27cb99644',
-      domainName: '2e45a999777f5fe42487a28040c9c926.897f69591e347cfdce9e9d66193f750d.comodoca.com.',
     });
   }
 

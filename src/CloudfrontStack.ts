@@ -50,12 +50,8 @@ export class CloudfrontStack extends Stack {
     const subdomain = Statics.subDomain(props.branch);
     const cspSubdomain = Statics.cspSubDomain(props.branch);
     const cspDomain = `${cspSubdomain}.csp-nijmegen.nl`;
-    const oldCspDomain = `${subdomain}.csp-nijmegen.nl`;
     const mainDomain = `${subdomain}.nijmegen.nl`;
     var domains = [mainDomain, cspDomain];
-    if (cspDomain !== oldCspDomain) { // Temp solution until oldCspDomain is decommissioned
-      domains.push(oldCspDomain);
-    }
 
     const certificateArn = this.certificateArn();
 
