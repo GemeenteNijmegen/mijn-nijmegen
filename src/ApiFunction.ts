@@ -2,8 +2,7 @@ import * as path from 'path';
 import { aws_lambda as Lambda, aws_dynamodb, aws_ssm as SSM, RemovalPolicy, Duration } from 'aws-cdk-lib';
 import { Alarm } from 'aws-cdk-lib/aws-cloudwatch';
 import { Role } from 'aws-cdk-lib/aws-iam';
-import { FilterPattern, IFilterPattern, MetricFilter, RetentionDays, SubscriptionFilter } from 'aws-cdk-lib/aws-logs';
-import { LambdaDestination } from 'aws-cdk-lib/aws-logs-destinations';
+import { FilterPattern, IFilterPattern, MetricFilter, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
 import { LambdaReadOnlyPolicy } from './iam/lambda-readonly-policy';
 import { Statics } from './statics';
@@ -15,7 +14,6 @@ export interface ApiFunctionProps {
   tablePermissions: string;
   applicationUrlBase?: string;
   environment?: {[key: string]: string};
-  monitoredBy?: Lambda.IFunction;
   monitorFilterPattern?: IFilterPattern;
   readOnlyRole: Role;
 }
@@ -45,9 +43,7 @@ export class ApiFunction extends Construct {
     });
     props.table.grantReadWriteData(this.lambda.grantPrincipal);
 
-    if (props.monitoredBy) {
-      this.monitor(props.monitoredBy, props.monitorFilterPattern);
-    }
+    this.monitor(props.monitorFilterPattern);
     this.allowAccessToReadOnlyRole(props.readOnlyRole);
   }
 
@@ -58,7 +54,7 @@ export class ApiFunction extends Construct {
    * @param monitoredBy Lambda function responsible for monitoring this function
    * @param filterPattern Pattern to filter by (default: containing ERROR)
    */
-  private monitor(monitoredBy: Lambda.IFunction, filterPattern?: IFilterPattern) {
+  private monitor(filterPattern?: IFilterPattern) {
     const filter = new MetricFilter(this, 'MetricFilter', {
       logGroup: this.lambda.logGroup,
       metricNamespace: `${Statics.projectName}/${this.node.id}`,
@@ -80,12 +76,6 @@ export class ApiFunction extends Construct {
     });
     alarm.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
-    const subscriptionFilter = new SubscriptionFilter(this, 'error-logs-subscription', {
-      logGroup: this.lambda.logGroup,
-      destination: new LambdaDestination(monitoredBy),
-      filterPattern: filterPattern ?? FilterPattern.anyTerm('ERROR'),
-    });
-    subscriptionFilter.applyRemovalPolicy(RemovalPolicy.DESTROY);
   }
 
   private allowAccessToReadOnlyRole(role: Role) {

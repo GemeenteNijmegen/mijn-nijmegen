@@ -29,9 +29,9 @@ test('Api', async () => {
   const ca = await getStringFromFilePath(process.env.CAPATH);
   const client = new ApiClient(cert, key, ca);
   const api = new BrpApi(client);
-  const result = await api.getBrpData('999993653');
-  expect(result.Persoon.BSN.BSN).toBe('999993653');
-  expect(result.Persoon.Persoonsgegevens.Naam).toBe('S. Moulin');
+  const result = await api.getBrpData('900222670');
+  expect(result.Persoon.BSN.BSN).toBe('900222670');
+  expect(result.Persoon.Persoonsgegevens.Naam).toBe('A. de Smit');
 });
 
 // This test doesn't run in CI by default, depends on unavailable secrets
