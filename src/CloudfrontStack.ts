@@ -160,6 +160,7 @@ export class CloudfrontStack extends Stack {
       errorResponses: this.errorResponses(),
       logBucket: this.logBucket(),
       minimumProtocolVersion: SecurityPolicyProtocol.TLS_V1_2_2021,
+      defaultRootObject: '/home',
     });
     return distribution;
   }
