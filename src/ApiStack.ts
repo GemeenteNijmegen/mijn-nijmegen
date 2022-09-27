@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
+import * as integrations from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
 import { aws_secretsmanager, Stack, StackProps, aws_ssm as SSM, aws_lambda as Lambda } from 'aws-cdk-lib';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { AccountPrincipal, PrincipalWithConditions, Role } from 'aws-cdk-lib/aws-iam';
@@ -154,6 +155,12 @@ export class ApiStack extends Stack {
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('home', homeFunction.lambda),
       path: '/',
+      methods: [apigatewayv2.HttpMethod.GET],
+    });
+
+    this.api.addRoutes({ // Add a home path for the defaultRootObject
+      integration: new HttpLambdaIntegration('home-path', homeFunction.lambda),
+      path: '/home',
       methods: [apigatewayv2.HttpMethod.GET],
     });
   }
