@@ -42,9 +42,9 @@ export class ApiStack extends Stack {
     const subdomain = Statics.subDomain(props.branch);
     const appDomain = `${subdomain}.nijmegen.nl`;
 
-    const monitoringLambda = this.monitoringLambda();
+    this.monitoringLambda();
     const readOnlyRole = this.readOnlyRole();
-    this.setFunctions(`https://${appDomain}/`, monitoringLambda, readOnlyRole);
+    this.setFunctions(`https://${appDomain}/`, readOnlyRole);
     this.allowReadAccessToTable(readOnlyRole, this.sessionsTable);
   }
 
@@ -79,14 +79,13 @@ export class ApiStack extends Stack {
    * add routes to the gateway.
    * @param {string} baseUrl the application url
    */
-  setFunctions(baseUrl: string, monitoringLambda: Lambda.Function, readOnlyRole: Role) {
+  setFunctions(baseUrl: string, readOnlyRole: Role) {
     const loginFunction = new ApiFunction(this, 'login-function', {
       description: 'Login-pagina voor de Mijn Uitkering-applicatie.',
       codePath: 'app/login',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
-      monitoredBy: monitoringLambda,
       readOnlyRole,
     });
 
@@ -96,7 +95,6 @@ export class ApiStack extends Stack {
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
-      monitoredBy: monitoringLambda,
       readOnlyRole,
     });
 
@@ -107,7 +105,6 @@ export class ApiStack extends Stack {
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
-      monitoredBy: monitoringLambda,
       readOnlyRole,
       environment: {
         CLIENT_SECRET_ARN: oidcSecret.secretArn,
@@ -124,7 +121,6 @@ export class ApiStack extends Stack {
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
-      monitoredBy: monitoringLambda,
       readOnlyRole,
       environment: {
         MTLS_PRIVATE_KEY_ARN: secretMTLSPrivateKey.secretArn,
@@ -194,6 +190,11 @@ export class ApiStack extends Stack {
           },
         },
       ),
+    });
+
+    new SSM.StringParameter(this, 'ssm_readonly', {
+      stringValue: readOnlyRole.roleArn,
+      parameterName: Statics.ssmReadOnlyRoleArn,
     });
     return readOnlyRole;
   }
