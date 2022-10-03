@@ -55,17 +55,17 @@ export class ApiFunction extends Construct {
    * @param filterPattern Pattern to filter by (default: containing ERROR)
    */
   private monitor(filterPattern?: IFilterPattern) {
-    const filter = new MetricFilter(this, 'MetricFilter', {
+    const errorMetricFilter = new MetricFilter(this, 'MetricFilter', {
       logGroup: this.lambda.logGroup,
       metricNamespace: `${Statics.projectName}/${this.node.id}`,
       metricName: 'Errors',
       filterPattern: filterPattern ?? FilterPattern.anyTerm('ERROR'),
       metricValue: '1',
     });
-    filter.applyRemovalPolicy(RemovalPolicy.DESTROY);
+    errorMetricFilter.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     const alarm = new Alarm(this, `${Statics.projectName}-${this.node.id}-alarm`, {
-      metric: filter.metric({
+      metric: errorMetricFilter.metric({
         statistic: 'sum',
         period: Duration.minutes(5),
       }),
@@ -75,7 +75,6 @@ export class ApiFunction extends Construct {
       alarmDescription: `This alarm triggers if the function ${this.node.id} is logging more than 5 errors over n minutes.`,
     });
     alarm.applyRemovalPolicy(RemovalPolicy.DESTROY);
-
   }
 
   private allowAccessToReadOnlyRole(role: Role) {

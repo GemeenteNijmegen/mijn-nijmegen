@@ -20,7 +20,7 @@ test.beforeAll(async ({ browser }) => {
   await expect(page).toHaveURL('https://authenticatie-accp.nijmegen.nl/broker/authn/simulator/authenticate/digid');
 
   // Fill input[name="bsn"]
-  await page.locator('input[name="bsn"]').fill('900070341');
+  await page.locator('input[name="bsn"]').fill('900026236');
 
   // Click [data-test="send-button"]
   await page.locator('[data-test="send-button"]').click();

@@ -151,9 +151,9 @@ export class ApiStack extends Stack {
       methods: [apigatewayv2.HttpMethod.GET],
     });
 
-    this.api.addRoutes({
+    this.api.addRoutes({ // Also availabel at / due to CloudFront defaultRootObject
       integration: new HttpLambdaIntegration('home', homeFunction.lambda),
-      path: '/',
+      path: '/home',
       methods: [apigatewayv2.HttpMethod.GET],
     });
   }
