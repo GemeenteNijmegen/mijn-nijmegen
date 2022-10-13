@@ -38,8 +38,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'install:auth': 'copyfiles -f src/shared/* src/app/auth/shared && cd src/app/auth && npm install',
     'install:home': 'copyfiles -f src/shared/* src/app/home/shared && cd src/app/home && npm install',
     'install:logout': 'copyfiles -f src/shared/* src/app/logout/shared && cd src/app/logout && npm install',
-    'install:monitoring': 'cd src/monitoring/lambda && npm install',
-    'postinstall': 'npm run install:login && npm run install:auth && npm run install:home && npm run install:logout && npm run install:monitoring',
+    'postinstall': 'npm run install:login && npm run install:auth && npm run install:home && npm run install:logout',
     'post-upgrade': ' \
       (cd src/app/login && npx npm-check-updates -u --dep prod,dev && npm install) \
       && (cd src/app/home && npx npm-check-updates -u --dep prod,dev && npm install) \
