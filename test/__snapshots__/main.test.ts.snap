@@ -52,65 +52,6 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.assets.json\\\\\\" --verbose publish \\\\\\"f98b78092dcdd31f5e6d47489beb5f804d4835ef86a8085d0a2053cb9ae711da:test-eu-west-1\\\\\\"\\"
-      ]
-    }
-  }
-}",
-          "Type": "CODEPIPELINE",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cdkManaged",
-            "Value": "yes",
-          },
-          Object {
-            "Key": "Project",
-            "Value": "mijn-nijmegen",
-          },
-        ],
-      },
-      "Type": "AWS::CodeBuild::Project",
-    },
-    "mijnnijmegendevelopmentAssetsFileAsset11DB4CAE5E": Object {
-      "Properties": Object {
-        "Artifacts": Object {
-          "Type": "CODEPIPELINE",
-        },
-        "Cache": Object {
-          "Type": "NO_CACHE",
-        },
-        "Description": "Pipeline step test/Pipeline/Assets/FileAsset11",
-        "EncryptionKey": Object {
-          "Fn::GetAtt": Array [
-            "mijnnijmegendevelopmentPipelineArtifactsBucketEncryptionKeyA0AE2BAF",
-            "Arn",
-          ],
-        },
-        "Environment": Object {
-          "ComputeType": "BUILD_GENERAL1_SMALL",
-          "Image": "aws/codebuild/standard:5.0",
-          "ImagePullCredentialsType": "CODEBUILD",
-          "PrivilegedMode": false,
-          "Type": "LINUX_CONTAINER",
-        },
-        "ServiceRole": Object {
-          "Fn::GetAtt": Array [
-            "mijnnijmegendevelopmentAssetsFileRole8397C4AA",
-            "Arn",
-          ],
-        },
-        "Source": Object {
-          "BuildSpec": "{
-  \\"version\\": \\"0.2\\",
-  \\"phases\\": {
-    \\"install\\": {
-      \\"commands\\": [
-        \\"npm install -g cdk-assets@2\\"
-      ]
-    },
-    \\"build\\": {
-      \\"commands\\": [
         \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.assets.json\\\\\\" --verbose publish \\\\\\"ed3f23491c20cbbef10aa8f3b800e9e0d38099c7a16a1c3589cfa3d2696ebbae:test-eu-west-1\\\\\\"\\"
       ]
     }
@@ -350,7 +291,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"10cb4be03ddfd5aad3b81fc7163219ce8c6578f441c7a8f0947c7041868f7cb3:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"86dbd32ac55da7d2455c95f4111f65b80417b9015bf4bf6543cfd3767204a934:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -409,7 +350,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"86dbd32ac55da7d2455c95f4111f65b80417b9015bf4bf6543cfd3767204a934:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"fbf487e3531ec72ae4cff3de4bfd8fbe9abfc6dfd04406dc84280571048f0638:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -468,7 +409,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"fbf487e3531ec72ae4cff3de4bfd8fbe9abfc6dfd04406dc84280571048f0638:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"2d3ad79d26c35b527cd4e1a12a237fe396fdc8f55c0c6398dcbba5e1e2d30992:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -527,7 +468,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"2d3ad79d26c35b527cd4e1a12a237fe396fdc8f55c0c6398dcbba5e1e2d30992:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"43a12eb32005d880d63ffbceb432bb2aec7a77202a5bdd19b95a675b73acafab:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -586,7 +527,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"43a12eb32005d880d63ffbceb432bb2aec7a77202a5bdd19b95a675b73acafab:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.assets.json\\\\\\" --verbose publish \\\\\\"731f24951dbe4e08bfc519dd7c23a4f7158528bd5557e38437b08292ab2a873c:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -645,7 +586,7 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.assets.json\\\\\\" --verbose publish \\\\\\"731f24951dbe4e08bfc519dd7c23a4f7158528bd5557e38437b08292ab2a873c:test-eu-west-1\\\\\\"\\"
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapicloudfrontstackB17003A6.assets.json\\\\\\" --verbose publish \\\\\\"f98b78092dcdd31f5e6d47489beb5f804d4835ef86a8085d0a2053cb9ae711da:test-eu-west-1\\\\\\"\\"
       ]
     }
   }
@@ -931,20 +872,6 @@ Object {
               "Resource": Object {
                 "Fn::GetAtt": Array [
                   "mijnnijmegendevelopmentAssetsFileAsset10C562E55C",
-                  "Arn",
-                ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "codebuild:BatchGetBuilds",
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "mijnnijmegendevelopmentAssetsFileAsset11DB4CAE5E",
                   "Arn",
                 ],
               },
@@ -1278,32 +1205,6 @@ Object {
                   },
                 ],
                 "Name": "FileAsset10",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "mijnnijmegendevelopmentCodeBuildActionRole8F2C915A",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 1,
-              },
-              Object {
-                "ActionTypeId": Object {
-                  "Category": "Build",
-                  "Owner": "AWS",
-                  "Provider": "CodeBuild",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "ProjectName": Object {
-                    "Ref": "mijnnijmegendevelopmentAssetsFileAsset11DB4CAE5E",
-                  },
-                },
-                "InputArtifacts": Array [
-                  Object {
-                    "Name": "Synth_Output",
-                  },
-                ],
-                "Name": "FileAsset11",
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
                     "mijnnijmegendevelopmentCodeBuildActionRole8F2C915A",

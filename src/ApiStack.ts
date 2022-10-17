@@ -1,10 +1,8 @@
-import * as path from 'path';
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import { aws_secretsmanager, Stack, StackProps, aws_ssm as SSM, aws_lambda as Lambda } from 'aws-cdk-lib';
+import { aws_secretsmanager, Stack, StackProps, aws_ssm as SSM } from 'aws-cdk-lib';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { AccountPrincipal, PrincipalWithConditions, Role } from 'aws-cdk-lib/aws-iam';
-import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
 import { DynamoDbReadOnlyPolicy } from './iam/dynamodb-readonly-policy';
@@ -42,36 +40,9 @@ export class ApiStack extends Stack {
     const subdomain = Statics.subDomain(props.branch);
     const appDomain = `${subdomain}.nijmegen.nl`;
 
-    this.monitoringLambda();
     const readOnlyRole = this.readOnlyRole();
     this.setFunctions(`https://${appDomain}/`, readOnlyRole);
     this.allowReadAccessToTable(readOnlyRole, this.sessionsTable);
-  }
-
-
-  /**
-   * Create a lambda function to monitor cloudwatch logs
-   *
-   * @returns {Lambda.Function} a lambda responsible for monitoring cloudwatch logs
-   */
-  private monitoringLambda(): Lambda.Function {
-    let webhookUrl = SSM.StringParameter.valueForStringParameter(this, Statics.ssmSlackWebhookUrl);
-    const lambda = new Lambda.Function(this, 'lambda', {
-      runtime: Lambda.Runtime.NODEJS_14_X,
-      handler: 'index.handler',
-      description: 'Monitor Mijn Nijmegen cloudwatch logs',
-      code: Lambda.Code.fromAsset(path.join(__dirname, 'monitoring', 'lambda')),
-      logRetention: RetentionDays.ONE_MONTH,
-      environment: {
-        SLACK_WEBHOOK_URL: webhookUrl,
-      },
-    });
-
-    new SSM.StringParameter(this, 'ssm_slack_1', {
-      stringValue: lambda.functionArn,
-      parameterName: Statics.ssmMonitoringLambdaArn,
-    });
-    return lambda;
   }
 
   /**
