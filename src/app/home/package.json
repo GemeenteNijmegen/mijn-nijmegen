@@ -18,6 +18,7 @@
     "@gemeentenijmegen/apiclient": "0.0.0",
     "@gemeentenijmegen/session": "0.0.3",
     "@gemeentenijmegen/utils": "^0.0.0",
+    "aws-xray-sdk": "^3.3.8",
     "axios": "^0.27.2",
     "cookie": "^0.5.0",
     "mustache": "^4.2.0"
