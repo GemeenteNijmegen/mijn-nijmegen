@@ -21,7 +21,7 @@ async function handleRequest(cookies, queryStringParamCode, queryStringParamStat
     const state = session.getValue('state');
     const OIDC = new OpenIDConnect();
     try {
-        const claims = await OIDC.authorize(queryStringParamCode, state, queryStringParamState, queryStringParamState);    
+        const claims = await OIDC.authorize(queryStringParamCode, state, queryStringParamState, queryStringParamState);
         if (claims) {
             await session.createSession({ 
                 loggedin: { BOOL: true },
