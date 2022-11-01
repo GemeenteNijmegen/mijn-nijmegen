@@ -1,9 +1,8 @@
 const { ApiClient } = require('@gemeentenijmegen/apiclient');
-const AWSXRay = require('aws-xray-sdk');
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const { homeRequestHandler } = require("./homeRequestHandler");
 
-const dynamoDBClient = AWSXRay.captureAWSClient(new DynamoDBClient());
+const dynamoDBClient = new DynamoDBClient();
 const apiClient = new ApiClient();
 
 async function init() {
