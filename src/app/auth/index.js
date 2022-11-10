@@ -1,4 +1,5 @@
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+ const { Response } = require('@gemeentenijmegen/apigateway-http/lib/V2/Response');
 const { handleRequest } = require("./handleRequest");
 
 const dynamoDBClient = new DynamoDBClient();
@@ -17,9 +18,6 @@ exports.handler = async (event, context) => {
         return await handleRequest(params.cookies, params.code, params.state, dynamoDBClient);
     } catch (err) {
         console.error(err);
-        response = {
-            'statusCode': 500
-        }
-        return response;
+        return Response.error(500);
     }
 };

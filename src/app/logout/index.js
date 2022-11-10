@@ -1,4 +1,5 @@
 const { handleLogoutRequest } = require("./handleLogoutRequest");
+ const { Response } = require('@gemeentenijmegen/apigateway-http/lib/V2/Response');
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 
 const dynamoDBClient = new DynamoDBClient();
@@ -15,9 +16,6 @@ exports.handler = async (event, context) => {
         return await handleLogoutRequest(params.cookies, dynamoDBClient);
     } catch (err) {
         console.error(err);
-        response = {
-            'statusCode': 500
-        }
-        return response;
+        Response.error(500);
     }
 };
