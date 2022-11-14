@@ -21,10 +21,14 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   depsUpgradeOptions: {
     workflowOptions: {
       branches: ['acceptance'],
+      labels: ['auto-approve'],
     },
   },
-  // packageName: undefined,  /* The "name" in package.json. */
-  // release: undefined,      /* Add release management to this project. */
+  autoApproveOptions: {
+    label: 'auto-approve'
+  },
+  autoApproveUpgrades: true,
+  autoMerge: true,
   mutableBuild: true,
   jestOptions: {
     jestConfig: {
