@@ -5,7 +5,8 @@ test.beforeAll(async ({ browser }) => {
   // Create page once and sign in.
   page = await browser.newPage();
   // Go to https://mijn.accp.nijmegen.nl/login
-  await page.goto('https://mijn.accp.nijmegen.nl/login');
+  await page.goto('https://mijn.accp.nijmegen.nl/');
+  await expect(page).toHaveURL('https://mijn.accp.nijmegen.nl/login');
 
   // Click text=Inloggen via DigiD
   await page.locator('text=Inloggen via DigiD').click();

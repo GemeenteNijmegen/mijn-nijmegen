@@ -9,7 +9,7 @@ exports.homeRequestHandler = async (cookies, apiClient, dynamoDBClient) => {
     if (session.isLoggedIn() == true) {
         return await handleLoggedinRequest(session, apiClient);
     }
-    return redirectResponse('/login');
+    return Response.redirect('/login');
 }
 
 async function handleLoggedinRequest(session, apiClient) {
