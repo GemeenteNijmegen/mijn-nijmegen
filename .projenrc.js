@@ -40,9 +40,9 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   githubOptions: {
     pullRequestLintOptions: {
       semanticTitleOptions: {
-        types: ['fix', 'feat', 'chore', 'docs']
-      }
-    }
+        types: ['fix', 'feat', 'chore', 'docs'],
+      },
+    },
   },
   scripts: {
     'install:login': 'copyfiles -f src/shared/* src/app/login/shared && cd src/app/login && npm install',
