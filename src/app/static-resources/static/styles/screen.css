@@ -80,6 +80,15 @@ main {
     min-height: 50vh;
 }
 
+.btn-digid {
+    background-image: url(../images/digid.svg);
+    background-repeat: no-repeat;
+    background-position: left .25em center;
+    background-size: 2.5em;
+    text-indent: 1.75em;
+    width: auto;
+}
+
 .card-number {
     display: flex;
     flex-direction: row;
