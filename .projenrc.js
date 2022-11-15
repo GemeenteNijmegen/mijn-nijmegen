@@ -37,6 +37,13 @@ const project = new awscdk.AwsCdkTypeScriptApp({
       roots: ['src', 'test'],
     },
   },
+  githubOptions: {
+    pullRequestLintOptions: {
+      semanticTitleOptions: {
+        types: ['fix', 'feat', 'chore', 'docs'],
+      },
+    },
+  },
   scripts: {
     'install:login': 'copyfiles -f src/shared/* src/app/login/shared && cd src/app/login && npm install',
     'install:auth': 'copyfiles -f src/shared/* src/app/auth/shared && cd src/app/auth && npm install',
