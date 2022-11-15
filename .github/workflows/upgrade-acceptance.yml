@@ -75,6 +75,7 @@ jobs:
             *Automatically created by projen via the "upgrade-acceptance" workflow*
           branch: github-actions/upgrade-acceptance
           title: "chore(deps): upgrade dependencies"
+          labels: auto-approve
           body: |-
             Upgrades project dependencies. See details in [workflow run].
 

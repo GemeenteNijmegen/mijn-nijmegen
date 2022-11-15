@@ -1,16 +1,7 @@
 const { render } = require('./shared/render');
 const { BrpApi } = require('./BrpApi');
 const { Session } = require('@gemeentenijmegen/session');
-
-function redirectResponse(location, code = 302) {
-    return {
-        'statusCode': code,
-        'body': '',
-        'headers': { 
-            'Location': location
-        }
-    }
-}
+const { Response } = require('@gemeentenijmegen/apigateway-http/lib/V2/Response');
 
 exports.homeRequestHandler = async (cookies, apiClient, dynamoDBClient) => {
     let session = new Session(cookies, dynamoDBClient);
@@ -18,7 +9,7 @@ exports.homeRequestHandler = async (cookies, apiClient, dynamoDBClient) => {
     if (session.isLoggedIn() == true) {
         return await handleLoggedinRequest(session, apiClient);
     }
-    return redirectResponse('/login');
+    return Response.redirect('/login');
 }
 
 async function handleLoggedinRequest(session, apiClient) {
@@ -37,16 +28,7 @@ async function handleLoggedinRequest(session, apiClient) {
         'header': `${__dirname}/shared/header.mustache`,
         'footer': `${__dirname}/shared/footer.mustache`
     });
-    response = {
-        'statusCode': 200,
-        'body': html,
-        'headers': {
-            'Content-type': 'text/html'
-        },
-        'cookies': [
-            session.getCookie(),
-        ]
-    };
-    return response;
+    
+    return Response.html(html, 200, session.getCookie());
 }
 
