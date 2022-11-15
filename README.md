@@ -1,5 +1,5 @@
-# MIJN Uitkering
-Een applicatie voor het bekijken van gegevens binnen de gemeente Nijmegen.
+# MIJN Nijmegen
+Een applicatie voor het bekijken van gegevens binnen de gemeente Nijmegen. Op dit moment zijn persoonsgegevens en uitkeringsgegevens beschikbaar.
 
 ## Documentatie
 Documentatie is beschikbaar onder [docs](docs) in deze repository.
