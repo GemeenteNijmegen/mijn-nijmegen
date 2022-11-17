@@ -32,8 +32,8 @@
     "projen": "npx projen"
   },
   "devDependencies": {
-    "@playwright/test": "^1.28.0",
     "@axe-core/playwright": "^4.5.2",
+    "@playwright/test": "^1.28.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^14",
     "@typescript-eslint/eslint-plugin": "^5",
