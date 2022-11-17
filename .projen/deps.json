@@ -1,6 +1,10 @@
 {
   "dependencies": [
     {
+      "name": "@axe-core/playwright",
+      "type": "build"
+    },
+    {
       "name": "@playwright/test",
       "type": "build"
     },

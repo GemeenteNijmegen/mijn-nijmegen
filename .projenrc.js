@@ -17,6 +17,8 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   devDeps: [
     'copyfiles',
     '@playwright/test',
+    '@playwright/test',
+    '@axe-core/playwright'
   ], /* Build dependencies for this module. */
   depsUpgradeOptions: {
     workflowOptions: {
