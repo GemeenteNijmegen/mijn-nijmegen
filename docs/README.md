@@ -34,3 +34,6 @@ Elk onderdeel dat achter authenticatie zit is op dit moment zelf verantwoordelij
     }
 ```
 De sessie is nodig om de relevante user op te halen om zijn gegevens te tonen. De sessie-data wordt opgeslagen in dynamodb. De records in deze tabel krijgen een TTL mee, waarna dynamoDB zelf records zal opschonen. Omdat dit niet gegarandeerd direct gebeurt wordt bij het ophalen van de actieve sessie ook een check uitgevoerd of de sessie nog actief is.
+
+## Tests
+In het build-proces worden jest-tests gedraaid (alle .test.ts-files), Daarnaast worden playwright-browsertests gedaan. In deze tests zijn ook accessibility-checks (met axe-core) opgenomen. NB: Automatische accessibility-tests zijn slechts een hulpmiddel, geen garantie op toegankelijke pagina's.
