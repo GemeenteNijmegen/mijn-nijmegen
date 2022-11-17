@@ -291,7 +291,11 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
+<<<<<<< HEAD
         \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"5f07d5672fef48d306309d6c36adcc03d47761a91d14c11ebb290c89816eacf6:test-eu-west-1\\\\\\"\\"
+=======
+        \\"cdk-assets --path \\\\\\"assembly-test-mijn-api/testmijnapiapistackB91CFA18.assets.json\\\\\\" --verbose publish \\\\\\"bd7c8d69db722d75a7820f00bcf24655cc485cfaac8b00b86e173408ac5ef86d:test-eu-west-1\\\\\\"\\"
+>>>>>>> production
       ]
     }
   }
