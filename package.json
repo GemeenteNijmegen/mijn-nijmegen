@@ -60,11 +60,9 @@
     "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.49.0-alpha.0",
     "@aws-solutions-constructs/aws-lambda-dynamodb": "2.26.0",
     "aws-cdk-lib": "^2.22.0",
-    "axe": "^10.1.0",
     "cdk-remote-stack": "^2.0.10",
     "constructs": "^10.0.5",
-    "dotenv": "^16.0.3",
-    "global": "^4.4.0"
+    "dotenv": "^16.0.3"
   },
   "license": "EUPL-1.2",
   "version": "0.0.0",
