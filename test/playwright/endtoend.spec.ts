@@ -1,9 +1,12 @@
 import { test, expect, Page } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 
 let page: Page;
+let context: any;
 test.beforeAll(async ({ browser }) => {
   // Create page once and sign in.
-  page = await browser.newPage();
+  context = await browser.newContext();
+  page = await context.newPage();
   // Go to https://mijn.accp.nijmegen.nl/login
   await page.goto('https://mijn.accp.nijmegen.nl/');
   await expect(page).toHaveURL('https://mijn.accp.nijmegen.nl/login');
@@ -29,7 +32,12 @@ test.beforeAll(async ({ browser }) => {
 });
 
 test.afterAll(async () => {
+  await context.close();
   await page.close();
+});
+
+test.afterEach(async () => {
+  await checkAccessiblity(page);
 });
 
 test('Visiting main page with valid BSN shows cards', async () => {
@@ -54,7 +62,6 @@ test('Visiting uitkeringen-page with valid BSN shows info', async () => {
   const table =  page.locator('table tbody').first();
   await expect(table).toContainText('BSN van klant');
   await page.screenshot({ path: 'test/playwright/screenshots/uitkering.png', fullPage: true });
-
 });
 
 
@@ -70,3 +77,11 @@ test('Visiting persoonsgegevens-page with valid BSN shows info', async () => {
   await page.screenshot({ path: 'test/playwright/screenshots/persoonsgegevens.png', fullPage: true });
 
 });
+
+async function checkAccessiblity(page: Page) {
+  const accessibilityScanResults = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa'])
+    .exclude('.contact-list') // Axe has a false positive on the link list, doesn't understand the color contrasts
+    .analyze(); 
+  expect(accessibilityScanResults.violations).toEqual([]); 
+}
