@@ -1,4 +1,5 @@
 const { awscdk } = require('projen');
+const { addMergeJob } = require('./addMergeJob');
 const project = new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '2.22.0',
   defaultReleaseBranch: 'production',
@@ -23,14 +24,9 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   depsUpgradeOptions: {
     workflowOptions: {
       branches: ['acceptance'],
-      labels: ['auto-approve'],
+      labels: ['auto-merge'],
     },
   },
-  autoApproveOptions: {
-    label: 'auto-approve',
-  },
-  autoApproveUpgrades: true,
-  autoMerge: true,
   mutableBuild: true,
   jestOptions: {
     jestConfig: {
@@ -71,5 +67,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'test/playwright/screenshots',
   ],
 });
+
+addMergeJob(project);
 
 project.synth();
