@@ -5,7 +5,7 @@ exports.addMergeJob = function(project) {
       pullRequests: 'write',
       contents: 'write',
     },
-    if: "contains(github.event.pull_request.labels.*.name, 'auto-merge') && (github.event.pull_request.user.login == 'github-actions[bot]')",
+    if: "contains(github.event.pull_request.labels.*.name, 'auto-merge')",
     steps: [
       {
         run: 'gh pr merge --auto --merge "$PR_URL"',
