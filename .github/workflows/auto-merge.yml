@@ -15,7 +15,7 @@ jobs:
     permissions:
       pull-requests: write
       contents: write
-    if: contains(github.event.pull_request.labels.*.name, 'auto-merge') && (github.event.pull_request.user.login == 'github-actions[bot]')
+    if: contains(github.event.pull_request.labels.*.name, 'auto-merge')
     steps:
       - env:
           PR_URL: ${{github.event.pull_request.html_url}}
