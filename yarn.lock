@@ -11,9 +11,9 @@
     "@jridgewell/trace-mapping" "^0.3.9"
 
 "@aws-cdk/asset-awscli-v1@^2.2.9":
-  version "2.2.23"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/asset-awscli-v1/-/asset-awscli-v1-2.2.23.tgz#80c95e1288ae061f38ca563d22045d535ddb4f87"
-  integrity sha512-iWnTqDed6PmUeQR9ZuoFQOlA/8xGNsFU85iv8ecaueLDn1vGjsiVNwF2pI+JtrSfWBrZqEZogp8Efih1EX4suA==
+  version "2.2.24"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/asset-awscli-v1/-/asset-awscli-v1-2.2.24.tgz#e5ea3d76d81819b78953e1858e5a45ac2a544817"
+  integrity sha512-MW8JuXwZM5XEBAFMOY8JTGkeXW8mmzdl+XoHbAwi6w0KFOALDizIq+QdWKExh+Z77Nu9KvklBA26aSL9rT3zrQ==
 
 "@aws-cdk/asset-kubectl-v20@^2.1.1":
   version "2.1.1"
@@ -21,9 +21,9 @@
   integrity sha512-U1ntiX8XiMRRRH5J1IdC+1t5CE89015cwyt5U63Cpk0GnMlN5+h9WsWMlKlPXZR4rdq/m806JRlBMRpBUB2Dhw==
 
 "@aws-cdk/asset-node-proxy-agent-v5@^2.0.15":
-  version "2.0.29"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/asset-node-proxy-agent-v5/-/asset-node-proxy-agent-v5-2.0.29.tgz#fb655c82cd4de87386086c1041dc829de78320b2"
-  integrity sha512-dGk+l13xT03z/+qsyUvKxrn8v9k9aZefOo+GTbEZdHzG6qkTBk/iyOmTh9Oweoaf1o5FTCdL1tKb9T/naAYt/g==
+  version "2.0.30"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/asset-node-proxy-agent-v5/-/asset-node-proxy-agent-v5-2.0.30.tgz#1515fb3f011ce0b50b92dfbd2d165d3ba86a29c4"
+  integrity sha512-EruKG+4f0j+ft/PDu0zLoyYLadPwTve99hglbezhV8gD5ER9qIFoKYiZXW1w3ySZDgrOlTI8T1sVNdQWxbARyQ==
 
 "@aws-cdk/aws-apigatewayv2-alpha@^2.53.0-alpha.0":
   version "2.53.0-alpha.0"
@@ -35,17 +35,17 @@
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigatewayv2-integrations-alpha/-/aws-apigatewayv2-integrations-alpha-2.53.0-alpha.0.tgz#61bc262d30e97dd58b0ef235df5c22f0ec76b4d3"
   integrity sha512-lHzRA4PwWu+RpGwlhtb1hdJ83wdN1quthbTvIRGbcLctSQ81GZ50Fo2WkoDPHwJY4DIgmwy8sc/sni747XL1lg==
 
-"@aws-solutions-constructs/aws-lambda-dynamodb@2.27.0":
-  version "2.27.0"
-  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/aws-lambda-dynamodb/-/aws-lambda-dynamodb-2.27.0.tgz#0b534c587e9f4026ef1781e0e4ebc0196e305d25"
-  integrity sha512-XJZVanSFrzjUjVFy18c7ygKIKTmNE07zVUQYHFYGRCCY9g6a2Iyp5rddk46gqOAY7DvqW19qUB8zxZWY41rk5A==
+"@aws-solutions-constructs/aws-lambda-dynamodb@2.28.0":
+  version "2.28.0"
+  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/aws-lambda-dynamodb/-/aws-lambda-dynamodb-2.28.0.tgz#31a8f094986bd0c1acce6c14a2dd180e0497f5a1"
+  integrity sha512-YnJWseKGZMpyYEA+ljUoRH0zAI4bVkvFf/z+9F08YNevmiBY9YAj+o4aG+hfXMXhO8L17J2mdKZByHybm1gk0g==
   dependencies:
-    "@aws-solutions-constructs/core" "2.27.0"
+    "@aws-solutions-constructs/core" "2.28.0"
 
-"@aws-solutions-constructs/core@2.27.0":
-  version "2.27.0"
-  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/core/-/core-2.27.0.tgz#020c3b548d97178313e4966598ea4d96a9fdb4f8"
-  integrity sha512-vqWW+/w6RKQKZeu+wWnQxIx8MOPweVlb/0nZKcaIAA1/wK0ie1ImdT68kjF4HwrPNObMwi4VdS4gYU5xKKsc6Q==
+"@aws-solutions-constructs/core@2.28.0":
+  version "2.28.0"
+  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/core/-/core-2.28.0.tgz#ca25ee005a44d7362c5d2ecf1f6550ae52a35fbd"
+  integrity sha512-BX6kFdegUiL/hkke/hj172dfoOM2hYMEpzjb26BuvLSXx5umFfw0qSCoUU1TlJSPFe9aPJYEdAVu0mBMFvknwA==
   dependencies:
     deep-diff "^1.0.2"
     deepmerge "^4.0.0"
@@ -928,14 +928,14 @@
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
 
 "@types/node@*":
-  version "18.11.9"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.9.tgz#02d013de7058cea16d36168ef2fc653464cfbad4"
-  integrity sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==
+  version "18.11.10"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.10.tgz#4c64759f3c2343b7e6c4b9caf761c7a3a05cee34"
+  integrity sha512-juG3RWMBOqcOuXC643OAdSA525V44cVgGV6dUDuiFtss+8Fk5x1hI93Rsld43VeJVIeqlP9I7Fn9/qaVqoEAuQ==
 
 "@types/node@^14":
-  version "14.18.33"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.33.tgz#8c29a0036771569662e4635790ffa9e057db379b"
-  integrity sha512-qelS/Ra6sacc4loe/3MSjXNL1dNQ/GjxNHVzuChwMfmk7HuycRLVQN2qNY3XahK+fZc5E2szqQSKUyAF0E+2bg==
+  version "14.18.34"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.34.tgz#cd2e6fa0dbfb08a62582a7b967558e73c32061ec"
+  integrity sha512-hcU9AIQVHmPnmjRK+XUUYlILlr9pQrsqSrwov/JK1pnf3GTQowVBhx54FbvM0AU/VXGH4i3+vgXS5EguR7fysA==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
@@ -1564,9 +1564,9 @@ camelcase@^7.0.0:
   integrity sha512-JToIvOmz6nhGsUhAYScbo2d6Py5wojjNfoxoc2mEVLUdJ70gJK2gnd+ABY1Tc3sVMyK7QDPtN0T/XdlCQWITyQ==
 
 caniuse-lite@^1.0.30001400:
-  version "1.0.30001434"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001434.tgz#ec1ec1cfb0a93a34a0600d37903853030520a4e5"
-  integrity sha512-aOBHrLmTQw//WFa2rcF1If9fa3ypkC1wzqqiKHgfdrXTWcU8C4gKVZT77eQAPWN1APys3+uQ0Df07rKauXGEYA==
+  version "1.0.30001435"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001435.tgz#502c93dbd2f493bee73a408fe98e98fb1dad10b2"
+  integrity sha512-kdCkUTjR+v4YAJelyiDTqiu82BDr4W4CP5sgTA0ZBmqn30XfS2ZghPLMowik9TPhS+psWJiUNxsqLyurDbmutA==
 
 case@1.6.3, case@^1.6.3:
   version "1.6.3"
@@ -1755,9 +1755,9 @@ console-control-strings@^1.0.0, console-control-strings@^1.1.0, console-control-
   integrity sha512-ty/fTekppD2fIwRvnZAVdeOiGd1c7YXEixbgJTNzqcxJWKQnjJ/V1bNEEE6hygpM3WjwHFUVK6HTjWSzV4a8sQ==
 
 constructs@^10.0.5:
-  version "10.1.175"
-  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.1.175.tgz#50595d693c1c733ca2df8c442ec37458c86fa0fe"
-  integrity sha512-SL7ywhJ3QvkjrSX2aespKUmyRYCyC1qHEJnqouUsrMl60Ne4BGNqskE9oyaLeizpsMC2qyEEx9OwDYPclKd8Vg==
+  version "10.1.176"
+  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.1.176.tgz#2397c41400bda7214da992ddba35f623c884e24a"
+  integrity sha512-1+fQUc9AcJImVlRfyC0lAAhB4coAqvV+M7ZqfCX/8FLq2X1xuY1eDhlR2MHB6h1ndkyrPHqpbQaxoJhoQzLb8w==
 
 conventional-changelog-angular@^5.0.12:
   version "5.0.13"
@@ -5055,10 +5055,10 @@ progress@^2.0.3:
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
-projen@0.65.39:
-  version "0.65.39"
-  resolved "https://registry.yarnpkg.com/projen/-/projen-0.65.39.tgz#f7f1b9084bc4324ff102c3d158c13d407288aaa1"
-  integrity sha512-MSnWss6F1qJQQVTJEAMW6+ylccOd+tnqERPqQuIeB/UFj0CIUZh5smAn8ZuJ8B9+sIXLlIwKA1BwoUQa5VsgYQ==
+projen@0.65.41:
+  version "0.65.41"
+  resolved "https://registry.yarnpkg.com/projen/-/projen-0.65.41.tgz#2ca957790587e0baf069dc3cc2047eb8a1b14449"
+  integrity sha512-BcB8K6FWRbVbaCdkeio+tZxT3UVyh7bjLORBnsDMN7kn4Pcctg7wdNGv2yv+pHnv8Hv7oX4oC2X2GzziHX72HA==
   dependencies:
     "@iarna/toml" "^2.2.5"
     case "^1.6.3"
