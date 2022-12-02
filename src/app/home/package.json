@@ -12,9 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "3.218.0",
-    "@aws-sdk/client-secrets-manager": "3.218.0",
-    "@aws-sdk/client-ssm": "3.218.0",
+    "@aws-sdk/client-dynamodb": "3.222.0",
+    "@aws-sdk/client-secrets-manager": "3.222.0",
+    "@aws-sdk/client-ssm": "3.222.0",
     "@gemeentenijmegen/apiclient": "0.0.0",
     "@gemeentenijmegen/apigateway-http": "^0.0.3",
     "@gemeentenijmegen/session": "0.0.5",
@@ -24,7 +24,7 @@
     "mustache": "^4.2.0"
   },
   "devDependencies": {
-    "@aws-sdk/types": "3.215.0",
+    "@aws-sdk/types": "3.222.0",
     "aws-sdk-client-mock": "^2.0.1",
     "dotenv": "^16.0.3"
   }
