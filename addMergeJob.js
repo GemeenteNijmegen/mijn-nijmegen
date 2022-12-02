@@ -5,7 +5,7 @@ exports.addMergeJob = function(project) {
       pullRequests: 'write',
       contents: 'write',
     },
-    if: "contains(github.event.pull_request.labels.*.name, 'auto-merge')",
+    if: "github.event.workflow_run.conclusion == 'success' && contains(github.event.pull_request.labels.*.name, 'auto-merge')",
     steps: [
       {
         run: 'gh pr merge --auto --merge "$PR_URL"',
@@ -19,15 +19,10 @@ exports.addMergeJob = function(project) {
 
   const workflow = project.github.addWorkflow('auto-merge');
   workflow.on({
-    pullRequestTarget: {
-      types: [
-        'labeled',
-        'opened',
-        'synchronize',
-        'reopened',
-        'ready_for_review',
-      ],
-    },
+    workflowRun: {
+      workflows: ['build'],
+      types: ['completed'],
+    }
   });
 
   workflow.addJobs({ automerge: mergeJob });
