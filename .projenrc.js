@@ -1,6 +1,6 @@
-const { awscdk } = require('projen');
+const { GemeenteNijmegenCdkApp } = require('@gemeentenijmegen/modules-projen');
 const { addMergeJob } = require('./addMergeJob');
-const project = new awscdk.AwsCdkTypeScriptApp({
+const project = new GemeenteNijmegenCdkApp({
   cdkVersion: '2.22.0',
   defaultReleaseBranch: 'production',
   release: true,
@@ -8,6 +8,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   name: 'mijnnijmegen',
   license: 'EUPL-1.2',
   deps: [
+    '@gemeentenijmegen/modules-projen',
     'dotenv',
     '@aws-cdk/aws-apigatewayv2-alpha',
     '@aws-cdk/aws-apigatewayv2-integrations-alpha',
@@ -68,6 +69,5 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   ],
 });
 
-addMergeJob(project);
 
 project.synth();
