@@ -4,7 +4,12 @@ import { Construct } from 'constructs';
 import { Statics } from './statics';
 
 export interface DNSSECStackProps extends StackProps {
-  branch: string;
+  branch: string; // TODO: Use new dnssec solution
+  /**
+   * This stack set ssm parameters, these are required
+   * in the region the application runs in.
+   */
+  applicationRegion: string;
 }
 
 export class DNSSECStack extends Stack {
@@ -27,7 +32,7 @@ export class DNSSECStack extends Stack {
 
     const parameters = new RemoteParameters(this, 'params', {
       path: `${Statics.ssmZonePath}/`,
-      region: 'eu-west-1',
+      region: props.applicationRegion,
     });
     const zoneId = parameters.get(Statics.ssmZoneIdNew);
 
