@@ -95,8 +95,7 @@
       "description": "Deploys your CDK app to the AWS cloud",
       "steps": [
         {
-          "exec": "cdk deploy",
-          "receiveArgs": true
+          "exec": "cdk deploy"
         }
       ]
     },
@@ -105,8 +104,7 @@
       "description": "Destroys your cdk app in the AWS cloud",
       "steps": [
         {
-          "exec": "cdk destroy",
-          "receiveArgs": true
+          "exec": "cdk destroy"
         }
       ]
     },
@@ -169,6 +167,14 @@
       "steps": [
         {
           "exec": "copyfiles -f src/shared/* src/app/logout/shared && cd src/app/logout && npm install"
+        }
+      ]
+    },
+    "lint": {
+      "name": "lint",
+      "steps": [
+        {
+          "exec": "cfn-lint cdk.out/**/*.template.json -i W3005 W2001"
         }
       ]
     },
@@ -253,11 +259,19 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --updateSnapshot",
-          "receiveArgs": true
+          "exec": "jest --passWithNoTests --all --updateSnapshot"
         },
         {
           "spawn": "eslint"
+        }
+      ]
+    },
+    "test:update": {
+      "name": "test:update",
+      "description": "Update jest snapshots",
+      "steps": [
+        {
+          "exec": "jest --updateSnapshot"
         }
       ]
     },

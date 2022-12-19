@@ -15,9 +15,9 @@ jobs:
     permissions:
       pull-requests: write
       contents: write
-    if: contains(github.event.pull_request.labels.*.name, 'auto-merge')
+    if: contains(github.event.pull_request.labels.*.name, 'auto-merge') && github.base_ref == 'acceptance'
     steps:
-      - env:
+      - run: gh pr merge --auto --merge "$PR_URL"
+        env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        run: gh pr merge --auto --merge "$PR_URL"
