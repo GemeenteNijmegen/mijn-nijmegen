@@ -1,12 +1,9 @@
 const { GemeenteNijmegenCdkApp } = require('@gemeentenijmegen/modules-projen');
-const { addMergeJob } = require('./addMergeJob');
 const project = new GemeenteNijmegenCdkApp({
   cdkVersion: '2.22.0',
   defaultReleaseBranch: 'production',
-  release: true,
   majorVersion: 1,
   name: 'mijnnijmegen',
-  license: 'EUPL-1.2',
   deps: [
     '@gemeentenijmegen/modules-projen',
     'dotenv',
@@ -22,12 +19,6 @@ const project = new GemeenteNijmegenCdkApp({
     '@playwright/test',
     '@axe-core/playwright',
   ], /* Build dependencies for this module. */
-  depsUpgradeOptions: {
-    workflowOptions: {
-      branches: ['acceptance'],
-      labels: ['auto-merge'],
-    },
-  },
   mutableBuild: true,
   jestOptions: {
     jestConfig: {
