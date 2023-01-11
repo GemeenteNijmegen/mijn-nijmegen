@@ -95,7 +95,8 @@
       "description": "Deploys your CDK app to the AWS cloud",
       "steps": [
         {
-          "exec": "cdk deploy"
+          "exec": "cdk deploy",
+          "receiveArgs": true
         }
       ]
     },
@@ -104,7 +105,8 @@
       "description": "Destroys your cdk app in the AWS cloud",
       "steps": [
         {
-          "exec": "cdk destroy"
+          "exec": "cdk destroy",
+          "receiveArgs": true
         }
       ]
     },
@@ -259,19 +261,11 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --all --updateSnapshot"
+          "exec": "jest --passWithNoTests --updateSnapshot",
+          "receiveArgs": true
         },
         {
           "spawn": "eslint"
-        }
-      ]
-    },
-    "test:update": {
-      "name": "test:update",
-      "description": "Update jest snapshots",
-      "steps": [
-        {
-          "exec": "jest --updateSnapshot"
         }
       ]
     },
