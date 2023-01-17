@@ -1,5 +1,4 @@
 const { render } = require('./shared/render');
-const { BrpApi } = require('./BrpApi');
 const { Session } = require('@gemeentenijmegen/session');
 const { Response } = require('@gemeentenijmegen/apigateway-http/lib/V2/Response');
 
@@ -12,11 +11,8 @@ exports.homeRequestHandler = async (cookies, apiClient, dynamoDBClient) => {
     return Response.redirect('/login');
 }
 
-async function handleLoggedinRequest(session, apiClient) {
-    const bsn = session.getValue('bsn');
-    const brpApi = new BrpApi(apiClient);
-    const brpData = await brpApi.getBrpData(bsn);
-    const naam = brpData?.Persoon?.Persoonsgegevens?.Naam ? brpData.Persoon.Persoonsgegevens.Naam : 'Onbekende gebruiker';
+async function handleLoggedinRequest(session) {
+    const naam = session.getValue('username') ?? 'Onbekende gebruiker';
     data = {
         title: 'overzicht',
         shownav: true,
