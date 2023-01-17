@@ -1,9 +1,7 @@
-const { ApiClient } = require('@gemeentenijmegen/apiclient');
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const { homeRequestHandler } = require("./homeRequestHandler");
 
 const dynamoDBClient = new DynamoDBClient();
-const apiClient = new ApiClient();
 
 async function init() {
     console.time('init');
