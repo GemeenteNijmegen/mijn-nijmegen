@@ -2,11 +2,11 @@ const { render } = require('./shared/render');
 const { Session } = require('@gemeentenijmegen/session');
 const { Response } = require('@gemeentenijmegen/apigateway-http/lib/V2/Response');
 
-exports.homeRequestHandler = async (cookies, apiClient, dynamoDBClient) => {
+exports.homeRequestHandler = async (cookies, dynamoDBClient) => {
     let session = new Session(cookies, dynamoDBClient);
     await session.init();
     if (session.isLoggedIn() == true) {
-        return await handleLoggedinRequest(session, apiClient);
+        return await handleLoggedinRequest(session);
     }
     return Response.redirect('/login');
 }
