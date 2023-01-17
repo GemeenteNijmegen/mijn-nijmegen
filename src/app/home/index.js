@@ -3,16 +3,6 @@ const { homeRequestHandler } = require("./homeRequestHandler");
 
 const dynamoDBClient = new DynamoDBClient();
 
-async function init() {
-    console.time('init');
-    console.timeLog('init', 'start init');
-    let promise = apiClient.init();
-    console.timeEnd('init');
-    return promise;
-}
-
-const initPromise = init();
-
 function parseEvent(event) {
     return { 
         'cookies': event?.cookies?.join(';'),
@@ -22,7 +12,6 @@ function parseEvent(event) {
 exports.handler = async (event, context) => {
     try {
         const params = parseEvent(event);
-        await initPromise;
         return await homeRequestHandler(params.cookies, dynamoDBClient);
     
     } catch (err) {
