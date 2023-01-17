@@ -25,7 +25,7 @@ exports.handler = async (event, context) => {
     try {
         const params = parseEvent(event);
         await initPromise;
-        return await homeRequestHandler(params.cookies, apiClient, dynamoDBClient);
+        return await homeRequestHandler(params.cookies, dynamoDBClient);
     
     } catch (err) {
         console.error(err);
