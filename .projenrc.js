@@ -27,13 +27,6 @@ const project = new GemeenteNijmegenCdkApp({
       roots: ['src', 'test'],
     },
   },
-  githubOptions: {
-    pullRequestLintOptions: {
-      semanticTitleOptions: {
-        types: ['fix', 'feat', 'chore', 'docs'],
-      },
-    },
-  },
   scripts: {
     'install:login': 'copyfiles -f src/shared/* src/app/login/shared && cd src/app/login && npm install',
     'install:auth': 'copyfiles -f src/shared/* src/app/auth/shared && cd src/app/auth && npm install',
@@ -50,11 +43,8 @@ const project = new GemeenteNijmegenCdkApp({
     devdirs: ['src/app/login/tests', 'src/app/auth/tests', 'src/app/home/tests', 'src/app/uitkeringen/tests', 'src/app/logout/tests', '/test', '/build-tools'],
   },
   gitignore: [
-    '.env',
-    '.vscode',
     'src/app/**/shared',
     'src/app/**/tests/output',
-    '.DS_Store',
     'test/playwright/report',
     'test/playwright/screenshots',
   ],

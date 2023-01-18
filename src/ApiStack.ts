@@ -69,6 +69,9 @@ export class ApiStack extends Stack {
       readOnlyRole,
     });
 
+    const secretMTLSPrivateKey = aws_secretsmanager.Secret.fromSecretNameV2(this, 'tls-key-secret', Statics.secretMTLSPrivateKey);
+    const tlskeyParam = SSM.StringParameter.fromStringParameterName(this, 'tlskey', Statics.ssmMTLSClientCert);
+    const tlsRootCAParam = SSM.StringParameter.fromStringParameterName(this, 'tlsrootca', Statics.ssmMTLSRootCA);
     const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
     const authFunction = new ApiFunction(this, 'auth-function', {
       description: 'Authenticatie-lambd voor de Mijn Uitkering-applicatie.',
@@ -79,13 +82,17 @@ export class ApiStack extends Stack {
       readOnlyRole,
       environment: {
         CLIENT_SECRET_ARN: oidcSecret.secretArn,
+        MTLS_PRIVATE_KEY_ARN: secretMTLSPrivateKey.secretArn,
+        MTLS_CLIENT_CERT_NAME: Statics.ssmMTLSClientCert,
+        MTLS_ROOT_CA_NAME: Statics.ssmMTLSRootCA,
+        BRP_API_URL: SSM.StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
       },
     });
     oidcSecret.grantRead(authFunction.lambda);
+    secretMTLSPrivateKey.grantRead(authFunction.lambda);
+    tlskeyParam.grantRead(authFunction.lambda);
+    tlsRootCAParam.grantRead(authFunction.lambda);
 
-    const secretMTLSPrivateKey = aws_secretsmanager.Secret.fromSecretNameV2(this, 'tls-key-secret', Statics.secretMTLSPrivateKey);
-    const tlskeyParam = SSM.StringParameter.fromStringParameterName(this, 'tlskey', Statics.ssmMTLSClientCert);
-    const tlsRootCAParam = SSM.StringParameter.fromStringParameterName(this, 'tlsrootca', Statics.ssmMTLSRootCA);
     const homeFunction = new ApiFunction(this, 'home-function', {
       description: 'Home-lambda voor de Mijn Uitkering-applicatie.',
       codePath: 'app/home',
@@ -93,16 +100,7 @@ export class ApiStack extends Stack {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
       readOnlyRole,
-      environment: {
-        MTLS_PRIVATE_KEY_ARN: secretMTLSPrivateKey.secretArn,
-        MTLS_CLIENT_CERT_NAME: Statics.ssmMTLSClientCert,
-        MTLS_ROOT_CA_NAME: Statics.ssmMTLSRootCA,
-        BRP_API_URL: SSM.StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
-      },
     });
-    secretMTLSPrivateKey.grantRead(homeFunction.lambda);
-    tlskeyParam.grantRead(homeFunction.lambda);
-    tlsRootCAParam.grantRead(homeFunction.lambda);
 
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('login', loginFunction.lambda),
