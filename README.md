@@ -3,3 +3,5 @@ Een applicatie voor het bekijken van gegevens binnen de gemeente Nijmegen. Op di
 
 ## Documentatie
 Documentatie is beschikbaar onder [docs](docs) in deze repository.
+
+test if labels can be added from here
