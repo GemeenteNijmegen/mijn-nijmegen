@@ -33,7 +33,7 @@
     "projen": "npx projen"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.5.2",
+    "@axe-core/playwright": "^4.6.0",
     "@playwright/test": "^1.29.2",
     "@types/jest": "^29.2.6",
     "@types/node": "^14",
@@ -50,7 +50,7 @@
     "jest-junit": "^13",
     "json-schema": "^0.4.0",
     "npm-check-updates": "^16",
-    "projen": "^0.67.10",
+    "projen": "^0.67.11",
     "standard-version": "^9",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
