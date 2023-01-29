@@ -21,7 +21,7 @@
     "cookie": "^0.5.0",
     "mustache": "^4.2.0",
     "openid-client": "^5.3.2",
-    "axios": "^1.2.5"
+    "axios": "^1.2.6"
   },
   "devDependencies": {
     "@aws-sdk/types": "3.257.0",
