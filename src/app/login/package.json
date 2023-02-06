@@ -18,7 +18,7 @@
     "@gemeentenijmegen/session": "0.0.5",
     "cookie": "^0.5.0",
     "mustache": "^4.2.0",
-    "openid-client": "^5.3.4",
+    "openid-client": "^5.4.0",
     "uid-safe": "^2.1.5"
   },
   "devDependencies": {
