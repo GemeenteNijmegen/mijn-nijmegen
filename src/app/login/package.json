@@ -12,17 +12,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "3.252.0",
-    "@aws-sdk/client-secrets-manager": "3.252.0",
+    "@aws-sdk/client-dynamodb": "3.272.0",
+    "@aws-sdk/client-secrets-manager": "3.272.0",
     "@gemeentenijmegen/apigateway-http": "^0.0.3",
     "@gemeentenijmegen/session": "0.0.5",
     "cookie": "^0.5.0",
     "mustache": "^4.2.0",
-    "openid-client": "^5.3.1",
+    "openid-client": "^5.4.0",
     "uid-safe": "^2.1.5"
   },
   "devDependencies": {
-    "@aws-sdk/types": "3.226.0",
+    "@aws-sdk/types": "3.272.0",
     "aws-sdk-client-mock": "^2.0.1"
   }
 }
