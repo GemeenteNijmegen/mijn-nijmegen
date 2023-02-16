@@ -49,7 +49,6 @@ async function loggedinUserName(bsn, apiClient) {
     try { 
         const brpApi = new BrpApi(apiClient);
         const brpData = await brpApi.getBrpData(bsn);
-        console.debug(brpData);
         const naam = brpData?.Persoon?.Persoonsgegevens?.Naam ? brpData.Persoon.Persoonsgegevens.Naam : 'Onbekende gebruiker';
         return naam;
     } catch (error) {
