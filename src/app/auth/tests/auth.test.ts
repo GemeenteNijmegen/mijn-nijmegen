@@ -49,6 +49,7 @@ jest.mock('openid-client', () => {
                   return {
                     aud: process.env.OIDC_CLIENT_ID,
                     sub: '900222670',
+                    acr: 'urn:oasis:names:tc:SAML:2.0:ac:classes:MobileTwoFactorContract',
                   };
                 }),
               };
