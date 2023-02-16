@@ -1,5 +1,5 @@
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
- const { Response } = require('@gemeentenijmegen/apigateway-http/lib/V2/Response');
+const { Response } = require('@gemeentenijmegen/apigateway-http/lib/V2/Response');
 const { handleRequest } = require("./handleRequest");
 
 const dynamoDBClient = new DynamoDBClient();
