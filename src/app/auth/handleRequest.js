@@ -3,8 +3,11 @@ const { Bsn } = require('@gemeentenijmegen/utils');
 const { Response } = require('@gemeentenijmegen/apigateway-http/lib/V2/Response');
 const { OpenIDConnect } = require('./shared/OpenIDConnect');
 const { BrpApi } = require('./BrpApi');
+const { Logger } = require('@aws-lambda-powertools/logger');
+
 
 async function handleRequest(cookies, queryStringParamCode, queryStringParamState, dynamoDBClient, apiClient) {
+    const logger = new Logger({ serviceName: 'mijnnijmegen' });
     let session = new Session(cookies, dynamoDBClient);
     await session.init();
     if (session.sessionId === false) {
@@ -16,6 +19,9 @@ async function handleRequest(cookies, queryStringParamCode, queryStringParamStat
         const claims = await OIDC.authorize(queryStringParamCode, state, queryStringParamState, queryStringParamState);
         if (claims) {
             const bsn = new Bsn(claims.sub);
+            if(claims.hasOwnProperty('acr')) {
+                logger.info('auth succesful', { 'loa': claims.acr });
+            }
             try {
                 const username = await loggedinUserName(bsn.bsn, apiClient);
                 await session.createSession({ 
