@@ -25,7 +25,7 @@ export class ApiFunction extends Construct {
     // See https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights-extension-versionsx86-64.html
     const insightsArn = 'arn:aws:lambda:eu-west-1:580247275435:layer:LambdaInsightsExtension:16';
     this.lambda = new Lambda.Function(this, 'lambda', {
-      runtime: Lambda.Runtime.NODEJS_14_X,
+      runtime: Lambda.Runtime.NODEJS_18_X,
       memorySize: 512,
       handler: 'index.handler',
       description: props.description,
