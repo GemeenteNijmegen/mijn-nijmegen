@@ -1,7 +1,7 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { ApiClient } from '@gemeentenijmegen/apiclient';
-import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
-import { handleRequest } from "./handleRequest";
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { ApiClient } = require('@gemeentenijmegen/apiclient');
+const { Response } = require('@gemeentenijmegen/apigateway-http/lib/V2/Response');
+const { handleRequest } = require("./handleRequest");
 
 const dynamoDBClient = new DynamoDBClient();
 const apiClient = new ApiClient();
