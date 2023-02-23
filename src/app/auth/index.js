@@ -14,7 +14,7 @@ function parseEvent(event) {
     };
 }
 
-export async function handler(event, context) {
+exports.handler = async (event, context) => {
     try {
         const params = parseEvent(event);
         return await handleRequest(params.cookies, params.code, params.state, dynamoDBClient, apiClient);
