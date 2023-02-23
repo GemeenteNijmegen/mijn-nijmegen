@@ -5,7 +5,6 @@ const { handleRequest } = require("./handleRequest");
 
 const dynamoDBClient = new DynamoDBClient();
 const apiClient = new ApiClient();
-await apiClient.init();
 
 function parseEvent(event) {
     return { 
