@@ -1,7 +1,7 @@
-const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { ApiClient } = require('@gemeentenijmegen/apiclient');
-const { Response } = require('@gemeentenijmegen/apigateway-http/lib/V2/Response');
-const { handleRequest } = require("./handleRequest");
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { ApiClient } from '@gemeentenijmegen/apiclient';
+import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
+import { handleRequest } from "./handleRequest";
 
 const dynamoDBClient = new DynamoDBClient();
 const apiClient = new ApiClient();
@@ -15,7 +15,7 @@ function parseEvent(event) {
     };
 }
 
-exports.handler = async (event, context) => {
+export async function handler(event, context) {
     try {
         const params = parseEvent(event);
         return await handleRequest(params.cookies, params.code, params.state, dynamoDBClient, apiClient);
@@ -23,4 +23,4 @@ exports.handler = async (event, context) => {
         console.error(err);
         return Response.error(500);
     }
-};
+}
