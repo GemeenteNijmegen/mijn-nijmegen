@@ -5,6 +5,7 @@ const { handleRequest } = require("./handleRequest");
 
 const dynamoDBClient = new DynamoDBClient();
 const apiClient = new ApiClient();
+await apiClient.init();
 
 function parseEvent(event) {
     return { 
@@ -14,7 +15,7 @@ function parseEvent(event) {
     };
 }
 
-exports.handler = async (event, context) => {
+export async function handler(event, context) {
     try {
         const params = parseEvent(event);
         return await handleRequest(params.cookies, params.code, params.state, dynamoDBClient, apiClient);
@@ -22,4 +23,4 @@ exports.handler = async (event, context) => {
         console.error(err);
         return Response.error(500);
     }
-};
+}
