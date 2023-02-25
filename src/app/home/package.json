@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "3.278.0",
+    "@aws-sdk/client-dynamodb": "3.279.0",
     "@gemeentenijmegen/apigateway-http": "^0.0.3",
     "@gemeentenijmegen/session": "0.0.5",
     "@gemeentenijmegen/utils": "^0.0.0",
