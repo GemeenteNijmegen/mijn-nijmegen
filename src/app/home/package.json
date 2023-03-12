@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@aws-sdk/types": "3.289.0",
-    "aws-sdk-client-mock": "^2.1.0",
+    "aws-sdk-client-mock": "^2.1.1",
     "dotenv": "^16.0.3"
   }
 }
