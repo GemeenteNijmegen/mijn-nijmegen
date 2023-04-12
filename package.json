@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.6.1",
-    "@playwright/test": "^1.32.2",
+    "@playwright/test": "^1.32.3",
     "@types/jest": "^29.5.0",
     "@types/node": "^16",
     "@typescript-eslint/eslint-plugin": "^5",
@@ -58,7 +58,7 @@
   "dependencies": {
     "@aws-cdk/aws-apigatewayv2-alpha": "^2.73.0-alpha.0",
     "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.73.0-alpha.0",
-    "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.36.0",
+    "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.37.0",
     "@gemeentenijmegen/projen-project-type": "^1.4.0",
     "aws-cdk-lib": "^2.22.0",
     "cdk-remote-stack": "^2.0.10",
