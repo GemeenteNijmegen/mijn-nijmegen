@@ -2,8 +2,8 @@ import { writeFile } from 'fs';
 import * as path from 'path';
 import { DynamoDBClient, GetItemCommandOutput, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
-import { handler } from '../index.js';
-import { handleLoginRequest } from '../loginRequestHandler.js';
+import { handler } from '../index';
+import { handleLoginRequest } from '../loginRequestHandler';
 
 const ddbMock = mockClient(DynamoDBClient);
 
@@ -41,7 +41,9 @@ test('Return login page with correct link', async () => {
   expect(result.body).toMatch(`${process.env.AUTH_URL_BASE}/broker/sp/oidc/authenticate`);
   expect(result.body).toMatch(encodeURIComponent(`${process.env.APPLICATION_URL_BASE}auth`));
   expect(result.statusCode).toBe(200);
-  writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => { });
+  if (result.body) {
+    writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => { });
+  }
 });
 
 test('No redirect if session cookie doesn\'t exist', async () => {
@@ -75,7 +77,7 @@ test('Redirect to home if already logged in', async () => {
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   const sessionId = '12345';
   const result = await handleLoginRequest(`session=${sessionId}`, dynamoDBClient);
-  expect(result.headers.Location).toBe('/');
+  expect(result?.headers?.Location).toBe('/');
   expect(result.statusCode).toBe(302);
 });
 
