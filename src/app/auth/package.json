@@ -13,8 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "@aws-lambda-powertools/logger": "^1.8.0",
-    "@aws-sdk/client-dynamodb": "3.310.0",
-    "@aws-sdk/client-secrets-manager": "3.310.0",
+    "@aws-sdk/client-dynamodb": "3.312.0",
+    "@aws-sdk/client-secrets-manager": "3.312.0",
     "@gemeentenijmegen/apiclient": "0.0.4",
     "@gemeentenijmegen/apigateway-http": "^0.0.4",
     "@gemeentenijmegen/session": "~0.0.6",
