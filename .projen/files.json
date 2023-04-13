@@ -17,6 +17,7 @@
     ".projen/tasks.json",
     "cdk.json",
     "LICENSE",
+    "src/app/login/login-function.ts",
     "tsconfig.dev.json",
     "tsconfig.json"
   ],

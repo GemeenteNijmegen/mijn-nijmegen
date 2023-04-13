@@ -151,7 +151,8 @@
           "**/src/app/uitkeringen/tests/**",
           "**/src/app/logout/tests/**",
           "**//test/**",
-          "**//build-tools/**"
+          "**//build-tools/**",
+          "src/app/login/login.lambda.ts"
         ],
         "optionalDependencies": false,
         "peerDependencies": true

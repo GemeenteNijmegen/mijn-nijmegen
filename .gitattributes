@@ -20,6 +20,7 @@
 /cdk.json linguist-generated
 /LICENSE linguist-generated
 /package.json linguist-generated
+/src/app/login/login-function.ts linguist-generated
 /tsconfig.dev.json linguist-generated
 /tsconfig.json linguist-generated
 /yarn.lock linguist-generated

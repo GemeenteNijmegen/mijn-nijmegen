@@ -8,6 +8,7 @@ import { ApiFunction } from './ApiFunction';
 import { DynamoDbReadOnlyPolicy } from './iam/dynamodb-readonly-policy';
 import { SessionsTable } from './SessionsTable';
 import { Statics } from './statics';
+import { LoginFunction } from './app/login/login-function';
 
 export interface ApiStackProps extends StackProps {
   sessionsTable: SessionsTable;
@@ -58,6 +59,7 @@ export class ApiStack extends Stack {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
       readOnlyRole,
+      apiFunction: LoginFunction,
     });
 
     const logoutFunction = new ApiFunction(this, 'logout-function', {

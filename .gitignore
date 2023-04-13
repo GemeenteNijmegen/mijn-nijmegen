@@ -62,5 +62,6 @@ junit.xml
 /cdk.out/
 .cdk.staging/
 .parcel-cache/
+!/src/app/login/login-function.ts
 !/.github/workflows/emergency.yml
 !/.github/workflows/auto-merge.yml

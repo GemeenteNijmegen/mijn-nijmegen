@@ -4,6 +4,8 @@
     "build": "npx projen build",
     "bump": "npx projen bump",
     "bundle": "npx projen bundle",
+    "bundle:app/login/login.lambda": "npx projen bundle:app/login/login.lambda",
+    "bundle:app/login/login.lambda:watch": "npx projen bundle:app/login/login.lambda:watch",
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
     "default": "npx projen default",
