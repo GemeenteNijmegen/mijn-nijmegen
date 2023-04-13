@@ -33,6 +33,10 @@
       "type": "build"
     },
     {
+      "name": "aws-sdk-client-mock",
+      "type": "build"
+    },
+    {
       "name": "copyfiles",
       "type": "build"
     },
@@ -101,6 +105,10 @@
       "type": "runtime"
     },
     {
+      "name": "@aws-sdk/client-secrets-manager",
+      "type": "runtime"
+    },
+    {
       "name": "@aws-solutions-constructs/aws-lambda-dynamodb",
       "type": "runtime"
     },
@@ -124,6 +132,14 @@
     },
     {
       "name": "dotenv",
+      "type": "runtime"
+    },
+    {
+      "name": "mustache",
+      "type": "runtime"
+    },
+    {
+      "name": "openid-client",
       "type": "runtime"
     }
   ],

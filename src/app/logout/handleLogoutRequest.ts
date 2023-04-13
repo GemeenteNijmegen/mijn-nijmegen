@@ -1,9 +1,10 @@
-const { render } = require('./shared/render');
-const { Response } = require('@gemeentenijmegen/apigateway-http/lib/V2/Response');
-const cookie = require('cookie');
-const { Session } = require('@gemeentenijmegen/session');
+import { render } from '../../shared/render';
+import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
+import cookie from 'cookie';
+import { Session } from '@gemeentenijmegen/session';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 
-async function handleLogoutRequest(cookies, dynamoDBClient) {
+export async function handleLogoutRequest(cookies: string, dynamoDBClient: DynamoDBClient) {
     let session = new Session(cookies, dynamoDBClient);
     if(await session.init()) {
         await session.updateSession({
@@ -21,4 +22,3 @@ async function handleLogoutRequest(cookies, dynamoDBClient) {
     });
     return Response.html(html, 200, [emptyCookie]);
 }
-exports.handleLogoutRequest = handleLogoutRequest;

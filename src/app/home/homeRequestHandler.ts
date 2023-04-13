@@ -1,8 +1,9 @@
-const { render } = require('./shared/render');
-const { Session } = require('@gemeentenijmegen/session');
-const { Response } = require('@gemeentenijmegen/apigateway-http/lib/V2/Response');
+import { render } from '../../shared/render';
+import { Session } from '@gemeentenijmegen/session';
+import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 
-exports.homeRequestHandler = async (cookies, dynamoDBClient) => {
+export async function homeRequestHandler(cookies: string, dynamoDBClient: DynamoDBClient) {
     let session = new Session(cookies, dynamoDBClient);
     await session.init();
     if (session.isLoggedIn() == true) {
@@ -11,9 +12,9 @@ exports.homeRequestHandler = async (cookies, dynamoDBClient) => {
     return Response.redirect('/login');
 }
 
-async function handleLoggedinRequest(session) {
+async function handleLoggedinRequest(session: Session) {
     const naam = session.getValue('username') ?? 'Onbekende gebruiker';
-    data = {
+    const data = {
         title: 'overzicht',
         shownav: true,
         volledigenaam: naam

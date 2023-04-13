@@ -2,7 +2,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { handleLoginRequest } from './loginRequestHandler';
 
-const dynamoDBClient = new DynamoDBClient({});
+const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
 function parseEvent(event: any) {
   return { cookies: event?.cookies?.join(';') };

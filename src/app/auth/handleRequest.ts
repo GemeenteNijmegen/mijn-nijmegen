@@ -1,29 +1,40 @@
-const { Session } = require('@gemeentenijmegen/session');
-const { Bsn } = require('@gemeentenijmegen/utils');
-const { Response } = require('@gemeentenijmegen/apigateway-http/lib/V2/Response');
-const { OpenIDConnect } = require('./shared/OpenIDConnect');
-const { BrpApi } = require('./BrpApi');
-const { Logger } = require('@aws-lambda-powertools/logger');
+import { Session } from '@gemeentenijmegen/session';
+import { Bsn } from '@gemeentenijmegen/utils';
+import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
+import { OpenIDConnect } from '../../shared/OpenIDConnect';
+import { BrpApi } from './BrpApi';
+import { Logger } from '@aws-lambda-powertools/logger';
+import { ApiClient } from '@gemeentenijmegen/apiclient';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 
+interface requestProps {
+    cookies: string;
+    queryStringParamCode: string;
+    queryStringParamState: string;
+    dynamoDBClient: DynamoDBClient;
+    apiClient: ApiClient;
+    OpenIdConnect: OpenIDConnect;
+}
 
-async function handleRequest(cookies, queryStringParamCode, queryStringParamState, dynamoDBClient, apiClient) {
+export async function handleRequest(props: requestProps) {
     const logger = new Logger({ serviceName: 'mijnnijmegen' });
-    let session = new Session(cookies, dynamoDBClient);
+    let session = new Session(props.cookies, props.dynamoDBClient);
     await session.init();
     if (session.sessionId === false) {
+        console.debug('redirect 1')
         return Response.redirect('/login');
     }
     const state = session.getValue('state');
-    const OIDC = new OpenIDConnect();
     try {
-        const claims = await OIDC.authorize(queryStringParamCode, state, queryStringParamState, queryStringParamState);
+        const claims = await props.OpenIdConnect.authorize(props.queryStringParamCode, state, props.queryStringParamState);
+        console.debug(claims);
         if (claims) {
             const bsn = new Bsn(claims.sub);
             if(claims.hasOwnProperty('acr')) {
                 logger.info('auth succesful', { 'loa': claims.acr });
             }
             try {
-                const username = await loggedinUserName(bsn.bsn, apiClient);
+                const username = await loggedinUserName(bsn.bsn, props.apiClient);
                 await session.createSession({ 
                     loggedin: { BOOL: true },
                     bsn: { S: bsn.bsn },
@@ -37,15 +48,17 @@ async function handleRequest(cookies, queryStringParamCode, queryStringParamStat
         } else {
             return Response.redirect('/login');
         }
-    } catch (error) {
+    } catch (error: any) {
         console.error(error.message);
+        console.debug('redirect 2', error);
         return Response.redirect('/login');
     }
+    console.debug('redirect 3')
     return Response.redirect('/', 302, [session.getCookie()]);
 }
 
 
-async function loggedinUserName(bsn, apiClient) {
+async function loggedinUserName(bsn: string, apiClient: ApiClient) {
     try { 
         const brpApi = new BrpApi(apiClient);
         const brpData = await brpApi.getBrpData(bsn);
@@ -56,5 +69,3 @@ async function loggedinUserName(bsn, apiClient) {
         return 'Onbekende gebruiker';
     }
 }
-
-exports.handleRequest = handleRequest;

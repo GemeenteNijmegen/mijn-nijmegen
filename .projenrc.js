@@ -9,8 +9,11 @@ const project = new GemeenteNijmegenCdkApp({
     'dotenv',
     '@aws-cdk/aws-apigatewayv2-alpha',
     '@aws-cdk/aws-apigatewayv2-integrations-alpha',
+    '@aws-sdk/client-secrets-manager',
     '@aws-solutions-constructs/aws-lambda-dynamodb',
     'cdk-remote-stack',
+    'openid-client',
+    'mustache',
   ], /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   devDeps: [
@@ -18,6 +21,7 @@ const project = new GemeenteNijmegenCdkApp({
     '@playwright/test',
     '@playwright/test',
     '@axe-core/playwright',
+    'aws-sdk-client-mock'
   ], /* Build dependencies for this module. */
   mutableBuild: true,
   jestOptions: {

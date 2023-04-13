@@ -1,5 +1,6 @@
-const Mustache = require('mustache');
-const fs = require('fs/promises');
+import Mustache from 'mustache';
+import fs from 'fs/promises';
+import { PathLike } from 'fs';
 
 /**
  * Render data in a mustache template
@@ -8,9 +9,9 @@ const fs = require('fs/promises');
  * @param {string} templatePath the path to the mustache template
  * @returns string
  */
-exports.render = async function(data, templatePath, partials) {
+export async function render(data: object, templatePath: PathLike, partials: any) {
     const template = await fs.readFile(templatePath, 'utf8');
-    let partialTemplates = {};
+    let partialTemplates: any = {};
     if(partials) {
         const keys = Object.keys(partials);
         for (let i = 0; i < keys.length; i++) {
