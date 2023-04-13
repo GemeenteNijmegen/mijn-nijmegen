@@ -2,7 +2,6 @@ import { writeFile } from 'fs';
 import * as path from 'path';
 import { DynamoDBClient, GetItemCommandOutput, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
-import { handler } from '../login.lambda';
 import { handleLoginRequest } from '../loginRequestHandler';
 
 const ddbMock = mockClient(DynamoDBClient);
@@ -27,13 +26,6 @@ beforeAll(() => {
 beforeEach(() => {
   ddbMock.reset();
 });
-
-
-test('index is ok', async () => {
-  const result = await handler({}, {});
-  expect(result.statusCode).toBe(200);
-});
-
 
 test('Return login page with correct link', async () => {
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });

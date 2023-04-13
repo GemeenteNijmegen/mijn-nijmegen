@@ -152,6 +152,7 @@
           "**/src/app/logout/tests/**",
           "**//test/**",
           "**//build-tools/**",
+          "**/src/shared/tests/**",
           "src/app/auth/auth.lambda.ts",
           "src/app/home/home.lambda.ts",
           "src/app/login/login.lambda.ts",

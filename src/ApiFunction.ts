@@ -9,7 +9,7 @@ import { Statics } from './statics';
 type T = Lambda.Function;
 
 export interface ApiFunctionProps {
-  apiFunction: {new(scope: Construct, id:string, props?: Lambda.FunctionProps): T }
+  apiFunction: {new(scope: Construct, id:string, props?: Lambda.FunctionProps): T };
   description: string;
   codePath: string;
   table: aws_dynamodb.ITable;
@@ -20,7 +20,7 @@ export interface ApiFunctionProps {
   readOnlyRole: Role;
 }
 
-export class ApiFunction extends Construct  {
+export class ApiFunction extends Construct {
   lambda: Lambda.Function;
 
   constructor(scope: Construct, id: string, props: ApiFunctionProps) {

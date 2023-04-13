@@ -5,13 +5,13 @@ import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { AccountPrincipal, PrincipalWithConditions, Role } from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
+import { AuthFunction } from './app/auth/auth-function';
+import { HomeFunction } from './app/home/home-function';
+import { LoginFunction } from './app/login/login-function';
+import { LogoutFunction } from './app/logout/logout-function';
 import { DynamoDbReadOnlyPolicy } from './iam/dynamodb-readonly-policy';
 import { SessionsTable } from './SessionsTable';
 import { Statics } from './statics';
-import { LoginFunction } from './app/login/login-function';
-import { AuthFunction } from './app/auth/auth-function';
-import { HomeFunction } from './app/home/home-function';
-import { LogoutFunction } from './app/logout/logout-function';
 
 export interface ApiStackProps extends StackProps {
   sessionsTable: SessionsTable;

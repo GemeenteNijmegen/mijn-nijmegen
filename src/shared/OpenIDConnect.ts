@@ -91,7 +91,6 @@ export class OpenIDConnect {
      * @returns {IdTokenClaims} returns a claims object on succesful auth
      */
   async authorize(code: string, state: string, returnedState: string): Promise<IdTokenClaims> {
-    console.debug('here');
     if (!process.env.APPLICATION_URL_BASE || !process.env.OIDC_CLIENT_ID) {
       throw Error('no APPLICATION_URL_BASE or OIDC_CLIENT_ID in env. provided.');
     }
@@ -104,24 +103,20 @@ export class OpenIDConnect {
       client_secret: client_secret,
       response_types: ['code'],
     });
-    console.debug('here 2');
     const params = client.callbackParams(redirect_uri + '/?code=' + code + '&state=' + returnedState);
     if (state !== returnedState) {
       throw new Error('state does not match session state');
     }
-    console.debug('here 3');
     let tokenSet;
     try {
       tokenSet = await client.callback(redirect_uri.toString(), params, { state: state });
     } catch (err: any) {
       throw new Error(`${err.error} ${err.error_description}`);
     }
-    console.debug('here 4');
     const claims = tokenSet.claims();
     if (claims.aud != process.env.OIDC_CLIENT_ID) {
       throw new Error('claims aud does not match client id');
     }
-    console.debug('here 5');
     return claims;
 
   }

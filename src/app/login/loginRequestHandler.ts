@@ -1,6 +1,6 @@
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
-import { OpenIDConnect } from './shared/OpenIDConnect';
+import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { render } from '../../shared/render';
 
 export async function handleLoginRequest(cookies: string, dynamoDBClient: any):Promise<ApiGatewayV2Response> {

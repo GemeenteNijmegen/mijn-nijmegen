@@ -222,7 +222,7 @@
       "description": "Runs eslint against the codebase",
       "steps": [
         {
-          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src src/app/login/tests src/app/auth/tests src/app/home/tests src/app/uitkeringen/tests src/app/logout/tests /test /build-tools .projenrc.js"
+          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src src/app/login/tests src/app/auth/tests src/app/home/tests src/app/uitkeringen/tests src/app/logout/tests /test /build-tools src/shared/tests .projenrc.js"
         }
       ]
     },
@@ -239,7 +239,7 @@
       "name": "install:auth",
       "steps": [
         {
-          "exec": "copyfiles -f src/shared/* src/app/auth/shared && cd src/app/auth && npm install"
+          "exec": "copyfiles -f src/shared/*.mustache src/app/auth/shared"
         }
       ]
     },
@@ -256,7 +256,7 @@
       "name": "install:home",
       "steps": [
         {
-          "exec": "copyfiles -f src/shared/* src/app/home/shared && cd src/app/home && npm install"
+          "exec": "copyfiles -f src/shared/*.mustache src/app/home/shared"
         }
       ]
     },
@@ -264,7 +264,7 @@
       "name": "install:login",
       "steps": [
         {
-          "exec": "copyfiles -f src/shared/* src/app/login/shared && cd src/app/login && npm install"
+          "exec": "copyfiles -f src/shared/*.mustache src/app/login/shared"
         }
       ]
     },
@@ -272,7 +272,7 @@
       "name": "install:logout",
       "steps": [
         {
-          "exec": "copyfiles -f src/shared/* src/app/logout/shared && cd src/app/logout && npm install"
+          "exec": "copyfiles -f src/shared/*.mustache src/app/logout/shared"
         }
       ]
     },
@@ -299,11 +299,7 @@
     },
     "post-upgrade": {
       "name": "post-upgrade",
-      "steps": [
-        {
-          "exec": "       (cd src/app/login && npx npm-check-updates -u --dep prod,dev && npm install)       && (cd src/app/home && npx npm-check-updates -u --dep prod,dev && npm install)       && (cd src/app/auth && npx npm-check-updates -u --dep prod,dev && npm install)       && (cd src/app/logout && npx npm-check-updates -u --dep prod,dev && npm install)"
-        }
-      ]
+      "description": "Runs after upgrading dependencies"
     },
     "postinstall": {
       "name": "postinstall",

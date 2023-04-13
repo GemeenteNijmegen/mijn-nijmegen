@@ -1,22 +1,22 @@
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { SecretsManagerClient, GetSecretValueCommandOutput, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
+import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { mockClient } from 'aws-sdk-client-mock';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { handleRequest } from '../handleRequest';
-import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { OpenIDConnect } from '../../../shared/OpenIDConnect';
+import { handleRequest } from '../handleRequest';
 
 
 function mockedOidcClient(authorized = true) {
   const oidc = new OpenIDConnect();
   oidc.getOidcClientSecret = async () => '123';
-  if(authorized) {
+  if (authorized) {
     oidc.authorize = jest.fn().mockResolvedValue({
       sub: '900222670',
     });
   } else {
-    oidc.authorize = jest.fn().mockRejectedValue("state does not match session state");
+    oidc.authorize = jest.fn().mockRejectedValue('state does not match session state');
   }
   return oidc;
 }
@@ -49,7 +49,7 @@ beforeAll(() => {
 
 const ddbMock = mockClient(DynamoDBClient);
 const secretsMock = mockClient(SecretsManagerClient);
-const apiClient = new ApiClient('','','');
+const apiClient = new ApiClient('', '', '');
 const OIDC = mockedOidcClient(true);
 const sessionId = '12345';
 
@@ -94,9 +94,9 @@ test('Successful auth redirects to home', async () => {
   setupSessionResponse(true);
   const result = await handleRequest({
     cookies: `session=${sessionId}`,
-    queryStringParamState: 'state', 
-    queryStringParamCode: '12345', 
-    dynamoDBClient, 
+    queryStringParamState: 'state',
+    queryStringParamCode: '12345',
+    dynamoDBClient,
     apiClient,
     OpenIdConnect: OIDC,
   });
@@ -111,9 +111,9 @@ test('Successful auth creates new session', async () => {
 
   const result = await handleRequest({
     cookies: `session=${sessionId}`,
-    queryStringParamState: 'state', 
-    queryStringParamCode: '12345', 
-    dynamoDBClient, 
+    queryStringParamState: 'state',
+    queryStringParamCode: '12345',
+    dynamoDBClient,
     apiClient,
     OpenIdConnect: OIDC,
   });
@@ -126,9 +126,9 @@ test('No session redirects to login', async () => {
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   const result = await handleRequest({
     cookies: '',
-    queryStringParamState: 'state', 
-    queryStringParamCode: 'state', 
-    dynamoDBClient, 
+    queryStringParamState: 'state',
+    queryStringParamCode: 'state',
+    dynamoDBClient,
     apiClient,
     OpenIdConnect: OIDC,
   });
