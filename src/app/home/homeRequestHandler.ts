@@ -1,6 +1,7 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
+import * as homeTemplate from './templates/home.mustache';
 import { render } from '../../shared/render';
 
 export async function homeRequestHandler(cookies: string, dynamoDBClient: DynamoDBClient) {
@@ -21,10 +22,7 @@ async function handleLoggedinRequest(session: Session) {
   };
 
   // render page
-  const html = await render(data, __dirname + '/templates/home.mustache', {
-    header: `${__dirname}/shared/header.mustache`,
-    footer: `${__dirname}/shared/footer.mustache`,
-  });
+  const html = await render(data, homeTemplate.default);
 
   return Response.html(html, 200, session.getCookie());
 }

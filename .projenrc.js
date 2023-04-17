@@ -21,6 +21,7 @@ const project = new GemeenteNijmegenCdkApp({
     'cdk-remote-stack',
     'openid-client',
     'mustache',
+    '@types/mustache',
     'axios',
     'cookie',
     'openid-client',
@@ -35,24 +36,30 @@ const project = new GemeenteNijmegenCdkApp({
     '@playwright/test',
     '@axe-core/playwright',
     'aws-sdk-client-mock',
+    '@glen/jest-raw-loader',
   ], /* Build dependencies for this module. */
   mutableBuild: true,
   jestOptions: {
     jestConfig: {
       setupFiles: ['dotenv/config'],
+      moduleFileExtensions: [
+        'js', 'json', 'jsx', 'ts', 'tsx', 'node', 'mustache',
+      ],
+      transform: {
+        '\\.[jt]sx?$': 'ts-jest',
+        '^.+\\.mustache$': '@glen/jest-raw-loader',
+      },
       testPathIgnorePatterns: ['/node_modules/', '/cdk.out', '/test/playwright'],
       roots: ['src', 'test'],
     },
   },
-  scripts: {
-    'install:login': 'copyfiles -f src/shared/*.mustache src/app/login/shared',
-    'install:auth': 'copyfiles -f src/shared/*.mustache src/app/auth/shared',
-    'install:home': 'copyfiles -f src/shared/*.mustache src/app/home/shared',
-    'install:logout': 'copyfiles -f src/shared/*.mustache src/app/logout/shared',
-    'postinstall': 'npm run install:login && npm run install:auth && npm run install:home && npm run install:logout',
-  },
   eslintOptions: {
     devdirs: ['src/app/login/tests', 'src/app/auth/tests', 'src/app/home/tests', 'src/app/uitkeringen/tests', 'src/app/logout/tests', '/test', '/build-tools', 'src/shared/tests'],
+  },
+  bundlerOptions: {
+    loaders: {
+      mustache: 'text',
+    },
   },
   gitignore: [
     'src/app/**/tests/output',

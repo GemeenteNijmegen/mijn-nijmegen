@@ -1,5 +1,6 @@
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
+import * as loginTemplate from './templates/login.mustache';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { render } from '../../shared/render';
 
@@ -22,10 +23,7 @@ export async function handleLoginRequest(cookies: string, dynamoDBClient: any):P
     title: 'Inloggen',
     authUrl: authUrl,
   };
-  const html = await render(data, __dirname + '/templates/login.mustache', {
-    header: `${__dirname}/shared/header.mustache`,
-    footer: `${__dirname}/shared/footer.mustache`,
-  });
+  const html = await render(data, loginTemplate.default);
   const newCookies = [session.getCookie()];
   return Response.html(html, 200, newCookies);
 }
