@@ -1,5 +1,3 @@
-import { writeFile } from 'fs';
-import * as path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
 import { homeRequestHandler } from '../homeRequestHandler';
@@ -41,8 +39,8 @@ test('Returns 200', async () => {
   const result = await homeRequestHandler('session=12345', dynamoDBClient);
 
   expect(result.statusCode).toBe(200);
-  let cookies = result.cookies.filter((cookie: string) => cookie.indexOf('HttpOnly; Secure'));
-  expect(cookies.length).toBe(1);
+  let cookies = result?.cookies?.filter((cookie: string) => cookie.indexOf('HttpOnly; Secure'));
+  expect(cookies?.length).toBe(1);
 });
 
 test('Shows overview page', async () => {
@@ -50,5 +48,4 @@ test('Shows overview page', async () => {
   const result = await homeRequestHandler('session=12345', dynamoDBClient);
   expect(result.body).toMatch('Mijn Nijmegen');
   expect(result.body).toMatch('Jan de Tester');
-  writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => {});
 });

@@ -30,7 +30,6 @@ jspm_packages/
 *.tgz
 .yarn-integrity
 .cache
-src/app/**/shared
 src/app/**/tests/output
 test-reports/junit.xml
 test/__snapshots__/*
@@ -62,5 +61,9 @@ junit.xml
 /cdk.out/
 .cdk.staging/
 .parcel-cache/
+!/src/app/auth/auth-function.ts
+!/src/app/home/home-function.ts
+!/src/app/login/login-function.ts
+!/src/app/logout/logout-function.ts
 !/.github/workflows/emergency.yml
 !/.github/workflows/auto-merge.yml
