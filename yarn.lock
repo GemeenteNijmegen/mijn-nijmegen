@@ -1374,6 +1374,11 @@
     "@aws-sdk/client-secrets-manager" "^3.287.0"
     "@aws-sdk/client-ssm" "^3.287.0"
 
+"@glen/jest-raw-loader@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@glen/jest-raw-loader/-/jest-raw-loader-2.0.0.tgz#209377060d4aaaa19ab3ef46fb07650af4529d4c"
+  integrity sha512-758pv2NtgFOJvVIdh6JRy4LoxLsAz8qtXwxLp/u/GHXz6wCWrbw581QF0ORJ2E8zEdhM4xjDLlsFSjeISmX0KQ==
+
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.8.tgz#03595ac2075a4dc0f191cc2131de14fbd7d410b9"
@@ -2015,6 +2020,11 @@
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.2.tgz#ee771e2ba4b3dc5b372935d549fd9617bf345b8c"
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
+
+"@types/mustache@^4.2.2":
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/@types/mustache/-/mustache-4.2.2.tgz#825bf5c214c3ab84d0b23fef2c8eb898f3ff8717"
+  integrity sha512-MUSpfpW0yZbTgjekDbH0shMYBUD+X/uJJJMm9LXN1d5yjl5lCY1vN/eWKD6D1tOtjA6206K0zcIPnUaFMurdNA==
 
 "@types/node@*":
   version "18.15.11"

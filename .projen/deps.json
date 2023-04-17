@@ -9,6 +9,10 @@
       "type": "build"
     },
     {
+      "name": "@glen/jest-raw-loader",
+      "type": "build"
+    },
+    {
       "name": "@playwright/test",
       "type": "build"
     },
@@ -146,6 +150,10 @@
     },
     {
       "name": "@gemeentenijmegen/utils",
+      "type": "runtime"
+    },
+    {
+      "name": "@types/mustache",
       "type": "runtime"
     },
     {
