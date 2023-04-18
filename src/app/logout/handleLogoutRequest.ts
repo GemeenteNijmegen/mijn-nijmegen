@@ -13,10 +13,7 @@ export async function handleLogoutRequest(cookies: string, dynamoDBClient: Dynam
     });
   }
 
-  const html = await render({ title: 'Uitgelogd' }, logoutTemplate.default, {
-    header: `${__dirname}/shared/header.mustache`,
-    footer: `${__dirname}/shared/footer.mustache`,
-  });
+  const html = await render({ title: 'Uitgelogd' }, logoutTemplate.default);
   const emptyCookie = cookie.serialize('session', '', {
     httpOnly: true,
     secure: true,
