@@ -5,7 +5,9 @@ import { mockClient } from 'aws-sdk-client-mock';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { OpenIDConnect } from '../../../shared/OpenIDConnect';
-import { handleRequest } from '../handleRequest';
+import { bsnFromClaims, handleRequest } from '../handleRequest';
+import { IdTokenClaims } from 'openid-client';
+import { Bsn } from '@gemeentenijmegen/utils';
 
 
 function mockedOidcClient(authorized = true) {
@@ -24,7 +26,7 @@ function mockedOidcClient(authorized = true) {
 const axiosMock = new MockAdapter(axios);
 beforeAll(() => {
 
-  if (process.env.VERBOSETESTS!='True') {
+  if (process.env.VERBOSETESTS != 'True') {
     // global.console.error = jest.fn();
     // global.console.time = jest.fn();
     // global.console.log = jest.fn();
@@ -134,4 +136,85 @@ test('No session redirects to login', async () => {
   });
   expect(result.statusCode).toBe(302);
   expect(result?.headers?.Location).toBe('/login');
+});
+
+describe('Get bsn from claims object', () => {
+  const claims: IdTokenClaims = {
+    aud: 'test',
+    exp: 123,
+    iat: 123,
+    iss: 'test',
+    sub: '900222670',
+  };
+  test('bsn in sub', async () => {
+    const bsn = bsnFromClaims(claims);
+    expect(bsn).toBeInstanceOf(Bsn);
+    expect(bsn).toBeTruthy();
+    if (bsn) {
+      expect(bsn.bsn).toBe('900222670');
+    }
+  });
+  test('bsn in irma-demo.gemeente.personalData.bsn', async () => {
+    const claims: IdTokenClaims = {
+      aud: 'test',
+      exp: 123,
+      iat: 123,
+      iss: 'test',
+      sub: 'test',
+      [`irma-demo.gemeente.personalData.bsn`]: '900070341'
+    };
+    const bsn = bsnFromClaims(claims);
+    expect(bsn).toBeInstanceOf(Bsn);
+    expect(bsn).toBeTruthy();
+    if (bsn) {
+      expect(bsn.bsn).toBe('900070341');
+    }
+  });
+
+  test('bsn in pbdf.gemeente.bsn.bsn', async () => {
+    const claims: IdTokenClaims = {
+      aud: 'test',
+      exp: 123,
+      iat: 123,
+      iss: 'test',
+      sub: 'test',
+      [`pbdf.gemeente.bsn.bsn`]: '900070341'
+    };
+    const bsn = bsnFromClaims(claims);
+    expect(bsn).toBeInstanceOf(Bsn);
+    expect(bsn).toBeTruthy();
+    if (bsn) {
+      expect(bsn.bsn).toBe('900070341');
+    }
+  });
+  
+  test('bsn in sub and irma-demo.gemeente.personalData.bsn uses first', async () => {
+    const claims: IdTokenClaims = {
+      aud: 'test',
+      exp: 123,
+      iat: 123,
+      iss: 'test',
+      sub: '900222670',
+      [`irma-demo.gemeente.personalData.bsn`]: '900070341'
+    };
+    const bsn = bsnFromClaims(claims);
+    expect(bsn).toBeInstanceOf(Bsn);
+    expect(bsn).toBeTruthy();
+    if (bsn) {
+      expect(bsn.bsn).toBe('900222670');
+    }
+  });
+
+  test('No bsn in claims returns false', async () => {
+    const claims: IdTokenClaims = {
+      aud: 'test',
+      exp: 123,
+      iat: 123,
+      iss: 'test',
+      sub: 'test',
+    };
+    const bsn = bsnFromClaims(claims);
+    expect(bsn).not.toBeInstanceOf(Bsn);
+    expect(bsn).toBeFalsy();
+  });
 });
