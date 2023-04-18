@@ -30,6 +30,9 @@ export async function handleRequest(props: requestProps) {
     const claims = await props.OpenIdConnect.authorize(props.queryStringParamCode, state, props.queryStringParamState);
     if (claims) {
       const bsn = bsnFromClaims(claims);
+      if(!bsn) {
+        return Response.redirect('/login');
+      }
       if (claims.hasOwnProperty('acr')) {
         logger.info('auth succesful', { loa: claims.acr });
       }
