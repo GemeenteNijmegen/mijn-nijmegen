@@ -4,6 +4,7 @@ import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
+import { IdTokenClaims } from 'openid-client';
 import { BrpApi } from './BrpApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 
@@ -28,7 +29,10 @@ export async function handleRequest(props: requestProps) {
   try {
     const claims = await props.OpenIdConnect.authorize(props.queryStringParamCode, state, props.queryStringParamState);
     if (claims) {
-      const bsn = new Bsn(claims.sub);
+      const bsn = bsnFromClaims(claims);
+      if (!bsn) {
+        return Response.redirect('/login');
+      }
       if (claims.hasOwnProperty('acr')) {
         logger.info('auth succesful', { loa: claims.acr });
       }
@@ -64,4 +68,31 @@ async function loggedinUserName(bsn: string, apiClient: ApiClient) {
     console.error('Error getting username');
     return 'Onbekende gebruiker';
   }
+}
+
+/**
+ * Extract bsn from token claims
+ *
+ * The bsn can be found in several fields: either the 'sub' claim
+ * or a yivi-specific field can be used. This function tries (in order)
+ * to get a valid BSN from:
+ * - sub
+ * - pbdf.gemeente.bsn.bsn
+ * - irma-demo.gemeente.personalData.bsn
+ *
+ * @param claims an IdTokenClaims object
+ * @returns {BSN|false}
+ */
+export function bsnFromClaims(claims: IdTokenClaims): Bsn|false {
+  const possibleClaims = ['sub', 'pbdf.gemeente.bsn.bsn', 'irma-demo.gemeente.personalData.bsn'];
+  for (const type of possibleClaims) {
+    try {
+      if (claims[type]) {
+        return new Bsn(claims[type] as string);
+      }
+    } catch (error: any) {
+      // we don't care about non-valid BSN's (sub could have a random string)
+    }
+  }
+  return false;
 }
