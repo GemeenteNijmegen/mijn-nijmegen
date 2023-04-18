@@ -1,13 +1,13 @@
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { SecretsManagerClient, GetSecretValueCommandOutput, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
+import { Bsn } from '@gemeentenijmegen/utils';
 import { mockClient } from 'aws-sdk-client-mock';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import { IdTokenClaims } from 'openid-client';
 import { OpenIDConnect } from '../../../shared/OpenIDConnect';
 import { bsnFromClaims, handleRequest } from '../handleRequest';
-import { IdTokenClaims } from 'openid-client';
-import { Bsn } from '@gemeentenijmegen/utils';
 
 
 function mockedOidcClient(authorized = true) {
@@ -139,14 +139,14 @@ test('No session redirects to login', async () => {
 });
 
 describe('Get bsn from claims object', () => {
-  const claims: IdTokenClaims = {
-    aud: 'test',
-    exp: 123,
-    iat: 123,
-    iss: 'test',
-    sub: '900222670',
-  };
   test('bsn in sub', async () => {
+    const claims: IdTokenClaims = {
+      aud: 'test',
+      exp: 123,
+      iat: 123,
+      iss: 'test',
+      sub: '900222670',
+    };
     const bsn = bsnFromClaims(claims);
     expect(bsn).toBeInstanceOf(Bsn);
     expect(bsn).toBeTruthy();
@@ -161,7 +161,7 @@ describe('Get bsn from claims object', () => {
       iat: 123,
       iss: 'test',
       sub: 'test',
-      [`irma-demo.gemeente.personalData.bsn`]: '900070341'
+      ['irma-demo.gemeente.personalData.bsn']: '900070341',
     };
     const bsn = bsnFromClaims(claims);
     expect(bsn).toBeInstanceOf(Bsn);
@@ -178,7 +178,7 @@ describe('Get bsn from claims object', () => {
       iat: 123,
       iss: 'test',
       sub: 'test',
-      [`pbdf.gemeente.bsn.bsn`]: '900070341'
+      ['pbdf.gemeente.bsn.bsn']: '900070341',
     };
     const bsn = bsnFromClaims(claims);
     expect(bsn).toBeInstanceOf(Bsn);
@@ -187,7 +187,7 @@ describe('Get bsn from claims object', () => {
       expect(bsn.bsn).toBe('900070341');
     }
   });
-  
+
   test('bsn in sub and irma-demo.gemeente.personalData.bsn uses first', async () => {
     const claims: IdTokenClaims = {
       aud: 'test',
@@ -195,7 +195,7 @@ describe('Get bsn from claims object', () => {
       iat: 123,
       iss: 'test',
       sub: '900222670',
-      [`irma-demo.gemeente.personalData.bsn`]: '900070341'
+      ['irma-demo.gemeente.personalData.bsn']: '900070341',
     };
     const bsn = bsnFromClaims(claims);
     expect(bsn).toBeInstanceOf(Bsn);
