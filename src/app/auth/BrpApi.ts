@@ -8,10 +8,6 @@ export class BrpApi {
 
   constructor(client: ApiClient) {
     this.client = client;
-    this.endpoint = '';
-  }
-
-  async init() {
     if (!process.env.BRP_API_URL) {
       throw new Error('Could not initialize brp api as no endpoint parameter is provided in BRP_API_URL');
     }
