@@ -5,6 +5,10 @@ import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { AccountPrincipal, PrincipalWithConditions, Role } from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
+import { AuthFunction } from './app/auth/auth-function';
+import { HomeFunction } from './app/home/home-function';
+import { LoginFunction } from './app/login/login-function';
+import { LogoutFunction } from './app/logout/logout-function';
 import { DynamoDbReadOnlyPolicy } from './iam/dynamodb-readonly-policy';
 import { SessionsTable } from './SessionsTable';
 import { Statics } from './statics';
@@ -58,6 +62,7 @@ export class ApiStack extends Stack {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
       readOnlyRole,
+      apiFunction: LoginFunction,
     });
 
     const logoutFunction = new ApiFunction(this, 'logout-function', {
@@ -67,6 +72,7 @@ export class ApiStack extends Stack {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
       readOnlyRole,
+      apiFunction: LogoutFunction,
     });
 
     const secretMTLSPrivateKey = aws_secretsmanager.Secret.fromSecretNameV2(this, 'tls-key-secret', Statics.secretMTLSPrivateKey);
@@ -87,6 +93,7 @@ export class ApiStack extends Stack {
         MTLS_ROOT_CA_NAME: Statics.ssmMTLSRootCA,
         BRP_API_URL: SSM.StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
       },
+      apiFunction: AuthFunction,
     });
     oidcSecret.grantRead(authFunction.lambda);
     secretMTLSPrivateKey.grantRead(authFunction.lambda);
@@ -100,6 +107,7 @@ export class ApiStack extends Stack {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
       readOnlyRole,
+      apiFunction: HomeFunction,
     });
 
     this.api.addRoutes({

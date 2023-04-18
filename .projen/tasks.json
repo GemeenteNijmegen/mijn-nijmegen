@@ -43,7 +43,93 @@
     },
     "bundle": {
       "name": "bundle",
-      "description": "Prepare assets"
+      "description": "Prepare assets",
+      "steps": [
+        {
+          "spawn": "bundle:app/auth/auth.lambda"
+        },
+        {
+          "spawn": "bundle:app/home/home.lambda"
+        },
+        {
+          "spawn": "bundle:app/login/login.lambda"
+        },
+        {
+          "spawn": "bundle:app/logout/logout.lambda"
+        }
+      ]
+    },
+    "bundle:app/auth/auth.lambda": {
+      "name": "bundle:app/auth/auth.lambda",
+      "description": "Create a JavaScript bundle from src/app/auth/auth.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/auth/auth.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/app/auth/auth.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+        }
+      ]
+    },
+    "bundle:app/auth/auth.lambda:watch": {
+      "name": "bundle:app/auth/auth.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/app/auth/auth.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/auth/auth.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/app/auth/auth.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+        }
+      ]
+    },
+    "bundle:app/home/home.lambda": {
+      "name": "bundle:app/home/home.lambda",
+      "description": "Create a JavaScript bundle from src/app/home/home.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/home/home.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/app/home/home.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+        }
+      ]
+    },
+    "bundle:app/home/home.lambda:watch": {
+      "name": "bundle:app/home/home.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/app/home/home.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/home/home.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/app/home/home.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+        }
+      ]
+    },
+    "bundle:app/login/login.lambda": {
+      "name": "bundle:app/login/login.lambda",
+      "description": "Create a JavaScript bundle from src/app/login/login.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/login/login.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/app/login/login.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+        }
+      ]
+    },
+    "bundle:app/login/login.lambda:watch": {
+      "name": "bundle:app/login/login.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/app/login/login.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/login/login.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/app/login/login.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+        }
+      ]
+    },
+    "bundle:app/logout/logout.lambda": {
+      "name": "bundle:app/logout/logout.lambda",
+      "description": "Create a JavaScript bundle from src/app/logout/logout.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/logout/logout.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/app/logout/logout.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+        }
+      ]
+    },
+    "bundle:app/logout/logout.lambda:watch": {
+      "name": "bundle:app/logout/logout.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/app/logout/logout.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/logout/logout.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/app/logout/logout.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+        }
+      ]
     },
     "clobber": {
       "name": "clobber",
@@ -136,7 +222,7 @@
       "description": "Runs eslint against the codebase",
       "steps": [
         {
-          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src src/app/login/tests src/app/auth/tests src/app/home/tests src/app/uitkeringen/tests src/app/logout/tests /test /build-tools .projenrc.js"
+          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src src/app/login/tests src/app/auth/tests src/app/home/tests src/app/uitkeringen/tests src/app/logout/tests /test /build-tools src/shared/tests .projenrc.js"
         }
       ]
     },
@@ -149,44 +235,12 @@
         }
       ]
     },
-    "install:auth": {
-      "name": "install:auth",
-      "steps": [
-        {
-          "exec": "copyfiles -f src/shared/* src/app/auth/shared && cd src/app/auth && npm install"
-        }
-      ]
-    },
     "install:ci": {
       "name": "install:ci",
       "description": "Install project dependencies using frozen lockfile",
       "steps": [
         {
           "exec": "yarn install --check-files --frozen-lockfile"
-        }
-      ]
-    },
-    "install:home": {
-      "name": "install:home",
-      "steps": [
-        {
-          "exec": "copyfiles -f src/shared/* src/app/home/shared && cd src/app/home && npm install"
-        }
-      ]
-    },
-    "install:login": {
-      "name": "install:login",
-      "steps": [
-        {
-          "exec": "copyfiles -f src/shared/* src/app/login/shared && cd src/app/login && npm install"
-        }
-      ]
-    },
-    "install:logout": {
-      "name": "install:logout",
-      "steps": [
-        {
-          "exec": "copyfiles -f src/shared/* src/app/logout/shared && cd src/app/logout && npm install"
         }
       ]
     },
@@ -213,19 +267,7 @@
     },
     "post-upgrade": {
       "name": "post-upgrade",
-      "steps": [
-        {
-          "exec": "       (cd src/app/login && npx npm-check-updates -u --dep prod,dev && npm install)       && (cd src/app/home && npx npm-check-updates -u --dep prod,dev && npm install)       && (cd src/app/auth && npx npm-check-updates -u --dep prod,dev && npm install)       && (cd src/app/logout && npx npm-check-updates -u --dep prod,dev && npm install)"
-        }
-      ]
-    },
-    "postinstall": {
-      "name": "postinstall",
-      "steps": [
-        {
-          "exec": "npm run install:login && npm run install:auth && npm run install:home && npm run install:logout"
-        }
-      ]
+      "description": "Runs after upgrading dependencies"
     },
     "pre-compile": {
       "name": "pre-compile",

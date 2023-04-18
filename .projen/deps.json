@@ -1,7 +1,15 @@
 {
   "dependencies": [
     {
+      "name": "@aws-sdk/types",
+      "type": "build"
+    },
+    {
       "name": "@axe-core/playwright",
+      "type": "build"
+    },
+    {
+      "name": "@glen/jest-raw-loader",
       "type": "build"
     },
     {
@@ -30,6 +38,14 @@
     {
       "name": "aws-cdk",
       "version": "^2.22.0",
+      "type": "build"
+    },
+    {
+      "name": "aws-sdk-client-mock",
+      "type": "build"
+    },
+    {
+      "name": "axios-mock-adapter",
       "type": "build"
     },
     {
@@ -101,7 +117,27 @@
       "type": "runtime"
     },
     {
+      "name": "@aws-lambda-powertools/logger",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/client-dynamodb",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/client-secrets-manager",
+      "type": "runtime"
+    },
+    {
       "name": "@aws-solutions-constructs/aws-lambda-dynamodb",
+      "type": "runtime"
+    },
+    {
+      "name": "@gemeentenijmegen/apiclient",
+      "type": "runtime"
+    },
+    {
+      "name": "@gemeentenijmegen/apigateway-http",
       "type": "runtime"
     },
     {
@@ -109,8 +145,24 @@
       "type": "runtime"
     },
     {
+      "name": "@gemeentenijmegen/session",
+      "type": "runtime"
+    },
+    {
+      "name": "@gemeentenijmegen/utils",
+      "type": "runtime"
+    },
+    {
+      "name": "@types/mustache",
+      "type": "runtime"
+    },
+    {
       "name": "aws-cdk-lib",
       "version": "^2.22.0",
+      "type": "runtime"
+    },
+    {
+      "name": "axios",
       "type": "runtime"
     },
     {
@@ -123,7 +175,19 @@
       "type": "runtime"
     },
     {
+      "name": "cookie",
+      "type": "runtime"
+    },
+    {
       "name": "dotenv",
+      "type": "runtime"
+    },
+    {
+      "name": "mustache",
+      "type": "runtime"
+    },
+    {
+      "name": "openid-client",
       "type": "runtime"
     }
   ],
