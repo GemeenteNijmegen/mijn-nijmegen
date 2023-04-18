@@ -1,5 +1,5 @@
 import { ApiClient } from '@gemeentenijmegen/apiclient';
-import { AWS, Bsn } from '@gemeentenijmegen/utils';
+import { Bsn } from '@gemeentenijmegen/utils';
 
 export class BrpApi {
 
