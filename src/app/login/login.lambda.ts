@@ -3,7 +3,10 @@ import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-htt
 import { LoginRequestHandler } from './loginRequestHandler';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
-const loginRequestHandler = new LoginRequestHandler({});
+const loginRequestHandler = new LoginRequestHandler({
+  useYivi: process.env.USE_YIVI === 'true',
+  digidServiceLevel: process.env.DIGID_LOA
+});
 
 function parseEvent(event: any) {
   return { cookies: event?.cookies?.join(';') };
