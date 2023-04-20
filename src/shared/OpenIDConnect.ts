@@ -64,10 +64,10 @@ export class OpenIDConnect {
      * @returns {string} the login url
      */
   getLoginUrl(state: string, scope?: string): string {
-    if(!scope) {
+    if (!scope) {
       scope = process.env.OIDC_SCOPE;
     }
-    if(!scope) {
+    if (!scope) {
       throw Error('no scope provided in constructor or process.env.OIDC_SCOPE');
     }
 
