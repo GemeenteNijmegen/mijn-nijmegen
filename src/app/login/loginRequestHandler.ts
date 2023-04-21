@@ -7,16 +7,31 @@ import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { render } from '../../shared/render';
 
 interface LoginRequestHandlerProps {
+  /**
+   * General oidcScope. Will be concatenated with `digidScope` or `yiviScope`
+   */
+  oidcScope: string;
+
+  /**
+   * Scope param for digid. Concatenated with `oidcScope`
+   */
+  digidScope: string;
+
+  /**
+   * If set (and yiviScope is set) the yivi+digid template will be used and Yivi login is enabled
+   */
   useYivi?: boolean;
-  digidServiceLevel?: string;
+
+  /**
+   * Scope param for Yivi. Concatenated with `oidcScope`. Only active if `useYivi` is also set
+   */
+  yiviScope?: string;
 }
 
 export class LoginRequestHandler {
-  private useYivi: boolean = false;
-  private digidServiceLevel?: string;
-  constructor(props?: LoginRequestHandlerProps) {
-    this.useYivi = props?.useYivi ?? false;
-    this.digidServiceLevel = props?.digidServiceLevel;
+  private config: LoginRequestHandlerProps;
+  constructor(props: LoginRequestHandlerProps) {
+    this.config = props;
   }
 
   async handleRequest(cookies: string, dynamoDBClient: DynamoDBClient):Promise<ApiGatewayV2Response> {
@@ -26,11 +41,8 @@ export class LoginRequestHandler {
       console.debug('redirect to home');
       return Response.redirect('/');
     }
-    const scope = process.env.OIDC_SCOPE;
-    if (!scope) {
-      throw Error('No scope provided in process.env.OIDC_SCOPE');
-    }
-    let digidScope = this.scopeString(scope, 'digid', this.digidServiceLevel);
+    const scope = this.config.oidcScope;
+    let digidScope = `${scope} ${this.config.digidScope}`;
     let OIDC = new OpenIDConnect();
     const state = OIDC.generateState();
     await session.createSession({
@@ -45,20 +57,17 @@ export class LoginRequestHandler {
       authUrlDigid: authUrlDigid,
       authUrlYivi: '',
     };
-
-    if (this.useYivi) {
-      const yiviScope = this.scopeString(scope, 'yivi');
+    
+    // TODO: Simplify after yivi launch - JB 20230421
+    let template = loginTemplate.default;
+    if (this.config?.useYivi && this.config?.yiviScope) {
+      const yiviScope = `${scope} ${this.config.yiviScope}`
       data.authUrlYivi = OIDC.getLoginUrl(state, yiviScope);
+      template = loginYiviTemplate.default;
     }
-    const template = this.useYivi ? loginYiviTemplate.default : loginTemplate.default;
+    
     const html = await render(data, template);
     const newCookies = [session.getCookie()];
     return Response.html(html, 200, newCookies);
   }
-
-  scopeString(initialScope: string, type: string, loa?: string) {
-    const idp_scope = `${initialScope} idp_scoping:${type}`;
-    return loa ? `${idp_scope} service:${loa}` : idp_scope;
-  }
-
 }
