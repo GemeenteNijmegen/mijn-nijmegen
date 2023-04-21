@@ -67,7 +67,7 @@ export class ApiStack extends Stack {
         DIGID_SCOPE: SSM.StringParameter.valueForStringParameter(this, Statics.ssmDIGIDScope),
         YIVI_SCOPE: SSM.StringParameter.valueForStringParameter(this, Statics.ssmYiviScope),
         USE_YIVI: SSM.StringParameter.valueForStringParameter(this, Statics.ssmUseYivi),
-      }
+      },
     });
 
     const logoutFunction = new ApiFunction(this, 'logout-function', {
