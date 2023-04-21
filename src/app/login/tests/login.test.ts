@@ -2,7 +2,7 @@ import { writeFile } from 'fs';
 import * as path from 'path';
 import { DynamoDBClient, GetItemCommandOutput, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
-import { DigidServiceLevel, LoginRequestHandler } from '../loginRequestHandler';
+import { LoginRequestHandler } from '../loginRequestHandler';
 
 const ddbMock = mockClient(DynamoDBClient);
 const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
@@ -58,7 +58,7 @@ describe('Test login page and urls', () => {
 
   test('Return login page with digid loa high', async () => {
     const loginRequestHandler = new LoginRequestHandler({
-      digidServiceLevel: DigidServiceLevel.DigiD_Hoog,
+      digidServiceLevel: 'DigiD_Hoog',
     });
     const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
     expect(result.body).toMatch(encodeURIComponent('service:DigiD_Hoog'));
@@ -66,7 +66,7 @@ describe('Test login page and urls', () => {
 
   test('Return login page with digid loa mid', async () => {
     const loginRequestHandler = new LoginRequestHandler({
-      digidServiceLevel: DigidServiceLevel.DigiD_Midden,
+      digidServiceLevel: 'DigiD_Midden',
     });
     const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
     expect(result.body).toMatch(encodeURIComponent('service:DigiD_Midden'));

@@ -5,7 +5,7 @@ import { LoginRequestHandler } from './loginRequestHandler';
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 const loginRequestHandler = new LoginRequestHandler({
   useYivi: process.env.USE_YIVI === 'true',
-  digidServiceLevel: process.env.DIGID_LOA
+  digidServiceLevel: process.env.DIGID_LOA,
 });
 
 function parseEvent(event: any) {

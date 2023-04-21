@@ -27,7 +27,7 @@ export class LoginRequestHandler {
       return Response.redirect('/');
     }
     const scope = process.env.OIDC_SCOPE;
-    if(!scope) {
+    if (!scope) {
       throw Error('No scope provided in process.env.OIDC_SCOPE');
     }
     let digidScope = this.scopeString(scope, 'digid', this.digidServiceLevel);
