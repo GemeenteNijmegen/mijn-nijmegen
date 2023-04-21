@@ -32,7 +32,7 @@ describe('Test login page and urls', () => {
   test('Return login page with correct link', async () => {
     const loginRequestHandler = new LoginRequestHandler({
       digidScope: 'idp_scoping:digid',
-      oidcScope: 'openid'
+      oidcScope: 'openid',
     });
     const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
     expect(result.body).toMatch(`${process.env.AUTH_URL_BASE}/broker/sp/oidc/authenticate`);
@@ -49,7 +49,7 @@ describe('Test login page and urls', () => {
       digidScope: 'idp_scoping:digid',
       oidcScope: 'openid',
       useYivi: true,
-      yiviScope: 'idp_scoping:yivi'
+      yiviScope: 'idp_scoping:yivi',
     });
     const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
     expect(result.body).toMatch(encodeURIComponent('idp_scoping:yivi'));
@@ -71,7 +71,7 @@ describe('Test login page and urls', () => {
       digidScope: 'idp_scoping:digid service:DigiD_Hoog',
       oidcScope: 'openid',
       useYivi: true,
-      yiviScope: 'idp_scoping:yivi'
+      yiviScope: 'idp_scoping:yivi',
     });
     const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
     expect(result.body).toMatch(encodeURIComponent('service:DigiD_Hoog'));
@@ -82,7 +82,7 @@ describe('Test login page and urls', () => {
       digidScope: 'idp_scoping:digid service:DigiD_Midden',
       oidcScope: 'openid',
       useYivi: false,
-      yiviScope: 'idp_scoping:yivi'
+      yiviScope: 'idp_scoping:yivi',
     });
     const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
     expect(result.body).toMatch(encodeURIComponent('service:DigiD_Midden'));

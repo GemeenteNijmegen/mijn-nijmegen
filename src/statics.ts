@@ -35,7 +35,7 @@ export abstract class Statics {
   static readonly ssmOIDCScope: string = '/cdk/mijn-nijmegen/authScope';
   static readonly ssmDIGIDScope: string = '/cdk/mijn-nijmegen/digidScope';
   static readonly ssmYiviScope: string = '/cdk/mijn-nijmegen/yiviScope';
-  
+
   /**
    * OpenID Connect secret name
    */

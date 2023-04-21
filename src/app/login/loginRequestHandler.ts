@@ -57,15 +57,15 @@ export class LoginRequestHandler {
       authUrlDigid: authUrlDigid,
       authUrlYivi: '',
     };
-    
+
     // TODO: Simplify after yivi launch - JB 20230421
     let template = loginTemplate.default;
     if (this.config?.useYivi && this.config?.yiviScope) {
-      const yiviScope = `${scope} ${this.config.yiviScope}`
+      const yiviScope = `${scope} ${this.config.yiviScope}`;
       data.authUrlYivi = OIDC.getLoginUrl(state, yiviScope);
       template = loginYiviTemplate.default;
     }
-    
+
     const html = await render(data, template);
     const newCookies = [session.getCookie()];
     return Response.html(html, 200, newCookies);
