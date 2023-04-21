@@ -86,6 +86,7 @@ main {
     background-position: left .25em center;
     background-size: 2.5em;
     text-indent: 1.75em;
+    width: auto;
 }
 
 .btn-yivi {
@@ -94,6 +95,7 @@ main {
     background-position: left .25em center;
     background-size: 2.5em;
     text-indent: 1.75em;
+    width: auto;
 }
 
 .card-number {
