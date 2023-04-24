@@ -75,8 +75,13 @@ export class ssmParamsConstruct extends Construct {
     });
 
     new SSM.StringParameter(this, 'ssm_auth_5', {
-      stringValue: 'idp_scoping:yivi pbdf.gemeente.bsn.bsn',
+      stringValue: 'idp_scoping:yivi',
       parameterName: Statics.ssmYiviScope,
+    });
+
+    new SSM.StringParameter(this, 'ssm_auth_6', {
+      stringValue: 'pbdf.gemeente.bsn.bsn',
+      parameterName: Statics.ssmYiviAttributes,
     });
 
     new SSM.StringParameter(this, 'ssm_uitkering_2', {
