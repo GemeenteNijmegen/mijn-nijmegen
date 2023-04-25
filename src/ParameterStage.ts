@@ -44,6 +44,14 @@ export class ssmParamsConstruct extends Construct {
     Tags.of(this).add('Project', Statics.projectName);
 
     /**
+     * Application configuration
+     */
+    new SSM.StringParameter(this, 'ssm_config_1', {
+      stringValue: 'false',
+      parameterName: Statics.ssmUseYivi,
+    });
+
+    /**
      * authentication parameters
      */
     new SSM.StringParameter(this, 'ssm_auth_1', {
@@ -57,8 +65,23 @@ export class ssmParamsConstruct extends Construct {
     });
 
     new SSM.StringParameter(this, 'ssm_auth_3', {
-      stringValue: 'openid idp_scoping:simulator idp_scoping:https://was-preprod1.digid.nl/saml/idp/metadata',
+      stringValue: 'openid',
       parameterName: Statics.ssmOIDCScope,
+    });
+
+    new SSM.StringParameter(this, 'ssm_auth_4', {
+      stringValue: 'idp_scoping:digid',
+      parameterName: Statics.ssmDIGIDScope,
+    });
+
+    new SSM.StringParameter(this, 'ssm_auth_5', {
+      stringValue: 'idp_scoping:yivi',
+      parameterName: Statics.ssmYiviScope,
+    });
+
+    new SSM.StringParameter(this, 'ssm_auth_6', {
+      stringValue: 'pbdf.gemeente.bsn.bsn',
+      parameterName: Statics.ssmYiviAttributes,
     });
 
     new SSM.StringParameter(this, 'ssm_uitkering_2', {

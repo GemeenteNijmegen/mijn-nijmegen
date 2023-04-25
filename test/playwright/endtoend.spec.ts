@@ -12,7 +12,7 @@ test.beforeAll(async ({ browser }) => {
   await expect(page).toHaveURL('https://mijn.accp.nijmegen.nl/login');
 
   // Click text=Inloggen via DigiD
-  await page.locator('text=Inloggen via DigiD').click();
+  await page.locator('a[href*="digid"]').click();
   await expect(page).toHaveURL('https://authenticatie-accp.nijmegen.nl/broker/select/authn');
 
   // Click text=Simulator

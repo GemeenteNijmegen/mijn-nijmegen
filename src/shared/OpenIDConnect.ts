@@ -63,7 +63,14 @@ export class OpenIDConnect {
      * This should be checked before accepting the login response.
      * @returns {string} the login url
      */
-  getLoginUrl(state: string): string {
+  getLoginUrl(state: string, scope?: string): string {
+    if (!scope) {
+      scope = process.env.OIDC_SCOPE;
+    }
+    if (!scope) {
+      throw Error('no scope provided in constructor or process.env.OIDC_SCOPE');
+    }
+
     if (!process.env.APPLICATION_URL_BASE || !process.env.OIDC_CLIENT_ID) {
       throw Error('no APPLICATION_URL_BASE or OIDC_CLIENT_ID in env. provided.');
     }
@@ -75,7 +82,7 @@ export class OpenIDConnect {
       response_types: ['code'],
     });
     const authUrl = client.authorizationUrl({
-      scope: process.env.OIDC_SCOPE,
+      scope,
       resource: process.env.AUTH_URL_BASE,
       state: state,
     });

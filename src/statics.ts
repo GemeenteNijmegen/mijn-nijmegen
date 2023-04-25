@@ -16,6 +16,11 @@ export abstract class Statics {
   static readonly ssmReadOnlyRoleArn: string = '/cdk/mijn-nijmegen/role-readonly-arn';
 
   /**
+   * Configuration
+   */
+  static readonly ssmUseYivi: string = '/cdk/mijn-nijmegen/useYivi';
+
+  /**
    * Authentication URL base, used in auth and login lambda
    */
   static readonly ssmAuthUrlBaseParameter: string = '/cdk/mijn-nijmegen/authUrlBase';
@@ -23,10 +28,14 @@ export abstract class Statics {
    * OpenID Connect client ID (sent in URL as querystring-param, not secret)
    */
   static readonly ssmOIDCClientID: string = '/cdk/mijn-nijmegen/authClientID';
+
   /**
    * OpenID Connect scope
    */
   static readonly ssmOIDCScope: string = '/cdk/mijn-nijmegen/authScope';
+  static readonly ssmDIGIDScope: string = '/cdk/mijn-nijmegen/digidScope';
+  static readonly ssmYiviScope: string = '/cdk/mijn-nijmegen/yiviScope';
+  static readonly ssmYiviAttributes: string = '/cdk/mijn-nijmegen/yiviAttributes';
 
   /**
    * OpenID Connect secret name

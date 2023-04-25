@@ -2,9 +2,10 @@ import { writeFile } from 'fs';
 import * as path from 'path';
 import { DynamoDBClient, GetItemCommandOutput, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
-import { handleLoginRequest } from '../loginRequestHandler';
+import { LoginRequestHandler } from '../loginRequestHandler';
 
 const ddbMock = mockClient(DynamoDBClient);
+const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
 
 beforeAll(() => {
   if (process.env.VERBOSETESTS != 'True') {
@@ -27,28 +28,83 @@ beforeEach(() => {
   ddbMock.reset();
 });
 
-test('Return login page with correct link', async () => {
-  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-  const result = await handleLoginRequest('', dynamoDBClient);
-  expect(result.body).toMatch(`${process.env.AUTH_URL_BASE}/broker/sp/oidc/authenticate`);
-  expect(result.body).toMatch(encodeURIComponent(`${process.env.APPLICATION_URL_BASE}auth`));
-  expect(result.statusCode).toBe(200);
-  if (result.body) {
-    writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => { });
-  }
+describe('Test login page and urls', () => {
+  test('Return login page with correct link', async () => {
+    const loginRequestHandler = new LoginRequestHandler({
+      digidScope: 'idp_scoping:digid',
+      oidcScope: 'openid',
+    });
+    const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
+    expect(result.body).toMatch(`${process.env.AUTH_URL_BASE}/broker/sp/oidc/authenticate`);
+    expect(result.body).toMatch(encodeURIComponent(`${process.env.APPLICATION_URL_BASE}auth`));
+    expect(result.body).toMatch(encodeURIComponent('idp_scoping:digid'));
+    expect(result.statusCode).toBe(200);
+  });
+
+  test('Return login page with yivi link', async () => {
+    const loginRequestHandler = new LoginRequestHandler({
+      digidScope: 'idp_scoping:digid',
+      oidcScope: 'openid',
+      useYivi: true,
+      yiviScope: 'idp_scoping:yivi',
+    });
+    const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
+    expect(result.body).toMatch(encodeURIComponent('idp_scoping:yivi'));
+    expect(result.body).toMatch('<span class="title"> Inloggen </span><span class="assistive">met Yivi</span>');
+    if (result.body) {
+      writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => { });
+    }
+  });
+
+  test('Return login page without yivi link', async () => {
+    const loginRequestHandler = new LoginRequestHandler({
+      digidScope: 'idp_scoping:digid',
+      oidcScope: 'openid',
+      useYivi: false,
+    });
+    const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
+    expect(result.body).not.toMatch(encodeURIComponent('idp_scoping:yivi'));
+  });
+
+  test('Return login page with digid loa high', async () => {
+    const loginRequestHandler = new LoginRequestHandler({
+      digidScope: 'idp_scoping:digid service:DigiD_Hoog',
+      oidcScope: 'openid',
+      useYivi: true,
+      yiviScope: 'idp_scoping:yivi',
+    });
+    const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
+    expect(result.body).toMatch(encodeURIComponent('service:DigiD_Hoog'));
+  });
+
+  test('Return login page with digid loa mid', async () => {
+    const loginRequestHandler = new LoginRequestHandler({
+      digidScope: 'idp_scoping:digid service:DigiD_Midden',
+      oidcScope: 'openid',
+      useYivi: false,
+      yiviScope: 'idp_scoping:yivi',
+    });
+    const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
+    expect(result.body).toMatch(encodeURIComponent('service:DigiD_Midden'));
+    expect(result.body).not.toMatch(encodeURIComponent('service:DigiD_Hoog'));
+  });
 });
 
 test('No redirect if session cookie doesn\'t exist', async () => {
-  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-
-  const result = await handleLoginRequest('demo=12345', dynamoDBClient);
+  const loginRequestHandler = new LoginRequestHandler({
+    digidScope: 'idp_scoping:digid',
+    oidcScope: 'openid',
+  });
+  const result = await loginRequestHandler.handleRequest('demo=12345', dynamoDBClient);
   expect(result.statusCode).toBe(200);
 });
 
 test('Create session if no session exists', async () => {
-  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-
-  await handleLoginRequest('', dynamoDBClient);
+  const loginRequestHandler = new LoginRequestHandler({
+    digidScope: 'idp_scoping:digid service: DigiD_Midden',
+    oidcScope: 'openid',
+  });
+  await loginRequestHandler.handleRequest('', dynamoDBClient);
 
   expect(ddbMock.calls().length).toBe(1);
 });
@@ -66,19 +122,25 @@ test('Redirect to home if already logged in', async () => {
     },
   };
   ddbMock.on(GetItemCommand).resolves(output);
-  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   const sessionId = '12345';
-  const result = await handleLoginRequest(`session=${sessionId}`, dynamoDBClient);
+  const loginRequestHandler = new LoginRequestHandler({
+    digidScope: 'idp_scoping:digid',
+    oidcScope: 'openid',
+  });
+  const result = await loginRequestHandler.handleRequest(`session=${sessionId}`, dynamoDBClient);
   expect(result?.headers?.Location).toBe('/');
   expect(result.statusCode).toBe(302);
 });
 
 test('Unknown session returns login page', async () => {
-  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   const output: Partial<GetItemCommandOutput> = {}; //empty output
   ddbMock.on(GetItemCommand).resolves(output);
   const sessionId = '12345';
-  const result = await handleLoginRequest(`session=${sessionId}`, dynamoDBClient);
+  const loginRequestHandler = new LoginRequestHandler({
+    digidScope: 'idp_scoping:digid',
+    oidcScope: 'openid',
+  });
+  const result = await loginRequestHandler.handleRequest(`session=${sessionId}`, dynamoDBClient);
   expect(ddbMock.calls().length).toBe(2);
   expect(result.statusCode).toBe(200);
 });
@@ -92,16 +154,22 @@ test('Known session without login returns login page, without creating new sessi
     },
   };
   ddbMock.on(GetItemCommand).resolves(output);
-  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   const sessionId = '12345';
-  const result = await handleLoginRequest(`session=${sessionId}`, dynamoDBClient);
+  const loginRequestHandler = new LoginRequestHandler({
+    digidScope: 'idp_scoping:digid',
+    oidcScope: 'openid',
+  });
+  const result = await loginRequestHandler.handleRequest(`session=${sessionId}`, dynamoDBClient);
   expect(ddbMock.calls().length).toBe(2);
   expect(result.statusCode).toBe(200);
 });
 
 test('Request without session returns session cookie', async () => {
-  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-  const result = await handleLoginRequest('', dynamoDBClient);
+  const loginRequestHandler = new LoginRequestHandler({
+    digidScope: 'idp_scoping:digid',
+    oidcScope: 'openid',
+  });
+  const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
   expect(result.cookies).toEqual(
     expect.arrayContaining([expect.stringMatching('session=')]),
   );
@@ -109,10 +177,13 @@ test('Request without session returns session cookie', async () => {
 
 test('DynamoDB error', async () => {
   ddbMock.on(GetItemCommand).rejects(new Error('Not supported!'));
-  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   let failed = false;
   try {
-    await handleLoginRequest('session=12345', dynamoDBClient);
+    const loginRequestHandler = new LoginRequestHandler({
+      digidScope: 'idp_scoping:digid service: DigiD_Midden',
+      oidcScope: 'openid',
+    });
+    await loginRequestHandler.handleRequest('session=12345', dynamoDBClient);
   } catch (error) {
     failed = true;
   }

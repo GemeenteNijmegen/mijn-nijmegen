@@ -89,6 +89,15 @@ main {
     width: auto;
 }
 
+.btn-yivi {
+    background-image: url(../images/yivi.svg);
+    background-repeat: no-repeat;
+    background-position: left .25em center;
+    background-size: 2.5em;
+    text-indent: 1.75em;
+    width: auto;
+}
+
 .card-number {
     display: flex;
     flex-direction: row;

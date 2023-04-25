@@ -63,6 +63,12 @@ export class ApiStack extends Stack {
       applicationUrlBase: baseUrl,
       readOnlyRole,
       apiFunction: LoginFunction,
+      environment: {
+        DIGID_SCOPE: SSM.StringParameter.valueForStringParameter(this, Statics.ssmDIGIDScope),
+        YIVI_SCOPE: SSM.StringParameter.valueForStringParameter(this, Statics.ssmYiviScope),
+        YIVI_ATTRIBUTES: SSM.StringParameter.valueForStringParameter(this, Statics.ssmYiviAttributes),
+        USE_YIVI: SSM.StringParameter.valueForStringParameter(this, Statics.ssmUseYivi),
+      },
     });
 
     const logoutFunction = new ApiFunction(this, 'logout-function', {
@@ -92,6 +98,8 @@ export class ApiStack extends Stack {
         MTLS_CLIENT_CERT_NAME: Statics.ssmMTLSClientCert,
         MTLS_ROOT_CA_NAME: Statics.ssmMTLSRootCA,
         BRP_API_URL: SSM.StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
+        YIVI_ATTRIBUTES: SSM.StringParameter.valueForStringParameter(this, Statics.ssmYiviAttributes),
+        USE_YIVI: SSM.StringParameter.valueForStringParameter(this, Statics.ssmUseYivi),
       },
       apiFunction: AuthFunction,
     });
