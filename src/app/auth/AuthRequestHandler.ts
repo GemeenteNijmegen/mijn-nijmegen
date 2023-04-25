@@ -91,7 +91,7 @@ export class AuthRequestHandler {
    */
   bsnFromClaims(claims: IdTokenClaims): Bsn | false {
     let possibleClaims = ['sub'];
-    if(this.config.useYivi && typeof this.config?.yiviAttributes === 'string') {
+    if (this.config.useYivi && typeof this.config?.yiviAttributes === 'string') {
       const yiviClaims = this.config.yiviAttributes.split(' ').filter(val => val !== '');
       possibleClaims = [...possibleClaims, ...yiviClaims];
     }

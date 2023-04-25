@@ -1,8 +1,8 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
-import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { AuthRequestHandler } from './AuthRequestHandler';
+import { OpenIDConnect } from '../../shared/OpenIDConnect';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 const apiClient = new ApiClient();
@@ -19,7 +19,7 @@ function parseEvent(event: any) {
 export async function handler(event: any, _context: any):Promise<ApiGatewayV2Response> {
   try {
     const params = parseEvent(event);
-    const handler = new AuthRequestHandler({
+    const requestHandler = new AuthRequestHandler({
       cookies: params.cookies,
       queryStringParamCode: params.code,
       queryStringParamState: params.state,
@@ -29,7 +29,7 @@ export async function handler(event: any, _context: any):Promise<ApiGatewayV2Res
       useYivi: process.env.USE_YIVI === 'true',
       yiviAttributes: process.env.YIVI_ATTRIBUTES,
     });
-    return await handler.handleRequest();
+    return await requestHandler.handleRequest();
   } catch (err) {
     console.error(err);
     return Response.error(500);

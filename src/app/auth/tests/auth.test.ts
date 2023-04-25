@@ -101,7 +101,7 @@ test('Successful auth redirects to home', async () => {
     dynamoDBClient,
     apiClient,
     OpenIdConnect: OIDC,
-    useYivi: false
+    useYivi: false,
   });
   const result = await handler.handleRequest();
   expect(result.statusCode).toBe(302);
@@ -120,7 +120,7 @@ test('Successful auth creates new session', async () => {
     dynamoDBClient,
     apiClient,
     OpenIdConnect: OIDC,
-    useYivi: false
+    useYivi: false,
   });
   const result = await handler.handleRequest();
   expect(result.statusCode).toBe(302);
@@ -137,7 +137,7 @@ test('No session redirects to login', async () => {
     dynamoDBClient,
     apiClient,
     OpenIdConnect: OIDC,
-    useYivi: false
+    useYivi: false,
   });
   const result = await handler.handleRequest();
   expect(result.statusCode).toBe(302);
@@ -154,7 +154,7 @@ describe('Get bsn from claims object', () => {
     apiClient,
     OpenIdConnect: OIDC,
     useYivi: true,
-    yiviAttributes: 'irma-demo.gemeente.personalData.bsn pbdf.gemeente.bsn.bsn'
+    yiviAttributes: 'irma-demo.gemeente.personalData.bsn pbdf.gemeente.bsn.bsn',
   };
   const handler = new AuthRequestHandler(handlerAttributes);
   test('bsn in sub', async () => {
@@ -165,7 +165,7 @@ describe('Get bsn from claims object', () => {
       iss: 'test',
       sub: '900222670',
     };
-    
+
     const bsn = handler.bsnFromClaims(claims);
     expect(bsn).toBeInstanceOf(Bsn);
     expect(bsn).toBeTruthy();
@@ -239,7 +239,7 @@ describe('Get bsn from claims object', () => {
 
   test('bsn in pbdf.gemeente.bsn.bsn but no yivi attributes provided', async () => {
     handlerAttributes.yiviAttributes = '';
-    const handler = new AuthRequestHandler(handlerAttributes);
+    const testHandler = new AuthRequestHandler(handlerAttributes);
     const claims: IdTokenClaims = {
       aud: 'test',
       exp: 123,
@@ -248,7 +248,7 @@ describe('Get bsn from claims object', () => {
       sub: 'test',
       ['pbdf.gemeente.bsn.bsn']: '900070341',
     };
-    const bsn = handler.bsnFromClaims(claims);
+    const bsn = testHandler.bsnFromClaims(claims);
     expect(bsn).not.toBeInstanceOf(Bsn);
     expect(bsn).toBeFalsy();
   });
@@ -256,7 +256,7 @@ describe('Get bsn from claims object', () => {
   test('bsn in pbdf.gemeente.bsn.bsn but useYivi false', async () => {
     handlerAttributes.yiviAttributes = 'pbdf.gemeente.bsn.bsn';
     handlerAttributes.useYivi = false;
-    const handler = new AuthRequestHandler(handlerAttributes);
+    const testHandler = new AuthRequestHandler(handlerAttributes);
     const claims: IdTokenClaims = {
       aud: 'test',
       exp: 123,
@@ -265,7 +265,7 @@ describe('Get bsn from claims object', () => {
       sub: 'test',
       ['pbdf.gemeente.bsn.bsn']: '900070341',
     };
-    const bsn = handler.bsnFromClaims(claims);
+    const bsn = testHandler.bsnFromClaims(claims);
     expect(bsn).not.toBeInstanceOf(Bsn);
     expect(bsn).toBeFalsy();
   });
