@@ -26,6 +26,11 @@ interface LoginRequestHandlerProps {
    * Scope param for Yivi. Concatenated with `oidcScope`. Only active if `useYivi` is also set
    */
   yiviScope?: string;
+
+  /**
+   * Scope attribbutes for Yivi. Concatenated with `oidcScope`. Only active if `useYivi` is also set
+   */
+  yiviAttributes?: string;
 }
 
 export class LoginRequestHandler {
@@ -61,7 +66,7 @@ export class LoginRequestHandler {
     // TODO: Simplify after yivi launch - JB 20230421
     let template = loginTemplate.default;
     if (this.config?.useYivi && this.config?.yiviScope) {
-      const yiviScope = `${scope} ${this.config.yiviScope}`;
+      const yiviScope = `${scope} ${this.config.yiviScope} ${this.config.yiviAttributes}`;
       data.authUrlYivi = OIDC.getLoginUrl(state, yiviScope);
       template = loginYiviTemplate.default;
     }
