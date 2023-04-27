@@ -11,6 +11,7 @@
     ".github/workflows/upgrade-acceptance.yml",
     ".gitignore",
     ".npmignore",
+    ".npmrc",
     ".projen/deps.json",
     ".projen/files.json",
     ".projen/tasks.json",
