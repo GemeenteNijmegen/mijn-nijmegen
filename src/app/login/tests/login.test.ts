@@ -39,9 +39,6 @@ describe('Test login page and urls', () => {
     expect(result.body).toMatch(encodeURIComponent(`${process.env.APPLICATION_URL_BASE}auth`));
     expect(result.body).toMatch(encodeURIComponent('idp_scoping:digid'));
     expect(result.statusCode).toBe(200);
-    if (result.body) {
-      writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => { });
-    }
   });
 
   test('Return login page with yivi link', async () => {
@@ -54,6 +51,9 @@ describe('Test login page and urls', () => {
     const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
     expect(result.body).toMatch(encodeURIComponent('idp_scoping:yivi'));
     expect(result.body).toMatch('<span class="title"> Inloggen </span><span class="assistive">met Yivi</span>');
+    if (result.body) {
+      writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => { });
+    }
   });
 
   test('Return login page without yivi link', async () => {
