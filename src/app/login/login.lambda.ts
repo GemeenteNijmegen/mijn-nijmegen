@@ -4,7 +4,7 @@ import { LoginRequestHandler } from './loginRequestHandler';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
-if (!process.env.OIDC_SCOPE || process.env.DIGID_SCOPE) {
+if (!process.env.OIDC_SCOPE || !process.env.DIGID_SCOPE) {
   console.error('No OIDC_SCOPE or DIGID_SCOPE env. param provided');
 }
 const loginRequestHandler = new LoginRequestHandler({
