@@ -48,6 +48,7 @@ junit.xml
 !/.github/workflows/release.yml
 !/.github/workflows/upgrade-acceptance.yml
 !/.github/pull_request_template.md
+!/.npmrc
 !/test/
 !/tsconfig.json
 !/tsconfig.dev.json
