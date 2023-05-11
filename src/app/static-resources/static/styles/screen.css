@@ -76,6 +76,14 @@ body {
     padding-top: 150px;
 }
 
+body a {
+    text-decoration: underline;
+}
+
+.btn, .navbar a {
+    text-decoration: none;
+}
+
 main {
     min-height: 50vh;
 }
