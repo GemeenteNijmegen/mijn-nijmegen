@@ -41,8 +41,8 @@ export class AuthRequestHandler {
         if (!bsn) {
           return Response.redirect('/login');
         }
-        if (claims.hasOwnProperty('acr')) {
-          logger.info('auth succesful', { loa: claims.acr });
+        if (claims.hasOwnProperty('acr') && claims.hasOwnProperty('amr')) {
+          logger.info('auth succesful', { loa: claims.acr, method: claims.amr });
         }
         try {
           const username = await this.loggedinUserName(bsn.bsn, this.config.apiClient);
