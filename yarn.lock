@@ -887,17 +887,17 @@
     "@aws-sdk/types" "3.342.0"
     tslib "^2.5.0"
 
-"@aws-solutions-constructs/aws-lambda-dynamodb@^2.39.0":
-  version "2.39.0"
-  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/aws-lambda-dynamodb/-/aws-lambda-dynamodb-2.39.0.tgz#fc0100c6565a7d61ffaff72dbb25322d72025869"
-  integrity sha512-pwned1bkawddq6p8oMpXeukOW8YPy4EZqWdh3ERVgfBluRWnF50N3bzBQlE7+hCRWYZpnz65Tg4l1cSuRx4lPQ==
+"@aws-solutions-constructs/aws-lambda-dynamodb@^2.40.0":
+  version "2.40.0"
+  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/aws-lambda-dynamodb/-/aws-lambda-dynamodb-2.40.0.tgz#aac42392a0a9b61ed94eb95a104a7717dc50a606"
+  integrity sha512-i7orvnOIG0S8cByhlJorEy1flsuWt7OxppgNBhwOsZ605DxADdn1Ye6umMr77zfy18xs4X5UFOJpDinLIIAnmw==
   dependencies:
-    "@aws-solutions-constructs/core" "2.39.0"
+    "@aws-solutions-constructs/core" "2.40.0"
 
-"@aws-solutions-constructs/core@2.39.0":
-  version "2.39.0"
-  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/core/-/core-2.39.0.tgz#6c55c4524c45fa3591ccc2d272f3b5590a6feb7a"
-  integrity sha512-BhWgUUNeikOOdoRyOfMEMJOH69QR4XG3cKNQbkYebtKW/3Ius2NAgqOvWHSYUbK5CbNilDs7zqKiiml6vqmeDw==
+"@aws-solutions-constructs/core@2.40.0":
+  version "2.40.0"
+  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/core/-/core-2.40.0.tgz#4ba8434656429953ee686b7e24b1aca224216ebc"
+  integrity sha512-4nnvhJtYg8j2q0vqfGsU1/8nInQklSFgs3733GwChe15wxDGc+6X3xqOLu5rMpnDAkDQ/dXW/n8fDnJcYdItUw==
   dependencies:
     deep-diff "^1.0.2"
     deepmerge "^4.0.0"
@@ -2808,9 +2808,9 @@ camelcase@^7.0.1:
   integrity sha512-xlx1yCK2Oc1APsPXDL2LdlNP6+uu8OCDdhOBSVT279M/S+y75O30C2VuD8T2ogdePBBl7PfPF4504tnLgX3zfw==
 
 caniuse-lite@^1.0.30001489:
-  version "1.0.30001492"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001492.tgz#4a06861788a52b4c81fd3344573b68cc87fe062b"
-  integrity sha512-2efF8SAZwgAX1FJr87KWhvuJxnGJKOnctQa8xLOskAXNXq8oiuqgl6u1kk3fFpsp3GgvzlRjiK1sl63hNtFADw==
+  version "1.0.30001494"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001494.tgz#3e56e04a48da7a79eae994559eb1ec02aaac862f"
+  integrity sha512-sY2B5Qyl46ZzfYDegrl8GBCzdawSLT4ThM9b9F+aDYUrAG2zCOyMbd2Tq34mS1g4ZKBfjRlzOohQMxx28x6wJg==
 
 case@1.6.3, case@^1.6.3:
   version "1.6.3"
@@ -3016,9 +3016,9 @@ console-control-strings@^1.0.0, console-control-strings@^1.1.0, console-control-
   integrity sha512-ty/fTekppD2fIwRvnZAVdeOiGd1c7YXEixbgJTNzqcxJWKQnjJ/V1bNEEE6hygpM3WjwHFUVK6HTjWSzV4a8sQ==
 
 constructs@^10.0.5:
-  version "10.2.41"
-  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.2.41.tgz#090e725b84d2da59ddb9e5c782f9678a0c49257a"
-  integrity sha512-csg/lxYKHA3meQX4JWs7EiTAtVYl681jTl8VxCK7jMfzbH5RzRsCA09HwYzslarQcFCSZyUMcgHVvZhUyABjAA==
+  version "10.2.42"
+  resolved "https://registry.yarnpkg.com/constructs/-/constructs-10.2.42.tgz#881d1746dbb747586adb702b70d8c502b5c796da"
+  integrity sha512-QTy50blEmjrHexraR4JmxJtA7YCQ2p/IaDXiXNfy8lYNYnWQbp5YbAhDG1BSYvoRRgru/kB9CTlGtiLd9x3aUQ==
 
 conventional-changelog-angular@^5.0.12:
   version "5.0.13"
