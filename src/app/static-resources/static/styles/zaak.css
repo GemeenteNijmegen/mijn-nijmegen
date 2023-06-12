@@ -1,6 +1,16 @@
+
+.steps {
+    border-left: 4px solid #efefef;
+}
+
 .steps li {
     list-style: none;
     margin-top: 1.5em;
+    margin-left: -1em;
+}
+
+.steps p {
+    margin-left: 2.5em;
 }
 
 .steps .active h3 {
