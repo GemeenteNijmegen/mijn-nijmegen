@@ -1,0 +1,30 @@
+.steps li {
+    list-style: none;
+    margin-top: 1.5em;
+}
+
+.steps .active h3 {
+    font-weight: bold;
+    color: #333;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 1em;
+}
+
+.steps .circle {
+    color: black;
+    background-color: #efefef;
+    border-radius: 50%;
+    display: inline-block;
+    height: 28px;
+    margin-right: .5rem;
+    text-align: center;
+    width: 28px;
+    font-size: .875rem;
+    font-weight: 700;
+    line-height: 28px;
+}
+
+.steps .active .circle {
+    background-color: #17564a;
+    color: white;
+}
