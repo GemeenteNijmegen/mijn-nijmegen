@@ -1,9 +1,16 @@
 .cards {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 1em;
 }
 
+@media (min-width: 576px) {
+    .cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1em;
+    }
+}
 .card-body {
     display: flex;
     flex-direction: column;
