@@ -88,6 +88,11 @@ main {
     min-height: 50vh;
 }
 
+/** Fix for issue in safari, not in component library **/
+.navbar-brand .logo {
+    top: 0;
+}
+
 .btn-digid {
     background-image: url(../images/digid.svg);
     background-repeat: no-repeat;
