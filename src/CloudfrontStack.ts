@@ -51,7 +51,20 @@ export class CloudfrontStack extends Stack {
     const cspSubdomain = Statics.cspSubDomain(props.branch);
     const cspDomain = `${cspSubdomain}.csp-nijmegen.nl`;
     const mainDomain = `${subdomain}.nijmegen.nl`;
-    var domains = [mainDomain, cspDomain];
+    var domains = [cspDomain];
+
+    /**
+     * I know this is very ugly, but also very temporarely.
+     * This MUST be removed when the CloudFront domain name is (manually)
+     * switched between the old distribution and the new one.
+     * It is not possible to have two cloudfront distributions listen to
+     * a single alternative domain name... Switching using DNS records is way
+     * to overkill for us. See: https://repost.aws/knowledge-center/resolve-cnamealreadyexists-error
+     * We'll switch manually, sorry.
+     */
+    if (props.branch.endsWith('-new-lz')) {
+      domains.push(mainDomain);
+    }
 
     const certificateArn = this.certificateArn();
 
