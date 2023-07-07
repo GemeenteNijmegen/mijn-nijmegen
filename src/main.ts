@@ -32,7 +32,7 @@ const gnBuildEnvironment = {
 };
 
 const gnMijnNijmegenAccpEnvironment = {
-  account: '836443378780',
+  account: '021929636313',
   region: 'eu-central-1',
 };
 
