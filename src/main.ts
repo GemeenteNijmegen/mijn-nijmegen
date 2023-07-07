@@ -1,9 +1,9 @@
 import { App } from 'aws-cdk-lib';
 import * as Dotenv from 'dotenv';
+import { PipelineStack } from './PipelineStack';
 import { PipelineStackAcceptance } from './PipelineStackAcceptance';
 import { PipelineStackDevelopment } from './PipelineStackDevelopment';
 import { PipelineStackProduction } from './PipelineStackProduction';
-import { PipelineStack } from './PipelineStack';
 
 // for development, use sandbox account
 const deploymentEnvironment = {
@@ -29,12 +29,12 @@ const productionEnvironment = {
 const gnBuildEnvironment = {
   account: '836443378780',
   region: 'eu-central-1',
-}
+};
 
 const gnMijnNijmegenAccpEnvironment = {
   account: '836443378780',
   region: 'eu-central-1',
-}
+};
 
 Dotenv.config();
 const app = new App();

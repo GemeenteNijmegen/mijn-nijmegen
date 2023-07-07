@@ -71,6 +71,7 @@
     "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.41.0",
     "@gemeentenijmegen/apiclient": "^0.0.5",
     "@gemeentenijmegen/apigateway-http": "^0.0.6",
+    "@gemeentenijmegen/aws-constructs": "^0.0.4",
     "@gemeentenijmegen/projen-project-type": "^1.5.2",
     "@gemeentenijmegen/session": "^0.0.7",
     "@gemeentenijmegen/utils": "^0.0.4",
