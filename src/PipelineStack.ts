@@ -68,8 +68,6 @@ export class PipelineStack extends Stack {
 
     const pipeline = new pipelines.CodePipeline(this, `mijnnijmegen-${this.branchName}`, {
       pipelineName: `mijnnijmegen-${this.branchName}`,
-      dockerEnabledForSelfMutation: true,
-      dockerEnabledForSynth: true,
       crossAccountKeys: true,
       synth: synthStep,
     });
