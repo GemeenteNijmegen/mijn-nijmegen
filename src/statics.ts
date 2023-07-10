@@ -117,6 +117,8 @@ export abstract class Statics {
     const subdomainMap = {
       acceptance: 'mijn.accp',
       production: 'mijn',
+      'acceptance-new-lz': 'mijn.accp',
+      'production-new-lz': 'mijn',
     };
     const subdomain = subdomainMap[branch as keyof typeof subdomainMap] ?? 'mijn-dev';
     return subdomain;
@@ -126,6 +128,8 @@ export abstract class Statics {
     const subdomainMap = {
       acceptance: 'mijn.accp',
       production: 'mijn.auth-prod',
+      'acceptance-new-lz': 'mijn.mijn-accp',
+      'production-new-lz': 'mijn.mijn-prod',
     };
     const subdomain = subdomainMap[branch as keyof typeof subdomainMap] ?? 'mijn-dev';
     return subdomain;
