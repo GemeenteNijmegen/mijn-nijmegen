@@ -14,14 +14,6 @@ interface HomeRequestHandlerProps {
   showZaken?: boolean;
 }
 
-const zakenNav = {
-  url: '/zaken',
-  title: 'Zaken',
-  description: 'Bekijk de status van uw zaken en aanvragen.',
-  label: 'Bekijk zaken',
-  icon: MdiFileMultiple.default,
-};
-
 export async function homeRequestHandler(cookies: string, dynamoDBClient: DynamoDBClient, props?: HomeRequestHandlerProps) {
   let session = new Session(cookies, dynamoDBClient);
   await session.init();
@@ -32,6 +24,13 @@ export async function homeRequestHandler(cookies: string, dynamoDBClient: Dynamo
 }
 
 async function handleLoggedinRequest(session: Session, props?: HomeRequestHandlerProps) {
+  const zakenNav = {
+    url: '/zaken',
+    title: 'Zaken',
+    description: 'Bekijk de status van uw zaken en aanvragen.',
+    label: 'Bekijk zaken',
+    icon: MdiFileMultiple.default,
+  };
   if (props?.showZaken) {
     nav.push(zakenNav);
   }
