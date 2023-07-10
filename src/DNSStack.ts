@@ -86,7 +86,7 @@ export class DNSStack extends Stack {
    * to establish a chain of trust (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring-dnssec-enable-signing.html#dns-configuring-dnssec-chain-of-trust)
    */
   addDsRecord() {
-    let dsValue = '';
+    let dsValue = undefined;
     switch (this.branch) {
       case 'acceptance':
         dsValue = '52561 13 2 90CF3C35FDDC30AF42FB4BCCDCCB1123500050D70F1D4886D6DE25502F3BC50A';
@@ -97,6 +97,11 @@ export class DNSStack extends Stack {
       default:
         break;
     }
+
+    if (!dsValue) {
+      return; // Skip DS record creation if there is no value.
+    }
+
     new Route53.DsRecord(this, 'ds-record', {
       zone: this.accountRootZone,
       recordName: 'mijn',
