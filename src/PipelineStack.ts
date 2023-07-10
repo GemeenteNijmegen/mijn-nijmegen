@@ -1,4 +1,5 @@
-import { Stack, StackProps, Tags, pipelines, CfnParameter, Environment } from 'aws-cdk-lib';
+import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
+import { Stack, StackProps, Tags, pipelines, CfnParameter, Environment, Aspects } from 'aws-cdk-lib';
 import { ShellStep } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
 import { ApiStage } from './ApiStage';
@@ -16,6 +17,7 @@ export class PipelineStack extends Stack {
     super(scope, id, props);
     Tags.of(this).add('cdkManaged', 'yes');
     Tags.of(this).add('Project', Statics.projectName);
+    Aspects.of(this).add(new PermissionsBoundaryAspect());
     this.branchName = props.branchName;
 
     const connectionArn = new CfnParameter(this, 'connectionArn');
