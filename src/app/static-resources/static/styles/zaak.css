@@ -1,3 +1,24 @@
+.cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1em;
+}
+
+@media (min-width: 576px) {
+    .cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1em;
+    }
+}
+.card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-services p:last-of-type {
+    margin-top: auto;
+}
 
 .steps {
     border-left: 4px solid #efefef;
