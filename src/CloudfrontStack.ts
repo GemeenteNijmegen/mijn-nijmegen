@@ -233,6 +233,7 @@ export class CloudfrontStack extends Stack {
       eventBridgeEnabled: true,
       enforceSSL: true,
       encryption: S3.BucketEncryption.S3_MANAGED,
+      objectOwnership: S3.ObjectOwnership.OBJECT_WRITER,
       lifecycleRules: [
         {
           id: 'delete objects after 180 days',
