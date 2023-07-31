@@ -63,8 +63,11 @@ export class CloudfrontStack extends Stack {
      * We'll switch manually, sorry.
      */
     if (props.branch.endsWith('-new-lz')) {
+      console.warn('Keeping out the nijmegen.nl domain (CloudFront alternative name conflicts workaround)');
+    } else {
       domains.push(mainDomain);
     }
+
 
     const certificateArn = this.certificateArn();
 
@@ -233,6 +236,7 @@ export class CloudfrontStack extends Stack {
       eventBridgeEnabled: true,
       enforceSSL: true,
       encryption: S3.BucketEncryption.S3_MANAGED,
+      objectOwnership: S3.ObjectOwnership.OBJECT_WRITER,
       lifecycleRules: [
         {
           id: 'delete objects after 180 days',

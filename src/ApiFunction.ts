@@ -1,4 +1,4 @@
-import { aws_lambda as Lambda, aws_dynamodb, aws_ssm as SSM, RemovalPolicy, Duration } from 'aws-cdk-lib';
+import { aws_lambda as Lambda, aws_dynamodb, aws_ssm as SSM, RemovalPolicy, Duration, Stack } from 'aws-cdk-lib';
 import { Alarm } from 'aws-cdk-lib/aws-cloudwatch';
 import { Role } from 'aws-cdk-lib/aws-iam';
 import { FilterPattern, IFilterPattern, MetricFilter, RetentionDays } from 'aws-cdk-lib/aws-logs';
@@ -26,7 +26,7 @@ export class ApiFunction extends Construct {
   constructor(scope: Construct, id: string, props: ApiFunctionProps) {
     super(scope, id);
     // See https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights-extension-versionsx86-64.html
-    const insightsArn = 'arn:aws:lambda:eu-west-1:580247275435:layer:LambdaInsightsExtension:21';
+    const insightsArn = `arn:aws:lambda:${Stack.of(this).region}:580247275435:layer:LambdaInsightsExtension:21`;
     this.lambda = new props.apiFunction(this, 'lambda', {
       runtime: Lambda.Runtime.NODEJS_18_X,
       memorySize: 512,
