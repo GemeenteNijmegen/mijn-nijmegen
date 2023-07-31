@@ -7,6 +7,22 @@ import { PipelineStackDevelopment } from '../src/PipelineStackDevelopment';
 import { SessionsStack } from '../src/SessionsStack';
 import { DNSStack } from '../src/DNSStack';
 import { KeyStack } from '../src/keystack';
+import { Configuration } from '../src/Configuration';
+
+const mockEnv = {
+  account: '123456789012',
+  region: 'eu-central-1',
+}
+
+const config: Configuration = {
+  branch: 'test',
+  buildEnvironment: mockEnv,
+  deploymentEnvironment: mockEnv,
+  cnameRecords: {
+    '_1241251': '120421305.csp-nijmegen.nl',
+  },
+  dsRecord: undefined,
+}
 
 beforeAll(() => {
   Dotenv.config();
@@ -14,14 +30,14 @@ beforeAll(() => {
 
 test('Snapshot', () => {
   const app = new App();
-  const stack = new PipelineStackDevelopment(app, 'test', { env: { account: 'test', region: 'eu-west-1' }, branchName: 'development', deployToEnvironment: { account: 'test', region: 'eu-west-1' } });
+  const stack = new PipelineStackDevelopment(app, 'test', { env: mockEnv, configuration: config });
   const template = Template.fromStack(stack);
   expect(template.toJSON()).toMatchSnapshot();
 });
 
 test('MainPipelineExists', () => {
   const app = new App();
-  const stack = new PipelineStackDevelopment(app, 'test', { env: { account: 'test', region: 'eu-west-1' }, branchName: 'development', deployToEnvironment: { account: 'test', region: 'eu-west-1' } });
+  const stack = new PipelineStackDevelopment(app, 'test', { env: mockEnv, configuration: config });
   const template = Template.fromStack(stack);
   template.resourceCountIs('AWS::CodePipeline::Pipeline', 1);
 });
@@ -29,7 +45,7 @@ test('MainPipelineExists', () => {
 test('StackHasSessionsTable', () => {
   const app = new App();
   const keyStack = new KeyStack(app, 'keystack');
-  const stack = new SessionsStack(app, 'test', { key: keyStack.key});
+  const stack = new SessionsStack(app, 'test', { key: keyStack.key });
   const template = Template.fromStack(stack);
   template.resourceCountIs('AWS::DynamoDB::Table', 1);
   template.hasResourceProperties('AWS::DynamoDB::Table', {
@@ -45,8 +61,8 @@ test('StackHasSessionsTable', () => {
 test('StackHasApiGateway', () => {
   const app = new App();
   const keyStack = new KeyStack(app, 'keystack');
-  const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key});
-  new DNSStack(app, 'dns', { branch: 'dev'});
+  const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key });
+  new DNSStack(app, 'dns', { env: mockEnv, configuration: config });
   // const zone = dnsStack.zone;
   const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'dev' });
   const template = Template.fromStack(stack);
@@ -57,8 +73,8 @@ test('StackHasApiGateway', () => {
 test('StackHasLambdas', () => {
   const app = new App();
   const keyStack = new KeyStack(app, 'keystack');
-  const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key});
-  new DNSStack(app, 'dns', { branch: 'dev'});
+  const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key });
+  new DNSStack(app, 'dns', { env: mockEnv, configuration: config });
   // const zone = dnsStack.zone;
   const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'dev' });
   const template = Template.fromStack(stack);
