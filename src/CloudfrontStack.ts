@@ -62,9 +62,12 @@ export class CloudfrontStack extends Stack {
      * to overkill for us. See: https://repost.aws/knowledge-center/resolve-cnamealreadyexists-error
      * We'll switch manually, sorry.
      */
-    if (props.branch.endsWith('-new-lz')) {
+    if(props.branch.endsWith('-new-lz')) {
+      console.warn('Keeping out the nijmegen.nl domain (CloudFront alternative name conflicts workaround)');
+    } else {
       domains.push(mainDomain);
     }
+
 
     const certificateArn = this.certificateArn();
 
