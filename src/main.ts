@@ -6,7 +6,7 @@ import { PipelineStack } from './PipelineStack';
 Dotenv.config();
 const app = new App();
 
-const branchToBuild = process.env.BRANCH_NAME ?? 'development';
+const branchToBuild = process.env.BRANCH_NAME ?? 'acceptance-new-lz';
 const configuration = getEnvironmentConfiguration(branchToBuild);
 
 new PipelineStack(app, `mijnuitkering-pipeline-${configuration.branch}`, {
