@@ -23,7 +23,9 @@ export class ApiStage extends Stage {
 
     Tags.of(this).add('cdkManaged', 'yes');
     Tags.of(this).add('Project', Statics.projectName);
-    Aspects.of(this).add(new PermissionsBoundaryAspect());
+    if (props.configuration.envIsInNewLandingZone) {
+      Aspects.of(this).add(new PermissionsBoundaryAspect());
+    }
 
     const branchName = props.configuration.branch;
 

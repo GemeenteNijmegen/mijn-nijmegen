@@ -15,16 +15,24 @@ export class PipelineStack extends Stack {
     super(scope, id, props);
     Tags.of(this).add('cdkManaged', 'yes');
     Tags.of(this).add('Project', Statics.projectName);
-    Aspects.of(this).add(new PermissionsBoundaryAspect());
+    if (props.configuration.envIsInNewLandingZone) {
+      Aspects.of(this).add(new PermissionsBoundaryAspect());
+    }
     this.branchName = props.configuration.branch;
 
     const connectionArn = new CfnParameter(this, 'connectionArn');
     const source = this.connectionSource(connectionArn);
 
     const pipeline = this.pipeline(source);
-    pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', { env: props.configuration.deploymentEnvironment }));
+    pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', {
+      env: props.configuration.deploymentEnvironment,
+      configuration: props.configuration,
+    }));
 
-    const apiStage = pipeline.addStage(new ApiStage(this, 'mijn-api', { env: props.configuration.deploymentEnvironment, configuration: props.configuration }));
+    const apiStage = pipeline.addStage(new ApiStage(this, 'mijn-api', {
+      env: props.configuration.deploymentEnvironment,
+      configuration: props.configuration,
+    }));
     this.runValidationChecks(apiStage, source);
 
   }

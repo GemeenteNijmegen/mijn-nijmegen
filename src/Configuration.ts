@@ -43,10 +43,32 @@ export interface Configuration {
    * A DS record (value) to deploy in the hosted zone
    */
   dsRecord?: string;
+
+  /**
+   * Boolean to indicate if the environment to deploy to is in
+   * the new landingzone. (for including permissionboundaryaspect or other stuff)
+   */
+  envIsInNewLandingZone: boolean;
 }
 
 
 const EnvironmentConfigurations: {[key:string]: Configuration} = {
+  'acceptance': {
+    branch: 'acceptance',
+    buildEnvironment: Statics.deploymentEnvironment,
+    deploymentEnvironment: Statics.acceptanceEnvironment,
+    cnameRecords: undefined,
+    dsRecord: '',
+    envIsInNewLandingZone: false,
+  },
+  'production': {
+    branch: 'production',
+    buildEnvironment: Statics.deploymentEnvironment,
+    deploymentEnvironment: Statics.productionEnvironment,
+    cnameRecords: undefined,
+    dsRecord: '',
+    envIsInNewLandingZone: false,
+  },
   'acceptance-new-lz': {
     branch: 'acceptance-new-lz',
     buildEnvironment: Statics.gnBuildEnvironment,
@@ -55,6 +77,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
       _554c359f26fbc43f02d85e43dccd6336: '_430b5afffdedea75381eaec545e8189c.vrcmzfbvtx.acm-validations.aws.',
     },
     dsRecord: '3766 13 2 11761745E09473E6CE95DB798CF1ADB69B4433E73EEFC9F7FE341561966EA154',
+    envIsInNewLandingZone: true,
   },
   'production-new-lz': {
     branch: 'production-new-lz',
@@ -65,6 +88,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
       _abe87d0d7f8458c5f75c5d1e0bf6efdb: '_0d3e717e52354c47bf6b0c16612b709d.jzckvmdcqj.acm-validations.aws.',
     },
     dsRecord: '40951 13 2 1EFF20C0264CD1FDE6C7C858398BC2141768CC014A7BB27997F323076B7C47ED',
+    envIsInNewLandingZone: true,
   },
 };
 

@@ -3,7 +3,7 @@ import { Template } from 'aws-cdk-lib/assertions';
 import * as Dotenv from 'dotenv';
 import { ApiStack } from '../src/ApiStack';
 import { ParameterStack } from '../src/ParameterStage';
-import { PipelineStackDevelopment } from '../src/PipelineStackDevelopment';
+import { PipelineStack } from '../src/PipelineStack';
 import { SessionsStack } from '../src/SessionsStack';
 import { DNSStack } from '../src/DNSStack';
 import { KeyStack } from '../src/keystack';
@@ -22,6 +22,7 @@ const config: Configuration = {
     '_1241251': '120421305.csp-nijmegen.nl',
   },
   dsRecord: undefined,
+  envIsInNewLandingZone: true,
 }
 
 beforeAll(() => {
@@ -30,14 +31,14 @@ beforeAll(() => {
 
 test('Snapshot', () => {
   const app = new App();
-  const stack = new PipelineStackDevelopment(app, 'test', { env: mockEnv, configuration: config });
+  const stack = new PipelineStack(app, 'test', { env: mockEnv, configuration: config });
   const template = Template.fromStack(stack);
   expect(template.toJSON()).toMatchSnapshot();
 });
 
 test('MainPipelineExists', () => {
   const app = new App();
-  const stack = new PipelineStackDevelopment(app, 'test', { env: mockEnv, configuration: config });
+  const stack = new PipelineStack(app, 'test', { env: mockEnv, configuration: config });
   const template = Template.fromStack(stack);
   template.resourceCountIs('AWS::CodePipeline::Pipeline', 1);
 });
