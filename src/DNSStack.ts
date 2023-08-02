@@ -1,10 +1,10 @@
+import * as crypto from 'crypto';
 import { aws_route53 as Route53, Stack, StackProps, aws_ssm as SSM, Duration } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
+import { Configurable } from './Configuration';
 import { Statics } from './statics';
 
-export interface DNSStackProps extends StackProps {
-  branch: string;
-}
+export interface DNSStackProps extends StackProps, Configurable { }
 
 export class DNSStack extends Stack {
   zone: Route53.HostedZone;
@@ -13,7 +13,7 @@ export class DNSStack extends Stack {
 
   constructor(scope: Construct, id: string, props: DNSStackProps) {
     super(scope, id);
-    this.branch = props.branch;
+    this.branch = props.configuration.branch;
 
     const rootZoneId = SSM.StringParameter.valueForStringParameter(this, Statics.accountRootHostedZoneId);
     const rootZoneName = SSM.StringParameter.valueForStringParameter(this, Statics.accountRootHostedZoneName);
@@ -29,7 +29,8 @@ export class DNSStack extends Stack {
 
     this.addZoneIdAndNametoParams();
     this.addNSToRootCSPzone();
-    this.addDsRecord();
+    this.addDsRecord(props.configuration.dsRecord);
+    this.addCnameRecords(props.configuration.cnameRecords);
 
   }
 
@@ -80,19 +81,7 @@ export class DNSStack extends Stack {
    * Add DS record for the zone to the parent zone
    * to establish a chain of trust (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring-dnssec-enable-signing.html#dns-configuring-dnssec-chain-of-trust)
    */
-  addDsRecord() {
-    let dsValue = undefined;
-    switch (this.branch) {
-      case 'acceptance':
-        dsValue = '52561 13 2 90CF3C35FDDC30AF42FB4BCCDCCB1123500050D70F1D4886D6DE25502F3BC50A';
-        break;
-      case 'production':
-        dsValue = '60066 13 2 932CD585B029E674E17C4C33DFE7DE2C84353ACD8C109760FD17A6CDBD0CF3FA';
-        break;
-      default:
-        break;
-    }
-
+  addDsRecord(dsValue?: string) {
     if (!dsValue) {
       return; // Skip DS record creation if there is no value.
     }
@@ -102,6 +91,21 @@ export class DNSStack extends Stack {
       recordName: 'mijn',
       values: [dsValue],
       ttl: Duration.seconds(600),
+    });
+  }
+
+  addCnameRecords(cnameRecords?: { [key: string]: string }) {
+    if (!cnameRecords) {
+      return; // No records to define
+    }
+
+    Object.entries(cnameRecords).forEach(record => {
+      const hash = crypto.createHash('md5').update(`${record[0]}${record[1]}`).digest('hex').substring(0, 10);
+      new Route53.CnameRecord(this, `cname-record-${hash}`, {
+        recordName: record[0],
+        domainName: record[1],
+        zone: this.zone,
+      });
     });
   }
 }

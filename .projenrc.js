@@ -29,6 +29,7 @@ const project = new GemeenteNijmegenCdkApp({
   ], /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   devDeps: [
+    '@types/aws-lambda',
     '@aws-sdk/types',
     'aws-sdk-client-mock',
     'axios-mock-adapter',
