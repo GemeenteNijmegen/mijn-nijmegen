@@ -1,14 +1,13 @@
-import { Stack, StackProps, Tags, pipelines, CfnParameter, Environment } from 'aws-cdk-lib';
+import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
+import { Stack, StackProps, Tags, pipelines, CfnParameter, Aspects } from 'aws-cdk-lib';
 import { ShellStep } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
 import { ApiStage } from './ApiStage';
+import { Configurable } from './Configuration';
 import { ParameterStage } from './ParameterStage';
 import { Statics } from './statics';
 
-export interface PipelineStackProps extends StackProps{
-  branchName: string;
-  deployToEnvironment: Environment;
-}
+export interface PipelineStackProps extends StackProps, Configurable {}
 
 export class PipelineStack extends Stack {
   branchName: string;
@@ -16,15 +15,16 @@ export class PipelineStack extends Stack {
     super(scope, id, props);
     Tags.of(this).add('cdkManaged', 'yes');
     Tags.of(this).add('Project', Statics.projectName);
-    this.branchName = props.branchName;
+    Aspects.of(this).add(new PermissionsBoundaryAspect());
+    this.branchName = props.configuration.branch;
 
     const connectionArn = new CfnParameter(this, 'connectionArn');
     const source = this.connectionSource(connectionArn);
 
     const pipeline = this.pipeline(source);
-    pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', { env: props.deployToEnvironment }));
+    pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', { env: props.configuration.deploymentEnvironment }));
 
-    const apiStage = pipeline.addStage(new ApiStage(this, 'mijn-api', { env: props.deployToEnvironment, branch: this.branchName }));
+    const apiStage = pipeline.addStage(new ApiStage(this, 'mijn-api', { env: props.configuration.deploymentEnvironment, configuration: props.configuration }));
     this.runValidationChecks(apiStage, source);
 
   }
@@ -66,8 +66,6 @@ export class PipelineStack extends Stack {
 
     const pipeline = new pipelines.CodePipeline(this, `mijnnijmegen-${this.branchName}`, {
       pipelineName: `mijnnijmegen-${this.branchName}`,
-      dockerEnabledForSelfMutation: true,
-      dockerEnabledForSynth: true,
       crossAccountKeys: true,
       synth: synthStep,
     });
