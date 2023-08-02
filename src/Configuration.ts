@@ -49,6 +49,12 @@ export interface Configuration {
    * the new landingzone. (for including permissionboundaryaspect or other stuff)
    */
   envIsInNewLandingZone: boolean;
+
+  /**
+   * The CDK name of the pipeline stack (can be removed after
+   * moving to new lz)
+   */
+  pipelineStackCdkName: string;
 }
 
 
@@ -60,6 +66,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     cnameRecords: undefined, // Manually created in old env?
     dsRecord: '52561 13 2 90CF3C35FDDC30AF42FB4BCCDCCB1123500050D70F1D4886D6DE25502F3BC50A',
     envIsInNewLandingZone: false,
+    pipelineStackCdkName: 'mijnuitkering-pipeline-acceptance',
   },
   'production': {
     branch: 'production',
@@ -68,6 +75,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     cnameRecords: undefined, // Manually created in old env?
     dsRecord: '60066 13 2 932CD585B029E674E17C4C33DFE7DE2C84353ACD8C109760FD17A6CDBD0CF3FA',
     envIsInNewLandingZone: false,
+    pipelineStackCdkName: 'mijnuitkering-pipeline-production',
   },
   'acceptance-new-lz': {
     branch: 'acceptance-new-lz',
@@ -78,6 +86,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     },
     dsRecord: '3766 13 2 11761745E09473E6CE95DB798CF1ADB69B4433E73EEFC9F7FE341561966EA154',
     envIsInNewLandingZone: true,
+    pipelineStackCdkName: 'mijnnijmegen-pipeline-acceptance',
   },
   'production-new-lz': {
     branch: 'production-new-lz',
@@ -89,6 +98,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     },
     dsRecord: '40951 13 2 1EFF20C0264CD1FDE6C7C858398BC2141768CC014A7BB27997F323076B7C47ED',
     envIsInNewLandingZone: true,
+    pipelineStackCdkName: 'mijnnijmegen-pipeline-production',
   },
 };
 
