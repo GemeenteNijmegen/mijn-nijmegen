@@ -23,7 +23,8 @@ const config: Configuration = {
   },
   dsRecord: undefined,
   envIsInNewLandingZone: true,
-  pipelineStackCdkName: 'mijnnijmegen-pipeline-stack-testing'
+  pipelineStackCdkName: 'mijnnijmegen-pipeline-stack-testing',
+  pipelineName: 'mijnnijmegen-test'
 }
 
 beforeAll(() => {
