@@ -57,16 +57,16 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     branch: 'acceptance',
     buildEnvironment: Statics.deploymentEnvironment,
     deploymentEnvironment: Statics.acceptanceEnvironment,
-    cnameRecords: undefined,
-    dsRecord: '',
+    cnameRecords: undefined, // Manually created in old env?
+    dsRecord: '52561 13 2 90CF3C35FDDC30AF42FB4BCCDCCB1123500050D70F1D4886D6DE25502F3BC50A',
     envIsInNewLandingZone: false,
   },
   'production': {
     branch: 'production',
     buildEnvironment: Statics.deploymentEnvironment,
     deploymentEnvironment: Statics.productionEnvironment,
-    cnameRecords: undefined,
-    dsRecord: '',
+    cnameRecords: undefined, // Manually created in old env?
+    dsRecord: '60066 13 2 932CD585B029E674E17C4C33DFE7DE2C84353ACD8C109760FD17A6CDBD0CF3FA',
     envIsInNewLandingZone: false,
   },
   'acceptance-new-lz': {
