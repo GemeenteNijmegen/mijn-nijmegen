@@ -1,3 +1,5 @@
+import { writeFile } from 'fs';
+import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
 import { homeRequestHandler } from '../homeRequestHandler';
@@ -45,7 +47,8 @@ test('Returns 200', async () => {
 
 test('Shows overview page', async () => {
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-  const result = await homeRequestHandler('session=12345', dynamoDBClient);
+  const result = await homeRequestHandler('session=12345', dynamoDBClient, { showZaken: false });
   expect(result.body).toMatch('Mijn Nijmegen');
   expect(result.body).toMatch('Jan de Tester');
+  writeFile(path.join(__dirname, 'output', 'test2.html'), result.body ?? '', () => { });
 });
