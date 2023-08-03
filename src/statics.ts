@@ -113,10 +113,49 @@ export abstract class Statics {
   static readonly ssmSlackWebhookUrl: string = '/cdk/mijn-nijmegen/slack-webhook-url';
 
 
+  // ENVIRONMENTS
+
+  static readonly deploymentEnvironment = {
+    account: '418648875085',
+    region: 'eu-west-1',
+  };
+
+  static readonly sandboxEnvironment = {
+    account: '122467643252',
+    region: 'eu-west-1',
+  };
+
+  static readonly acceptanceEnvironment = {
+    account: '315037222840',
+    region: 'eu-west-1',
+  };
+
+  static readonly productionEnvironment = {
+    account: '196212984627',
+    region: 'eu-west-1',
+  };
+
+  static readonly gnBuildEnvironment = {
+    account: '836443378780',
+    region: 'eu-central-1',
+  };
+
+  static readonly gnMijnNijmegenAccpEnvironment = {
+    account: '021929636313',
+    region: 'eu-central-1',
+  };
+
+  static readonly gnMijnNijmegenProdEnvironment = {
+    account: '740606269759',
+    region: 'eu-central-1',
+  };
+
   static subDomain(branch: string) {
     const subdomainMap = {
-      acceptance: 'mijn.accp',
-      production: 'mijn',
+      'acceptance': 'mijn.accp',
+      'production': 'mijn',
+      'acceptance-new-lz': 'mijn.accp',
+      'production-new-lz': 'mijn',
     };
     const subdomain = subdomainMap[branch as keyof typeof subdomainMap] ?? 'mijn-dev';
     return subdomain;
@@ -124,8 +163,10 @@ export abstract class Statics {
 
   static cspSubDomain(branch: string) {
     const subdomainMap = {
-      acceptance: 'mijn.accp',
-      production: 'mijn.auth-prod',
+      'acceptance': 'mijn.accp',
+      'production': 'mijn.auth-prod',
+      'acceptance-new-lz': 'mijn.mijn-accp',
+      'production-new-lz': 'mijn.mijn-prod',
     };
     const subdomain = subdomainMap[branch as keyof typeof subdomainMap] ?? 'mijn-dev';
     return subdomain;

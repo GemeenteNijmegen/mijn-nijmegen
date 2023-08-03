@@ -1066,6 +1066,11 @@
   dependencies:
     "@types/aws-lambda" "^8.10.119"
 
+"@gemeentenijmegen/aws-constructs@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/aws-constructs/-/aws-constructs-0.0.4.tgz#ea4440bfd02f660643ffdbed98867559805369f4"
+  integrity sha512-POfKPHohkk6PQBM5KE4gqks+y4jnNKbitt+pQ4yi+y0fbKgWOj5kRdD3eQKSdDDqqrQx2+lVJah58rLJDAA6LQ==
+
 "@gemeentenijmegen/projen-project-type@^1.5.3":
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/@gemeentenijmegen/projen-project-type/-/projen-project-type-1.5.3.tgz#c518f2245a886e90d26c60b31afaadec34a335f5"
