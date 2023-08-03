@@ -23,7 +23,7 @@ export class PipelineStack extends Stack {
     const connectionArn = new CfnParameter(this, 'connectionArn');
     const source = this.connectionSource(connectionArn);
 
-    const pipeline = this.pipeline(source);
+    const pipeline = this.pipeline(source, props);
     pipeline.addStage(new ParameterStage(this, 'mijn-nijmegen-parameters', {
       env: props.configuration.deploymentEnvironment,
       configuration: props.configuration,
@@ -59,7 +59,7 @@ export class PipelineStack extends Stack {
     }));
   }
 
-  pipeline(source: pipelines.CodePipelineSource): pipelines.CodePipeline {
+  pipeline(source: pipelines.CodePipelineSource, props: PipelineStackProps): pipelines.CodePipeline {
     const synthStep = new pipelines.ShellStep('Synth', {
       input: source,
       env: {
@@ -72,8 +72,8 @@ export class PipelineStack extends Stack {
       ],
     });
 
-    const pipeline = new pipelines.CodePipeline(this, `mijnnijmegen-${this.branchName}`, {
-      pipelineName: `mijnnijmegen-${this.branchName}`,
+    const pipeline = new pipelines.CodePipeline(this, props.configuration.pipelineName, {
+      pipelineName: props.configuration.pipelineName,
       crossAccountKeys: true,
       synth: synthStep,
     });
