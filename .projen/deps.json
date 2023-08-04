@@ -145,6 +145,10 @@
       "type": "runtime"
     },
     {
+      "name": "@gemeentenijmegen/aws-constructs",
+      "type": "runtime"
+    },
+    {
       "name": "@gemeentenijmegen/projen-project-type",
       "type": "runtime"
     },
