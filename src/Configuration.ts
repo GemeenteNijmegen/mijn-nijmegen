@@ -74,12 +74,14 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
   },
   'production': {
     branch: 'production',
-    buildEnvironment: Statics.deploymentEnvironment,
-    deploymentEnvironment: Statics.productionEnvironment,
-    cnameRecords: undefined, // Manually created in old env?
-    dsRecord: '60066 13 2 932CD585B029E674E17C4C33DFE7DE2C84353ACD8C109760FD17A6CDBD0CF3FA',
-    envIsInNewLandingZone: false,
-    pipelineStackCdkName: 'mijnuitkering-pipeline-production',
+    buildEnvironment: Statics.gnBuildEnvironment,
+    deploymentEnvironment: Statics.gnMijnNijmegenProdEnvironment,
+    cnameRecords: {
+      _abe87d0d7f8458c5f75c5d1e0bf6efdb: '_0d3e717e52354c47bf6b0c16612b709d.jzckvmdcqj.acm-validations.aws.',
+    },
+    dsRecord: '40951 13 2 1EFF20C0264CD1FDE6C7C858398BC2141768CC014A7BB27997F323076B7C47ED',
+    envIsInNewLandingZone: true,
+    pipelineStackCdkName: 'mijnnijmegen-pipeline-production',
     pipelineName: 'mijnnijmegen-production',
   },
   'acceptance-new-lz': {
@@ -95,8 +97,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     pipelineName: 'mijnnijmegen-acceptance',
   },
   'production-new-lz': {
-    branch: 'production-new-lz',
-
+    branch: 'production',
     buildEnvironment: Statics.gnBuildEnvironment,
     deploymentEnvironment: Statics.gnMijnNijmegenProdEnvironment,
     cnameRecords: {
