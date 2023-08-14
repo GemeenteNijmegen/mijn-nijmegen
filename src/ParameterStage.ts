@@ -15,9 +15,7 @@ export class ParameterStage extends Stage {
     super(scope, id, props);
     Tags.of(this).add('cdkManaged', 'yes');
     Tags.of(this).add('Project', Statics.projectName);
-    if (props.configuration.envIsInNewLandingZone) {
-      Aspects.of(this).add(new PermissionsBoundaryAspect());
-    }
+    Aspects.of(this).add(new PermissionsBoundaryAspect());
 
     new ParameterStack(this, 'params');
   }
