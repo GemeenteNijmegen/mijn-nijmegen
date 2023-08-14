@@ -54,7 +54,7 @@ export interface Configuration {
 
 
 const EnvironmentConfigurations: {[key:string]: Configuration} = {
-  'acceptance': {
+  acceptance: {
     branch: 'acceptance',
     buildEnvironment: Statics.gnBuildEnvironment,
     deploymentEnvironment: Statics.gnMijnNijmegenAccpEnvironment,
@@ -65,7 +65,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     pipelineStackCdkName: 'mijnnijmegen-pipeline-acceptance',
     pipelineName: 'mijnnijmegen-acceptance',
   },
-  'production': {
+  production: {
     branch: 'production',
     buildEnvironment: Statics.gnBuildEnvironment,
     deploymentEnvironment: Statics.gnMijnNijmegenProdEnvironment,
