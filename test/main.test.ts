@@ -22,7 +22,6 @@ const config: Configuration = {
     '_1241251': '120421305.csp-nijmegen.nl',
   },
   dsRecord: undefined,
-  envIsInNewLandingZone: true,
   pipelineStackCdkName: 'mijnnijmegen-pipeline-stack-testing',
   pipelineName: 'mijnnijmegen-test'
 }
