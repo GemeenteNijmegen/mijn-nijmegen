@@ -9,11 +9,9 @@ export interface DNSStackProps extends StackProps, Configurable { }
 export class DNSStack extends Stack {
   zone: Route53.HostedZone;
   accountRootZone: Route53.IHostedZone;
-  branch: string;
 
   constructor(scope: Construct, id: string, props: DNSStackProps) {
     super(scope, id);
-    this.branch = props.configuration.branch;
 
     const rootZoneId = SSM.StringParameter.valueForStringParameter(this, Statics.accountRootHostedZoneId);
     const rootZoneName = SSM.StringParameter.valueForStringParameter(this, Statics.accountRootHostedZoneName);

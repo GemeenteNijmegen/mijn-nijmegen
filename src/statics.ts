@@ -163,8 +163,8 @@ export abstract class Statics {
 
   static cspSubDomain(branch: string) {
     const subdomainMap = {
-      'acceptance': 'mijn.accp',
-      'production': 'mijn.auth-prod',
+      'acceptance': 'mijn.mijn-accp',
+      'production': 'mijn.mijn-prod',
       'acceptance-new-lz': 'mijn.mijn-accp',
       'production-new-lz': 'mijn.mijn-prod',
     };
