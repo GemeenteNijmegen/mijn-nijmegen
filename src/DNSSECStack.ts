@@ -40,31 +40,14 @@ export class DNSSECStack extends Stack {
       hostedZoneId: zoneId,
     });
 
-    /**
-     * New ksk in prod only
-     */
-    if (props.branch === 'production') {
-      // Production KSK
-      const accountKmsKeyArnForDnsSec = SSM.StringParameter.valueForStringParameter(this, Statics.ssmAccountDnsSecKmsKey);
-      const dnssecKeySigningNew = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key', {
-        name: 'mijn_nijmegen_key_signing_key',
-        status: 'ACTIVE',
-        hostedZoneId: zoneId,
-        keyManagementServiceArn: accountKmsKeyArnForDnsSec,
-      });
-      dnssec.node.addDependency(dnssecKeySigningNew);
-    } else {
-      // Acceptance KSK
-      const accountDnssecKmsKeyArn = SSM.StringParameter.valueForStringParameter(this, Statics.ssmAccountDnsSecKmsKey);
-      const dnssecKeySigning = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key-2', {
-        name: 'mijn_nijmegen_ksk',
-        status: 'ACTIVE',
-        hostedZoneId: zoneId,
-        keyManagementServiceArn: accountDnssecKmsKeyArn,
-      });
-      dnssec.node.addDependency(dnssecKeySigning);
-    }
-
+    const accountDnssecKmsKeyArn = SSM.StringParameter.valueForStringParameter(this, Statics.ssmAccountDnsSecKmsKey);
+    const dnssecKeySigning = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key-2', {
+      name: 'mijn_nijmegen_ksk',
+      status: 'ACTIVE',
+      hostedZoneId: zoneId,
+      keyManagementServiceArn: accountDnssecKmsKeyArn,
+    });
+    dnssec.node.addDependency(dnssecKeySigning);
 
   }
 
