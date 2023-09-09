@@ -64,11 +64,11 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "@aws-cdk/aws-apigatewayv2-alpha": "^2.94.0-alpha.0",
+    "@aws-cdk/aws-apigatewayv2-alpha": "^2.95.0-alpha.0",
     "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.95.0-alpha.0",
     "@aws-lambda-powertools/logger": "^1.12.1",
-    "@aws-sdk/client-dynamodb": "^3.408.0",
-    "@aws-sdk/client-secrets-manager": "^3.408.0",
+    "@aws-sdk/client-dynamodb": "^3.409.0",
+    "@aws-sdk/client-secrets-manager": "^3.409.0",
     "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.44.0",
     "@gemeentenijmegen/apiclient": "^0.0.6",
     "@gemeentenijmegen/apigateway-http": "^0.0.7",
@@ -79,12 +79,12 @@
     "@types/mustache": "^4.2.2",
     "aws-cdk-lib": "^2.22.0",
     "axios": "^1.5.0",
-    "cdk-remote-stack": "^2.0.61",
+    "cdk-remote-stack": "^2.0.62",
     "constructs": "^10.0.5",
     "cookie": "^0.5.0",
     "dotenv": "^16.3.1",
     "mustache": "^4.2.0",
-    "openid-client": "^5.4.3"
+    "openid-client": "^5.5.0"
   },
   "license": "EUPL-1.2",
   "version": "0.0.0",
