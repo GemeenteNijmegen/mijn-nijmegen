@@ -30,10 +30,10 @@
   resolved "https://registry.yarnpkg.com/@aws-cdk/asset-node-proxy-agent-v6/-/asset-node-proxy-agent-v6-2.0.1.tgz#6dc9b7cdb22ff622a7176141197962360c33e9ac"
   integrity sha512-DDt4SLdLOwWCjGtltH4VCST7hpOI5DzieuhGZsBpZ+AgJdSI2GCjklCXm0GCTwJG/SolkL5dtQXyUKgg9luBDg==
 
-"@aws-cdk/aws-apigatewayv2-alpha@^2.95.0-alpha.0":
-  version "2.95.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigatewayv2-alpha/-/aws-apigatewayv2-alpha-2.95.0-alpha.0.tgz#f7c59aba37eed70da96df6ebf535e4ca211abe84"
-  integrity sha512-9cGBbPziDGQKSIYhBvAOymX5W/mjWXoDK9Gbt8jP6c6N9MpI5S8E70jFqf0qD/kQxB8FSGvp+Uu99knn3RG8LA==
+"@aws-cdk/aws-apigatewayv2-alpha@^2.95.1-alpha.0":
+  version "2.95.1-alpha.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigatewayv2-alpha/-/aws-apigatewayv2-alpha-2.95.1-alpha.0.tgz#14d00de7ea0767e17009d8e46ca7af01a0fb94fd"
+  integrity sha512-01CjocOWbt5XF2aaLWXSOrWlCevmebwLUtivlRhCMpLXfpIQVwMRWbPdzZvpjcsUm5e3ptHUe9aNDZfpWEWahg==
 
 "@aws-cdk/aws-apigatewayv2-integrations-alpha@^2.95.1-alpha.0":
   version "2.95.1-alpha.0"
@@ -2805,10 +2805,10 @@ case@1.6.3, case@^1.6.3:
   resolved "https://registry.yarnpkg.com/case/-/case-1.6.3.tgz#0a4386e3e9825351ca2e6216c60467ff5f1ea1c9"
   integrity sha512-mzDSXIPaFwVDvZAHqZ9VlbyF4yyXRuX6IvB06WvPYkqJVO24kX1PPhv9bfpKNFZyxYFmmgo03HUiD8iklmJYRQ==
 
-cdk-remote-stack@^2.0.63:
-  version "2.0.63"
-  resolved "https://registry.yarnpkg.com/cdk-remote-stack/-/cdk-remote-stack-2.0.63.tgz#fcec9843fc87db20af717c349d301b8f12c87f67"
-  integrity sha512-oaBIL2kbbJFhSPJTOMPbHQP0ABH9qDaFESlbdVLKa3tcIat5sCB+CGrkUjxoE9xbYrQBW+3zcgd7y/MLXi+1/A==
+cdk-remote-stack@^2.0.64:
+  version "2.0.64"
+  resolved "https://registry.yarnpkg.com/cdk-remote-stack/-/cdk-remote-stack-2.0.64.tgz#13db8528c54af556b4d86d951cbeee7960506194"
+  integrity sha512-fQ2B943+ORwMZEd92D/4Q3XgnzQo1ROtiIgXdUyL6goRaBvUXHv58dpj0g+tS53qXXyGm+CQESQUpB+SKgGvPQ==
 
 chalk@^2.4.2:
   version "2.4.2"
