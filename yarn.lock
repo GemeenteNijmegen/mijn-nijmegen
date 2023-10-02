@@ -30,10 +30,10 @@
   resolved "https://registry.yarnpkg.com/@aws-cdk/asset-node-proxy-agent-v6/-/asset-node-proxy-agent-v6-2.0.1.tgz#6dc9b7cdb22ff622a7176141197962360c33e9ac"
   integrity sha512-DDt4SLdLOwWCjGtltH4VCST7hpOI5DzieuhGZsBpZ+AgJdSI2GCjklCXm0GCTwJG/SolkL5dtQXyUKgg9luBDg==
 
-"@aws-cdk/aws-apigatewayv2-alpha@^2.99.0-alpha.0":
-  version "2.99.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigatewayv2-alpha/-/aws-apigatewayv2-alpha-2.99.0-alpha.0.tgz#a4e613c230f66d06ce06b5c6cb83b122162c509a"
-  integrity sha512-bYtSCyjsa9h7LVz2n0xbQowV+amztnT5U0K48Lbo18N5u+WswW4TP4wu/xxRcotP1PoiGLeyEt+Lpa757ac3ww==
+"@aws-cdk/aws-apigatewayv2-alpha@^2.99.1-alpha.0":
+  version "2.99.1-alpha.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigatewayv2-alpha/-/aws-apigatewayv2-alpha-2.99.1-alpha.0.tgz#453cead8df9624b2ba1ad6640d70c02451afbec0"
+  integrity sha512-BgHAo0E28c1AgXFZIIFSRPZCfpnASl8KHggJKqMNwDVMVccANIyHh7cUAYi90+lIhi87o3GsrkwCKRVCLNCBvg==
 
 "@aws-cdk/aws-apigatewayv2-integrations-alpha@^2.99.1-alpha.0":
   version "2.99.1-alpha.0"
@@ -2801,19 +2801,19 @@ camelcase@^7.0.1:
   integrity sha512-xlx1yCK2Oc1APsPXDL2LdlNP6+uu8OCDdhOBSVT279M/S+y75O30C2VuD8T2ogdePBBl7PfPF4504tnLgX3zfw==
 
 caniuse-lite@^1.0.30001541:
-  version "1.0.30001541"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001541.tgz#b1aef0fadd87fb72db4dcb55d220eae17b81cdb1"
-  integrity sha512-bLOsqxDgTqUBkzxbNlSBt8annkDpQB9NdzdTbO2ooJ+eC/IQcvDspDc058g84ejCelF7vHUx57KIOjEecOHXaw==
+  version "1.0.30001542"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001542.tgz#823ddb5aed0a70d5e2bfb49126478e84e9514b85"
+  integrity sha512-UrtAXVcj1mvPBFQ4sKd38daP8dEcXXr5sQe6QNNinaPd0iA/cxg9/l3VrSdL73jgw5sKyuQ6jNgiKO12W3SsVA==
 
 case@1.6.3, case@^1.6.3:
   version "1.6.3"
   resolved "https://registry.yarnpkg.com/case/-/case-1.6.3.tgz#0a4386e3e9825351ca2e6216c60467ff5f1ea1c9"
   integrity sha512-mzDSXIPaFwVDvZAHqZ9VlbyF4yyXRuX6IvB06WvPYkqJVO24kX1PPhv9bfpKNFZyxYFmmgo03HUiD8iklmJYRQ==
 
-cdk-remote-stack@^2.0.82:
-  version "2.0.82"
-  resolved "https://registry.yarnpkg.com/cdk-remote-stack/-/cdk-remote-stack-2.0.82.tgz#896e3dfb06bbf592b5f5cbc37245a150bbfe6c6d"
-  integrity sha512-jOspGccWsRWv/NmPUITDFKGbIFcHIj7qXp2Z7GWVJo2PEVe5+yhJPWa8Hwak7Dyps2MhFhK/mylmYguuAAn6gA==
+cdk-remote-stack@^2.0.83:
+  version "2.0.83"
+  resolved "https://registry.yarnpkg.com/cdk-remote-stack/-/cdk-remote-stack-2.0.83.tgz#ecf7e2016744a98c8651b74c30fcf7218f056c12"
+  integrity sha512-muISeQt58OGswjIZMLkBrVIDn1Xa/OVdvP9PvtYSU+2Wjw4krRhoQ/105le2hVP4odSiLMwMtERusgRUS3XtKg==
 
 chalk@^2.4.2:
   version "2.4.2"
