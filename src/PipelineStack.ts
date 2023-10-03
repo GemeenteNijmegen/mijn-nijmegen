@@ -32,7 +32,6 @@ export class PipelineStack extends Stack {
       configuration: props.configuration,
     }));
     this.runValidationChecks(apiStage, source);
-
   }
 
   /**
