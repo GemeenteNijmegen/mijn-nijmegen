@@ -2,7 +2,7 @@ import { writeFile } from 'fs';
 import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
-import { homeRequestHandler } from '../homeRequestHandler';
+import { HomeRequestHandler } from '../homeRequestHandler';
 
 beforeAll(() => {
 
@@ -38,7 +38,8 @@ beforeEach(() => {
 
 test('Returns 200', async () => {
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-  const result = await homeRequestHandler('session=12345', dynamoDBClient);
+  const handler = new HomeRequestHandler(dynamoDBClient, { showZaken: false });
+  const result = await handler.handleRequest('session=12345');
 
   expect(result.statusCode).toBe(200);
   let cookies = result?.cookies?.filter((cookie: string) => cookie.indexOf('HttpOnly; Secure'));
@@ -47,7 +48,8 @@ test('Returns 200', async () => {
 
 test('Shows overview page', async () => {
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-  const result = await homeRequestHandler('session=12345', dynamoDBClient, { showZaken: false });
+  const handler = new HomeRequestHandler(dynamoDBClient, { showZaken: false });
+  const result = await handler.handleRequest('session=12345');
   expect(result.body).toMatch('Mijn Nijmegen');
   expect(result.body).toMatch('Jan de Tester');
   writeFile(path.join(__dirname, 'output', 'test2.html'), result.body ?? '', () => { });
