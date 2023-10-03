@@ -247,6 +247,25 @@ export class CloudfrontStack extends Stack {
         referrerPolicy: { referrerPolicy: HeadersReferrerPolicy.NO_REFERRER, override: true },
         strictTransportSecurity: { accessControlMaxAge: Duration.days(366), includeSubdomains: true, override: true },
       },
+      customHeadersBehavior: {
+        customHeaders: [
+          {
+            header: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate',
+            override: false,
+          },
+          {
+            header: 'Pragma',
+            value: 'no-cache',
+            override: false,
+          },
+          {
+            header: 'Expires',
+            value: '0',
+            override: false,
+          }
+        ],
+      }
     });
     return responseHeadersPolicy;
   }
