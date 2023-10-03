@@ -263,9 +263,9 @@ export class CloudfrontStack extends Stack {
             header: 'Expires',
             value: '0',
             override: false,
-          }
+          },
         ],
-      }
+      },
     });
     return responseHeadersPolicy;
   }
