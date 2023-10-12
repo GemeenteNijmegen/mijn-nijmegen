@@ -37,9 +37,9 @@
   },
   "devDependencies": {
     "@aws-sdk/types": "^3.425.0",
-    "@axe-core/playwright": "^4.7.3",
+    "@axe-core/playwright": "^4.8.0",
     "@glen/jest-raw-loader": "^2.0.0",
-    "@playwright/test": "^1.38.1",
+    "@playwright/test": "^1.39.0",
     "@types/aws-lambda": "^8.10.124",
     "@types/jest": "^29.5.5",
     "@types/node": "^16",
@@ -79,12 +79,12 @@
     "@types/mustache": "^4.2.3",
     "aws-cdk-lib": "^2.22.0",
     "axios": "^1.5.1",
-    "cdk-remote-stack": "^2.0.92",
+    "cdk-remote-stack": "^2.0.93",
     "constructs": "^10.0.5",
     "cookie": "^0.5.0",
     "dotenv": "^16.3.1",
     "mustache": "^4.2.0",
-    "openid-client": "^5.6.0"
+    "openid-client": "^5.6.1"
   },
   "license": "EUPL-1.2",
   "version": "0.0.0",
