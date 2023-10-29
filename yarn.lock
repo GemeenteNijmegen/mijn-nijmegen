@@ -30,10 +30,10 @@
   resolved "https://registry.yarnpkg.com/@aws-cdk/asset-node-proxy-agent-v6/-/asset-node-proxy-agent-v6-2.0.1.tgz#6dc9b7cdb22ff622a7176141197962360c33e9ac"
   integrity sha512-DDt4SLdLOwWCjGtltH4VCST7hpOI5DzieuhGZsBpZ+AgJdSI2GCjklCXm0GCTwJG/SolkL5dtQXyUKgg9luBDg==
 
-"@aws-cdk/aws-apigatewayv2-alpha@^2.103.0-alpha.0":
-  version "2.103.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigatewayv2-alpha/-/aws-apigatewayv2-alpha-2.103.0-alpha.0.tgz#5b61240a36d40d918ff9812973e1af31b260b096"
-  integrity sha512-vjZBrUL1iR+Ru4jshbx3DaU2EGPQB7FtvaghUz02yE8cpZEPwaIga9OD8ohmQaSVNDbL7kOofDRtv69RAlkB4A==
+"@aws-cdk/aws-apigatewayv2-alpha@^2.103.1-alpha.0":
+  version "2.103.1-alpha.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigatewayv2-alpha/-/aws-apigatewayv2-alpha-2.103.1-alpha.0.tgz#065417bf39dc3831a0e4ee6f2c63fc4f1dd806a4"
+  integrity sha512-x6HmtwTtC1sZVK5/PoI1XMF8YtP8n93m8aQlKn3ovFPhqwn4ANts699DzVL4d8Q7XoVMgi9lE6N5dm+50zSRQw==
 
 "@aws-cdk/aws-apigatewayv2-integrations-alpha@^2.103.1-alpha.0":
   version "2.103.1-alpha.0"
@@ -2885,9 +2885,9 @@ camelcase@^7.0.1:
   integrity sha512-xlx1yCK2Oc1APsPXDL2LdlNP6+uu8OCDdhOBSVT279M/S+y75O30C2VuD8T2ogdePBBl7PfPF4504tnLgX3zfw==
 
 caniuse-lite@^1.0.30001541:
-  version "1.0.30001555"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001555.tgz#e36f4d49e345337d6788f32093867cec8d951789"
-  integrity sha512-NzbUFKUnJ3DTcq6YyZB6+qqhfD112uR3uoEnkmfzm2wVzUNsFkU7AwBjKQ654Sp5cau0JxhFyRSn/tQZ+XfygA==
+  version "1.0.30001557"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001557.tgz#13f762ea1d7f7b009d4d2785fbbd250354d09ad9"
+  integrity sha512-91oR7hLNUP3gG6MLU+n96em322a8Xzes8wWdBKhLgUoiJsAF5irZnxSUCbc+qUZXNnPCfUwLOi9ZCZpkvjQajw==
 
 case@1.6.3, case@^1.6.3:
   version "1.6.3"
