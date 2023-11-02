@@ -47,7 +47,7 @@ export interface CloudFrontStackProps extends StackProps {
  * Create a Cloudfront distribution, which can be accessed on the custom domain.
  * This uses the static resources bucket, the API Gateway, and the certificate
  * from us-east-1.
- * 
+ *
  * Cloudfront is also responsible for setting security headers, the TLS version
  * used and must be linked to the [web application firewall](https://aws.amazon.com/waf/).
  */

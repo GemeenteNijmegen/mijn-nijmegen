@@ -7,7 +7,7 @@ import { Statics } from './statics';
 export interface DNSStackProps extends StackProps, Configurable { }
 
 /** Setup DNS
- * 
+ *
  * This stack is responsible for creating a project hosted zone in Route53
  * It sets up a DS record if provided (NB: In newer projects we have a [custom resource](https://www.npmjs.com/package/@gemeentenijmegen/dnssec-record) that provides DNSSEC, including the DS record)
  */
@@ -84,7 +84,7 @@ export class DNSStack extends Stack {
   /**
    * Add DS record for the zone to the parent zone
    * to establish a chain of trust (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring-dnssec-enable-signing.html#dns-configuring-dnssec-chain-of-trust)
-   * 
+   *
    * NB: Use https://www.npmjs.com/package/@gemeentenijmegen/dnssec-record in new projects
    */
   addDsRecord(dsValue?: string) {

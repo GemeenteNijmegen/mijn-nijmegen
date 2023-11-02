@@ -8,7 +8,7 @@ import { Statics } from './statics';
 export class KeyStack extends Stack {
   /**
    * key for encrypting user data in the project. The session store
-   * is encrypted with this key. 
+   * is encrypted with this key.
    */
   key: KMS.Key;
 
@@ -28,7 +28,7 @@ export class KeyStack extends Stack {
   }
 
   /** Modify the KSM key policy
-   * 
+   *
    * We allow DynamoDB to use this key.
    */
   setPolicies() {

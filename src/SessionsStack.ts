@@ -18,7 +18,7 @@ export class SessionsStack extends Stack {
   constructor(scope: Construct, id: string, props: SessionStackProps) {
     super(scope, id);
     this.sessionsTable = new SessionsTable(this, 'sessions-table', { key: props.key });
-    
+
     // Store session table id to be used in other stacks
     new SSM.StringParameter(this, 'ssm_sessions_1', {
       stringValue: this.sessionsTable.table.tableArn,

@@ -26,14 +26,14 @@ export interface Configuration {
 
   /**
    * The pipeline will run from this environment
-   * 
+   *
    * Use this environment for your initial manual deploy
    */
   buildEnvironment: Environment;
 
   /**
    * Environment to deploy the application to
-   * 
+   *
    * The pipeline (which usually runs in the build account) will
    * deploy the application to this environment. This is usually
    * the workload AWS account in our default region.
@@ -42,7 +42,7 @@ export interface Configuration {
 
   /**
    * CNAME records to deploy to the hosted zone
-   * 
+   *
    * This will deploy the provided CNAME records to
    * the project DNS zone (in Route53)
    */
@@ -50,9 +50,9 @@ export interface Configuration {
 
   /**
    * A DS record (value) to deploy in the hosted zone
-   * 
+   *
    * This will deploy the provided DS record to
-   * the account root DNS zone (in Route53), to provide 
+   * the account root DNS zone (in Route53), to provide
    * DNSSEC key chaining.
    */
   dsRecord?: string;
@@ -93,10 +93,10 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
 
 /**
  * Retrieve a configuration object by passing a branch string
- * 
+ *
  * **NB**: This retrieves the subobject with key `branchName`, not
  * the subobject containing the `branchName` as the value of the `branch` key
- * 
+ *
  * @param branchName the branch for which to retrieve the environment
  * @returns the configuration object for this branch
  */

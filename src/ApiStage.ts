@@ -16,15 +16,15 @@ export interface ApiStageProps extends StageProps, Configurable {}
 
 /**
  * Stage responsible for the API Gateway and lambdas
- * 
+ *
  * The application is accessible via CloudFront on a custom domain. CloudFront has
  * several origins (
  * - S3 for static assets and error pages
  * - API Gateway (v2) for dynamic pages
- * 
+ *
  * The API Gateway has several routes. This project manages the auth-related routes and
  * the homepage. Separate projects can add routes to the API Gateway for extended functionality.
- * 
+ *
  */
 export class ApiStage extends Stage {
   constructor(scope: Construct, id: string, props: ApiStageProps) {
