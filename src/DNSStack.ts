@@ -6,6 +6,12 @@ import { Statics } from './statics';
 
 export interface DNSStackProps extends StackProps, Configurable { }
 
+/** Setup DNS
+ *
+ * This stack is responsible for creating a project hosted zone in Route53
+ * It sets up a DS record if provided (NB: In newer projects we have a [custom resource](https://www.npmjs.com/package/@gemeentenijmegen/dnssec-record) that provides DNSSEC, including the DS record)
+ */
+
 export class DNSStack extends Stack {
   zone: Route53.HostedZone;
   accountRootZone: Route53.IHostedZone;
@@ -78,6 +84,8 @@ export class DNSStack extends Stack {
   /**
    * Add DS record for the zone to the parent zone
    * to establish a chain of trust (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring-dnssec-enable-signing.html#dns-configuring-dnssec-chain-of-trust)
+   *
+   * NB: Use https://www.npmjs.com/package/@gemeentenijmegen/dnssec-record in new projects
    */
   addDsRecord(dsValue?: string) {
     if (!dsValue) {
@@ -92,12 +100,16 @@ export class DNSStack extends Stack {
     });
   }
 
+  /**
+   * Convenience method to add a set of CNAME records to the hosted zone
+   */
   addCnameRecords(cnameRecords?: { [key: string]: string }) {
     if (!cnameRecords) {
       return; // No records to define
     }
 
     Object.entries(cnameRecords).forEach(record => {
+      // Construct ID's must be unique. Generates a hash of the record to use as ID value.
       const hash = crypto.createHash('md5').update(`${record[0]}${record[1]}`).digest('hex').substring(0, 10);
       new Route53.CnameRecord(this, `cname-record-${hash}`, {
         recordName: record[0],

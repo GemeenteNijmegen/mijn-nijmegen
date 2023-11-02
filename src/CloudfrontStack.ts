@@ -43,6 +43,14 @@ export interface CloudFrontStackProps extends StackProps {
   branch: string;
 }
 
+/**
+ * Create a Cloudfront distribution, which can be accessed on the custom domain.
+ * This uses the static resources bucket, the API Gateway, and the certificate
+ * from us-east-1.
+ *
+ * Cloudfront is also responsible for setting security headers, the TLS version
+ * used and must be linked to the [web application firewall](https://aws.amazon.com/waf/).
+ */
 export class CloudfrontStack extends Stack {
   constructor(scope: Construct, id: string, props: CloudFrontStackProps) {
     super(scope, id);
@@ -90,7 +98,7 @@ export class CloudfrontStack extends Stack {
    * Add static contents to cloudfront
    *
    * Creates a bucket, deploys contents from a folder and adds it to
-   * the cloudfront distribution.
+   * the cloudfront distribution. This bucket contains CSS and such.
    *
    * @param cloudfrontDistribution the distribution for these resources
    */

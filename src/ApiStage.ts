@@ -16,6 +16,15 @@ export interface ApiStageProps extends StageProps, Configurable {}
 
 /**
  * Stage responsible for the API Gateway and lambdas
+ *
+ * The application is accessible via CloudFront on a custom domain. CloudFront has
+ * several origins (
+ * - S3 for static assets and error pages
+ * - API Gateway (v2) for dynamic pages
+ *
+ * The API Gateway has several routes. This project manages the auth-related routes and
+ * the homepage. Separate projects can add routes to the API Gateway for extended functionality.
+ *
  */
 export class ApiStage extends Stage {
   constructor(scope: Construct, id: string, props: ApiStageProps) {
@@ -23,7 +32,7 @@ export class ApiStage extends Stage {
 
     Tags.of(this).add('cdkManaged', 'yes');
     Tags.of(this).add('Project', Statics.projectName);
-    Aspects.of(this).add(new PermissionsBoundaryAspect());
+    Aspects.of(this).add(new PermissionsBoundaryAspect()); // Required for all stages in our LZ (TODO: Subclass Stage/Stack to provide this in our own project type)
 
     const branchName = props.configuration.branch;
 
@@ -31,7 +40,7 @@ export class ApiStage extends Stage {
     const sessionsStack = new SessionsStack(this, 'sessions-stack', { key: keyStack.key });
     const dnsStack = new DNSStack(this, 'dns-stack', { configuration: props.configuration });
 
-    const usEastCertificateStack = new UsEastCertificateStack(this, 'us-cert-stack', { branch: branchName, env: { region: 'us-east-1' } });
+    const usEastCertificateStack = new UsEastCertificateStack(this, 'us-cert-stack', { branch: branchName, env: { region: 'us-east-1' } }); // This stack must live in us-east-1
     const dnssecStack = new DNSSECStack(this, 'dnssec-stack', { branch: branchName, env: { region: 'us-east-1' }, applicationRegion: this.region! });
     usEastCertificateStack.addDependency(dnsStack);
     dnssecStack.addDependency(dnsStack);
