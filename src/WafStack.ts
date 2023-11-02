@@ -7,6 +7,10 @@ export interface WafStackProps extends StackProps {
   branch: string;
 }
 
+/** Setup the Web Application Firewall (https://aws.amazon.com/waf/) 
+ * We block non-browsers, setup rate limiting, and allowlist internet.nl 
+ * so we can test our configuration.
+ */
 export class WafStack extends Stack {
   constructor(scope: Construct, id: string, props: WafStackProps) {
     super(scope, id, props);

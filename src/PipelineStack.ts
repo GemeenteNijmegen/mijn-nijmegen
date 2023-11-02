@@ -9,8 +9,18 @@ import { Statics } from './statics';
 
 export interface PipelineStackProps extends StackProps, Configurable {}
 
+/**
+ * The pipeline runs in a build environment, and is responsible for deploying
+ * Cloudformation stacks to the workload account. The pipeline will first build
+ * and synth the project, then deploy (self-mutating if necessary).
+ * 
+ * The pipeline can optionally run a validation step, which runs playwright tests
+ * against the deployed environment. This does not run in production since we do
+ * not have a mechanism to do end-to-end auth tests in production.
+ */
 export class PipelineStack extends Stack {
   branchName: string;
+
   constructor(scope: Construct, id: string, props: PipelineStackProps) {
     super(scope, id, props);
     Tags.of(this).add('cdkManaged', 'yes');
@@ -18,6 +28,10 @@ export class PipelineStack extends Stack {
     Aspects.of(this).add(new PermissionsBoundaryAspect());
     this.branchName = props.configuration.branch;
 
+    /** On first deploy, providing a connectionArn param to `cdk deploy` is required, so the
+     * codestarconnection can be setup. This connection is responsible for further deploys 
+     * triggering from a commit to the specified branch on Github.
+     */
     const connectionArn = new CfnParameter(this, 'connectionArn');
     const source = this.connectionSource(connectionArn);
 
@@ -48,10 +62,10 @@ export class PipelineStack extends Stack {
         CI: 'true',
       },
       commands: [
-        'yarn install --frozen-lockfile',
-        'npx playwright install',
-        'npx playwright install-deps',
-        'npx playwright test',
+        'yarn install --frozen-lockfile', // Install dependencies
+        'npx playwright install', // Install playwright TODO: Run playwright in LambdaTest instead
+        'npx playwright install-deps', 
+        'npx playwright test', // Run tests
       ],
     }));
   }
@@ -77,6 +91,15 @@ export class PipelineStack extends Stack {
     return pipeline;
   }
 
+  /**
+   * We use a codestarconnection to trigger automatic deploys from Github
+   * 
+   * The value for this ARN can be found in the CodePipeline service under [settings->connections](https://eu-central-1.console.aws.amazon.com/codesuite/settings/connections?region=eu-central-1)
+   * Usually this will be in the build-account.
+   * 
+   * @param connectionArn the ARN for the codestarconnection. 
+   * @returns 
+   */
   private connectionSource(connectionArn: CfnParameter): pipelines.CodePipelineSource {
     return pipelines.CodePipelineSource.connection('GemeenteNijmegen/mijn-nijmegen', this.branchName, {
       connectionArn: connectionArn.valueAsString,

@@ -55,6 +55,10 @@ export class ApiStack extends Stack {
    * @param {string} baseUrl the application url
    */
   setFunctions(baseUrl: string, readOnlyRole: Role) {
+
+    /**
+     * The login function generates a login URL and renders the login page.
+     */
     const loginFunction = new ApiFunction(this, 'login-function', {
       description: 'Login-pagina voor de Mijn Uitkering-applicatie.',
       codePath: 'app/login',
@@ -71,6 +75,9 @@ export class ApiStack extends Stack {
       },
     });
 
+    /**
+     * The logout-function sets logout, unsets the session object and renders the logged-out page.
+     */
     const logoutFunction = new ApiFunction(this, 'logout-function', {
       description: 'Uitlog-pagina voor de Mijn Uitkering-applicatie.',
       codePath: 'app/logout',
@@ -85,6 +92,10 @@ export class ApiStack extends Stack {
     const tlskeyParam = SSM.StringParameter.fromStringParameterName(this, 'tlskey', Statics.ssmMTLSClientCert);
     const tlsRootCAParam = SSM.StringParameter.fromStringParameterName(this, 'tlsrootca', Statics.ssmMTLSRootCA);
     const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
+    
+    /**
+     * The auth function receives the callback from the OIDC-provider, validates the received ID-Token, and sets the session to loggedin.
+     */
     const authFunction = new ApiFunction(this, 'auth-function', {
       description: 'Authenticatie-lambd voor de Mijn Uitkering-applicatie.',
       codePath: 'app/auth',
@@ -108,6 +119,9 @@ export class ApiStack extends Stack {
     tlskeyParam.grantRead(authFunction.lambda);
     tlsRootCAParam.grantRead(authFunction.lambda);
 
+    /**
+     * The Home function show the homepage.
+     */
     const homeFunction = new ApiFunction(this, 'home-function', {
       description: 'Home-lambda voor de Mijn Uitkering-applicatie.',
       codePath: 'app/home',

@@ -10,6 +10,7 @@ export interface SessionStackProps extends StackProps {
 /**
  * For session storage a sessions-table is created in dynamoDB. Session
  * state is maintained by relating an opaque session cookie value to this table.
+ * The table (and this stack) requires a KMS key.
  */
 export class SessionsStack extends Stack {
   sessionsTable : SessionsTable;
@@ -17,6 +18,7 @@ export class SessionsStack extends Stack {
   constructor(scope: Construct, id: string, props: SessionStackProps) {
     super(scope, id);
     this.sessionsTable = new SessionsTable(this, 'sessions-table', { key: props.key });
+    
     // Store session table id to be used in other stacks
     new SSM.StringParameter(this, 'ssm_sessions_1', {
       stringValue: this.sessionsTable.table.tableArn,

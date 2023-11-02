@@ -3,19 +3,15 @@ import { Construct } from 'constructs';
 import { Statics } from './statics';
 
 /**
- * For session storage a sessions-table is created in dynamoDB. Session
- * state is maintained by relating an opaque session cookie value to this table.
+ * Creates a `KMS.Key` for encrypting user data (session data).
  */
 export class KeyStack extends Stack {
   /**
-     * key for encrypting user data
-     */
+   * key for encrypting user data in the project. The session store
+   * is encrypted with this key. 
+   */
   key: KMS.Key;
 
-  /**
-     * key for encrypting logging data
-     */
-  // logKey: KMS.Key;
   constructor(scope: Construct, id: string) {
     super(scope, id);
     this.key = new KMS.Key(this, 'kmskey', {
@@ -29,14 +25,12 @@ export class KeyStack extends Stack {
       stringValue: this.key.keyArn,
       parameterName: Statics.ssmDataKeyArn,
     });
-
-    // this.logKey = new KMS.Key(this, 'logkey', {
-    //     enableKeyRotation: true,
-    //     description: 'encryption key for Mijn Nijmegen logging',
-    //     alias: 'mijnnijmegen/logs'
-    // });
   }
 
+  /** Modify the KSM key policy
+   * 
+   * We allow DynamoDB to use this key.
+   */
   setPolicies() {
     this.key.addToResourcePolicy(new IAM.PolicyStatement({
       sid: 'Allow direct access to key metadata to the account',
