@@ -65,7 +65,7 @@
   },
   "dependencies": {
     "@aws-cdk/aws-apigatewayv2-alpha": "^2.104.0-alpha.0",
-    "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.104.0-alpha.0",
+    "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.105.0-alpha.0",
     "@aws-lambda-powertools/logger": "^1.14.2",
     "@aws-sdk/client-dynamodb": "^3.445.0",
     "@aws-sdk/client-secrets-manager": "^3.445.0",
@@ -78,7 +78,7 @@
     "@gemeentenijmegen/utils": "^0.0.5",
     "@types/mustache": "^4.2.5",
     "aws-cdk-lib": "^2.22.0",
-    "axios": "^1.6.0",
+    "axios": "^1.6.1",
     "cdk-remote-stack": "^2.0.101",
     "constructs": "^10.0.5",
     "cookie": "^0.6.0",
