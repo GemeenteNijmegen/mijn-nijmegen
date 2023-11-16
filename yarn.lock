@@ -30,10 +30,10 @@
   resolved "https://registry.yarnpkg.com/@aws-cdk/asset-node-proxy-agent-v6/-/asset-node-proxy-agent-v6-2.0.1.tgz#6dc9b7cdb22ff622a7176141197962360c33e9ac"
   integrity sha512-DDt4SLdLOwWCjGtltH4VCST7hpOI5DzieuhGZsBpZ+AgJdSI2GCjklCXm0GCTwJG/SolkL5dtQXyUKgg9luBDg==
 
-"@aws-cdk/aws-apigatewayv2-alpha@^2.107.0-alpha.0":
-  version "2.107.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigatewayv2-alpha/-/aws-apigatewayv2-alpha-2.107.0-alpha.0.tgz#1d25e16e0c96a272de645dc743bb975ee2e611f4"
-  integrity sha512-2xWbt91f53eRuHt3KPdRiutyDOEctsO2c2/utmkXRE81UbJZ90fePjZXYxTk74rcIWjCNLoB+JVj2X7rSeuEag==
+"@aws-cdk/aws-apigatewayv2-alpha@^2.108.1-alpha.0":
+  version "2.108.1-alpha.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigatewayv2-alpha/-/aws-apigatewayv2-alpha-2.108.1-alpha.0.tgz#876ee7bd288c5d105924fde2682bd2cc7efeb2ca"
+  integrity sha512-mfRInkr6YNWgQMEoXFkya0mFjlCGJOdu0mtA0DKEd8CZr2MPwVVin3d5LUdgGRpd2E4SN6ePohoViWiZkjfnYw==
 
 "@aws-cdk/aws-apigatewayv2-integrations-alpha@^2.108.1-alpha.0":
   version "2.108.1-alpha.0"
@@ -3509,9 +3509,9 @@ eastasianwidth@^0.2.0:
   integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
 
 electron-to-chromium@^1.4.535:
-  version "1.4.583"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.583.tgz#7b0ac4f36388da4b5485788adb92cd7dd0abffc4"
-  integrity sha512-93y1gcONABZ7uqYe/JWDVQP/Pj/sQSunF0HVAPdlg/pfBnOyBMLlQUxWvkqcljJg1+W6cjvPuYD+r1Th9Tn8mA==
+  version "1.4.585"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.585.tgz#7b3cb6846bb5cc10a8d5904c351a9b8aaa76ea90"
+  integrity sha512-B4yBlX0azdA3rVMxpYwLQfDpdwOgcnLCkpvSOd68iFmeedo+WYjaBJS3/W58LVD8CB2nf+o7C4K9xz1l09RkWg==
 
 emittery@^0.13.1:
   version "0.13.1"
