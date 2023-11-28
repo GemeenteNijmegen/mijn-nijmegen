@@ -65,10 +65,10 @@
   },
   "dependencies": {
     "@aws-cdk/aws-apigatewayv2-alpha": "^2.110.1-alpha.0",
-    "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.110.1-alpha.0",
+    "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.111.0-alpha.0",
     "@aws-lambda-powertools/logger": "^1.17.0",
-    "@aws-sdk/client-dynamodb": "^3.454.0",
-    "@aws-sdk/client-secrets-manager": "^3.454.0",
+    "@aws-sdk/client-dynamodb": "^3.458.0",
+    "@aws-sdk/client-secrets-manager": "^3.458.0",
     "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.46.0",
     "@gemeentenijmegen/apiclient": "^0.0.9",
     "@gemeentenijmegen/apigateway-http": "^0.0.7",
