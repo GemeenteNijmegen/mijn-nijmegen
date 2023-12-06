@@ -65,7 +65,7 @@
   },
   "dependencies": {
     "@aws-cdk/aws-apigatewayv2-alpha": "^2.113.0-alpha.0",
-    "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.113.0-alpha.0",
+    "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.114.0-alpha.0",
     "@aws-lambda-powertools/logger": "^1.17.0",
     "@aws-sdk/client-dynamodb": "^3.465.0",
     "@aws-sdk/client-secrets-manager": "^3.465.0",
