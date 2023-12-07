@@ -20,11 +20,11 @@ export class ParameterStage extends Stage {
     new ParameterStack(this, 'params');
   }
 }
+
 /**
  * Stack that creates ssm parameters for the application.
- * These need to be present before stack that use them.
+ * These need to be present before stacks that use them.
  */
-
 export class ParameterStack extends Stack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
@@ -39,7 +39,6 @@ export class ParameterStack extends Stack {
  * Some are created with a sensible default, others are
  * empty and need to be filled or changed via the console.
  */
-
 export class ssmParamsConstruct extends Construct {
 
   constructor(scope: Construct, id: string) {
