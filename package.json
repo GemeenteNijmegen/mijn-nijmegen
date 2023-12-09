@@ -60,15 +60,15 @@
     "projen": "^0.73.0",
     "standard-version": "^9",
     "ts-jest": "^29.1.1",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "typescript": "^4.9.5"
   },
   "dependencies": {
     "@aws-cdk/aws-apigatewayv2-alpha": "^2.114.1-alpha.0",
     "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.114.1-alpha.0",
     "@aws-lambda-powertools/logger": "^1.17.0",
-    "@aws-sdk/client-dynamodb": "^3.468.0",
-    "@aws-sdk/client-secrets-manager": "^3.468.0",
+    "@aws-sdk/client-dynamodb": "^3.470.0",
+    "@aws-sdk/client-secrets-manager": "^3.470.0",
     "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.47.0",
     "@gemeentenijmegen/apiclient": "^0.0.9",
     "@gemeentenijmegen/apigateway-http": "^0.0.7",
