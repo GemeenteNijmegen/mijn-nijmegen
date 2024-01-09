@@ -45,7 +45,6 @@ describe('Test login page and urls', () => {
     const loginRequestHandler = new LoginRequestHandler({
       digidScope: 'idp_scoping:digid',
       oidcScope: 'openid',
-      useYivi: true,
       yiviScope: 'idp_scoping:yivi',
     });
     const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
@@ -60,7 +59,6 @@ describe('Test login page and urls', () => {
     const loginRequestHandler = new LoginRequestHandler({
       digidScope: 'idp_scoping:digid',
       oidcScope: 'openid',
-      useYivi: false,
     });
     const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
     expect(result.body).not.toMatch(encodeURIComponent('idp_scoping:yivi'));
@@ -70,7 +68,6 @@ describe('Test login page and urls', () => {
     const loginRequestHandler = new LoginRequestHandler({
       digidScope: 'idp_scoping:digid service:DigiD_Hoog',
       oidcScope: 'openid',
-      useYivi: true,
       yiviScope: 'idp_scoping:yivi',
     });
     const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
@@ -81,7 +78,6 @@ describe('Test login page and urls', () => {
     const loginRequestHandler = new LoginRequestHandler({
       digidScope: 'idp_scoping:digid service:DigiD_Midden',
       oidcScope: 'openid',
-      useYivi: false,
       yiviScope: 'idp_scoping:yivi',
     });
     const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
