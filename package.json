@@ -69,7 +69,7 @@
     "@aws-lambda-powertools/logger": "^1.17.0",
     "@aws-sdk/client-dynamodb": "^3.485.0",
     "@aws-sdk/client-secrets-manager": "^3.485.0",
-    "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.47.0",
+    "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.48.0",
     "@gemeentenijmegen/apiclient": "^0.0.9",
     "@gemeentenijmegen/apigateway-http": "^0.0.7",
     "@gemeentenijmegen/aws-constructs": "^0.0.4",
