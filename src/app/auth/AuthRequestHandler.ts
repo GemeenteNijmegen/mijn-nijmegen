@@ -37,6 +37,7 @@ export class AuthRequestHandler {
       const claims = await this.config.OpenIdConnect.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
       if (claims) {
         const bsn = this.bsnFromClaims(claims);
+        // const kvk = this.kvkFromClaims(claims);
         if (!bsn) {
           return Response.redirect('/login');
         }
@@ -107,4 +108,16 @@ export class AuthRequestHandler {
     return false;
   }
 
+  /** Extract kvk number from token claims 
+   * 
+   * Checks if there's a value, and if this value is numeric.
+   * Returns the kvk as a string, or false if validation fails/there is no kvk.
+   */
+  kvkFromClaims(claims: IdTokenClaims): string | false {
+    const kvkClaim = claims?.['urn:etoegang:1.9:EntityConcernedID:KvKnr'] as string;
+    if(kvkClaim && Number.isInteger(parseInt(kvkClaim))) {
+      return kvkClaim;
+    }
+    return false;
+  }
 }

@@ -250,5 +250,30 @@ describe('Get bsn from claims object', () => {
     expect(bsn).not.toBeInstanceOf(Bsn);
     expect(bsn).toBeFalsy();
   });
+});
 
+describe('eHerkenning logins', () => {
+  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
+  const handlerAttributes = {
+    cookies: `session=${sessionId}`,
+    queryStringParamState: 'state',
+    queryStringParamCode: '12345',
+    dynamoDBClient,
+    apiClient,
+    OpenIdConnect: OIDC,
+    yiviAttributes: 'irma-demo.gemeente.personalData.bsn pbdf.gemeente.bsn.bsn',
+  };
+  test('urn:etoegang:1.9:EntityConcernedID:KvKnr in claims returns kvk', async () => {
+    const claims: IdTokenClaims = {
+      aud: 'test',
+      exp: 123,
+      iat: 123,
+      iss: 'test',
+      sub: 'PSEUDORANDOMSTRING',
+      ['urn:etoegang:1.9:EntityConcernedID:KvKnr']: '12345678',
+    };
+    const handler = new AuthRequestHandler(handlerAttributes);
+    const kvk = handler.kvkFromClaims(claims);
+    expect(kvk).toBe('12345678');
+  });
 });
