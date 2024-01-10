@@ -90,58 +90,57 @@ function setupSessionResponse(loggedin: boolean) {
   ddbMock.on(GetItemCommand).resolves(getItemOutput);
 }
 
-test('Successful auth redirects to home', async () => {
-  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
+describe('Auth handler', () => {
+  test('Successful auth redirects to home', async () => {
+    const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
 
-  setupSessionResponse(true);
-  const handler = new AuthRequestHandler({
-    cookies: `session=${sessionId}`,
-    queryStringParamState: 'state',
-    queryStringParamCode: '12345',
-    dynamoDBClient,
-    apiClient,
-    OpenIdConnect: OIDC,
-    useYivi: false,
+    setupSessionResponse(true);
+    const handler = new AuthRequestHandler({
+      cookies: `session=${sessionId}`,
+      queryStringParamState: 'state',
+      queryStringParamCode: '12345',
+      dynamoDBClient,
+      apiClient,
+      OpenIdConnect: OIDC,
+    });
+    const result = await handler.handleRequest();
+    expect(result.statusCode).toBe(302);
+    expect(result?.headers?.Location).toBe('/');
   });
-  const result = await handler.handleRequest();
-  expect(result.statusCode).toBe(302);
-  expect(result?.headers?.Location).toBe('/');
-});
 
-test('Successful auth creates new session', async () => {
-  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
+  test('Successful auth creates new session', async () => {
+    const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
 
-  setupSessionResponse(false);
+    setupSessionResponse(false);
 
-  const handler = new AuthRequestHandler({
-    cookies: `session=${sessionId}`,
-    queryStringParamState: 'state',
-    queryStringParamCode: '12345',
-    dynamoDBClient,
-    apiClient,
-    OpenIdConnect: OIDC,
-    useYivi: false,
+    const handler = new AuthRequestHandler({
+      cookies: `session=${sessionId}`,
+      queryStringParamState: 'state',
+      queryStringParamCode: '12345',
+      dynamoDBClient,
+      apiClient,
+      OpenIdConnect: OIDC,
+    });
+    const result = await handler.handleRequest();
+    expect(result.statusCode).toBe(302);
+    expect(result?.headers?.Location).toBe('/');
+    expect(result.cookies).toContainEqual(expect.stringContaining('session='));
   });
-  const result = await handler.handleRequest();
-  expect(result.statusCode).toBe(302);
-  expect(result?.headers?.Location).toBe('/');
-  expect(result.cookies).toContainEqual(expect.stringContaining('session='));
-});
 
-test('No session redirects to login', async () => {
-  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-  const handler = new AuthRequestHandler({
-    cookies: '',
-    queryStringParamState: 'state',
-    queryStringParamCode: 'state',
-    dynamoDBClient,
-    apiClient,
-    OpenIdConnect: OIDC,
-    useYivi: false,
+  test('No session redirects to login', async () => {
+    const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
+    const handler = new AuthRequestHandler({
+      cookies: '',
+      queryStringParamState: 'state',
+      queryStringParamCode: 'state',
+      dynamoDBClient,
+      apiClient,
+      OpenIdConnect: OIDC,
+    });
+    const result = await handler.handleRequest();
+    expect(result.statusCode).toBe(302);
+    expect(result?.headers?.Location).toBe('/login');
   });
-  const result = await handler.handleRequest();
-  expect(result.statusCode).toBe(302);
-  expect(result?.headers?.Location).toBe('/login');
 });
 
 describe('Get bsn from claims object', () => {
@@ -153,7 +152,6 @@ describe('Get bsn from claims object', () => {
     dynamoDBClient,
     apiClient,
     OpenIdConnect: OIDC,
-    useYivi: true,
     yiviAttributes: 'irma-demo.gemeente.personalData.bsn pbdf.gemeente.bsn.bsn',
   };
   const handler = new AuthRequestHandler(handlerAttributes);
@@ -239,23 +237,6 @@ describe('Get bsn from claims object', () => {
 
   test('bsn in pbdf.gemeente.bsn.bsn but no yivi attributes provided', async () => {
     handlerAttributes.yiviAttributes = '';
-    const testHandler = new AuthRequestHandler(handlerAttributes);
-    const claims: IdTokenClaims = {
-      aud: 'test',
-      exp: 123,
-      iat: 123,
-      iss: 'test',
-      sub: 'test',
-      ['pbdf.gemeente.bsn.bsn']: '900070341',
-    };
-    const bsn = testHandler.bsnFromClaims(claims);
-    expect(bsn).not.toBeInstanceOf(Bsn);
-    expect(bsn).toBeFalsy();
-  });
-
-  test('bsn in pbdf.gemeente.bsn.bsn but useYivi false', async () => {
-    handlerAttributes.yiviAttributes = 'pbdf.gemeente.bsn.bsn';
-    handlerAttributes.useYivi = false;
     const testHandler = new AuthRequestHandler(handlerAttributes);
     const claims: IdTokenClaims = {
       aud: 'test',

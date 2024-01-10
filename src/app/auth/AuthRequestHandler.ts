@@ -15,7 +15,6 @@ interface requestProps {
   dynamoDBClient: DynamoDBClient;
   apiClient: ApiClient;
   OpenIdConnect: OpenIDConnect;
-  useYivi: boolean;
   yiviAttributes?: string;
 }
 
@@ -41,6 +40,7 @@ export class AuthRequestHandler {
         if (!bsn) {
           return Response.redirect('/login');
         }
+        
         if (claims.hasOwnProperty('acr') && claims.hasOwnProperty('amr')) {
           logger.info('auth succesful', { loa: claims.acr, method: claims.amr });
         }
@@ -91,7 +91,7 @@ export class AuthRequestHandler {
    */
   bsnFromClaims(claims: IdTokenClaims): Bsn | false {
     let possibleClaims = ['sub'];
-    if (this.config.useYivi && typeof this.config?.yiviAttributes === 'string') {
+    if (typeof this.config?.yiviAttributes === 'string') {
       const yiviClaims = this.config.yiviAttributes.split(' ').filter(val => val !== '');
       possibleClaims = [...possibleClaims, ...yiviClaims];
     }
@@ -106,4 +106,5 @@ export class AuthRequestHandler {
     }
     return false;
   }
+
 }
