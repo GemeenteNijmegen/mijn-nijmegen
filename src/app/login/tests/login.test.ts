@@ -84,6 +84,21 @@ describe('Test login page and urls', () => {
     expect(result.body).toMatch(encodeURIComponent('service:DigiD_Midden'));
     expect(result.body).not.toMatch(encodeURIComponent('service:DigiD_Hoog'));
   });
+
+  test('Return login page with eherkenning link', async () => {
+    const loginRequestHandler = new LoginRequestHandler({
+      digidScope: 'idp_scoping:digid',
+      oidcScope: 'openid',
+      yiviScope: 'idp_scoping:yivi',
+      eHerkenningScope: 'idp_scoping:eherkenning',
+    });
+    const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
+    expect(result.body).toMatch(encodeURIComponent('idp_scoping:eherkenning'));
+    expect(result.body).toMatch('<span class="title"> Inloggen </span><span class="assistive">met eHerkenning</span>');
+    if (result.body) {
+      writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => { });
+    }
+  });
 });
 
 test('No redirect if session cookie doesn\'t exist', async () => {

@@ -54,15 +54,7 @@ export class LoginRequestHandler {
     });
 
     const scope = this.config.oidcScope;
-    const authMethods = [];
-    if (this.config?.digidScope) {
-      const digidScope = `${scope} ${this.config.digidScope}`;
-      authMethods.push(this.authMethodData(digidScope, state, 'digid', 'DigiD'));
-    }
-    if (this.config?.yiviScope) {
-      const yiviScope = `${scope} ${this.config.yiviScope} ${this.config.yiviAttributes}`;
-      authMethods.push(this.authMethodData(yiviScope, state, 'yivi', 'Yivi'));
-    }
+    const authMethods = this.addAuthMethods(scope, state);
 
     const data = {
       title: 'Inloggen',
@@ -74,6 +66,23 @@ export class LoginRequestHandler {
     const html = await render(data, template);
     const newCookies = [session.getCookie()];
     return Response.html(html, 200, newCookies);
+  }
+
+  private addAuthMethods(scope: string, state: string) {
+    const authMethods = [];
+    if (this.config?.digidScope) {
+      const digidScope = `${scope} ${this.config.digidScope}`;
+      authMethods.push(this.authMethodData(digidScope, state, 'digid', 'DigiD'));
+    }
+    if (this.config?.yiviScope) {
+      const yiviScope = `${scope} ${this.config.yiviScope} ${this.config.yiviAttributes}`;
+      authMethods.push(this.authMethodData(yiviScope, state, 'yivi', 'Yivi'));
+    }
+    if (this.config?.eHerkenningScope) {
+      const eherkenningScope = `${scope} ${this.config.eHerkenningScope}`;
+      authMethods.push(this.authMethodData(eherkenningScope, state, 'eherkenning', 'eHerkenning'));
+    }
+    return authMethods;
   }
 
   private authMethodData(scope: string, state:string, name:string, niceName:string) {
