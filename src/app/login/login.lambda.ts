@@ -10,9 +10,9 @@ if (!process.env.OIDC_SCOPE || !process.env.DIGID_SCOPE) {
 const loginRequestHandler = new LoginRequestHandler({
   oidcScope: process.env.OIDC_SCOPE ?? '',
   digidScope: process.env.DIGID_SCOPE ?? '',
-  useYivi: process.env.USE_YIVI === 'true',
   yiviScope: process.env.YIVI_SCOPE,
   yiviAttributes: process.env.YIVI_ATTRIBUTES,
+  eHerkenningScope: process.env.EHERKENNING_SCOPE ?? '',
 });
 
 function parseEvent(event: any) {
