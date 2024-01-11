@@ -26,7 +26,6 @@ export async function handler(event: any, _context: any):Promise<ApiGatewayV2Res
       dynamoDBClient,
       apiClient,
       OpenIdConnect: OIDC,
-      useYivi: process.env.USE_YIVI === 'true',
       yiviAttributes: process.env.YIVI_ATTRIBUTES,
     });
     return await requestHandler.handleRequest();
