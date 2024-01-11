@@ -46,7 +46,8 @@ export class AuthRequestHandler {
           logger.info('auth succesful', { loa: claims.acr, method: claims.amr });
         }
         try {
-          const username = await this.loggedinUserName(bsn.bsn, this.config.apiClient);
+          const user = new Person(bsn, { apiClient: this.config.apiClient });
+          const username = await user.getUserName();
           await session.createSession({
             loggedin: { BOOL: true },
             bsn: { S: bsn.bsn },
@@ -64,18 +65,6 @@ export class AuthRequestHandler {
       return Response.redirect('/login');
     }
     return Response.redirect('/', 302, [session.getCookie()]);
-  }
-
-  async loggedinUserName(bsn: string, apiClient: ApiClient) {
-    try {
-      const brpApi = new BrpApi(apiClient);
-      const brpData = await brpApi.getBrpData(bsn);
-      const naam = brpData?.Persoon?.Persoonsgegevens?.Naam ? brpData.Persoon.Persoonsgegevens.Naam : 'Onbekende gebruiker';
-      return naam;
-    } catch (error) {
-      console.error('Error getting username');
-      return 'Onbekende gebruiker';
-    }
   }
 
   /**
@@ -119,5 +108,37 @@ export class AuthRequestHandler {
       return kvkClaim;
     }
     return false;
+  }
+}
+
+interface User {
+  getUserName(): Promise<string>;
+}
+
+interface UserConfig {
+  apiClient: ApiClient;
+}
+
+class Person implements User {
+  bsn: Bsn;
+  config: UserConfig;
+  userName?: string;
+  constructor(bsn: Bsn, config: UserConfig) {
+    this.bsn = bsn;
+    this.config = config;
+  }
+
+  async getUserName(): Promise<string> {
+    if(typeof this.userName !== 'string') { 
+      try {
+        const brpApi = new BrpApi(this.config.apiClient);
+        const brpData = await brpApi.getBrpData(this.bsn.bsn);
+        this.userName = brpData?.Persoon?.Persoonsgegevens?.Naam ? brpData.Persoon.Persoonsgegevens.Naam : 'Onbekende gebruiker';
+      } catch (error) {
+        console.error('Error getting username');
+        this.userName = 'Onbekende gebruiker';
+      }
+    }
+    return this.userName as string;
   }
 }
