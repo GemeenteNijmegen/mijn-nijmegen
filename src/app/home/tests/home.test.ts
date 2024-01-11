@@ -26,7 +26,8 @@ beforeEach(() => {
       data: {
         M: {
           loggedin: { BOOL: true },
-          bsn: { S: '12345678' },
+          identifier: { S: '12345678' },
+          type: { S: 'person' },
           state: { S: '12345' },
           username: { S: 'Jan de Tester' },
         },
