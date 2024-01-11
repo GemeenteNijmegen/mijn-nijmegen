@@ -129,7 +129,7 @@ class Person implements User {
   }
 
   async getUserName(): Promise<string> {
-    if(typeof this.userName !== 'string') { 
+    if (typeof this.userName !== 'string') {
       try {
         const brpApi = new BrpApi(this.config.apiClient);
         const brpData = await brpApi.getBrpData(this.bsn.bsn);
