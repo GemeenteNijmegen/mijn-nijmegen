@@ -263,17 +263,41 @@ describe('eHerkenning logins', () => {
     OpenIdConnect: OIDC,
     yiviAttributes: 'irma-demo.gemeente.personalData.bsn pbdf.gemeente.bsn.bsn',
   };
+  const claims: IdTokenClaims = {
+    aud: 'test',
+    exp: 123,
+    iat: 123,
+    iss: 'test',
+    sub: 'PSEUDORANDOMSTRING',
+    ['urn:etoegang:1.9:EntityConcernedID:KvKnr']: '12345678',
+    ['urn:etoegang:1.11:attribute-represented:CompanyName']: 'My Company',
+  };
+
   test('urn:etoegang:1.9:EntityConcernedID:KvKnr in claims returns kvk', async () => {
-    const claims: IdTokenClaims = {
-      aud: 'test',
-      exp: 123,
-      iat: 123,
-      iss: 'test',
-      sub: 'PSEUDORANDOMSTRING',
-      ['urn:etoegang:1.9:EntityConcernedID:KvKnr']: '12345678',
-    };
     const handler = new AuthRequestHandler(handlerAttributes);
     const kvk = handler.kvkFromClaims(claims);
-    expect(kvk).toBe('12345678');
+    expect(kvk).toBeTruthy();
+    if (kvk) {
+      expect(kvk.kvkNumber).toBe('12345678');
+    }
+  });
+
+  test('kvk login sets username', async () => {
+    const handler = new AuthRequestHandler(handlerAttributes);
+    const kvk = handler.kvkFromClaims(claims);
+    expect(kvk).toBeTruthy();
+    if (kvk) {
+      expect(kvk.kvkNumber).toBe('12345678');
+      expect(kvk.organisationName).toBe('My Company');
+    }
+  });
+
+  test('kvk login sets organisation type user', async () => {
+    const handler = new AuthRequestHandler(handlerAttributes);
+    const user = handler.userFromClaims(claims);
+    expect(user).toBeTruthy();
+    if (user) {
+      expect(await user.getUserName()).toBe('My Company');
+    }
   });
 });

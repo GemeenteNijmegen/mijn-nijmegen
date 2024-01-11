@@ -36,21 +36,17 @@ export class AuthRequestHandler {
     try {
       const claims = await this.config.OpenIdConnect.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
       if (claims) {
-        const bsn = this.bsnFromClaims(claims);
-        // const kvk = this.kvkFromClaims(claims);
-        if (!bsn) {
+        const user = this.userFromClaims(claims);
+        if (!user) {
           return Response.redirect('/login');
         }
+        this.logAuthMethod(claims, logger);
 
-        if (claims.hasOwnProperty('acr') && claims.hasOwnProperty('amr')) {
-          logger.info('auth succesful', { loa: claims.acr, method: claims.amr });
-        }
         try {
-          const user = new Person(bsn, { apiClient: this.config.apiClient });
           const username = await user.getUserName();
           await session.createSession({
             loggedin: { BOOL: true },
-            bsn: { S: bsn.bsn },
+            bsn: { S: user.identifier }, // TODO: generic name, not BSN. Impacts other parts of Mijn Nijmegen + current sessions
             username: { S: username },
           });
         } catch (error: any) {
@@ -65,6 +61,12 @@ export class AuthRequestHandler {
       return Response.redirect('/login');
     }
     return Response.redirect('/', 302, [session.getCookie()]);
+  }
+
+  private logAuthMethod(claims: IdTokenClaims, logger: Logger) {
+    if (claims.hasOwnProperty('acr') && claims.hasOwnProperty('amr')) {
+      logger.info('auth succesful', { loa: claims.acr, method: claims.amr });
+    }
   }
 
   /**
@@ -102,29 +104,51 @@ export class AuthRequestHandler {
    * Checks if there's a value, and if this value is numeric.
    * Returns the kvk as a string, or false if validation fails/there is no kvk.
    */
-  kvkFromClaims(claims: IdTokenClaims): string | false {
+  kvkFromClaims(claims: IdTokenClaims): { kvkNumber: string; organisationName: string } | false {
     const kvkClaim = claims?.['urn:etoegang:1.9:EntityConcernedID:KvKnr'] as string;
+    const organisationNameClaim = claims?.['urn:etoegang:1.11:attribute-represented:CompanyName'] as string;
     if (kvkClaim && Number.isInteger(parseInt(kvkClaim))) {
-      return kvkClaim;
+      return { kvkNumber: kvkClaim, organisationName: organisationNameClaim };
     }
     return false;
   }
-}
 
-interface User {
-  getUserName(): Promise<string>;
+  userFromClaims(claims: IdTokenClaims): User | false {
+    const bsn = this.bsnFromClaims(claims);
+    const kvk = this.kvkFromClaims(claims);
+    let user: User | null = null;
+    if (!bsn && !kvk) {
+      return false;
+    }
+
+    if (bsn) {
+      user = new Person(bsn, { apiClient: this.config.apiClient });
+    } else if (kvk) {
+      user = new Organisation(kvk.kvkNumber, kvk.organisationName, { apiClient: this.config.apiClient });
+    }
+    return user ?? false;
+  }
 }
 
 interface UserConfig {
   apiClient: ApiClient;
 }
 
+interface User {
+  config: UserConfig;
+  identifier: string;
+  getUserName(): Promise<string>;
+}
+
+
 class Person implements User {
   bsn: Bsn;
   config: UserConfig;
+  identifier: string;
   userName?: string;
   constructor(bsn: Bsn, config: UserConfig) {
     this.bsn = bsn;
+    this.identifier = bsn.bsn;
     this.config = config;
   }
 
@@ -140,5 +164,23 @@ class Person implements User {
       }
     }
     return this.userName as string;
+  }
+}
+
+class Organisation implements User {
+  kvk: string;
+  config: UserConfig;
+  identifier: string;
+  userName: string;
+
+  constructor(kvk: string, userName: string, config: UserConfig) {
+    this.kvk = kvk;
+    this.identifier = kvk;
+    this.userName = userName;
+    this.config = config;
+  }
+
+  async getUserName(): Promise<string> {
+    return this.userName;
   }
 }
