@@ -47,7 +47,7 @@ export class AuthRequestHandler {
 
           await session.createSession({
             loggedin: { BOOL: true },
-            identifier: { S: user.identifier }, 
+            identifier: { S: user.identifier },
             bsn: { S: user.type == 'person' ? user.identifier : '' }, // TODO: remove when consuming pages (persoonsgegevens, uitkeringen, zaken) have been updated to use identifier
             user_type: { S: user.type },
             username: { S: username },
