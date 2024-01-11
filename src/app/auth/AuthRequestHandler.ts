@@ -44,9 +44,12 @@ export class AuthRequestHandler {
 
         try {
           const username = await user.getUserName();
+
           await session.createSession({
             loggedin: { BOOL: true },
-            bsn: { S: user.identifier }, // TODO: generic name, not BSN. Impacts other parts of Mijn Nijmegen + current sessions
+            identifier: { S: user.identifier }, 
+            bsn: { S: user.type == 'person' ? user.identifier : '' }, // TODO: remove when consuming pages (persoonsgegevens, uitkeringen, zaken) have been updated to use identifier
+            user_type: { S: user.type },
             username: { S: username },
           });
         } catch (error: any) {
@@ -134,18 +137,27 @@ interface UserConfig {
   apiClient: ApiClient;
 }
 
+/**
+ * Several types of user exist:
+ * - 'Natuurlijk persoon' (a human), having a BSN and a name (provided by the BRP)
+ * - 'Organisation', having a KVK identification number, and a company name (provided by eherkenning)
+ */
 interface User {
   config: UserConfig;
   identifier: string;
+  type: string;
   getUserName(): Promise<string>;
 }
 
-
+/**
+ * Implementation of a 'natuurlijk persoon', a human, having a BSN.
+ */
 class Person implements User {
   bsn: Bsn;
   config: UserConfig;
   identifier: string;
   userName?: string;
+  type: string = 'person';
   constructor(bsn: Bsn, config: UserConfig) {
     this.bsn = bsn;
     this.identifier = bsn.bsn;
@@ -167,11 +179,15 @@ class Person implements User {
   }
 }
 
+/**
+ * Implementation of a user of type 'organisation', having a KVK number.
+ */
 class Organisation implements User {
   kvk: string;
   config: UserConfig;
   identifier: string;
   userName: string;
+  type: string = 'organisation';
 
   constructor(kvk: string, userName: string, config: UserConfig) {
     this.kvk = kvk;

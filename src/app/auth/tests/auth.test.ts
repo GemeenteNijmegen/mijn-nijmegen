@@ -298,6 +298,7 @@ describe('eHerkenning logins', () => {
     expect(user).toBeTruthy();
     if (user) {
       expect(await user.getUserName()).toBe('My Company');
+      expect(await user.type).toBe('organisation');
     }
   });
 });
