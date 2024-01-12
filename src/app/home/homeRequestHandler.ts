@@ -2,8 +2,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import * as homeTemplate from './templates/home.mustache';
-import { MdiFileMultiple } from '../../shared/Icons';
-import { nav } from '../../shared/nav';
+import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 
 
@@ -16,18 +15,10 @@ interface HomeRequestHandlerProps {
 
 export class HomeRequestHandler {
   private dynamoDBClient: DynamoDBClient;
+  private props: HomeRequestHandlerProps;
   constructor(dynamoDBClient: DynamoDBClient, props: HomeRequestHandlerProps) {
     this.dynamoDBClient = dynamoDBClient;
-    const zakenNav = {
-      url: '/zaken',
-      title: 'Zaken',
-      description: 'Bekijk de status van uw zaken en aanvragen.',
-      label: 'Bekijk zaken',
-      icon: MdiFileMultiple.default,
-    };
-    if (props?.showZaken) {
-      nav.push(zakenNav);
-    }
+    this.props = props;
   }
 
   async handleRequest(cookies: string) {
@@ -42,10 +33,12 @@ export class HomeRequestHandler {
   private async handleLoggedinRequest(session: Session) {
 
     const naam = session.getValue('username') ?? 'Onbekende gebruiker';
+    const userType = session.getValue('user_type');
+    const navigation = new Navigation(userType, { showZaken: this.props.showZaken });
     const data = {
       title: 'overzicht',
       shownav: true,
-      nav: nav,
+      nav: navigation.items,
       volledigenaam: naam,
     };
 

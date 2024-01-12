@@ -26,7 +26,9 @@ beforeEach(() => {
       data: {
         M: {
           loggedin: { BOOL: true },
+          identifier: { S: '12345678' },
           bsn: { S: '12345678' },
+          user_type: { S: 'person' },
           state: { S: '12345' },
           username: { S: 'Jan de Tester' },
         },
@@ -48,7 +50,7 @@ test('Returns 200', async () => {
 
 test('Shows overview page', async () => {
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-  const handler = new HomeRequestHandler(dynamoDBClient, { showZaken: false });
+  const handler = new HomeRequestHandler(dynamoDBClient, { showZaken: true });
   const result = await handler.handleRequest('session=12345');
   expect(result.body).toMatch('Mijn Nijmegen');
   expect(result.body).toMatch('Jan de Tester');
