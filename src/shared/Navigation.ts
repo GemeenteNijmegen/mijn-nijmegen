@@ -31,7 +31,7 @@ export class Navigation {
   zakenItem = {
     url: '/zaken',
     title: 'Zaken',
-    description: 'Bekijk de status van uw zaken en aanvragen.',
+    description: 'Bekijk de status van uw zaken en aanvragen. Nog niet alle zaken zijn te zien, we breiden dit uit.',
     label: 'Bekijk zaken',
     icon: MdiFileMultiple.default,
   };
