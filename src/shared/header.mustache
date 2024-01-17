@@ -38,20 +38,20 @@
     <!-- Start: Core styling -->
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" 
-          href="https://componenten.nijmegen.nl/v6.1.0/css/bootstrap.min.css"
+          href="https://componenten.nijmegen.nl/v6.3.2/css/bootstrap.min.css"
           integrity="sha512-bnCn1haQjQGPoq90nqpOWUiu9i60sex8WQI639yU2yElzx0pfG0hpaJrKuJTJD3bZ3lEUw+HRGEHrWm6TGsKSg=="
           crossorigin="anonymous">
     <!-- Material Design Bootstrap combined with custom Nijmegen styles -->
     <link rel="stylesheet" 
-          href="https://componenten.nijmegen.nl/v6.1.0/nijmegen.css"
-          integrity="sha512-blgrU3wXs0CIV9iars0ZyneHar1CFTEojkN3O9sGQrkvwT4PZX5wXD6dv7Gde+mUGPhgrr9ej92UCuzDkmk7cQ=="
+          href="https://componenten.nijmegen.nl/v6.3.2/nijmegen.css"
+          integrity="sha512-AYsJlKV+MDCA/1wgwJJYz02dP0XdtGe2AVCfzSEmCISPY2Oyl4ArVVn/pguKjt04CroW7HTo1xMHKSCEfSdz9w=="
           crossorigin="anonymous">
     <!-- End: Core styling -->
     <link rel="stylesheet" href="/static/styles/screen.css">
     <title>Mijn Nijmegen{{#title}} - {{.}} {{/title}}</title>
     </head>
 <body>
-<nav class="navbar fixed-top navbar-expand-lg scrolling-navbar navbar-primary">
+<nav class="navbar fixed-top navbar-expand-lg scrolling-navbar navbar-light">
     <ul class="navbar-skiplinks">
         <li>
             <a href="#section-1 ">Direct naar inhoud</a>
@@ -65,8 +65,8 @@
         <a class="navbar-brand" href="https://nijmegen.nl">
             <span class="sr-only">Hoofdpagina</span>
             <div class="navbar-brand-container">
-                <img src="https://componenten.nijmegen.nl/v6.0.0/img/beeldmerklabelwit.svg" class="logo-labeled" alt="Logo Nijmegen">
-                <img src="https://componenten.nijmegen.nl/v6.0.0/img/beeldmerkwit.svg" class="logo" aria-hidden="true" alt="Logo Nijmegen">
+                <img src="https://componenten.nijmegen.nl/v6.3.2/img/beeldmerklabel.svg" class="logo-labeled" alt="Logo Nijmegen">
+                <img src="https://componenten.nijmegen.nl/v6.3.2/img/beeldmerk.svg" class="logo" aria-hidden="true" alt="Logo Nijmegen">
             </div>
         </a>
         {{#shownav}}
@@ -75,16 +75,19 @@
                 <li class="nav-item">
                     <a href="/" class="nav-link">Overzicht</a>
                 </li>
-            {{#nav}}
-                <li class="nav-item">
-                    <a href="{{{url}}}" class="nav-link">{{title}}</a>
-                </li>
-            {{/nav}}
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link nav-no-link" href="/logout">{{volledigenaam}}
                         <svg title="uitloggen" class="mdi mdi-logout"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path d="M16,17V14H9V10H16V7L21,12L16,17M14,2A2,2 0 0,1 16,4V6H14V4H5V20H14V18H16V20A2,2 0 0,1 14,22H5A2,2 0 0,1 3,20V4A2,2 0 0,1 5,2H14Z" /></svg>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-no-link" href="https://nijmegen.nl">Nijmegen.nl
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 384 384">
+                            <path fill="currentColor"
+                                d="M341 341V192h43v149q0 18-12.5 30.5T341 384H43q-18 0-30.5-12.5T0 341V43q0-18 12.5-30.5T43 0h149v43H43v298zM235 0h149v149h-43V73L132 282l-30-30L311 43h-76z" />
+                        </svg>
                     </a>
                 </li>
             </ul>

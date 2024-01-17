@@ -219,10 +219,66 @@ footer.page-footer {
     fill: white;
 }
 
+nav.navbar.navbar-light .navbar-nav .nav-item .nav-link {
+    color: #4B4B4B;
+}
+
 .navbar-nav svg {
-    fill: white;
+    fill: #4B4B4B;
 }
 
 .md-form label {
     left: initial;
+}
+
+nav.nijmegen-sidenav ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-bottom: 2rem;
+}
+
+nav.nijmegen-sidenav ul>* {
+    flex-grow: 1;
+    flex-basis: calc((30rem - 100%) * 999);
+}
+
+nav.nijmegen-sidenav li {
+    display: flex;
+    align-items: center;
+    padding: .75em 0;
+}
+
+nav.nijmegen-sidenav li svg {
+    margin-inline-end: 0.5em;
+    outline: #323232;
+    fill: #323232;
+}
+
+nav.nijmegen-sidenav a {
+    text-decoration: none;
+    color: #323232;
+}
+nav.nijmegen-sidenav a, 
+nav.nijmegen-sidenav a:visited {
+    text-decoration: none;
+    color: #323232;
+}
+
+nav.nijmegen-sidenav a:hover {
+    text-decoration: underline;
+}
+
+nav.nijmegen-sidenav a:focus {
+    outline: 2px solid #00a889;
+    transition: none;
+}
+
+nav.nijmegen-sidenav li.active a {
+    color: #157C68;
+}
+nav.nijmegen-sidenav li.active svg {
+    outline: #157C68;
+    fill: #157C68;
 }
