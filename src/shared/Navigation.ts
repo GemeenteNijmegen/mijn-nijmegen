@@ -1,6 +1,7 @@
-import { MdiAccount, MdiCurrencyEur, MdiFileMultiple } from './Icons';
+import { MdiAccount, MdiCurrencyEur, MdiFileMultiple, MdiOverview } from './Icons';
 
 interface NavigationItem {
+  priority: number; // Sort based on priority
   url: string;
   title: string;
   description: string;
@@ -10,12 +11,14 @@ interface NavigationItem {
 export class Navigation {
   personItems = [
     {
+      priority: 20,
       url: '/persoonsgegevens',
       title: 'Persoonsgegevens',
       description: 'Bekijk uw persoons- en adresgegevens.',
       label: 'Bekijk mijn persoonsgegevens',
       icon: MdiAccount.default,
     }, {
+      priority: 40,
       url: '/uitkeringen',
       title: 'Uitkeringen',
       description: 'Bekijk uw uitkeringsgegevens.',
@@ -26,9 +29,17 @@ export class Navigation {
 
   organisationItems: NavigationItem[] = [];
 
-  sharedItems: NavigationItem[] = [];
+  sharedItems: NavigationItem[] = [{
+    priority: 10,
+    url: '/',
+    title: 'Overzicht',
+    description: 'Bekijk de overzichtspagina',
+    label: 'Bekijk de overzichtspagina',
+    icon: MdiOverview.default,
+  }];
 
   zakenItem = {
+    priority: 30,
     url: '/zaken',
     title: 'Zaken',
     description: 'Bekijk de status van uw zaken en aanvragen. Nog niet alle zaken zijn te zien, we breiden dit uit.',
@@ -48,5 +59,6 @@ export class Navigation {
     } else {
       this.items = [...this.organisationItems, ...this.sharedItems];
     }
+    this.items = this.items.sort((a:NavigationItem, b: NavigationItem) => a.priority - b.priority);
   }
 }
