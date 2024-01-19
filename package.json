@@ -36,7 +36,7 @@
     "projen": "npx projen"
   },
   "devDependencies": {
-    "@aws-sdk/types": "^3.489.0",
+    "@aws-sdk/types": "^3.495.0",
     "@axe-core/playwright": "^4.8.3",
     "@glen/jest-raw-loader": "^2.0.0",
     "@playwright/test": "^1.41.0",
@@ -67,8 +67,8 @@
     "@aws-cdk/aws-apigatewayv2-alpha": "^2.114.1-alpha.0",
     "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.114.1-alpha.0",
     "@aws-lambda-powertools/logger": "^1.17.0",
-    "@aws-sdk/client-dynamodb": "^3.494.0",
-    "@aws-sdk/client-secrets-manager": "^3.491.0",
+    "@aws-sdk/client-dynamodb": "^3.495.0",
+    "@aws-sdk/client-secrets-manager": "^3.495.0",
     "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.48.0",
     "@gemeentenijmegen/apiclient": "^0.0.10",
     "@gemeentenijmegen/apigateway-http": "^0.0.7",
