@@ -34,7 +34,7 @@ export class HomeRequestHandler {
 
     const naam = session.getValue('username') ?? 'Onbekende gebruiker';
     const userType = session.getValue('user_type');
-    const navigation = new Navigation(userType, { showZaken: this.props.showZaken });
+    const navigation = new Navigation(userType, { showZaken: this.props.showZaken, currentPath: '/' });
     const data = {
       title: 'overzicht',
       shownav: true,
