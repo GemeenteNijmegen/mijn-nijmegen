@@ -7,6 +7,7 @@ interface NavigationItem {
   description: string;
   label: string;
   icon: string;
+  current?: boolean;
 }
 export class Navigation {
   personItems = [
@@ -49,7 +50,7 @@ export class Navigation {
 
   items: NavigationItem[];
 
-  constructor(navigationType: 'person' | 'organisation', config?: { showZaken?: boolean }) {
+  constructor(navigationType: 'person' | 'organisation', config?: { showZaken?: boolean, currentPath: string }) {
     if (config?.showZaken) {
       this.sharedItems.push(this.zakenItem);
     }
@@ -59,6 +60,11 @@ export class Navigation {
     } else {
       this.items = [...this.organisationItems, ...this.sharedItems];
     }
-    this.items = this.items.sort((a:NavigationItem, b: NavigationItem) => a.priority - b.priority);
+    this.items = this.items
+    .sort((a:NavigationItem, b: NavigationItem) => a.priority - b.priority)
+    .map((item: NavigationItem) => { 
+      if(item.url == config?.currentPath) { item.current = true; }
+      return item;
+    });
   }
 }
