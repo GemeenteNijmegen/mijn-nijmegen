@@ -7,8 +7,11 @@
                         <h2 class="title">Mijn Nijmegen</h2>
                         <div class="link-list-wrapper">
                             <ul class="link-list">
-                                <li><a href="/persoonsgegevens">Persoonsgegevens</a></li>
-                                <li><a href="/uitkeringen">Uitkeringen</a></li>
+                            {{#nav}}
+                                <li">
+                                    <a href="{{{url}}}">{{title}}</a>
+                                </li>
+                            {{/nav}}
                             </ul>
                         </div>
                     {{/shownav}}
