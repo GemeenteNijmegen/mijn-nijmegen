@@ -14,14 +14,14 @@ export class Navigation {
     {
       priority: 20,
       url: '/persoonsgegevens',
-      title: 'Persoonsgegevens',
+      title: 'Mijn gegevens',
       description: 'Bekijk uw persoons- en adresgegevens.',
       label: 'Bekijk mijn persoonsgegevens',
       icon: MdiAccount.default,
     }, {
       priority: 40,
       url: '/uitkeringen',
-      title: 'Uitkeringen',
+      title: 'Mijn uitkeringen',
       description: 'Bekijk uw uitkeringsgegevens.',
       label: 'Bekijk mijn uitkeringen',
       icon: MdiCurrencyEur.default,
@@ -42,7 +42,7 @@ export class Navigation {
   zakenItem = {
     priority: 30,
     url: '/zaken',
-    title: 'Zaken',
+    title: 'Mijn zaken',
     description: 'Bekijk de status van uw zaken en aanvragen. Nog niet alle zaken zijn te zien, we breiden dit uit.',
     label: 'Bekijk zaken',
     icon: MdiFileMultiple.default,
