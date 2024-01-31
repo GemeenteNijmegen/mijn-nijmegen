@@ -72,9 +72,9 @@
 }
 */
 body {
-    padding-top: 60px;
+    padding-top: 70px;
 }
-@media (min-width: 600px) {
+@media (min-width: 1000px) {
     body {
         padding-top: 150px;
     }
@@ -260,14 +260,12 @@ nav.nijmegen-sidenav li svg {
     fill: #323232;
 }
 
-nav.nijmegen-sidenav a {
-    text-decoration: none;
-    color: #323232;
-}
 nav.nijmegen-sidenav a, 
 nav.nijmegen-sidenav a:visited {
     text-decoration: none;
     color: #323232;
+    flex-shrink: 0;
+    flex-grow: 1;
 }
 
 nav.nijmegen-sidenav a:hover {
