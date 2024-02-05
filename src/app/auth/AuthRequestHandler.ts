@@ -53,7 +53,7 @@ export class AuthRequestHandler {
             username: { S: username },
           });
         } catch (error: any) {
-          console.error(error.message);
+          console.error('creating session failed', error);
           return Response.error(500);
         }
       } else {
@@ -192,7 +192,7 @@ class Organisation implements User {
   constructor(kvk: string, userName: string, config: UserConfig) {
     this.kvk = kvk;
     this.identifier = kvk;
-    this.userName = userName;
+    this.userName = userName ?? kvk;
     this.config = config;
   }
 
