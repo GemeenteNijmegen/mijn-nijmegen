@@ -38,7 +38,6 @@ test/__snapshots__/*
 .DS_Store
 test/playwright/report
 test/playwright/screenshots
-!/.projenrc.js
 /test-reports/
 junit.xml
 /coverage/
@@ -48,7 +47,6 @@ junit.xml
 !/.github/workflows/release.yml
 !/.github/workflows/upgrade-acceptance.yml
 !/.github/pull_request_template.md
-!/.npmrc
 !/test/
 !/tsconfig.json
 !/tsconfig.dev.json
@@ -67,3 +65,4 @@ junit.xml
 !/src/app/logout/logout-function.ts
 !/.github/workflows/emergency.yml
 !/.github/workflows/auto-merge.yml
+!/.projenrc.js
