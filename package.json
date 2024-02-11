@@ -55,7 +55,7 @@
     "eslint-plugin-import": "^2.29.1",
     "jest": "^29.7.0",
     "jest-junit": "^15",
-    "projen": "^0.79.15",
+    "projen": "^0.79.16",
     "standard-version": "^9",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
@@ -80,7 +80,7 @@
     "cdk-remote-stack": "^2.0.101",
     "constructs": "^10.0.5",
     "cookie": "^0.6.0",
-    "dotenv": "^16.4.1",
+    "dotenv": "^16.4.2",
     "mustache": "^4.2.0",
     "openid-client": "^5.6.4"
   },
