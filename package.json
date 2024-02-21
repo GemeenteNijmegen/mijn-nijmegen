@@ -64,8 +64,8 @@
   "dependencies": {
     "@aws-cdk/aws-apigatewayv2-alpha": "^2.114.1-alpha.0",
     "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.114.1-alpha.0",
-    "@aws-lambda-powertools/logger": "^1.18.0",
-    "@aws-sdk/client-dynamodb": "^3.515.0",
+    "@aws-lambda-powertools/logger": "^1.18.1",
+    "@aws-sdk/client-dynamodb": "^3.518.0",
     "@aws-sdk/client-secrets-manager": "^3.515.0",
     "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.52.1",
     "@gemeentenijmegen/apiclient": "^0.0.12",
@@ -80,7 +80,7 @@
     "cdk-remote-stack": "^2.0.101",
     "constructs": "^10.0.5",
     "cookie": "^0.6.0",
-    "dotenv": "^16.4.4",
+    "dotenv": "^16.4.5",
     "mustache": "^4.2.0",
     "openid-client": "^5.6.4"
   },
