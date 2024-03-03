@@ -39,7 +39,7 @@
     "@aws-sdk/types": "^3.523.0",
     "@axe-core/playwright": "^4.8.5",
     "@glen/jest-raw-loader": "^2.0.0",
-    "@playwright/test": "^1.42.0",
+    "@playwright/test": "^1.42.1",
     "@types/aws-lambda": "^8.10.134",
     "@types/jest": "^29.5.12",
     "@types/node": "^18",
