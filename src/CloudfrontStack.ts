@@ -285,7 +285,7 @@ export class CloudfrontStack extends Stack {
    */
   cspHeaderValue() {
     const cspValues = 'default-src \'self\';\
-    frame-ancestors \'self\';\
+    frame-ancestors \'none\';\
     frame-src \'self\';\
     connect-src \'self\' https://componenten.nijmegen.nl;\
     style-src \'self\' https://componenten.nijmegen.nl https://fonts.googleapis.com https://fonts.gstatic.com \

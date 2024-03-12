@@ -36,11 +36,11 @@
     "projen": "npx projen"
   },
   "devDependencies": {
-    "@aws-sdk/types": "^3.521.0",
+    "@aws-sdk/types": "^3.523.0",
     "@axe-core/playwright": "^4.8.5",
     "@glen/jest-raw-loader": "^2.0.0",
-    "@playwright/test": "^1.41.2",
-    "@types/aws-lambda": "^8.10.134",
+    "@playwright/test": "^1.42.1",
+    "@types/aws-lambda": "^8.10.136",
     "@types/jest": "^29.5.12",
     "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^6",
@@ -65,9 +65,9 @@
     "@aws-cdk/aws-apigatewayv2-alpha": "^2.114.1-alpha.0",
     "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.114.1-alpha.0",
     "@aws-lambda-powertools/logger": "^1.18.1",
-    "@aws-sdk/client-dynamodb": "^3.521.0",
-    "@aws-sdk/client-secrets-manager": "^3.521.0",
-    "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.53.0",
+    "@aws-sdk/client-dynamodb": "^3.529.1",
+    "@aws-sdk/client-secrets-manager": "^3.529.1",
+    "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.54.0",
     "@gemeentenijmegen/apiclient": "^0.0.12",
     "@gemeentenijmegen/apigateway-http": "^0.0.8",
     "@gemeentenijmegen/aws-constructs": "^0.0.5",
@@ -82,7 +82,7 @@
     "cookie": "^0.6.0",
     "dotenv": "^16.4.5",
     "mustache": "^4.2.0",
-    "openid-client": "^5.6.4"
+    "openid-client": "^5.6.5"
   },
   "license": "EUPL-1.2",
   "version": "0.0.0",
