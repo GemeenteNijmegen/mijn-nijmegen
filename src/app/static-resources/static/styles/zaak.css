@@ -4342,3 +4342,17 @@ a.file .file__link {
   text-decoration: underline;
   color: ;
 }
+
+.denhaag-process-steps {
+  margin-bottom: 1rem;
+}
+
+table tr th {
+  width: auto; /* reset min */
+  min-width: 6rem;
+}
+
+tr td, tr th {
+  vertical-align: top;
+  padding-right: 1rem;
+}
