@@ -4286,3 +4286,56 @@
     background-color: #17564a;
     color: white;
 }
+
+/** For zaak details **/
+dl {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+}
+dt, dd {
+border-bottom: 1px solid #D2D2D2;
+margin-bottom: 0.5rem;
+padding: 1rem;
+}
+
+/*
+  File download component, html structure 
+  from https://nl-design-system.github.io/denhaag/?path=/docs/css-surfaces-file--docs,
+  css custom.
+ */
+ a.file {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  border: 1px solid #7A7A7A;
+  gap: 1rem;
+  text-decoration: none;
+  }
+  
+  a.file .file__left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F8F7F5;
+  width: 56px;
+  }
+  
+  a.file .file__right {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  }
+  a.file .file__right .file__label {
+  flex-grow: 1;
+  }
+  
+  a.file .file__link {
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+  text-decoration: underline;
+  }
+  
