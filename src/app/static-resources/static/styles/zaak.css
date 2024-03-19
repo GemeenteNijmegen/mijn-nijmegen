@@ -4342,3 +4342,7 @@ a.file .file__link {
   text-decoration: underline;
   color: ;
 }
+
+.denhaag-process-steps {
+  margin-bottom: 1rem;
+}
