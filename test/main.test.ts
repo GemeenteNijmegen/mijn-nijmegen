@@ -2,29 +2,29 @@ import { App } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import * as Dotenv from 'dotenv';
 import { ApiStack } from '../src/ApiStack';
+import { Configuration } from '../src/Configuration';
+import { DNSStack } from '../src/DNSStack';
+import { KeyStack } from '../src/keystack';
 import { ParameterStack } from '../src/ParameterStage';
 import { PipelineStack } from '../src/PipelineStack';
 import { SessionsStack } from '../src/SessionsStack';
-import { DNSStack } from '../src/DNSStack';
-import { KeyStack } from '../src/keystack';
-import { Configuration } from '../src/Configuration';
 
 const mockEnv = {
   account: '123456789012',
   region: 'eu-central-1',
-}
+};
 
 const config: Configuration = {
   branch: 'test',
   buildEnvironment: mockEnv,
   deploymentEnvironment: mockEnv,
   cnameRecords: {
-    '_1241251': '120421305.csp-nijmegen.nl',
+    _1241251: '120421305.csp-nijmegen.nl',
   },
   dsRecord: undefined,
   pipelineStackCdkName: 'mijnnijmegen-pipeline-stack-testing',
-  pipelineName: 'mijnnijmegen-test'
-}
+  pipelineName: 'mijnnijmegen-test',
+};
 
 beforeAll(() => {
   Dotenv.config();
@@ -80,7 +80,7 @@ test('StackHasLambdas', () => {
   // const zone = dnsStack.zone;
   const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'dev' });
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::Lambda::Function', 5);
+  template.resourceCountIs('AWS::Lambda::Function', 6);
 });
 
 

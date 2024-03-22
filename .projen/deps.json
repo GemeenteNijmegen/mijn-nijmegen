@@ -1,6 +1,10 @@
 {
   "dependencies": [
     {
+      "name": "@aws-sdk/client-ssm",
+      "type": "build"
+    },
+    {
       "name": "@aws-sdk/types",
       "type": "build"
     },
@@ -75,6 +79,10 @@
     },
     {
       "name": "jest",
+      "type": "build"
+    },
+    {
+      "name": "jest-aws-client-mock",
       "type": "build"
     },
     {
