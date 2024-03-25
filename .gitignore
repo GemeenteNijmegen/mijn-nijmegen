@@ -63,6 +63,7 @@ junit.xml
 !/src/app/home/home-function.ts
 !/src/app/login/login-function.ts
 !/src/app/logout/logout-function.ts
+!/src/app/persoonsgegevens/persoonsgegevens-function.ts
 !/.github/workflows/emergency.yml
 !/.github/workflows/auto-merge.yml
 !/.projenrc.js

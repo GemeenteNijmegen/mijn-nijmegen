@@ -27,10 +27,10 @@ const project = new GemeenteNijmegenCdkApp({
     'cookie',
     'openid-client',
   ], /* Runtime dependencies of this module. */
-  // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   devDeps: [
     '@types/aws-lambda',
     '@aws-sdk/types',
+    '@aws-sdk/client-ssm',
     'aws-sdk-client-mock',
     'axios-mock-adapter',
     'copyfiles',
@@ -39,6 +39,7 @@ const project = new GemeenteNijmegenCdkApp({
     '@axe-core/playwright',
     'aws-sdk-client-mock',
     '@glen/jest-raw-loader',
+    'jest-aws-client-mock',
   ], /* Build dependencies for this module. */
   mutableBuild: true,
   jestOptions: {

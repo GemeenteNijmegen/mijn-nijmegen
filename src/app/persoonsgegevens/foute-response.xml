@@ -1,0 +1,36 @@
+<soapenv:Envelope xmlns:gban="https://data-test.nijmegen.nl/GbaNaw/"
+    xmlns:ns2="http://www.competent.nl/gbav/v1" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <gban:getGbaNawResponse>
+            <out>
+                <PL010120/>
+                <PL010310/>
+                <PL010410/>
+                <PL010210/>
+                <PL010230/>
+                <PL010240/>
+                <PL081110/>
+                <PL081120/>
+                <PL081130/>
+                <PL081140/>
+                <PL081150/>
+                <PL081160/>
+                <PL080910/>
+                <PL081030/>
+                <PL080920/>
+                <Geboortedatum/>
+                <DatumAanvangAdreshuishouding/>
+                <DatumInschrijvingGemeente/>
+                <Postcode/>
+                <Adres/>
+                <Voorletters/>
+                <GemeenteInschrijving/>
+                <PL050230/>
+                <PL050240/>
+                <Naam/>
+                <Identificatienummer/>
+            </out>
+        </gban:getGbaNawResponse>
+    </soapenv:Body>
+</soapenv:Envelope>
