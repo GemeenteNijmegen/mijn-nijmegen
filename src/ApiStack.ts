@@ -1,17 +1,26 @@
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import { aws_secretsmanager, Stack, StackProps, aws_ssm as SSM } from 'aws-cdk-lib';
+import { aws_secretsmanager, Stack, StackProps } from 'aws-cdk-lib';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { AccountPrincipal, PrincipalWithConditions, Role } from 'aws-cdk-lib/aws-iam';
+import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
+import { IStringParameter, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
 import { AuthFunction } from './app/auth/auth-function';
 import { HomeFunction } from './app/home/home-function';
 import { LoginFunction } from './app/login/login-function';
 import { LogoutFunction } from './app/logout/logout-function';
+import { PersoonsgegevensFunction } from './app/persoonsgegevens/persoonsgegevens-function';
 import { DynamoDbReadOnlyPolicy } from './iam/dynamodb-readonly-policy';
 import { SessionsTable } from './SessionsTable';
 import { Statics } from './statics';
+
+interface TLSConfig {
+  privateKey: ISecret;
+  clientCert: IStringParameter;
+  rootCert: IStringParameter;
+}
 
 export interface ApiStackProps extends StackProps {
   sessionsTable: SessionsTable;
@@ -36,7 +45,7 @@ export class ApiStack extends Stack {
     });
 
     // Store apigateway ID to be used in other stacks
-    new SSM.StringParameter(this, 'ssm_api_1', {
+    new StringParameter(this, 'ssm_api_1', {
       stringValue: this.api.httpApiId,
       parameterName: Statics.ssmApiGatewayId,
     });
@@ -56,81 +65,32 @@ export class ApiStack extends Stack {
    */
   setFunctions(baseUrl: string, readOnlyRole: Role) {
 
+
+    const tlsConfig = this.mtlsConfig();
     /**
      * The login function generates a login URL and renders the login page.
      */
-    const loginFunction = new ApiFunction(this, 'login-function', {
-      description: 'Login-pagina voor de Mijn Uitkering-applicatie.',
-      codePath: 'app/login',
-      table: this.sessionsTable,
-      tablePermissions: 'ReadWrite',
-      applicationUrlBase: baseUrl,
-      readOnlyRole,
-      apiFunction: LoginFunction,
-      environment: {
-        DIGID_SCOPE: SSM.StringParameter.valueForStringParameter(this, Statics.ssmDIGIDScope),
-        YIVI_SCOPE: SSM.StringParameter.valueForStringParameter(this, Statics.ssmYiviScope),
-        YIVI_ATTRIBUTES: SSM.StringParameter.valueForStringParameter(this, Statics.ssmYiviAttributes),
-        USE_YIVI: SSM.StringParameter.valueForStringParameter(this, Statics.ssmUseYivi),
-      },
-    });
+    const loginFunction = this.loginFunction(baseUrl, readOnlyRole);
 
     /**
      * The logout-function sets logout, unsets the session object and renders the logged-out page.
      */
-    const logoutFunction = new ApiFunction(this, 'logout-function', {
-      description: 'Uitlog-pagina voor de Mijn Uitkering-applicatie.',
-      codePath: 'app/logout',
-      table: this.sessionsTable,
-      tablePermissions: 'ReadWrite',
-      applicationUrlBase: baseUrl,
-      readOnlyRole,
-      apiFunction: LogoutFunction,
-    });
-
-    const secretMTLSPrivateKey = aws_secretsmanager.Secret.fromSecretNameV2(this, 'tls-key-secret', Statics.secretMTLSPrivateKey);
-    const tlskeyParam = SSM.StringParameter.fromStringParameterName(this, 'tlskey', Statics.ssmMTLSClientCert);
-    const tlsRootCAParam = SSM.StringParameter.fromStringParameterName(this, 'tlsrootca', Statics.ssmMTLSRootCA);
-    const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
+    const logoutFunction = this.logoutFunction(baseUrl, readOnlyRole);
 
     /**
      * The auth function receives the callback from the OIDC-provider, validates the received ID-Token, and sets the session to loggedin.
      */
-    const authFunction = new ApiFunction(this, 'auth-function', {
-      description: 'Authenticatie-lambd voor de Mijn Uitkering-applicatie.',
-      codePath: 'app/auth',
-      table: this.sessionsTable,
-      tablePermissions: 'ReadWrite',
-      applicationUrlBase: baseUrl,
-      readOnlyRole,
-      environment: {
-        CLIENT_SECRET_ARN: oidcSecret.secretArn,
-        MTLS_PRIVATE_KEY_ARN: secretMTLSPrivateKey.secretArn,
-        MTLS_CLIENT_CERT_NAME: Statics.ssmMTLSClientCert,
-        MTLS_ROOT_CA_NAME: Statics.ssmMTLSRootCA,
-        BRP_API_URL: SSM.StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
-        YIVI_ATTRIBUTES: SSM.StringParameter.valueForStringParameter(this, Statics.ssmYiviAttributes),
-        USE_YIVI: SSM.StringParameter.valueForStringParameter(this, Statics.ssmUseYivi),
-      },
-      apiFunction: AuthFunction,
-    });
-    oidcSecret.grantRead(authFunction.lambda);
-    secretMTLSPrivateKey.grantRead(authFunction.lambda);
-    tlskeyParam.grantRead(authFunction.lambda);
-    tlsRootCAParam.grantRead(authFunction.lambda);
+    const authFunction = this.authFunction(baseUrl, readOnlyRole, tlsConfig);
 
     /**
      * The Home function show the homepage.
      */
-    const homeFunction = new ApiFunction(this, 'home-function', {
-      description: 'Home-lambda voor de Mijn Uitkering-applicatie.',
-      codePath: 'app/home',
-      table: this.sessionsTable,
-      tablePermissions: 'ReadWrite',
-      applicationUrlBase: baseUrl,
-      readOnlyRole,
-      apiFunction: HomeFunction,
-    });
+    const homeFunction = this.homeFunction(baseUrl, readOnlyRole);
+
+    /**
+     * The Persoonsgegevens function show the homepage.
+     */
+    const persoonsGegevensFunction = this.persoonsgegevensFunction(baseUrl, readOnlyRole, tlsConfig);
 
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('login', loginFunction.lambda),
@@ -155,6 +115,113 @@ export class ApiStack extends Stack {
       path: '/home',
       methods: [apigatewayv2.HttpMethod.GET],
     });
+
+    this.api.addRoutes({
+      integration: new HttpLambdaIntegration('persoonsgegevens', persoonsGegevensFunction.lambda),
+      path: '/persoonsgegevens',
+      methods: [apigatewayv2.HttpMethod.GET],
+    });
+  }
+
+  private mtlsConfig() {
+    const privateKey = aws_secretsmanager.Secret.fromSecretNameV2(this, 'tls-key-secret', Statics.secretMTLSPrivateKey);
+    const clientCert = StringParameter.fromStringParameterName(this, 'tlskey', Statics.ssmMTLSClientCert);
+    const rootCert = StringParameter.fromStringParameterName(this, 'tlsrootca', Statics.ssmMTLSRootCA);
+    const tlsConfig = { privateKey, clientCert, rootCert };
+    return tlsConfig;
+  }
+
+  private logoutFunction(baseUrl: string, readOnlyRole: Role) {
+    return new ApiFunction(this, 'logout-function', {
+      description: 'Uitlog-pagina voor de Mijn Uitkering-applicatie.',
+      codePath: 'app/logout',
+      table: this.sessionsTable,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: baseUrl,
+      readOnlyRole,
+      apiFunction: LogoutFunction,
+    });
+  }
+
+  private loginFunction(baseUrl: string, readOnlyRole: Role) {
+    return new ApiFunction(this, 'login-function', {
+      description: 'Login-pagina voor de Mijn Uitkering-applicatie.',
+      codePath: 'app/login',
+      table: this.sessionsTable,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: baseUrl,
+      readOnlyRole,
+      apiFunction: LoginFunction,
+      environment: {
+        DIGID_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmDIGIDScope),
+        YIVI_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmYiviScope),
+        YIVI_ATTRIBUTES: StringParameter.valueForStringParameter(this, Statics.ssmYiviAttributes),
+        USE_YIVI: StringParameter.valueForStringParameter(this, Statics.ssmUseYivi),
+      },
+    });
+  }
+
+  private homeFunction(baseUrl: string, readOnlyRole: Role) {
+    return new ApiFunction(this, 'home-function', {
+      description: 'Home-lambda voor de Mijn Uitkering-applicatie.',
+      codePath: 'app/home',
+      table: this.sessionsTable,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: baseUrl,
+      readOnlyRole,
+      apiFunction: HomeFunction,
+    });
+  }
+
+  private authFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
+    const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
+
+    const authFunction = new ApiFunction(this, 'auth-function', {
+      description: 'Authenticatie-lambd voor de Mijn Uitkering-applicatie.',
+      codePath: 'app/auth',
+      table: this.sessionsTable,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: baseUrl,
+      readOnlyRole,
+      environment: {
+        CLIENT_SECRET_ARN: oidcSecret.secretArn,
+        MTLS_PRIVATE_KEY_ARN: mtlsConfig.privateKey.secretArn,
+        MTLS_CLIENT_CERT_NAME: Statics.ssmMTLSClientCert,
+        MTLS_ROOT_CA_NAME: Statics.ssmMTLSRootCA,
+        BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
+        YIVI_ATTRIBUTES: StringParameter.valueForStringParameter(this, Statics.ssmYiviAttributes),
+        USE_YIVI: StringParameter.valueForStringParameter(this, Statics.ssmUseYivi),
+      },
+      apiFunction: AuthFunction,
+    });
+    oidcSecret.grantRead(authFunction.lambda);
+    mtlsConfig.privateKey.grantRead(authFunction.lambda);
+    mtlsConfig.clientCert.grantRead(authFunction.lambda);
+    mtlsConfig.rootCert.grantRead(authFunction.lambda);
+    return authFunction;
+  }
+
+  private persoonsgegevensFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
+
+    const persoonsGegevensFunction = new ApiFunction(this, 'persoonsgegevens-function', {
+      description: 'Authenticatie-lambd voor de Mijn Uitkering-applicatie.',
+      codePath: 'app/persoonsgegevens',
+      table: this.sessionsTable,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: baseUrl,
+      readOnlyRole,
+      environment: {
+        MTLS_PRIVATE_KEY_ARN: mtlsConfig.privateKey.secretArn,
+        MTLS_CLIENT_CERT_NAME: Statics.ssmMTLSClientCert,
+        MTLS_ROOT_CA_NAME: Statics.ssmMTLSRootCA,
+        BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
+      },
+      apiFunction: PersoonsgegevensFunction,
+    });
+    mtlsConfig.privateKey.grantRead(persoonsGegevensFunction.lambda);
+    mtlsConfig.clientCert.grantRead(persoonsGegevensFunction.lambda);
+    mtlsConfig.rootCert.grantRead(persoonsGegevensFunction.lambda);
+    return persoonsGegevensFunction;
   }
 
   /**
@@ -191,7 +258,7 @@ export class ApiStack extends Stack {
       ),
     });
 
-    new SSM.StringParameter(this, 'ssm_readonly', {
+    new StringParameter(this, 'ssm_readonly', {
       stringValue: readOnlyRole.roleArn,
       parameterName: Statics.ssmReadOnlyRoleArn,
     });

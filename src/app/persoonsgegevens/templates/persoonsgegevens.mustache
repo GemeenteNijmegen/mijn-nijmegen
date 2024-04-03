@@ -1,0 +1,106 @@
+{{>header}}
+
+<main>
+    <!-- START: template component(s) -->
+    <div class="container">
+        <div class="row">
+            <nav class="nijmegen-sidenav col-lg-3 col-md-12">
+                    <ul class="nijmegen-sidenav__list">
+                    {{#nav}}
+                        <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
+                            {{{icon}}}
+                            <a href="{{{url}}}">{{title}}</a>
+                        </li>
+                    {{/nav}}
+                    </ul>
+            </nav>
+            <div class="col-lg-9 col-md-12">
+                <h1>Mijn gegevens</h1>
+                <p class="lead">Hier vindt u een overzicht van uw persoons- en adresgegevens.</p>
+                {{^error}}
+                <section>
+                <h2>Persoonsgegevens</h2>
+                <table class="responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Kenmerk</th>
+                            <th>Waarde</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>BSN</td>
+                            <td>{{Persoon.BSN.BSN}}</td>
+                        </tr>
+                        <tr>
+                            <td>Initialen</td>
+                            <td>{{Persoon.Persoonsgegevens.Voorletters}}</td>
+                        </tr>
+                        <tr>
+                            <td>Voornamen</td>
+                            <td>{{Persoon.Persoonsgegevens.Voornamen}}</td>
+                        </tr>
+                        <tr>
+                            <td>Voorvoegsel</td>
+                            <td>{{Persoon.Persoonsgegevens.Voorvoegsel}}</td>
+                        </tr>
+                        <tr>
+                            <td>Geslachtsnaam</td>
+                            <td>{{Persoon.Persoonsgegevens.Geslachtsnaam}}</td>
+                        </tr>
+                        <tr>
+                            <td>Achternaam</td>
+                            <td>{{Persoon.Persoonsgegevens.Achternaam}}</td>
+                        </tr>
+                        <tr>
+                            <td>Geboortedatum</td>
+                            <td>{{Persoon.Persoonsgegevens.Geboortedatum}}</td>
+                        </tr>
+                        <tr>
+                            <td>Nederlandse nationaliteit</td>
+                            <td>{{Persoon.Persoonsgegevens.NederlandseNationaliteit}}</td>
+                        </tr>
+                        <tr>
+                            <td>Geslachtsaanduiding</td>
+                            <td>{{Persoon.Persoonsgegevens.Geslacht}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </section>
+                <section>
+                <h2>Adresgegevens</h2>
+                <table class="responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Kenmerk</th>
+                            <th>Waarde</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Straat en huisnummer</td>
+                            <td>{{Persoon.Adres.Straat}} {{Persoon.Adres.Huisnummer}}</td>
+                        </tr>
+                        <tr>
+                            <td>Postcode</td>
+                            <td>{{Persoon.Adres.Postcode}}</td>
+                        </tr>
+                        <tr>
+                            <td>Woonplaats</td>
+                            <td>{{Persoon.Adres.Woonplaats}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </section>
+                {{/error}}
+                {{#error}}
+                <h2>Er is iets misgegaan</h2>
+                <p>{{error}}</p>
+                {{/error}}
+            </div>
+        </div>
+    </div>
+
+    <!-- END: template component(s) -->
+</main>
+{{>footer}}

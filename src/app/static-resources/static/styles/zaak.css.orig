@@ -4349,14 +4349,14 @@ a.file .file__link {
 
 table tr th {
   width: auto; /* reset min */
+<<<<<<< HEAD
   min-width: 8em;
+=======
+  min-width: 6rem;
+>>>>>>> acceptance
 }
 
 tr td, tr th {
   vertical-align: top;
   padding-right: 1rem;
-}
-
-td.nowrap {
-  white-space: nowrap;
 }

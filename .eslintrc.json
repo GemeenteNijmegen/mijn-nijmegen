@@ -156,7 +156,8 @@
           "src/app/auth/auth.lambda.ts",
           "src/app/home/home.lambda.ts",
           "src/app/login/login.lambda.ts",
-          "src/app/logout/logout.lambda.ts"
+          "src/app/logout/logout.lambda.ts",
+          "src/app/persoonsgegevens/persoonsgegevens.lambda.ts"
         ],
         "optionalDependencies": false,
         "peerDependencies": true
