@@ -26,6 +26,8 @@ const project = new GemeenteNijmegenCdkApp({
     'axios',
     'cookie',
     'openid-client',
+    'object-mapper',
+    'xml2js',
   ], /* Runtime dependencies of this module. */
   devDeps: [
     '@types/aws-lambda',

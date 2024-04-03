@@ -14,6 +14,8 @@
     "bundle:app/logout/logout.lambda:watch": "npx projen bundle:app/logout/logout.lambda:watch",
     "bundle:app/persoonsgegevens/persoonsgegevens.lambda": "npx projen bundle:app/persoonsgegevens/persoonsgegevens.lambda",
     "bundle:app/persoonsgegevens/persoonsgegevens.lambda:watch": "npx projen bundle:app/persoonsgegevens/persoonsgegevens.lambda:watch",
+    "bundle:app/uitkeringen/uitkering.lambda": "npx projen bundle:app/uitkeringen/uitkering.lambda",
+    "bundle:app/uitkeringen/uitkering.lambda:watch": "npx projen bundle:app/uitkeringen/uitkering.lambda:watch",
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
     "default": "npx projen default",
@@ -86,7 +88,9 @@
     "cookie": "^0.6.0",
     "dotenv": "^16.4.5",
     "mustache": "^4.2.0",
-    "openid-client": "^5.6.5"
+    "object-mapper": "^6.2.0",
+    "openid-client": "^5.6.5",
+    "xml2js": "^0.6.2"
   },
   "license": "EUPL-1.2",
   "version": "0.0.0",
