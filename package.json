@@ -72,7 +72,7 @@
     "@aws-sdk/client-dynamodb": "^3.540.0",
     "@aws-sdk/client-secrets-manager": "^3.543.0",
     "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.54.0",
-    "@gemeentenijmegen/apiclient": "^0.0.12",
+    "@gemeentenijmegen/apiclient": "^0.0.13",
     "@gemeentenijmegen/apigateway-http": "^0.0.8",
     "@gemeentenijmegen/aws-constructs": "^0.0.5",
     "@gemeentenijmegen/projen-project-type": "^1.5.6",
