@@ -1,0 +1,38 @@
+<h2>{{type}}</h2>
+                        <div class="card card-number">
+                            <div class="card-body">
+                                <p class="card-title">€ {{#fieldsByName}} {{betaald-totaal}} {{/fieldsByName}}</p>
+                                <p class="card-text">Totaal betaald</p>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-title">€	{{#fieldsByName}} {{betaald-aan-u}} {{/fieldsByName}}</p>
+                                <p class="card-text">Betaald aan u</p>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-title">€	{{#fieldsByName}} {{betaald-aan-derde}} {{/fieldsByName}}</p>
+                                <p class="card-text">Betaald aan derde</p>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-title">{{#fieldsByName}} {{laatste-betaling}} {{/fieldsByName}}</p>
+                                <p class="card-text">Betalingsdatum</p>
+                            </div>
+                        </div>
+                        
+                        <h3>Uitkeringsgegevens</h3>
+                        
+                        <table class="responsive-table">
+                            <thead>
+                                <tr>
+                                    <th>Kenmerk</th>
+                                    <th>Waarde</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#fields}}
+                                <tr>
+                                    <td>{{label}}</td>
+                                    <td>{{value}}</td>
+                                </tr>
+                                {{/fields}}
+                            </tbody>
+                        </table>

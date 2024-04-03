@@ -64,6 +64,7 @@ junit.xml
 !/src/app/login/login-function.ts
 !/src/app/logout/logout-function.ts
 !/src/app/persoonsgegevens/persoonsgegevens-function.ts
+!/src/app/uitkeringen/uitkering-function.ts
 !/.github/workflows/emergency.yml
 !/.github/workflows/auto-merge.yml
 !/.projenrc.js
