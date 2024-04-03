@@ -62,6 +62,10 @@ export abstract class Statics {
    */
   static readonly ssmBrpApiEndpointUrl: string = '/cdk/mijn-nijmegen/brp-api-url';
 
+  /**
+   * Uitkeringsgegevens API endpoint
+   */
+  static readonly ssmUitkeringsApiEndpointUrl: string = '/cdk/mijn-nijmegen/uitkerings-api-url';
 
   /**
    * Route53 Zone ID and name for csp-nijmegen.nl in this account.

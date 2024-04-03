@@ -12,6 +12,7 @@ import { HomeFunction } from './app/home/home-function';
 import { LoginFunction } from './app/login/login-function';
 import { LogoutFunction } from './app/logout/logout-function';
 import { PersoonsgegevensFunction } from './app/persoonsgegevens/persoonsgegevens-function';
+import { UitkeringFunction } from './app/uitkeringen/uitkering-function';
 import { DynamoDbReadOnlyPolicy } from './iam/dynamodb-readonly-policy';
 import { SessionsTable } from './SessionsTable';
 import { Statics } from './statics';
@@ -92,6 +93,11 @@ export class ApiStack extends Stack {
      */
     const persoonsGegevensFunction = this.persoonsgegevensFunction(baseUrl, readOnlyRole, tlsConfig);
 
+    /**
+     * The uitkeringenfunction show your current uitkering.
+     */
+    const uitkeringenFunction = this.uitkeringenFunction(baseUrl, readOnlyRole, tlsConfig);
+
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('login', loginFunction.lambda),
       path: '/login',
@@ -119,6 +125,12 @@ export class ApiStack extends Stack {
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('persoonsgegevens', persoonsGegevensFunction.lambda),
       path: '/persoonsgegevens',
+      methods: [apigatewayv2.HttpMethod.GET],
+    });
+
+    this.api.addRoutes({
+      integration: new HttpLambdaIntegration('uitkeringen', uitkeringenFunction.lambda),
+      path: '/uitkeringen',
       methods: [apigatewayv2.HttpMethod.GET],
     });
   }
@@ -222,6 +234,29 @@ export class ApiStack extends Stack {
     mtlsConfig.clientCert.grantRead(persoonsGegevensFunction.lambda);
     mtlsConfig.rootCert.grantRead(persoonsGegevensFunction.lambda);
     return persoonsGegevensFunction;
+  }
+
+  private uitkeringenFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
+    const uitkeringenFunction = new ApiFunction(this, 'uitkeringen-function', {
+      description: 'Uitkeringen-lambda voor de Mijn Nijmegen-applicatie.',
+      codePath: 'app/uitkeringen',
+      table: this.sessionsTable,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: baseUrl,
+      readOnlyRole,
+      environment: {
+        MTLS_PRIVATE_KEY_ARN: mtlsConfig.privateKey.secretArn,
+        MTLS_CLIENT_CERT_NAME: Statics.ssmMTLSClientCert,
+        MTLS_ROOT_CA_NAME: Statics.ssmMTLSRootCA,
+        BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
+        UITKERING_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmUitkeringsApiEndpointUrl),
+      },
+      apiFunction: UitkeringFunction,
+    });
+    mtlsConfig.privateKey.grantRead(uitkeringenFunction.lambda);
+    mtlsConfig.clientCert.grantRead(uitkeringenFunction.lambda);
+    mtlsConfig.rootCert.grantRead(uitkeringenFunction.lambda);
+    return uitkeringenFunction;
   }
 
   /**

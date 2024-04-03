@@ -21,6 +21,7 @@
     "src/app/login/login-function.ts",
     "src/app/logout/logout-function.ts",
     "src/app/persoonsgegevens/persoonsgegevens-function.ts",
+    "src/app/uitkeringen/uitkering-function.ts",
     "tsconfig.dev.json",
     "tsconfig.json"
   ],
