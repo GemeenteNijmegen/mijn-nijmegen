@@ -97,6 +97,11 @@ export class ssmParamsConstruct extends Construct {
       parameterName: Statics.ssmMTLSRootCA,
     });
 
+    new SSM.StringParameter(this, 'ssm_uitkering_4', {
+      stringValue: 'https://data-test.nijmegen.nl/mijnNijmegenData',
+      parameterName: Statics.ssmUitkeringsApiEndpointUrl,
+    });
+
     new SecretsManager.Secret(this, 'secret_1', {
       secretName: Statics.secretOIDCClientSecret,
       description: 'OpenIDConnect client secret',

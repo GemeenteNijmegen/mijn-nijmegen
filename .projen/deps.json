@@ -194,7 +194,15 @@
       "type": "runtime"
     },
     {
+      "name": "object-mapper",
+      "type": "runtime"
+    },
+    {
       "name": "openid-client",
+      "type": "runtime"
+    },
+    {
+      "name": "xml2js",
       "type": "runtime"
     }
   ],

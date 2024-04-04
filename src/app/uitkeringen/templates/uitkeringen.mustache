@@ -1,0 +1,59 @@
+{{>header}}
+<main>
+    <!-- START: template component(s) -->
+    <div class="container">
+        <div class="row">
+        <nav class="nijmegen-sidenav col-lg-3 col-md-12">
+                <ul class="nijmegen-sidenav__list">
+                {{#nav}}
+                    <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
+                        {{{icon}}}
+                        <a href="{{{url}}}">{{title}}</a>
+                    </li>
+                {{/nav}}
+                </ul>
+        </nav>
+        <div class="col-lg-9 col-md-12">
+                <h1>Mijn Uitkering</h1>
+                {{^error}}
+                <p class="lead">Hier vindt u een overzicht van uw uitkeringen.</p>
+                {{#multipleUitkeringen}}
+                    <div class="tabs-wrapper">
+                        <!-- Tab List -->
+                        <div class="nav classic-tabs-no-line" role="tablist" aria-label="Uitkeringen">
+                        {{#uitkeringen}}
+                            <div class="nav-item">
+                                <button class="nav-link {{#selected}}active{{/selected}}" role="tab" {{#selected}}aria-selected="true" {{/selected}} aria-controls="{{typetolower}}-tab" id="{{typetolower}}-tabcontrol">
+                                    {{type}}
+                                </button>
+                            </div>
+                        {{/uitkeringen}}
+                        </div>
+                        {{#uitkeringen}}
+                        <!-- Tab Content -->
+                        <div class="tab-content" tabindex="0" role="tabpanel" id="{{typetolower}}-tab" aria-labelledby="{{typetolower}}-tabcontrol">
+                            {{> uitkering }}
+                        </div>
+                        {{/uitkeringen}}
+                    </div>
+                {{/multipleUitkeringen}}
+                {{^multipleUitkeringen}}
+                    {{#uitkeringen}}
+                        {{> uitkering }}
+                    {{/uitkeringen}}
+                {{/multipleUitkeringen}}
+                {{^uitkeringen}}
+                <p>U heeft geen lopende uitkeringen.</p>
+                {{/uitkeringen}}
+                {{/error}}
+                {{#error}}
+                    <h2>Er is iets misgegaan</h2>
+                    <p>{{error}}</p>
+                {{/error}}
+            </div>
+        </div>
+    </div>
+
+    <!-- END: template component(s) -->
+</main>
+{{>footer}}
