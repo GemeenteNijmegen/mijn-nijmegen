@@ -1,0 +1,33 @@
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "url": "/zaken/api/v1/rollen/11722ad0-455c-4550-a399-11e9b18e7559",
+            "uuid": "11722ad0-455c-4550-a399-11e9b18e7559",
+            "zaak": "/zaken/api/v1/zaken/5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886",
+            "betrokkene": "",
+            "betrokkeneType": "natuurlijk_persoon",
+            "roltype": "/catalogi/api/v1/roltypen/b9d8dd80-e163-4df7-9d91-83c76ff93f96",
+            "omschrijving": "Bezwaarmaker",
+            "omschrijvingGeneriek": "initiator",
+            "roltoelichting": "Bezwaarmaker",
+            "registratiedatum": "2023-03-28T06:31:57.565953Z",
+            "indicatieMachtiging": "",
+            "betrokkeneIdentificatie": {
+                "inpBsn": "900222670",
+                "anpIdentificatie": "",
+                "inpA_nummer": "",
+                "geslachtsnaam": "Onbekend",
+                "voorvoegselGeslachtsnaam": "",
+                "voorletters": "",
+                "voornamen": "",
+                "geslachtsaanduiding": "",
+                "geboortedatum": "",
+                "verblijfsadres": null,
+                "subVerblijfBuitenland": null
+            }
+        }
+    ]
+}

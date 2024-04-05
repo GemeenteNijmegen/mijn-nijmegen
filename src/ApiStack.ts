@@ -3,7 +3,7 @@ import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-al
 import { aws_secretsmanager, Stack, StackProps } from 'aws-cdk-lib';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { AccountPrincipal, PrincipalWithConditions, Role } from 'aws-cdk-lib/aws-iam';
-import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
+import { ISecret, Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { IStringParameter, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
@@ -13,6 +13,8 @@ import { LoginFunction } from './app/login/login-function';
 import { LogoutFunction } from './app/logout/logout-function';
 import { PersoonsgegevensFunction } from './app/persoonsgegevens/persoonsgegevens-function';
 import { UitkeringFunction } from './app/uitkeringen/uitkering-function';
+import { ZakenFunction } from './app/zaken/zaken-function';
+import { Configurable, Configuration } from './Configuration';
 import { DynamoDbReadOnlyPolicy } from './iam/dynamodb-readonly-policy';
 import { SessionsTable } from './SessionsTable';
 import { Statics } from './statics';
@@ -23,7 +25,7 @@ interface TLSConfig {
   rootCert: IStringParameter;
 }
 
-export interface ApiStackProps extends StackProps {
+export interface ApiStackProps extends StackProps, Configurable {
   sessionsTable: SessionsTable;
   branch: string;
   // zone: HostedZone;
@@ -34,12 +36,14 @@ export interface ApiStackProps extends StackProps {
  * lambda's. It requires supporting resources (such as the
  * DynamoDB sessions table to be provided and thus created first)
  */
-export class ApiStack extends Stack {
+export class ApiStack extends Stack implements Configurable {
   private sessionsTable: Table;
+  configuration: Configuration;
   api: apigatewayv2.HttpApi;
 
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id);
+    this.configuration = props.configuration;
     this.sessionsTable = props.sessionsTable.table;
     this.api = new apigatewayv2.HttpApi(this, 'mijnuitkering-api', {
       description: 'Mijn Uitkering webapplicatie',
@@ -65,8 +69,6 @@ export class ApiStack extends Stack {
    * @param {string} baseUrl the application url
    */
   setFunctions(baseUrl: string, readOnlyRole: Role) {
-
-
     const tlsConfig = this.mtlsConfig();
     /**
      * The login function generates a login URL and renders the login page.
@@ -98,6 +100,12 @@ export class ApiStack extends Stack {
      */
     const uitkeringenFunction = this.uitkeringenFunction(baseUrl, readOnlyRole, tlsConfig);
 
+    /**
+     * The zaken function show your current uitkering.
+     */
+    const zakenFunction = this.zakenFunction(baseUrl, readOnlyRole);
+
+    //MARK: Routes
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('login', loginFunction.lambda),
       path: '/login',
@@ -132,6 +140,24 @@ export class ApiStack extends Stack {
       integration: new HttpLambdaIntegration('uitkeringen', uitkeringenFunction.lambda),
       path: '/uitkeringen',
       methods: [apigatewayv2.HttpMethod.GET],
+    });
+
+    new apigatewayv2.HttpRoute(this, 'zaken-route', {
+      httpApi: this.api,
+      integration: new HttpLambdaIntegration('zaken', zakenFunction.lambda),
+      routeKey: apigatewayv2.HttpRouteKey.with('/zaken', apigatewayv2.HttpMethod.GET),
+    });
+
+    new apigatewayv2.HttpRoute(this, 'zaak-route', {
+      httpApi: this.api,
+      integration: new HttpLambdaIntegration('zaak', zakenFunction.lambda),
+      routeKey: apigatewayv2.HttpRouteKey.with('/zaken/{zaaksource}/{zaakid}', apigatewayv2.HttpMethod.GET),
+    });
+
+    new apigatewayv2.HttpRoute(this, 'download-route', {
+      httpApi: this.api,
+      integration: new HttpLambdaIntegration('zaak', zakenFunction.lambda),
+      routeKey: apigatewayv2.HttpRouteKey.with('/zaken/{zaaksource}/{zaakid}/download/{file+}', apigatewayv2.HttpMethod.GET),
     });
   }
 
@@ -198,8 +224,8 @@ export class ApiStack extends Stack {
       environment: {
         CLIENT_SECRET_ARN: oidcSecret.secretArn,
         MTLS_PRIVATE_KEY_ARN: mtlsConfig.privateKey.secretArn,
-        MTLS_CLIENT_CERT_NAME: Statics.ssmMTLSClientCert,
-        MTLS_ROOT_CA_NAME: Statics.ssmMTLSRootCA,
+        MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
+        MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
         YIVI_ATTRIBUTES: StringParameter.valueForStringParameter(this, Statics.ssmYiviAttributes),
         USE_YIVI: StringParameter.valueForStringParameter(this, Statics.ssmUseYivi),
@@ -224,8 +250,8 @@ export class ApiStack extends Stack {
       readOnlyRole,
       environment: {
         MTLS_PRIVATE_KEY_ARN: mtlsConfig.privateKey.secretArn,
-        MTLS_CLIENT_CERT_NAME: Statics.ssmMTLSClientCert,
-        MTLS_ROOT_CA_NAME: Statics.ssmMTLSRootCA,
+        MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
+        MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
       },
       apiFunction: PersoonsgegevensFunction,
@@ -246,8 +272,8 @@ export class ApiStack extends Stack {
       readOnlyRole,
       environment: {
         MTLS_PRIVATE_KEY_ARN: mtlsConfig.privateKey.secretArn,
-        MTLS_CLIENT_CERT_NAME: Statics.ssmMTLSClientCert,
-        MTLS_ROOT_CA_NAME: Statics.ssmMTLSRootCA,
+        MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
+        MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
         UITKERING_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmUitkeringsApiEndpointUrl),
       },
@@ -257,6 +283,39 @@ export class ApiStack extends Stack {
     mtlsConfig.clientCert.grantRead(uitkeringenFunction.lambda);
     mtlsConfig.rootCert.grantRead(uitkeringenFunction.lambda);
     return uitkeringenFunction;
+  }
+
+  private zakenFunction(baseUrl: string, readOnlyRole: Role) {
+    const jwtSecret = Secret.fromSecretNameV2(this, 'jwt-token-secret', Statics.vipJwtSecret);
+    const tokenSecret = Secret.fromSecretNameV2(this, 'taken-token-secret', Statics.vipTakenSecret);
+    const submissionstorageKey = Secret.fromSecretNameV2(this, 'taken-submission-secret', Statics.submissionstorageKey);
+    const zakenFunction = new ApiFunction(this, 'zaken-function', {
+      description: 'Zaken-lambda voor de Mijn Nijmegen-applicatie.',
+      codePath: 'app/zaken',
+      table: this.sessionsTable,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: baseUrl,
+      environment: {
+        VIP_JWT_SECRET_ARN: jwtSecret.secretArn,
+        VIP_TAKEN_SECRET_ARN: tokenSecret.secretArn,
+        SUBMISSIONSTORAGE_SECRET_ARN: submissionstorageKey.secretArn,
+        VIP_JWT_USER_ID: StringParameter.valueForStringParameter(this, Statics.ssmOpenZaakUserId),
+        VIP_JWT_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics.ssmOpenZaakClientId),
+        VIP_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmOpenZaakBaseUrl),
+        VIP_TOKEN_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmOpenZaakTakenBaseUrl),
+        SUBMISSIONSTORAGE_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmSubmissionstorageBaseUrl),
+        IS_LIVE: this.configuration.zakenIsLive ? 'true' : 'false',
+        USE_TAKEN: this.configuration.zakenUseTaken ? 'true' : 'false',
+        SUBMISSIONS_LIVE: this.configuration.zakenUseSubmissions ? 'true' : 'false',
+        ALLOWED_ZAKEN_DOMAINS: this.configuration.zakenAllowDomains.join(','),
+      },
+      readOnlyRole,
+      apiFunction: ZakenFunction,
+    });
+    jwtSecret.grantRead(zakenFunction.lambda);
+    tokenSecret.grantRead(zakenFunction.lambda);
+    submissionstorageKey.grantRead(zakenFunction.lambda);
+    return zakenFunction;
   }
 
   /**

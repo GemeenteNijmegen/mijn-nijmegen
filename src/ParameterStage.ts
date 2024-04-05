@@ -126,5 +126,49 @@ export class ssmParamsConstruct extends Construct {
       stringValue: '-',
       parameterName: Statics.ssmSlackWebhookUrl,
     });
+
+    this.addZaakParameters();
+  }
+
+  private addZaakParameters() {
+    new SSM.StringParameter(this, 'ssm_zaken_1', {
+      stringValue: '-',
+      parameterName: Statics.ssmOpenZaakUserId,
+    });
+
+    new SSM.StringParameter(this, 'ssm_zaken_2', {
+      stringValue: '-',
+      parameterName: Statics.ssmOpenZaakBaseUrl,
+    });
+
+    new SSM.StringParameter(this, 'ssm_zaken_3', {
+      stringValue: '-',
+      parameterName: Statics.ssmOpenZaakClientId,
+    });
+
+    new SSM.StringParameter(this, 'ssm_zaken_4', {
+      stringValue: '-',
+      parameterName: Statics.ssmOpenZaakTakenBaseUrl,
+    });
+
+    new SSM.StringParameter(this, 'ssm_zaken_5', {
+      stringValue: '-',
+      parameterName: Statics.ssmSubmissionstorageBaseUrl,
+    });
+
+    new SecretsManager.Secret(this, 'zaken_secret_1', {
+      secretName: Statics.vipJwtSecret,
+      description: 'VIP Taken token secret',
+    });
+
+    new SecretsManager.Secret(this, 'zaken_secret_2', {
+      secretName: Statics.vipTakenSecret,
+      description: 'VIP Taken token secret',
+    });
+
+    new SecretsManager.Secret(this, 'zaken_secret_3', {
+      secretName: Statics.submissionstorageKey,
+      description: 'Submission storage API key',
+    });
   }
 }

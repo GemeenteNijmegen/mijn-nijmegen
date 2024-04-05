@@ -62,6 +62,9 @@
         },
         {
           "spawn": "bundle:app/uitkeringen/uitkering.lambda"
+        },
+        {
+          "spawn": "bundle:app/zaken/zaken.lambda"
         }
       ]
     },
@@ -173,6 +176,24 @@
         }
       ]
     },
+    "bundle:app/zaken/zaken.lambda": {
+      "name": "bundle:app/zaken/zaken.lambda",
+      "description": "Create a JavaScript bundle from src/app/zaken/zaken.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/zaken/zaken.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/app/zaken/zaken.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+        }
+      ]
+    },
+    "bundle:app/zaken/zaken.lambda:watch": {
+      "name": "bundle:app/zaken/zaken.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/app/zaken/zaken.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/zaken/zaken.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/app/zaken/zaken.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+        }
+      ]
+    },
     "clobber": {
       "name": "clobber",
       "description": "hard resets to HEAD of origin and cleans the local repo",
@@ -264,7 +285,7 @@
       "description": "Runs eslint against the codebase",
       "steps": [
         {
-          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern $@ src src/app/login/tests src/app/auth/tests src/app/home/tests src/app/uitkeringen/tests src/app/logout/tests /test /build-tools src/shared/tests .projenrc.js",
+          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern $@ src src/**/tests /test /build-tools .projenrc.js",
           "receiveArgs": true
         }
       ]
@@ -405,13 +426,13 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@aws-sdk/client-ssm,@aws-sdk/types,@axe-core/playwright,@glen/jest-raw-loader,@playwright/test,@types/aws-lambda,@types/jest,aws-sdk-client-mock,axios-mock-adapter,copyfiles,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jest,jest-aws-client-mock,projen,ts-jest,ts-node,typescript,@aws-cdk/aws-apigatewayv2-alpha,@aws-cdk/aws-apigatewayv2-integrations-alpha,@aws-lambda-powertools/logger,@aws-sdk/client-dynamodb,@aws-sdk/client-secrets-manager,@aws-solutions-constructs/aws-lambda-dynamodb,@gemeentenijmegen/apiclient,@gemeentenijmegen/apigateway-http,@gemeentenijmegen/aws-constructs,@gemeentenijmegen/projen-project-type,@gemeentenijmegen/session,@gemeentenijmegen/utils,@types/mustache,axios,cdk-remote-stack,cookie,dotenv,mustache,object-mapper,openid-client,xml2js"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@aws-sdk/client-ssm,@aws-sdk/types,@axe-core/playwright,@glen/jest-raw-loader,@playwright/test,@types/aws-lambda,@types/jest,aws-sdk-client-mock,axios-mock-adapter,copyfiles,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jest,jest-aws-client-mock,projen,ts-jest,ts-node,typescript,@aws-cdk/aws-apigatewayv2-alpha,@aws-cdk/aws-apigatewayv2-integrations-alpha,@aws-lambda-powertools/logger,@aws-sdk/client-dynamodb,@aws-sdk/client-secrets-manager,@aws-solutions-constructs/aws-lambda-dynamodb,@gemeentenijmegen/apiclient,@gemeentenijmegen/apigateway-http,@gemeentenijmegen/aws-constructs,@gemeentenijmegen/projen-project-type,@gemeentenijmegen/session,@gemeentenijmegen/utils,@types/mustache,axios,cdk-remote-stack,cookie,dotenv,jsonwebtoken,mustache,object-mapper,openid-client,xml2js,zod"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @aws-sdk/client-ssm @aws-sdk/types @axe-core/playwright @glen/jest-raw-loader @playwright/test @types/aws-lambda @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk aws-sdk-client-mock axios-mock-adapter copyfiles esbuild eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-aws-client-mock jest-junit projen standard-version ts-jest ts-node typescript @aws-cdk/aws-apigatewayv2-alpha @aws-cdk/aws-apigatewayv2-integrations-alpha @aws-lambda-powertools/logger @aws-sdk/client-dynamodb @aws-sdk/client-secrets-manager @aws-solutions-constructs/aws-lambda-dynamodb @gemeentenijmegen/apiclient @gemeentenijmegen/apigateway-http @gemeentenijmegen/aws-constructs @gemeentenijmegen/projen-project-type @gemeentenijmegen/session @gemeentenijmegen/utils @types/mustache aws-cdk-lib axios cdk-remote-stack constructs cookie dotenv mustache object-mapper openid-client xml2js"
+          "exec": "yarn upgrade @aws-sdk/client-ssm @aws-sdk/types @axe-core/playwright @glen/jest-raw-loader @playwright/test @types/aws-lambda @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk aws-sdk-client-mock axios-mock-adapter copyfiles esbuild eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-aws-client-mock jest-junit projen standard-version ts-jest ts-node typescript @aws-cdk/aws-apigatewayv2-alpha @aws-cdk/aws-apigatewayv2-integrations-alpha @aws-lambda-powertools/logger @aws-sdk/client-dynamodb @aws-sdk/client-secrets-manager @aws-solutions-constructs/aws-lambda-dynamodb @gemeentenijmegen/apiclient @gemeentenijmegen/apigateway-http @gemeentenijmegen/aws-constructs @gemeentenijmegen/projen-project-type @gemeentenijmegen/session @gemeentenijmegen/utils @types/mustache aws-cdk-lib axios cdk-remote-stack constructs cookie dotenv jsonwebtoken mustache object-mapper openid-client xml2js zod"
         },
         {
           "exec": "npx projen"
