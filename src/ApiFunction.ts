@@ -1,6 +1,7 @@
 import { aws_lambda as Lambda, aws_dynamodb, aws_ssm as SSM, RemovalPolicy, Duration, Stack } from 'aws-cdk-lib';
 import { Alarm } from 'aws-cdk-lib/aws-cloudwatch';
 import { Role } from 'aws-cdk-lib/aws-iam';
+import { FunctionProps } from 'aws-cdk-lib/aws-lambda';
 import { FilterPattern, IFilterPattern, MetricFilter, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
 import { LambdaReadOnlyPolicy } from './iam/lambda-readonly-policy';
@@ -18,6 +19,11 @@ export interface ApiFunctionProps {
   environment?: {[key: string]: string};
   monitorFilterPattern?: IFilterPattern;
   readOnlyRole: Role;
+  /**
+   * The default 'Lambda Function' props can be overridden or amended using
+   * properties provided in this property. These will map to the props of the lambda
+   */
+  functionProps?: Partial<FunctionProps>;
 }
 
 export class ApiFunction extends Construct {
@@ -44,6 +50,7 @@ export class ApiFunction extends Construct {
         SHOW_ZAKEN: 'True',
         ...props.environment,
       },
+      ...props.functionProps,
     });
     props.table.grantReadWriteData(this.lambda.grantPrincipal);
 

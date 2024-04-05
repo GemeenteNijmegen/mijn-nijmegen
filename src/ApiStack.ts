@@ -1,6 +1,6 @@
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import { aws_secretsmanager, Stack, StackProps } from 'aws-cdk-lib';
+import { aws_secretsmanager, Duration, Stack, StackProps } from 'aws-cdk-lib';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { AccountPrincipal, PrincipalWithConditions, Role } from 'aws-cdk-lib/aws-iam';
 import { ISecret, Secret } from 'aws-cdk-lib/aws-secretsmanager';
@@ -311,6 +311,10 @@ export class ApiStack extends Stack implements Configurable {
       },
       readOnlyRole,
       apiFunction: ZakenFunction,
+      functionProps: {
+        timeout: Duration.seconds(15),
+        memorySize: 1024,
+      },
     });
     jwtSecret.grantRead(zakenFunction.lambda);
     tokenSecret.grantRead(zakenFunction.lambda);
