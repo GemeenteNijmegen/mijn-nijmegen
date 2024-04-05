@@ -1,0 +1,22 @@
+[
+    {
+        "url": "/zaken/api/v1/zaakinformatieobjecten/757ea2f9-ddd6-466b-8b0d-83a2309ce9ac",
+        "uuid": "757ea2f9-ddd6-466b-8b0d-83a2309ce9ac",
+        "informatieobject": "/documenten/api/v1/enkelvoudiginformatieobjecten/634d7c96-9fe2-4dee-b389-fcd2c5beb2d0",
+        "zaak": "/zaken/api/v1/zaken/5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886",
+        "aardRelatieWeergave": "Hoort bij, omgekeerd: kent",
+        "titel": "test docx",
+        "beschrijving": "",
+        "registratiedatum": "2023-10-03T11:33:45.978291Z"
+    },
+    {
+        "url": "/zaken/api/v1/zaakinformatieobjecten/6af156fe-206f-451c-b972-6b5f700091d8",
+        "uuid": "6af156fe-206f-451c-b972-6b5f700091d8",
+        "informatieobject": "/documenten/api/v1/enkelvoudiginformatieobjecten/94531518-25a3-4b06-8eb1-1a076d2ba93f",
+        "zaak": "/zaken/api/v1/zaken/5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886",
+        "aardRelatieWeergave": "Hoort bij, omgekeerd: kent",
+        "titel": "",
+        "beschrijving": "",
+        "registratiedatum": "2023-10-03T11:33:32.680667Z"
+    }
+]

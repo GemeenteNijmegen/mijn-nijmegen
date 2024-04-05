@@ -20,6 +20,7 @@ export abstract class Statics {
    */
   static readonly ssmUseYivi: string = '/cdk/mijn-nijmegen/useYivi';
 
+  // MARK: OpenIDConnect
   /**
    * Authentication URL base, used in auth and login lambda
    */
@@ -42,6 +43,7 @@ export abstract class Statics {
    */
   static readonly secretOIDCClientSecret: string = '/cdk/mijn-nijmegen/oidc-clientsecret';
 
+  // MARK: API config (mTLS)
   /**
    * Certificate private key for mTLS
    */
@@ -67,6 +69,7 @@ export abstract class Statics {
    */
   static readonly ssmUitkeringsApiEndpointUrl: string = '/cdk/mijn-nijmegen/uitkerings-api-url';
 
+  // MARK: DNS
   /**
    * Route53 Zone ID and name for csp-nijmegen.nl in this account.
    * NB: This depends on the eform-project existing and having set this parameter!
@@ -104,6 +107,7 @@ export abstract class Statics {
   static readonly certificatePath: string = '/cdk/mijn-nijmegen/certificates';
   static readonly certificateArn: string = '/cdk/mijn-nijmegen/certificates/certificate-arn';
 
+  // MARK: Application infrastructure
   static readonly ssmApiGatewayId: string = '/cdk/mijn-nijmegen/apigateway-id';
 
   static readonly ssmSessionsTableArn: string = '/cdk/mijn-nijmegen/sessionstable-arn';
@@ -116,29 +120,23 @@ export abstract class Statics {
   static readonly ssmMonitoringLambdaArn: string = '/cdk/mijn-nijmegen/monitoring-lambda-arn';
   static readonly ssmSlackWebhookUrl: string = '/cdk/mijn-nijmegen/slack-webhook-url';
 
+  // MARK: ZGW configuration
 
-  // ENVIRONMENTS
+  static readonly ssmOpenZaakUserId: string = '/cdk/mijn-nijmegen/vip-jwt-userid';
+  static readonly ssmOpenZaakClientId: string = '/cdk/mijn-nijmegen/vip-jwt-clientid';
+  static readonly ssmOpenZaakBaseUrl: string = '/cdk/mijn-nijmegen/vip-base-url';
+  static readonly ssmOpenZaakTakenBaseUrl: string = '/cdk/mijn-nijmegen/taken-base-url';
 
-  static readonly deploymentEnvironment = {
-    account: '418648875085',
-    region: 'eu-west-1',
-  };
+  static readonly ssmSubmissionstorageBaseUrl: string = '/cdk/mijn-nijmegen/submissionstorage-base-url';
+  /**
+   * Secrets for zaken
+   */
+  static readonly vipJwtSecret: string = '/cdk/mijn-nijmegen/vip-jwttoken-new';
+  static readonly vipTakenSecret: string = '/cdk/mijn-nijmegen/vip-takentoken-new';
 
-  static readonly sandboxEnvironment = {
-    account: '122467643252',
-    region: 'eu-west-1',
-  };
+  static readonly submissionstorageKey: string = '/cdk/mijn-nijmegen/submissionstorage-key';
 
-  static readonly acceptanceEnvironment = {
-    account: '315037222840',
-    region: 'eu-west-1',
-  };
-
-  static readonly productionEnvironment = {
-    account: '196212984627',
-    region: 'eu-west-1',
-  };
-
+  // MARK: ENVIRONMENTS
   static readonly gnBuildEnvironment = {
     account: '836443378780',
     region: 'eu-central-1',

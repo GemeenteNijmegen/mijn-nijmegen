@@ -1,0 +1,1907 @@
+{
+  "count": 190,
+  "next": "/catalogi/api/v1/resultaattypen?page=2",
+  "previous": null,
+  "results": [
+      {
+          "url": "/catalogi/api/v1/resultaattypen/077d455a-73e6-4cab-807a-9d85ae265962",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/a9f5bf26-2664-44ed-b47e-9fe99971b2c2",
+          "omschrijving": "Buiten behandeling",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/671945f8-d57f-406f-86d9-95473d301c63",
+          "toelichting": "",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P1Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/5eb8f462-1c5c-4a7e-ad44-d8f691f12eef",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/a9f5bf26-2664-44ed-b47e-9fe99971b2c2",
+          "omschrijving": "Geannuleerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1118c52c-5445-4d32-91cd-e9efbac24ccd",
+          "omschrijvingGeneriek": "Niet ontvankelijk",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/e6089c84-1722-4342-b24c-888b7d6fcc22",
+          "toelichting": "",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/56850766-dfe5-4783-a669-2f63afbfa8fd",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/a9f5bf26-2664-44ed-b47e-9fe99971b2c2",
+          "omschrijving": "Ingetrokken",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0e8e7833-e491-44e2-8770-fd23f3f249b0",
+          "toelichting": "",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P1Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/9c53dfcb-8cd2-41a3-b943-00d0a18d0bea",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/a9f5bf26-2664-44ed-b47e-9fe99971b2c2",
+          "omschrijving": "Geweigerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1f750958-431c-4916-bc01-af5d3a753b41",
+          "omschrijvingGeneriek": "Geweigerd",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/e6089c84-1722-4342-b24c-888b7d6fcc22",
+          "toelichting": "",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/e612294e-8068-44df-915e-48718de80706",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/a9f5bf26-2664-44ed-b47e-9fe99971b2c2",
+          "omschrijving": "Verleend",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/f7d2dc14-1b71-4179-aed3-4e7abcfbeb0d",
+          "omschrijvingGeneriek": "Verleend",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/cbf810ed-63ac-4454-bd54-0040383428a8",
+          "toelichting": "",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P1Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/f826b2a4-6b82-42c4-8f2e-4ac1d1e1bd46",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/559caaac-7b9e-43f9-a56a-ad439cfb459a",
+          "omschrijving": "Buiten behandeling",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/671945f8-d57f-406f-86d9-95473d301c63",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/a792ffcd-b1f2-45d2-9b70-76c236d83344",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/559caaac-7b9e-43f9-a56a-ad439cfb459a",
+          "omschrijving": "Geannuleerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1118c52c-5445-4d32-91cd-e9efbac24ccd",
+          "omschrijvingGeneriek": "Niet ontvankelijk",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/e6089c84-1722-4342-b24c-888b7d6fcc22",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/c2be044a-9133-4a7c-9a5f-adf4f580b275",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/559caaac-7b9e-43f9-a56a-ad439cfb459a",
+          "omschrijving": "Ingetrokken",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0e8e7833-e491-44e2-8770-fd23f3f249b0",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/158c6b3a-6b4c-41bd-bd28-c42a299d1e99",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/559caaac-7b9e-43f9-a56a-ad439cfb459a",
+          "omschrijving": "Geweigerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1f750958-431c-4916-bc01-af5d3a753b41",
+          "omschrijvingGeneriek": "Geweigerd",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/e6089c84-1722-4342-b24c-888b7d6fcc22",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/a2a2f28a-e9e1-41ba-a200-78922cba8776",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/559caaac-7b9e-43f9-a56a-ad439cfb459a",
+          "omschrijving": "Verleend",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/f7d2dc14-1b71-4179-aed3-4e7abcfbeb0d",
+          "omschrijvingGeneriek": "Verleend",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/d670ce8d-efd0-468a-a3ea-bfdae33cae02",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/05dfa475-2b48-4d0b-9603-cd041c0ba3df",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/76af0bf5-c714-4d18-9a21-035cf1f9ffea",
+          "omschrijving": "Informeel - Weer ingetrokken vóór behandeling",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/afa30940-855b-4a7e-aa21-9e15a8078814",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/5f209dc8-fde8-46ef-bd88-3cbcaf3ee1db",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/76af0bf5-c714-4d18-9a21-035cf1f9ffea",
+          "omschrijving": "Informeel - Niet in behandeling genomen",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/afa30940-855b-4a7e-aa21-9e15a8078814",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/2ece0169-6444-4ad9-b626-205f678bbd1a",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/76af0bf5-c714-4d18-9a21-035cf1f9ffea",
+          "omschrijving": "Informeel - Extern doorgestuurd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgehandeld",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/afa30940-855b-4a7e-aa21-9e15a8078814",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/8b01a78c-fe6f-4673-a79f-7f9d8110cdfe",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/76af0bf5-c714-4d18-9a21-035cf1f9ffea",
+          "omschrijving": "Informeel - Intern doorgestuurd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/7cb315fb-4f7b-4a43-aca1-e4522e4c73b3",
+          "omschrijvingGeneriek": "Afgehandeld",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/afa30940-855b-4a7e-aa21-9e15a8078814",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/5448395b-0416-4499-b9f8-0c3c65a0d0d7",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/76af0bf5-c714-4d18-9a21-035cf1f9ffea",
+          "omschrijving": "Informeel - Minnelijk afgehandeld",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/7cb315fb-4f7b-4a43-aca1-e4522e4c73b3",
+          "omschrijvingGeneriek": "Afgehandeld",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/afa30940-855b-4a7e-aa21-9e15a8078814",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/6ef49329-c72e-4bab-b48a-7b8aee263f97",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/76af0bf5-c714-4d18-9a21-035cf1f9ffea",
+          "omschrijving": "Formeel - Niet ontvankelijk",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1118c52c-5445-4d32-91cd-e9efbac24ccd",
+          "omschrijvingGeneriek": "Niet ontvankelijk",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/afa30940-855b-4a7e-aa21-9e15a8078814",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/31558ce7-2d1d-410e-bff8-c10ec3710ad5",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/76af0bf5-c714-4d18-9a21-035cf1f9ffea",
+          "omschrijving": "Formeel - Ongegrond",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/b20acab7-ba04-4c44-b408-3d2ea18d1e57",
+          "omschrijvingGeneriek": "Ongegrond",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/afa30940-855b-4a7e-aa21-9e15a8078814",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/01d92a44-c5bf-4d76-92d8-b8df16b0c00d",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/76af0bf5-c714-4d18-9a21-035cf1f9ffea",
+          "omschrijving": "Formeel - Gedeeltelijk gegrond",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/3a0a9c3c-0847-4e7e-b7d9-765b9434094c",
+          "omschrijvingGeneriek": "Gegrond",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/afa30940-855b-4a7e-aa21-9e15a8078814",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/dd2de8e0-4887-4c26-bbce-fc7171b08831",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/76af0bf5-c714-4d18-9a21-035cf1f9ffea",
+          "omschrijving": "Formeel - Gegrond",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/3a0a9c3c-0847-4e7e-b7d9-765b9434094c",
+          "omschrijvingGeneriek": "Gegrond",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/afa30940-855b-4a7e-aa21-9e15a8078814",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/a7144c9b-2834-43b4-85a0-d17f51d2cb66",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1aaa4998-cbbf-4a65-9126-a9a2e74bb7ba",
+          "omschrijving": "Ingetrokken",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/03fca5b0-0570-45df-930a-dcd2f918a242",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/7b995f0a-fb67-4c30-9a92-50373dfff447",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1aaa4998-cbbf-4a65-9126-a9a2e74bb7ba",
+          "omschrijving": "Niet ontvankelijk",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1118c52c-5445-4d32-91cd-e9efbac24ccd",
+          "omschrijvingGeneriek": "Niet ontvankelijk",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/03fca5b0-0570-45df-930a-dcd2f918a242",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/ed8b6c0e-7967-4817-9a31-cc1901a05fa9",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1aaa4998-cbbf-4a65-9126-a9a2e74bb7ba",
+          "omschrijving": "Ongegrond",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/b20acab7-ba04-4c44-b408-3d2ea18d1e57",
+          "omschrijvingGeneriek": "Ongegrond",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/03fca5b0-0570-45df-930a-dcd2f918a242",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/71ccdfae-67dd-49f5-aec7-05d2e34f5611",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1aaa4998-cbbf-4a65-9126-a9a2e74bb7ba",
+          "omschrijving": "Gegrond",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/3a0a9c3c-0847-4e7e-b7d9-765b9434094c",
+          "omschrijvingGeneriek": "Gegrond",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/03fca5b0-0570-45df-930a-dcd2f918a242",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/36474f16-adc6-43b5-b8c7-83ae27a71b97",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1aaa4998-cbbf-4a65-9126-a9a2e74bb7ba",
+          "omschrijving": "Gedeeltelijk gegrond",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/3a0a9c3c-0847-4e7e-b7d9-765b9434094c",
+          "omschrijvingGeneriek": "Gegrond",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/03fca5b0-0570-45df-930a-dcd2f918a242",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/8b6ec3d5-723c-4bbb-80d9-1de1352f1413",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1aaa4998-cbbf-4a65-9126-a9a2e74bb7ba",
+          "omschrijving": "Toegewezen",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/fb65d251-1518-4185-865f-b8bdcfad07b1",
+          "omschrijvingGeneriek": "Toegekend",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/03fca5b0-0570-45df-930a-dcd2f918a242",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/b6a9e8fc-e6b3-4d87-b0c8-0c5adb82fdc8",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1aaa4998-cbbf-4a65-9126-a9a2e74bb7ba",
+          "omschrijving": "Afgewezen",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/e6a0c939-3404-45b0-88e3-76c94fb80ea7",
+          "omschrijvingGeneriek": "Afgewezen",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/03fca5b0-0570-45df-930a-dcd2f918a242",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/186c2c5a-fffe-42e0-8741-528441311ed2",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1f38a02a-e6e7-4665-b0f9-f2213784e5b8",
+          "omschrijving": "Ingetrokken",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/4811c2bc-3255-4cd4-a00a-7ed59223b8b1",
+          "toelichting": "Ingetrokken overig",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/950971b5-9000-4411-9b86-cab42b4e7d76",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1f38a02a-e6e7-4665-b0f9-f2213784e5b8",
+          "omschrijving": "Ingetrokken na BIA",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/4811c2bc-3255-4cd4-a00a-7ed59223b8b1",
+          "toelichting": "Ingetrokken na BIA",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/9b4c1c7b-4205-455b-8224-c0fef21f4c39",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1f38a02a-e6e7-4665-b0f9-f2213784e5b8",
+          "omschrijving": "Ingetrokken na herzien primair besluit",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/4811c2bc-3255-4cd4-a00a-7ed59223b8b1",
+          "toelichting": "Ingetrokken na herzien primair besluit",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/e46fa9f7-7da7-4fc9-a803-84f3f8a10b19",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1f38a02a-e6e7-4665-b0f9-f2213784e5b8",
+          "omschrijving": "Niet ontvankelijk",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1118c52c-5445-4d32-91cd-e9efbac24ccd",
+          "omschrijvingGeneriek": "Niet ontvankelijk",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/8af64c99-a168-40dd-8afd-9fbe0597b6dc",
+          "toelichting": "Niet ontvankelijk overig",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/60de4876-6221-4332-9877-059bcddadc5e",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1f38a02a-e6e7-4665-b0f9-f2213784e5b8",
+          "omschrijving": "Niet ontvankelijk na herzien primair besluit",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1118c52c-5445-4d32-91cd-e9efbac24ccd",
+          "omschrijvingGeneriek": "Niet ontvankelijk",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/afa30940-855b-4a7e-aa21-9e15a8078814",
+          "toelichting": "Bezwaar niet ontvankelijk na herzien primair besluit",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/c788faec-057e-4b9c-bc0a-0f37772b8047",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1f38a02a-e6e7-4665-b0f9-f2213784e5b8",
+          "omschrijving": "Ongegrond",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/b20acab7-ba04-4c44-b408-3d2ea18d1e57",
+          "omschrijvingGeneriek": "Ongegrond",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/afa30940-855b-4a7e-aa21-9e15a8078814",
+          "toelichting": "Bezwaar ongegrond overig",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/eda59f11-3538-48b4-bde6-1b76e69c71af",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1f38a02a-e6e7-4665-b0f9-f2213784e5b8",
+          "omschrijving": "Ongegrond met aanpassing gronden",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/b20acab7-ba04-4c44-b408-3d2ea18d1e57",
+          "omschrijvingGeneriek": "Ongegrond",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/afa30940-855b-4a7e-aa21-9e15a8078814",
+          "toelichting": "Bezwaar ongegrond met aanpassing gronden",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/3693b0d5-f082-4904-baea-b9e45c989ce9",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1f38a02a-e6e7-4665-b0f9-f2213784e5b8",
+          "omschrijving": "Gedeeltelijk gegrond",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/3a0a9c3c-0847-4e7e-b7d9-765b9434094c",
+          "omschrijvingGeneriek": "Gegrond",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/8af64c99-a168-40dd-8afd-9fbe0597b6dc",
+          "toelichting": "Bezwaar gedeeltelijk gegrond",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": null,
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/92aaa559-0f26-43ac-b62c-37c1cad5f87a",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1f38a02a-e6e7-4665-b0f9-f2213784e5b8",
+          "omschrijving": "Gegrond",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/3a0a9c3c-0847-4e7e-b7d9-765b9434094c",
+          "omschrijvingGeneriek": "Gegrond",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/8af64c99-a168-40dd-8afd-9fbe0597b6dc",
+          "toelichting": "Gegrond",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/aa2590d4-57cd-42f5-8018-49129000b9f1",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/d18e8a67-4fdf-41ef-a73e-10926198df14",
+          "omschrijving": "Buiten behandeling",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "Buiten behandeling gesteld",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/2104cd2d-b002-4b40-bdcf-547e3cbf91e1",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/d18e8a67-4fdf-41ef-a73e-10926198df14",
+          "omschrijving": "Geannuleerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1118c52c-5445-4d32-91cd-e9efbac24ccd",
+          "omschrijvingGeneriek": "Niet ontvankelijk",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/3d7b9016-eb26-4c99-b212-9f9eeef607d1",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/d18e8a67-4fdf-41ef-a73e-10926198df14",
+          "omschrijving": "Ingetrokken",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/12421a71-3dc3-42df-a0dc-820c1744c7b7",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/d4993323-7d68-4af0-9996-c24a9700098a",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/d18e8a67-4fdf-41ef-a73e-10926198df14",
+          "omschrijving": "Geweigerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1f750958-431c-4916-bc01-af5d3a753b41",
+          "omschrijvingGeneriek": "Geweigerd",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/f572cb0e-244a-4682-b57e-0c044c468387",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/fd703585-74b8-436e-aa86-973e9780669f",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/d18e8a67-4fdf-41ef-a73e-10926198df14",
+          "omschrijving": "Verleend",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/f7d2dc14-1b71-4179-aed3-4e7abcfbeb0d",
+          "omschrijvingGeneriek": "Verleend",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/5d102cc6-4a74-4262-a14a-538bbfe3f2da",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "ingangsdatum_besluit",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/4c96b3f9-5e45-4924-afde-7347c6fa3939",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/6cad9cd8-7f7a-4e6a-9e2c-d08cfbcc7f15",
+          "omschrijving": "Buiten behandeling",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "Buiten behandeling gesteld",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/c934199a-5c1c-4656-a4ec-cf1f80fa05cc",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/6cad9cd8-7f7a-4e6a-9e2c-d08cfbcc7f15",
+          "omschrijving": "Geannuleerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1118c52c-5445-4d32-91cd-e9efbac24ccd",
+          "omschrijvingGeneriek": "Niet ontvankelijk",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/dc673392-ac6d-49e3-b25c-74c25084a3df",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/6cad9cd8-7f7a-4e6a-9e2c-d08cfbcc7f15",
+          "omschrijving": "Ingetrokken",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/12421a71-3dc3-42df-a0dc-820c1744c7b7",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/4680f3b8-03d1-496c-b986-c9b492c02a06",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/6cad9cd8-7f7a-4e6a-9e2c-d08cfbcc7f15",
+          "omschrijving": "Geweigerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1f750958-431c-4916-bc01-af5d3a753b41",
+          "omschrijvingGeneriek": "Geweigerd",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/f572cb0e-244a-4682-b57e-0c044c468387",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/22151e19-95ee-4820-a925-44e3971b1015",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/6cad9cd8-7f7a-4e6a-9e2c-d08cfbcc7f15",
+          "omschrijving": "Verleend",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/f7d2dc14-1b71-4179-aed3-4e7abcfbeb0d",
+          "omschrijvingGeneriek": "Verleend",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/5d102cc6-4a74-4262-a14a-538bbfe3f2da",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "ingangsdatum_besluit",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/3f5eb387-1acc-4f3d-a590-ca87b3784eb5",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/8df5bf82-bc54-4319-a682-1fda5c16b97b",
+          "omschrijving": "Buiten behandeling",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "Buiten behandeling gesteld",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/792b14fe-ab5e-445d-baad-c003f2d6d2ff",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/8df5bf82-bc54-4319-a682-1fda5c16b97b",
+          "omschrijving": "Geannuleerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1118c52c-5445-4d32-91cd-e9efbac24ccd",
+          "omschrijvingGeneriek": "Niet ontvankelijk",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/2ba1e3f1-4d97-49fa-90e4-76c07d334e27",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/8df5bf82-bc54-4319-a682-1fda5c16b97b",
+          "omschrijving": "Ingetrokken",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/12421a71-3dc3-42df-a0dc-820c1744c7b7",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/3aca71b1-7b7d-44cb-aa1c-c4d2601832ca",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/8df5bf82-bc54-4319-a682-1fda5c16b97b",
+          "omschrijving": "Geweigerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1f750958-431c-4916-bc01-af5d3a753b41",
+          "omschrijvingGeneriek": "Geweigerd",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/f572cb0e-244a-4682-b57e-0c044c468387",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/76b3766d-cb04-48ac-b863-d2a1faec09b0",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/8df5bf82-bc54-4319-a682-1fda5c16b97b",
+          "omschrijving": "Verleend",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/f7d2dc14-1b71-4179-aed3-4e7abcfbeb0d",
+          "omschrijvingGeneriek": "Verleend",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/5d102cc6-4a74-4262-a14a-538bbfe3f2da",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "ingangsdatum_besluit",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/1cea170c-163e-4591-adcf-4544fd1a76f4",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1155d55d-3b6e-4268-bf83-47dcd7ed7b22",
+          "omschrijving": "Buiten behandeling",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/4811c2bc-3255-4cd4-a00a-7ed59223b8b1",
+          "toelichting": "geen reactie/volledige aanvraag na een aanvullingsverzoek",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/89335bc1-8ce7-4a4a-8e50-ce1d041bfd5a",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1155d55d-3b6e-4268-bf83-47dcd7ed7b22",
+          "omschrijving": "Geannuleerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/4811c2bc-3255-4cd4-a00a-7ed59223b8b1",
+          "toelichting": "gaat niet door i.v.m. Coronaregels",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/45015749-84a4-4fa3-9984-52a44becae17",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1155d55d-3b6e-4268-bf83-47dcd7ed7b22",
+          "omschrijving": "Ingetrokken",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/4811c2bc-3255-4cd4-a00a-7ed59223b8b1",
+          "toelichting": "ingetrokken door aanvrager zelf",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/02330611-202b-4520-a057-723d1c455994",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1155d55d-3b6e-4268-bf83-47dcd7ed7b22",
+          "omschrijving": "Geweigerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1f750958-431c-4916-bc01-af5d3a753b41",
+          "omschrijvingGeneriek": "Geweigerd",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/914f4198-3e73-497f-807f-1d17ee0af21f",
+          "toelichting": "Op wettelijke gronden geweigerd juridisch",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/c638c82f-ea61-4ea0-b470-291df888d1dc",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1155d55d-3b6e-4268-bf83-47dcd7ed7b22",
+          "omschrijving": "Verleend",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/f7d2dc14-1b71-4179-aed3-4e7abcfbeb0d",
+          "omschrijvingGeneriek": "Verleend",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/ef6ec016-7747-4e71-b62f-d33cf90e0bc7",
+          "toelichting": "standplaatsvergunning verleend",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "ingangsdatum_besluit",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/2a1c7069-19fe-47bf-9588-e29ed19c8088",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/f42223fe-66d5-495b-96fb-e164406a6e6b",
+          "omschrijving": "Buiten behandeling",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/4811c2bc-3255-4cd4-a00a-7ed59223b8b1",
+          "toelichting": "geen reactie/volledige aanvraag na een aanvullingsverzoek",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/cba693e3-989b-49d4-b800-a4a7c91c93ad",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/f42223fe-66d5-495b-96fb-e164406a6e6b",
+          "omschrijving": "Geannuleerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/4811c2bc-3255-4cd4-a00a-7ed59223b8b1",
+          "toelichting": "gaat niet door i.v.m. Coronaregels",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/5b1a92b3-b79f-4cc3-be0c-7285a16253f6",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/f42223fe-66d5-495b-96fb-e164406a6e6b",
+          "omschrijving": "Ingetrokken",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/4811c2bc-3255-4cd4-a00a-7ed59223b8b1",
+          "toelichting": "ingetrokken door aanvrager zelf",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/be916121-1aed-40fc-ae68-0240bc47a894",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/f42223fe-66d5-495b-96fb-e164406a6e6b",
+          "omschrijving": "Geweigerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1f750958-431c-4916-bc01-af5d3a753b41",
+          "omschrijvingGeneriek": "Geweigerd",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/914f4198-3e73-497f-807f-1d17ee0af21f",
+          "toelichting": "Op wettelijke gronden geweigerd juridisch",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/b32bbddf-eec4-4fee-b1f8-a142cafbeacc",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/f42223fe-66d5-495b-96fb-e164406a6e6b",
+          "omschrijving": "Verleend",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/f7d2dc14-1b71-4179-aed3-4e7abcfbeb0d",
+          "omschrijvingGeneriek": "Verleend",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/ef6ec016-7747-4e71-b62f-d33cf90e0bc7",
+          "toelichting": "standplaatsvergunning verleend",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "ingangsdatum_besluit",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/996c55f7-1775-4574-83b3-ce4ee816d246",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1a37500b-4954-4c75-b5d3-e1f5151516ad",
+          "omschrijving": "Vergunningvrij",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/f33dbd16-68ae-4820-acb5-5f437bca5edb",
+          "omschrijvingGeneriek": "Verwerkt",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/5038528b-0eb7-4502-a415-a3093987d69b",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/ca795f04-7d15-4963-ba09-131ceced8e64",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1a37500b-4954-4c75-b5d3-e1f5151516ad",
+          "omschrijving": "Buiten behandeling",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "Buiten behandeling gesteld",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/7054dbe4-5166-4a15-8acd-bf2fd80a5667",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1a37500b-4954-4c75-b5d3-e1f5151516ad",
+          "omschrijving": "Geannuleerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1118c52c-5445-4d32-91cd-e9efbac24ccd",
+          "omschrijvingGeneriek": "Niet ontvankelijk",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/b0d9d866-c87c-4cd2-94fa-5cb77ca80648",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1a37500b-4954-4c75-b5d3-e1f5151516ad",
+          "omschrijving": "Ingetrokken",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/12421a71-3dc3-42df-a0dc-820c1744c7b7",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/2084d3e8-efe5-4487-aba7-7abff533cd08",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/1a37500b-4954-4c75-b5d3-e1f5151516ad",
+          "omschrijving": "Geweigerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1f750958-431c-4916-bc01-af5d3a753b41",
+          "omschrijvingGeneriek": "Geweigerd",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/f572cb0e-244a-4682-b57e-0c044c468387",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/34af010b-ef1f-454e-8f02-26732bfdfaa2",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/a037b2fc-6c7b-4091-b494-f83013b2bd55",
+          "omschrijving": "Buiten behandeling",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "Buiten behandeling gesteld",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/f8782d45-fd02-4324-8d04-6252b90c0b61",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/a037b2fc-6c7b-4091-b494-f83013b2bd55",
+          "omschrijving": "Geannuleerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1118c52c-5445-4d32-91cd-e9efbac24ccd",
+          "omschrijvingGeneriek": "Niet ontvankelijk",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/974f3fe6-a9f7-4c14-aaeb-bc36d95b03d5",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/a037b2fc-6c7b-4091-b494-f83013b2bd55",
+          "omschrijving": "Ingetrokken",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/12421a71-3dc3-42df-a0dc-820c1744c7b7",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/098f64cb-4e98-4630-9a15-1924542fdf2c",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/a037b2fc-6c7b-4091-b494-f83013b2bd55",
+          "omschrijving": "Geweigerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1f750958-431c-4916-bc01-af5d3a753b41",
+          "omschrijvingGeneriek": "Geweigerd",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/f572cb0e-244a-4682-b57e-0c044c468387",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/b799cce2-754b-405e-a8de-f809ffe3f969",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/a037b2fc-6c7b-4091-b494-f83013b2bd55",
+          "omschrijving": "Verleend",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/f7d2dc14-1b71-4179-aed3-4e7abcfbeb0d",
+          "omschrijvingGeneriek": "Verleend",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/5d102cc6-4a74-4262-a14a-538bbfe3f2da",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "ingangsdatum_besluit",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/ca0e7cb3-8b2a-4c2b-88ec-bf42006d3a9b",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/80535479-c1eb-4f12-af04-52d33b48872f",
+          "omschrijving": "Buiten behandeling",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "Buiten behandeling gesteld",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/498cd317-1881-4e5f-be32-8216389eb5e2",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/80535479-c1eb-4f12-af04-52d33b48872f",
+          "omschrijving": "Geannuleerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1118c52c-5445-4d32-91cd-e9efbac24ccd",
+          "omschrijvingGeneriek": "Niet ontvankelijk",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/91ba6cc4-bfea-4f0a-8608-8bbb97c84aa7",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/80535479-c1eb-4f12-af04-52d33b48872f",
+          "omschrijving": "Ingetrokken",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/12421a71-3dc3-42df-a0dc-820c1744c7b7",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/5b3f4496-aed8-4f25-b311-d2bc753063e3",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/80535479-c1eb-4f12-af04-52d33b48872f",
+          "omschrijving": "Geweigerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1f750958-431c-4916-bc01-af5d3a753b41",
+          "omschrijvingGeneriek": "Geweigerd",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/f572cb0e-244a-4682-b57e-0c044c468387",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/f0387d17-7ea1-42c5-88c3-7ffdbb1215a1",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/80535479-c1eb-4f12-af04-52d33b48872f",
+          "omschrijving": "Verleend",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/f7d2dc14-1b71-4179-aed3-4e7abcfbeb0d",
+          "omschrijvingGeneriek": "Verleend",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/5d102cc6-4a74-4262-a14a-538bbfe3f2da",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "ingangsdatum_besluit",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/8adf3d7c-7f6e-49cd-802a-d9c2da32bcdc",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/06f7c1fe-af3b-4558-b4b1-4e74fc5f5a65",
+          "omschrijving": "Buiten behandeling",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "Buiten behandeling gesteld",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/88e1bc6d-6479-4da0-be57-e085c39813f5",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/06f7c1fe-af3b-4558-b4b1-4e74fc5f5a65",
+          "omschrijving": "Geannuleerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1118c52c-5445-4d32-91cd-e9efbac24ccd",
+          "omschrijvingGeneriek": "Niet ontvankelijk",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/58092e1b-f148-47bb-9c44-cc0e06a8a7f6",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/06f7c1fe-af3b-4558-b4b1-4e74fc5f5a65",
+          "omschrijving": "Ingetrokken",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/12421a71-3dc3-42df-a0dc-820c1744c7b7",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/c4ad6498-34c8-4e33-abd0-1217f12000d3",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/06f7c1fe-af3b-4558-b4b1-4e74fc5f5a65",
+          "omschrijving": "Geweigerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1f750958-431c-4916-bc01-af5d3a753b41",
+          "omschrijvingGeneriek": "Geweigerd",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/f572cb0e-244a-4682-b57e-0c044c468387",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/24f5b024-19f5-40c6-96fb-9886bfb89a75",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/06f7c1fe-af3b-4558-b4b1-4e74fc5f5a65",
+          "omschrijving": "Verleend",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/f7d2dc14-1b71-4179-aed3-4e7abcfbeb0d",
+          "omschrijvingGeneriek": "Verleend",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/5d102cc6-4a74-4262-a14a-538bbfe3f2da",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "ingangsdatum_besluit",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/cdd5f25c-a36f-48c7-b4fb-bbdbb3d91b47",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/e3dd351e-1d2b-4e27-8303-da7a134b5c7b",
+          "omschrijving": "Vergunningvrij",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/f33dbd16-68ae-4820-acb5-5f437bca5edb",
+          "omschrijvingGeneriek": "Verwerkt",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/f83410d7-57bc-4e38-9e51-d38995de9a05",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/90493bc5-4327-4e11-be53-b892b85f705b",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/5b736a08-8674-4ced-aa27-3f067f30427e",
+          "omschrijving": "Vergunningvrij",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/f33dbd16-68ae-4820-acb5-5f437bca5edb",
+          "omschrijvingGeneriek": "Verwerkt",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/5038528b-0eb7-4502-a415-a3093987d69b",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/588b9fb6-1f43-4cfb-a268-cab20449fcd1",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/b47225ce-543d-48cf-807c-878789114ea0",
+          "omschrijving": "Vergunningvrij",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/f33dbd16-68ae-4820-acb5-5f437bca5edb",
+          "omschrijvingGeneriek": "Verwerkt",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/5038528b-0eb7-4502-a415-a3093987d69b",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/a0945855-abe3-4a9e-a219-ba23d94d8a95",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/d72b5974-94c5-4131-a190-01f8da3c44fb",
+          "omschrijving": "Buiten behandeling",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/4811c2bc-3255-4cd4-a00a-7ed59223b8b1",
+          "toelichting": "geen reactie/volledige aanvraag na een aanvullingsverzoek",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/dcc37951-79a2-49f5-9cb7-899811c28e5b",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/d72b5974-94c5-4131-a190-01f8da3c44fb",
+          "omschrijving": "Geannuleerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/4811c2bc-3255-4cd4-a00a-7ed59223b8b1",
+          "toelichting": "gaat niet door i.v.m. Coronaregels",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/d2a0261e-9b85-4de2-bcf1-6ff99b92cf2c",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/d72b5974-94c5-4131-a190-01f8da3c44fb",
+          "omschrijving": "Ingetrokken",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/4811c2bc-3255-4cd4-a00a-7ed59223b8b1",
+          "toelichting": "ingetrokken door aanvrager zelf",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/787fa0eb-f984-4bc8-a04a-4c7b51b37121",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/d72b5974-94c5-4131-a190-01f8da3c44fb",
+          "omschrijving": "Geweigerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1f750958-431c-4916-bc01-af5d3a753b41",
+          "omschrijvingGeneriek": "Geweigerd",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/914f4198-3e73-497f-807f-1d17ee0af21f",
+          "toelichting": "Op wettelijke gronden geweigerd juridisch",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P3Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/c9a6acd3-f739-463b-a95d-06e588f4b5dc",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/9b9d90d0-2529-43e4-ab02-e0e701a6bf44",
+          "omschrijving": "Buiten behandeling",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "Buiten behandeling gesteld",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/0e4c3257-25dd-4a6c-a916-32c39f7ca736",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/9b9d90d0-2529-43e4-ab02-e0e701a6bf44",
+          "omschrijving": "Geannuleerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1118c52c-5445-4d32-91cd-e9efbac24ccd",
+          "omschrijvingGeneriek": "Niet ontvankelijk",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/379b2365-e79f-4a02-a04d-9607961c5c95",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/9b9d90d0-2529-43e4-ab02-e0e701a6bf44",
+          "omschrijving": "Ingetrokken",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/12421a71-3dc3-42df-a0dc-820c1744c7b7",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/954d5be9-d6a6-42cc-86d6-5f144605c015",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/9b9d90d0-2529-43e4-ab02-e0e701a6bf44",
+          "omschrijving": "Geweigerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1f750958-431c-4916-bc01-af5d3a753b41",
+          "omschrijvingGeneriek": "Geweigerd",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/f572cb0e-244a-4682-b57e-0c044c468387",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/38032d48-c3b3-452d-8554-7c41edb0bbdb",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/9b9d90d0-2529-43e4-ab02-e0e701a6bf44",
+          "omschrijving": "Verleend",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/f7d2dc14-1b71-4179-aed3-4e7abcfbeb0d",
+          "omschrijvingGeneriek": "Verleend",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/5d102cc6-4a74-4262-a14a-538bbfe3f2da",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "ingangsdatum_besluit",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/f97ed0fa-4620-4651-9c77-3da8ff7b19ec",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/28e24608-7f19-439f-9755-8c3ecbbe386f",
+          "omschrijving": "Buiten behandeling",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "Buiten behandeling gesteld",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/5887f58c-8058-4712-8ffc-e04b1ca8d743",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/28e24608-7f19-439f-9755-8c3ecbbe386f",
+          "omschrijving": "Geannuleerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1118c52c-5445-4d32-91cd-e9efbac24ccd",
+          "omschrijvingGeneriek": "Niet ontvankelijk",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/d1eb6dc2-ebed-48bf-a5ef-3a7a16a18a49",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/28e24608-7f19-439f-9755-8c3ecbbe386f",
+          "omschrijving": "Ingetrokken",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/12421a71-3dc3-42df-a0dc-820c1744c7b7",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/3edf2211-5e4f-4ce9-993a-cd0a7a8dc787",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/28e24608-7f19-439f-9755-8c3ecbbe386f",
+          "omschrijving": "Geweigerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1f750958-431c-4916-bc01-af5d3a753b41",
+          "omschrijvingGeneriek": "Geweigerd",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/f572cb0e-244a-4682-b57e-0c044c468387",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/764be5ba-29cb-4278-9c1c-b5ca016f97a0",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/28e24608-7f19-439f-9755-8c3ecbbe386f",
+          "omschrijving": "Verleend",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/f7d2dc14-1b71-4179-aed3-4e7abcfbeb0d",
+          "omschrijvingGeneriek": "Verleend",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/5d102cc6-4a74-4262-a14a-538bbfe3f2da",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "ingangsdatum_besluit",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/cfbd1eb6-888b-4622-aba4-562cb845f41c",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/9c8e1e67-fd35-446e-a084-5ef19b6e87eb",
+          "omschrijving": "Buiten behandeling",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/ce8cf476-0b59-496f-8eee-957a7c6e2506",
+          "omschrijvingGeneriek": "Afgebroken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "Buiten behandeling gesteld",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/506e50b8-3151-45d1-ab08-6e7ad3e8cbd6",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/9c8e1e67-fd35-446e-a084-5ef19b6e87eb",
+          "omschrijving": "Geannuleerd",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/1118c52c-5445-4d32-91cd-e9efbac24ccd",
+          "omschrijvingGeneriek": "Niet ontvankelijk",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/0d978967-6bf2-452f-951a-c16bff338f42",
+          "toelichting": "",
+          "archiefnominatie": "vernietigen",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      },
+      {
+          "url": "/catalogi/api/v1/resultaattypen/dfe9db05-8ffb-4fde-bd8c-cda239e2ebac",
+          "zaaktype": "/catalogi/api/v1/zaaktypen/9c8e1e67-fd35-446e-a084-5ef19b6e87eb",
+          "omschrijving": "Ingetrokken",
+          "resultaattypeomschrijving": "https://selectielijst.openzaak.nl/api/v1/resultaattypeomschrijvingen/a6a0bd73-262a-401a-b629-9c4a908c69b5",
+          "omschrijvingGeneriek": "Ingetrokken",
+          "selectielijstklasse": "https://selectielijst.openzaak.nl/api/v1/resultaten/12421a71-3dc3-42df-a0dc-820c1744c7b7",
+          "toelichting": "",
+          "archiefnominatie": "blijvend_bewaren",
+          "archiefactietermijn": "P5Y",
+          "brondatumArchiefprocedure": {
+              "afleidingswijze": "afgehandeld",
+              "datumkenmerk": "",
+              "einddatumBekend": false,
+              "objecttype": "",
+              "registratie": "",
+              "procestermijn": null
+          }
+      }
+  ]
+}

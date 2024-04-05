@@ -63,6 +63,34 @@ export interface Configuration {
    */
   pipelineStackCdkName: string;
   pipelineName: string;
+
+  /**
+   * Feature flag: if this is not true, the lambda will
+   * return 404.
+   */
+  readonly zakenIsLive?: boolean;
+
+  /**
+   * Feature flag: The taken functionality is experimental
+   * If this flag is not true, the taken-functionality will
+   * always exit immediately.
+   */
+  readonly zakenUseTaken?: boolean;
+
+  /**
+   * Feature flag: The submissions functionality is experimental
+   * If this flag is not true, the submissions-functionality will
+   * not be called.
+   */
+  readonly zakenUseSubmissions?: boolean;
+
+  /**
+   * Allow zaken from these 'domains'. These values are added to
+   * a call to `Zaken.allowDomains` which checks the 'zaakType'
+   * for each zaak for its 'domein', and only shows zaken
+   * from the allowed list.
+   */
+  readonly zakenAllowDomains: string[];
 }
 
 
@@ -77,6 +105,10 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     dsRecord: '3766 13 2 11761745E09473E6CE95DB798CF1ADB69B4433E73EEFC9F7FE341561966EA154',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-acceptance',
     pipelineName: 'mijnnijmegen-acceptance',
+    zakenUseTaken: true,
+    zakenIsLive: true,
+    zakenUseSubmissions: true,
+    zakenAllowDomains: ['APV', 'JZ'],
   },
   production: {
     branch: 'production',
@@ -88,6 +120,10 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     dsRecord: '40951 13 2 1EFF20C0264CD1FDE6C7C858398BC2141768CC014A7BB27997F323076B7C47ED',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-production',
     pipelineName: 'mijnnijmegen-production',
+    zakenUseTaken: false,
+    zakenIsLive: true,
+    zakenUseSubmissions: true,
+    zakenAllowDomains: ['APV'], // JZ is not yet available in prod
   },
 };
 
