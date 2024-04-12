@@ -1,6 +1,67 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
-import { devices } from '@playwright/test';
 
+
+const localProjects: any = [
+  // Config for running tests in local
+  // {
+  //   name: "chrome",
+  //   use: {
+  //     browserName: "chromium",
+  //     channel: "chrome",
+  //   },
+  // },
+  // {
+  //   name: "safari",
+  //   use: {
+  //     browserName: "webkit",
+  //     viewport: { width: 1200, height: 750 },
+  //   },
+  // },
+  {
+    name: 'firefox',
+    use: {
+      browserName: 'firefox',
+      viewport: { width: 1625, height: 1240 },
+    },
+  },
+];
+
+const lambdaTestProjects: any = [
+  // -- LambdaTest Config --
+  // name in the format: browserName:browserVersion:platform@lambdatest
+  // Browsers allowed: `Chrome`, `MicrosoftEdge`, `pw-chromium`, `pw-firefox` and `pw-webkit`
+  // Use additional configuration options provided by Playwright if required: https://playwright.dev/docs/api/class-testconfig
+  {
+    name: 'chrome:latest:MacOS Ventura@lambdatest',
+    use: {
+      viewport: { width: 1920, height: 1080 },
+    },
+  },
+  // {
+  //   name: "chrome:latest:Windows 11@lambdatest",
+  //   use: {
+  //     viewport: { width: 1280, height: 720 },
+  //   },
+  // },
+  // {
+  //   name: "MicrosoftEdge:109:MacOS Ventura@lambdatest",
+  //   use: {
+  //     ...devices["iPhone 12 Pro Max"],
+  //   },
+  // },
+  // {
+  //   name: "pw-firefox:latest:Windows 11@lambdatest",
+  //   use: {
+  //     viewport: { width: 1280, height: 720 },
+  //   },
+  // },
+  // {
+  //   name: "pw-webkit:latest:Windows 10@lambdatest",
+  //   use: {
+  //     viewport: { width: 1920, height: 1080 },
+  //   },
+  // },
+];
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -41,67 +102,7 @@ const config: PlaywrightTestConfig = {
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
-
-  /* Configure projects for major browsers */
-  projects: [
-    {
-      name: 'chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-      },
-    },
-
-    {
-      name: 'firefox',
-      use: {
-        ...devices['Desktop Firefox'],
-      },
-    },
-
-    {
-      name: 'webkit',
-      use: {
-        ...devices['Desktop Safari'],
-      },
-    },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: {
-    //     ...devices['Pixel 5'],
-    //   },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: {
-    //     ...devices['iPhone 12'],
-    //   },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: {
-    //     channel: 'msedge',
-    //   },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: {
-    //     channel: 'chrome',
-    //   },
-    // },
-  ],
-
-  /* Folder for test artifacts such as screenshots, videos, traces, etc. */
-  // outputDir: 'test-results/',
-
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   port: 3000,
-  // },
-};
-
+  projects: (process.env?.LT_USERNAME && process.env?.LT_ACCESS_KEY) ? lambdaTestProjects : localProjects,
+}
+  
 export default config;
