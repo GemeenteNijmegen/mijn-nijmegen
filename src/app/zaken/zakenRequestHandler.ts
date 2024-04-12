@@ -49,7 +49,7 @@ export class ZakenRequestHandler {
     const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
     let data = {
       volledigenaam: user.userName,
-      title: 'Lopende zaken',
+      title: 'Mijn zaken',
       shownav: true,
       nav: navigation.items,
       zaken: zaakSummaries,
@@ -68,7 +68,7 @@ export class ZakenRequestHandler {
       const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
       let data = {
         volledigenaam: session.getValue('username'),
-        title: 'Zaak',
+        title: `Zaak - ${formattedZaak.zaak_type}`,
         shownav: true,
         nav: navigation.items,
         zaak: formattedZaak,
