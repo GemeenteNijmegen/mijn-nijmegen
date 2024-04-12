@@ -84,7 +84,7 @@
                         {{/completed}}
                         </div>
                         <p class="denhaag-process-steps__step-heading denhaag-process-steps__step-heading--{{#current}}current{{/current}}{{^current}}{{#completed}}checked{{/completed}}{{^completed}}not-checked{{/completed}}{{/current}}">
-                            {{name}}
+                            {{name}}{{#current}} <span class="sr-only">(huidige stap)</span>{{/current}}
                         </p>
                         </div>
                         <div class="denhaag-process-steps__step-body">
