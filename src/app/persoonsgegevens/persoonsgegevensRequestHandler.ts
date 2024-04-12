@@ -56,7 +56,7 @@ export class PersoonsgegevensRequestHandler {
     const navigation = new Navigation(userType, { showZaken: this.config.showZaken, currentPath: '/persoonsgegevens' });
     data.volledigenaam = session.getValue('username');
 
-    data.title = 'Persoonsgegevens';
+    data.title = 'Mijn gegevens';
     data.shownav = true;
     data.nav = navigation.items;
     // render page

@@ -62,7 +62,7 @@ export class uitkeringsRequestHandler {
   }
 
   async renderHtml(data: any) {
-    data.title = 'Uitkeringen';
+    data.title = 'Mijn uitkeringen';
     data.shownav = true;
 
     // render page
