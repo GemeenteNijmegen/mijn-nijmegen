@@ -1,0 +1,33 @@
+{
+    "url": "/documenten/api/v1/enkelvoudiginformatieobjecten/634d7c96-9fe2-4dee-b389-fcd2c5beb2d0",
+    "identificatie": "DOCUMENT-2023-0000000007",
+    "bronorganisatie": "001479179",
+    "creatiedatum": "2023-07-05",
+    "titel": "test docx",
+    "vertrouwelijkheidaanduiding": "zaakvertrouwelijk",
+    "auteur": "Michel",
+    "status": "definitief",
+    "formaat": "text/plain",
+    "taal": "nld",
+    "versie": 1,
+    "beginRegistratie": "2023-10-03T11:33:45.683874Z",
+    "bestandsnaam": "",
+    "inhoud": "/documenten/api/v1/enkelvoudiginformatieobjecten/634d7c96-9fe2-4dee-b389-fcd2c5beb2d0/download?versie=1",
+    "bestandsomvang": 16893,
+    "link": "",
+    "beschrijving": "",
+    "ontvangstdatum": null,
+    "verzenddatum": null,
+    "indicatieGebruiksrecht": null,
+    "ondertekening": {
+        "soort": "",
+        "datum": null
+    },
+    "integriteit": {
+        "algoritme": "",
+        "waarde": "",
+        "datum": null
+    },
+    "informatieobjecttype": "/catalogi/api/v1/informatieobjecttypen/ad05e7f5-9484-40c1-8f4e-150f09e961ae",
+    "locked": false
+}

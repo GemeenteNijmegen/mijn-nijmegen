@@ -1,0 +1,312 @@
+{
+    "count": 10,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "url": "/api/v2/objects/2445ce87-b936-4702-b3bd-bdd2bae31007",
+            "uuid": "2445ce87-b936-4702-b3bd-bdd2bae31007",
+            "type": "/api/v2/objecttypes/27b38b08-35a8-42ee-b829-633722850992",
+            "record": {
+                "index": 1,
+                "typeVersion": 1,
+                "data": {
+                    "zaak": "/zaken/api/v1/zaken/0cb4f028-7d08-4161-b94c-49eaf9c647f8",
+                    "soort": "bestand",
+                    "title": "We missen nog het veiligheidsplan voor uw evenement, zou u deze willen uploaden via het formulier",
+                    "status": "open",
+                    "formulier": {
+                        "type": "url",
+                        "value": "https://app6-accp.nijmegen.nl/#/form/ontwikkel/uploadBijlage"
+                    },
+                    "verloopdatum": "2024-03-11 00:00:00",
+                    "identificatie": {
+                        "type": "bsn",
+                        "value": "999999333"
+                    },
+                    "verwerker_taak_id": "bestand"
+                },
+                "geometry": null,
+                "startAt": "2024-03-04",
+                "endAt": null,
+                "registrationAt": "2024-03-04",
+                "correctionFor": null,
+                "correctedBy": null
+            }
+        },
+        {
+            "url": "/api/v2/objects/f6c47525-9bb8-49ec-bf17-eed55a5bd73c",
+            "uuid": "f6c47525-9bb8-49ec-bf17-eed55a5bd73c",
+            "type": "/api/v2/objecttypes/27b38b08-35a8-42ee-b829-633722850992",
+            "record": {
+                "index": 3,
+                "typeVersion": 1,
+                "data": {
+                    "zaak": "/zaken/api/v1/zaken/78016b83-40fc-44d6-b237-03b188c6d964",
+                    "soort": "bestand",
+                    "title": "We missen nog het veiligheidsplan voor uw evenement, zou u deze willen uploaden via het formulier.",
+                    "status": "gesloten",
+                    "formulier": {
+                        "type": "url",
+                        "value": "https://app6-accp.nijmegen.nl/#/form/ontwikkel/uploadBijlage"
+                    },
+                    "verloopdatum": "2023-10-12 00:00:00",
+                    "identificatie": {
+                        "type": "bsn",
+                        "value": "999999333"
+                    },
+                    "verwerker_taak_id": "bestand"
+                },
+                "geometry": null,
+                "startAt": "2023-10-05",
+                "endAt": null,
+                "registrationAt": "2023-10-05",
+                "correctionFor": null,
+                "correctedBy": null
+            }
+        },
+        {
+            "url": "/api/v2/objects/2b47b05b-5f89-4cc6-8dd2-09ae5e4e6b8c",
+            "uuid": "2b47b05b-5f89-4cc6-8dd2-09ae5e4e6b8c",
+            "type": "/api/v2/objecttypes/27b38b08-35a8-42ee-b829-633722850992",
+            "record": {
+                "index": 5,
+                "typeVersion": 1,
+                "data": {
+                    "zaak": "/zaken/api/v1/zaken/ce84ed0c-5195-4570-93d9-7ee0bcb7cfaa",
+                    "soort": "bestand",
+                    "title": "We missen nog het veiligheidsplan voor uw evenement, zou u deze willen uploaden via het formulier",
+                    "status": "gesloten",
+                    "formulier": {
+                        "type": "url",
+                        "value": "https://app6-accp.nijmegen.nl/#/form/ontwikkel/uploadBijlage"
+                    },
+                    "verloopdatum": "2023-10-25 00:00:00",
+                    "identificatie": {
+                        "type": "bsn",
+                        "value": "999999333"
+                    },
+                    "verwerker_taak_id": "bestand"
+                },
+                "geometry": null,
+                "startAt": "2023-10-04",
+                "endAt": null,
+                "registrationAt": "2023-10-05",
+                "correctionFor": null,
+                "correctedBy": null
+            }
+        },
+        {
+            "url": "/api/v2/objects/a336175d-1696-4f1e-8012-ebeac3f00552",
+            "uuid": "a336175d-1696-4f1e-8012-ebeac3f00552",
+            "type": "/api/v2/objecttypes/27b38b08-35a8-42ee-b829-633722850992",
+            "record": {
+                "index": 1,
+                "typeVersion": 1,
+                "data": {
+                    "zaak": "/zaken/api/v1/zaken/0748ea08-43f5-499b-9474-4367a62cdd8f",
+                    "soort": "bestand",
+                    "title": "We missen nog het veiligheidsplan voor uw evenement, zou u deze willen uploaden via het formulier",
+                    "status": "open",
+                    "formulier": {
+                        "type": "url",
+                        "value": "https://app6-accp.nijmegen.nl/#/form/ontwikkel/uploadBijlage"
+                    },
+                    "verloopdatum": "2023-10-26 00:00:00",
+                    "identificatie": {
+                        "type": "bsn",
+                        "value": "999999333"
+                    },
+                    "verwerker_taak_id": "bestand"
+                },
+                "geometry": null,
+                "startAt": "2023-10-05",
+                "endAt": null,
+                "registrationAt": "2023-10-05",
+                "correctionFor": null,
+                "correctedBy": null
+            }
+        },
+        {
+            "url": "/api/v2/objects/be894056-439a-4dfd-ad59-3a7e798e2045",
+            "uuid": "be894056-439a-4dfd-ad59-3a7e798e2045",
+            "type": "/api/v2/objecttypes/27b38b08-35a8-42ee-b829-633722850992",
+            "record": {
+                "index": 1,
+                "typeVersion": 1,
+                "data": {
+                    "zaak": "/zaken/api/v1/zaken/b843c6f6-19cd-452b-971e-3c096f47e447",
+                    "soort": "bestand",
+                    "title": "We missen nog het veiligheidsplan voor uw evenement, zou u deze willen uploaden via het formulier",
+                    "status": "open",
+                    "formulier": {
+                        "type": "url",
+                        "value": "https://app6-accp.nijmegen.nl/#/form/ontwikkel/uploadBijlage"
+                    },
+                    "verloopdatum": "2023-10-19 00:00:00",
+                    "identificatie": {
+                        "type": "bsn",
+                        "value": "999999333"
+                    },
+                    "verwerker_taak_id": "bestand"
+                },
+                "geometry": null,
+                "startAt": "2023-10-05",
+                "endAt": null,
+                "registrationAt": "2023-10-05",
+                "correctionFor": null,
+                "correctedBy": null
+            }
+        },
+        {
+            "url": "/api/v2/objects/67c75e2a-8260-4dbd-804e-84c8d5ae15f8",
+            "uuid": "67c75e2a-8260-4dbd-804e-84c8d5ae15f8",
+            "type": "/api/v2/objecttypes/27b38b08-35a8-42ee-b829-633722850992",
+            "record": {
+                "index": 1,
+                "typeVersion": 1,
+                "data": {
+                    "zaak": "/zaken/api/v1/zaken/485b84b6-ec5b-4d18-83ca-a88618311684",
+                    "soort": "bestand",
+                    "title": "We missen nog het veiligheidsplan voor uw evenement, zou u deze willen uploaden via het formulier",
+                    "status": "open",
+                    "formulier": {
+                        "type": "url",
+                        "value": "https://app6-accp.nijmegen.nl/#/form/ontwikkel/uploadBijlage"
+                    },
+                    "verloopdatum": "2023-10-25 00:00:00",
+                    "identificatie": {
+                        "type": "bsn",
+                        "value": "999999333"
+                    },
+                    "verwerker_taak_id": "bestand"
+                },
+                "geometry": null,
+                "startAt": "2023-10-04",
+                "endAt": null,
+                "registrationAt": "2023-10-04",
+                "correctionFor": null,
+                "correctedBy": null
+            }
+        },
+        {
+            "url": "/api/v2/objects/33be854b-ea96-43c9-bd3b-e0565ec8c0bd",
+            "uuid": "33be854b-ea96-43c9-bd3b-e0565ec8c0bd",
+            "type": "/api/v2/objecttypes/27b38b08-35a8-42ee-b829-633722850992",
+            "record": {
+                "index": 1,
+                "typeVersion": 1,
+                "data": {
+                    "zaak": "/zaken/api/v1/zaken/e36fdf69-3b3e-4125-ae3c-6e299880c060",
+                    "soort": "bestand",
+                    "title": "Test taak vanuit VIP testomgeving door Michel",
+                    "status": "open",
+                    "formulier": {
+                        "type": "url",
+                        "value": "https://app6-accp.nijmegen.nl/#/form/ontwikkel/uploadBijlage"
+                    },
+                    "verloopdatum": "2023-11-04 00:00:00",
+                    "identificatie": {
+                        "type": "bsn",
+                        "value": "999999333"
+                    },
+                    "verwerker_taak_id": "bestand"
+                },
+                "geometry": null,
+                "startAt": "2023-10-04",
+                "endAt": null,
+                "registrationAt": "2023-10-04",
+                "correctionFor": null,
+                "correctedBy": null
+            }
+        },
+        {
+            "url": "/api/v2/objects/0bd2c171-a926-4737-85d7-9b534ee84235",
+            "uuid": "0bd2c171-a926-4737-85d7-9b534ee84235",
+            "type": "/api/v2/objecttypes/27b38b08-35a8-42ee-b829-633722850992",
+            "record": {
+                "index": 1,
+                "typeVersion": 1,
+                "data": {
+                    "zaak": "/zaken/api/v1/zaken/e36fdf69-3b3e-4125-ae3c-6e299880c060",
+                    "soort": "bestand",
+                    "title": "Dit is een test vanuit de VIP test omgeving ",
+                    "status": "open",
+                    "formulier": {
+                        "type": "url",
+                        "value": "https://app6-accp.nijmegen.nl/#/form/ontwikkel/uploadBijlage"
+                    },
+                    "verloopdatum": "2023-10-31 00:00:00",
+                    "identificatie": {
+                        "type": "bsn",
+                        "value": "999999333"
+                    },
+                    "verwerker_taak_id": "bestand"
+                },
+                "geometry": null,
+                "startAt": "2023-10-04",
+                "endAt": null,
+                "registrationAt": "2023-10-04",
+                "correctionFor": null,
+                "correctedBy": null
+            }
+        },
+        {
+            "url": "/api/v2/objects/2948a837-0731-4684-8a43-894c9e1724a8",
+            "uuid": "2948a837-0731-4684-8a43-894c9e1724a8",
+            "type": "/api/v2/objecttypes/27b38b08-35a8-42ee-b829-633722850992",
+            "record": {
+                "index": 1,
+                "typeVersion": 1,
+                "data": {
+                    "zaak": "/zaken/api/v1/zaken/0cb4f028-7d08-4161-b94c-49eaf9c647f8",
+                    "soort": "bestand",
+                    "title": "Test taak vanuit VIP",
+                    "status": "open",
+                    "formulier": {
+                        "type": "url",
+                        "value": "htpps://www.woweb.nl"
+                    },
+                    "verloopdatum": "2023-10-18 13:36:14",
+                    "identificatie": {
+                        "type": "bsn",
+                        "value": "999999333"
+                    },
+                    "verwerker_taak_id": "123"
+                },
+                "geometry": null,
+                "startAt": "2023-10-04",
+                "endAt": null,
+                "registrationAt": "2023-10-04",
+                "correctionFor": null,
+                "correctedBy": null
+            }
+        },
+        {
+            "url": "/api/v2/objects/6809a651-17b8-4386-b7bd-d5a9d226bfb1",
+            "uuid": "6809a651-17b8-4386-b7bd-d5a9d226bfb1",
+            "type": "/api/v2/objecttypes/27b38b08-35a8-42ee-b829-633722850992",
+            "record": {
+                "index": 3,
+                "typeVersion": 1,
+                "data": {
+                    "zaak": "/zaken/api/v1/zaken/0cb4f028-7d08-4161-b94c-49eaf9c647f8",
+                    "title": "Test taak vanuit VIP",
+                    "status": "ingediend",
+                    "verloopdatum": "2023-10-18 11:21:05",
+                    "identificatie": {
+                        "type": "bsn",
+                        "value": "999999333"
+                    },
+                    "verwerker_taak_id": "123"
+                },
+                "geometry": null,
+                "startAt": "2023-10-04",
+                "endAt": null,
+                "registrationAt": "2023-10-04",
+                "correctionFor": null,
+                "correctedBy": null
+            }
+        }
+    ]
+}

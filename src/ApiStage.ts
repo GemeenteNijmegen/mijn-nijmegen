@@ -48,6 +48,7 @@ export class ApiStage extends Stage {
     const apistack = new ApiStack(this, 'api-stack', {
       branch: branchName,
       sessionsTable: sessionsStack.sessionsTable,
+      configuration: props.configuration,
     });
     const cloudfrontStack = new CloudfrontStack(this, 'cloudfront-stack', {
       branch: branchName,

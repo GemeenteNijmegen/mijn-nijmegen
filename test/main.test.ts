@@ -24,6 +24,10 @@ const config: Configuration = {
   dsRecord: undefined,
   pipelineStackCdkName: 'mijnnijmegen-pipeline-stack-testing',
   pipelineName: 'mijnnijmegen-test',
+  zakenAllowDomains: [],
+  zakenIsLive: false,
+  zakenUseSubmissions: false,
+  zakenUseTaken: false,
 };
 
 beforeAll(() => {
@@ -66,7 +70,7 @@ test('StackHasApiGateway', () => {
   const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key });
   new DNSStack(app, 'dns', { env: mockEnv, configuration: config });
   // const zone = dnsStack.zone;
-  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'dev' });
+  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'dev', configuration: config });
   const template = Template.fromStack(stack);
   template.resourceCountIs('AWS::ApiGatewayV2::Api', 1);
 });
@@ -78,9 +82,9 @@ test('StackHasLambdas', () => {
   const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key });
   new DNSStack(app, 'dns', { env: mockEnv, configuration: config });
   // const zone = dnsStack.zone;
-  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'dev' });
+  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'dev', configuration: config });
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::Lambda::Function', 7);
+  template.resourceCountIs('AWS::Lambda::Function', 8);
 });
 
 
@@ -88,7 +92,7 @@ test('StackHasParameters', () => {
   const app = new App();
   const stack = new ParameterStack(app, 'test');
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::SSM::Parameter', 13);
+  template.resourceCountIs('AWS::SSM::Parameter', 18);
 });
 
 
@@ -96,7 +100,7 @@ test('StackHasSecrets', () => {
   const app = new App();
   const stack = new ParameterStack(app, 'test');
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::SecretsManager::Secret', 2);
+  template.resourceCountIs('AWS::SecretsManager::Secret', 5);
 });
 
 

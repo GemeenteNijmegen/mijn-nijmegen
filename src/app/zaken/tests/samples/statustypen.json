@@ -1,0 +1,1007 @@
+{
+    "count": 112,
+    "next": "/catalogi/api/v1/statustypen?page=2",
+    "previous": null,
+    "results": [
+        {
+            "url": "/catalogi/api/v1/statustypen/4ea07bd7-4cea-4417-b355-36747e9d3ae0",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/a9f5bf26-2664-44ed-b47e-9fe99971b2c2",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/24849276-7e5a-40dd-bd40-f475c35d4167",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/a9f5bf26-2664-44ed-b47e-9fe99971b2c2",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/39395d88-1024-433b-80c6-cdf37161426f",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/a9f5bf26-2664-44ed-b47e-9fe99971b2c2",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/bb8e737d-df72-44f0-bb18-7cb4bc0daa0b",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/559caaac-7b9e-43f9-a56a-ad439cfb459a",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/9de96661-69fb-414d-9a2c-a907be595729",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/559caaac-7b9e-43f9-a56a-ad439cfb459a",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/edd22cb1-c2f5-4ef2-80d3-87afc2fb977c",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/559caaac-7b9e-43f9-a56a-ad439cfb459a",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/c983ef42-ea02-443c-a203-ee258f2dd836",
+            "omschrijving": "Afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/76af0bf5-c714-4d18-9a21-035cf1f9ffea",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/81e561ef-7e54-446d-a120-97d937732af1",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/76af0bf5-c714-4d18-9a21-035cf1f9ffea",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/df3a1f9b-e57b-497e-abcf-0c95f5b6730d",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/76af0bf5-c714-4d18-9a21-035cf1f9ffea",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/c598fc99-66c6-49a0-864f-99b6db1da28b",
+            "omschrijving": "Afgerond",
+            "omschrijvingGeneriek": "Afgerond",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/1aaa4998-cbbf-4a65-9126-a9a2e74bb7ba",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/a4f342a6-bbe0-4c7a-a54f-54318a9a3ecd",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "In behandeling",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/1aaa4998-cbbf-4a65-9126-a9a2e74bb7ba",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/3030676b-ee89-4230-9b0c-01dbfff1d4d2",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "ontvangen",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/1aaa4998-cbbf-4a65-9126-a9a2e74bb7ba",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/c59b8a62-3ad7-43cd-a752-c6401c83d16a",
+            "omschrijving": "Afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/1f38a02a-e6e7-4665-b0f9-f2213784e5b8",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/97530557-4aaa-4225-9d4c-77e19daaca50",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/1f38a02a-e6e7-4665-b0f9-f2213784e5b8",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/95d63cdb-4322-43c4-a234-5ef17af0eacb",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/1f38a02a-e6e7-4665-b0f9-f2213784e5b8",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/dc5183a6-3592-40e9-a6c5-9bdb75169f14",
+            "omschrijving": "Zaakbehandeling gestart",
+            "omschrijvingGeneriek": "horeca_start",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/a037b2fc-6c7b-4091-b494-f83013b2bd55",
+            "volgnummer": 3,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/3d5f254e-8fe2-41c0-b97b-482ef751f5bf",
+            "omschrijving": "Zaakbehandeling gestart",
+            "omschrijvingGeneriek": "horeca_start",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/80535479-c1eb-4f12-af04-52d33b48872f",
+            "volgnummer": 3,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/9feb3fb1-689a-4373-9a96-558ca75cd9c2",
+            "omschrijving": "Zaakbehandeling gestart",
+            "omschrijvingGeneriek": "horeca_start",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/06f7c1fe-af3b-4558-b4b1-4e74fc5f5a65",
+            "volgnummer": 3,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/4f53a2b4-c1e8-462f-a6e0-e3b2c97e2287",
+            "omschrijving": "Zaakbehandeling gestart",
+            "omschrijvingGeneriek": "horeca_start",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/90cd2656-62f8-48b4-a6aa-564042cc9c77",
+            "volgnummer": 3,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/ba54710a-8447-448c-a27a-5807782f1aa9",
+            "omschrijving": "Zaakbehandeling gestart",
+            "omschrijvingGeneriek": "horeca_start",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/3a395dcb-811c-4d9f-98bf-eb638e87a310",
+            "volgnummer": 3,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/1b7e482e-ed36-4bb0-826d-ada7b815cefc",
+            "omschrijving": "Zaakbehandeling gestart",
+            "omschrijvingGeneriek": "horeca_start",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/d40a74d1-2ed8-4494-b9f5-7a1949b6126a",
+            "volgnummer": 3,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/e7afaf9a-2dd4-4bf3-adfd-f18fe6b27031",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/d18e8a67-4fdf-41ef-a73e-10926198df14",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/53b0c1d7-2962-413b-895b-2deb28795c84",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/d18e8a67-4fdf-41ef-a73e-10926198df14",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/46b9c61a-1921-4e49-a19b-cb4cf79893f2",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/d18e8a67-4fdf-41ef-a73e-10926198df14",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/a50f95d8-fe68-470f-8cb4-d09137b8fed6",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/6cad9cd8-7f7a-4e6a-9e2c-d08cfbcc7f15",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/bcaca674-e746-404a-946b-5bda34b0d758",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/6cad9cd8-7f7a-4e6a-9e2c-d08cfbcc7f15",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/730ff189-1234-4702-a5a7-41f17264804a",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/6cad9cd8-7f7a-4e6a-9e2c-d08cfbcc7f15",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/bb902950-3a85-4b17-abfc-22508f580c4c",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/8df5bf82-bc54-4319-a682-1fda5c16b97b",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/ed7dc224-8382-420b-b590-ff15a99f874b",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/8df5bf82-bc54-4319-a682-1fda5c16b97b",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/d22da456-1a6d-418e-a746-603ab2460bd5",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/8df5bf82-bc54-4319-a682-1fda5c16b97b",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/eae64332-6f6c-48bb-9d72-d44611354dbc",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "Uw aanvraag is ontvangen",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/1155d55d-3b6e-4268-bf83-47dcd7ed7b22",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": true
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/5c54bf68-7a62-4a10-939e-3a24dd54208a",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/1155d55d-3b6e-4268-bf83-47dcd7ed7b22",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/de19b008-2b25-4f9c-bba1-0a5c6ddd328f",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/1155d55d-3b6e-4268-bf83-47dcd7ed7b22",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/bcef4017-8a45-4666-9110-d0f38aeacd29",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "Uw aanvraag is ontvangen",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/f42223fe-66d5-495b-96fb-e164406a6e6b",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": true
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/9f072562-90e7-4437-b2bf-0b2c7b03fbf5",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/f42223fe-66d5-495b-96fb-e164406a6e6b",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/edc3f2f6-6071-459f-ad0d-1ecd64872cd1",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/f42223fe-66d5-495b-96fb-e164406a6e6b",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/b8fea517-28ed-4940-8433-04145bbc32ab",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/5b736a08-8674-4ced-aa27-3f067f30427e",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/586be5f8-16de-4447-ada2-3883d6758c33",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/b47225ce-543d-48cf-807c-878789114ea0",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/75e73cc1-618d-4758-b916-4ce8756a68cc",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/e3dd351e-1d2b-4e27-8303-da7a134b5c7b",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/8d2fef92-a7a8-4529-839f-d586e03d5761",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/1a37500b-4954-4c75-b5d3-e1f5151516ad",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/235546f8-3439-4966-9f03-8409d2dc59da",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/1a37500b-4954-4c75-b5d3-e1f5151516ad",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/9a7c3782-ee37-46fe-b57b-b463c6351839",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/1a37500b-4954-4c75-b5d3-e1f5151516ad",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/9809f716-2bff-4dcc-8957-ac77dd60c4f7",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/a037b2fc-6c7b-4091-b494-f83013b2bd55",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/5c6ec560-59b2-4a85-9d97-a985d5c6bf22",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/a037b2fc-6c7b-4091-b494-f83013b2bd55",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/a8987cce-171c-4a47-93f3-97ce4f83fd4b",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/a037b2fc-6c7b-4091-b494-f83013b2bd55",
+            "volgnummer": 4,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/88f70095-d058-42b6-a8e1-c6279f22da76",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/80535479-c1eb-4f12-af04-52d33b48872f",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/74bed887-7c97-4375-9799-c5729f933ae1",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/80535479-c1eb-4f12-af04-52d33b48872f",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/b8cadf9e-acd1-4cff-b228-97a8d9f36950",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/80535479-c1eb-4f12-af04-52d33b48872f",
+            "volgnummer": 4,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/e21e2f0d-2734-4689-83db-9330edac5dfb",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/06f7c1fe-af3b-4558-b4b1-4e74fc5f5a65",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/61ded4f1-5041-4caf-855e-dd509e35ee41",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/06f7c1fe-af3b-4558-b4b1-4e74fc5f5a65",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/3f934bd7-6e8e-42ad-8eb2-1a14bfc0fad7",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/06f7c1fe-af3b-4558-b4b1-4e74fc5f5a65",
+            "volgnummer": 4,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/885086e6-2f2d-45a7-8be7-927f7c916ed6",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/9c8e1e67-fd35-446e-a084-5ef19b6e87eb",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/e626f2a0-7403-4853-b810-47a087bef223",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/90cd2656-62f8-48b4-a6aa-564042cc9c77",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/59db7d8a-9e9a-450e-8911-4b6add0eadfd",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/9cddba0c-4d58-4038-bb49-7a42562230c5",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/da0019f1-f8ed-46a1-8868-3112efa0acb1",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/e473974a-6429-412d-8d3a-940835aedfa2",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/c3e4105d-cd66-4ce3-af5e-036fc9152442",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/98c01720-8a80-4e33-810d-3c5e6f867447",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/42b2426c-fe0b-42db-87d5-c904b93b2e1d",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/77b94b51-69ff-4355-bd7a-a606fed13711",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/7965d64d-feaf-4920-af65-567163545a11",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/c1b04e91-263c-4268-b41f-d3e5ac84aa0d",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/0c38c074-31d1-4f91-968a-77dc92ac51b1",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/fcf3e477-52dc-429f-a39e-9940b506b19b",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/6f383aeb-49c9-4d11-ac0d-929cb77a438d",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/fae77fcc-c187-4c30-8a19-298c65d168d5",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/3851612b-622e-4d2b-8630-3ce136025262",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/f1721477-3447-42d1-b53d-6bd86de8e926",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/edb2fbfc-9536-4ec7-8bb6-4c4855b62278",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/ce485718-df21-4533-af8a-e520c00bb910",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/b7645ba3-3441-43fd-9f17-0401c6cb9871",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/846cee5a-fba3-4356-9b96-9cc920f8de14",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/c9e41576-4068-493a-905e-2cb3da0b8ee1",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/3a395dcb-811c-4d9f-98bf-eb638e87a310",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/d8e142f1-daf8-4ccb-b82c-b200bb0f3686",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/747b8258-81c6-4404-90e2-2939cce9c552",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/d7ebfeed-4b95-4511-ba2d-888347062006",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/d40a74d1-2ed8-4494-b9f5-7a1949b6126a",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/6ed03257-4cc4-404d-9036-ef28e55b1e80",
+            "omschrijving": "In behandeling",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/c9d6a951-7edd-42d7-9679-c6872a08c8bc",
+            "volgnummer": 2,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/82e9b56f-7ec6-461b-9129-44092eb9f3da",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/9b9d90d0-2529-43e4-ab02-e0e701a6bf44",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/17454213-b902-4635-bdb1-9dd85d3ea1f8",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/9b9d90d0-2529-43e4-ab02-e0e701a6bf44",
+            "volgnummer": 2,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/fe14756b-30cd-49d5-941f-e65ffc5109c6",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/28e24608-7f19-439f-9755-8c3ecbbe386f",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/8a4f9f10-8a91-4065-98e5-75e8c9827386",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/28e24608-7f19-439f-9755-8c3ecbbe386f",
+            "volgnummer": 2,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/c0a7479a-2e3d-49f6-a266-47a866ef7a14",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/9c8e1e67-fd35-446e-a084-5ef19b6e87eb",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/0e399d6f-b611-4019-a95c-4b0a5939a583",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/9c8e1e67-fd35-446e-a084-5ef19b6e87eb",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/35279202-03bf-4499-93cb-bf6cec1a28d8",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/90cd2656-62f8-48b4-a6aa-564042cc9c77",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/68b77fb4-387e-4ebd-b569-111de740de2e",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/90cd2656-62f8-48b4-a6aa-564042cc9c77",
+            "volgnummer": 4,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/fc4d6f0f-4d5f-488c-b137-08318b021e9c",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/e3dd351e-1d2b-4e27-8303-da7a134b5c7b",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/8ac41b90-fdee-4aac-8f79-429f8906ae72",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/e3dd351e-1d2b-4e27-8303-da7a134b5c7b",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/b78123d1-33ab-4dbe-b5dc-c34dbb65430a",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/5b736a08-8674-4ced-aa27-3f067f30427e",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/7593fda7-106d-4b59-b36e-843f39a8eb22",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/5b736a08-8674-4ced-aa27-3f067f30427e",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/1c23284a-7408-483d-89e5-d37f890865e4",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/b47225ce-543d-48cf-807c-878789114ea0",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/ad1c3038-bddd-480b-8632-d61aa69f0121",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/b47225ce-543d-48cf-807c-878789114ea0",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/46486bed-30f2-4c6c-a7a1-05096ee17ad6",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/9cddba0c-4d58-4038-bb49-7a42562230c5",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/c1b2ee07-ccdf-4fe8-acf3-eea730394a0f",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/9cddba0c-4d58-4038-bb49-7a42562230c5",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/debdb214-7d1b-4c92-8e7e-02b62a87eb2c",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/e473974a-6429-412d-8d3a-940835aedfa2",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/86e7be35-c59c-44bb-8940-e553ab135476",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/e473974a-6429-412d-8d3a-940835aedfa2",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/cfd499a2-f9fe-4990-82f5-b3d6e8936458",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/98c01720-8a80-4e33-810d-3c5e6f867447",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/a59e2837-73b0-4636-8a84-025d5e345bf0",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/98c01720-8a80-4e33-810d-3c5e6f867447",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/c41832e7-b7b4-4c06-9ee7-a92af4b61cc7",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/77b94b51-69ff-4355-bd7a-a606fed13711",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/a8f0d523-0797-4585-91d0-c6e0f33b843f",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/77b94b51-69ff-4355-bd7a-a606fed13711",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/06abbedb-c8bb-433d-94cb-2dae515e29e1",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/c1b04e91-263c-4268-b41f-d3e5ac84aa0d",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/690dbc9e-c174-45df-8eee-55c63f160f06",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/c1b04e91-263c-4268-b41f-d3e5ac84aa0d",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/791e9847-15c7-4685-be5d-b9b93d1e39a0",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/fcf3e477-52dc-429f-a39e-9940b506b19b",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/a4c7a66c-2182-4ab0-bbca-cd396e048da4",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/fcf3e477-52dc-429f-a39e-9940b506b19b",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/1ef33e97-969c-4df0-88b5-ea46b4d18a1c",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/fae77fcc-c187-4c30-8a19-298c65d168d5",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/c414892e-208d-49cd-b31d-72b9a457b1ed",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/fae77fcc-c187-4c30-8a19-298c65d168d5",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/0f81e608-0011-4d1c-84d2-b983024dd99e",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/f1721477-3447-42d1-b53d-6bd86de8e926",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/e45ca1ca-8110-49cd-b1a6-b70195b36079",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/f1721477-3447-42d1-b53d-6bd86de8e926",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/06ecbabd-0acb-4791-a642-c9c6adb29ac9",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/ce485718-df21-4533-af8a-e520c00bb910",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/e73aabdd-b7a0-4ae9-b65b-54947f5d6f71",
+            "omschrijving": "Zaak afgerond",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/ce485718-df21-4533-af8a-e520c00bb910",
+            "volgnummer": 3,
+            "isEindstatus": true,
+            "informeren": false
+        },
+        {
+            "url": "/catalogi/api/v1/statustypen/b4d17df3-d4fa-4955-a267-f6b68b589c74",
+            "omschrijving": "Ontvangen",
+            "omschrijvingGeneriek": "",
+            "statustekst": "",
+            "zaaktype": "/catalogi/api/v1/zaaktypen/846cee5a-fba3-4356-9b96-9cc920f8de14",
+            "volgnummer": 1,
+            "isEindstatus": false,
+            "informeren": false
+        }
+    ]
+}

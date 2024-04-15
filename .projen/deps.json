@@ -190,6 +190,10 @@
       "type": "runtime"
     },
     {
+      "name": "jsonwebtoken",
+      "type": "runtime"
+    },
+    {
       "name": "mustache",
       "type": "runtime"
     },
@@ -203,6 +207,10 @@
     },
     {
       "name": "xml2js",
+      "type": "runtime"
+    },
+    {
+      "name": "zod",
       "type": "runtime"
     }
   ],

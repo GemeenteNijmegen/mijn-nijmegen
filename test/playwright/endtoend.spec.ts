@@ -1,12 +1,8 @@
-import { test, expect, Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { expect, Page } from '@playwright/test';
+import test from './lambdatest-setup';
 
-let page: Page;
-let context: any;
-test.beforeAll(async ({ browser }) => {
-  // Create page once and sign in.
-  context = await browser.newContext();
-  page = await context.newPage();
+test.beforeEach(async ({ page }) => {
   // Go to https://mijn.accp.nijmegen.nl/login
   await page.goto('https://mijn.accp.nijmegen.nl/');
   await expect(page).toHaveURL('https://mijn.accp.nijmegen.nl/login');
@@ -31,48 +27,45 @@ test.beforeAll(async ({ browser }) => {
   await expect(page).toHaveURL('https://mijn.accp.nijmegen.nl/');
 });
 
-test.afterAll(async () => {
-  await context.close();
-  await page.close();
-});
-
-test.afterEach(async () => {
+test.afterEach(async ({ page }) => {
   await checkAccessiblity(page);
 });
 
-test('Visiting main page with valid BSN shows cards', async () => {
-
+test('Visiting main page with valid BSN shows menu', async ({ page }) => {
   // Click #navbar-collapse >> text=Uitkeringen
   await expect(page).toHaveURL('https://mijn.accp.nijmegen.nl/');
 
   // Click text=Hier vindt u een overzicht van uw uitkeringen.
-  const cards =  page.locator('.card');
-  await expect(cards).toContainText(['Persoonsgegevens', 'Uitkeringen']);
+  const menu = page.locator('.nijmegen-sidenav');
+  await expect(menu.getByText('Mijn gegevens')).toHaveAttribute('href');
+  await expect(menu.getByText('Mijn uitkering')).toHaveAttribute('href');
   await page.screenshot({ path: 'test/playwright/screenshots/home.png', fullPage: true });
 
 });
 
-test('Visiting uitkeringen-page with valid BSN shows info', async () => {
+test('Visiting uitkeringen-page with valid BSN shows info', async ({ page }) => {
 
+  const menu = page.locator('.nijmegen-sidenav');
   // Click #navbar-collapse >> text=Uitkeringen
-  await page.locator('#navbar-collapse >> text=Uitkeringen').click();
+  await menu.getByText('Mijn uitkering').click();
   await expect(page).toHaveURL('https://mijn.accp.nijmegen.nl/uitkeringen');
 
   // Click text=Hier vindt u een overzicht van uw uitkeringen.
-  const table =  page.locator('table tbody').first();
+  const table = page.locator('table tbody').first();
   await expect(table).toContainText('BSN van klant');
   await page.screenshot({ path: 'test/playwright/screenshots/uitkering.png', fullPage: true });
 });
 
 
-test('Visiting persoonsgegevens-page with valid BSN shows info', async () => {
+test('Visiting persoonsgegevens-page with valid BSN shows info', async ({ page }) => {
 
   // Click #navbar-collapse >> text=Uitkeringen
-  await page.locator('#navbar-collapse >> text=Persoonsgegevens').click();
+  const menu = page.locator('.nijmegen-sidenav');
+  await menu.getByText('Mijn gegevens').click();
   await expect(page).toHaveURL('https://mijn.accp.nijmegen.nl/persoonsgegevens');
 
   // Click text=Hier vindt u een overzicht van uw uitkeringen.
-  const table =  page.locator('h2');
+  const table = page.locator('h2');
   await expect(table).toContainText(['Persoonsgegevens', 'Adresgegevens']);
   await page.screenshot({ path: 'test/playwright/screenshots/persoonsgegevens.png', fullPage: true });
 
@@ -82,6 +75,6 @@ async function checkAccessiblity(page: Page) {
   const accessibilityScanResults = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa'])
     .exclude('.contact-list') // Axe has a false positive on the link list, doesn't understand the color contrasts
-    .analyze(); 
-  expect(accessibilityScanResults.violations).toEqual([]); 
+    .analyze();
+  expect(accessibilityScanResults.violations).toEqual([]);
 }

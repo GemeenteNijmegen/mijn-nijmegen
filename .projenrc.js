@@ -28,6 +28,8 @@ const project = new GemeenteNijmegenCdkApp({
     'openid-client',
     'object-mapper',
     'xml2js',
+    'jsonwebtoken',
+    'zod',
   ], /* Runtime dependencies of this module. */
   devDeps: [
     '@types/aws-lambda',
@@ -59,7 +61,7 @@ const project = new GemeenteNijmegenCdkApp({
     },
   },
   eslintOptions: {
-    devdirs: ['src/app/login/tests', 'src/app/auth/tests', 'src/app/home/tests', 'src/app/uitkeringen/tests', 'src/app/logout/tests', '/test', '/build-tools', 'src/shared/tests'],
+    devdirs: ['src/**/tests', '/test', '/build-tools'],
   },
   bundlerOptions: {
     loaders: {
