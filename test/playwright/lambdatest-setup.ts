@@ -13,7 +13,7 @@ const capabilities = {
   'browserVersion': 'latest',
   'LT:Options': {
     platform: 'Windows 10',
-    build: `Webformulieren ${process.env.ENVIRONMENT}`,
+    build: `Mijn Nijmegen ${process.env.ENVIRONMENT}`,
     name: 'Playwright Test',
     user: process.env.LT_USERNAME,
     accessKey: process.env.LT_ACCESS_KEY,

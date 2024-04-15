@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: lts/*
     - name: Install dependencies
-      run: npm ci
+      run: yarn --frozen-lockfile
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
@@ -30,6 +30,6 @@ jobs:
         retention-days: 30
     env:
       CI: true
-      LT_ACCESS_KEY: ${{ secrets.LAMBDATEST_USERNAME }}
-      LT_USERNAME: ${{ secrets.LAMBDATEST_ACCESSKEY }}
+      LT_USERNAME: ${{ secrets.LAMBDATEST_USERNAME }}
+      LT_ACCESS_KEY: ${{ secrets.LAMBDATEST_ACCESSKEY }}
       ENVIRONMENT: ${{github.ref}}
