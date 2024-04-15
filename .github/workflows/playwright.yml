@@ -4,6 +4,7 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  workflow_dispatch: {}
   schedule:
     - cron: 02 03 * * *
 jobs:
@@ -29,6 +30,6 @@ jobs:
         retention-days: 30
     env:
       CI: true
-      LT_ACCESS_KEY: ${{ secrets.LT_ACCESS_KEY }}
-      LT_USERNAME: ${{ secrets.LT_USERNAME }}
+      LT_ACCESS_KEY: ${{ secrets.LAMBDATEST_USERNAME }}
+      LT_USERNAME: ${{ secrets.LAMBDATEST_ACCESSKEY }}
       ENVIRONMENT: ${{github.ref}}
