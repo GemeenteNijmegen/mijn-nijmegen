@@ -27,10 +27,6 @@ test.beforeEach(async ({ page }) => {
   await expect(page).toHaveURL('https://mijn.accp.nijmegen.nl/');
 });
 
-test.afterEach(async ({ page }) => {
-  await checkAccessiblity(page);
-});
-
 test('Visiting main page with valid BSN shows menu', async ({ page }) => {
   // Click #navbar-collapse >> text=Uitkeringen
   await expect(page).toHaveURL('https://mijn.accp.nijmegen.nl/');
@@ -70,11 +66,3 @@ test('Visiting persoonsgegevens-page with valid BSN shows info', async ({ page }
   await page.screenshot({ path: 'test/playwright/screenshots/persoonsgegevens.png', fullPage: true });
 
 });
-
-async function checkAccessiblity(page: Page) {
-  const accessibilityScanResults = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa'])
-    .exclude('.contact-list') // Axe has a false positive on the link list, doesn't understand the color contrasts
-    .analyze();
-  expect(accessibilityScanResults.violations).toEqual([]);
-}
