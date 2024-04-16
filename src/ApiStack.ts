@@ -1,6 +1,6 @@
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import { EndpointHealthCheck } from '@pepperize/cdk-route53-health-check';
+import { EndpointHealthCheck, HealthCheckerRegions } from '@pepperize/cdk-route53-health-check';
 import { aws_secretsmanager, Duration, Stack, StackProps } from 'aws-cdk-lib';
 import { Alarm, ComparisonOperator } from 'aws-cdk-lib/aws-cloudwatch';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
@@ -379,7 +379,9 @@ export class ApiStack extends Stack implements Configurable {
     const domain = `${Statics.subDomain(branch)}.nijmegen.nl`;
     const healthCheck = new EndpointHealthCheck(this, 'healthcheck', {
       domainName: domain,
+      resourcePath: '/login',
       searchString: 'Inloggen Mijn Nijmegen',
+      regions: [HealthCheckerRegions.EU_WEST_1, HealthCheckerRegions.US_EAST_1, HealthCheckerRegions.AP_NORTHEAST_1],
     });
 
     new Alarm(this, 'healthcheck-alarm', {
