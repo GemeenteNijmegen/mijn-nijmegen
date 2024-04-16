@@ -40,7 +40,6 @@ const project = new GemeenteNijmegenCdkApp({
     'copyfiles',
     '@playwright/test',
     '@playwright/test',
-    '@axe-core/playwright',
     'aws-sdk-client-mock',
     '@glen/jest-raw-loader',
     'jest-aws-client-mock',

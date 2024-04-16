@@ -44,7 +44,6 @@
   "devDependencies": {
     "@aws-sdk/client-ssm": "^3.554.0",
     "@aws-sdk/types": "^3.535.0",
-    "@axe-core/playwright": "^4.9.0",
     "@glen/jest-raw-loader": "^2.0.0",
     "@playwright/test": "^1.43.1",
     "@types/aws-lambda": "^8.10.137",

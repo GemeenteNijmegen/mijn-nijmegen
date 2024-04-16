@@ -26,5 +26,4 @@ jobs:
             feat
             chore
             docs
-            test
           requireScope: false
