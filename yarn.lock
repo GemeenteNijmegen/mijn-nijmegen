@@ -1466,6 +1466,11 @@
   resolved "https://registry.yarnpkg.com/@oozcitak/util/-/util-8.3.8.tgz#10f65fe1891fd8cde4957360835e78fd1936bfdd"
   integrity sha512-T8TbSnGsxo6TDBJx/Sgv/BlVJL3tshxZP7Aq5R1mSnM5OcHY2dQaxLMu2+E8u3gN0MLOzdjurqN4ZRVuzQycOQ==
 
+"@pepperize/cdk-route53-health-check@^0.0.586":
+  version "0.0.586"
+  resolved "https://registry.yarnpkg.com/@pepperize/cdk-route53-health-check/-/cdk-route53-health-check-0.0.586.tgz#7c662ce380c00fa4a3337635b4109373db0ef785"
+  integrity sha512-4pVZdwiD3BjjtDSUUZOqQuzvYEzQ6HVvheFyoGukOR5HlijaLBU48Y2aEM+LMUFPAdWbgVnDB+ZRAjkgQSiZJA==
+
 "@playwright/test@^1.43.1":
   version "1.43.1"
   resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.43.1.tgz#16728a59eb8ce0f60472f98d8886d6cab0fa3e42"

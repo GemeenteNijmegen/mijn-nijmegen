@@ -19,6 +19,7 @@ const project = new GemeenteNijmegenCdkApp({
     '@aws-cdk/aws-apigatewayv2-integrations-alpha',
     '@aws-sdk/client-secrets-manager',
     '@aws-solutions-constructs/aws-lambda-dynamodb',
+    '@pepperize/cdk-route53-health-check',
     'cdk-remote-stack',
     'openid-client',
     'mustache',
