@@ -379,6 +379,7 @@ export class ApiStack extends Stack implements Configurable {
     const domain = `${Statics.subDomain(branch)}.nijmegen.nl`;
     const healthCheck = new EndpointHealthCheck(this, 'healthcheck', {
       domainName: domain,
+      searchString: 'Inloggen Mijn Nijmegen',
     });
 
     new Alarm(this, 'healthcheck-alarm', {
