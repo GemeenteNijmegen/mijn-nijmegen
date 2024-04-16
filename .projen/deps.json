@@ -9,10 +9,6 @@
       "type": "build"
     },
     {
-      "name": "@axe-core/playwright",
-      "type": "build"
-    },
-    {
       "name": "@glen/jest-raw-loader",
       "type": "build"
     },
