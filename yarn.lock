@@ -645,13 +645,6 @@
     deepmerge "^4.0.0"
     npmlog "^7.0.0"
 
-"@axe-core/playwright@^4.9.0":
-  version "4.9.0"
-  resolved "https://registry.yarnpkg.com/@axe-core/playwright/-/playwright-4.9.0.tgz#3538c5af8868f1704eedeb58a6b5a84feb0ccfe1"
-  integrity sha512-Q1Lz75dNsX38jof+aev7RficDMdH/HLOLySkDdXR0fUoeFcLdw4UNgDO2CNNP4CTpoesEdfYRdd6VmDXjhBgbA==
-  dependencies:
-    axe-core "~4.9.0"
-
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.23.5", "@babel/code-frame@^7.24.1", "@babel/code-frame@^7.24.2":
   version "7.24.2"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.24.2.tgz#718b4b19841809a58b29b68cde80bc5e1aa6d9ae"
@@ -1472,6 +1465,11 @@
   version "8.3.8"
   resolved "https://registry.yarnpkg.com/@oozcitak/util/-/util-8.3.8.tgz#10f65fe1891fd8cde4957360835e78fd1936bfdd"
   integrity sha512-T8TbSnGsxo6TDBJx/Sgv/BlVJL3tshxZP7Aq5R1mSnM5OcHY2dQaxLMu2+E8u3gN0MLOzdjurqN4ZRVuzQycOQ==
+
+"@pepperize/cdk-route53-health-check@^0.0.586":
+  version "0.0.586"
+  resolved "https://registry.yarnpkg.com/@pepperize/cdk-route53-health-check/-/cdk-route53-health-check-0.0.586.tgz#7c662ce380c00fa4a3337635b4109373db0ef785"
+  integrity sha512-4pVZdwiD3BjjtDSUUZOqQuzvYEzQ6HVvheFyoGukOR5HlijaLBU48Y2aEM+LMUFPAdWbgVnDB+ZRAjkgQSiZJA==
 
 "@playwright/test@^1.43.1":
   version "1.43.1"
@@ -2426,11 +2424,6 @@ aws-sdk-client-mock@^2.2.0:
     sinon "^14.0.2"
     tslib "^2.1.0"
 
-axe-core@~4.9.0:
-  version "4.9.0"
-  resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.9.0.tgz#b18971494551ab39d4ff5f7d4c6411bd20cc7c2a"
-  integrity sha512-H5orY+M2Fr56DWmMFpMrq5Ge93qjNdPVqzBv5gWK3aD1OvjBEJlEzxf09z93dGVQeI0LiW+aCMIx1QtShC/zUw==
-
 axios-mock-adapter@^1.22.0:
   version "1.22.0"
   resolved "https://registry.yarnpkg.com/axios-mock-adapter/-/axios-mock-adapter-1.22.0.tgz#0f3e6be0fc9b55baab06f2d49c0b71157e7c053d"
@@ -2610,9 +2603,9 @@ camelcase@^6.2.0:
   integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
 
 caniuse-lite@^1.0.30001587:
-  version "1.0.30001609"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001609.tgz#fc34fad75c0c6d6d6303bdbceec2da8f203dabd6"
-  integrity sha512-JFPQs34lHKx1B5t1EpQpWH4c+29zIyn/haGsbpfq3suuV9v56enjFt23zqijxGTMwy1p/4H2tjnQMY+p1WoAyA==
+  version "1.0.30001610"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001610.tgz#2f44ed6e21d359e914271ae35b68903632628ccf"
+  integrity sha512-QFutAY4NgaelojVMjY63o6XlZyORPaLfyMnsl3HgnWdJUcX6K0oaJymHjH8PT5Gk7sTm8rvC/c5COUQKXqmOMA==
 
 case@1.6.3, case@^1.6.3:
   version "1.6.3"

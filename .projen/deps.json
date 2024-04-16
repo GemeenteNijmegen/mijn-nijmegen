@@ -9,10 +9,6 @@
       "type": "build"
     },
     {
-      "name": "@axe-core/playwright",
-      "type": "build"
-    },
-    {
       "name": "@glen/jest-raw-loader",
       "type": "build"
     },
@@ -157,6 +153,10 @@
     },
     {
       "name": "@gemeentenijmegen/utils",
+      "type": "runtime"
+    },
+    {
+      "name": "@pepperize/cdk-route53-health-check",
       "type": "runtime"
     },
     {
