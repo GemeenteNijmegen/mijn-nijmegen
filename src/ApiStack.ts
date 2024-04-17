@@ -1,8 +1,6 @@
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import { EndpointHealthCheck } from '@pepperize/cdk-route53-health-check';
 import { aws_secretsmanager, Duration, Stack, StackProps } from 'aws-cdk-lib';
-import { Alarm, ComparisonOperator } from 'aws-cdk-lib/aws-cloudwatch';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { AccountPrincipal, PrincipalWithConditions, Role } from 'aws-cdk-lib/aws-iam';
 import { ISecret, Secret } from 'aws-cdk-lib/aws-secretsmanager';
@@ -373,21 +371,5 @@ export class ApiStack extends Stack implements Configurable {
         tableArn: table.tableArn,
       }),
     );
-  }
-
-  monitorLoginPage(branch: string) {
-    const domain = `${Statics.subDomain(branch)}.nijmegen.nl`;
-    const healthCheck = new EndpointHealthCheck(this, 'healthcheck', {
-      domainName: domain,
-      searchString: 'Inloggen Mijn Nijmegen',
-    });
-
-    new Alarm(this, 'healthcheck-alarm', {
-      alarmName: 'mijn-nijmegen-healthcheck-critical-lvl',
-      metric: healthCheck.metricHealthCheckStatus(),
-      comparisonOperator: ComparisonOperator.LESS_THAN_THRESHOLD,
-      threshold: 1,
-      evaluationPeriods: 1,
-    });
   }
 }

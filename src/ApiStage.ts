@@ -9,7 +9,7 @@ import { DNSStack } from './DNSStack';
 import { KeyStack } from './keystack';
 import { SessionsStack } from './SessionsStack';
 import { Statics } from './statics';
-import { UsEastCertificateStack } from './UsEastCertificateStack';
+import { UsEastStack } from './UsEastStack';
 import { WafStack } from './WafStack';
 
 export interface ApiStageProps extends StageProps, Configurable {}
@@ -40,9 +40,9 @@ export class ApiStage extends Stage {
     const sessionsStack = new SessionsStack(this, 'sessions-stack', { key: keyStack.key });
     const dnsStack = new DNSStack(this, 'dns-stack', { configuration: props.configuration });
 
-    const usEastCertificateStack = new UsEastCertificateStack(this, 'us-cert-stack', { branch: branchName, env: { region: 'us-east-1' } }); // This stack must live in us-east-1
+    const usEastStack = new UsEastStack(this, 'us-cert-stack', { branch: branchName, env: { region: 'us-east-1' } }); // This stack must live in us-east-1
     const dnssecStack = new DNSSECStack(this, 'dnssec-stack', { branch: branchName, env: { region: 'us-east-1' }, applicationRegion: this.region! });
-    usEastCertificateStack.addDependency(dnsStack);
+    usEastStack.addDependency(dnsStack);
     dnssecStack.addDependency(dnsStack);
 
     const apistack = new ApiStack(this, 'api-stack', {
@@ -54,7 +54,7 @@ export class ApiStage extends Stage {
       branch: branchName,
       hostDomain: apistack.domain(),
     });
-    cloudfrontStack.addDependency(usEastCertificateStack);
+    cloudfrontStack.addDependency(UsEastStack);
 
     new WafStack(this, 'waf-stack', { env: { region: 'us-east-1' }, branch: branchName });
   }
