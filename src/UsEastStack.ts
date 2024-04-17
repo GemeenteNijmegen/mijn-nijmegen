@@ -75,6 +75,7 @@ export class UsEastStack extends Stack {
     const domain = `${Statics.subDomain(branch)}.nijmegen.nl`;
     const healthCheck = new EndpointHealthCheck(this, 'healthcheck', {
       domainName: domain,
+      resourcePath: '/login',
       searchString: 'Inloggen Mijn Nijmegen',
     });
 
