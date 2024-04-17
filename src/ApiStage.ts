@@ -54,7 +54,7 @@ export class ApiStage extends Stage {
       branch: branchName,
       hostDomain: apistack.domain(),
     });
-    cloudfrontStack.addDependency(UsEastStack);
+    cloudfrontStack.addDependency(usEastStack);
 
     new WafStack(this, 'waf-stack', { env: { region: 'us-east-1' }, branch: branchName });
   }

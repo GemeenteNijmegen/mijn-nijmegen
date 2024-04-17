@@ -61,8 +61,6 @@ export class ApiStack extends Stack implements Configurable {
     const readOnlyRole = this.readOnlyRole();
     this.setFunctions(`https://${appDomain}/`, readOnlyRole);
     this.allowReadAccessToTable(readOnlyRole, this.sessionsTable);
-
-    this.monitorLoginPage(props.branch);
   }
 
   /**
