@@ -228,7 +228,7 @@ nav.navbar.navbar-light .navbar-nav .nav-item .nav-link {
 }
 
 .navbar-nav svg {
-    fill: #4B4B4B;
+    fill: none;
 }
 
 .md-form label {
@@ -257,7 +257,7 @@ nav.nijmegen-sidenav li {
 nav.nijmegen-sidenav li svg {
     margin-inline-end: 0.5em;
     outline: #323232;
-    fill: #323232;
+    fill: none;
 }
 
 nav.nijmegen-sidenav a, 
@@ -282,5 +282,5 @@ nav.nijmegen-sidenav li.active a {
 }
 nav.nijmegen-sidenav li.active svg {
     outline: #157C68;
-    fill: #157C68;
+    stroke: #157C68;
 }
