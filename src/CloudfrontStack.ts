@@ -66,6 +66,16 @@ export class CloudfrontStack extends Stack {
     const cloudfrontDistribution = this.setCloudfrontStack(props.hostDomain, domains, certificateArn);
     this.addStaticResources(cloudfrontDistribution);
     this.addDnsRecords(cloudfrontDistribution);
+    this.addSecurityRedirect(cloudfrontDistribution);
+  }
+
+  addSecurityRedirect(cloudfrontDistribution: Distribution) {
+    cloudfrontDistribution.addBehavior(
+      '/.well-known/security.txt',
+      new HttpOrigin('nijmegen.nl', {
+        originPath: '.well-known/security.txt',
+      }),
+    );
   }
 
   /**
