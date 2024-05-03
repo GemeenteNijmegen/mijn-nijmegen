@@ -76,9 +76,7 @@ export class CloudfrontStack extends Stack {
   addSecurityRedirect(cloudfrontDistribution: Distribution) {
     cloudfrontDistribution.addBehavior(
       '/.well-known/security.txt',
-      new HttpOrigin('nijmegen.nl', {
-        originPath: '.well-known/security.txt',
-      }),
+      new HttpOrigin('nijmegen.nl'),
     );
   }
 
