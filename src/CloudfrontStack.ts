@@ -64,9 +64,13 @@ export class CloudfrontStack extends Stack {
     const certificateArn = this.certificateArn();
 
     const cloudfrontDistribution = this.setCloudfrontStack(props.hostDomain, domains, certificateArn);
+
+    /** The order of adding behaviors to a distribution impacts behavior. For now the security redirect should be added before the
+     * static resources.
+     */
+    this.addSecurityRedirect(cloudfrontDistribution);
     this.addStaticResources(cloudfrontDistribution);
     this.addDnsRecords(cloudfrontDistribution);
-    this.addSecurityRedirect(cloudfrontDistribution);
   }
 
   addSecurityRedirect(cloudfrontDistribution: Distribution) {
