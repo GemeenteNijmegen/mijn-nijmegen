@@ -259,7 +259,7 @@ nav.nijmegen-sidenav li svg {
     outline: #323232;
     fill: none;
 }
-
+ 
 nav.nijmegen-sidenav a, 
 nav.nijmegen-sidenav a:visited {
     text-decoration: none;
@@ -268,7 +268,8 @@ nav.nijmegen-sidenav a:visited {
     flex-grow: 1;
 }
 
-nav.nijmegen-sidenav a:hover {
+nav.nijmegen-sidenav a:hover, 
+.navbar-nav .nav-item a:hover {
     text-decoration: underline;
 }
 
