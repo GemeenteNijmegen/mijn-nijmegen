@@ -55,7 +55,7 @@
     "aws-sdk-client-mock": "^2.2.0",
     "axios-mock-adapter": "^1.22.0",
     "copyfiles": "^2.4.1",
-    "esbuild": "^0.21.1",
+    "esbuild": "^0.21.2",
     "eslint": "^8",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
