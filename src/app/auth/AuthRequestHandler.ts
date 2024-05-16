@@ -8,6 +8,8 @@ import { IdTokenClaims } from 'openid-client';
 import { BrpApi } from './BrpApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 
+type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
+
 interface requestProps {
   cookies: string;
   queryStringParamCode: string;
@@ -34,31 +36,37 @@ export class AuthRequestHandler {
     }
     const state = session.getValue('state');
     try {
-      const claims = await this.config.OpenIdConnect.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
-      if (claims) {
-        const user = this.userFromClaims(claims);
-        if (!user) {
-          return Response.redirect('/login');
-        }
-        this.logAuthMethod(claims, logger);
-
-        try {
-          const username = await user.getUserName();
-
-          await session.createSession({
-            loggedin: { BOOL: true },
-            identifier: { S: user.identifier },
-            bsn: { S: user.type == 'person' ? user.identifier : '' }, // TODO: remove when consuming pages (persoonsgegevens, uitkeringen, zaken) have been updated to use identifier
-            user_type: { S: user.type },
-            username: { S: username },
-          });
-        } catch (error: any) {
-          console.error('creating session failed', error);
-          return Response.error(500);
-        }
-      } else {
+      // Authorize the request
+      const tokens = await this.config.OpenIdConnect.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
+      const claims = tokens.claims();
+      const scope = tokens.scope;
+      if (!claims || !scope) {
         return Response.redirect('/login');
       }
+
+      // Load the principal data
+      const user = this.userFromClaims(claims, scope);
+      if (!user) {
+        return Response.redirect('/login');
+      }
+      this.logAuthMethod(claims, logger);
+
+      // Startup the session
+      try {
+        const username = await user.getUserName();
+
+        await session.createSession({
+          loggedin: { BOOL: true },
+          identifier: { S: user.identifier },
+          bsn: { S: user.type == 'person' ? user.identifier : '' }, // TODO: remove when consuming pages (persoonsgegevens, uitkeringen, zaken) have been updated to use identifier
+          user_type: { S: user.type },
+          username: { S: username },
+        });
+      } catch (error: any) {
+        console.error('creating session failed', error);
+        return Response.error(500);
+      }
+
     } catch (error: any) {
       console.error(error.message);
       return Response.redirect('/login');
@@ -72,42 +80,35 @@ export class AuthRequestHandler {
     }
   }
 
-  /**
-   * Extract bsn from token claims
-   *
-   * The bsn can be found in several fields: either the 'sub' claim
-   * or a yivi-specific field can be used. This function tries (in order)
-   * to get a valid BSN from:
-   * - sub
-   * - any values in space separated yivi attributes string, in order
-   *
-   * @param claims an IdTokenClaims object
-   * @returns {BSN|false}
-   */
-  bsnFromClaims(claims: IdTokenClaims): Bsn | false {
-    let possibleClaims = ['sub'];
-    if (typeof this.config?.yiviAttributes === 'string') {
-      const yiviClaims = this.config.yiviAttributes.split(' ').filter(val => val !== '');
-      possibleClaims = [...possibleClaims, ...yiviClaims];
+
+  bsnFromDigidLogin(claims: IdTokenClaims): Bsn | false {
+    const subject = 'sub';
+    if (claims[subject]) {
+      return new Bsn(claims[subject] as string);
     }
-    for (const type of possibleClaims) {
-      try {
-        if (claims[type]) {
-          return new Bsn(claims[type] as string);
-        }
-      } catch (error: any) {
-        // we don't care about non-valid BSN's (sub could have a random string)
-      }
-    }
-    return false;
+    throw Error('Invalid or no bsn in DigiD claims!');
   }
 
-  /** Extract kvk number from token claims
-   *
-   * Checks if there's a value, and if this value is numeric.
-   * Returns the kvk as a string, or false if validation fails/there is no kvk.
-   */
-  kvkFromClaims(claims: IdTokenClaims): { kvkNumber: string; organisationName: string } | false {
+  bsnFromYiviLogin(claims: IdTokenClaims): Bsn | false {
+    const bsnAttribute = process.env.YIVI_ATTRIBUTE_BSN!;
+    if (claims[bsnAttribute]) {
+      return new Bsn(claims[bsnAttribute] as string);
+    }
+    throw Error('Invalid or no bsn in Yivi claims!');
+  }
+
+  kvkFromYiviLogin(claims: IdTokenClaims): { kvkNumber: string; organisationName: string } | false {
+    let kvkNumberAttribute = process.env.YIVI_ATTRIBUTE_KVK_NUMBER!;
+    let kvkNameAttribute = process.env.YIVI_ATTRIBUTE_KVK_NAME!;
+    const yiviKvkClaim = claims[kvkNumberAttribute] as string;
+    const yiviNameClaim = claims[kvkNameAttribute] as string;
+    if (yiviKvkClaim && Number.isInteger(parseInt(yiviKvkClaim))) {
+      return { kvkNumber: yiviKvkClaim, organisationName: yiviNameClaim };
+    }
+    throw Error('Invalid or no kvk in Yivi claims!');
+  }
+
+  kvkFromEherkenningLogin(claims: IdTokenClaims): { kvkNumber: string; organisationName: string } | false {
     const kvkClaim = claims?.['urn:etoegang:1.9:EntityConcernedID:KvKnr'] as string;
     const organisationNameClaim = claims?.['urn:etoegang:1.11:attribute-represented:CompanyName'] as string;
     if (kvkClaim && Number.isInteger(parseInt(kvkClaim))) {
@@ -116,22 +117,54 @@ export class AuthRequestHandler {
     return false;
   }
 
-  userFromClaims(claims: IdTokenClaims): User | false {
-    const bsn = this.bsnFromClaims(claims);
-    const kvk = this.kvkFromClaims(claims);
-    let user: User | null = null;
-    if (!bsn && !kvk) {
-      return false;
+  userFromClaims(claims: IdTokenClaims, scope: string): User | false {
+    const authMethod = this.authMethodFromScope(scope);
+
+    let bsn = undefined;
+    let kvk = undefined;
+
+    if (authMethod == 'yivi') {
+      if (scope.includes(process.env.YIVI_ATTRIBUTE_BSN!)) {
+        bsn = this.bsnFromYiviLogin(claims);
+      }
+      if (scope.includes(process.env.YIVI_ATTRIBUTE_KVK_NUMBER!)) {
+        kvk = this.kvkFromYiviLogin(claims);
+      }
+    }
+
+    if (authMethod == 'digid') {
+      bsn = this.bsnFromDigidLogin(claims);
+    }
+
+    if ( authMethod == 'eherkenning') {
+      kvk = this.kvkFromEherkenningLogin(claims);
     }
 
     if (bsn) {
-      user = new Person(bsn, { apiClient: this.config.apiClient });
-    } else if (kvk) {
-      user = new Organisation(kvk.kvkNumber, kvk.organisationName, { apiClient: this.config.apiClient });
+      return new Person(bsn, { apiClient: this.config.apiClient });
     }
-    return user ?? false;
+
+    if (kvk) {
+      return new Organisation(kvk.kvkNumber, kvk.organisationName, { apiClient: this.config.apiClient });
+    }
+
+    throw Error('User authentication failed: No BSN or KVK found in request');
+  }
+
+
+  authMethodFromScope(scope: string) : AuthenticationMethod {
+    const scopes = scope.split(' ');
+    if (scopes.includes('idp_scoping:yivi')) {
+      return 'yivi';
+    } else if (scopes.includes('idp_scoping:eherkenning')) {
+      return 'eherkenning';
+    } else if (scopes.includes('idp_scoping:digid')) {
+      return 'digid';
+    }
+    throw Error('Unsupported authentication method');
   }
 }
+
 
 interface UserConfig {
   apiClient: ApiClient;
