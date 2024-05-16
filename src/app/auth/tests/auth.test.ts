@@ -294,7 +294,7 @@ describe('eHerkenning logins', () => {
 
   test('kvk login sets organisation type user', async () => {
     const handler = new AuthRequestHandler(handlerAttributes);
-    const user = handler.userFromClaims(claims);
+    const user = handler.userFromTokens(claims);
     expect(user).toBeTruthy();
     if (user) {
       expect(await user.getUserName()).toBe('My Company');

@@ -4,7 +4,7 @@ import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
-import { IdTokenClaims } from 'openid-client';
+import { IdTokenClaims, TokenSet } from 'openid-client';
 import { BrpApi } from './BrpApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 
@@ -27,7 +27,6 @@ export class AuthRequestHandler {
   }
 
   async handleRequest() {
-    const logger = new Logger({ serviceName: 'mijnnijmegen' });
     let session = new Session(this.config.cookies, this.config.dynamoDBClient);
     await session.init();
     if (session.sessionId === false) {
@@ -38,18 +37,12 @@ export class AuthRequestHandler {
     try {
       // Authorize the request
       const tokens = await this.config.OpenIdConnect.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
-      const claims = tokens.claims();
-      const scope = tokens.scope;
-      if (!claims || !scope) {
-        return Response.redirect('/login');
-      }
 
       // Load the principal data
-      const user = this.userFromClaims(claims, scope);
+      const user = this.userFromTokens(tokens);
       if (!user) {
         return Response.redirect('/login');
       }
-      this.logAuthMethod(claims, logger);
 
       // Startup the session
       try {
@@ -74,7 +67,8 @@ export class AuthRequestHandler {
     return Response.redirect('/', 302, [session.getCookie()]);
   }
 
-  private logAuthMethod(claims: IdTokenClaims, logger: Logger) {
+  private logAuthMethod(claims: IdTokenClaims) {
+    const logger = new Logger({ serviceName: 'mijnnijmegen' });
     if (claims.hasOwnProperty('acr') && claims.hasOwnProperty('amr')) {
       logger.info('auth succesful', { loa: claims.acr, method: claims.amr });
     }
@@ -117,7 +111,12 @@ export class AuthRequestHandler {
     return false;
   }
 
-  userFromClaims(claims: IdTokenClaims, scope: string): User | false {
+  userFromTokens(tokens: TokenSet): User | false {
+    if (!tokens.scope || !tokens.claims) {
+      throw Error('scope and claims expected');
+    }
+    const claims = tokens.claims();
+    const scope = tokens.scope;
     const authMethod = this.authMethodFromScope(scope);
 
     let bsn = undefined;
@@ -138,6 +137,9 @@ export class AuthRequestHandler {
 
     if ( authMethod == 'eherkenning') {
       kvk = this.kvkFromEherkenningLogin(claims);
+    }
+    if (bsn || kvk) {
+      this.logAuthMethod(claims);
     }
 
     if (bsn) {
