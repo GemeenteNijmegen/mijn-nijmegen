@@ -41,7 +41,6 @@ export class ZakenRequestHandler {
 
   async list(session: Session) {
     const user = UserFromSession(session);
-    console.timeLog('request', 'Api Client init');
 
     const zaken = await this.zaakAggregator.list(user);
     const zaakSummaries = new ZaakFormatter().formatList(zaken);
