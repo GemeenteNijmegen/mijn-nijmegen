@@ -11,8 +11,10 @@ const loginRequestHandler = new LoginRequestHandler({
   oidcScope: process.env.OIDC_SCOPE ?? '',
   digidScope: process.env.DIGID_SCOPE ?? '',
   yiviScope: process.env.YIVI_SCOPE,
-  yiviAttributes: process.env.YIVI_ATTRIBUTES,
+  yiviBsnAttribute: process.env.YIVI_BSN_ATTRIBUTE,
+  yiviCondisconScope: process.env.YIVI_CONDISCON_SCOPE,
   eHerkenningScope: process.env.EHERKENNING_SCOPE ?? '',
+  useYiviKvk: process.env.USE_YIVI_KVK == 'true',
 });
 
 function parseEvent(event: any) {

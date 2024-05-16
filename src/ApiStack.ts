@@ -193,8 +193,9 @@ export class ApiStack extends Stack implements Configurable {
       environment: {
         DIGID_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmDIGIDScope),
         YIVI_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmYiviScope),
-        YIVI_ATTRIBUTES: StringParameter.valueForStringParameter(this, Statics.ssmYiviAttributes),
-        USE_YIVI: StringParameter.valueForStringParameter(this, Statics.ssmUseYivi),
+        YIVI_BSN_ATTRIBUTE: StringParameter.valueForStringParameter(this, Statics.ssmYiviBsnAttribute),
+        YIVI_CONDISCON_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmYiviCondisconScope),
+        USE_YIVI_KVK: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviKvk), // Feature flag for kvk bsn conditional disclosure
       },
     });
   }
@@ -227,8 +228,10 @@ export class ApiStack extends Stack implements Configurable {
         MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
         MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
-        YIVI_ATTRIBUTES: StringParameter.valueForStringParameter(this, Statics.ssmYiviAttributes),
-        USE_YIVI: StringParameter.valueForStringParameter(this, Statics.ssmUseYivi),
+        YIVI_BSN_ATTRIBUTE: StringParameter.valueForStringParameter(this, Statics.ssmYiviBsnAttribute),
+        YIVI_KVK_ATTRIBUTE_NUMBER: StringParameter.valueForStringParameter(this, Statics.ssmYiviKvkAttribute),
+        YIVI_KVK_ATTRIBUTE_NAME: StringParameter.valueForStringParameter(this, Statics.ssmYiviKvkAttribute),
+        USE_YIVI_KVK: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviKvk),
       },
       apiFunction: AuthFunction,
     });

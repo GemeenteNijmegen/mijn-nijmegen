@@ -22,14 +22,24 @@ interface LoginRequestHandlerProps {
   yiviScope?: string;
 
   /**
-   * Scope attribbutes for Yivi. Concatenated with `oidcScope`. Only active if yiviScope is set
+   * BSN attribbute for Yivi. Concatenated with `oidcScope`.
    */
-  yiviAttributes?: string;
+  yiviBsnAttribute?: string;
+
+  /**
+   * Conditional disclosure scope for Yivi. Concatenated with `oidcScope`.
+   */
+  yiviCondisconScope?: string;
 
   /**
    * Scope param for eherkenning. Concatenated with `oidcScope`. Setting this implies eherkenning is active
    */
   eHerkenningScope?: string;
+
+  /**
+   * Feature flag to incicate if we need to enable conditional disclosure with kvk and bsn
+   */
+  useYiviKvk?: boolean;
 }
 
 export class LoginRequestHandler {
@@ -75,8 +85,14 @@ export class LoginRequestHandler {
       authMethods.push(this.authMethodData(digidScope, state, 'digid', 'DigiD'));
     }
     if (this.config?.yiviScope) {
-      const yiviScope = `${scope} ${this.config.yiviScope} ${this.config.yiviAttributes}`;
-      authMethods.push(this.authMethodData(yiviScope, state, 'yivi', 'Yivi'));
+      const yiviScopes = [scope, this.config.yiviScope];
+      if (this.config?.useYiviKvk) { // Feature flag
+        yiviScopes.push(this.config.yiviCondisconScope ?? '');
+      } else {
+        yiviScopes.push(this.config.yiviBsnAttribute ?? '');
+      }
+      authMethods.push(this.authMethodData(yiviScopes.join(' '), state, 'yivi', 'Yivi'));
+
     }
     if (this.config?.eHerkenningScope) {
       const eherkenningScope = `${scope} ${this.config.eHerkenningScope}`;

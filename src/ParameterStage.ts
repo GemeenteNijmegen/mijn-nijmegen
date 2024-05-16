@@ -49,9 +49,10 @@ export class ssmParamsConstruct extends Construct {
     /**
      * Application configuration
      */
-    new SSM.StringParameter(this, 'ssm_config_1', {
+    new SSM.StringParameter(this, 'ssm_config_2', {
       stringValue: 'false',
-      parameterName: Statics.ssmUseYivi,
+      parameterName: Statics.ssmUseYiviKvk,
+      description: 'Feature flag Yivi using KVK',
     });
 
     /**
@@ -84,7 +85,20 @@ export class ssmParamsConstruct extends Construct {
 
     new SSM.StringParameter(this, 'ssm_auth_6', {
       stringValue: 'pbdf.gemeente.bsn.bsn',
-      parameterName: Statics.ssmYiviAttributes,
+      parameterName: Statics.ssmYiviBsnAttribute,
+      description: 'Yivi bsn attribute to obtain from claims',
+    });
+
+    new SSM.StringParameter(this, 'ssm_auth_7', {
+      stringValue: 'pbdf.gemeente.bsn.bsn',
+      parameterName: Statics.ssmYiviKvkAttribute,
+      description: 'Yivi kvk attribute to obtain from claims',
+    });
+
+    new SSM.StringParameter(this, 'ssm_auth_8', {
+      stringValue: 'pbdf.gemeente.bsn.bsn',
+      parameterName: Statics.ssmYiviCondisconScope,
+      description: 'Conditional disclosure scope for Yivi',
     });
 
     new SSM.StringParameter(this, 'ssm_uitkering_2', {

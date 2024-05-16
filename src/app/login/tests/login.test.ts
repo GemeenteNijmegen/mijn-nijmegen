@@ -46,9 +46,28 @@ describe('Test login page and urls', () => {
       digidScope: 'idp_scoping:digid',
       oidcScope: 'openid',
       yiviScope: 'idp_scoping:yivi',
+      yiviBsnAttribute: 'bsn',
     });
     const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
     expect(result.body).toMatch(encodeURIComponent('idp_scoping:yivi'));
+    expect(result.body).toMatch(encodeURIComponent('bsn'));
+    expect(result.body).toMatch('<span class="title"> Inloggen </span><span class="assistive">met Yivi</span>');
+    if (result.body) {
+      writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => { });
+    }
+  });
+
+  test('Return login page with yivi link (conditional disclosure)', async () => {
+    const loginRequestHandler = new LoginRequestHandler({
+      digidScope: 'idp_scoping:digid',
+      oidcScope: 'openid',
+      yiviScope: 'idp_scoping:yivi',
+      yiviCondisconScope: 'condiscon',
+      useYiviKvk: true,
+    });
+    const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
+    expect(result.body).toMatch(encodeURIComponent('idp_scoping:yivi'));
+    expect(result.body).toMatch(encodeURIComponent('condiscon'));
     expect(result.body).toMatch('<span class="title"> Inloggen </span><span class="assistive">met Yivi</span>');
     if (result.body) {
       writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => { });

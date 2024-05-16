@@ -75,7 +75,12 @@ export class AuthRequestHandler {
   }
 
 
-  bsnFromDigidLogin(claims: IdTokenClaims): Bsn | false {
+  /**
+   * Get the BSN from the claims for a DigiD login
+   * @param claims
+   * @returns
+   */
+  bsnFromDigidLogin(claims: IdTokenClaims): Bsn {
     const subject = 'sub';
     if (claims[subject]) {
       return new Bsn(claims[subject] as string);
@@ -83,7 +88,12 @@ export class AuthRequestHandler {
     throw Error('Invalid or no bsn in DigiD claims!');
   }
 
-  bsnFromYiviLogin(claims: IdTokenClaims): Bsn | false {
+  /**
+   * Get the BSN from a Yivi login
+   * @param claims
+   * @returns
+   */
+  bsnFromYiviLogin(claims: IdTokenClaims): Bsn {
     const bsnAttribute = process.env.YIVI_ATTRIBUTE_BSN!;
     if (claims[bsnAttribute]) {
       return new Bsn(claims[bsnAttribute] as string);
@@ -91,7 +101,12 @@ export class AuthRequestHandler {
     throw Error('Invalid or no bsn in Yivi claims!');
   }
 
-  kvkFromYiviLogin(claims: IdTokenClaims): { kvkNumber: string; organisationName: string } | false {
+  /**
+   * Get the KVK number and company name from a Yivi login
+   * @param claims
+   * @returns
+   */
+  kvkFromYiviLogin(claims: IdTokenClaims): { kvkNumber: string; organisationName: string } {
     let kvkNumberAttribute = process.env.YIVI_ATTRIBUTE_KVK_NUMBER!;
     let kvkNameAttribute = process.env.YIVI_ATTRIBUTE_KVK_NAME!;
     const yiviKvkClaim = claims[kvkNumberAttribute] as string;
@@ -102,13 +117,18 @@ export class AuthRequestHandler {
     throw Error('Invalid or no kvk in Yivi claims!');
   }
 
-  kvkFromEherkenningLogin(claims: IdTokenClaims): { kvkNumber: string; organisationName: string } | false {
+  /**
+   * Get the KVK number and company name form a eHerkenning login
+   * @param claims
+   * @returns
+   */
+  kvkFromEherkenningLogin(claims: IdTokenClaims): { kvkNumber: string; organisationName: string } {
     const kvkClaim = claims?.['urn:etoegang:1.9:EntityConcernedID:KvKnr'] as string;
     const organisationNameClaim = claims?.['urn:etoegang:1.11:attribute-represented:CompanyName'] as string;
     if (kvkClaim && Number.isInteger(parseInt(kvkClaim))) {
       return { kvkNumber: kvkClaim, organisationName: organisationNameClaim };
     }
-    return false;
+    throw Error('Invalid eHerkenning login');
   }
 
   userFromTokens(tokens: TokenSet): User | false {
@@ -126,7 +146,9 @@ export class AuthRequestHandler {
       if (scope.includes(process.env.YIVI_ATTRIBUTE_BSN!)) {
         bsn = this.bsnFromYiviLogin(claims);
       }
-      if (scope.includes(process.env.YIVI_ATTRIBUTE_KVK_NUMBER!)) {
+      if (
+        process.env.USE_YIVI_KVK === 'true' // Feature flag USE_YIVI_KVK
+        && scope.includes(process.env.YIVI_ATTRIBUTE_KVK_NUMBER!)) {
         kvk = this.kvkFromYiviLogin(claims);
       }
     }
@@ -156,11 +178,11 @@ export class AuthRequestHandler {
 
   authMethodFromScope(scope: string) : AuthenticationMethod {
     const scopes = scope.split(' ');
-    if (scopes.includes('idp_scoping:yivi')) {
+    if (scopes.includes(process.env.YIVI_SCOPE!)) {
       return 'yivi';
-    } else if (scopes.includes('idp_scoping:eherkenning')) {
+    } else if (scopes.includes(process.env.EHERKENNING_SCOPE!)) {
       return 'eherkenning';
-    } else if (scopes.includes('idp_scoping:digid')) {
+    } else if (scopes.includes(process.env.DIGID_SCOPE!)) {
       return 'digid';
     }
     throw Error('Unsupported authentication method');
