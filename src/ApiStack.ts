@@ -171,7 +171,7 @@ export class ApiStack extends Stack implements Configurable {
 
   private logoutFunction(baseUrl: string, readOnlyRole: Role) {
     return new ApiFunction(this, 'logout-function', {
-      description: 'Uitlog-pagina voor de Mijn Uitkering-applicatie.',
+      description: 'Uitlog-pagina voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/logout',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
@@ -183,7 +183,7 @@ export class ApiStack extends Stack implements Configurable {
 
   private loginFunction(baseUrl: string, readOnlyRole: Role) {
     return new ApiFunction(this, 'login-function', {
-      description: 'Login-pagina voor de Mijn Uitkering-applicatie.',
+      description: 'Login-pagina voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/login',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
@@ -193,6 +193,7 @@ export class ApiStack extends Stack implements Configurable {
       environment: {
         DIGID_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmDIGIDScope),
         YIVI_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmYiviScope),
+        EHERKENNING_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmEherkenningScope),
         YIVI_BSN_ATTRIBUTE: StringParameter.valueForStringParameter(this, Statics.ssmYiviBsnAttribute),
         YIVI_CONDISCON_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmYiviCondisconScope),
         USE_YIVI_KVK: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviKvk), // Feature flag for kvk bsn conditional disclosure
@@ -202,7 +203,7 @@ export class ApiStack extends Stack implements Configurable {
 
   private homeFunction(baseUrl: string, readOnlyRole: Role) {
     return new ApiFunction(this, 'home-function', {
-      description: 'Home-lambda voor de Mijn Uitkering-applicatie.',
+      description: 'Home-lambda voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/home',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
@@ -216,7 +217,7 @@ export class ApiStack extends Stack implements Configurable {
     const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
 
     const authFunction = new ApiFunction(this, 'auth-function', {
-      description: 'Authenticatie-lambd voor de Mijn Uitkering-applicatie.',
+      description: 'Authenticatie-lambd voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/auth',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
@@ -245,7 +246,7 @@ export class ApiStack extends Stack implements Configurable {
   private persoonsgegevensFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
 
     const persoonsGegevensFunction = new ApiFunction(this, 'persoonsgegevens-function', {
-      description: 'Authenticatie-lambd voor de Mijn Uitkering-applicatie.',
+      description: 'Authenticatie-lambd voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/persoonsgegevens',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',

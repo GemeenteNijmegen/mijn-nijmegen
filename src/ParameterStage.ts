@@ -101,6 +101,12 @@ export class ssmParamsConstruct extends Construct {
       description: 'Conditional disclosure scope for Yivi',
     });
 
+    new SSM.StringParameter(this, 'ssm_auth_9', {
+      stringValue: 'eherkenning',
+      parameterName: Statics.ssmEherkenningScope,
+      description: 'OIDC scope for eherkenning',
+    });
+
     new SSM.StringParameter(this, 'ssm_uitkering_2', {
       stringValue: '-',
       parameterName: Statics.ssmMTLSClientCert,
