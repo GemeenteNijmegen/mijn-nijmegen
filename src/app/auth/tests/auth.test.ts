@@ -7,15 +7,27 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { IdTokenClaims } from 'openid-client';
 import { OpenIDConnect } from '../../../shared/OpenIDConnect';
-import { AuthRequestHandler } from '../AuthRequestHandler';
+import { AuthRequestHandler, AuthRequestHandlerProps, Organisation, Person } from '../AuthRequestHandler';
 
+const scopesAndAttributes = {
+  digidScope: 'idp_scoping:digid',
+  eherkenningScope: 'idp_scoping:eherkenning',
+  yiviScope: 'idp_scoping:yivi',
+  yiviBsnAttribute: 'pbdf.gemeente.bsn.bsn',
+  yiviKvkNumberAttribute: 'pbdf.signicat.kvkTradeRegister.kvkNumber',
+  yiviKvkNameAttribute: 'pbdf.signicat.kvkTradeRegister.name',
+  useYiviKvk: true,
+};
 
 function mockedOidcClient(authorized = true) {
   const oidc = new OpenIDConnect();
   oidc.getOidcClientSecret = async () => '123';
   if (authorized) {
     oidc.authorize = jest.fn().mockResolvedValue({
-      sub: '900222670',
+      claims: () => {
+        return { sub: '900222670' };
+      },
+      scope: 'openid idp_scoping:digid',
     });
   } else {
     oidc.authorize = jest.fn().mockRejectedValue('state does not match session state');
@@ -102,6 +114,7 @@ describe('Auth handler', () => {
       dynamoDBClient,
       apiClient,
       OpenIdConnect: OIDC,
+      ...scopesAndAttributes,
     });
     const result = await handler.handleRequest();
     expect(result.statusCode).toBe(302);
@@ -120,6 +133,7 @@ describe('Auth handler', () => {
       dynamoDBClient,
       apiClient,
       OpenIdConnect: OIDC,
+      ...scopesAndAttributes,
     });
     const result = await handler.handleRequest();
     expect(result.statusCode).toBe(302);
@@ -136,6 +150,7 @@ describe('Auth handler', () => {
       dynamoDBClient,
       apiClient,
       OpenIdConnect: OIDC,
+      ...scopesAndAttributes,
     });
     const result = await handler.handleRequest();
     expect(result.statusCode).toBe(302);
@@ -143,16 +158,17 @@ describe('Auth handler', () => {
   });
 });
 
-describe('Get bsn from claims object', () => {
+
+describe('DigiD logins', () => {
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-  const handlerAttributes = {
+  const handlerAttributes: AuthRequestHandlerProps = {
     cookies: `session=${sessionId}`,
     queryStringParamState: 'state',
     queryStringParamCode: '12345',
     dynamoDBClient,
     apiClient,
     OpenIdConnect: OIDC,
-    yiviAttributes: 'irma-demo.gemeente.personalData.bsn pbdf.gemeente.bsn.bsn',
+    ...scopesAndAttributes,
   };
   const handler = new AuthRequestHandler(handlerAttributes);
   test('bsn in sub', async () => {
@@ -164,65 +180,14 @@ describe('Get bsn from claims object', () => {
       sub: '900222670',
     };
 
-    const bsn = handler.bsnFromClaims(claims);
+    const bsn = handler.bsnFromDigidLogin(claims);
     expect(bsn).toBeInstanceOf(Bsn);
     expect(bsn).toBeTruthy();
     if (bsn) {
       expect(bsn.bsn).toBe('900222670');
     }
   });
-  test('bsn in irma-demo.gemeente.personalData.bsn', async () => {
-    const claims: IdTokenClaims = {
-      aud: 'test',
-      exp: 123,
-      iat: 123,
-      iss: 'test',
-      sub: 'test',
-      ['irma-demo.gemeente.personalData.bsn']: '900070341',
-    };
-    const bsn = handler.bsnFromClaims(claims);
-    expect(bsn).toBeInstanceOf(Bsn);
-    expect(bsn).toBeTruthy();
-    if (bsn) {
-      expect(bsn.bsn).toBe('900070341');
-    }
-  });
-
-  test('bsn in pbdf.gemeente.bsn.bsn', async () => {
-    const claims: IdTokenClaims = {
-      aud: 'test',
-      exp: 123,
-      iat: 123,
-      iss: 'test',
-      sub: 'test',
-      ['pbdf.gemeente.bsn.bsn']: '900070341',
-    };
-    const bsn = handler.bsnFromClaims(claims);
-    expect(bsn).toBeInstanceOf(Bsn);
-    expect(bsn).toBeTruthy();
-    if (bsn) {
-      expect(bsn.bsn).toBe('900070341');
-    }
-  });
-
-  test('bsn in sub and irma-demo.gemeente.personalData.bsn uses first', async () => {
-    const claims: IdTokenClaims = {
-      aud: 'test',
-      exp: 123,
-      iat: 123,
-      iss: 'test',
-      sub: '900222670',
-      ['irma-demo.gemeente.personalData.bsn']: '900070341',
-    };
-    const bsn = handler.bsnFromClaims(claims);
-    expect(bsn).toBeInstanceOf(Bsn);
-    expect(bsn).toBeTruthy();
-    if (bsn) {
-      expect(bsn.bsn).toBe('900222670');
-    }
-  });
-
-  test('No bsn in claims returns false', async () => {
+  test('No bsn in sub claim throws', async () => {
     const claims: IdTokenClaims = {
       aud: 'test',
       exp: 123,
@@ -230,39 +195,165 @@ describe('Get bsn from claims object', () => {
       iss: 'test',
       sub: 'test',
     };
-    const bsn = handler.bsnFromClaims(claims);
-    expect(bsn).not.toBeInstanceOf(Bsn);
-    expect(bsn).toBeFalsy();
-  });
-
-  test('bsn in pbdf.gemeente.bsn.bsn but no yivi attributes provided', async () => {
-    handlerAttributes.yiviAttributes = '';
-    const testHandler = new AuthRequestHandler(handlerAttributes);
-    const claims: IdTokenClaims = {
-      aud: 'test',
-      exp: 123,
-      iat: 123,
-      iss: 'test',
-      sub: 'test',
-      ['pbdf.gemeente.bsn.bsn']: '900070341',
-    };
-    const bsn = testHandler.bsnFromClaims(claims);
-    expect(bsn).not.toBeInstanceOf(Bsn);
-    expect(bsn).toBeFalsy();
+    expect(() => {
+      handler.bsnFromDigidLogin(claims);
+    }).toThrow();
   });
 });
 
-describe('eHerkenning logins', () => {
+
+describe('Yivi logins', () => {
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-  const handlerAttributes = {
+  const handlerAttributes: AuthRequestHandlerProps = {
     cookies: `session=${sessionId}`,
     queryStringParamState: 'state',
     queryStringParamCode: '12345',
     dynamoDBClient,
     apiClient,
     OpenIdConnect: OIDC,
-    yiviAttributes: 'irma-demo.gemeente.personalData.bsn pbdf.gemeente.bsn.bsn',
+    ...scopesAndAttributes,
   };
+  const handler = new AuthRequestHandler(handlerAttributes);
+
+  test('Can login with bsn', async () => {
+    const claims: IdTokenClaims = {
+      aud: 'test',
+      exp: 123,
+      iat: 123,
+      iss: 'test',
+      sub: 'test',
+      ['pbdf.gemeente.bsn.bsn']: '900070341',
+    };
+
+    const tokens = {
+      claims: () => claims,
+      scope: 'openid idp_scoping:yivi pbdf.gemeente.bsn.bsn',
+    };
+
+    const user = handler.userFromTokens(tokens as any);
+    expect(user.identifier).toBe('900070341');
+    expect(user).toBeInstanceOf(Person);
+  });
+
+  test('Can login with kvk', async () => {
+    const claims: IdTokenClaims = {
+      aud: 'test',
+      exp: 123,
+      iat: 123,
+      iss: 'test',
+      sub: 'test',
+      ['pbdf.signicat.kvkTradeRegister.kvkNumber']: '123456',
+      ['pbdf.signicat.kvkTradeRegister.name']: 'test company',
+    };
+    const tokens = {
+      claims: () => claims,
+      scope: 'openid idp_scoping:yivi pbdf.signicat.kvkTradeRegister.kvkNumber pbdf.signicat.kvkTradeRegister.name',
+    };
+    const user = handler.userFromTokens(tokens as any);
+    expect(user.identifier).toBe('123456');
+    expect(user).toBeInstanceOf(Organisation);
+  });
+
+  test('Cannot login without kvk name', async () => {
+    const claims: IdTokenClaims = {
+      aud: 'test',
+      exp: 123,
+      iat: 123,
+      iss: 'test',
+      sub: 'test',
+      ['pbdf.signicat.kvkTradeRegister.kvkNumber']: '123456',
+    };
+    const tokens = {
+      claims: () => claims,
+      scope: 'openid idp_scoping:yivi pbdf.signicat.kvkTradeRegister.kvkNumber',
+    };
+    expect(() => {
+      handler.userFromTokens(tokens as any);
+    }).toThrow();
+  });
+
+  test('Can login without bsn in claims', async () => {
+    const claims: IdTokenClaims = {
+      aud: 'test',
+      exp: 123,
+      iat: 123,
+      iss: 'test',
+      sub: 'test',
+    };
+    const tokens = {
+      claims: () => claims,
+      scope: 'openid idp_scoping:yivi',
+    };
+    expect(() => {handler.userFromTokens(tokens as any);}).toThrow();
+  });
+
+});
+
+
+describe('Yivi logins (kvk feature flag off)', () => {
+  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
+  const handlerAttributes: AuthRequestHandlerProps = {
+    cookies: `session=${sessionId}`,
+    queryStringParamState: 'state',
+    queryStringParamCode: '12345',
+    dynamoDBClient,
+    apiClient,
+    OpenIdConnect: OIDC,
+    ...scopesAndAttributes,
+    useYiviKvk: false,
+  };
+  const handler = new AuthRequestHandler(handlerAttributes);
+
+  test('Can login with bsn', async () => {
+    const claims: IdTokenClaims = {
+      aud: 'test',
+      exp: 123,
+      iat: 123,
+      iss: 'test',
+      sub: 'test',
+      ['pbdf.gemeente.bsn.bsn']: '900070341',
+    };
+
+    const tokens = {
+      claims: () => claims,
+      scope: 'openid idp_scoping:yivi pbdf.gemeente.bsn.bsn',
+    };
+
+    const user = handler.userFromTokens(tokens as any);
+    expect(user.identifier).toBe('900070341');
+    expect(user).toBeInstanceOf(Person);
+  });
+
+  test('Cannot login with kvk', async () => {
+    const claims: IdTokenClaims = {
+      aud: 'test',
+      exp: 123,
+      iat: 123,
+      iss: 'test',
+      sub: 'test',
+      ['pbdf.signicat.kvkTradeRegister.kvkNumber']: '123456',
+      ['pbdf.signicat.kvkTradeRegister.name']: 'test company',
+    };
+    const tokens = {
+      claims: () => claims,
+      scope: 'openid idp_scoping:yivi pbdf.signicat.kvkTradeRegister.kvkNumber pbdf.signicat.kvkTradeRegister.name',
+    };
+    expect(() => {handler.userFromTokens(tokens as any);}).toThrow();
+  });
+});
+
+describe('eHerkenning logins', () => {
+  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
+  const handlerAttributes: AuthRequestHandlerProps = {
+    cookies: `session=${sessionId}`,
+    queryStringParamState: 'state',
+    queryStringParamCode: '12345',
+    dynamoDBClient,
+    apiClient,
+    OpenIdConnect: OIDC,
+    ...scopesAndAttributes,
+  };
+  const scope = 'openid idp_scoping:eherkenning';
   const claims: IdTokenClaims = {
     aud: 'test',
     exp: 123,
@@ -275,7 +366,7 @@ describe('eHerkenning logins', () => {
 
   test('urn:etoegang:1.9:EntityConcernedID:KvKnr in claims returns kvk', async () => {
     const handler = new AuthRequestHandler(handlerAttributes);
-    const kvk = handler.kvkFromClaims(claims);
+    const kvk = handler.kvkFromEherkenningLogin(claims);
     expect(kvk).toBeTruthy();
     if (kvk) {
       expect(kvk.kvkNumber).toBe('12345678');
@@ -284,7 +375,7 @@ describe('eHerkenning logins', () => {
 
   test('kvk login sets username', async () => {
     const handler = new AuthRequestHandler(handlerAttributes);
-    const kvk = handler.kvkFromClaims(claims);
+    const kvk = handler.kvkFromEherkenningLogin(claims);
     expect(kvk).toBeTruthy();
     if (kvk) {
       expect(kvk.kvkNumber).toBe('12345678');
@@ -294,7 +385,8 @@ describe('eHerkenning logins', () => {
 
   test('kvk login sets organisation type user', async () => {
     const handler = new AuthRequestHandler(handlerAttributes);
-    const user = handler.userFromTokens(claims);
+    const tokens = { claims: () => claims, scope };
+    const user = handler.userFromTokens(tokens as any);
     expect(user).toBeTruthy();
     if (user) {
       expect(await user.getUserName()).toBe('My Company');

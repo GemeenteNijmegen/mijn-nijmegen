@@ -9,20 +9,34 @@ import { BrpApi } from './BrpApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 
 type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
+const eHerkenningKvkNummerClaim = 'urn:etoegang:1.9:EntityConcernedID:KvKnr';
+const eHerkenningCompanyNameClaim = 'urn:etoegang:1.11:attribute-represented:CompanyName';
 
-interface requestProps {
+export interface AuthRequestHandlerProps {
   cookies: string;
   queryStringParamCode: string;
   queryStringParamState: string;
   dynamoDBClient: DynamoDBClient;
   apiClient: ApiClient;
   OpenIdConnect: OpenIDConnect;
-  yiviAttributes?: string;
+
+  // Scopes
+  yiviScope: string;
+  digidScope: string;
+  eherkenningScope: string;
+
+  // Yivi attributes
+  yiviBsnAttribute: string;
+  yiviKvkNumberAttribute: string;
+  yiviKvkNameAttribute: string;
+
+  // Feature toggle
+  useYiviKvk?: boolean;
 }
 
 export class AuthRequestHandler {
-  private config: requestProps;
-  constructor(props: requestProps) {
+  private config: AuthRequestHandlerProps;
+  constructor(props: AuthRequestHandlerProps) {
     this.config = props;
   }
 
@@ -94,7 +108,7 @@ export class AuthRequestHandler {
    * @returns
    */
   bsnFromYiviLogin(claims: IdTokenClaims): Bsn {
-    const bsnAttribute = process.env.YIVI_ATTRIBUTE_BSN!;
+    const bsnAttribute = this.config.yiviBsnAttribute;
     if (claims[bsnAttribute]) {
       return new Bsn(claims[bsnAttribute] as string);
     }
@@ -107,11 +121,12 @@ export class AuthRequestHandler {
    * @returns
    */
   kvkFromYiviLogin(claims: IdTokenClaims): { kvkNumber: string; organisationName: string } {
-    let kvkNumberAttribute = process.env.YIVI_ATTRIBUTE_KVK_NUMBER!;
-    let kvkNameAttribute = process.env.YIVI_ATTRIBUTE_KVK_NAME!;
+    let kvkNumberAttribute = this.config.yiviKvkNumberAttribute;
+    let kvkNameAttribute = this.config.yiviKvkNameAttribute;
     const yiviKvkClaim = claims[kvkNumberAttribute] as string;
     const yiviNameClaim = claims[kvkNameAttribute] as string;
-    if (yiviKvkClaim && Number.isInteger(parseInt(yiviKvkClaim))) {
+    console.log(yiviKvkClaim, yiviNameClaim);
+    if (yiviKvkClaim && yiviNameClaim && Number.isInteger(parseInt(yiviKvkClaim))) {
       return { kvkNumber: yiviKvkClaim, organisationName: yiviNameClaim };
     }
     throw Error('Invalid or no kvk in Yivi claims!');
@@ -123,15 +138,21 @@ export class AuthRequestHandler {
    * @returns
    */
   kvkFromEherkenningLogin(claims: IdTokenClaims): { kvkNumber: string; organisationName: string } {
-    const kvkClaim = claims?.['urn:etoegang:1.9:EntityConcernedID:KvKnr'] as string;
-    const organisationNameClaim = claims?.['urn:etoegang:1.11:attribute-represented:CompanyName'] as string;
+    const kvkClaim = claims?.[eHerkenningKvkNummerClaim] as string;
+    const organisationNameClaim = claims?.[eHerkenningCompanyNameClaim] as string;
     if (kvkClaim && Number.isInteger(parseInt(kvkClaim))) {
       return { kvkNumber: kvkClaim, organisationName: organisationNameClaim };
     }
     throw Error('Invalid eHerkenning login');
   }
 
-  userFromTokens(tokens: TokenSet): User | false {
+  /**
+   * Given the set of claims and scopes determine the login method and
+   * authenticate the user based on the claims.
+   * @param tokens
+   * @returns User
+   */
+  userFromTokens(tokens: TokenSet): User {
     if (!tokens.scope || !tokens.claims) {
       throw Error('scope and claims expected');
     }
@@ -143,12 +164,12 @@ export class AuthRequestHandler {
     let kvk = undefined;
 
     if (authMethod == 'yivi') {
-      if (scope.includes(process.env.YIVI_ATTRIBUTE_BSN!)) {
+      if (scope.includes(this.config.yiviBsnAttribute)) {
         bsn = this.bsnFromYiviLogin(claims);
       }
       if (
-        process.env.USE_YIVI_KVK === 'true' // Feature flag USE_YIVI_KVK
-        && scope.includes(process.env.YIVI_ATTRIBUTE_KVK_NUMBER!)) {
+        this.config.useYiviKvk // Feature flag USE_YIVI_KVK
+        && scope.includes(this.config.yiviKvkNumberAttribute)) {
         kvk = this.kvkFromYiviLogin(claims);
       }
     }
@@ -176,13 +197,19 @@ export class AuthRequestHandler {
   }
 
 
+  /**
+   * Given a list of scopes issued by the IdP after authentication
+   * determine the authentication method that is used
+   * @param scope
+   * @returns authentication method that is used
+   */
   authMethodFromScope(scope: string) : AuthenticationMethod {
     const scopes = scope.split(' ');
-    if (scopes.includes(process.env.YIVI_SCOPE!)) {
+    if (scopes.includes(this.config.yiviScope)) {
       return 'yivi';
-    } else if (scopes.includes(process.env.EHERKENNING_SCOPE!)) {
+    } else if (scopes.includes(this.config.eherkenningScope)) {
       return 'eherkenning';
-    } else if (scopes.includes(process.env.DIGID_SCOPE!)) {
+    } else if (scopes.includes(this.config.digidScope)) {
       return 'digid';
     }
     throw Error('Unsupported authentication method');
@@ -209,7 +236,7 @@ interface User {
 /**
  * Implementation of a 'natuurlijk persoon', a human, having a BSN.
  */
-class Person implements User {
+export class Person implements User {
   bsn: Bsn;
   config: UserConfig;
   identifier: string;
@@ -239,7 +266,7 @@ class Person implements User {
 /**
  * Implementation of a user of type 'organisation', having a KVK number.
  */
-class Organisation implements User {
+export class Organisation implements User {
   kvk: string;
   config: UserConfig;
   identifier: string;

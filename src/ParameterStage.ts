@@ -90,9 +90,15 @@ export class ssmParamsConstruct extends Construct {
     });
 
     new SSM.StringParameter(this, 'ssm_auth_7', {
-      stringValue: 'pbdf.gemeente.bsn.bsn',
-      parameterName: Statics.ssmYiviKvkAttribute,
-      description: 'Yivi kvk attribute to obtain from claims',
+      stringValue: 'pbdf.signicat.kvkTradeRegister.kvkNumber',
+      parameterName: Statics.ssmYiviKvkNumberAttribute,
+      description: 'Yivi kvk number attribute to obtain from claims',
+    });
+
+    new SSM.StringParameter(this, 'ssm_auth_10', {
+      stringValue: 'pbdf.signicat.kvkTradeRegister.name',
+      parameterName: Statics.ssmYiviKvkNameAttribute,
+      description: 'Yivi kvk name attribute to obtain from claims',
     });
 
     new SSM.StringParameter(this, 'ssm_auth_8', {
