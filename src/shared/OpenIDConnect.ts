@@ -1,5 +1,5 @@
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
-import { IdTokenClaims, Issuer, generators } from 'openid-client';
+import { Issuer, TokenSet, generators } from 'openid-client';
 
 export class OpenIDConnect {
   issuer: Issuer;
@@ -95,9 +95,9 @@ export class OpenIDConnect {
      *
      * @param {string} code
      * @param {string} state
-     * @returns {IdTokenClaims} returns a claims object on succesful auth
+     * @returns {TokenSet} returns the tokens object on succesful auth
      */
-  async authorize(code: string, state: string, returnedState: string): Promise<IdTokenClaims> {
+  async authorize(code: string, state: string, returnedState: string): Promise<TokenSet> {
     if (!process.env.APPLICATION_URL_BASE || !process.env.OIDC_CLIENT_ID) {
       throw Error('no APPLICATION_URL_BASE or OIDC_CLIENT_ID in env. provided.');
     }
@@ -124,7 +124,7 @@ export class OpenIDConnect {
     if (claims.aud != process.env.OIDC_CLIENT_ID) {
       throw new Error('claims aud does not match client id');
     }
-    return claims;
+    return tokenSet;
 
   }
 
