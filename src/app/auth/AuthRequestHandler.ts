@@ -204,12 +204,11 @@ export class AuthRequestHandler {
    * @returns authentication method that is used
    */
   authMethodFromScope(scope: string) : AuthenticationMethod {
-    const scopes = scope.split(' ');
-    if (scopes.includes(this.config.yiviScope)) {
+    if (scope.includes(this.config.yiviScope)) {
       return 'yivi';
-    } else if (scopes.includes(this.config.eherkenningScope)) {
+    } else if (scope.includes(this.config.eherkenningScope)) {
       return 'eherkenning';
-    } else if (scopes.includes(this.config.digidScope)) {
+    } else if (scope.includes(this.config.digidScope)) {
       return 'digid';
     }
     throw Error('Unsupported authentication method');
