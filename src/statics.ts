@@ -38,7 +38,7 @@ export abstract class Statics {
   static readonly ssmYiviScope: string = '/cdk/mijn-nijmegen/yiviScope';
   static readonly ssmEherkenningScope: string = '/cdk/mijn-nijmegen/eHerkenningScope';
   static readonly ssmYiviCondisconScope: string = '/cdk/mijn-nijmegen/yiviCondisconScope';
-  static readonly ssmYiviBsnAttribute: string = '/cdk/mijn-nijmegen/yiviKvkAttribute';
+  static readonly ssmYiviBsnAttribute: string = '/cdk/mijn-nijmegen/yiviBsnAttribute';
   static readonly ssmYiviKvkNameAttribute: string = '/cdk/mijn-nijmegen/yiviKvkNameAttribute';
   static readonly ssmYiviKvkNumberAttribute: string = '/cdk/mijn-nijmegen/yiviKvkNumberAttribute';
 

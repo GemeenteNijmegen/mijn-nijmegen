@@ -109,7 +109,8 @@ export class AuthRequestHandler {
    */
   bsnFromYiviLogin(claims: IdTokenClaims): Bsn {
     const bsnAttribute = this.config.yiviBsnAttribute;
-    if (claims[bsnAttribute]) {
+    console.log(this.config.yiviBsnAttribute, claims[bsnAttribute]);
+    if (claims?.[bsnAttribute]) {
       return new Bsn(claims[bsnAttribute] as string);
     }
     throw Error('Invalid or no bsn in Yivi claims!');

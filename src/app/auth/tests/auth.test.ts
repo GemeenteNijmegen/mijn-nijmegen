@@ -13,7 +13,7 @@ const scopesAndAttributes = {
   digidScope: 'idp_scoping:digid',
   eherkenningScope: 'idp_scoping:eherkenning',
   yiviScope: 'idp_scoping:yivi',
-  yiviBsnAttribute: 'pbdf.gemeente.bsn.bsn',
+  yiviBsnAttribute: 'pbdf.gemeente.personalData.bsn',
   yiviKvkNumberAttribute: 'pbdf.signicat.kvkTradeRegister.kvkNumber',
   yiviKvkNameAttribute: 'pbdf.signicat.kvkTradeRegister.name',
   useYiviKvk: true,
@@ -222,12 +222,12 @@ describe('Yivi logins', () => {
       iat: 123,
       iss: 'test',
       sub: 'test',
-      ['pbdf.gemeente.bsn.bsn']: '900070341',
+      ['pbdf.gemeente.personalData.bsn']: '900070341',
     };
 
     const tokens = {
       claims: () => claims,
-      scope: 'openid idp_scoping:yivi pbdf.gemeente.bsn.bsn',
+      scope: 'openid idp_scoping:yivi condisconscopewithbase64isignored',
     };
 
     const user = handler.userFromTokens(tokens as any);
@@ -247,7 +247,7 @@ describe('Yivi logins', () => {
     };
     const tokens = {
       claims: () => claims,
-      scope: 'openid idp_scoping:yivi pbdf.signicat.kvkTradeRegister.kvkNumber pbdf.signicat.kvkTradeRegister.name',
+      scope: 'openid idp_scoping:yivi condisconscopewithbase64isignored',
     };
     const user = handler.userFromTokens(tokens as any);
     expect(user.identifier).toBe('123456');
@@ -265,7 +265,7 @@ describe('Yivi logins', () => {
     };
     const tokens = {
       claims: () => claims,
-      scope: 'openid idp_scoping:yivi pbdf.signicat.kvkTradeRegister.kvkNumber',
+      scope: 'openid idp_scoping:yivi condisconscopewithbase64isignored',
     };
     expect(() => {
       handler.userFromTokens(tokens as any);
@@ -285,6 +285,19 @@ describe('Yivi logins', () => {
       scope: 'openid idp_scoping:yivi',
     };
     expect(() => {handler.userFromTokens(tokens as any);}).toThrow();
+  });
+
+
+  test('bsn from yivi claims', () => {
+    const claims = {
+      'sub': 'test',
+      'aud': 'cleintid',
+      'iss': 'test',
+      'exp': 234,
+      'iat': 234,
+      'pbdf.gemeente.personalData.bsn': '900026236',
+    };
+    handler.bsnFromYiviLogin(claims as any);
   });
 
 });
@@ -311,12 +324,12 @@ describe('Yivi logins (kvk feature flag off)', () => {
       iat: 123,
       iss: 'test',
       sub: 'test',
-      ['pbdf.gemeente.bsn.bsn']: '900070341',
+      ['pbdf.gemeente.personalData.bsn']: '900070341',
     };
 
     const tokens = {
       claims: () => claims,
-      scope: 'openid idp_scoping:yivi pbdf.gemeente.bsn.bsn',
+      scope: 'openid idp_scoping:yivi condisconscopewithbase64isignored',
     };
 
     const user = handler.userFromTokens(tokens as any);
