@@ -84,7 +84,7 @@ export class ssmParamsConstruct extends Construct {
     });
 
     new SSM.StringParameter(this, 'ssm_auth_6', {
-      stringValue: 'pbdf.gemeente.bsn.bsn',
+      stringValue: 'pbdf.gemeente.personalData.bsn',
       parameterName: Statics.ssmYiviBsnAttribute,
       description: 'Yivi bsn attribute to obtain from claims',
     });
@@ -102,7 +102,7 @@ export class ssmParamsConstruct extends Construct {
     });
 
     new SSM.StringParameter(this, 'ssm_auth_8', {
-      stringValue: 'pbdf.gemeente.bsn.bsn',
+      stringValue: '-',
       parameterName: Statics.ssmYiviCondisconScope,
       description: 'Conditional disclosure scope for Yivi',
     });
