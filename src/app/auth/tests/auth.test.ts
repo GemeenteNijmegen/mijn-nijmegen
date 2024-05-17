@@ -290,17 +290,12 @@ describe('Yivi logins', () => {
 
   test('bsn from yivi claims', () => {
     const claims = {
-      'sub': 'ofvBR23ExDNfZNyxW9E3iNnF3uAxh8tacXOk4nYG1F8=',
-      'aud': 'AawootW574MqIMRAfAgzdv8lhQYLuGY3',
-      'acr': 'urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport',
-      'simulator-authorization': true,
+      'sub': 'test',
+      'aud': 'cleintid',
+      'iss': 'test',
+      'exp': 234,
+      'iat': 234,
       'pbdf.gemeente.personalData.bsn': '900026236',
-      'idpId': '900026236',
-      'amr': 'yivi',
-      'iss': 'https://authenticatie-accp.nijmegen.nl/broker/sp/oidc',
-      'subject_issuer': 'https://broker-a.yiviconnect.nl/auth/saml',
-      'exp': 1715939815,
-      'iat': 1715938015,
     };
     handler.bsnFromYiviLogin(claims as any);
   });
@@ -329,12 +324,12 @@ describe('Yivi logins (kvk feature flag off)', () => {
       iat: 123,
       iss: 'test',
       sub: 'test',
-      ['pbdf.gemeente.bsn.bsn']: '900070341',
+      ['pbdf.gemeente.personalData.bsn']: '900070341',
     };
 
     const tokens = {
       claims: () => claims,
-      scope: 'openid idp_scoping:yivi pbdf.gemeente.bsn.bsn',
+      scope: 'openid idp_scoping:yivi condisconscopewithbase64isignored',
     };
 
     const user = handler.userFromTokens(tokens as any);
