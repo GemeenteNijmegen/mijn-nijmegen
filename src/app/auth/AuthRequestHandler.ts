@@ -170,7 +170,10 @@ export class AuthRequestHandler {
       if (bsnClaim) {
         bsn = this.bsnFromYiviLogin(claims);
       }
-      if (this.config.useYiviKvk && kvkClaim) { // Feature flag
+      if (kvkClaim) {
+        if (!this.config.useYiviKvk) { // Feature flag
+          throw Error('Kvk login via Yivi is not enabled yet!');
+        }
         kvk = this.kvkFromYiviLogin(claims);
       }
     }
