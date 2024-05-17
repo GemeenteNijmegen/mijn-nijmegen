@@ -300,6 +300,20 @@ describe('Yivi logins', () => {
     handler.bsnFromYiviLogin(claims as any);
   });
 
+
+  test('kvk number and name form claims', () => {
+    const claims = {
+      'sub': 'test',
+      'iss': 'test',
+      'aud': 'test',
+      'exp': 123,
+      'iat': 123,
+      'pbdf.signicat.kvkTradeRegister.name': 'ZelfIngevuld',
+      'pbdf.signicat.kvkTradeRegister.kvkNumber': '69599084',
+    };
+    handler.kvkFromYiviLogin(claims as any);
+  });
+
 });
 
 
