@@ -164,12 +164,12 @@ export class AuthRequestHandler {
     let kvk = undefined;
 
     if (authMethod == 'yivi') {
-      if (scope.includes(this.config.yiviBsnAttribute)) {
+      const bsnClaim = claims[this.config.yiviBsnAttribute];
+      const kvkClaim = claims[this.config.yiviKvkNumberAttribute];
+      if (bsnClaim) {
         bsn = this.bsnFromYiviLogin(claims);
       }
-      if (
-        this.config.useYiviKvk // Feature flag USE_YIVI_KVK
-        && scope.includes(this.config.yiviKvkNumberAttribute)) {
+      if (this.config.useYiviKvk && kvkClaim) { // Feature flag
         kvk = this.kvkFromYiviLogin(claims);
       }
     }
