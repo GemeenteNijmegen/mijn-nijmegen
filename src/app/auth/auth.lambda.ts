@@ -26,7 +26,13 @@ export async function handler(event: any, _context: any):Promise<ApiGatewayV2Res
       dynamoDBClient,
       apiClient,
       OpenIdConnect: OIDC,
-      yiviAttributes: process.env.YIVI_ATTRIBUTES,
+      digidScope: process.env.DIGID_SCOPE ?? '',
+      eherkenningScope: process.env.EHERKENNING_SCOPE ?? '',
+      yiviScope: process.env.YIVI_SCOPE ?? '',
+      yiviBsnAttribute: process.env.YIVI_BSN_ATTRIBUTE ?? '',
+      yiviKvkNumberAttribute: process.env.YIVI_KVK_NUMBER_ATTRIBUTE ?? '',
+      yiviKvkNameAttribute: process.env.YIVI_KVK_NAME_ATTRIBUTE ?? '',
+      useYiviKvk: process.env.USE_YIVI_KVK === 'true',
     });
     return await requestHandler.handleRequest();
   } catch (err) {

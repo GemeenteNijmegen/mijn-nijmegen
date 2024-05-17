@@ -4,28 +4,43 @@ import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
-import { IdTokenClaims } from 'openid-client';
+import { IdTokenClaims, TokenSet } from 'openid-client';
 import { BrpApi } from './BrpApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 
-interface requestProps {
+type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
+const eHerkenningKvkNummerClaim = 'urn:etoegang:1.9:EntityConcernedID:KvKnr';
+const eHerkenningCompanyNameClaim = 'urn:etoegang:1.11:attribute-represented:CompanyName';
+
+export interface AuthRequestHandlerProps {
   cookies: string;
   queryStringParamCode: string;
   queryStringParamState: string;
   dynamoDBClient: DynamoDBClient;
   apiClient: ApiClient;
   OpenIdConnect: OpenIDConnect;
-  yiviAttributes?: string;
+
+  // Scopes
+  yiviScope: string;
+  digidScope: string;
+  eherkenningScope: string;
+
+  // Yivi attributes
+  yiviBsnAttribute: string;
+  yiviKvkNumberAttribute: string;
+  yiviKvkNameAttribute: string;
+
+  // Feature toggle
+  useYiviKvk?: boolean;
 }
 
 export class AuthRequestHandler {
-  private config: requestProps;
-  constructor(props: requestProps) {
+  private config: AuthRequestHandlerProps;
+  constructor(props: AuthRequestHandlerProps) {
     this.config = props;
   }
 
   async handleRequest() {
-    const logger = new Logger({ serviceName: 'mijnnijmegen' });
     let session = new Session(this.config.cookies, this.config.dynamoDBClient);
     await session.init();
     if (session.sessionId === false) {
@@ -34,31 +49,31 @@ export class AuthRequestHandler {
     }
     const state = session.getValue('state');
     try {
-      const claims = await this.config.OpenIdConnect.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
-      if (claims) {
-        const user = this.userFromClaims(claims);
-        if (!user) {
-          return Response.redirect('/login');
-        }
-        this.logAuthMethod(claims, logger);
+      // Authorize the request
+      const tokens = await this.config.OpenIdConnect.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
 
-        try {
-          const username = await user.getUserName();
-
-          await session.createSession({
-            loggedin: { BOOL: true },
-            identifier: { S: user.identifier },
-            bsn: { S: user.type == 'person' ? user.identifier : '' }, // TODO: remove when consuming pages (persoonsgegevens, uitkeringen, zaken) have been updated to use identifier
-            user_type: { S: user.type },
-            username: { S: username },
-          });
-        } catch (error: any) {
-          console.error('creating session failed', error);
-          return Response.error(500);
-        }
-      } else {
+      // Load the principal data
+      const user = this.userFromTokens(tokens);
+      if (!user) {
         return Response.redirect('/login');
       }
+
+      // Startup the session
+      try {
+        const username = await user.getUserName();
+
+        await session.createSession({
+          loggedin: { BOOL: true },
+          identifier: { S: user.identifier },
+          bsn: { S: user.type == 'person' ? user.identifier : '' }, // TODO: remove when consuming pages (persoonsgegevens, uitkeringen, zaken) have been updated to use identifier
+          user_type: { S: user.type },
+          username: { S: username },
+        });
+      } catch (error: any) {
+        console.error('creating session failed', error);
+        return Response.error(500);
+      }
+
     } catch (error: any) {
       console.error(error.message);
       return Response.redirect('/login');
@@ -66,72 +81,144 @@ export class AuthRequestHandler {
     return Response.redirect('/', 302, [session.getCookie()]);
   }
 
-  private logAuthMethod(claims: IdTokenClaims, logger: Logger) {
+  private logAuthMethod(claims: IdTokenClaims) {
+    const logger = new Logger({ serviceName: 'mijnnijmegen' });
     if (claims.hasOwnProperty('acr') && claims.hasOwnProperty('amr')) {
       logger.info('auth succesful', { loa: claims.acr, method: claims.amr });
     }
   }
 
+
   /**
-   * Extract bsn from token claims
-   *
-   * The bsn can be found in several fields: either the 'sub' claim
-   * or a yivi-specific field can be used. This function tries (in order)
-   * to get a valid BSN from:
-   * - sub
-   * - any values in space separated yivi attributes string, in order
-   *
-   * @param claims an IdTokenClaims object
-   * @returns {BSN|false}
+   * Get the BSN from the claims for a DigiD login
+   * @param claims
+   * @returns
    */
-  bsnFromClaims(claims: IdTokenClaims): Bsn | false {
-    let possibleClaims = ['sub'];
-    if (typeof this.config?.yiviAttributes === 'string') {
-      const yiviClaims = this.config.yiviAttributes.split(' ').filter(val => val !== '');
-      possibleClaims = [...possibleClaims, ...yiviClaims];
+  bsnFromDigidLogin(claims: IdTokenClaims): Bsn {
+    const subject = 'sub';
+    if (claims[subject]) {
+      return new Bsn(claims[subject] as string);
     }
-    for (const type of possibleClaims) {
-      try {
-        if (claims[type]) {
-          return new Bsn(claims[type] as string);
-        }
-      } catch (error: any) {
-        // we don't care about non-valid BSN's (sub could have a random string)
-      }
-    }
-    return false;
+    throw Error('Invalid or no bsn in DigiD claims!');
   }
 
-  /** Extract kvk number from token claims
-   *
-   * Checks if there's a value, and if this value is numeric.
-   * Returns the kvk as a string, or false if validation fails/there is no kvk.
+  /**
+   * Get the BSN from a Yivi login
+   * @param claims
+   * @returns
    */
-  kvkFromClaims(claims: IdTokenClaims): { kvkNumber: string; organisationName: string } | false {
-    const kvkClaim = claims?.['urn:etoegang:1.9:EntityConcernedID:KvKnr'] as string;
-    const organisationNameClaim = claims?.['urn:etoegang:1.11:attribute-represented:CompanyName'] as string;
+  bsnFromYiviLogin(claims: IdTokenClaims): Bsn {
+    const bsnAttribute = this.config.yiviBsnAttribute;
+    console.log(this.config.yiviBsnAttribute, claims[bsnAttribute]);
+    if (claims?.[bsnAttribute]) {
+      return new Bsn(claims[bsnAttribute] as string);
+    }
+    throw Error('Invalid or no bsn in Yivi claims!');
+  }
+
+  /**
+   * Get the KVK number and company name from a Yivi login
+   * @param claims
+   * @returns
+   */
+  kvkFromYiviLogin(claims: IdTokenClaims): { kvkNumber: string; organisationName: string } {
+    let kvkNumberAttribute = this.config.yiviKvkNumberAttribute;
+    let kvkNameAttribute = this.config.yiviKvkNameAttribute;
+    const yiviKvkClaim = claims[kvkNumberAttribute] as string;
+    const yiviNameClaim = claims[kvkNameAttribute] as string;
+    console.log(yiviKvkClaim, yiviNameClaim);
+    if (yiviKvkClaim && yiviNameClaim && Number.isInteger(parseInt(yiviKvkClaim))) {
+      return { kvkNumber: yiviKvkClaim, organisationName: yiviNameClaim };
+    }
+    throw Error('Invalid or no kvk in Yivi claims!');
+  }
+
+  /**
+   * Get the KVK number and company name form a eHerkenning login
+   * @param claims
+   * @returns
+   */
+  kvkFromEherkenningLogin(claims: IdTokenClaims): { kvkNumber: string; organisationName: string } {
+    const kvkClaim = claims?.[eHerkenningKvkNummerClaim] as string;
+    const organisationNameClaim = claims?.[eHerkenningCompanyNameClaim] as string;
     if (kvkClaim && Number.isInteger(parseInt(kvkClaim))) {
       return { kvkNumber: kvkClaim, organisationName: organisationNameClaim };
     }
-    return false;
+    throw Error('Invalid eHerkenning login');
   }
 
-  userFromClaims(claims: IdTokenClaims): User | false {
-    const bsn = this.bsnFromClaims(claims);
-    const kvk = this.kvkFromClaims(claims);
-    let user: User | null = null;
-    if (!bsn && !kvk) {
-      return false;
+  /**
+   * Given the set of claims and scopes determine the login method and
+   * authenticate the user based on the claims.
+   * @param tokens
+   * @returns User
+   */
+  userFromTokens(tokens: TokenSet): User {
+    if (!tokens.scope || !tokens.claims) {
+      throw Error('scope and claims expected');
+    }
+    const claims = tokens.claims();
+    const scope = tokens.scope;
+    const authMethod = this.authMethodFromScope(scope);
+
+    let bsn = undefined;
+    let kvk = undefined;
+
+    if (authMethod == 'yivi') {
+      const bsnClaim = claims[this.config.yiviBsnAttribute];
+      const kvkClaim = claims[this.config.yiviKvkNumberAttribute];
+      if (bsnClaim) {
+        bsn = this.bsnFromYiviLogin(claims);
+      }
+      if (kvkClaim) {
+        if (!this.config.useYiviKvk) { // Feature flag
+          throw Error('Kvk login via Yivi is not enabled yet!');
+        }
+        kvk = this.kvkFromYiviLogin(claims);
+      }
+    }
+
+    if (authMethod == 'digid') {
+      bsn = this.bsnFromDigidLogin(claims);
+    }
+
+    if ( authMethod == 'eherkenning') {
+      kvk = this.kvkFromEherkenningLogin(claims);
+    }
+    if (bsn || kvk) {
+      this.logAuthMethod(claims);
     }
 
     if (bsn) {
-      user = new Person(bsn, { apiClient: this.config.apiClient });
-    } else if (kvk) {
-      user = new Organisation(kvk.kvkNumber, kvk.organisationName, { apiClient: this.config.apiClient });
+      return new Person(bsn, { apiClient: this.config.apiClient });
     }
-    return user ?? false;
+
+    if (kvk) {
+      return new Organisation(kvk.kvkNumber, kvk.organisationName, { apiClient: this.config.apiClient });
+    }
+
+    throw Error('User authentication failed: No BSN or KVK found in request');
+  }
+
+
+  /**
+   * Given a list of scopes issued by the IdP after authentication
+   * determine the authentication method that is used
+   * @param scope
+   * @returns authentication method that is used
+   */
+  authMethodFromScope(scope: string) : AuthenticationMethod {
+    if (scope.includes(this.config.yiviScope)) {
+      return 'yivi';
+    } else if (scope.includes(this.config.eherkenningScope)) {
+      return 'eherkenning';
+    } else if (scope.includes(this.config.digidScope)) {
+      return 'digid';
+    }
+    throw Error('Unsupported authentication method');
   }
 }
+
 
 interface UserConfig {
   apiClient: ApiClient;
@@ -152,7 +239,7 @@ interface User {
 /**
  * Implementation of a 'natuurlijk persoon', a human, having a BSN.
  */
-class Person implements User {
+export class Person implements User {
   bsn: Bsn;
   config: UserConfig;
   identifier: string;
@@ -182,7 +269,7 @@ class Person implements User {
 /**
  * Implementation of a user of type 'organisation', having a KVK number.
  */
-class Organisation implements User {
+export class Organisation implements User {
   kvk: string;
   config: UserConfig;
   identifier: string;

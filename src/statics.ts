@@ -18,7 +18,7 @@ export abstract class Statics {
   /**
    * Configuration
    */
-  static readonly ssmUseYivi: string = '/cdk/mijn-nijmegen/useYivi';
+  static readonly ssmUseYiviKvk: string = '/cdk/mijn-nijmegen/useYiviKvk';
 
   // MARK: OpenIDConnect
   /**
@@ -36,7 +36,11 @@ export abstract class Statics {
   static readonly ssmOIDCScope: string = '/cdk/mijn-nijmegen/authScope';
   static readonly ssmDIGIDScope: string = '/cdk/mijn-nijmegen/digidScope';
   static readonly ssmYiviScope: string = '/cdk/mijn-nijmegen/yiviScope';
-  static readonly ssmYiviAttributes: string = '/cdk/mijn-nijmegen/yiviAttributes';
+  static readonly ssmEherkenningScope: string = '/cdk/mijn-nijmegen/eHerkenningScope';
+  static readonly ssmYiviCondisconScope: string = '/cdk/mijn-nijmegen/yiviCondisconScope';
+  static readonly ssmYiviBsnAttribute: string = '/cdk/mijn-nijmegen/yiviBsnAttribute';
+  static readonly ssmYiviKvkNameAttribute: string = '/cdk/mijn-nijmegen/yiviKvkNameAttribute';
+  static readonly ssmYiviKvkNumberAttribute: string = '/cdk/mijn-nijmegen/yiviKvkNumberAttribute';
 
   /**
    * OpenID Connect secret name
