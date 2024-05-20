@@ -84,7 +84,7 @@
     "@pepperize/cdk-route53-health-check": "^0.0.596",
     "@types/mustache": "^4.2.5",
     "aws-cdk-lib": "^2.22.0",
-    "axios": "^1.6.8",
+    "axios": "^1.7.0",
     "cdk-remote-stack": "^2.0.101",
     "constructs": "^10.0.5",
     "cookie": "^0.6.0",
