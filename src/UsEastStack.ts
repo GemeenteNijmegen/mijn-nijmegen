@@ -1,4 +1,4 @@
-import { EndpointHealthCheck } from '@pepperize/cdk-route53-health-check';
+import { EndpointHealthCheck, HealthCheckerRegions } from '@pepperize/cdk-route53-health-check';
 import { aws_certificatemanager as CertificateManager, Stack, StackProps, aws_ssm as SSM } from 'aws-cdk-lib';
 import { Alarm, ComparisonOperator } from 'aws-cdk-lib/aws-cloudwatch';
 import { RemoteParameters } from 'cdk-remote-stack';
@@ -77,6 +77,7 @@ export class UsEastStack extends Stack {
       domainName: domain,
       resourcePath: '/login',
       searchString: 'Inloggen Mijn Nijmegen',
+      regions: [HealthCheckerRegions.AP_NORTHEAST_1, HealthCheckerRegions.EU_WEST_1, HealthCheckerRegions.SA_EAST_1],
     });
 
     new Alarm(this, 'healthcheck-alarm', {
