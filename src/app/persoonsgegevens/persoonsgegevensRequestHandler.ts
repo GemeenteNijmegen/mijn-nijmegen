@@ -7,6 +7,7 @@ import { BrpApi } from './BrpApi';
 import * as template from './templates/persoonsgegevens.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import * as surveyCTA from '../../shared/survey-cta.mustache';
 
 interface Config {
   apiClient: ApiClient;
@@ -60,9 +61,9 @@ export class PersoonsgegevensRequestHandler {
     data.shownav = true;
     data.nav = navigation.items;
     // render page
-    const html = await render(data, template.default);
+    const html = await render(data, template.default, {
+      surveyCTA: process.env.SHOW_SURVEY == 'true' ? surveyCTA.default : undefined,
+    });
     return Response.html(html, 200, session.getCookie());
   }
-
 }
-

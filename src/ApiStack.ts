@@ -178,6 +178,9 @@ export class ApiStack extends Stack implements Configurable {
       applicationUrlBase: baseUrl,
       readOnlyRole,
       apiFunction: LogoutFunction,
+      environment: {
+        SHOW_SURVEY: this.configuration.showSurveyCTA ? 'true' : 'false',
+      },
     });
   }
 
@@ -260,6 +263,7 @@ export class ApiStack extends Stack implements Configurable {
         MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
         MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
+        SHOW_SURVEY: this.configuration.showSurveyCTA ? 'true' : 'false',
       },
       apiFunction: PersoonsgegevensFunction,
     });
@@ -283,6 +287,7 @@ export class ApiStack extends Stack implements Configurable {
         MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
         UITKERING_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmUitkeringsApiEndpointUrl),
+        SHOW_SURVEY: this.configuration.showSurveyCTA ? 'true' : 'false',
       },
       apiFunction: UitkeringFunction,
     });
@@ -315,6 +320,7 @@ export class ApiStack extends Stack implements Configurable {
         USE_TAKEN: this.configuration.zakenUseTaken ? 'true' : 'false',
         SUBMISSIONS_LIVE: this.configuration.zakenUseSubmissions ? 'true' : 'false',
         ALLOWED_ZAKEN_DOMAINS: this.configuration.zakenAllowDomains.join(','),
+        SHOW_SURVEY: this.configuration.showSurveyCTA ? 'true' : 'false',
       },
       readOnlyRole,
       apiFunction: ZakenFunction,
