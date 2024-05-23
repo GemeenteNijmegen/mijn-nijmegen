@@ -22,6 +22,8 @@ beforeAll(() => {
   process.env.CLIENT_SECRET_ARN = '123';
   process.env.OIDC_CLIENT_ID = '1234';
   process.env.OIDC_SCOPE = 'openid';
+  process.env.SHOW_SURVEY = 'true';
+
 
   process.env.MTLS_PRIVATE_KEY_ARN = 'testarn';
 
@@ -110,7 +112,7 @@ describe('Loading the uitkeringspagina', () => {
     if (!result.body) {
       return;
     }
-    fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => {});
+    fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replaceAll('href="/static', 'href="../../../static-resources/static'), () => {});
   });
 
   test('Companies are redirected', async () => {

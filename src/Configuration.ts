@@ -71,6 +71,12 @@ export interface Configuration {
   readonly zakenIsLive?: boolean;
 
   /**
+   * Feature flag: if this is falsey, the lambda will
+   * not show the survey CTA.
+   */
+  readonly showSurveyCTA?: boolean;
+
+  /**
    * Feature flag: The taken functionality is experimental
    * If this flag is not true, the taken-functionality will
    * always exit immediately.
@@ -109,6 +115,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenIsLive: true,
     zakenUseSubmissions: true,
     zakenAllowDomains: ['APV', 'JZ'],
+    showSurveyCTA: true,
   },
   production: {
     branch: 'production',
@@ -124,6 +131,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenIsLive: true,
     zakenUseSubmissions: true,
     zakenAllowDomains: ['APV'], // JZ is not yet available in prod
+    showSurveyCTA: false,
   },
 };
 

@@ -285,3 +285,21 @@ nav.nijmegen-sidenav li.active svg {
     outline: #157C68;
     stroke: #157C68;
 }
+
+.cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+    gap: .5rem;
+}
+
+.cta p {
+    flex-basis: 60%;
+    flex-grow: 1;
+}
+
+.cta a.btn {
+    width: auto;
+    flex-shrink: 0;
+}

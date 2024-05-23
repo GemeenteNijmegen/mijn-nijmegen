@@ -169,7 +169,7 @@ describe('Request handler class', () => {
     expect(result.statusCode).toBe(200);
     if (result.body) {
       try {
-        writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => { });
+        writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replaceAll('href="/static', 'href="../../../static-resources/static'), () => { });
       } catch (error) {
         console.debug(error);
       }
