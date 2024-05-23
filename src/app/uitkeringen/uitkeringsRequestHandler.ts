@@ -8,6 +8,7 @@ import * as uitkering from './templates/uitkerings-item.mustache';
 import { UitkeringsApi } from './UitkeringsApi';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import * as surveyCTA from '../../shared/survey-cta.mustache';
 
 interface Config {
   apiClient: ApiClient;
@@ -66,7 +67,10 @@ export class uitkeringsRequestHandler {
     data.shownav = true;
 
     // render page
-    const html = await render(data, template.default, { uitkering: uitkering.default });
+    const html = await render(data, template.default, {
+      uitkering: uitkering.default,
+      surveyCTA: process.env.SHOW_SURVEY == 'true' ? surveyCTA.default : undefined,
+    });
     return html;
   }
 }

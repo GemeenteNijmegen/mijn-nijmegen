@@ -73,6 +73,11 @@ const project = new GemeenteNijmegenCdkApp({
     'test/playwright/report',
     'test/playwright/screenshots',
   ],
+  tsconfig: {
+    compilerOptions: {
+      lib: ['es2021'],
+    },
+  },
 });
 
 
