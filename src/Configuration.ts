@@ -131,6 +131,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenIsLive: true,
     zakenUseSubmissions: true,
     zakenAllowDomains: ['APV'], // JZ is not yet available in prod
+    showSurveyCTA: false,
   },
 };
 
