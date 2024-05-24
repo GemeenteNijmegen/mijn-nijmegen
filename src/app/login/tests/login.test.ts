@@ -56,7 +56,7 @@ describe('Test login page and urls', () => {
     expect(result.body).toMatch(encodeURIComponent('bsn'));
     expect(result.body).toMatch('<span class="title"> Inloggen </span><span class="assistive">met Yivi</span>');
     if (result.body) {
-      fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => { });
+      fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
     }
   });
 
@@ -73,7 +73,7 @@ describe('Test login page and urls', () => {
     expect(result.body).toMatch(encodeURIComponent('condiscon'));
     expect(result.body).toMatch('<span class="title"> Inloggen </span><span class="assistive">met Yivi</span>');
     if (result.body) {
-      fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => { });
+      fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
     }
   });
 
@@ -118,7 +118,7 @@ describe('Test login page and urls', () => {
     expect(result.body).toMatch(encodeURIComponent('idp_scoping:eherkenning'));
     expect(result.body).toMatch('<span class="title"> Inloggen </span><span class="assistive">met eHerkenning</span>');
     if (result.body) {
-      fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => { });
+      fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
     }
   });
 });

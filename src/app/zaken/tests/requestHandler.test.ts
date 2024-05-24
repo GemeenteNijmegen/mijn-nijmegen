@@ -144,7 +144,7 @@ describe('Request handler class', () => {
     expect(result.statusCode).toBe(200);
     if (result.body) {
       try {
-        fs.writeFile(path.join(__dirname, 'output', 'test-zaken.html'), result.body, () => { });
+        fs.writeFile(path.join(__dirname, 'output', 'test-zaken.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
       } catch (error) {
         console.debug(error);
       }
@@ -174,7 +174,7 @@ describe('Request handler class', () => {
     expect(result.statusCode).toBe(200);
     if (result.body) {
       try {
-        fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replaceAll('href="/static', 'href="../../../static-resources/static'), () => { });
+        fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => { });
       } catch (error) {
         console.debug(error);
       }

@@ -57,5 +57,5 @@ test('Shows overview page', async () => {
   const result = await handler.handleRequest('session=12345');
   expect(result.body).toMatch('Mijn Nijmegen');
   expect(result.body).toMatch('Jan de Tester');
-  fs.writeFile(path.join(__dirname, 'output', 'test2.html'), result.body ?? '', () => { });
+  fs.writeFile(path.join(__dirname, 'output', 'test2.html'), result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '', () => { });
 });

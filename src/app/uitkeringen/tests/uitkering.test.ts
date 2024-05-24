@@ -115,7 +115,7 @@ describe('Loading the uitkeringspagina', () => {
     if (!result.body) {
       return;
     }
-    fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replaceAll('href="/static', 'href="../../../static-resources/static'), () => {});
+    fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
   });
 
   test('Companies are redirected', async () => {
@@ -163,7 +163,7 @@ describe('Loading the uitkeringspagina', () => {
     if (!result.body) {
       return;
     }
-    fs.writeFile(path.join(__dirname, 'output', 'test-twee.html'), result.body, () => {});
+    fs.writeFile(path.join(__dirname, 'output', 'test-twee.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
   });
 
 
@@ -187,7 +187,7 @@ describe('Loading the uitkeringspagina', () => {
     if (!result.body) {
       return;
     }
-    fs.writeFile(path.join(__dirname, 'output', 'test-empty.html'), result.body, () => {});
+    fs.writeFile(path.join(__dirname, 'output', 'test-empty.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
   });
 
 
@@ -205,7 +205,7 @@ describe('Loading the uitkeringspagina', () => {
     if (!result.body) {
       return;
     }
-    fs.writeFile(path.join(__dirname, 'output', 'test-error.html'), result.body, () => {});
+    fs.writeFile(path.join(__dirname, 'output', 'test-error.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
   });
 
   async function getStringFromFilePath(filePath: string): Promise<string> {
