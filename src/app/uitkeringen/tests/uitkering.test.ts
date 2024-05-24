@@ -41,8 +41,11 @@ beforeAll(() => {
 
   secretsMock.mockImplementation(() => secretsOutput);
   parameterStoreMock.mockImplementation(() => ssmOutput);
-});
+  //create output folder for test html if it does not exist yet
 
+  const outputDir = path.join(__dirname, 'output');
+  if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
+});
 
 const ddbMock = mockClient(DynamoDBClient);
 const secretsMock = mockClient(SecretsManagerClient);
