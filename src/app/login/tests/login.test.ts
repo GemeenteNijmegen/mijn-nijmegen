@@ -1,4 +1,4 @@
-import { writeFile } from 'fs';
+import * as fs from 'fs';
 import * as path from 'path';
 import { DynamoDBClient, GetItemCommandOutput, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
@@ -21,6 +21,9 @@ beforeAll(() => {
   process.env.OIDC_SECRET_ARN = '123';
   process.env.OIDC_CLIENT_ID = '1234';
   process.env.OIDC_SCOPE = 'openid';
+
+  const outputDir = path.join(__dirname, 'output');
+  if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
 });
 
 
@@ -53,7 +56,7 @@ describe('Test login page and urls', () => {
     expect(result.body).toMatch(encodeURIComponent('bsn'));
     expect(result.body).toMatch('<span class="title"> Inloggen </span><span class="assistive">met Yivi</span>');
     if (result.body) {
-      writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => { });
+      fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
     }
   });
 
@@ -70,7 +73,7 @@ describe('Test login page and urls', () => {
     expect(result.body).toMatch(encodeURIComponent('condiscon'));
     expect(result.body).toMatch('<span class="title"> Inloggen </span><span class="assistive">met Yivi</span>');
     if (result.body) {
-      writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => { });
+      fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
     }
   });
 
@@ -115,7 +118,7 @@ describe('Test login page and urls', () => {
     expect(result.body).toMatch(encodeURIComponent('idp_scoping:eherkenning'));
     expect(result.body).toMatch('<span class="title"> Inloggen </span><span class="assistive">met eHerkenning</span>');
     if (result.body) {
-      writeFile(path.join(__dirname, 'output', 'test.html'), result.body, () => { });
+      fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
     }
   });
 });

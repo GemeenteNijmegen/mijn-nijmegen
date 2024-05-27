@@ -1,4 +1,4 @@
-import { writeFile } from 'fs';
+import * as fs from 'fs';
 import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
@@ -14,6 +14,9 @@ beforeAll(() => {
   // Set env variables
   process.env.SESSION_TABLE = 'mijnuitkering-sessions';
   process.env.APPLICATION_URL_BASE = 'https://testing.example.com/';
+
+  const outputDir = path.join(__dirname, 'output');
+  if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
 });
 
 
@@ -54,5 +57,5 @@ test('Shows overview page', async () => {
   const result = await handler.handleRequest('session=12345');
   expect(result.body).toMatch('Mijn Nijmegen');
   expect(result.body).toMatch('Jan de Tester');
-  writeFile(path.join(__dirname, 'output', 'test2.html'), result.body ?? '', () => { });
+  fs.writeFile(path.join(__dirname, 'output', 'test2.html'), result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '', () => { });
 });

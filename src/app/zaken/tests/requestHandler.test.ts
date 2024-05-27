@@ -1,4 +1,4 @@
-import { writeFile } from 'fs';
+import * as fs from 'fs';
 import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
@@ -131,6 +131,11 @@ const zaken = new Zaken(client, { zaakConnectorId: 'test' });
 const inzendingen = new Inzendingen({ baseUrl: 'https://localhost', accessKey: 'test' });
 const zaakAggregator = new ZaakAggregator({ zaakConnectors: { inzendingen, zaak: zaken } });
 
+beforeAll(() => {
+  const outputDir = path.join(__dirname, 'output');
+  if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
+});
+
 describe('Request handler class', () => {
   const handler = new ZakenRequestHandler(zaakAggregator, new DynamoDBClient({ region: process.env.AWS_REGION }));
   test('returns 200 for person', async () => {
@@ -139,7 +144,7 @@ describe('Request handler class', () => {
     expect(result.statusCode).toBe(200);
     if (result.body) {
       try {
-        writeFile(path.join(__dirname, 'output', 'test-zaken.html'), result.body, () => { });
+        fs.writeFile(path.join(__dirname, 'output', 'test-zaken.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
       } catch (error) {
         console.debug(error);
       }
@@ -169,7 +174,7 @@ describe('Request handler class', () => {
     expect(result.statusCode).toBe(200);
     if (result.body) {
       try {
-        writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replaceAll('href="/static', 'href="../../../static-resources/static'), () => { });
+        fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => { });
       } catch (error) {
         console.debug(error);
       }
