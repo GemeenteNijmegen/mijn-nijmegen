@@ -12,10 +12,6 @@ export interface PipelineStackProps extends StackProps, Configurable {}
  * The pipeline runs in a build environment, and is responsible for deploying
  * Cloudformation stacks to the workload account. The pipeline will first build
  * and synth the project, then deploy (self-mutating if necessary).
- *
- * The pipeline can optionally run a validation step, which runs playwright tests
- * against the deployed environment. This does not run in production since we do
- * not have a mechanism to do end-to-end auth tests in production.
  */
 export class PipelineStack extends Stack {
   branchName: string;
