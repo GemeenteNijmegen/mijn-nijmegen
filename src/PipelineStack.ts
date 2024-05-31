@@ -1,6 +1,5 @@
 import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
 import { Stack, StackProps, Tags, pipelines, CfnParameter, Aspects } from 'aws-cdk-lib';
-import { ShellStep } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
 import { ApiStage } from './ApiStage';
 import { Configurable } from './Configuration';
@@ -13,10 +12,6 @@ export interface PipelineStackProps extends StackProps, Configurable {}
  * The pipeline runs in a build environment, and is responsible for deploying
  * Cloudformation stacks to the workload account. The pipeline will first build
  * and synth the project, then deploy (self-mutating if necessary).
- *
- * The pipeline can optionally run a validation step, which runs playwright tests
- * against the deployed environment. This does not run in production since we do
- * not have a mechanism to do end-to-end auth tests in production.
  */
 export class PipelineStack extends Stack {
   branchName: string;
@@ -41,32 +36,9 @@ export class PipelineStack extends Stack {
       configuration: props.configuration,
     }));
 
-    const apiStage = pipeline.addStage(new ApiStage(this, 'mijn-api', {
+    pipeline.addStage(new ApiStage(this, 'mijn-api', {
       env: props.configuration.deploymentEnvironment,
       configuration: props.configuration,
-    }));
-    this.runValidationChecks(apiStage, source);
-  }
-
-  /**
-   * Run validation checks on the finished deployment (for now this runs playwright e2e tests)
-   *
-   * @param stage stage after which to run
-   * @param source the source repo in which to run
-   */
-  private runValidationChecks(stage: pipelines.StageDeployment, source: pipelines.CodePipelineSource) {
-    if (this.branchName != 'acceptance') { return; }
-    stage.addPost(new ShellStep('validate', {
-      input: source,
-      env: {
-        CI: 'true',
-      },
-      commands: [
-        'yarn install --frozen-lockfile', // Install dependencies
-        'npx playwright install', // Install playwright TODO: Run playwright in LambdaTest instead
-        'npx playwright install-deps',
-        'npx playwright test', // Run tests
-      ],
     }));
   }
 

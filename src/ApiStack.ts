@@ -213,6 +213,9 @@ export class ApiStack extends Stack implements Configurable {
       applicationUrlBase: baseUrl,
       readOnlyRole,
       apiFunction: HomeFunction,
+      environment: {
+        SHOW_SURVEY: this.configuration.showSurveyCTA ? 'true' : 'false',
+      },
     });
   }
 
