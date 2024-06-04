@@ -44,7 +44,6 @@ export class AuthRequestHandler {
     let session = new Session(this.config.cookies, this.config.dynamoDBClient);
     await session.init();
     if (session.sessionId === false) {
-
       return Response.redirect('/login');
     }
     const state = session.getValue('state');
@@ -68,6 +67,7 @@ export class AuthRequestHandler {
           bsn: { S: user.type == 'person' ? user.identifier : '' }, // TODO: remove when consuming pages (persoonsgegevens, uitkeringen, zaken) have been updated to use identifier
           user_type: { S: user.type },
           username: { S: username },
+          token: { S: tokens.id_token },
         });
       } catch (error: any) {
         console.error('creating session failed', error);
