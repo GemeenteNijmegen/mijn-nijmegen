@@ -67,7 +67,8 @@ export class AuthRequestHandler {
           bsn: { S: user.type == 'person' ? user.identifier : '' }, // TODO: remove when consuming pages (persoonsgegevens, uitkeringen, zaken) have been updated to use identifier
           user_type: { S: user.type },
           username: { S: username },
-          token: { S: tokens.id_token },
+          id_token: { S: tokens.id_token },
+          refresh_token: { S: tokens.refresh_token },
         });
       } catch (error: any) {
         console.error('creating session failed', error);
