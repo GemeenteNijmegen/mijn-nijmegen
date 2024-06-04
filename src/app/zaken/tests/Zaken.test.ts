@@ -41,7 +41,7 @@ beforeAll(() => {
 });
 
 describe('Zaken', () => {
-  const person = new Person(new Bsn('900222670'));
+  const person = new Person(new Bsn('900222670'), 'test');
   const client = new OpenZaakClient({ baseUrl, axiosInstance: axios });
   test('constructing object succeeds', async () => {
     axiosMock.onGet().reply(200, []);
@@ -235,7 +235,7 @@ describe('Zaken', () => {
 });
 
 describe('Filtering domains', () => {
-  const person = new Person(new Bsn('900222670'));
+  const person = new Person(new Bsn('900222670'), 'test');
   const client = new OpenZaakClient({ baseUrl, axiosInstance: axios });
   test('zaken are filtered (APV)', async () => {
     const zaakConnectorId = 'testzaak';

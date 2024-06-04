@@ -9,6 +9,7 @@ import { Bsn } from '@gemeentenijmegen/utils';
 export interface User {
   identifier: string;
   type: 'person' | 'organisation';
+  idToken: string;
   userName?: string;
 }
 
@@ -18,12 +19,14 @@ export interface User {
 export class Person implements User {
   bsn: Bsn;
   identifier: string;
+  idToken: string;
   userName?: string;
   type: 'person' | 'organisation' = 'person';
-  constructor(bsn: Bsn, userName?: string) {
+  constructor(bsn: Bsn, idToken: string, userName?: string) {
     this.bsn = bsn;
     this.identifier = bsn.bsn;
     this.userName = userName;
+    this.idToken = idToken;
   }
 }
 
@@ -33,13 +36,15 @@ export class Person implements User {
 export class Organisation implements User {
   kvk: string;
   identifier: string;
+  idToken: string;
   type: 'person' | 'organisation' = 'organisation';
   userName?: string;
 
-  constructor(kvk: string, userName?: string) {
+  constructor(kvk: string, idToken: string, userName?: string) {
     this.kvk = kvk;
     this.identifier = kvk;
     this.userName = userName;
+    this.idToken = idToken;
   }
 }
 
@@ -48,9 +53,9 @@ export function UserFromSession(session: Session): User {
   const userType = session.getValue('user_type');
   let user: User;
   if (userType == 'organisation') {
-    user = new Organisation(session.getValue('identifier'), session.getValue('username'));
+    user = new Organisation(session.getValue('identifier'), session.getValue('id_token'), session.getValue('username'));
   } else {
-    user = new Person(new Bsn(session.getValue('identifier')), session.getValue('username'));
+    user = new Person(new Bsn(session.getValue('identifier')), session.getValue('id_token'), session.getValue('username'));
   }
   return user;
 }
