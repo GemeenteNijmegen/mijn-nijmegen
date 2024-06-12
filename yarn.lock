@@ -35,10 +35,10 @@
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigatewayv2-integrations-alpha/-/aws-apigatewayv2-integrations-alpha-2.114.1-alpha.0.tgz#38b94fa36c4ee4b8f417c1430f7f7b4f0c5bd72c"
   integrity sha512-iB7vHoTguDKLeatJS4p/8OBqH4oLCG2xBn1toUFwMD9iWoRGahGiK0pYuq24baab3SuNS1LFThJw5Zu0R+cZGA==
 
-"@aws-cdk/integ-tests-alpha@2.143.0-alpha.0":
-  version "2.143.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/integ-tests-alpha/-/integ-tests-alpha-2.143.0-alpha.0.tgz#40af768b4d9b7a8265eb9b9c07ff91873a6c5ce7"
-  integrity sha512-dlz4SF9ciBD8DfNiTvVlL0lIRdTXha7OB2a7lOgBYIlo2VG7UN5oZIczwSCANnf3JioHdWn7t61I8MSqm4DsCw==
+"@aws-cdk/integ-tests-alpha@2.145.0-alpha.0":
+  version "2.145.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/integ-tests-alpha/-/integ-tests-alpha-2.145.0-alpha.0.tgz#07a0f8048797ec6aba8ece2a00370eb0e0469351"
+  integrity sha512-vQDeY6qD/fa6kiLBSGn962VpHszo1Ln9lqftz60WCbfPxZHbbrZDIf2jP+aMB31pkqKrN5fve1r/tU599ANnZw==
 
 "@aws-crypto/ie11-detection@^3.0.0":
   version "3.0.0"
@@ -624,21 +624,21 @@
   dependencies:
     tslib "^2.3.1"
 
-"@aws-solutions-constructs/aws-lambda-dynamodb@^2.59.0":
-  version "2.59.0"
-  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/aws-lambda-dynamodb/-/aws-lambda-dynamodb-2.59.0.tgz#d873a4210be02bfca74e02178f0996ca19766359"
-  integrity sha512-yidG6lOD+h+u5Yu6d09zfaWoru1rQ57W6brF1HKSCAoLaCQGyZjaHrTNpmRVoqcNhQ2xDWzjpslbAw5tV+oaGQ==
+"@aws-solutions-constructs/aws-lambda-dynamodb@^2.60.0":
+  version "2.60.0"
+  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/aws-lambda-dynamodb/-/aws-lambda-dynamodb-2.60.0.tgz#2aa2d04fae3d794a63d9b5b8e80851cd2845b2f3"
+  integrity sha512-DfkIEZUJfm8s1XBEHDz3tO/LXuuiS9//8AkwCCQ/8jb+SRxaGF26FvBvcXynLfxc+n7fwfSd02xbv2aWwsgxjw==
   dependencies:
-    "@aws-cdk/integ-tests-alpha" "2.143.0-alpha.0"
-    "@aws-solutions-constructs/core" "2.59.0"
+    "@aws-cdk/integ-tests-alpha" "2.145.0-alpha.0"
+    "@aws-solutions-constructs/core" "2.60.0"
     constructs "^10.0.0"
 
-"@aws-solutions-constructs/core@2.59.0":
-  version "2.59.0"
-  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/core/-/core-2.59.0.tgz#8a0e188dfdffded18dee1a75763b6e4a45347f3a"
-  integrity sha512-h9zpUJNq0gjQjzDqe7wMS+LUz6iNB19ULmNcf0vEJGtKyGILDrYoJN5ilw7zmDH4WO8MyGISizFhM5TxEYh1xA==
+"@aws-solutions-constructs/core@2.60.0":
+  version "2.60.0"
+  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/core/-/core-2.60.0.tgz#1c6aac1dc04647e68dec7029810ca6d4abc00a9d"
+  integrity sha512-tt0gCKFhxjBP+gMt9BafK3TcVZxpetTqDMvKkHkkGtZiscuieYDGAXiSwT8fvtuf+T6u6NDqoimwvB362MhM5g==
   dependencies:
-    "@aws-cdk/integ-tests-alpha" "2.143.0-alpha.0"
+    "@aws-cdk/integ-tests-alpha" "2.145.0-alpha.0"
     constructs "^10.0.0"
     deep-diff "^1.0.2"
     deepmerge "^4.0.0"
@@ -3158,9 +3158,9 @@ ecdsa-sig-formatter@1.0.11:
     safe-buffer "^5.0.1"
 
 electron-to-chromium@^1.4.796:
-  version "1.4.797"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.797.tgz#0e15657e4ebcfeb8df8d8cdd29e6a6784b76dc57"
-  integrity sha512-RWMYymqyWwIdCEb7Psag5zyAHirYnB354ZREoF8c5QOHbt8AodF7lwVxGUnu5gzBVjzDo9R3XeTwy7pbvubxGw==
+  version "1.4.799"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.799.tgz#271c56654ab4dc703037e47a5af4fc8945160611"
+  integrity sha512-3D3DwWkRTzrdEpntY0hMLYwj7SeBk1138CkPE8sBDSj3WzrzOiG2rHm3luw8jucpf+WiyLBCZyU9lMHyQI9M9Q==
 
 emittery@^0.13.1:
   version "0.13.1"
