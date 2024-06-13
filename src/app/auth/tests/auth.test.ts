@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { SecretsManagerClient, GetSecretValueCommandOutput, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
@@ -8,6 +9,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { IdTokenClaims } from 'openid-client';
 import { OpenIDConnect } from '../../../shared/OpenIDConnect';
 import { AuthRequestHandler, AuthRequestHandlerProps, Organisation, Person } from '../AuthRequestHandler';
+import { OurOwnIdentityProvider } from '../IdentityProvider';
 
 const scopesAndAttributes = {
   digidScope: 'idp_scoping:digid',
@@ -102,6 +104,9 @@ function setupSessionResponse(loggedin: boolean) {
   ddbMock.on(GetItemCommand).resolves(getItemOutput);
 }
 
+const idp = new OurOwnIdentityProvider('https://example.com/oauth', randomUUID(), randomUUID());
+jest.spyOn(idp, 'exchangeToken').mockResolvedValue('token');
+
 describe('Auth handler', () => {
   test('Successful auth redirects to home', async () => {
     const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
@@ -113,6 +118,7 @@ describe('Auth handler', () => {
       queryStringParamCode: '12345',
       dynamoDBClient,
       apiClient,
+      idp,
       OpenIdConnect: OIDC,
       ...scopesAndAttributes,
     });
@@ -132,6 +138,7 @@ describe('Auth handler', () => {
       queryStringParamCode: '12345',
       dynamoDBClient,
       apiClient,
+      idp,
       OpenIdConnect: OIDC,
       ...scopesAndAttributes,
     });
@@ -149,6 +156,7 @@ describe('Auth handler', () => {
       queryStringParamCode: 'state',
       dynamoDBClient,
       apiClient,
+      idp,
       OpenIdConnect: OIDC,
       ...scopesAndAttributes,
     });
@@ -167,6 +175,7 @@ describe('DigiD logins', () => {
     queryStringParamCode: '12345',
     dynamoDBClient,
     apiClient,
+    idp,
     OpenIdConnect: OIDC,
     ...scopesAndAttributes,
   };
@@ -210,6 +219,7 @@ describe('Yivi logins', () => {
     queryStringParamCode: '12345',
     dynamoDBClient,
     apiClient,
+    idp,
     OpenIdConnect: OIDC,
     ...scopesAndAttributes,
   };
@@ -325,6 +335,7 @@ describe('Yivi logins (kvk feature flag off)', () => {
     queryStringParamCode: '12345',
     dynamoDBClient,
     apiClient,
+    idp,
     OpenIdConnect: OIDC,
     ...scopesAndAttributes,
     useYiviKvk: false,
@@ -377,6 +388,7 @@ describe('eHerkenning logins', () => {
     queryStringParamCode: '12345',
     dynamoDBClient,
     apiClient,
+    idp,
     OpenIdConnect: OIDC,
     ...scopesAndAttributes,
   };
