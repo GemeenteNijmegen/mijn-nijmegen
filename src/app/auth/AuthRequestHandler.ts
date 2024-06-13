@@ -6,6 +6,8 @@ import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
 import { IdTokenClaims, TokenSet } from 'openid-client';
 import { BrpApi } from './BrpApi';
+
+import { OurOwnIdentityProvider } from './IdentityProvider';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 
 type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
@@ -19,6 +21,7 @@ export interface AuthRequestHandlerProps {
   dynamoDBClient: DynamoDBClient;
   apiClient: ApiClient;
   OpenIdConnect: OpenIDConnect;
+  idp: OurOwnIdentityProvider;
 
   // Scopes
   yiviScope: string;
@@ -60,6 +63,7 @@ export class AuthRequestHandler {
       // Startup the session
       try {
         const username = await user.getUserName();
+        const delegated_token = await this.exchangeTokenWithOurOwnVerySpecialIdP(tokens.id_token!);
 
         await session.createSession({
           loggedin: { BOOL: true },
@@ -69,6 +73,7 @@ export class AuthRequestHandler {
           username: { S: username },
           id_token: { S: tokens.id_token },
           refresh_token: { S: tokens.refresh_token },
+          delegated_token: { S: delegated_token },
         });
       } catch (error: any) {
         console.error('creating session failed', error);
@@ -217,6 +222,10 @@ export class AuthRequestHandler {
       return 'digid';
     }
     throw Error('Unsupported authentication method');
+  }
+
+  async exchangeTokenWithOurOwnVerySpecialIdP(access_token: string) {
+    return this.config.idp.exchangeToken(access_token);
   }
 }
 
