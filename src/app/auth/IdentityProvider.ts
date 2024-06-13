@@ -13,6 +13,7 @@ export class OurOwnIdentityProvider {
 
   async exchangeToken(access_token: string) {
     const response = await fetch(this.url, {
+      method: 'POST',
       body: new URLSearchParams({
         client_id: this.client_id,
         client_secret: this.client_secret,
