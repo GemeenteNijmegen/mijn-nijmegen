@@ -89,7 +89,7 @@ export class Inzendingen implements ZaakConnector {
       user_id: user.identifier,
       user_type: user.type,
     });
-    const results = await this.request('submissions', user.idToken, params);
+    const results = await this.request('submissions', user.delegatedToken, params);
     const inzendingen = InzendingenSchema.parse(results);
     return inzendingen.map(inzending => this.summarize(inzending));
   }
@@ -99,7 +99,7 @@ export class Inzendingen implements ZaakConnector {
       user_id: user.identifier,
       user_type: user.type,
     });
-    const results = await this.request(`submissions/${key}`, user.idToken, params);
+    const results = await this.request(`submissions/${key}`, user.delegatedToken, params);
     const submission = this.summarizeSingle(InzendingSchema.parse(results));
     return submission;
   }
@@ -110,7 +110,7 @@ export class Inzendingen implements ZaakConnector {
       const params = new URLSearchParams({
         key: `${zaakId}/${file}`,
       });
-      const results = await this.request('download', user.idToken, params);
+      const results = await this.request('download', user.delegatedToken, params);
       return results;
     }
     return false;

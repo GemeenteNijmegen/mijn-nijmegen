@@ -37,7 +37,7 @@ beforeAll(() => {
 });
 
 describe('Zaken', () => {
-  const user = new Organisation('12345678', 'test');
+  const user = new Organisation('12345678', 'test', 'token');
   const client = new OpenZaakClient({ baseUrl, axiosInstance: axios });
   test('zaken are processed correctly', async () => {
     const statusResults = new Zaken(client, { zaakConnectorId: 'test' });

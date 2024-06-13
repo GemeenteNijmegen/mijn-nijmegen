@@ -14,7 +14,7 @@ jest.spyOn(inzendingen, 'request').mockImplementation((endpoint, _params) => {
 });
 jest.spyOn(inzendingen, 'download').mockImplementation(() => Promise.resolve(sampleDownloadLink));
 
-const person = new Person(new Bsn('900222670'), 'test');
+const person = new Person(new Bsn('900222670'), 'test', 'token');
 
 describe('Inzendingen from submission storage', () => {
   test('Getting a list of submissions', async() => {
