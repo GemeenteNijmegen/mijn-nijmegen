@@ -8,8 +8,8 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { IdTokenClaims } from 'openid-client';
 import { OpenIDConnect } from '../../../shared/OpenIDConnect';
+import { AuthenticationService } from '../AuthenticationService';
 import { AuthRequestHandler, AuthRequestHandlerProps, Organisation, Person } from '../AuthRequestHandler';
-import { AuthenticationService } from '../IdentityProvider';
 
 const scopesAndAttributes = {
   digidScope: 'idp_scoping:digid',
@@ -119,6 +119,25 @@ describe('Auth handler', () => {
       dynamoDBClient,
       apiClient,
       authenticationService: idp,
+      OpenIdConnect: OIDC,
+      ...scopesAndAttributes,
+    });
+    const result = await handler.handleRequest();
+    expect(result.statusCode).toBe(302);
+    expect(result?.headers?.Location).toBe('/');
+  });
+
+  test('Successful auth redirects to home without authentication service', async () => {
+    const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
+
+    setupSessionResponse(true);
+    const handler = new AuthRequestHandler({
+      cookies: `session=${sessionId}`,
+      queryStringParamState: 'state',
+      queryStringParamCode: '12345',
+      dynamoDBClient,
+      apiClient,
+      authenticationService: undefined,
       OpenIdConnect: OIDC,
       ...scopesAndAttributes,
     });
