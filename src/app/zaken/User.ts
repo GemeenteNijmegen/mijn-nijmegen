@@ -11,7 +11,7 @@ export interface User {
   type: 'person' | 'organisation';
   idToken: string;
   userName?: string;
-  delegatedToken: string;
+  delegatedToken?: string;
 }
 
 /**
@@ -23,9 +23,9 @@ export class Person implements User {
   idToken: string;
   userName?: string;
   type: 'person' | 'organisation' = 'person';
-  delegatedToken: string;
+  delegatedToken?: string;
 
-  constructor(bsn: Bsn, idToken: string, delegatedToken: string, userName?: string) {
+  constructor(bsn: Bsn, idToken: string, delegatedToken?: string, userName?: string) {
     this.bsn = bsn;
     this.identifier = bsn.bsn;
     this.userName = userName;
@@ -43,9 +43,9 @@ export class Organisation implements User {
   idToken: string;
   type: 'person' | 'organisation' = 'organisation';
   userName?: string;
-  delegatedToken: string;
+  delegatedToken?: string;
 
-  constructor(kvk: string, idToken: string, delegatedToken: string, userName?: string) {
+  constructor(kvk: string, idToken: string, delegatedToken?: string, userName?: string) {
     this.kvk = kvk;
     this.identifier = kvk;
     this.userName = userName;

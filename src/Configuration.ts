@@ -97,6 +97,16 @@ export interface Configuration {
    * from the allowed list.
    */
   readonly zakenAllowDomains: string[];
+
+  /**
+   * Enable PoC authentication service adding a configuration for it
+   * Note requires configuration of the client secret through secretmanaget
+   * @default - no authenticaiton service
+   */
+  readonly authenticationServiceConfiguration?: {
+    endpoint: string;
+    clientId: string;
+  };
 }
 
 
@@ -116,6 +126,10 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenUseSubmissions: true,
     zakenAllowDomains: ['APV', 'JZ'],
     showSurveyCTA: true,
+    authenticationServiceConfiguration: {
+      clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
+      endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
+    },
   },
   production: {
     branch: 'production',
