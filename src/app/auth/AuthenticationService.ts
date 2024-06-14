@@ -1,6 +1,6 @@
 
 
-export class OurOwnIdentityProvider {
+export class AuthenticationService {
   readonly url: string;
   readonly client_id: string;
   readonly client_secret: string;

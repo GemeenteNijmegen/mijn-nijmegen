@@ -8,8 +8,8 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { IdTokenClaims } from 'openid-client';
 import { OpenIDConnect } from '../../../shared/OpenIDConnect';
+import { AuthenticationService } from '../AuthenticationService';
 import { AuthRequestHandler, AuthRequestHandlerProps, Organisation, Person } from '../AuthRequestHandler';
-import { OurOwnIdentityProvider } from '../IdentityProvider';
 
 const scopesAndAttributes = {
   digidScope: 'idp_scoping:digid',
@@ -104,7 +104,7 @@ function setupSessionResponse(loggedin: boolean) {
   ddbMock.on(GetItemCommand).resolves(getItemOutput);
 }
 
-const idp = new OurOwnIdentityProvider('https://example.com/oauth', randomUUID(), randomUUID());
+const idp = new AuthenticationService('https://example.com/oauth', randomUUID(), randomUUID());
 jest.spyOn(idp, 'exchangeToken').mockResolvedValue('token');
 
 describe('Auth handler', () => {
@@ -118,7 +118,26 @@ describe('Auth handler', () => {
       queryStringParamCode: '12345',
       dynamoDBClient,
       apiClient,
-      idp,
+      authenticationService: idp,
+      OpenIdConnect: OIDC,
+      ...scopesAndAttributes,
+    });
+    const result = await handler.handleRequest();
+    expect(result.statusCode).toBe(302);
+    expect(result?.headers?.Location).toBe('/');
+  });
+
+  test('Successful auth redirects to home without authentication service', async () => {
+    const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
+
+    setupSessionResponse(true);
+    const handler = new AuthRequestHandler({
+      cookies: `session=${sessionId}`,
+      queryStringParamState: 'state',
+      queryStringParamCode: '12345',
+      dynamoDBClient,
+      apiClient,
+      authenticationService: undefined,
       OpenIdConnect: OIDC,
       ...scopesAndAttributes,
     });
@@ -138,7 +157,7 @@ describe('Auth handler', () => {
       queryStringParamCode: '12345',
       dynamoDBClient,
       apiClient,
-      idp,
+      authenticationService: idp,
       OpenIdConnect: OIDC,
       ...scopesAndAttributes,
     });
@@ -156,7 +175,7 @@ describe('Auth handler', () => {
       queryStringParamCode: 'state',
       dynamoDBClient,
       apiClient,
-      idp,
+      authenticationService: idp,
       OpenIdConnect: OIDC,
       ...scopesAndAttributes,
     });
@@ -175,7 +194,7 @@ describe('DigiD logins', () => {
     queryStringParamCode: '12345',
     dynamoDBClient,
     apiClient,
-    idp,
+    authenticationService: idp,
     OpenIdConnect: OIDC,
     ...scopesAndAttributes,
   };
@@ -219,7 +238,7 @@ describe('Yivi logins', () => {
     queryStringParamCode: '12345',
     dynamoDBClient,
     apiClient,
-    idp,
+    authenticationService: idp,
     OpenIdConnect: OIDC,
     ...scopesAndAttributes,
   };
@@ -335,7 +354,7 @@ describe('Yivi logins (kvk feature flag off)', () => {
     queryStringParamCode: '12345',
     dynamoDBClient,
     apiClient,
-    idp,
+    authenticationService: idp,
     OpenIdConnect: OIDC,
     ...scopesAndAttributes,
     useYiviKvk: false,
@@ -388,7 +407,7 @@ describe('eHerkenning logins', () => {
     queryStringParamCode: '12345',
     dynamoDBClient,
     apiClient,
-    idp,
+    authenticationService: idp,
     OpenIdConnect: OIDC,
     ...scopesAndAttributes,
   };

@@ -49,15 +49,14 @@ export class Inzendingen implements ZaakConnector {
     }
   }
 
-  async request(endpoint: string, authorization: string, params?: URLSearchParams): Promise<any> {
+  async request(endpoint: string, authorization?: string, params?: URLSearchParams): Promise<any> {
     const paramString = params ? `?${params}` : '';
     const url =`${endpoint}${paramString}`;
     try {
       // console.debug('getting ', this.axios.getUri({ url }));
+      const headers = authorization ? { Authorization: `Bearer ${authorization}` } : {};
       const response = await this.axios.get(url, {
-        headers: {
-          Authorization: `Bearer ${authorization}`,
-        },
+        headers: headers,
       });
       if (response.status != 200) {
         // console.debug(response.request.responseURL);

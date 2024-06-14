@@ -5,9 +5,9 @@ import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
 import { IdTokenClaims, TokenSet } from 'openid-client';
+import { AuthenticationService } from './AuthenticationService';
 import { BrpApi } from './BrpApi';
 
-import { OurOwnIdentityProvider } from './IdentityProvider';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 
 type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
@@ -21,7 +21,7 @@ export interface AuthRequestHandlerProps {
   dynamoDBClient: DynamoDBClient;
   apiClient: ApiClient;
   OpenIdConnect: OpenIDConnect;
-  idp: OurOwnIdentityProvider;
+  authenticationService?: AuthenticationService;
 
   // Scopes
   yiviScope: string;
@@ -63,7 +63,13 @@ export class AuthRequestHandler {
       // Startup the session
       try {
         const username = await user.getUserName();
-        const delegated_token = await this.exchangeTokenWithOurOwnVerySpecialIdP(tokens.id_token!);
+
+        // Optionally store delegated_token in the session
+        let additional_session_data = {};
+        if (this.config.authenticationService) {
+          const delegated_token = await this.exchangeTokenWithOurOwnVerySpecialIdP(tokens.id_token!);
+          additional_session_data = { delegated_token: { S: delegated_token } };
+        }
 
         await session.createSession({
           loggedin: { BOOL: true },
@@ -73,7 +79,7 @@ export class AuthRequestHandler {
           username: { S: username },
           id_token: { S: tokens.id_token },
           refresh_token: { S: tokens.refresh_token },
-          delegated_token: { S: delegated_token },
+          ...additional_session_data,
         });
       } catch (error: any) {
         console.error('creating session failed', error);
@@ -225,7 +231,7 @@ export class AuthRequestHandler {
   }
 
   async exchangeTokenWithOurOwnVerySpecialIdP(access_token: string) {
-    return this.config.idp.exchangeToken(access_token);
+    return this.config.authenticationService?.exchangeToken(access_token);
   }
 }
 
