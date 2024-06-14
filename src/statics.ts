@@ -143,7 +143,7 @@ export abstract class Statics {
   /**
    * PoC authentication service
    */
-  static readonly authServiceClientSecretArn: '/cdk/mijn-nijmegen/auth=service-client-secret-arn';
+  static readonly authServiceClientSecretArn = '/cdk/mijn-nijmegen/auth=service-client-secret-arn';
 
   // MARK: ENVIRONMENTS
   static readonly gnBuildEnvironment = {
