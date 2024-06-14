@@ -140,6 +140,11 @@ export abstract class Statics {
 
   static readonly submissionstorageKey: string = '/cdk/mijn-nijmegen/submissionstorage-key';
 
+  /**
+   * PoC authentication service
+   */
+  static readonly authServiceClientSecretArn: '/cdk/mijn-nijmegen/auth=service-client-secret-arn';
+
   // MARK: ENVIRONMENTS
   static readonly gnBuildEnvironment = {
     account: '836443378780',

@@ -13,7 +13,7 @@ const OIDC = new OpenIDConnect();
 // This is proof of cocept the API is actually secured with an classical API key
 let authenticationService: AuthenticationService | undefined = undefined;
 async function init() {
-  if (process.env.USE_AUTH_SERVICE) {
+  if (process.env.USE_AUTH_SERVICE === 'true') {
     const clientSecret = await AWS.getSecret(process.env.AUTH_SERVICE_CLIENT_SECRET_ARN!);
     authenticationService = new AuthenticationService(process.env.AUTH_SERVICE_ENDPOINT!, process.env.AUTH_SERVICE_CLIENT_ID!, clientSecret);
   }

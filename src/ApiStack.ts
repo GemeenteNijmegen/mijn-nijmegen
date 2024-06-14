@@ -221,6 +221,7 @@ export class ApiStack extends Stack implements Configurable {
 
   private authFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
     const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
+    const authServiceClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'auth-serice-client-secret', Statics.authServiceClientSecretArn);
 
     const authFunction = new ApiFunction(this, 'auth-function', {
       description: 'Authenticatie-lambd voor de Mijn Nijmegen-applicatie.',
@@ -242,9 +243,14 @@ export class ApiStack extends Stack implements Configurable {
         YIVI_KVK_NAME_ATTRIBUTE: StringParameter.valueForStringParameter(this, Statics.ssmYiviKvkNameAttribute),
         YIVI_KVK_NUMBER_ATTRIBUTE: StringParameter.valueForStringParameter(this, Statics.ssmYiviKvkNumberAttribute),
         USE_YIVI_KVK: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviKvk),
+        USE_AUTH_SERVICE: this.configuration.authenticationServiceConfiguration ? 'true' : 'false',
+        AUTH_SERVICE_CLIENT_SECRET_ARN: authServiceClientSecret.secretArn,
+        AUTH_SERVICE_CLIENT_ID: this.configuration.authenticationServiceConfiguration?.clientId ?? '',
+        AUTH_SERVICE_ENDPOINT: this.configuration.authenticationServiceConfiguration?.endpoint ?? '',
       },
       apiFunction: AuthFunction,
     });
+    authServiceClientSecret.grantRead(authFunction.lambda);
     oidcSecret.grantRead(authFunction.lambda);
     mtlsConfig.privateKey.grantRead(authFunction.lambda);
     mtlsConfig.clientCert.grantRead(authFunction.lambda);

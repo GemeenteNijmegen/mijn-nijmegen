@@ -196,5 +196,10 @@ export class ssmParamsConstruct extends Construct {
       secretName: Statics.submissionstorageKey,
       description: 'Submission storage API key',
     });
+
+    new SecretsManager.Secret(this, 'auth_service_client_secret', {
+      secretName: Statics.authServiceClientSecretArn,
+      description: 'OAuth client secret for mijn-nijmegen to use with authenticaiton service (Poc)',
+    });
   }
 }
