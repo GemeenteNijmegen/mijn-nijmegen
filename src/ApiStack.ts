@@ -230,6 +230,7 @@ export class ApiStack extends Stack implements Configurable {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
       readOnlyRole,
+      timeout: Duration.seconds(6), // Too long but required for poc authentication service
       environment: {
         CLIENT_SECRET_ARN: oidcSecret.secretArn,
         MTLS_PRIVATE_KEY_ARN: mtlsConfig.privateKey.secretArn,

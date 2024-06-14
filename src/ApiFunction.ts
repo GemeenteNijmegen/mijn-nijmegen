@@ -18,6 +18,7 @@ export interface ApiFunctionProps {
   applicationUrlBase?: string;
   environment?: {[key: string]: string};
   monitorFilterPattern?: IFilterPattern;
+  timeout?: Duration;
   readOnlyRole: Role;
   /**
    * The default 'Lambda Function' props can be overridden or amended using
@@ -41,6 +42,7 @@ export class ApiFunction extends Construct {
       code: Lambda.Code.fromInline('empty'), // Overwritten,
       insightsVersion: Lambda.LambdaInsightsVersion.fromInsightVersionArn(insightsArn),
       logRetention: RetentionDays.ONE_MONTH,
+      timeout: props.timeout,
       environment: {
         APPLICATION_URL_BASE: props.applicationUrlBase || '',
         AUTH_URL_BASE: SSM.StringParameter.valueForStringParameter(this, Statics.ssmAuthUrlBaseParameter),
