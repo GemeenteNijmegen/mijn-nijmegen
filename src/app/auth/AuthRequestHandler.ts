@@ -5,9 +5,9 @@ import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
 import { IdTokenClaims, TokenSet } from 'openid-client';
+import { AuthenticationService } from './AuthenticationService';
 import { BrpApi } from './BrpApi';
 
-import { OurOwnIdentityProvider } from './IdentityProvider';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 
 type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
@@ -21,7 +21,7 @@ export interface AuthRequestHandlerProps {
   dynamoDBClient: DynamoDBClient;
   apiClient: ApiClient;
   OpenIdConnect: OpenIDConnect;
-  idp: OurOwnIdentityProvider;
+  authenticationService: AuthenticationService;
 
   // Scopes
   yiviScope: string;
@@ -225,7 +225,7 @@ export class AuthRequestHandler {
   }
 
   async exchangeTokenWithOurOwnVerySpecialIdP(access_token: string) {
-    return this.config.idp.exchangeToken(access_token);
+    return this.config.authenticationService.exchangeToken(access_token);
   }
 }
 

@@ -1,8 +1,8 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
+import { AuthenticationService } from './AuthenticationService';
 import { AuthRequestHandler } from './AuthRequestHandler';
-import { OurOwnIdentityProvider } from './IdentityProvider';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
@@ -10,7 +10,7 @@ const apiClient = new ApiClient();
 const OIDC = new OpenIDConnect();
 
 // This is proof of cocept the API is actually secured with an classical API key
-const idp = new OurOwnIdentityProvider('https://auth-service.sandbox-01.csp-nijmegen.nl', '0588239d-3fb8-42af-9f0a-96cbfe199a8e', 'cf8ac7cf-dea8-414a-b37d-c00813778d41');
+const authenticationService = new AuthenticationService('https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token', '0588239d-3fb8-42af-9f0a-96cbfe199a8e', 'cf8ac7cf-dea8-414a-b37d-c00813778d41');
 
 function parseEvent(event: any) {
   return {
@@ -29,7 +29,7 @@ export async function handler(event: any, _context: any):Promise<ApiGatewayV2Res
       queryStringParamState: params.state,
       dynamoDBClient,
       apiClient,
-      idp,
+      authenticationService: authenticationService,
       OpenIdConnect: OIDC,
       digidScope: process.env.DIGID_SCOPE ?? '',
       eherkenningScope: process.env.EHERKENNING_SCOPE ?? '',
