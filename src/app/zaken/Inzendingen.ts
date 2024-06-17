@@ -49,12 +49,15 @@ export class Inzendingen implements ZaakConnector {
     }
   }
 
-  async request(endpoint: string, params?: URLSearchParams): Promise<any> {
+  async request(endpoint: string, authorization?: string, params?: URLSearchParams): Promise<any> {
     const paramString = params ? `?${params}` : '';
     const url =`${endpoint}${paramString}`;
     try {
       // console.debug('getting ', this.axios.getUri({ url }));
-      const response = await this.axios.get(url);
+      const headers = authorization ? { Authorization: `Bearer ${authorization}` } : {};
+      const response = await this.axios.get(url, {
+        headers: headers,
+      });
       if (response.status != 200) {
         // console.debug(response.request.responseURL);
         throw Error('Unexpected response: ' + response.status);
@@ -85,7 +88,7 @@ export class Inzendingen implements ZaakConnector {
       user_id: user.identifier,
       user_type: user.type,
     });
-    const results = await this.request('submissions', params);
+    const results = await this.request('submissions', user.delegatedToken, params);
     const inzendingen = InzendingenSchema.parse(results);
     return inzendingen.map(inzending => this.summarize(inzending));
   }
@@ -95,7 +98,7 @@ export class Inzendingen implements ZaakConnector {
       user_id: user.identifier,
       user_type: user.type,
     });
-    const results = await this.request(`submissions/${key}`, params);
+    const results = await this.request(`submissions/${key}`, user.delegatedToken, params);
     const submission = this.summarizeSingle(InzendingSchema.parse(results));
     return submission;
   }
@@ -106,7 +109,7 @@ export class Inzendingen implements ZaakConnector {
       const params = new URLSearchParams({
         key: `${zaakId}/${file}`,
       });
-      const results = await this.request('download', params);
+      const results = await this.request('download', user.delegatedToken, params);
       return results;
     }
     return false;

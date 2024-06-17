@@ -5,7 +5,9 @@ import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
 import { IdTokenClaims, TokenSet } from 'openid-client';
+import { AuthenticationService } from './AuthenticationService';
 import { BrpApi } from './BrpApi';
+
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 
 type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
@@ -19,6 +21,7 @@ export interface AuthRequestHandlerProps {
   dynamoDBClient: DynamoDBClient;
   apiClient: ApiClient;
   OpenIdConnect: OpenIDConnect;
+  authenticationService?: AuthenticationService;
 
   // Scopes
   yiviScope: string;
@@ -44,7 +47,6 @@ export class AuthRequestHandler {
     let session = new Session(this.config.cookies, this.config.dynamoDBClient);
     await session.init();
     if (session.sessionId === false) {
-
       return Response.redirect('/login');
     }
     const state = session.getValue('state');
@@ -62,12 +64,22 @@ export class AuthRequestHandler {
       try {
         const username = await user.getUserName();
 
+        // Optionally store delegated_token in the session
+        let additional_session_data = {};
+        if (this.config.authenticationService) {
+          const delegated_token = await this.exchangeTokenWithOurOwnVerySpecialIdP(tokens.id_token!);
+          additional_session_data = { delegated_token: { S: delegated_token } };
+        }
+
         await session.createSession({
           loggedin: { BOOL: true },
           identifier: { S: user.identifier },
           bsn: { S: user.type == 'person' ? user.identifier : '' }, // TODO: remove when consuming pages (persoonsgegevens, uitkeringen, zaken) have been updated to use identifier
           user_type: { S: user.type },
           username: { S: username },
+          id_token: { S: tokens.id_token },
+          refresh_token: { S: tokens.refresh_token },
+          ...additional_session_data,
         });
       } catch (error: any) {
         console.error('creating session failed', error);
@@ -216,6 +228,10 @@ export class AuthRequestHandler {
       return 'digid';
     }
     throw Error('Unsupported authentication method');
+  }
+
+  async exchangeTokenWithOurOwnVerySpecialIdP(access_token: string) {
+    return this.config.authenticationService?.exchangeToken(access_token);
   }
 }
 

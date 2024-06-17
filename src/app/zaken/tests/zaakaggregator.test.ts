@@ -74,7 +74,7 @@ jest.mock('../Inzendingen', () => {
 });
 
 let baseUrl = new URL('http://localhost');
-const person = new Person(new Bsn('900222670'));
+const person = new Person(new Bsn('900222670'), 'test', 'token');
 const client = new OpenZaakClient({ baseUrl, axiosInstance: axios });
 const inzendingen = new Inzendingen({ baseUrl: 'https://example.com', accessKey: 'test-access-key' });
 const zaken = new Zaken(client, { zaakConnectorId: 'test' });
