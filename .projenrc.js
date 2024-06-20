@@ -4,6 +4,11 @@ const project = new GemeenteNijmegenCdkApp({
   defaultReleaseBranch: 'production',
   majorVersion: 1,
   name: 'mijnnijmegen',
+  depsUpgradeOptions: {
+    workflowOptions: {
+      branches: ['development'],
+    },
+  },
   deps: [
     '@aws-lambda-powertools/logger',
     '@aws-sdk/client-dynamodb',
