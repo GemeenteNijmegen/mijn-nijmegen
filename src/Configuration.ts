@@ -111,6 +111,24 @@ export interface Configuration {
 
 
 const EnvironmentConfigurations: {[key:string]: Configuration} = {
+  development: {
+    branch: 'development',
+    buildEnvironment: Statics.gnBuildEnvironment,
+    deploymentEnvironment: Statics.gnMijnNijmegenDevEnvironment,
+    // cnameRecords: {},
+    // dsRecord: '3766 13 2 11761745E09473E6CE95DB798CF1ADB69B4433E73EEFC9F7FE341561966EA154',
+    pipelineStackCdkName: 'mijnnijmegen-pipeline-development',
+    pipelineName: 'mijnnijmegen-development',
+    zakenUseTaken: true,
+    zakenIsLive: true,
+    zakenUseSubmissions: true,
+    zakenAllowDomains: ['APV', 'JZ'],
+    showSurveyCTA: true,
+    authenticationServiceConfiguration: {
+      clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
+      endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
+    },
+  },
   acceptance: {
     branch: 'acceptance',
     buildEnvironment: Statics.gnBuildEnvironment,
@@ -126,10 +144,10 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenUseSubmissions: true,
     zakenAllowDomains: ['APV', 'JZ'],
     showSurveyCTA: true,
-    authenticationServiceConfiguration: {
-      clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
-      endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
-    },
+    // authenticationServiceConfiguration: {
+    //   clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
+    //   endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
+    // },
   },
   production: {
     branch: 'production',

@@ -151,6 +151,11 @@ export abstract class Statics {
     region: 'eu-central-1',
   };
 
+  static readonly gnMijnNijmegenDevEnvironment = {
+    account: '590184009539',
+    region: 'eu-central-1',
+  };
+
   static readonly gnMijnNijmegenAccpEnvironment = {
     account: '021929636313',
     region: 'eu-central-1',
