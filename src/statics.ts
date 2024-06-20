@@ -168,23 +168,24 @@ export abstract class Statics {
 
   static subDomain(branch: string) {
     const subdomainMap = {
-      'acceptance': 'mijn.accp',
-      'production': 'mijn',
-      'acceptance-new-lz': 'mijn.accp',
-      'production-new-lz': 'mijn',
+      development: undefined,
+      acceptance: 'mijn.accp',
+      production: 'mijn',
     };
-    const subdomain = subdomainMap[branch as keyof typeof subdomainMap] ?? 'mijn-dev';
+    const subdomain = subdomainMap[branch as keyof typeof subdomainMap];
     return subdomain;
   }
 
   static cspSubDomain(branch: string) {
     const subdomainMap = {
-      'acceptance': 'mijn.mijn-accp',
-      'production': 'mijn.mijn-prod',
-      'acceptance-new-lz': 'mijn.mijn-accp',
-      'production-new-lz': 'mijn.mijn-prod',
+      development: 'mijn.mijn-dev',
+      acceptance: 'mijn.mijn-accp',
+      production: 'mijn.mijn-prod',
     };
-    const subdomain = subdomainMap[branch as keyof typeof subdomainMap] ?? 'mijn-dev';
+    const subdomain = subdomainMap[branch as keyof typeof subdomainMap];
+    if (!subdomain) {
+      throw Error(`No subdomain configured for branch ${branch}`);
+    }
     return subdomain;
   }
 }
