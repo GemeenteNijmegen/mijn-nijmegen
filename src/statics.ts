@@ -168,11 +168,15 @@ export abstract class Statics {
 
   static subDomain(branch: string) {
     const subdomainMap = {
-      development: undefined,
+      development: 'mijn.dev',
       acceptance: 'mijn.accp',
       production: 'mijn',
     };
     const subdomain = subdomainMap[branch as keyof typeof subdomainMap];
+    if (!subdomain) {
+      throw Error(`No subdomain configured for branch ${branch}`);
+
+    }
     return subdomain;
   }
 
