@@ -178,6 +178,7 @@ export abstract class Statics {
 
   static cspSubDomain(branch: string) {
     const subdomainMap = {
+      test: 'mijn.test', // Only used in unit tests
       development: 'mijn.mijn-dev',
       acceptance: 'mijn.mijn-accp',
       production: 'mijn.mijn-prod',
