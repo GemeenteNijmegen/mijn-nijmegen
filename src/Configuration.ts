@@ -115,8 +115,10 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     branch: 'development',
     buildEnvironment: Statics.gnBuildEnvironment,
     deploymentEnvironment: Statics.gnMijnNijmegenDevEnvironment,
-    // cnameRecords: {},
-    // dsRecord: '3766 13 2 11761745E09473E6CE95DB798CF1ADB69B4433E73EEFC9F7FE341561966EA154',
+    cnameRecords: {
+      _e4ff6e8ae7bc7524819aa925e2cae281: '_0d5a2be7528f49daefc4b67ec7f31f85.sdgjtdhdhz.acm-validations.aws.',
+    },
+    dsRecord: '1092 13 2 1F367460EB372760AA306E8BA29C64AD04BCA7AB515E30CA99FE710A1484A0FE',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-development',
     pipelineName: 'mijnnijmegen-development',
     zakenUseTaken: true,
