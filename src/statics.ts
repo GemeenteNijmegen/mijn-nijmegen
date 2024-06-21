@@ -168,6 +168,7 @@ export abstract class Statics {
 
   static subDomain(branch: string) {
     const subdomainMap = {
+      test: 'mijn.test', // Only used in unit tests
       development: 'mijn.dev',
       acceptance: 'mijn.accp',
       production: 'mijn',
