@@ -6,7 +6,7 @@ import { PipelineStack } from './PipelineStack';
 Dotenv.config();
 const app = new App();
 
-const branchToBuild = process.env.BRANCH_NAME ?? 'acceptance';
+const branchToBuild = process.env.BRANCH_NAME ?? 'development';
 const configuration = getEnvironmentConfiguration(branchToBuild);
 
 new PipelineStack(app, configuration.pipelineStackCdkName, {
