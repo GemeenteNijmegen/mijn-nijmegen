@@ -102,7 +102,6 @@
   },
   "version": "0.0.0",
   "jest": {
-    "coverageProvider": "v8",
     "setupFiles": [
       "dotenv/config"
     ],
