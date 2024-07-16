@@ -22,7 +22,6 @@ beforeAll(() => {
   process.env.CLIENT_SECRET_ARN = '123';
   process.env.OIDC_CLIENT_ID = '1234';
   process.env.OIDC_SCOPE = 'openid';
-  process.env.SHOW_SURVEY = 'true';
 
 
   process.env.MTLS_PRIVATE_KEY_ARN = 'testarn';

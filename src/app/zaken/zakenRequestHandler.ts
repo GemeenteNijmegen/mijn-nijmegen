@@ -8,7 +8,6 @@ import { ZaakAggregator } from './ZaakAggregator';
 import { ZaakFormatter } from './ZaakFormatter';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
-import * as surveyCTA from '../../shared/survey-cta.mustache';
 
 export class ZakenRequestHandler {
   private zaakAggregator: ZaakAggregator;
@@ -74,9 +73,7 @@ export class ZakenRequestHandler {
         zaak: formattedZaak,
       };
       // render page
-      const html = await render(data, zaakTemplate.default, {
-        surveyCTA: process.env.SHOW_SURVEY == 'true' ? surveyCTA.default : undefined,
-      });
+      const html = await render(data, zaakTemplate.default);
       return Response.html(html, 200, session.getCookie());
     } else {
       return Response.error(404);
