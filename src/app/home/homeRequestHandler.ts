@@ -4,7 +4,6 @@ import { Session } from '@gemeentenijmegen/session';
 import * as homeTemplate from './templates/home.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
-import * as surveyCTA from '../../shared/survey-cta.mustache';
 
 
 interface HomeRequestHandlerProps {
@@ -44,9 +43,7 @@ export class HomeRequestHandler {
     };
 
     // render page
-    const html = await render(data, homeTemplate.default, {
-      surveyCTA: process.env.SHOW_SURVEY == 'true' ? surveyCTA.default : undefined,
-    });
+    const html = await render(data, homeTemplate.default);
 
     return Response.html(html, 200, session.getCookie());
   }
