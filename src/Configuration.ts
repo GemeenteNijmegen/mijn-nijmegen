@@ -71,12 +71,6 @@ export interface Configuration {
   readonly zakenIsLive?: boolean;
 
   /**
-   * Feature flag: if this is falsey, the lambda will
-   * not show the survey CTA.
-   */
-  readonly showSurveyCTA?: boolean;
-
-  /**
    * Feature flag: The taken functionality is experimental
    * If this flag is not true, the taken-functionality will
    * always exit immediately.
@@ -125,7 +119,6 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenIsLive: true,
     zakenUseSubmissions: true,
     zakenAllowDomains: ['APV', 'JZ'],
-    showSurveyCTA: false,
     authenticationServiceConfiguration: {
       clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
       endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
@@ -145,7 +138,6 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenIsLive: true,
     zakenUseSubmissions: true,
     zakenAllowDomains: ['APV', 'JZ'],
-    showSurveyCTA: false,
     // authenticationServiceConfiguration: {
     //   clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
     //   endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
@@ -165,7 +157,6 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenIsLive: true,
     zakenUseSubmissions: true,
     zakenAllowDomains: ['APV'], // JZ is not yet available in prod
-    showSurveyCTA: false,
   },
 };
 
