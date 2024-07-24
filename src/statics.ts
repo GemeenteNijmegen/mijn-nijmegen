@@ -148,7 +148,7 @@ export abstract class Statics {
   /**
    * Secret for verwerkingenlogging inzage
    */
-  static readonly ssmInzageApiKey: string = '/cdk/mijn-inzage/inzage-api-key';
+  static readonly ssmInzageApiKey: string = '/cdk/mijn-inzage/vw-inzage-api-key';
 
   /**
    * PoC authentication service
