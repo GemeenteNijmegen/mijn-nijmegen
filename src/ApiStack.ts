@@ -59,7 +59,7 @@ export class ApiStack extends Stack implements Configurable {
     const appDomain = `${subdomain}.nijmegen.nl`;
 
     const readOnlyRole = this.readOnlyRole();
-    this.setFunctions(`https://${appDomain}/`, readOnlyRole);
+    this.setFunctions(`https://${appDomain}/`, readOnlyRole, props.configuration);
     this.allowReadAccessToTable(readOnlyRole, this.sessionsTable);
   }
 
@@ -68,7 +68,7 @@ export class ApiStack extends Stack implements Configurable {
    * add routes to the gateway.
    * @param {string} baseUrl the application url
    */
-  setFunctions(baseUrl: string, readOnlyRole: Role) {
+  setFunctions(baseUrl: string, readOnlyRole: Role, configuration: Configuration) {
     const tlsConfig = this.mtlsConfig();
     /**
      * The login function generates a login URL and renders the login page.
@@ -104,6 +104,7 @@ export class ApiStack extends Stack implements Configurable {
      * The zaken function show your current uitkering.
      */
     const zakenFunction = this.zakenFunction(baseUrl, readOnlyRole);
+
 
     //MARK: Routes
     this.api.addRoutes({
@@ -159,6 +160,16 @@ export class ApiStack extends Stack implements Configurable {
       integration: new HttpLambdaIntegration('zaak', zakenFunction.lambda),
       routeKey: apigatewayv2.HttpRouteKey.with('/zaken/{zaaksource}/{zaakid}/download/{file+}', apigatewayv2.HttpMethod.GET),
     });
+
+
+    if (configuration.inzageLive) {
+      const inzageFunction = this.inzageFunction(baseUrl, readOnlyRole, tlsConfig);
+      this.api.addRoutes({
+        integration: new HttpLambdaIntegration('inzage', inzageFunction.lambda),
+        path: '/inzage',
+        methods: [apigatewayv2.HttpMethod.GET],
+      });
+    }
   }
 
   private mtlsConfig() {
@@ -298,6 +309,33 @@ export class ApiStack extends Stack implements Configurable {
     mtlsConfig.rootCert.grantRead(uitkeringenFunction.lambda);
     return uitkeringenFunction;
   }
+
+  private inzageFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
+    const inzageApiKey = Secret.fromSecretNameV2(this, 'inzage-key', Statics.ssmInzageApiKey);
+
+    const inzageFunction = new ApiFunction(this, 'inzage-function', {
+      description: 'Inzage-lambda voor de Mijn Nijmegen-applicatie.',
+      codePath: 'app/inzage',
+      table: this.sessionsTable,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: baseUrl,
+      readOnlyRole,
+      environment: {
+        MTLS_PRIVATE_KEY_ARN: mtlsConfig.privateKey.secretArn,
+        MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
+        MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
+        BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
+        INZAGE_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmInzageApiEndpointUrl),
+        INZAGE_API_KEY_ARN: inzageApiKey.secretArn,
+      },
+      apiFunction: UitkeringFunction,
+    });
+    mtlsConfig.privateKey.grantRead(inzageFunction.lambda);
+    mtlsConfig.clientCert.grantRead(inzageFunction.lambda);
+    mtlsConfig.rootCert.grantRead(inzageFunction.lambda);
+    return inzageFunction;
+  }
+
 
   private zakenFunction(baseUrl: string, readOnlyRole: Role) {
     const jwtSecret = Secret.fromSecretNameV2(this, 'jwt-token-secret', Statics.vipJwtSecret);

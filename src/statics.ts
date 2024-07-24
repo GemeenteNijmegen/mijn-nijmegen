@@ -73,6 +73,11 @@ export abstract class Statics {
    */
   static readonly ssmUitkeringsApiEndpointUrl: string = '/cdk/mijn-nijmegen/uitkerings-api-url';
 
+  /**
+   * Uitkeringsgegevens API endpoint
+   */
+  static readonly ssmInzageApiEndpointUrl: string = '/cdk/mijn-nijmegen/inzage-api-url';
+
   // MARK: DNS
   /**
    * Route53 Zone ID and name for csp-nijmegen.nl in this account.
@@ -139,6 +144,11 @@ export abstract class Statics {
   static readonly vipTakenSecret: string = '/cdk/mijn-nijmegen/vip-takentoken-new';
 
   static readonly submissionstorageKey: string = '/cdk/mijn-nijmegen/submissionstorage-key';
+
+  /**
+   * Secret for verwerkingenlogging inzage
+   */
+  static readonly ssmInzageApiKey: string = '/cdk/mijn-inzage/inzage-api-key';
 
   /**
    * PoC authentication service

@@ -92,6 +92,12 @@ export interface Configuration {
    */
   readonly zakenAllowDomains: string[];
 
+
+  /**
+   * Set this to true if you want the verwerkingenlogging inzage-page to be created
+   */
+  readonly inzageLive?: boolean;
+
   /**
    * Enable PoC authentication service adding a configuration for it
    * Note requires configuration of the client secret through secretmanaget
@@ -123,6 +129,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
       clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
       endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
     },
+    inzageLive: true,
   },
   acceptance: {
     branch: 'acceptance',
@@ -142,6 +149,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     //   clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
     //   endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
     // },
+    inzageLive: false,
   },
   production: {
     branch: 'production',
@@ -157,6 +165,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenIsLive: true,
     zakenUseSubmissions: true,
     zakenAllowDomains: ['APV'], // JZ is not yet available in prod
+    inzageLive: false,
   },
 };
 
