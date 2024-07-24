@@ -8,6 +8,8 @@
     "bundle:app/auth/auth.lambda:watch": "npx projen bundle:app/auth/auth.lambda:watch",
     "bundle:app/home/home.lambda": "npx projen bundle:app/home/home.lambda",
     "bundle:app/home/home.lambda:watch": "npx projen bundle:app/home/home.lambda:watch",
+    "bundle:app/inzage/inzage.lambda": "npx projen bundle:app/inzage/inzage.lambda",
+    "bundle:app/inzage/inzage.lambda:watch": "npx projen bundle:app/inzage/inzage.lambda:watch",
     "bundle:app/login/login.lambda": "npx projen bundle:app/login/login.lambda",
     "bundle:app/login/login.lambda:watch": "npx projen bundle:app/login/login.lambda:watch",
     "bundle:app/logout/logout.lambda": "npx projen bundle:app/logout/logout.lambda",
