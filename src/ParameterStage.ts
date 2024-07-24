@@ -128,6 +128,11 @@ export class ssmParamsConstruct extends Construct {
       parameterName: Statics.ssmUitkeringsApiEndpointUrl,
     });
 
+    new SSM.StringParameter(this, 'ssm_inzage_1', {
+      stringValue: 'https://g423bazyr0.execute-api.eu-west-1.amazonaws.com/dev/',
+      parameterName: Statics.ssmInzageApiEndpointUrl,
+    });
+
     new SecretsManager.Secret(this, 'secret_1', {
       secretName: Statics.secretOIDCClientSecret,
       description: 'OpenIDConnect client secret',
@@ -201,5 +206,11 @@ export class ssmParamsConstruct extends Construct {
       secretName: Statics.authServiceClientSecretArn,
       description: 'OAuth client secret for mijn-nijmegen to use with authenticaiton service (Poc)',
     });
+
+    new SecretsManager.Secret(this, 'inzage_secret_1', {
+      secretName: Statics.ssmInzageApiKey,
+      description: 'Verwerkingen logging Api key',
+    });
+
   }
 }
