@@ -1,5 +1,5 @@
-import { handleLogoutRequest } from '../handleLogoutRequest';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { handleLogoutRequest } from '../handleLogoutRequest';
 
 const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
 
