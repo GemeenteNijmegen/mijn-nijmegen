@@ -1,15 +1,15 @@
 import { randomUUID } from 'crypto';
+import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
+import { SecretsManagerClient, GetSecretValueCommandOutput, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Bsn } from '@gemeentenijmegen/utils';
+import { mockClient } from 'aws-sdk-client-mock';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import { IdTokenClaims } from 'openid-client';
 import { OpenIDConnect } from '../../../shared/OpenIDConnect';
 import { AuthenticationService } from '../AuthenticationService';
 import { AuthRequestHandler, AuthRequestHandlerProps, Organisation, Person } from '../AuthRequestHandler';
-import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
-import { SecretsManagerClient, GetSecretValueCommandOutput, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
-import { mockClient } from 'aws-sdk-client-mock';
-import { IdTokenClaims } from 'openid-client';
 
 const scopesAndAttributes = {
   digidScope: 'idp_scoping:digid',

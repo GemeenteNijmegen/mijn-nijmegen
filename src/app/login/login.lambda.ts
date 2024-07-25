@@ -1,6 +1,6 @@
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { LoginRequestHandler } from './loginRequestHandler';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 

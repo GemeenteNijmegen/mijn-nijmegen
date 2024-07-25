@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { LoginRequestHandler } from '../loginRequestHandler';
 import { DynamoDBClient, GetItemCommandOutput, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
+import { LoginRequestHandler } from '../loginRequestHandler';
 
 const ddbMock = mockClient(DynamoDBClient);
 const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
