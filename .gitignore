@@ -61,6 +61,7 @@ junit.xml
 .parcel-cache/
 !/src/app/auth/auth-function.ts
 !/src/app/home/home-function.ts
+!/src/app/inzage/inzage-function.ts
 !/src/app/login/login-function.ts
 !/src/app/logout/logout-function.ts
 !/src/app/persoonsgegevens/persoonsgegevens-function.ts
