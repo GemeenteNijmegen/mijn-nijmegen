@@ -110,9 +110,6 @@ export abstract class Statics {
   static readonly ssmZoneIdNew: string = '/cdk/mijn-nijmegen/zones/csp-id';
   static readonly ssmZoneNameNew: string = '/cdk/mijn-nijmegen/zones/csp-name';
 
-  /** There seems to be no way to get the required ds record value in the CDK/API */
-  static readonly ssmNijmegenDSRecordValue: string = '/cdk/mijn-nijmegen/ds-record-value';
-
   static readonly certificatePath: string = '/cdk/mijn-nijmegen/certificates';
   static readonly certificateArn: string = '/cdk/mijn-nijmegen/certificates/certificate-arn';
 
@@ -127,7 +124,6 @@ export abstract class Statics {
   static readonly ssmWafAclArn: string = '/cdk/mijn-nijmegen/waf/acl-arn';
 
   static readonly ssmMonitoringLambdaArn: string = '/cdk/mijn-nijmegen/monitoring-lambda-arn';
-  static readonly ssmSlackWebhookUrl: string = '/cdk/mijn-nijmegen/slack-webhook-url';
 
   // MARK: ZGW configuration
 
