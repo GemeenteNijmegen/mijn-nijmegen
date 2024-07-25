@@ -52,6 +52,9 @@
           "spawn": "bundle:app/home/home.lambda"
         },
         {
+          "spawn": "bundle:app/inzage/inzage.lambda"
+        },
+        {
           "spawn": "bundle:app/login/login.lambda"
         },
         {
@@ -101,6 +104,24 @@
       "steps": [
         {
           "exec": "esbuild --bundle src/app/home/home.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/app/home/home.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+        }
+      ]
+    },
+    "bundle:app/inzage/inzage.lambda": {
+      "name": "bundle:app/inzage/inzage.lambda",
+      "description": "Create a JavaScript bundle from src/app/inzage/inzage.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/inzage/inzage.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/app/inzage/inzage.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+        }
+      ]
+    },
+    "bundle:app/inzage/inzage.lambda:watch": {
+      "name": "bundle:app/inzage/inzage.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/app/inzage/inzage.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/inzage/inzage.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/app/inzage/inzage.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
         }
       ]
     },

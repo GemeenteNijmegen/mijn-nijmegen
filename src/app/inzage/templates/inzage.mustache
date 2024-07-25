@@ -1,0 +1,71 @@
+{{>header}}
+
+<main class="verwerkingen">
+    <!-- START: template component(s) -->
+    <div class="container" id="section-1">
+        <div class="row">
+            <div class="col-12">
+                <h1>Mijn verwerkte persoonsgegevens</h1>
+                <p class="lead">Hier vindt u een overzicht de verwerkingen die de gemeente Nijmegen heeft gedaan met uw persoonsgegevens.</p>
+                <section>
+                <form class="md-form row" method="get" action="/verwerkingen"> 
+                    <div class="col-md-6">
+                        <label for="date-picker-start-input" class="active">Vanaf</label>
+                        <span class="sr-only" id="date-picker-start-instruction">
+                            Geef een datum op in het volgende formaat: dag-maand-jaar. Bijvoorbeeld: 30-05-2010.
+                        </span>
+                        <input name="date-start" type="date" id="date-picker-start-input" class="form-control" aria-describedby="date-picker-start-instruction" value={{startdate}}>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="date-picker-end-input" class="active">Tot en met</label>
+                        <span class="sr-only" id="date-picker-end-instruction">
+                            Geef een datum op in het volgende formaat: dag-maand-jaar. Bijvoorbeeld: 30-05-2010.
+                        </span>
+                        <input name="date-end" type="date" id="date-picker-end-input" class="form-control" aria-describedby="date-picker-end-instruction" value={{enddate}}>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Weergeven</button>
+                </form>
+                {{^error}}
+                <h2>Verwerkingen</h2>
+                <table class="responsive-table complex-table">
+                     <thead>
+                        <tr>
+                            <th>Verwerking</th>
+                            <th>Datum</th>
+                            <th>Handeling</th>
+                            <th>Actie</th>
+                            <th>Verwerkte gegevens</th>
+                            <th>Bewaartermijn</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {{#items}}
+                        <tr>
+                            <th>{{verwerkingNaam}}</th>
+                            <td>{{tijdstipRegistratie}}</td>
+                            <td>{{handelingNaam}}</td>
+                            <td>{{actieNaam}}</td>
+                            <td>{{#verwerkteObjecten}}
+                                    {{#verwerkteSoortenGegevens}}
+                                        {{soortGegeven}}
+                                    {{/verwerkteSoortenGegevens}}
+                            {{/verwerkteObjecten}}
+                            </td>
+                            <td>{{bewaartermijn}}</td>
+                        </tr>
+                    </tbody>
+                    {{/items}}
+                </table>
+                {{/error}}
+                {{#error}}
+                <h2>Er is iets misgegaan</h2>
+                <p>{{error}}</p>
+                {{/error}}
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- END: template component(s) -->
+</main>
+{{>footer}}
