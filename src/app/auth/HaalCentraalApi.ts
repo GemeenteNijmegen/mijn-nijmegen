@@ -8,13 +8,13 @@ export class HaalCentraalApi {
 
   constructor(client: ApiClient) {
     this.client = client;
-    if (!process.env.BRP_API_URL) {
+    if (!process.env.BRP_HAAL_CENTRAAL_API_URL) {
       throw new Error('Could not initialize brp api as no endpoint parameter is provided in BRP_API_URL');
     }
     if (!process.env.BRP_API_KEY) {
       throw new Error('Could not initialize brp api as no key parameter is provided in BRP_API_KEY');
     }
-    this.endpoint = process.env.BRP_API_URL;
+    this.endpoint = process.env.BRP_HAAL_CENTRAAL_API_URL;
   }
 
   /**
