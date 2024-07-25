@@ -65,6 +65,12 @@ export interface Configuration {
   pipelineName: string;
 
   /**
+   * Feature flag: if this is not true, the lamba will
+   * use the old (layer7) BRP api.
+   */
+  readonly brpHaalCentraalIsLive?: boolean;
+
+  /**
    * Feature flag: if this is not true, the lambda will
    * return 404.
    */
@@ -115,6 +121,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     dsRecord: '1092 13 2 1F367460EB372760AA306E8BA29C64AD04BCA7AB515E30CA99FE710A1484A0FE',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-development',
     pipelineName: 'mijnnijmegen-development',
+    brpHaalCentraalIsLive: true,
     zakenUseTaken: true,
     zakenIsLive: true,
     zakenUseSubmissions: true,
@@ -134,6 +141,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     dsRecord: '3766 13 2 11761745E09473E6CE95DB798CF1ADB69B4433E73EEFC9F7FE341561966EA154',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-acceptance',
     pipelineName: 'mijnnijmegen-acceptance',
+    brpHaalCentraalIsLive: true,
     zakenUseTaken: true,
     zakenIsLive: true,
     zakenUseSubmissions: true,
@@ -153,6 +161,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     dsRecord: '40951 13 2 1EFF20C0264CD1FDE6C7C858398BC2141768CC014A7BB27997F323076B7C47ED',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-production',
     pipelineName: 'mijnnijmegen-production',
+    brpHaalCentraalIsLive: false,
     zakenUseTaken: false,
     zakenIsLive: true,
     zakenUseSubmissions: true,
