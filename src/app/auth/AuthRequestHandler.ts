@@ -2,11 +2,11 @@ import { Logger } from '@aws-lambda-powertools/logger';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Bsn } from '@gemeentenijmegen/utils';
-import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { AuthenticationService } from './AuthenticationService';
 import { BrpApi } from './BrpApi';
 
 import { HaalCentraalApi } from './HaalCentraalApi';
+import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Session } from '@gemeentenijmegen/session';
 import { IdTokenClaims, TokenSet } from 'openid-client';
@@ -275,8 +275,7 @@ export class Person implements User {
           const brpApi = new HaalCentraalApi(this.config.apiClient);
           const brpData = await brpApi.getBrpData(this.bsn.bsn);
           this.userName = brpData?.personen[0]?.naam?.volledigeNaam ? brpData.personen[0].naam.volledigeNaam : 'Onbekende gebruiker';
-        }
-        {
+        } else {
           const brpApi = new BrpApi(this.config.apiClient);
           const brpData = await brpApi.getBrpData(this.bsn.bsn);
           this.userName = brpData?.Persoon?.Persoonsgegevens?.Naam ? brpData.Persoon.Persoonsgegevens.Naam : 'Onbekende gebruiker';

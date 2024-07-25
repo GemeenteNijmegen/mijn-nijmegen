@@ -37,11 +37,10 @@ export class HaalCentraalApi {
           'X-API-KEY': apiKey,
         });
 
-      if (data?.Persoon?.overleden) {
-        throw new Error('Persoon lijkt overleden');
-      } else if (data?.Persoon) {
-        return data;
+      if (data?.Personen[0]) {
+        return data?.Personen[0];
       }
+
       throw new Error('Het ophalen van persoonsgegevens is misgegaan.');
     } catch (error: any) {
       console.error('BRP API:', error.message);
