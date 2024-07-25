@@ -37,8 +37,10 @@ export class HaalCentraalApi {
           'X-API-KEY': apiKey,
         });
 
-      if (data?.Personen[0]) {
-        return data?.Personen[0];
+      if (data?.personen[0]?.overlijden) {
+        throw new Error('Persoon lijkt overleden');
+      } else if (data?.personen[0]) {
+        return data.personen[0];
       }
 
       throw new Error('Het ophalen van persoonsgegevens is misgegaan.');

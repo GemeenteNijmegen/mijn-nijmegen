@@ -1,9 +1,9 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
-import { Session } from '@gemeentenijmegen/session';
 import * as homeTemplate from './templates/home.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { Session } from '@gemeentenijmegen/session';
 
 
 interface HomeRequestHandlerProps {
