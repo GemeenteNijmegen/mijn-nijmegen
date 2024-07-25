@@ -148,16 +148,6 @@ export class ssmParamsConstruct extends Construct {
       parameterName: Statics.ssmBrpApiEndpointUrl,
     });
 
-    new SSM.StringParameter(this, 'ssm_dns_1', {
-      stringValue: '11099 13 2 D7B02BB98488B0D5AAD2509A2ADF73D69C26C9AF27D3CA5AC472A8DD6115AB08',
-      parameterName: Statics.ssmNijmegenDSRecordValue,
-    });
-
-    new SSM.StringParameter(this, 'ssm_slack_1', {
-      stringValue: '-',
-      parameterName: Statics.ssmSlackWebhookUrl,
-    });
-
     this.addZaakParameters();
   }
 
