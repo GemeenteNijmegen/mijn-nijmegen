@@ -148,6 +148,11 @@ export class ssmParamsConstruct extends Construct {
       parameterName: Statics.ssmBrpApiEndpointUrl,
     });
 
+    new SSM.StringParameter(this, 'ssm_brp_2', {
+      stringValue: 'https://proefomgeving.haalcentraal.nl/haalcentraal/api/brp/personen',
+      parameterName: Statics.ssmBrpHaalCentraalApiEndpointUrl,
+    });
+
     this.addZaakParameters();
   }
 

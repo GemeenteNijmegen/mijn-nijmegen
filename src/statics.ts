@@ -69,6 +69,16 @@ export abstract class Statics {
   static readonly ssmBrpApiEndpointUrl: string = '/cdk/mijn-nijmegen/brp-api-url';
 
   /**
+   * BRP Haal Centraal API endpoint
+   */
+  static readonly ssmBrpHaalCentraalApiEndpointUrl: string = '/cdk/mijn-nijmegen/brp-haal-centraal-api-url';
+
+  /**
+   * BRP Haal Centraal API Key
+   */
+  static readonly haalCentraalApiKeySecret: string = '/cdk/mijn-nijmegen/brp-haal-centraal-api-key';
+
+  /**
    * Uitkeringsgegevens API endpoint
    */
   static readonly ssmUitkeringsApiEndpointUrl: string = '/cdk/mijn-nijmegen/uitkerings-api-url';

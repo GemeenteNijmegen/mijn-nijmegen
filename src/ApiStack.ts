@@ -227,9 +227,10 @@ export class ApiStack extends Stack implements Configurable {
   private authFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
     const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
     const authServiceClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'auth-serice-client-secret', Statics.authServiceClientSecretArn);
+    const brpHaalCentraalApiKeySecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'brp-haal-centraal-api-key-auth-secret', Statics.haalCentraalApiKeySecret);
 
     const authFunction = new ApiFunction(this, 'auth-function', {
-      description: 'Authenticatie-lambd voor de Mijn Nijmegen-applicatie.',
+      description: 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/auth',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
@@ -242,6 +243,9 @@ export class ApiStack extends Stack implements Configurable {
         MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
         MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
+        BRP_HAAL_CENTRAAL_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpHaalCentraalApiEndpointUrl),
+        BRP_API_KEY: brpHaalCentraalApiKeySecret.secretArn,
+        HAALCENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
         DIGID_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmDIGIDScope),
         EHERKENNING_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmEherkenningScope),
         YIVI_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmYiviScope),
@@ -267,7 +271,7 @@ export class ApiStack extends Stack implements Configurable {
   private persoonsgegevensFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
 
     const persoonsGegevensFunction = new ApiFunction(this, 'persoonsgegevens-function', {
-      description: 'Authenticatie-lambd voor de Mijn Nijmegen-applicatie.',
+      description: 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/persoonsgegevens',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
@@ -278,6 +282,7 @@ export class ApiStack extends Stack implements Configurable {
         MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
         MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
+        HAALCENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
       },
       apiFunction: PersoonsgegevensFunction,
     });
