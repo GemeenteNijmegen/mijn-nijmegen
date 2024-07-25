@@ -162,7 +162,7 @@ export class ssmParamsConstruct extends Construct {
       stringValue: '-',
       parameterName: Statics.ssmSlackWebhookUrl,
     });
-
+    
     this.addZaakParameters();
   }
 
