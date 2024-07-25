@@ -25,16 +25,6 @@
   resolved "https://registry.yarnpkg.com/@aws-cdk/asset-node-proxy-agent-v6/-/asset-node-proxy-agent-v6-2.0.3.tgz#9b5d213b5ce5ad4461f6a4720195ff8de72e6523"
   integrity sha512-twhuEG+JPOYCYPx/xy5uH2+VUsIEhPTzDY0F1KuB+ocjWWB/KEDiOVL19nHvbPCB6fhWnkykXEMJ4HHcKvjtvg==
 
-"@aws-cdk/aws-apigatewayv2-alpha@^2.114.1-alpha.0":
-  version "2.114.1-alpha.0"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigatewayv2-alpha/-/aws-apigatewayv2-alpha-2.114.1-alpha.0.tgz#831f9c448f6e5d4244d312f85ac73a2a434201d7"
-  integrity sha512-+urpw7rGrtdGvnHQlDXVfpI3TmQJpjuT9jTOeuuG5dNDczLJrUokBvQdj6H6KsngdmBC07WfWU+yL2MBp71ozA==
-
-"@aws-cdk/aws-apigatewayv2-integrations-alpha@^2.114.1-alpha.0":
-  version "2.114.1-alpha.0"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigatewayv2-integrations-alpha/-/aws-apigatewayv2-integrations-alpha-2.114.1-alpha.0.tgz#38b94fa36c4ee4b8f417c1430f7f7b4f0c5bd72c"
-  integrity sha512-iB7vHoTguDKLeatJS4p/8OBqH4oLCG2xBn1toUFwMD9iWoRGahGiK0pYuq24baab3SuNS1LFThJw5Zu0R+cZGA==
-
 "@aws-cdk/integ-tests-alpha@2.147.3-alpha.0":
   version "2.147.3-alpha.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/integ-tests-alpha/-/integ-tests-alpha-2.147.3-alpha.0.tgz#4daea57fc6f387f44daa3f7a20cecfd3b6f9f536"

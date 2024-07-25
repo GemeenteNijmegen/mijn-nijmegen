@@ -1,6 +1,6 @@
-import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
-import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
 import { aws_secretsmanager, Duration, Stack, StackProps } from 'aws-cdk-lib';
+import * as apigatewayv2 from 'aws-cdk-lib/aws-apigatewayv2';
+import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { AccountPrincipal, PrincipalWithConditions, Role } from 'aws-cdk-lib/aws-iam';
 import { ISecret, Secret } from 'aws-cdk-lib/aws-secretsmanager';

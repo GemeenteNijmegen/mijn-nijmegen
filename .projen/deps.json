@@ -108,14 +108,6 @@
       "type": "build"
     },
     {
-      "name": "@aws-cdk/aws-apigatewayv2-alpha",
-      "type": "runtime"
-    },
-    {
-      "name": "@aws-cdk/aws-apigatewayv2-integrations-alpha",
-      "type": "runtime"
-    },
-    {
       "name": "@aws-lambda-powertools/logger",
       "type": "runtime"
     },
