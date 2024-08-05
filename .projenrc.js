@@ -7,6 +7,7 @@ const project = new GemeenteNijmegenCdkApp({
   depsUpgradeOptions: {
     workflowOptions: {
       branches: ['development'],
+      labels: ['auto-merge'],
     },
   },
   deps: [
@@ -20,8 +21,6 @@ const project = new GemeenteNijmegenCdkApp({
     '@gemeentenijmegen/session',
     '@gemeentenijmegen/utils',
     'dotenv',
-    '@aws-cdk/aws-apigatewayv2-alpha',
-    '@aws-cdk/aws-apigatewayv2-integrations-alpha',
     '@aws-sdk/client-secrets-manager',
     '@aws-solutions-constructs/aws-lambda-dynamodb',
     '@pepperize/cdk-route53-health-check',

@@ -23,6 +23,7 @@
     "src/app/logout/logout-function.ts",
     "src/app/persoonsgegevens/persoonsgegevens-function.ts",
     "src/app/uitkeringen/uitkering-function.ts",
+    "src/app/zaakgerichtwerken/zaakgerichtwerken-function.ts",
     "src/app/zaken/zaken-function.ts",
     "tsconfig.dev.json",
     "tsconfig.json"

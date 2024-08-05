@@ -66,6 +66,7 @@ junit.xml
 !/src/app/logout/logout-function.ts
 !/src/app/persoonsgegevens/persoonsgegevens-function.ts
 !/src/app/uitkeringen/uitkering-function.ts
+!/src/app/zaakgerichtwerken/zaakgerichtwerken-function.ts
 !/src/app/zaken/zaken-function.ts
 !/.github/workflows/emergency.yml
 !/.github/workflows/auto-merge.yml
