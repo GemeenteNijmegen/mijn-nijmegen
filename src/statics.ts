@@ -69,9 +69,24 @@ export abstract class Statics {
   static readonly ssmBrpApiEndpointUrl: string = '/cdk/mijn-nijmegen/brp-api-url';
 
   /**
+   * BRP Haal Centraal API endpoint
+   */
+  static readonly ssmBrpHaalCentraalApiEndpointUrl: string = '/cdk/mijn-nijmegen/brp-haal-centraal-api-url';
+
+  /**
+   * BRP Haal Centraal API Key
+   */
+  static readonly haalCentraalApiKeySecret: string = '/cdk/mijn-nijmegen/brp-haal-centraal-api-key';
+
+  /**
    * Uitkeringsgegevens API endpoint
    */
   static readonly ssmUitkeringsApiEndpointUrl: string = '/cdk/mijn-nijmegen/uitkerings-api-url';
+
+  /**
+   * Uitkeringsgegevens API endpoint
+   */
+  static readonly ssmInzageApiEndpointUrl: string = '/cdk/mijn-nijmegen/inzage-api-url';
 
   // MARK: DNS
   /**
@@ -105,9 +120,6 @@ export abstract class Statics {
   static readonly ssmZoneIdNew: string = '/cdk/mijn-nijmegen/zones/csp-id';
   static readonly ssmZoneNameNew: string = '/cdk/mijn-nijmegen/zones/csp-name';
 
-  /** There seems to be no way to get the required ds record value in the CDK/API */
-  static readonly ssmNijmegenDSRecordValue: string = '/cdk/mijn-nijmegen/ds-record-value';
-
   static readonly certificatePath: string = '/cdk/mijn-nijmegen/certificates';
   static readonly certificateArn: string = '/cdk/mijn-nijmegen/certificates/certificate-arn';
 
@@ -122,7 +134,6 @@ export abstract class Statics {
   static readonly ssmWafAclArn: string = '/cdk/mijn-nijmegen/waf/acl-arn';
 
   static readonly ssmMonitoringLambdaArn: string = '/cdk/mijn-nijmegen/monitoring-lambda-arn';
-  static readonly ssmSlackWebhookUrl: string = '/cdk/mijn-nijmegen/slack-webhook-url';
 
   // MARK: ZGW configuration
 
@@ -139,6 +150,11 @@ export abstract class Statics {
   static readonly vipTakenSecret: string = '/cdk/mijn-nijmegen/vip-takentoken-new';
 
   static readonly submissionstorageKey: string = '/cdk/mijn-nijmegen/submissionstorage-key';
+
+  /**
+   * Secret for verwerkingenlogging inzage
+   */
+  static readonly ssmInzageApiKey: string = '/cdk/mijn-inzage/vw-inzage-api-key';
 
   /**
    * PoC authentication service

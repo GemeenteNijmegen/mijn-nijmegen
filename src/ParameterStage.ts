@@ -128,6 +128,11 @@ export class ssmParamsConstruct extends Construct {
       parameterName: Statics.ssmUitkeringsApiEndpointUrl,
     });
 
+    new SSM.StringParameter(this, 'ssm_inzage_1', {
+      stringValue: 'https://g423bazyr0.execute-api.eu-west-1.amazonaws.com/dev/',
+      parameterName: Statics.ssmInzageApiEndpointUrl,
+    });
+
     new SecretsManager.Secret(this, 'secret_1', {
       secretName: Statics.secretOIDCClientSecret,
       description: 'OpenIDConnect client secret',
@@ -143,14 +148,9 @@ export class ssmParamsConstruct extends Construct {
       parameterName: Statics.ssmBrpApiEndpointUrl,
     });
 
-    new SSM.StringParameter(this, 'ssm_dns_1', {
-      stringValue: '11099 13 2 D7B02BB98488B0D5AAD2509A2ADF73D69C26C9AF27D3CA5AC472A8DD6115AB08',
-      parameterName: Statics.ssmNijmegenDSRecordValue,
-    });
-
-    new SSM.StringParameter(this, 'ssm_slack_1', {
-      stringValue: '-',
-      parameterName: Statics.ssmSlackWebhookUrl,
+    new SSM.StringParameter(this, 'ssm_brp_2', {
+      stringValue: 'https://proefomgeving.haalcentraal.nl/haalcentraal/api/brp/personen',
+      parameterName: Statics.ssmBrpHaalCentraalApiEndpointUrl,
     });
 
     this.addZaakParameters();
@@ -201,5 +201,16 @@ export class ssmParamsConstruct extends Construct {
       secretName: Statics.authServiceClientSecretArn,
       description: 'OAuth client secret for mijn-nijmegen to use with authenticaiton service (Poc)',
     });
+
+    new SecretsManager.Secret(this, 'inzage_secret_1', {
+      secretName: Statics.ssmInzageApiKey,
+      description: 'Verwerkingen logging Api key',
+    });
+
+    new SecretsManager.Secret(this, 'haalcentraal_secret_1', {
+      secretName: Statics.haalCentraalApiKeySecret,
+      description: 'BRP Api key haal centraal',
+    });
+
   }
 }

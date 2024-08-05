@@ -52,6 +52,9 @@
           "spawn": "bundle:app/home/home.lambda"
         },
         {
+          "spawn": "bundle:app/inzage/inzage.lambda"
+        },
+        {
           "spawn": "bundle:app/login/login.lambda"
         },
         {
@@ -62,6 +65,9 @@
         },
         {
           "spawn": "bundle:app/uitkeringen/uitkering.lambda"
+        },
+        {
+          "spawn": "bundle:app/zaakgerichtwerken/zaakgerichtwerken.lambda"
         },
         {
           "spawn": "bundle:app/zaken/zaken.lambda"
@@ -101,6 +107,24 @@
       "steps": [
         {
           "exec": "esbuild --bundle src/app/home/home.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/app/home/home.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+        }
+      ]
+    },
+    "bundle:app/inzage/inzage.lambda": {
+      "name": "bundle:app/inzage/inzage.lambda",
+      "description": "Create a JavaScript bundle from src/app/inzage/inzage.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/inzage/inzage.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/app/inzage/inzage.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+        }
+      ]
+    },
+    "bundle:app/inzage/inzage.lambda:watch": {
+      "name": "bundle:app/inzage/inzage.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/app/inzage/inzage.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/inzage/inzage.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/app/inzage/inzage.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
         }
       ]
     },
@@ -173,6 +197,24 @@
       "steps": [
         {
           "exec": "esbuild --bundle src/app/uitkeringen/uitkering.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/app/uitkeringen/uitkering.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+        }
+      ]
+    },
+    "bundle:app/zaakgerichtwerken/zaakgerichtwerken.lambda": {
+      "name": "bundle:app/zaakgerichtwerken/zaakgerichtwerken.lambda",
+      "description": "Create a JavaScript bundle from src/app/zaakgerichtwerken/zaakgerichtwerken.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/zaakgerichtwerken/zaakgerichtwerken.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/app/zaakgerichtwerken/zaakgerichtwerken.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+        }
+      ]
+    },
+    "bundle:app/zaakgerichtwerken/zaakgerichtwerken.lambda:watch": {
+      "name": "bundle:app/zaakgerichtwerken/zaakgerichtwerken.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/app/zaakgerichtwerken/zaakgerichtwerken.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/zaakgerichtwerken/zaakgerichtwerken.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/app/zaakgerichtwerken/zaakgerichtwerken.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
         }
       ]
     },
@@ -426,13 +468,13 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@aws-sdk/client-ssm,@aws-sdk/types,@glen/jest-raw-loader,@playwright/test,@types/aws-lambda,@types/jest,aws-sdk-client-mock,axios-mock-adapter,copyfiles,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jest,jest-aws-client-mock,projen,ts-jest,ts-node,typescript,@aws-cdk/aws-apigatewayv2-alpha,@aws-cdk/aws-apigatewayv2-integrations-alpha,@aws-lambda-powertools/logger,@aws-sdk/client-dynamodb,@aws-sdk/client-secrets-manager,@aws-solutions-constructs/aws-lambda-dynamodb,@gemeentenijmegen/apiclient,@gemeentenijmegen/apigateway-http,@gemeentenijmegen/aws-constructs,@gemeentenijmegen/projen-project-type,@gemeentenijmegen/session,@gemeentenijmegen/utils,@pepperize/cdk-route53-health-check,@types/mustache,axios,cdk-remote-stack,cookie,dotenv,jsonwebtoken,mustache,object-mapper,openid-client,xml2js,zod"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@aws-sdk/client-ssm,@aws-sdk/types,@glen/jest-raw-loader,@playwright/test,@types/aws-lambda,@types/jest,aws-sdk-client-mock,axios-mock-adapter,copyfiles,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jest,jest-aws-client-mock,projen,ts-jest,ts-node,typescript,@aws-lambda-powertools/logger,@aws-sdk/client-dynamodb,@aws-sdk/client-secrets-manager,@aws-solutions-constructs/aws-lambda-dynamodb,@gemeentenijmegen/apiclient,@gemeentenijmegen/apigateway-http,@gemeentenijmegen/aws-constructs,@gemeentenijmegen/projen-project-type,@gemeentenijmegen/session,@gemeentenijmegen/utils,@pepperize/cdk-route53-health-check,@types/mustache,axios,cdk-remote-stack,cookie,dotenv,jsonwebtoken,mustache,object-mapper,openid-client,xml2js,zod"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @aws-sdk/client-ssm @aws-sdk/types @glen/jest-raw-loader @playwright/test @types/aws-lambda @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk aws-sdk-client-mock axios-mock-adapter copyfiles esbuild eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-aws-client-mock jest-junit projen standard-version ts-jest ts-node typescript @aws-cdk/aws-apigatewayv2-alpha @aws-cdk/aws-apigatewayv2-integrations-alpha @aws-lambda-powertools/logger @aws-sdk/client-dynamodb @aws-sdk/client-secrets-manager @aws-solutions-constructs/aws-lambda-dynamodb @gemeentenijmegen/apiclient @gemeentenijmegen/apigateway-http @gemeentenijmegen/aws-constructs @gemeentenijmegen/projen-project-type @gemeentenijmegen/session @gemeentenijmegen/utils @pepperize/cdk-route53-health-check @types/mustache aws-cdk-lib axios cdk-remote-stack constructs cookie dotenv jsonwebtoken mustache object-mapper openid-client xml2js zod"
+          "exec": "yarn upgrade @aws-sdk/client-ssm @aws-sdk/types @glen/jest-raw-loader @playwright/test @types/aws-lambda @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk aws-sdk-client-mock axios-mock-adapter copyfiles esbuild eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-aws-client-mock jest-junit projen standard-version ts-jest ts-node typescript @aws-lambda-powertools/logger @aws-sdk/client-dynamodb @aws-sdk/client-secrets-manager @aws-solutions-constructs/aws-lambda-dynamodb @gemeentenijmegen/apiclient @gemeentenijmegen/apigateway-http @gemeentenijmegen/aws-constructs @gemeentenijmegen/projen-project-type @gemeentenijmegen/session @gemeentenijmegen/utils @pepperize/cdk-route53-health-check @types/mustache aws-cdk-lib axios cdk-remote-stack constructs cookie dotenv jsonwebtoken mustache object-mapper openid-client xml2js zod"
         },
         {
           "exec": "npx projen"

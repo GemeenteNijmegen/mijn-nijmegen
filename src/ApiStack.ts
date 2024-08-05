@@ -1,6 +1,6 @@
-import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
-import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
 import { aws_secretsmanager, Duration, Stack, StackProps } from 'aws-cdk-lib';
+import * as apigatewayv2 from 'aws-cdk-lib/aws-apigatewayv2';
+import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { AccountPrincipal, PrincipalWithConditions, Role } from 'aws-cdk-lib/aws-iam';
 import { ISecret, Secret } from 'aws-cdk-lib/aws-secretsmanager';
@@ -13,6 +13,7 @@ import { LoginFunction } from './app/login/login-function';
 import { LogoutFunction } from './app/logout/logout-function';
 import { PersoonsgegevensFunction } from './app/persoonsgegevens/persoonsgegevens-function';
 import { UitkeringFunction } from './app/uitkeringen/uitkering-function';
+import { ZaakgerichtwerkenFunction } from './app/zaakgerichtwerken/zaakgerichtwerken-function';
 import { ZakenFunction } from './app/zaken/zaken-function';
 import { Configurable, Configuration } from './Configuration';
 import { DynamoDbReadOnlyPolicy } from './iam/dynamodb-readonly-policy';
@@ -59,7 +60,7 @@ export class ApiStack extends Stack implements Configurable {
     const appDomain = `${subdomain}.nijmegen.nl`;
 
     const readOnlyRole = this.readOnlyRole();
-    this.setFunctions(`https://${appDomain}/`, readOnlyRole);
+    this.setFunctions(`https://${appDomain}/`, readOnlyRole, props.configuration);
     this.allowReadAccessToTable(readOnlyRole, this.sessionsTable);
   }
 
@@ -68,7 +69,7 @@ export class ApiStack extends Stack implements Configurable {
    * add routes to the gateway.
    * @param {string} baseUrl the application url
    */
-  setFunctions(baseUrl: string, readOnlyRole: Role) {
+  setFunctions(baseUrl: string, readOnlyRole: Role, configuration: Configuration) {
     const tlsConfig = this.mtlsConfig();
     /**
      * The login function generates a login URL and renders the login page.
@@ -101,9 +102,15 @@ export class ApiStack extends Stack implements Configurable {
     const uitkeringenFunction = this.uitkeringenFunction(baseUrl, readOnlyRole, tlsConfig);
 
     /**
-     * The zaken function show your current uitkering.
+     * The zaken function show your current zaken.
      */
     const zakenFunction = this.zakenFunction(baseUrl, readOnlyRole);
+
+    /**
+     * The zgw function show your current zaken from the zgw endpoint.
+     */
+    const zaakgerichtwerkenFunction = this.zaakgerichtwerkenFunction();
+
 
     //MARK: Routes
     this.api.addRoutes({
@@ -159,6 +166,21 @@ export class ApiStack extends Stack implements Configurable {
       integration: new HttpLambdaIntegration('zaak', zakenFunction.lambda),
       routeKey: apigatewayv2.HttpRouteKey.with('/zaken/{zaaksource}/{zaakid}/download/{file+}', apigatewayv2.HttpMethod.GET),
     });
+
+    new apigatewayv2.HttpRoute(this, 'zaakgerichtwerken-route', {
+      httpApi: this.api,
+      integration: new HttpLambdaIntegration('zaakgerichtwerken', zaakgerichtwerkenFunction),
+      routeKey: apigatewayv2.HttpRouteKey.with('/zgw', apigatewayv2.HttpMethod.GET),
+    });
+
+    if (configuration.inzageLive) {
+      const inzageFunction = this.inzageFunction(baseUrl, readOnlyRole, tlsConfig);
+      this.api.addRoutes({
+        integration: new HttpLambdaIntegration('inzage', inzageFunction.lambda),
+        path: '/inzage',
+        methods: [apigatewayv2.HttpMethod.GET],
+      });
+    }
   }
 
   private mtlsConfig() {
@@ -216,9 +238,10 @@ export class ApiStack extends Stack implements Configurable {
   private authFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
     const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
     const authServiceClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'auth-serice-client-secret', Statics.authServiceClientSecretArn);
+    const brpHaalCentraalApiKeySecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'brp-haal-centraal-api-key-auth-secret', Statics.haalCentraalApiKeySecret);
 
     const authFunction = new ApiFunction(this, 'auth-function', {
-      description: 'Authenticatie-lambd voor de Mijn Nijmegen-applicatie.',
+      description: 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/auth',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
@@ -231,6 +254,9 @@ export class ApiStack extends Stack implements Configurable {
         MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
         MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
+        BRP_HAAL_CENTRAAL_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpHaalCentraalApiEndpointUrl),
+        BRP_API_KEY: brpHaalCentraalApiKeySecret.secretArn,
+        HAALCENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
         DIGID_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmDIGIDScope),
         EHERKENNING_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmEherkenningScope),
         YIVI_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmYiviScope),
@@ -245,6 +271,7 @@ export class ApiStack extends Stack implements Configurable {
       },
       apiFunction: AuthFunction,
     });
+    brpHaalCentraalApiKeySecret.grantRead(authFunction.lambda);
     authServiceClientSecret.grantRead(authFunction.lambda);
     oidcSecret.grantRead(authFunction.lambda);
     mtlsConfig.privateKey.grantRead(authFunction.lambda);
@@ -256,7 +283,7 @@ export class ApiStack extends Stack implements Configurable {
   private persoonsgegevensFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
 
     const persoonsGegevensFunction = new ApiFunction(this, 'persoonsgegevens-function', {
-      description: 'Authenticatie-lambd voor de Mijn Nijmegen-applicatie.',
+      description: 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/persoonsgegevens',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
@@ -267,6 +294,7 @@ export class ApiStack extends Stack implements Configurable {
         MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
         MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
+        HAALCENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
       },
       apiFunction: PersoonsgegevensFunction,
     });
@@ -298,6 +326,33 @@ export class ApiStack extends Stack implements Configurable {
     mtlsConfig.rootCert.grantRead(uitkeringenFunction.lambda);
     return uitkeringenFunction;
   }
+
+  private inzageFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
+    const inzageApiKey = Secret.fromSecretNameV2(this, 'inzage-key', Statics.ssmInzageApiKey);
+
+    const inzageFunction = new ApiFunction(this, 'inzage-function', {
+      description: 'Inzage-lambda voor de Mijn Nijmegen-applicatie.',
+      codePath: 'app/inzage',
+      table: this.sessionsTable,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: baseUrl,
+      readOnlyRole,
+      environment: {
+        MTLS_PRIVATE_KEY_ARN: mtlsConfig.privateKey.secretArn,
+        MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
+        MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
+        BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
+        INZAGE_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmInzageApiEndpointUrl),
+        INZAGE_API_KEY_ARN: inzageApiKey.secretArn,
+      },
+      apiFunction: UitkeringFunction,
+    });
+    mtlsConfig.privateKey.grantRead(inzageFunction.lambda);
+    mtlsConfig.clientCert.grantRead(inzageFunction.lambda);
+    mtlsConfig.rootCert.grantRead(inzageFunction.lambda);
+    return inzageFunction;
+  }
+
 
   private zakenFunction(baseUrl: string, readOnlyRole: Role) {
     const jwtSecret = Secret.fromSecretNameV2(this, 'jwt-token-secret', Statics.vipJwtSecret);
@@ -334,6 +389,10 @@ export class ApiStack extends Stack implements Configurable {
     tokenSecret.grantRead(zakenFunction.lambda);
     submissionstorageKey.grantRead(zakenFunction.lambda);
     return zakenFunction;
+  }
+
+  private zaakgerichtwerkenFunction() {
+    return new ZaakgerichtwerkenFunction(this, 'zgwfunction');
   }
 
   /**

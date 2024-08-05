@@ -150,10 +150,12 @@
           "**//build-tools/**",
           "src/app/auth/auth.lambda.ts",
           "src/app/home/home.lambda.ts",
+          "src/app/inzage/inzage.lambda.ts",
           "src/app/login/login.lambda.ts",
           "src/app/logout/logout.lambda.ts",
           "src/app/persoonsgegevens/persoonsgegevens.lambda.ts",
           "src/app/uitkeringen/uitkering.lambda.ts",
+          "src/app/zaakgerichtwerken/zaakgerichtwerken.lambda.ts",
           "src/app/zaken/zaken.lambda.ts"
         ],
         "optionalDependencies": false,
@@ -176,7 +178,7 @@
         }
       }
     ],
-    "no-duplicate-imports": [
+    "import/no-duplicates": [
       "error"
     ],
     "no-shadow": [
