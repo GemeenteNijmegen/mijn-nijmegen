@@ -8,6 +8,7 @@ import { IdTokenClaims, TokenSet } from 'openid-client';
 import { AuthenticationService } from './AuthenticationService';
 import { BrpApi } from './BrpApi';
 
+import { HaalCentraalApi } from './HaalCentraalApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 
 type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
@@ -270,9 +271,15 @@ export class Person implements User {
   async getUserName(): Promise<string> {
     if (typeof this.userName !== 'string') {
       try {
-        const brpApi = new BrpApi(this.config.apiClient);
-        const brpData = await brpApi.getBrpData(this.bsn.bsn);
-        this.userName = brpData?.Persoon?.Persoonsgegevens?.Naam ? brpData.Persoon.Persoonsgegevens.Naam : 'Onbekende gebruiker';
+        if (process.env.HAALCENTRAAL_LIVE == 'true') {
+          const brpApi = new HaalCentraalApi(this.config.apiClient);
+          const brpData = await brpApi.getBrpData(this.bsn.bsn);
+          this.userName = brpData?.personen[0]?.naam?.volledigeNaam ? brpData.personen[0].naam.volledigeNaam : 'Onbekende gebruiker';
+        } else {
+          const brpApi = new BrpApi(this.config.apiClient);
+          const brpData = await brpApi.getBrpData(this.bsn.bsn);
+          this.userName = brpData?.Persoon?.Persoonsgegevens?.Naam ? brpData.Persoon.Persoonsgegevens.Naam : 'Onbekende gebruiker';
+        }
       } catch (error) {
         console.error('Error getting username');
         this.userName = 'Onbekende gebruiker';
