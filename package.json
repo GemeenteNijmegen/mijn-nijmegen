@@ -53,8 +53,8 @@
     "@types/aws-lambda": "^8.10.142",
     "@types/jest": "^29.5.12",
     "@types/node": "^18",
-    "@typescript-eslint/eslint-plugin": "^7",
-    "@typescript-eslint/parser": "^7",
+    "@typescript-eslint/eslint-plugin": "^6",
+    "@typescript-eslint/parser": "^6",
     "aws-cdk": "^2.22.0",
     "aws-sdk-client-mock": "^2.2.0",
     "axios-mock-adapter": "^1.22.0",
@@ -104,7 +104,6 @@
   },
   "version": "0.0.0",
   "jest": {
-    "coverageProvider": "v8",
     "setupFiles": [
       "dotenv/config"
     ],
