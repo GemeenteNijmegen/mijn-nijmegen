@@ -5,6 +5,7 @@ export class HaalCentraalApi {
 
   private endpoint: string;
   private client: ApiClient;
+  private apikey: string;
 
   constructor(client: ApiClient) {
     this.client = client;
@@ -15,6 +16,7 @@ export class HaalCentraalApi {
       throw new Error('Could not initialize brp api as no key parameter is provided in BRP_API_KEY');
     }
     this.endpoint = process.env.BRP_HAAL_CENTRAAL_API_URL;
+    this.apikey = process.env.BRP_API_KEY;
   }
 
   /**
@@ -24,7 +26,7 @@ export class HaalCentraalApi {
    */
   async getBrpData(bsn: string) {
     try {
-      const apiKey = await AWS.getSecret(process.env.BRP_API_KEY_ARN!);
+      const apiKey = await AWS.getSecret(this.apikey);
       const aBsn = new Bsn(bsn);
       let data = await this.client.postData(this.endpoint,
         {
