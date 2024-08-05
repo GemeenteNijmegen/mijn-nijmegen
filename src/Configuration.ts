@@ -132,10 +132,10 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenIsLive: true,
     zakenUseSubmissions: true,
     zakenAllowDomains: ['APV', 'JZ'],
-    authenticationServiceConfiguration: {
-      clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
-      endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
-    },
+    // authenticationServiceConfiguration: {
+    //   clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
+    //   endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
+    // },
     inzageLive: true,
   },
   acceptance: {
