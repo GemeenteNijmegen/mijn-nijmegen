@@ -1,15 +1,15 @@
 import { Logger } from '@aws-lambda-powertools/logger';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
-import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
-import { IdTokenClaims, TokenSet } from 'openid-client';
 import { AuthenticationService } from './AuthenticationService';
 import { BrpApi } from './BrpApi';
 
 import { HaalCentraalApi } from './HaalCentraalApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { Session } from '@gemeentenijmegen/session';
+import { IdTokenClaims, TokenSet } from 'openid-client';
 
 type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
 const eHerkenningKvkNummerClaim = 'urn:etoegang:1.9:EntityConcernedID:KvKnr';
@@ -272,7 +272,7 @@ export class Person implements User {
     if (typeof this.userName !== 'string') {
       try {
         if (process.env.HAALCENTRAAL_LIVE == 'true') {
-          const brpApi = new HaalCentraalApi(this.config.apiClient);
+          const brpApi = new HaalCentraalApi();
           const brpData = await brpApi.getBrpData(this.bsn.bsn);
           this.userName = brpData?.personen[0]?.naam?.volledigeNaam ? brpData.personen[0].naam.volledigeNaam : 'Onbekende gebruiker';
         } else {
