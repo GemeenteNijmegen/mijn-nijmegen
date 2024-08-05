@@ -207,5 +207,10 @@ export class ssmParamsConstruct extends Construct {
       description: 'Verwerkingen logging Api key',
     });
 
+    new SecretsManager.Secret(this, 'haalcentraal_secret_1', {
+      secretName: Statics.haalCentraalApiKeySecret,
+      description: 'BRP Api key haal centraal',
+    });
+
   }
 }
