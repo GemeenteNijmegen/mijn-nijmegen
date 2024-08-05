@@ -85,7 +85,7 @@ class ZaakAggregatorStack extends Stack {
     const plan = api.addUsagePlan('plan', {
       description: 'internal use',
     });
-    const key = new ApiKey(this, 'key', {
+    const key = new ApiKey(this, 'apikey', {
       description: 'Internal use for Mijn Nijmegen',
     });
     plan.addApiKey(key);
@@ -95,5 +95,4 @@ class ZaakAggregatorStack extends Stack {
     });
     return api;
   }
-
 }
