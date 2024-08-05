@@ -84,7 +84,7 @@ test('StackHasLambdas', () => {
   // const zone = dnsStack.zone;
   const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'test', configuration: config });
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::Lambda::Function', 9);
+  template.resourceCountIs('AWS::Lambda::Function', 8);
 });
 
 
@@ -100,7 +100,7 @@ test('StackHasSecrets', () => {
   const app = new App();
   const stack = new ParameterStack(app, 'test');
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::SecretsManager::Secret', 9);
+  template.resourceCountIs('AWS::SecretsManager::Secret', 8);
 });
 
 
