@@ -1,8 +1,9 @@
 import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
 import { Aspects, Stack, StackProps, Stage, StageProps, Tags } from 'aws-cdk-lib';
-import { ApiKey, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { ApiKey, LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Construct } from 'constructs';
 import { ApiStack } from './ApiStack';
+import { ZaakgerichtwerkenFunction } from './app/zaakgerichtwerken/zaakgerichtwerken-function';
 import { CloudfrontStack } from './CloudfrontStack';
 import { Configurable } from './Configuration';
 import { DNSSECStack } from './DNSSECStack';
@@ -68,6 +69,15 @@ class ZaakAggregatorStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
+    const api = this.api();
+
+    const resource = api.root.addResource('zaken');
+    resource.addMethod('GET', new LambdaIntegration(new ZaakgerichtwerkenFunction(this, 'zgwfunction')), {
+      apiKeyRequired: true,
+    });
+  }
+
+  private api() {
     const api = new RestApi(this, 'zaken', {
       description: 'API Gateway for ZaakAggregator',
     });
@@ -80,6 +90,7 @@ class ZaakAggregatorStack extends Stack {
     });
     plan.addApiKey(key);
     plan.node.addDependency(key);
+    return api;
   }
 
 }
