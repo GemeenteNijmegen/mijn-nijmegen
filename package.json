@@ -18,6 +18,8 @@
     "bundle:app/persoonsgegevens/persoonsgegevens.lambda:watch": "npx projen bundle:app/persoonsgegevens/persoonsgegevens.lambda:watch",
     "bundle:app/uitkeringen/uitkering.lambda": "npx projen bundle:app/uitkeringen/uitkering.lambda",
     "bundle:app/uitkeringen/uitkering.lambda:watch": "npx projen bundle:app/uitkeringen/uitkering.lambda:watch",
+    "bundle:app/zaakgerichtwerken/zaakgerichtwerken.lambda": "npx projen bundle:app/zaakgerichtwerken/zaakgerichtwerken.lambda",
+    "bundle:app/zaakgerichtwerken/zaakgerichtwerken.lambda:watch": "npx projen bundle:app/zaakgerichtwerken/zaakgerichtwerken.lambda:watch",
     "bundle:app/zaken/zaken.lambda": "npx projen bundle:app/zaken/zaken.lambda",
     "bundle:app/zaken/zaken.lambda:watch": "npx projen bundle:app/zaken/zaken.lambda:watch",
     "clobber": "npx projen clobber",

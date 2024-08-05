@@ -67,6 +67,9 @@
           "spawn": "bundle:app/uitkeringen/uitkering.lambda"
         },
         {
+          "spawn": "bundle:app/zaakgerichtwerken/zaakgerichtwerken.lambda"
+        },
+        {
           "spawn": "bundle:app/zaken/zaken.lambda"
         }
       ]
@@ -194,6 +197,24 @@
       "steps": [
         {
           "exec": "esbuild --bundle src/app/uitkeringen/uitkering.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/app/uitkeringen/uitkering.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+        }
+      ]
+    },
+    "bundle:app/zaakgerichtwerken/zaakgerichtwerken.lambda": {
+      "name": "bundle:app/zaakgerichtwerken/zaakgerichtwerken.lambda",
+      "description": "Create a JavaScript bundle from src/app/zaakgerichtwerken/zaakgerichtwerken.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/zaakgerichtwerken/zaakgerichtwerken.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/app/zaakgerichtwerken/zaakgerichtwerken.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+        }
+      ]
+    },
+    "bundle:app/zaakgerichtwerken/zaakgerichtwerken.lambda:watch": {
+      "name": "bundle:app/zaakgerichtwerken/zaakgerichtwerken.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/app/zaakgerichtwerken/zaakgerichtwerken.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/zaakgerichtwerken/zaakgerichtwerken.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/app/zaakgerichtwerken/zaakgerichtwerken.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
         }
       ]
     },

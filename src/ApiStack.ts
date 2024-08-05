@@ -13,6 +13,7 @@ import { LoginFunction } from './app/login/login-function';
 import { LogoutFunction } from './app/logout/logout-function';
 import { PersoonsgegevensFunction } from './app/persoonsgegevens/persoonsgegevens-function';
 import { UitkeringFunction } from './app/uitkeringen/uitkering-function';
+import { ZaakgerichtwerkenFunction } from './app/zaakgerichtwerken/zaakgerichtwerken-function';
 import { ZakenFunction } from './app/zaken/zaken-function';
 import { Configurable, Configuration } from './Configuration';
 import { DynamoDbReadOnlyPolicy } from './iam/dynamodb-readonly-policy';
@@ -101,9 +102,14 @@ export class ApiStack extends Stack implements Configurable {
     const uitkeringenFunction = this.uitkeringenFunction(baseUrl, readOnlyRole, tlsConfig);
 
     /**
-     * The zaken function show your current uitkering.
+     * The zaken function show your current zaken.
      */
     const zakenFunction = this.zakenFunction(baseUrl, readOnlyRole);
+
+    /**
+     * The zgw function show your current zaken from the zgw endpoint.
+     */
+    const zaakgerichtwerkenFunction = this.zaakgerichtwerkenFunction();
 
 
     //MARK: Routes
@@ -161,6 +167,11 @@ export class ApiStack extends Stack implements Configurable {
       routeKey: apigatewayv2.HttpRouteKey.with('/zaken/{zaaksource}/{zaakid}/download/{file+}', apigatewayv2.HttpMethod.GET),
     });
 
+    new apigatewayv2.HttpRoute(this, 'zaakgerichtwerken-route', {
+      httpApi: this.api,
+      integration: new HttpLambdaIntegration('zaakgerichtwerken', zaakgerichtwerkenFunction),
+      routeKey: apigatewayv2.HttpRouteKey.with('/zgw', apigatewayv2.HttpMethod.GET),
+    });
 
     if (configuration.inzageLive) {
       const inzageFunction = this.inzageFunction(baseUrl, readOnlyRole, tlsConfig);
@@ -372,6 +383,10 @@ export class ApiStack extends Stack implements Configurable {
     tokenSecret.grantRead(zakenFunction.lambda);
     submissionstorageKey.grantRead(zakenFunction.lambda);
     return zakenFunction;
+  }
+
+  private zaakgerichtwerkenFunction() {
+    return new ZaakgerichtwerkenFunction(this, 'zgwfunction');
   }
 
   /**
