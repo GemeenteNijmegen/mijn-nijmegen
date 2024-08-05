@@ -2,7 +2,7 @@ import { Response } from '@gemeentenijmegen/apigateway-http';
 import { APIGatewayEvent } from 'aws-lambda';
 
 function parseEvent(event: APIGatewayEvent) {
-  if (!event?.queryStringParameters?.userType || event?.queryStringParameters?.userType) {
+  if (!event?.queryStringParameters?.userType || !event?.queryStringParameters?.userIdentifier) {
     throw Error('required params not set');
   }
   return {
