@@ -1,15 +1,21 @@
-import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { Response } from '@gemeentenijmegen/apigateway-http';
+import { APIGatewayEvent } from 'aws-lambda';
 
-// function parseEvent(event: APIGatewayProxyEventV2) {
-//   return {
-//   };
-// }
+function parseEvent(event: APIGatewayEvent) {
+  if (!event?.queryStringParameters?.userType || event?.queryStringParameters?.userType) {
+    throw Error('required params not set');
+  }
+  return {
+    userType: event.queryStringParameters.userType,
+    identifier: event.queryStringParameters.userIdentifier,
+  };
+}
 
-export async function handler (event: APIGatewayProxyEventV2, _context: any):Promise<ApiGatewayV2Response> {
+export async function handler (event: APIGatewayEvent, _context: any):Promise<any> {
   try {
     console.debug(JSON.stringify(event));
-    // const params = parseEvent(event);
+    const params = parseEvent(event);
+    console.log('user type: ', params.userType);
     return Response.ok();
   } catch (err) {
     console.error(err);
