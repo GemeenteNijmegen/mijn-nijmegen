@@ -88,6 +88,11 @@ export abstract class Statics {
    */
   static readonly ssmInzageApiEndpointUrl: string = '/cdk/mijn-nijmegen/inzage-api-url';
 
+  /**
+   * BRP ZGW API Key for ZGW Aggregator endpoint
+   */
+  static readonly zgwAggregatorApiKey: string = '/cdk/mijn-nijmegen/zgw-aggregator-api-key';
+
   // MARK: DNS
   /**
    * Route53 Zone ID and name for csp-nijmegen.nl in this account.

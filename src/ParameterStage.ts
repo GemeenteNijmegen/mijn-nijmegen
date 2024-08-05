@@ -212,5 +212,11 @@ export class ssmParamsConstruct extends Construct {
       description: 'BRP Api key haal centraal',
     });
 
+    // ZGW extraction api kye
+    new SecretsManager.Secret(this, 'zgw_apikey', {
+      secretName: Statics.zgwAggregatorApiKey,
+      description: 'ZGW Aggregator api key',
+    });
+
   }
 }

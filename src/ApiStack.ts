@@ -392,7 +392,14 @@ export class ApiStack extends Stack implements Configurable {
   }
 
   private zaakgerichtwerkenFunction() {
-    return new ZaakgerichtwerkenFunction(this, 'zgwfunction');
+    const key = Secret.fromSecretNameV2(this, 'zgw-aggr-secret', Statics.zgwAggregatorApiKey);
+    const zgwFunction = new ZaakgerichtwerkenFunction(this, 'zgwfunction', {
+      environment: {
+        API_KEY_ARN: key.secretArn,
+      },
+    });
+    key.grantRead(zgwFunction);
+    return zgwFunction;
   }
 
   /**
