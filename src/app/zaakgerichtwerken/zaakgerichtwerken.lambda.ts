@@ -4,7 +4,7 @@ import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 function parseEvent(event: APIGatewayProxyEventV2) {
   return {
-    apikey: event.headers.Authorization,
+    apikey: event.headers['x-api-key'],
   };
 }
 
