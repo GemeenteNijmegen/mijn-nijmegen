@@ -1,14 +1,10 @@
-import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Bsn, AWS } from '@gemeentenijmegen/utils';
 
 export class HaalCentraalApi {
 
   private endpoint: string;
-  private client: ApiClient;
-  private apikey: string;
 
-  constructor(client: ApiClient) {
-    this.client = client;
+  constructor() {
     if (!process.env.BRP_HAAL_CENTRAAL_API_URL) {
       throw new Error('Could not initialize brp api as no endpoint parameter is provided in BRP_API_URL');
     }
@@ -16,7 +12,6 @@ export class HaalCentraalApi {
       throw new Error('Could not initialize brp api as no key parameter is provided in BRP_API_KEY');
     }
     this.endpoint = process.env.BRP_HAAL_CENTRAAL_API_URL;
-    this.apikey = process.env.BRP_API_KEY;
   }
 
   /**
@@ -26,23 +21,27 @@ export class HaalCentraalApi {
    */
   async getBrpData(bsn: string) {
     try {
-      const apiKey = await AWS.getSecret(this.apikey);
+      const apiKey = await AWS.getSecret(process.env.BRP_API_KEY_ARN!);
       const aBsn = new Bsn(bsn);
-      let data = await this.client.postData(this.endpoint,
+      const response = await fetch(this.endpoint,
         {
-          type: 'RaadpleegMetBurgerservicenummer',
-          fields: ['aNummer', 'adressering', 'burgerservicenummer', 'datumEersteInschrijvingGBA', 'datumInschrijvingInGemeente', 'europeesKiesrecht', 'geboorte', 'gemeenteVanInschrijving', 'geslacht', 'gezag', 'immigratie', 'indicatieCurateleRegister', 'indicatieGezagMinderjarige', 'kinderen', 'leeftijd', 'naam', 'nationaliteiten', 'ouders', 'overlijden', 'partners', 'uitsluitingKiesrecht', 'verblijfplaats', 'verblijfstitel', 'verblijfplaatsBinnenland', 'adresseringBinnenland'],
-          burgerservicenummer: aBsn.bsn,
-        },
-        {
-          'Content-type': 'application/json',
-          'X-API-KEY': apiKey,
+          headers: {
+            'Content-type': 'application/json',
+            'X-API-KEY': apiKey,
+          },
+          body: JSON.stringify({
+            type: 'RaadpleegMetBurgerservicenummer',
+            fields: ['aNummer', 'adressering', 'burgerservicenummer', 'datumEersteInschrijvingGBA', 'datumInschrijvingInGemeente', 'europeesKiesrecht', 'geboorte', 'gemeenteVanInschrijving', 'geslacht', 'gezag', 'immigratie', 'indicatieCurateleRegister', 'indicatieGezagMinderjarige', 'kinderen', 'leeftijd', 'naam', 'nationaliteiten', 'ouders', 'overlijden', 'partners', 'uitsluitingKiesrecht', 'verblijfplaats', 'verblijfstitel', 'verblijfplaatsBinnenland', 'adresseringBinnenland'],
+            burgerservicenummer: aBsn.bsn,
+          }),
         });
 
-      if (data?.personen[0]?.overlijden) {
+      const data = await response.json() as Promise<any>;
+
+      if ((await data).personen[0].overlijden) {
         throw new Error('Persoon lijkt overleden');
-      } else if (data?.personen[0]) {
-        return data.personen[0];
+      } else if ((await data).personen[0]) {
+        return (await data).personen[0];
       }
 
       throw new Error('Het ophalen van persoonsgegevens is misgegaan.');
