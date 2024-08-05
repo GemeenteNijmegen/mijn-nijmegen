@@ -90,6 +90,9 @@ class ZaakAggregatorStack extends Stack {
     });
     plan.addApiKey(key);
     plan.node.addDependency(key);
+    plan.addApiStage({
+      stage: api.deploymentStage,
+    });
     return api;
   }
 
