@@ -178,7 +178,7 @@
         }
       }
     ],
-    "import/no-duplicates": [
+    "no-duplicate-imports": [
       "error"
     ],
     "no-shadow": [
