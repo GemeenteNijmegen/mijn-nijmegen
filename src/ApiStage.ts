@@ -1,5 +1,6 @@
 import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
-import { Aspects, Stage, StageProps, Tags } from 'aws-cdk-lib';
+import { Aspects, Stack, StackProps, Stage, StageProps, Tags } from 'aws-cdk-lib';
+import { ApiKey, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Construct } from 'constructs';
 import { ApiStack } from './ApiStack';
 import { CloudfrontStack } from './CloudfrontStack';
@@ -57,5 +58,28 @@ export class ApiStage extends Stage {
     cloudfrontStack.addDependency(usEastStack);
 
     new WafStack(this, 'waf-stack', { env: { region: 'us-east-1' }, branch: branchName });
+
+    new ZaakAggregatorStack(this, 'zaakaggregator');
   }
+}
+
+
+class ZaakAggregatorStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
+    super(scope, id, props);
+
+    const api = new RestApi(this, 'zaken', {
+      description: 'API Gateway for ZaakAggregator',
+    });
+
+    const plan = api.addUsagePlan('plan', {
+      description: 'internal use',
+    });
+    const key = new ApiKey(this, 'key', {
+      description: 'Internal use for Mijn Nijmegen',
+    });
+    plan.addApiKey(key);
+    plan.node.addDependency(key);
+  }
+
 }
