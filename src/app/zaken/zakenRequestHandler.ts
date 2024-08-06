@@ -47,7 +47,7 @@ export class ZakenRequestHandler {
     let zaken: ZaakSummary[];
     if (process.env.APIGATEWAY_BASEURL && process.env.APIGATEWAY_APIKEY) {
       this.apikey = await AWS.getSecret(process.env.APIGATEWAY_APIKEY);
-      const response = await fetch(`${process.env.APIGATEWAY_BASEURL}/zaken` + new URLSearchParams({
+      const response = await fetch(`${process.env.APIGATEWAY_BASEURL}zaken?` + new URLSearchParams({
         userType: user.type,
         userIdentifier: user.identifier,
       }).toString(), {
