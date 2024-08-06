@@ -21,7 +21,7 @@ export class HaalCentraalApi {
    */
   async getBrpData(bsn: string) {
     try {
-      const apiKey = await AWS.getSecret(process.env.BRP_API_KEY_ARN!);
+      const apiKey = await AWS.getSecret(process.env.BRP_API_KEY!);
       const aBsn = new Bsn(bsn);
       const response = await fetch(this.endpoint,
         {
