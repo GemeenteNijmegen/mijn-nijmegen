@@ -101,6 +101,9 @@ class ZaakAggregatorStack extends Stack {
         ALLOWED_ZAKEN_DOMAINS: this.configuration.zakenAllowDomains.join(','),
       },
     });
+    for (let secret of [jwtSecret, tokenSecret, submissionstorageKey]) {
+      secret.grantRead(zgwLambda);
+    }
     return zgwLambda;
   }
 
