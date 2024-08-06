@@ -125,7 +125,7 @@ export const ZaakSummarySchema = z.object({
   uiterlijke_einddatum: z.coerce.date().optional().nullable(),
   einddatum: z.coerce.date().optional().nullable(),
   zaak_type: z.string(),
-  status: z.string(),
+  status: z.string().optional().nullable(),
   resultaat: z.string().optional().nullable(),
 });
 
