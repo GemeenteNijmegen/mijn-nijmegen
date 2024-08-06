@@ -378,6 +378,7 @@ export class ApiStack extends Stack implements Configurable {
       const apiKey = Secret.fromSecretNameV2(this, 'zakenapikey', Statics.zaakAggregatorApiGatewayApiKey);
       zakenFunction.lambda.addEnvironment('APIGATEWAY_BASEURL', StringParameter.valueForStringParameter(this, Statics.ssmZaakAggregatorApiGatewayEndpointUrl));
       zakenFunction.lambda.addEnvironment('APIGATEWAY_APIKEY', apiKey.secretArn);
+      apiKey.grantRead(zakenFunction.lambda);
     }
 
     jwtSecret.grantRead(zakenFunction.lambda);

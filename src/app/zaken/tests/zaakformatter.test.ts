@@ -23,3 +23,17 @@ describe('Zaakformatter can format single zaak', () => {
     expect(new ZaakFormatter().formatZaak(zaak).behandelaars).toBe('Antoon Andriessen, Piet Pietersen');
   });
 });
+
+describe('Zaakformatter can format lists', () => {
+  const zaken = [
+    {
+      identifier: 'TDL28.627',
+      internal_id: 'inzendingen/TDL28.627',
+      registratiedatum: new Date('2024-08-06T09:47:01.000Z'),
+      zaak_type: 'test',
+      status: 'Ontvangen',
+    },
+  ];
+  const zaakSummaries = new ZaakFormatter().formatList(zaken);
+  expect(zaakSummaries).toBeTruthy();
+});

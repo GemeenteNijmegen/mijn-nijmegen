@@ -2,9 +2,10 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { AWS } from '@gemeentenijmegen/utils';
+import { z } from 'zod';
 import * as zaakTemplate from './templates/zaak.mustache';
 import * as zakenTemplate from './templates/zaken.mustache';
-import { UserFromSession } from './User';
+import { User, UserFromSession } from './User';
 import { ZaakAggregator } from './ZaakAggregator';
 import { ZaakSummary } from './ZaakConnector';
 import { ZaakFormatter } from './ZaakFormatter';
@@ -46,17 +47,7 @@ export class ZakenRequestHandler {
     const user = UserFromSession(session);
     let zaken: ZaakSummary[];
     if (process.env.APIGATEWAY_BASEURL && process.env.APIGATEWAY_APIKEY) {
-      this.apikey = await AWS.getSecret(process.env.APIGATEWAY_APIKEY);
-      const response = await fetch(`${process.env.APIGATEWAY_BASEURL}/zaken` + new URLSearchParams({
-        userType: user.type,
-        userIdentifier: user.identifier,
-      }).toString(), {
-        method: 'GET',
-        headers: {
-          'x-api-key': this.apikey,
-        },
-      });
-      zaken = await response.json() as ZaakSummary[];
+      zaken = await this.fetchList(user);
     } else {
       zaken = await this.zaakAggregator.list(user);
     }
@@ -74,6 +65,23 @@ export class ZakenRequestHandler {
     // render page
     const html = await render(data, zakenTemplate.default);
     return Response.html(html, 200, session.getCookie());
+  }
+
+  private async fetchList(user: User) {
+    if (!process.env.APIGATEWAY_BASEURL || !process.env.APIGATEWAY_APIKEY) {
+      throw Error('not all required env variables are set');
+    }
+    this.apikey = await AWS.getSecret(process.env.APIGATEWAY_APIKEY);
+    const response = await fetch(`${process.env.APIGATEWAY_BASEURL}zaken?` + new URLSearchParams({
+      userType: user.type,
+      userIdentifier: user.identifier,
+    }).toString(), {
+      method: 'GET',
+      headers: {
+        'x-api-key': this.apikey,
+      },
+    });
+    return ZaakSummariesSchema.parse(await response.json());
   }
 
   async get(zaakConnectorId: string, zaakId: string, session: Session) {
@@ -109,3 +117,16 @@ export class ZakenRequestHandler {
   }
 }
 
+export const ZaakSummarySchema = z.object({
+  identifier: z.string(),
+  internal_id: z.string(),
+  registratiedatum: z.coerce.date(),
+  verwachtte_einddatum: z.coerce.date().optional(),
+  uiterlijke_einddatum: z.coerce.date().optional(),
+  einddatum: z.coerce.date().optional().nullable(),
+  zaak_type: z.string(),
+  status: z.string().nullable(),
+  resultaat: z.string().optional().nullable(),
+});
+
+export const ZaakSummariesSchema = z.array(ZaakSummarySchema);
