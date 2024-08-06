@@ -9,7 +9,7 @@ import { Bsn } from '@gemeentenijmegen/utils';
 export interface User {
   identifier: string;
   type: 'person' | 'organisation';
-  idToken: string;
+  idToken?: string;
   userName?: string;
   delegatedToken?: string;
 }
@@ -20,12 +20,12 @@ export interface User {
 export class Person implements User {
   bsn: Bsn;
   identifier: string;
-  idToken: string;
+  idToken?: string;
   userName?: string;
   type: 'person' | 'organisation' = 'person';
   delegatedToken?: string;
 
-  constructor(bsn: Bsn, idToken: string, delegatedToken?: string, userName?: string) {
+  constructor(bsn: Bsn, idToken?: string, delegatedToken?: string, userName?: string) {
     this.bsn = bsn;
     this.identifier = bsn.bsn;
     this.userName = userName;
@@ -40,12 +40,12 @@ export class Person implements User {
 export class Organisation implements User {
   kvk: string;
   identifier: string;
-  idToken: string;
+  idToken?: string;
   type: 'person' | 'organisation' = 'organisation';
   userName?: string;
   delegatedToken?: string;
 
-  constructor(kvk: string, idToken: string, delegatedToken?: string, userName?: string) {
+  constructor(kvk: string, idToken?: string, delegatedToken?: string, userName?: string) {
     this.kvk = kvk;
     this.identifier = kvk;
     this.userName = userName;
@@ -54,6 +54,13 @@ export class Organisation implements User {
   }
 }
 
+export function UserFromAttributes(userType: string, identifier: string) {
+  if (userType == 'organisation') {
+    return new Organisation(identifier);
+  } else {
+    return new Person(new Bsn(identifier));
+  }
+}
 
 export function UserFromSession(session: Session): User {
   const userType = session.getValue('user_type');
