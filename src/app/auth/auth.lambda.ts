@@ -1,10 +1,10 @@
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { AWS } from '@gemeentenijmegen/utils';
 import { AuthenticationService } from './AuthenticationService';
 import { AuthRequestHandler } from './AuthRequestHandler';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 const apiClient = new ApiClient();
