@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import path from 'path';
+import { HomeRequestHandler } from '../homeRequestHandler';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
-import { HomeRequestHandler } from '../homeRequestHandler';
 
 beforeAll(() => {
 

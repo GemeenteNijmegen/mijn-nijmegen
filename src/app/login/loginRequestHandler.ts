@@ -1,9 +1,9 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
-import { Session } from '@gemeentenijmegen/session';
 import * as loginTemplate from './templates/login.mustache';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { render } from '../../shared/render';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { Session } from '@gemeentenijmegen/session';
 
 interface LoginRequestHandlerProps {
   /**
