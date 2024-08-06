@@ -1,10 +1,12 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
+import { AWS } from '@gemeentenijmegen/utils';
 import * as zaakTemplate from './templates/zaak.mustache';
 import * as zakenTemplate from './templates/zaken.mustache';
 import { UserFromSession } from './User';
 import { ZaakAggregator } from './ZaakAggregator';
+import { ZaakSummary } from './ZaakConnector';
 import { ZaakFormatter } from './ZaakFormatter';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
@@ -12,6 +14,7 @@ import { render } from '../../shared/render';
 export class ZakenRequestHandler {
   private zaakAggregator: ZaakAggregator;
   private dynamoDBClient: DynamoDBClient;
+  private apikey?: string;
   constructor(zaakAggregator: ZaakAggregator, dynamoDBClient: DynamoDBClient) {
     this.zaakAggregator = zaakAggregator;
     this.dynamoDBClient = dynamoDBClient;
@@ -40,12 +43,24 @@ export class ZakenRequestHandler {
   }
 
   async list(session: Session) {
-    if (process.env.APIGATEWAY_URL) {
-      //use new functionality
-    }
     const user = UserFromSession(session);
+    let zaken: ZaakSummary[];
+    if (process.env.APIGATEWAY_BASEURL && process.env.APIGATEWAY_APIKEY) {
+      this.apikey = await AWS.getSecret(process.env.APIGATEWAY_APIKEY);
+      const response = await fetch(`${process.env.APIGATEWAY_BASEURL}/zaken` + new URLSearchParams({
+        userType: user.type,
+        userIdentifier: user.identifier,
+      }).toString(), {
+        method: 'GET',
+        headers: {
+          'x-api-key': this.apikey,
+        },
+      });
+      zaken = await response.json() as ZaakSummary[];
+    } else {
+      zaken = await this.zaakAggregator.list(user);
+    }
 
-    const zaken = await this.zaakAggregator.list(user);
     const zaakSummaries = new ZaakFormatter().formatList(zaken);
 
     const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
