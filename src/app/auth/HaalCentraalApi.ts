@@ -25,6 +25,7 @@ export class HaalCentraalApi {
       const aBsn = new Bsn(bsn);
       const response = await fetch(this.endpoint,
         {
+          method: 'POST',
           headers: {
             'Content-type': 'application/json',
             'X-API-KEY': apiKey,
