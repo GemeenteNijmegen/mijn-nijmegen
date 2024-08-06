@@ -272,7 +272,7 @@ export class Person implements User {
     if (typeof this.userName !== 'string') {
       try {
         if (process.env.HAALCENTRAAL_LIVE == 'true') {
-          const brpApi = new HaalCentraalApi(this.config.apiClient);
+          const brpApi = new HaalCentraalApi();
           const brpData = await brpApi.getBrpData(this.bsn.bsn);
           this.userName = brpData?.personen[0]?.naam?.volledigeNaam ? brpData.personen[0].naam.volledigeNaam : 'Onbekende gebruiker';
         } else {

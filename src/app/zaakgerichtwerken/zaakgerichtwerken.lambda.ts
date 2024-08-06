@@ -1,16 +1,27 @@
-import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { Response } from '@gemeentenijmegen/apigateway-http';
+import { APIGatewayEvent } from 'aws-lambda';
+import { ZaakRequestHandler } from './ZaakRequestHandler';
+import { UserFromAttributes } from '../zaken/User';
 
-// function parseEvent(event: APIGatewayProxyEventV2) {
-//   return {
-//   };
-// }
+const zaakRequestHandler = new ZaakRequestHandler();
 
-export async function handler (_event: APIGatewayProxyEventV2, _context: any):Promise<ApiGatewayV2Response> {
+function parseEvent(event: APIGatewayEvent) {
+  if (!event?.queryStringParameters?.userType || !event?.queryStringParameters?.userIdentifier) {
+    throw Error('required params not set');
+  }
+  return {
+    userType: event.queryStringParameters.userType,
+    identifier: event.queryStringParameters.userIdentifier,
+  };
+}
+
+export async function handler (event: APIGatewayEvent, _context: any):Promise<any> {
   try {
-    // const params = parseEvent(event);
-    return Response.ok();
-
+    console.debug(JSON.stringify(event));
+    const params = parseEvent(event);
+    const user = UserFromAttributes(params.userType, params.identifier);
+    const result = zaakRequestHandler.list(user);
+    return Response.json(result);
   } catch (err) {
     console.error(err);
     return Response.error(500);
