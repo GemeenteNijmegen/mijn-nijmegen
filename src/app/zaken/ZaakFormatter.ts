@@ -12,13 +12,19 @@ export class ZaakFormatter {
   }
 
   formatZaakSummary(zaak: ZaakSummary) {
-    return {
-      ...zaak,
-      registratiedatum: this.humanDate(zaak.registratiedatum),
-      verwachtte_einddatum: this.humanDate(zaak.verwachtte_einddatum),
-      uiterlijke_einddatum: this.humanDate(zaak.uiterlijke_einddatum),
-      einddatum: this.humanDate(zaak.einddatum),
-    };
+    try {
+      const result = {
+        ...zaak,
+        registratiedatum: this.humanDate(zaak.registratiedatum),
+        verwachtte_einddatum: this.humanDate(zaak.verwachtte_einddatum),
+        uiterlijke_einddatum: this.humanDate(zaak.uiterlijke_einddatum),
+        einddatum: this.humanDate(zaak.einddatum),
+      };
+      return result;
+    } catch (error) {
+      console.error(error, zaak, 'hopelijk iets met datums');
+      throw (error);
+    }
   }
 
   formatZaak(zaak: SingleZaak) {
