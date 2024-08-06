@@ -375,7 +375,6 @@ export class ApiStack extends Stack implements Configurable {
     });
 
     if (this.configuration.useZakenFromAggregatorAPI) {
-      zakenFunction.lambda.addEnvironment('APIGATEWAY_URL', StringParameter.valueForStringParameter(this, Statics.ssmZaakAggregatorApiGatewayEndpointUrl));
       const apiKey = Secret.fromSecretNameV2(this, 'zakenapikey', Statics.zaakAggregatorApiGatewayApiKey);
       zakenFunction.lambda.addEnvironment('APIGATEWAY_BASEURL', StringParameter.valueForStringParameter(this, Statics.ssmZaakAggregatorApiGatewayEndpointUrl));
       zakenFunction.lambda.addEnvironment('APIGATEWAY_APIKEY', apiKey.secretArn);
