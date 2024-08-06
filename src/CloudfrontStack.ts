@@ -169,7 +169,7 @@ export class CloudfrontStack extends Stack {
             'Referer',
             'Accept-Language',
             'Accept-Datetime',
-            'Authoriz',
+            'x-api-key',
           ),
         }),
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,

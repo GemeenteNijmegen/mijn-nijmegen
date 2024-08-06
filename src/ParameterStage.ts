@@ -212,5 +212,10 @@ export class ssmParamsConstruct extends Construct {
       description: 'BRP Api key haal centraal',
     });
 
+    new SecretsManager.Secret(this, 'zaakaggregator-api-key', {
+      secretName: Statics.zaakAggregatorApiGatewayApiKey,
+      description: 'Api key zaakaggregator',
+    });
+
   }
 }

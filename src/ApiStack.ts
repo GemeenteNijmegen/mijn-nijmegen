@@ -13,7 +13,6 @@ import { LoginFunction } from './app/login/login-function';
 import { LogoutFunction } from './app/logout/logout-function';
 import { PersoonsgegevensFunction } from './app/persoonsgegevens/persoonsgegevens-function';
 import { UitkeringFunction } from './app/uitkeringen/uitkering-function';
-import { ZaakgerichtwerkenFunction } from './app/zaakgerichtwerken/zaakgerichtwerken-function';
 import { ZakenFunction } from './app/zaken/zaken-function';
 import { Configurable, Configuration } from './Configuration';
 import { DynamoDbReadOnlyPolicy } from './iam/dynamodb-readonly-policy';
@@ -106,11 +105,6 @@ export class ApiStack extends Stack implements Configurable {
      */
     const zakenFunction = this.zakenFunction(baseUrl, readOnlyRole);
 
-    /**
-     * The zgw function show your current zaken from the zgw endpoint.
-     */
-    const zaakgerichtwerkenFunction = this.zaakgerichtwerkenFunction();
-
 
     //MARK: Routes
     this.api.addRoutes({
@@ -165,12 +159,6 @@ export class ApiStack extends Stack implements Configurable {
       httpApi: this.api,
       integration: new HttpLambdaIntegration('zaak', zakenFunction.lambda),
       routeKey: apigatewayv2.HttpRouteKey.with('/zaken/{zaaksource}/{zaakid}/download/{file+}', apigatewayv2.HttpMethod.GET),
-    });
-
-    new apigatewayv2.HttpRoute(this, 'zaakgerichtwerken-route', {
-      httpApi: this.api,
-      integration: new HttpLambdaIntegration('zaakgerichtwerken', zaakgerichtwerkenFunction),
-      routeKey: apigatewayv2.HttpRouteKey.with('/zgw', apigatewayv2.HttpMethod.GET),
     });
 
     if (configuration.inzageLive) {
@@ -385,14 +373,17 @@ export class ApiStack extends Stack implements Configurable {
         memorySize: 1024,
       },
     });
+
+    if (this.configuration.useZakenFromAggregatorAPI) {
+      const apiKey = Secret.fromSecretNameV2(this, 'zakenapikey', Statics.zaakAggregatorApiGatewayApiKey);
+      zakenFunction.lambda.addEnvironment('APIGATEWAY_BASEURL', StringParameter.valueForStringParameter(this, Statics.ssmZaakAggregatorApiGatewayEndpointUrl));
+      zakenFunction.lambda.addEnvironment('APIGATEWAY_APIKEY', apiKey.secretArn);
+    }
+
     jwtSecret.grantRead(zakenFunction.lambda);
     tokenSecret.grantRead(zakenFunction.lambda);
     submissionstorageKey.grantRead(zakenFunction.lambda);
     return zakenFunction;
-  }
-
-  private zaakgerichtwerkenFunction() {
-    return new ZaakgerichtwerkenFunction(this, 'zgwfunction');
   }
 
   /**
