@@ -1,5 +1,5 @@
 import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
-import { Aspects, Stack, StackProps, Stage, StageProps, Tags } from 'aws-cdk-lib';
+import { Aspects, Stack, Stage, StageProps, Tags } from 'aws-cdk-lib';
 import { ApiKey, LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
