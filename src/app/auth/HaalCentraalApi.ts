@@ -25,6 +25,7 @@ export class HaalCentraalApi {
       const aBsn = new Bsn(bsn);
       const response = await fetch(this.endpoint,
         {
+          method: 'POST',
           headers: {
             'Content-type': 'application/json',
             'X-API-KEY': apiKey,
@@ -32,7 +33,7 @@ export class HaalCentraalApi {
           body: JSON.stringify({
             type: 'RaadpleegMetBurgerservicenummer',
             fields: ['aNummer', 'adressering', 'burgerservicenummer', 'datumEersteInschrijvingGBA', 'datumInschrijvingInGemeente', 'europeesKiesrecht', 'geboorte', 'gemeenteVanInschrijving', 'geslacht', 'gezag', 'immigratie', 'indicatieCurateleRegister', 'indicatieGezagMinderjarige', 'kinderen', 'leeftijd', 'naam', 'nationaliteiten', 'ouders', 'overlijden', 'partners', 'uitsluitingKiesrecht', 'verblijfplaats', 'verblijfstitel', 'verblijfplaatsBinnenland', 'adresseringBinnenland'],
-            burgerservicenummer: aBsn.bsn,
+            burgerservicenummer: [aBsn.bsn],
           }),
         });
 
