@@ -93,7 +93,12 @@ export abstract class Statics {
    * URL for the API Gateway for zaken
    * This will be extracted and hosted on a stable domain later
    */
-  static readonly ssmApiGatewayEndpointUrl: string = '/cdk/mijn-nijmegen/zaken-api-url';
+  static readonly ssmZaakAggregatorApiGatewayEndpointUrl: string = '/cdk/mijn-nijmegen/zaken-api-url';
+
+  /**
+   * Zaak aggregator API GATEWAY API Key
+   */
+  static readonly zaakAggregatorApiGatewayApiKey: string = '/cdk/mijn-nijmegen/zaken-api-key';
 
   // MARK: DNS
   /**

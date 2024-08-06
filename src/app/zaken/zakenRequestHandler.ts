@@ -40,6 +40,9 @@ export class ZakenRequestHandler {
   }
 
   async list(session: Session) {
+    if (process.env.APIGATEWAY_URL) {
+      //use new functionality
+    }
     const user = UserFromSession(session);
 
     const zaken = await this.zaakAggregator.list(user);

@@ -353,7 +353,6 @@ export class ApiStack extends Stack implements Configurable {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
       environment: {
-        APIGATEWAY_URL: StringParameter.valueForStringParameter(this, Statics.ssmApiGatewayEndpointUrl),
         VIP_JWT_SECRET_ARN: jwtSecret.secretArn,
         VIP_TAKEN_SECRET_ARN: tokenSecret.secretArn,
         SUBMISSIONSTORAGE_SECRET_ARN: submissionstorageKey.secretArn,
@@ -374,6 +373,13 @@ export class ApiStack extends Stack implements Configurable {
         memorySize: 1024,
       },
     });
+
+    if (this.configuration.useZakenFromAggregatorAPI) {
+      zakenFunction.lambda.addEnvironment('APIGATEWAY_URL', StringParameter.valueForStringParameter(this, Statics.ssmZaakAggregatorApiGatewayEndpointUrl));
+      const apiKey = Secret.fromSecretNameV2(this, 'zakenapikey', Statics.vipTakenSecret);
+      zakenFunction.lambda.addEnvironment('APIGATEWAY_APIKEY', StringParameter.valueForStringParameter(this, Statics.ssmZaakAggregatorApiGatewayEndpointUrl));
+    }
+
     jwtSecret.grantRead(zakenFunction.lambda);
     tokenSecret.grantRead(zakenFunction.lambda);
     submissionstorageKey.grantRead(zakenFunction.lambda);
