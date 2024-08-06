@@ -33,7 +33,7 @@ export class HaalCentraalApi {
           body: JSON.stringify({
             type: 'RaadpleegMetBurgerservicenummer',
             fields: ['aNummer', 'adressering', 'burgerservicenummer', 'datumEersteInschrijvingGBA', 'datumInschrijvingInGemeente', 'europeesKiesrecht', 'geboorte', 'gemeenteVanInschrijving', 'geslacht', 'gezag', 'immigratie', 'indicatieCurateleRegister', 'indicatieGezagMinderjarige', 'kinderen', 'leeftijd', 'naam', 'nationaliteiten', 'ouders', 'overlijden', 'partners', 'uitsluitingKiesrecht', 'verblijfplaats', 'verblijfstitel', 'verblijfplaatsBinnenland', 'adresseringBinnenland'],
-            burgerservicenummer: aBsn.bsn,
+            burgerservicenummer: [aBsn.bsn],
           }),
         });
 
