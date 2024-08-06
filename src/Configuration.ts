@@ -113,6 +113,8 @@ export interface Configuration {
     endpoint: string;
     clientId: string;
   };
+
+  readonly useZakenFromAggregatorAPI?: boolean;
 }
 
 
@@ -137,6 +139,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     //   endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
     // },
     inzageLive: true,
+    useZakenFromAggregatorAPI: true,
   },
   acceptance: {
     branch: 'acceptance',
@@ -158,6 +161,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     //   endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
     // },
     inzageLive: false,
+    useZakenFromAggregatorAPI: false,
   },
   production: {
     branch: 'production',
@@ -175,6 +179,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenUseSubmissions: true,
     zakenAllowDomains: ['APV'], // JZ is not yet available in prod
     inzageLive: false,
+    useZakenFromAggregatorAPI: false,
   },
 };
 

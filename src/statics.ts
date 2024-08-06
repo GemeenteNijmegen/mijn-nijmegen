@@ -88,6 +88,13 @@ export abstract class Statics {
    */
   static readonly ssmInzageApiEndpointUrl: string = '/cdk/mijn-nijmegen/inzage-api-url';
 
+  /**
+   * TODO: TEMPORARY remove later
+   * URL for the API Gateway for zaken
+   * This will be extracted and hosted on a stable domain later
+   */
+  static readonly ssmApiGatewayEndpointUrl: string = '/cdk/mijn-nijmegen/zaken-api-url';
+
   // MARK: DNS
   /**
    * Route53 Zone ID and name for csp-nijmegen.nl in this account.

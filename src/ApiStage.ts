@@ -123,6 +123,11 @@ class ZaakAggregatorStack extends Stack {
     plan.addApiStage({
       stage: api.deploymentStage,
     });
+    new StringParameter(this, 'gateway-url', {
+      parameterName: Statics.ssmApiGatewayEndpointUrl,
+      description: 'url for the API Gateway',
+      stringValue: api.deploymentStage.urlForPath(),
+    });
     return api;
   }
 }

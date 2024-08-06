@@ -353,6 +353,7 @@ export class ApiStack extends Stack implements Configurable {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: baseUrl,
       environment: {
+        APIGATEWAY_URL: StringParameter.valueForStringParameter(this, Statics.ssmApiGatewayEndpointUrl),
         VIP_JWT_SECRET_ARN: jwtSecret.secretArn,
         VIP_TAKEN_SECRET_ARN: tokenSecret.secretArn,
         SUBMISSIONSTORAGE_SECRET_ARN: submissionstorageKey.secretArn,
