@@ -1,15 +1,15 @@
 import { Logger } from '@aws-lambda-powertools/logger';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
+import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
+import { IdTokenClaims, TokenSet } from 'openid-client';
 import { AuthenticationService } from './AuthenticationService';
 import { BrpApi } from './BrpApi';
 
 import { HaalCentraalApi } from './HaalCentraalApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { Session } from '@gemeentenijmegen/session';
-import { IdTokenClaims, TokenSet } from 'openid-client';
 
 type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
 const eHerkenningKvkNummerClaim = 'urn:etoegang:1.9:EntityConcernedID:KvKnr';

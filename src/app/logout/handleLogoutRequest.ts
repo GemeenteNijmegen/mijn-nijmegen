@@ -1,9 +1,9 @@
-import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
-import * as logoutTemplate from './templates/logout.mustache';
-import { render } from '../../shared/render';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import cookie from 'cookie';
+import * as logoutTemplate from './templates/logout.mustache';
+import { render } from '../../shared/render';
 
 export async function handleLogoutRequest(cookies: string, dynamoDBClient: DynamoDBClient) {
   let session = new Session(cookies, dynamoDBClient);
