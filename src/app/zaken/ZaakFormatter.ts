@@ -16,9 +16,9 @@ export class ZaakFormatter {
       const result = {
         ...zaak,
         registratiedatum: this.humanDate(zaak.registratiedatum),
-        verwachtte_einddatum: this.humanDate(zaak.verwachtte_einddatum),
+        verwachtte_einddatum: zaak.verwachtte_einddatum ?? this.humanDate(zaak.verwachtte_einddatum),
         uiterlijke_einddatum: this.humanDate(zaak.uiterlijke_einddatum),
-        einddatum: this.humanDate(zaak.einddatum),
+        einddatum: zaak.einddatum ? this.humanDate(zaak.einddatum) : null,
       };
       return result;
     } catch (error) {

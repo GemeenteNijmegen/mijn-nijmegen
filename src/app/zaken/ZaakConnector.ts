@@ -7,10 +7,10 @@ export interface ZaakSummary {
   registratiedatum: Date;
   verwachtte_einddatum?: Date;
   uiterlijke_einddatum?: Date;
-  einddatum?: Date;
+  einddatum?: Date | null | undefined;
   zaak_type: string;
-  status: string;
-  resultaat?: string;
+  status: string | null;
+  resultaat?: string | null;
 }
 
 export interface SingleZaak {
