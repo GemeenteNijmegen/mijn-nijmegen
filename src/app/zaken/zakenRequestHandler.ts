@@ -121,12 +121,12 @@ export const ZaakSummarySchema = z.object({
   identifier: z.string(),
   internal_id: z.string(),
   registratiedatum: z.coerce.date(),
-  verwachtte_einddatum: z.coerce.date().optional(),
-  uiterlijke_einddatum: z.coerce.date().optional(),
-  einddatum: z.coerce.date().optional(),
+  verwachtte_einddatum: z.coerce.date().optional().nullable(),
+  uiterlijke_einddatum: z.coerce.date().optional().nullable(),
+  einddatum: z.coerce.date().optional().nullable(),
   zaak_type: z.string(),
   status: z.string(),
-  resultaat: z.string().optional(),
+  resultaat: z.string().optional().nullable(),
 });
 
 export const ZaakSummariesSchema = z.array(ZaakSummarySchema);
