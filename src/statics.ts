@@ -89,7 +89,6 @@ export abstract class Statics {
   static readonly ssmInzageApiEndpointUrl: string = '/cdk/mijn-nijmegen/inzage-api-url';
 
   /**
-   * TODO: TEMPORARY remove later
    * URL for the API Gateway for zaken
    * This will be extracted and hosted on a stable domain later
    */
