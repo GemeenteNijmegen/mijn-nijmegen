@@ -133,7 +133,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenUseTaken: true,
     zakenIsLive: true,
     zakenUseSubmissions: true,
-    zakenAllowDomains: ['APV', 'JZ'],
+    zakenAllowDomains: ['APV', 'JZ'], // Deze moet naar de aggregator
     // authenticationServiceConfiguration: {
     //   clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
     //   endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
@@ -155,13 +155,13 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenUseTaken: true,
     zakenIsLive: true,
     zakenUseSubmissions: true,
-    zakenAllowDomains: ['APV', 'JZ'],
+    zakenAllowDomains: ['APV', 'JZ'], // Deze moet naar de aggregator
     // authenticationServiceConfiguration: {
     //   clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
     //   endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
     // },
     inzageLive: false,
-    useZakenFromAggregatorAPI: false,
+    useZakenFromAggregatorAPI: true,
   },
   production: {
     branch: 'production',
