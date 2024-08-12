@@ -820,19 +820,19 @@
     "@smithy/types" "^3.3.0"
     tslib "^2.6.2"
 
-"@aws-solutions-constructs/aws-lambda-dynamodb@^2.64.0":
-  version "2.64.0"
-  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/aws-lambda-dynamodb/-/aws-lambda-dynamodb-2.64.0.tgz#ee46ba26815e530cad89111395dbf1883ebb2e8f"
-  integrity sha512-ffzRh54Msh1bHegHd45JJdWrfE3igSCJdMgI2prnmhhm/XRjHuCBh+xkDwMTQtGTgaywG8CCV/uiKk3uM3iTeg==
+"@aws-solutions-constructs/aws-lambda-dynamodb@^2.65.0":
+  version "2.65.0"
+  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/aws-lambda-dynamodb/-/aws-lambda-dynamodb-2.65.0.tgz#f3c99e6e0c9aeb1a5de6c9cf9b9d7000dab3918d"
+  integrity sha512-akdHux9pK4Fntfv4tbWqgVM1QTXKeLxtgrVau+ZZG7XPc7wrdLpAfljdLsLzUr00YBJWi+k3se4M2pst8GFaDQ==
   dependencies:
     "@aws-cdk/integ-tests-alpha" "2.150.0-alpha.0"
-    "@aws-solutions-constructs/core" "2.64.0"
+    "@aws-solutions-constructs/core" "2.65.0"
     constructs "^10.0.0"
 
-"@aws-solutions-constructs/core@2.64.0":
-  version "2.64.0"
-  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/core/-/core-2.64.0.tgz#238e77b3869e5236e40aaf0316126bbe1127e8b9"
-  integrity sha512-aTtACeSRMwMZn4QrjWoHlqTe7Ydm/LAX8wiLK9lKKF1qsN0Wis1mtlF8Zf1e82udNjzM7TthJbOqsUnQ0nqFCg==
+"@aws-solutions-constructs/core@2.65.0":
+  version "2.65.0"
+  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/core/-/core-2.65.0.tgz#fdfbe3904489b893f8710b6245a264d57abfd133"
+  integrity sha512-HMXWwTKJlVh6pR1OXVREqpIMF7U6E0Ue+UlCs7+dbBV9fSq5d7gIoeo4XSPSiUgINVnp/veqsGR8Twe4Rvc13A==
   dependencies:
     "@aws-cdk/integ-tests-alpha" "2.150.0-alpha.0"
     constructs "^10.0.0"
