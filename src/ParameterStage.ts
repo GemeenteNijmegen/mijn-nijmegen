@@ -182,6 +182,11 @@ export class ssmParamsConstruct extends Construct {
       parameterName: Statics.ssmSubmissionstorageBaseUrl,
     });
 
+    new SSM.StringParameter(this, 'ssm_zaken_6', {
+      stringValue: '-',
+      parameterName: Statics.ssmZaakAggregatorApiGatewayEndpointUrl,
+    });
+
     new SecretsManager.Secret(this, 'zaken_secret_1', {
       secretName: Statics.vipJwtSecret,
       description: 'VIP Taken token secret',

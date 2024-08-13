@@ -11,7 +11,6 @@ import { SessionsStack } from './SessionsStack';
 import { Statics } from './statics';
 import { UsEastStack } from './UsEastStack';
 import { WafStack } from './WafStack';
-import { ZaakAggregatorStack } from './ZaakAggregatorStack';
 
 export interface ApiStageProps extends StageProps, Configurable {}
 
@@ -58,10 +57,5 @@ export class ApiStage extends Stage {
     cloudfrontStack.addDependency(usEastStack);
 
     new WafStack(this, 'waf-stack', { env: { region: 'us-east-1' }, branch: branchName });
-
-    if (props.configuration.useZakenFromAggregatorAPI) {
-      const zaakAggregatorStack = new ZaakAggregatorStack(this, 'zaakaggregator', { configuration: props.configuration });
-      apistack.addDependency(zaakAggregatorStack);
-    }
   }
 }
