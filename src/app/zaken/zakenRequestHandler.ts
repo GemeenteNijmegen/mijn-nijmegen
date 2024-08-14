@@ -1,25 +1,27 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
-import { AWS } from '@gemeentenijmegen/utils';
+import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
 import { z } from 'zod';
 import * as zaakTemplate from './templates/zaak.mustache';
 import * as zakenTemplate from './templates/zaken.mustache';
 import { User, UserFromSession } from './User';
-import { ZaakAggregator } from './ZaakAggregator';
-import { SingleZaak, ZaakSummary } from './ZaakConnector';
 import { ZaakFormatter } from './ZaakFormatter';
+import { SingleZaak, ZaakSummary } from './ZaakInterface';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 
 export class ZakenRequestHandler {
-  private zaakAggregator: ZaakAggregator;
   private dynamoDBClient: DynamoDBClient;
   private apiKey?: string;
+  private zakenApiUrl: string;
+  private zakenApiKeyName: string;
 
-  constructor(zaakAggregator: ZaakAggregator, dynamoDBClient: DynamoDBClient) {
-    this.zaakAggregator = zaakAggregator;
+  constructor(dynamoDBClient: DynamoDBClient) {
     this.dynamoDBClient = dynamoDBClient;
+    const env = environmentVariables(['APIGATEWAY_BASEURL', 'APIGATEWAY_APIKEY']);
+    this.zakenApiUrl = env.APIGATEWAY_BASEURL;
+    this.zakenApiKeyName = env.APIGATEWAY_APIKEY;
   }
 
   async handleRequest(cookies: string, zaakConnectorId?: string, zaak?: string, file?: string ) {
@@ -47,11 +49,7 @@ export class ZakenRequestHandler {
   async list(session: Session) {
     const user = UserFromSession(session);
     let zaken: ZaakSummary[];
-    if (process.env.APIGATEWAY_BASEURL && process.env.APIGATEWAY_APIKEY) {
-      zaken = await this.fetchList(user);
-    } else {
-      zaken = await this.zaakAggregator.list(user);
-    }
+    zaken = await this.fetchList(user);
 
     const zaakSummaries = new ZaakFormatter().formatList(zaken);
 
@@ -70,7 +68,7 @@ export class ZakenRequestHandler {
 
   private async fetchList(user: User) {
     const key = await this.getApiKey();
-    const response = await fetch(`${process.env.APIGATEWAY_BASEURL}zaken?` + new URLSearchParams({
+    const response = await fetch(`${this.zakenApiUrl}zaken?` + new URLSearchParams({
       userType: user.type,
       userIdentifier: user.identifier,
     }).toString(), {
@@ -84,13 +82,7 @@ export class ZakenRequestHandler {
 
   async get(zaakConnectorId: string, zaakId: string, session: Session) {
     const user = UserFromSession(session);
-
-    let zaak;
-    if (process.env.APIGATEWAY_BASEURL && process.env.APIGATEWAY_APIKEY) {
-      zaak = await this.fetchGet(zaakId, zaakConnectorId, user);
-    } else {
-      zaak = await this.zaakAggregator.get(zaakId, zaakConnectorId, user);
-    }
+    const zaak = await this.fetchGet(zaakId, zaakConnectorId, user);
 
     if (zaak) {
       const formattedZaak = new ZaakFormatter().formatZaak(zaak);
@@ -114,7 +106,7 @@ export class ZakenRequestHandler {
   private async fetchGet(zaakId: string, zaakConnectorId: string, user: User) {
     const key = await this.getApiKey();
 
-    const response = await fetch(`${process.env.APIGATEWAY_BASEURL}zaken/${zaakConnectorId}/${zaakId}?` + new URLSearchParams({
+    const response = await fetch(`${this.zakenApiUrl}zaken/${zaakConnectorId}/${zaakId}?` + new URLSearchParams({
       userType: user.type,
       userIdentifier: user.identifier,
     }).toString(), {
@@ -134,12 +126,7 @@ export class ZakenRequestHandler {
   async download(zaakConnectorId: string, zaakId: string, file: string, session: Session) {
     const user = UserFromSession(session);
 
-    let response;
-    if (process.env.APIGATEWAY_BASEURL && process.env.APIGATEWAY_APIKEY) {
-      response = await this.fetchDownload(zaakId, zaakConnectorId, file, user);
-    } else {
-      response = await this.zaakAggregator.download(zaakConnectorId, zaakId, file, user);
-    }
+    const response = await this.fetchDownload(zaakId, zaakConnectorId, file, user);
 
     if (response) {
       return Response.redirect(response.downloadUrl);
@@ -151,7 +138,7 @@ export class ZakenRequestHandler {
   private async fetchDownload(zaakId: string, zaakConnectorId: string, file: string, user: User) {
     const key = await this.getApiKey();
 
-    const response = await fetch(`${process.env.APIGATEWAY_BASEURL}zaken/${zaakConnectorId}/${zaakId}/download/${file}?` + new URLSearchParams({
+    const response = await fetch(`${this.zakenApiUrl}zaken/${zaakConnectorId}/${zaakId}/download/${file}?` + new URLSearchParams({
       userType: user.type,
       userIdentifier: user.identifier,
     }).toString(), {
@@ -165,18 +152,15 @@ export class ZakenRequestHandler {
   }
 
   private async getApiKey(): Promise<string> {
+    console.debug('getting api key real');
     if (!this.apiKey) {
-      if (!process.env.APIGATEWAY_BASEURL || !process.env.APIGATEWAY_APIKEY) {
-        throw Error('not all required env variables are set');
-      }
-      this.apiKey = await AWS.getSecret(process.env.APIGATEWAY_APIKEY);
+      this.apiKey = await AWS.getSecret(this.zakenApiKeyName);
       if (!this.apiKey) {
         throw Error('No API key found');
       }
     }
     return this.apiKey;
   }
-
 }
 
 export const ZaakSummarySchema = z.object({

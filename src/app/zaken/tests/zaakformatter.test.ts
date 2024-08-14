@@ -1,5 +1,5 @@
-import { SingleZaak } from '../ZaakConnector';
 import { ZaakFormatter } from '../ZaakFormatter';
+import { SingleZaak } from '../ZaakInterface';
 
 describe('Zaakformatter can format single zaak', () => {
   test('Sorting behandelaars works', async () => {
