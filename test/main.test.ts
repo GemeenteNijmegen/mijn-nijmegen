@@ -24,7 +24,6 @@ const config: Configuration = {
   dsRecord: undefined,
   pipelineStackCdkName: 'mijnnijmegen-pipeline-stack-testing',
   pipelineName: 'mijnnijmegen-test',
-  zakenAllowDomains: [],
   zakenIsLive: false,
   zakenUseSubmissions: false,
   zakenUseTaken: false,

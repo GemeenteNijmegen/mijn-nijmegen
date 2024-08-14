@@ -364,7 +364,6 @@ export class ApiStack extends Stack implements Configurable {
         IS_LIVE: this.configuration.zakenIsLive ? 'true' : 'false',
         USE_TAKEN: this.configuration.zakenUseTaken ? 'true' : 'false',
         SUBMISSIONS_LIVE: this.configuration.zakenUseSubmissions ? 'true' : 'false',
-        ALLOWED_ZAKEN_DOMAINS: this.configuration.zakenAllowDomains.join(','),
       },
       readOnlyRole,
       apiFunction: ZakenFunction,
