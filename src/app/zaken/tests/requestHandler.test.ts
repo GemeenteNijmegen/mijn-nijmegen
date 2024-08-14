@@ -1,15 +1,10 @@
 import * as fs from 'fs';
 import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
+import { GetSecretValueCommand, GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'aws-sdk-client-mock';
-import axios from 'axios';
 import * as dotenv from 'dotenv';
-import jwt from 'jsonwebtoken';
-import { Inzendingen } from '../Inzendingen';
-import { OpenZaakClient } from '../OpenZaakClient';
-import { ZaakAggregator } from '../ZaakAggregator';
-import { ZaakSummary } from '../ZaakConnector';
-import { Zaken } from '../Zaken';
+import { ZaakSummary } from '../ZaakInterface';
 import { ZakenRequestHandler } from '../zakenRequestHandler';
 dotenv.config();
 
@@ -35,6 +30,13 @@ const mockedZakenList: ZaakSummary[] = [
     status: 'open',
     resultaat: 'vergunning verleend',
   },
+  {
+    identifier: '234',
+    internal_id: 'inzending/234',
+    registratiedatum: sampleDate,
+    zaak_type: 'inzending',
+    status: 'ontvangen',
+  },
 ];
 const mockedZaak = {
   identifier: '1234',
@@ -48,45 +50,63 @@ const mockedZaak = {
   behandelaars: ['Jan Jansen', 'Andries Fietst'],
 };
 
-const mockedInzendingenList: ZaakSummary[] = [
-  {
-    identifier: '234',
-    internal_id: 'inzending/234',
-    registratiedatum: sampleDate,
-    zaak_type: 'inzending',
-    status: 'ontvangen',
-  },
-];
-
 const mockedDownload = {
   downloadUrl: 'https://somebucket.s3.eu-central-1.amazonaws.com/APV1.234/APV1.234.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=<SOMESTRING>%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20240305T135245Z&X-Amz-Expires=5&X-Amz-Security-Token=<REALLYLONGSTRING>X-Amz-Signature=<SIGNATURE>&X-Amz-SignedHeaders=host&x-id=GetObject',
 };
 
-jest.mock('../Zaken', () => {
-  return {
-    Zaken: jest.fn(() => {
-      return {
-        allowDomains: jest.fn(),
-        list: jest.fn().mockResolvedValue(mockedZakenList),
-        get: jest.fn().mockResolvedValue(mockedZaak),
-        setTaken: jest.fn(),
-      };
+process.env.APIGATEWAY_BASEURL = 'http://localhost/';
+process.env.APIGATEWAY_APIKEY = 'fakekey';
+
+beforeAll(() => {
+  global.fetch = jest.fn((url: string) =>
+    Promise.resolve({
+      json: () => {
+        console.debug('mocked fetch', url);
+        const urlPathParts = new URL(url).pathname.split('/');
+        if (urlPathParts[3]) {
+          return Promise.resolve(mockedDownload);
+        } else if (urlPathParts[2]) {
+          return Promise.resolve(mockedZaak);
+        } else {
+          return Promise.resolve(mockedZakenList);
+        }
+      },
     }),
+  ) as jest.Mock;
+
+  const secretsMock = mockClient(SecretsManagerClient);
+  const output: GetSecretValueCommandOutput = {
+    $metadata: {},
+    SecretString: 'ditiseennepgeheim',
   };
+  secretsMock.on(GetSecretValueCommand).resolves(output);
 });
 
+// jest.mock('../Zaken', () => {
+//   return {
+//     Zaken: jest.fn(() => {
+//       return {
+//         allowDomains: jest.fn(),
+//         list: jest.fn().mockResolvedValue(mockedZakenList),
+//         get: jest.fn().mockResolvedValue(mockedZaak),
+//         setTaken: jest.fn(),
+//       };
+//     }),
+//   };
+// });
 
-jest.mock('../Inzendingen', () => {
-  return {
-    Inzendingen: jest.fn(() => {
-      return {
-        list: jest.fn().mockResolvedValue(mockedInzendingenList),
-        get: jest.fn().mockResolvedValue(mockedZaak),
-        download: jest.fn().mockResolvedValue(mockedDownload),
-      };
-    }),
-  };
-});
+
+// jest.mock('../Inzendingen', () => {
+//   return {
+//     Inzendingen: jest.fn(() => {
+//       return {
+//         list: jest.fn().mockResolvedValue(mockedInzendingenList),
+//         get: jest.fn().mockResolvedValue(mockedZaak),
+//         download: jest.fn().mockResolvedValue(mockedDownload),
+//       };
+//     }),
+//   };
+// });
 
 const ddbMock = mockClient(DynamoDBClient);
 const getItemOutput: Partial<GetItemCommandOutput> = {
@@ -101,35 +121,6 @@ const getItemOutput: Partial<GetItemCommandOutput> = {
   },
 };
 ddbMock.on(GetItemCommand).resolves(getItemOutput);
-const secret = process.env.VIP_JWT_SECRET ?? 'fakesecret';
-process.env.VIP_TOKEN_BASE_URL = 'http://localhost';
-
-let baseUrl = new URL('http://localhost');
-if (process.env.VIP_BASE_URL) {
-  baseUrl = new URL(process.env.VIP_BASE_URL);
-}
-
-const token = jwt.sign({
-  iss: process.env.VIP_JWT_CLIENT_ID,
-  iat: Date.now(),
-  client_id: process.env.VIP_JWT_CLIENT_ID,
-  user_id: process.env.VIP_JWT_USER_ID,
-  user_representation: process.env.VIP_JWT_USER_ID,
-}, secret);
-
-const axiosInstance = axios.create(
-  {
-    baseURL: baseUrl.toString(),
-    headers: {
-      'Authorization': 'Bearer ' + token,
-      'Accept-Crs': 'EPSG:4326',
-      'Content-Crs': 'EPSG:4326',
-    },
-  });
-const client = new OpenZaakClient({ baseUrl, axiosInstance });
-const zaken = new Zaken(client, { zaakConnectorId: 'test' });
-const inzendingen = new Inzendingen({ baseUrl: 'https://localhost', accessKey: 'test' });
-const zaakAggregator = new ZaakAggregator({ zaakConnectors: { inzendingen, zaak: zaken } });
 
 beforeAll(() => {
   const outputDir = path.join(__dirname, 'output');
@@ -137,9 +128,8 @@ beforeAll(() => {
 });
 
 describe('Request handler class', () => {
-  const handler = new ZakenRequestHandler(zaakAggregator, new DynamoDBClient({ region: process.env.AWS_REGION }));
+  const handler = new ZakenRequestHandler(new DynamoDBClient({ region: process.env.AWS_REGION }));
   test('returns 200 for person', async () => {
-    console.debug('inzendingen in test', inzendingen);
     const result = await handler.handleRequest('session=12345');
     expect(result.statusCode).toBe(200);
     if (result.body) {
