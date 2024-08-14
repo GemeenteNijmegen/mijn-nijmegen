@@ -91,15 +91,6 @@ export interface Configuration {
   readonly zakenUseSubmissions?: boolean;
 
   /**
-   * Allow zaken from these 'domains'. These values are added to
-   * a call to `Zaken.allowDomains` which checks the 'zaakType'
-   * for each zaak for its 'domein', and only shows zaken
-   * from the allowed list.
-   */
-  readonly zakenAllowDomains: string[];
-
-
-  /**
    * Set this to true if you want the verwerkingenlogging inzage-page to be created
    */
   readonly inzageLive?: boolean;
@@ -114,6 +105,11 @@ export interface Configuration {
     clientId: string;
   };
 
+  /**
+   * If set, the internal ZGW-connection code is not used, instead we fetch results
+   * from the 'zaakaggregator' API. This is a feature flag to allow for development
+   * of the zaakaggregator in parallel to existing functionality.
+   */
   readonly useZakenFromAggregatorAPI?: boolean;
 }
 
@@ -133,7 +129,6 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenUseTaken: true,
     zakenIsLive: true,
     zakenUseSubmissions: true,
-    zakenAllowDomains: ['APV', 'JZ'], // Deze moet naar de aggregator
     // authenticationServiceConfiguration: {
     //   clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
     //   endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
@@ -155,7 +150,6 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenUseTaken: true,
     zakenIsLive: true,
     zakenUseSubmissions: true,
-    zakenAllowDomains: ['APV', 'JZ'], // Deze moet naar de aggregator
     // authenticationServiceConfiguration: {
     //   clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
     //   endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
@@ -177,9 +171,8 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenUseTaken: false,
     zakenIsLive: true,
     zakenUseSubmissions: true,
-    zakenAllowDomains: ['APV'], // JZ is not yet available in prod
     inzageLive: false,
-    useZakenFromAggregatorAPI: false,
+    useZakenFromAggregatorAPI: true,
   },
 };
 
