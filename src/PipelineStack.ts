@@ -37,18 +37,10 @@ export class PipelineStack extends Stack {
       configuration: props.configuration,
     }));
 
-    const apiStage = pipeline.addStage(new ApiStage(this, 'mijn-api', {
+    pipeline.addStage(new ApiStage(this, 'mijn-api', {
       env: props.configuration.deploymentEnvironment,
       configuration: props.configuration,
     }));
-
-    //TODO: This can be removed after initial deployment of the zakenaggregatorservice in production
-    if (props.configuration.useZakenFromAggregatorAPI && props.configuration.branch == 'production') {
-      apiStage.addPost(new ManualApprovalStep('ManualApprovalBeforeDeploy', {
-        comment:
-      'Please set the zaakaggregator API baseURL and secret before continuing',
-      }));
-    }
 
   }
 
