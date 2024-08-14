@@ -152,7 +152,6 @@ export class ZakenRequestHandler {
   }
 
   private async getApiKey(): Promise<string> {
-    console.debug('getting api key real');
     if (!this.apiKey) {
       this.apiKey = await AWS.getSecret(this.zakenApiKeyName);
       if (!this.apiKey) {
