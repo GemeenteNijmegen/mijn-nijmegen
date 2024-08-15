@@ -1,8 +1,0 @@
-{
-  "url": "/zaken/api/v1/statussen/9f14d7b0-8f00-4827-9b99-d77ae5d8d155",
-  "uuid": "cdc038de-3b32-49da-9dc3-9e19e74fb401",
-  "zaak": "/zaken/api/v1/zaken/5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886",
-  "statustype": "/catalogi/api/v1/statustypen/97530557-4aaa-4225-9d4c-77e19daaca50",
-  "datumStatusGezet": "2023-06-09T15:20:30Z",
-  "statustoelichting": ""
-}

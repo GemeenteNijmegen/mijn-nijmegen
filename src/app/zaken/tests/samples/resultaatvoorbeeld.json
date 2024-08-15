@@ -1,7 +1,0 @@
-{
-    "url": "/zaken/api/v1/resultaten/9df2adf0-5937-495a-aba0-daf893c0c7e1",
-    "uuid": "9df2adf0-5937-495a-aba0-daf893c0c7e1",
-    "zaak": "/zaken/api/v1/zaken/3720dbc1-6a94-411e-b651-0aeb67330064",
-    "resultaattype": "/catalogi/api/v1/resultaattypen/950971b5-9000-4411-9b86-cab42b4e7d76",
-    "toelichting": ""
-}
