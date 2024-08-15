@@ -1,3 +1,0 @@
-{
-    "downloadUrl": "https://somebucket.s3.eu-central-1.amazonaws.com/APV1.234/APV1.234.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=<SOMESTRING>%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20240305T135245Z&X-Amz-Expires=5&X-Amz-Security-Token=<REALLYLONGSTRING>X-Amz-Signature=<SIGNATURE>&X-Amz-SignedHeaders=host&x-id=GetObject"
-}

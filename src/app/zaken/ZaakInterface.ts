@@ -1,6 +1,3 @@
-import { User } from './User';
-
-
 export interface ZaakSummary {
   identifier: string;
   internal_id: string;
@@ -28,10 +25,4 @@ export interface SingleZaak {
   taken?: any[];
   behandelaars?: string[];
   type: 'case' | 'submission';
-}
-
-export interface ZaakConnector {
-  list(user: User): Promise<ZaakSummary[]>;
-  get(zaakId: string, user: User): Promise<SingleZaak|false>;
-  download(zaakId: string, file: string, user: User): Promise<{downloadUrl: string}>;
 }

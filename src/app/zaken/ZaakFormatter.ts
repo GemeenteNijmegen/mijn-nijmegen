@@ -1,4 +1,4 @@
-import { SingleZaak, ZaakSummary } from './ZaakConnector';
+import { SingleZaak, ZaakSummary } from './ZaakInterface';
 
 export class ZaakFormatter {
   formatList(zaken: ZaakSummary[]) {
