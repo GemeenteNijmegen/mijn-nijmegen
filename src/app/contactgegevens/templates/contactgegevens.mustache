@@ -14,37 +14,21 @@
                 </ul>
         </nav>
         <div class="col-lg-9 col-md-12">
-                <h1>Mijn Uitkering</h1>
+                <h1>Mijn Contactgegevens</h1>
                 {{^error}}
-                <p class="lead">Hier vindt u een overzicht van uw uitkeringen.</p>
-                {{#multipleUitkeringen}}
-                    <div class="tabs-wrapper">
-                        <!-- Tab List -->
-                        <div class="nav classic-tabs-no-line" role="tablist" aria-label="Uitkeringen">
-                        {{#uitkeringen}}
-                            <div class="nav-item">
-                                <button class="nav-link {{#selected}}active{{/selected}}" role="tab" {{#selected}}aria-selected="true" {{/selected}} aria-controls="{{typetolower}}-tab" id="{{typetolower}}-tabcontrol">
-                                    {{type}}
-                                </button>
-                            </div>
-                        {{/uitkeringen}}
-                        </div>
-                        {{#uitkeringen}}
-                        <!-- Tab Content -->
-                        <div class="tab-content" tabindex="0" role="tabpanel" id="{{typetolower}}-tab" aria-labelledby="{{typetolower}}-tabcontrol">
-                            {{> uitkering }}
-                        </div>
-                        {{/uitkeringen}}
-                    </div>
-                {{/multipleUitkeringen}}
-                {{^multipleUitkeringen}}
-                    {{#uitkeringen}}
-                        {{> uitkering }}
-                    {{/uitkeringen}}
-                {{/multipleUitkeringen}}
-                {{^uitkeringen}}
-                <p>U heeft geen lopende uitkeringen.</p>
-                {{/uitkeringen}}
+                <p class="lead">Hier vindt u een overzicht van uw contactgegevens.</p>
+                <table class="responsive-table">
+                    <tbody>
+                        <tr>
+                            <td>Email</td>
+                            <td class="nowrap">{{email}}</td>
+                        </tr>
+                        <tr>
+                            <td>Telefoonummer</td>
+                            <td class="nowrap">{{Telefoonummer}}</td>
+                        </tr>
+                    </tbody>
+                </table>    
                 {{/error}}
                 {{#error}}
                     <h2>Er is iets misgegaan</h2>
