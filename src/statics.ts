@@ -153,6 +153,9 @@ export abstract class Statics {
   static readonly ssmOpenZaakBaseUrl: string = '/cdk/mijn-nijmegen/vip-base-url';
   static readonly ssmOpenZaakTakenBaseUrl: string = '/cdk/mijn-nijmegen/taken-base-url';
 
+  static readonly ssmOpenKlantSecret = '/cdk/mijn-nijmegen/open-klant/api-key';
+  static readonly ssmOpenKlantEndpoint = '/cdk/mijn-nijmegen/open-klant/endpoint';
+
   static readonly ssmSubmissionstorageBaseUrl: string = '/cdk/mijn-nijmegen/submissionstorage-base-url';
   /**
    * Secrets for zaken

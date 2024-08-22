@@ -49,6 +49,9 @@
           "spawn": "bundle:app/auth/auth.lambda"
         },
         {
+          "spawn": "bundle:app/contactgegevens/contactgegevens.lambda"
+        },
+        {
           "spawn": "bundle:app/home/home.lambda"
         },
         {
@@ -86,6 +89,24 @@
       "steps": [
         {
           "exec": "esbuild --bundle src/app/auth/auth.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/app/auth/auth.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+        }
+      ]
+    },
+    "bundle:app/contactgegevens/contactgegevens.lambda": {
+      "name": "bundle:app/contactgegevens/contactgegevens.lambda",
+      "description": "Create a JavaScript bundle from src/app/contactgegevens/contactgegevens.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/contactgegevens/contactgegevens.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/app/contactgegevens/contactgegevens.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+        }
+      ]
+    },
+    "bundle:app/contactgegevens/contactgegevens.lambda:watch": {
+      "name": "bundle:app/contactgegevens/contactgegevens.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/app/contactgegevens/contactgegevens.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/contactgegevens/contactgegevens.lambda.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/app/contactgegevens/contactgegevens.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
         }
       ]
     },
