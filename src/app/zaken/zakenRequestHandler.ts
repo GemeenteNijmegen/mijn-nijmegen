@@ -7,7 +7,7 @@ import * as zaakTemplate from './templates/zaak.mustache';
 import * as zakenTemplate from './templates/zaken.mustache';
 import { User, UserFromSession } from './User';
 import { ZaakFormatter } from './ZaakFormatter';
-import { SingleZaak, ZaakSummary } from './ZaakInterface';
+import { SingleZaak } from './ZaakInterface';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 
@@ -48,9 +48,10 @@ export class ZakenRequestHandler {
 
   async list(session: Session) {
     const user = UserFromSession(session);
-    let zaken: ZaakSummary[];
-    zaken = await this.fetchList(user);
 
+    const endpoint = 'zaken';
+    const json = await this.fetch(endpoint, user);
+    const zaken = ZaakSummariesSchema.parse(json);
     const zaakSummaries = new ZaakFormatter().formatList(zaken);
 
     const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
@@ -64,20 +65,6 @@ export class ZakenRequestHandler {
     // render page
     const html = await render(data, zakenTemplate.default);
     return Response.html(html, 200, session.getCookie());
-  }
-
-  private async fetchList(user: User) {
-    const key = await this.getApiKey();
-    const response = await fetch(`${this.zakenApiUrl}zaken?` + new URLSearchParams({
-      userType: user.type,
-      userIdentifier: user.identifier,
-    }).toString(), {
-      method: 'GET',
-      headers: {
-        'x-api-key': key,
-      },
-    });
-    return ZaakSummariesSchema.parse(await response.json());
   }
 
   async get(zaakConnectorId: string, zaakId: string, session: Session) {
@@ -104,18 +91,8 @@ export class ZakenRequestHandler {
   }
 
   private async fetchGet(zaakId: string, zaakConnectorId: string, user: User) {
-    const key = await this.getApiKey();
-
-    const response = await fetch(`${this.zakenApiUrl}zaken/${zaakConnectorId}/${zaakId}?` + new URLSearchParams({
-      userType: user.type,
-      userIdentifier: user.identifier,
-    }).toString(), {
-      method: 'GET',
-      headers: {
-        'x-api-key': key,
-      },
-    });
-    const json = await response.json() as any;
+    const endpoint = `zaken/${zaakConnectorId}/${zaakId}`;
+    const json = await this.fetch(endpoint, user);
     json.registratiedatum = new Date(json.registratiedatum);
     json.verwachtte_einddatum = new Date(json.verwachtte_einddatum);
     json.uiterlijke_einddatum = new Date(json.uiterlijke_einddatum);
@@ -126,7 +103,8 @@ export class ZakenRequestHandler {
   async download(zaakConnectorId: string, zaakId: string, file: string, session: Session) {
     const user = UserFromSession(session);
 
-    const response = await this.fetchDownload(zaakId, zaakConnectorId, file, user);
+    const endpoint = `zaken/${zaakConnectorId}/${zaakId}/download/${file}`;
+    const response = await this.fetch(endpoint, user);
 
     if (response) {
       return Response.redirect(response.downloadUrl);
@@ -135,13 +113,13 @@ export class ZakenRequestHandler {
     }
   }
 
-  private async fetchDownload(zaakId: string, zaakConnectorId: string, file: string, user: User) {
+  private async fetch(endPoint: string, user: User) {
     const key = await this.getApiKey();
-
-    const response = await fetch(`${this.zakenApiUrl}zaken/${zaakConnectorId}/${zaakId}/download/${file}?` + new URLSearchParams({
+    const userParams = new URLSearchParams({
       userType: user.type,
       userIdentifier: user.identifier,
-    }).toString(), {
+    }).toString();
+    const response = await fetch(`${this.zakenApiUrl}${endPoint}?${userParams}`, {
       method: 'GET',
       headers: {
         'x-api-key': key,

@@ -82,32 +82,6 @@ beforeAll(() => {
   secretsMock.on(GetSecretValueCommand).resolves(output);
 });
 
-// jest.mock('../Zaken', () => {
-//   return {
-//     Zaken: jest.fn(() => {
-//       return {
-//         allowDomains: jest.fn(),
-//         list: jest.fn().mockResolvedValue(mockedZakenList),
-//         get: jest.fn().mockResolvedValue(mockedZaak),
-//         setTaken: jest.fn(),
-//       };
-//     }),
-//   };
-// });
-
-
-// jest.mock('../Inzendingen', () => {
-//   return {
-//     Inzendingen: jest.fn(() => {
-//       return {
-//         list: jest.fn().mockResolvedValue(mockedInzendingenList),
-//         get: jest.fn().mockResolvedValue(mockedZaak),
-//         download: jest.fn().mockResolvedValue(mockedDownload),
-//       };
-//     }),
-//   };
-// });
-
 const ddbMock = mockClient(DynamoDBClient);
 const getItemOutput: Partial<GetItemCommandOutput> = {
   Item: {
