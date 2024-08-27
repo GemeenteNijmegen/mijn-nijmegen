@@ -45,7 +45,6 @@ export class ZakenAggregatorConnector {
   }
 
   async fetch(endpoint: string, user: User) {
-    console.debug('test', endpoint, user);
     const url = this.createUrlForRequest(endpoint, user);
     try {
       const response = await fetch(url, {
