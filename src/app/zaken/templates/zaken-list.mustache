@@ -1,73 +1,73 @@
-<div class="tabs-wrapper">
-                    <!-- Tab List -->
-                    <div class="nav classic-tabs-no-line" role="tablist">
-                        <div class="nav-item">
-                            <button class="nav-link active" role="tab" aria-selected="true" aria-controls="example-1-tab" id="example-1">
-                                Lopende zaken
-                            </button>
-                        </div>
-                        <div class="nav-item">
-                            <button class="nav-link" role="tab" aria-selected="false" aria-controls="example-2-tab" id="example-2" tabindex="-1">
-                                Afgeronde zaken
-                            </button>
-                        </div>
-                    </div>
-                
-                    <!-- Tab Content -->
-                    <div class="tab-content" tabindex="0" role="tabpanel" id="example-1-tab" aria-labelledby="example-1">
-                        <table class="responsive-table">
-                            <thead>
-                            <tr>
-                                <th>Omschrijving</th>
-                                <th>Zaaknummer</th>
-                                <th>Datum</th>
-                                <th>Fase</th>
-                                <th>Actie</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                        {{#zaken.open}}
-                            <tr>
-                                <td>{{zaak_type}}</td>
-                                <td class="nowrap">{{identifier}}</td>
-                                <td class="nowrap">{{registratiedatum}}</td>
-                                <td class="nowrap">{{status}}</td>
-                                <td><a href="/zaken/{{internal_id}}">Bekijk</a></td>
-                            </tr>
-                            
-                        {{/zaken.open}}
-                        {{^zaken.open}}
-                            <tr><td colspan="5">Er zijn geen open zaken gevonden.</td></tr>
-                        {{/zaken.open}}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-content" tabindex="0" role="tabpanel" id="example-2-tab" aria-labelledby="example-2" hidden="">
-                        <table class="responsive-table">
-                            <thead>
-                            <tr>
-                                <th>Omschrijving</th>
-                                <th>Zaaknummer</th>
-                                <th>Datum</th>
-                                <th>Fase</th>
-                                <th>Actie</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                        {{#zaken.gesloten}}
-                            <tr>
-                                <td>{{zaak_type}}</td>
-                                <td>{{identifier}}</td>
-                                <td>{{registratiedatum}}</td>
-                                <td>{{status}}</td>
-                                <td><a href="/zaken/{{internal_id}}">Bekijk</a></td>
-                            </tr>
-                            
-                        {{/zaken.gesloten}}
-                        {{^zaken.gesloten}}
-                            <tr><td colspan="5">Er zijn geen gesloten zaken gevonden.</td></tr>
-                        {{/zaken.gesloten}}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+<div id="zaken-container" class="tabs-wrapper">
+    <!-- Tab List -->
+    <div class="nav classic-tabs-no-line" role="tablist">
+        <div class="nav-item">
+            <button class="nav-link active" role="tab" aria-selected="true" aria-controls="example-1-tab" id="example-1">
+                Lopende zaken
+            </button>
+        </div>
+        <div class="nav-item">
+            <button class="nav-link" role="tab" aria-selected="false" aria-controls="example-2-tab" id="example-2" tabindex="-1">
+                Afgeronde zaken
+            </button>
+        </div>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content" tabindex="0" role="tabpanel" id="example-1-tab" aria-labelledby="example-1">
+        <table class="responsive-table">
+            <thead>
+            <tr>
+                <th>Omschrijving</th>
+                <th>Zaaknummer</th>
+                <th>Datum</th>
+                <th>Fase</th>
+                <th>Actie</th>
+            </tr>
+            </thead>
+            <tbody>
+        {{#zaken.open}}
+            <tr>
+                <td>{{zaak_type}}</td>
+                <td class="nowrap">{{identifier}}</td>
+                <td class="nowrap">{{registratiedatum}}</td>
+                <td class="nowrap">{{status}}</td>
+                <td><a href="/zaken/{{internal_id}}">Bekijk</a></td>
+            </tr>
+            
+        {{/zaken.open}}
+        {{^zaken.open}}
+            <tr><td colspan="5">Er zijn geen open zaken gevonden.</td></tr>
+        {{/zaken.open}}
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-content" tabindex="0" role="tabpanel" id="example-2-tab" aria-labelledby="example-2" hidden="">
+        <table class="responsive-table">
+            <thead>
+            <tr>
+                <th>Omschrijving</th>
+                <th>Zaaknummer</th>
+                <th>Datum</th>
+                <th>Fase</th>
+                <th>Actie</th>
+            </tr>
+            </thead>
+            <tbody>
+        {{#zaken.gesloten}}
+            <tr>
+                <td>{{zaak_type}}</td>
+                <td>{{identifier}}</td>
+                <td>{{registratiedatum}}</td>
+                <td>{{status}}</td>
+                <td><a href="/zaken/{{internal_id}}">Bekijk</a></td>
+            </tr>
+            
+        {{/zaken.gesloten}}
+        {{^zaken.gesloten}}
+            <tr><td colspan="5">Er zijn geen gesloten zaken gevonden.</td></tr>
+        {{/zaken.gesloten}}
+            </tbody>
+        </table>
+    </div>
+</div>
