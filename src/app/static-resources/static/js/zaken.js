@@ -15,7 +15,7 @@ function updateZaken() {
 
 async function getData() {
   const token = document.querySelector('meta[name=xsrf-token]').content;
-  const response = await fetch(`?xsrf_token=${token}`, {
+  const response = await fetch(`?xsrftoken=${token}`, {
     method: 'GET',
     credentials: "same-origin",
     headers: { 'accept': 'application/json' },

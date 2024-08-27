@@ -36,7 +36,7 @@ export class ZakenRequestHandler {
     }
 
     if (!params.zaak) {
-      return this.list(session);
+      return this.list(session, params.xsrfToken);
     }
 
     if (params.zaak && params.zaakConnectorId && !params.file) {
