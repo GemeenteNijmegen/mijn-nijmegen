@@ -3,10 +3,12 @@ import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
 import * as zaakTemplate from './templates/zaak.mustache';
+import * as zakenListPartial from './templates/zaken-list.mustache';
 import * as zakenTemplate from './templates/zaken.mustache';
 import { User, UserFromSession } from './User';
 import { ZaakFormatter } from './ZaakFormatter';
 import { SingleZaak, singleZaakSchema, ZaakSummariesSchema } from './ZaakInterface';
+import { eventParams } from './zaken.lambda';
 import { ZakenAggregatorConnector } from './ZakenAggregatorConnector';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
@@ -25,35 +27,40 @@ export class ZakenRequestHandler {
     });
   }
 
-  async handleRequest(cookies: string, zaakConnectorId?: string, zaak?: string, file?: string ) {
+  async handleRequest(params: eventParams) {
     // do session stuff here
-    let session = new Session(cookies, this.dynamoDBClient);
+    let session = new Session(params.cookies, this.dynamoDBClient);
     await session.init();
     if (session.isLoggedIn() != true) {
       return Response.redirect('/login');
     }
 
-    if (!zaak) {
+    if (!params.zaak) {
       return this.list(session);
     }
 
-    if (zaak && zaakConnectorId && !file) {
-      return this.get(zaakConnectorId, zaak, session);
+    if (params.zaak && params.zaakConnectorId && !params.file) {
+      return this.get(params.zaakConnectorId, params.zaak, session);
     }
 
-    if (zaak && zaakConnectorId && file) {
-      return this.download(zaakConnectorId, zaak, file, session);
+    if (params.zaak && params.zaakConnectorId && params.file) {
+      return this.download(params.zaakConnectorId, params.zaak, params.file, session);
     }
     return Response.error(400);
   }
 
-  async list(session: Session) {
+  async list(session: Session, xsrfToken?: string) {
     const user = UserFromSession(session);
 
     const endpoint = 'zaken';
     let zaakSummaries;
     let timeout = false;
     try {
+      if (xsrfToken) {
+        this.connector.setTimeout(10000); // allow for more time from frontend
+      } else {
+        this.connector.setTimeout(2000);
+      }
       const json = await this.connector.fetch(endpoint, user);
       const zaken = ZaakSummariesSchema.parse(json);
       zaakSummaries = new ZaakFormatter().formatList(zaken);
@@ -63,18 +70,34 @@ export class ZakenRequestHandler {
       }
     }
 
-    const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
-    let data = {
-      volledigenaam: user.userName,
-      title: 'Mijn zaken',
-      shownav: true,
-      nav: navigation.items,
-      zaken: zaakSummaries,
-      timeout,
-    };
-    // render page
-    const html = await render(data, zakenTemplate.default);
-    return Response.html(html, 200, session.getCookie());
+    if (xsrfToken) {
+      if (!this.validToken(session, xsrfToken)) {
+        return Response.error(403);
+      }
+      let data = {
+        zaken: zaakSummaries,
+      };
+      const html = await render(data, zakenListPartial.default);
+      return Response.json({
+        html,
+      });
+    } else {
+      const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
+      let data = {
+        volledigenaam: user.userName,
+        title: 'Mijn zaken',
+        shownav: true,
+        nav: navigation.items,
+        zaken: zaakSummaries,
+        timeout,
+        xsrf_token: xsrfToken,
+      };
+      // render page
+      const html = await render(data, zakenTemplate.default, {
+        'zaken-list': zakenListPartial.default,
+      });
+      return Response.html(html, 200, session.getCookie());
+    }
   }
 
   async get(zaakConnectorId: string, zaakId: string, session: Session) {
@@ -132,6 +155,16 @@ export class ZakenRequestHandler {
     } else {
       return Response.error(404);
     }
+  }
+
+  async validToken(session: Session, token: string) {
+    const xsrf_token = session.getValue('xsrf_token');
+    const invalid_xsrf_token = xsrf_token == undefined || xsrf_token !== token;
+    if (invalid_xsrf_token) {
+      console.warn('xsrf tokens do not match');
+      return false;
+    }
+    return true;
   }
 }
 

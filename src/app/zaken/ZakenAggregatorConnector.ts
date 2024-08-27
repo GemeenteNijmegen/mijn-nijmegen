@@ -34,6 +34,10 @@ export class ZakenAggregatorConnector {
     this.timeout = options.timeout;
   }
 
+  setTimeout(timeout: number) {
+    this.timeout = timeout;
+  }
+
   async getApiKey(): Promise<string> {
     if (!this.apiKey) {
       this.apiKey = await AWS.getSecret(this.keyName);
