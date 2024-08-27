@@ -31,7 +31,7 @@ function parseEvent(event: APIGatewayProxyEventV2): eventParams {
     zaak: event?.pathParameters?.zaakid,
     file: event?.pathParameters?.file,
     cookies: event.cookies.join(';'),
-    xsrfToken: event?.pathParameters?.xsrftoken,
+    xsrfToken: event?.queryStringParameters?.xsrftoken,
   };
 }
 
