@@ -2,12 +2,11 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
-import { z } from 'zod';
 import * as zaakTemplate from './templates/zaak.mustache';
 import * as zakenTemplate from './templates/zaken.mustache';
 import { User, UserFromSession } from './User';
 import { ZaakFormatter } from './ZaakFormatter';
-import { SingleZaak } from './ZaakInterface';
+import { SingleZaak, singleZaakSchema, ZaakSummariesSchema, ZaakSummarySchema } from './ZaakInterface';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 
@@ -92,11 +91,7 @@ export class ZakenRequestHandler {
 
   private async fetchGet(zaakId: string, zaakConnectorId: string, user: User) {
     const endpoint = `zaken/${zaakConnectorId}/${zaakId}`;
-    const json = await this.fetch(endpoint, user);
-    json.registratiedatum = new Date(json.registratiedatum);
-    json.verwachtte_einddatum = new Date(json.verwachtte_einddatum);
-    json.uiterlijke_einddatum = new Date(json.uiterlijke_einddatum);
-    json.einddatum = json.einddatum ? new Date(json.einddatum) : undefined;
+    const json = singleZaakSchema.parse(await this.fetch(endpoint, user));
     return json as SingleZaak;
   }
 
@@ -139,17 +134,3 @@ export class ZakenRequestHandler {
     return this.apiKey;
   }
 }
-
-export const ZaakSummarySchema = z.object({
-  identifier: z.string(),
-  internal_id: z.string(),
-  registratiedatum: z.coerce.date(),
-  verwachtte_einddatum: z.coerce.date().optional(),
-  uiterlijke_einddatum: z.coerce.date().optional(),
-  einddatum: z.coerce.date().optional().nullable(),
-  zaak_type: z.string(),
-  status: z.string().nullable(),
-  resultaat: z.string().optional().nullable(),
-});
-
-export const ZaakSummariesSchema = z.array(ZaakSummarySchema);
