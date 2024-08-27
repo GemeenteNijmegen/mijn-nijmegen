@@ -6,7 +6,7 @@ import * as zaakTemplate from './templates/zaak.mustache';
 import * as zakenTemplate from './templates/zaken.mustache';
 import { User, UserFromSession } from './User';
 import { ZaakFormatter } from './ZaakFormatter';
-import { SingleZaak, singleZaakSchema, ZaakSummariesSchema, ZaakSummarySchema } from './ZaakInterface';
+import { SingleZaak, singleZaakSchema, ZaakSummariesSchema } from './ZaakInterface';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 
@@ -91,8 +91,15 @@ export class ZakenRequestHandler {
 
   private async fetchGet(zaakId: string, zaakConnectorId: string, user: User) {
     const endpoint = `zaken/${zaakConnectorId}/${zaakId}`;
-    const json = singleZaakSchema.parse(await this.fetch(endpoint, user));
-    return json as SingleZaak;
+    try {
+      const result = await this.fetch(endpoint, user);
+      result.type = 'submission';
+      const json = singleZaakSchema.parse(result);
+      return json as SingleZaak;
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
   }
 
   async download(zaakConnectorId: string, zaakId: string, file: string, session: Session) {

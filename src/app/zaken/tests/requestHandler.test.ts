@@ -63,9 +63,9 @@ beforeAll(() => {
       json: () => {
         console.debug('mocked fetch', url);
         const urlPathParts = new URL(url).pathname.split('/');
-        if (urlPathParts[3]) {
+        if (urlPathParts[4]) {
           return Promise.resolve(mockedDownload);
-        } else if (urlPathParts[2]) {
+        } else if (urlPathParts[3]) {
           return Promise.resolve(mockedZaak);
         } else {
           return Promise.resolve(mockedZakenList);
