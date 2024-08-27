@@ -93,7 +93,6 @@ export class ZakenRequestHandler {
     const endpoint = `zaken/${zaakConnectorId}/${zaakId}`;
     try {
       const result = await this.fetch(endpoint, user);
-      result.type = 'submission';
       const json = singleZaakSchema.parse(result);
       return json as SingleZaak;
     } catch (err) {

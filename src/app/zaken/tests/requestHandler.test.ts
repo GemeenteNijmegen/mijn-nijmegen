@@ -48,6 +48,7 @@ const mockedZaak = {
   zaak_type: 'zaaktype 2',
   status: 'open',
   behandelaars: ['Jan Jansen', 'Andries Fietst'],
+  type: 'case',
 };
 
 const mockedDownload = {
