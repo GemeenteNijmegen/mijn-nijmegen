@@ -1,26 +1,28 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
-import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
+import { environmentVariables } from '@gemeentenijmegen/utils';
 import * as zaakTemplate from './templates/zaak.mustache';
 import * as zakenTemplate from './templates/zaken.mustache';
 import { User, UserFromSession } from './User';
 import { ZaakFormatter } from './ZaakFormatter';
 import { SingleZaak, singleZaakSchema, ZaakSummariesSchema } from './ZaakInterface';
+import { ZakenAggregatorConnector } from './ZakenAggregatorConnector';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 
 export class ZakenRequestHandler {
   private dynamoDBClient: DynamoDBClient;
-  private apiKey?: string;
-  private zakenApiUrl: string;
-  private zakenApiKeyName: string;
+  private connector: ZakenAggregatorConnector;
 
   constructor(dynamoDBClient: DynamoDBClient) {
     this.dynamoDBClient = dynamoDBClient;
     const env = environmentVariables(['APIGATEWAY_BASEURL', 'APIGATEWAY_APIKEY']);
-    this.zakenApiUrl = env.APIGATEWAY_BASEURL;
-    this.zakenApiKeyName = env.APIGATEWAY_APIKEY;
+    this.connector = new ZakenAggregatorConnector({
+      baseUrl: new URL(env.APIGATEWAY_BASEURL),
+      apiKeySecretName: env.APIGATEWAY_APIKEY,
+      timeout: 2000,
+    });
   }
 
   async handleRequest(cookies: string, zaakConnectorId?: string, zaak?: string, file?: string ) {
@@ -49,7 +51,7 @@ export class ZakenRequestHandler {
     const user = UserFromSession(session);
 
     const endpoint = 'zaken';
-    const json = await this.fetch(endpoint, user);
+    const json = await this.connector.fetch(endpoint, user);
     const zaken = ZaakSummariesSchema.parse(json);
     const zaakSummaries = new ZaakFormatter().formatList(zaken);
 
@@ -92,7 +94,7 @@ export class ZakenRequestHandler {
   private async fetchGet(zaakId: string, zaakConnectorId: string, user: User) {
     const endpoint = `zaken/${zaakConnectorId}/${zaakId}`;
     try {
-      const result = await this.fetch(endpoint, user);
+      const result = await this.connector.fetch(endpoint, user);
       const json = singleZaakSchema.parse(result);
       return json as SingleZaak;
     } catch (err) {
@@ -105,7 +107,7 @@ export class ZakenRequestHandler {
     const user = UserFromSession(session);
 
     const endpoint = `zaken/${zaakConnectorId}/${zaakId}/download/${file}`;
-    const response = await this.fetch(endpoint, user);
+    const response = await this.connector.fetch(endpoint, user);
 
     if (response) {
       return Response.redirect(response.downloadUrl);
@@ -113,35 +115,6 @@ export class ZakenRequestHandler {
       return Response.error(404);
     }
   }
-
-  private async fetch(endPoint: string, user: User) {
-    const key = await this.getApiKey();
-    const userParams = new URLSearchParams({
-      userType: user.type,
-      userIdentifier: user.identifier,
-    }).toString();
-    try {
-      const response = await fetch(`${this.zakenApiUrl}${endPoint}?${userParams}`, {
-        method: 'GET',
-        headers: {
-          'x-api-key': key,
-        },
-        signal: AbortSignal.timeout(2000),
-      });
-      const json = await response.json() as any;
-      return json;
-    } catch (err) {
-      console.info(err);
-    }
-  }
-
-  private async getApiKey(): Promise<string> {
-    if (!this.apiKey) {
-      this.apiKey = await AWS.getSecret(this.zakenApiKeyName);
-      if (!this.apiKey) {
-        throw Error('No API key found');
-      }
-    }
-    return this.apiKey;
-  }
 }
+
+
