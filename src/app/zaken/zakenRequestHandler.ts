@@ -51,9 +51,17 @@ export class ZakenRequestHandler {
     const user = UserFromSession(session);
 
     const endpoint = 'zaken';
-    const json = await this.connector.fetch(endpoint, user);
-    const zaken = ZaakSummariesSchema.parse(json);
-    const zaakSummaries = new ZaakFormatter().formatList(zaken);
+    let zaakSummaries;
+    let timeout = false;
+    try {
+      const json = await this.connector.fetch(endpoint, user);
+      const zaken = ZaakSummariesSchema.parse(json);
+      zaakSummaries = new ZaakFormatter().formatList(zaken);
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === 'TimeoutError') {
+        timeout = true;
+      }
+    }
 
     const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
     let data = {
@@ -62,6 +70,7 @@ export class ZakenRequestHandler {
       shownav: true,
       nav: navigation.items,
       zaken: zaakSummaries,
+      timeout,
     };
     // render page
     const html = await render(data, zakenTemplate.default);
