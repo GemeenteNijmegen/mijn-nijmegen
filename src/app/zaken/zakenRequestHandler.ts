@@ -120,14 +120,19 @@ export class ZakenRequestHandler {
       userType: user.type,
       userIdentifier: user.identifier,
     }).toString();
-    const response = await fetch(`${this.zakenApiUrl}${endPoint}?${userParams}`, {
-      method: 'GET',
-      headers: {
-        'x-api-key': key,
-      },
-    });
-    const json = await response.json() as any;
-    return json;
+    try {
+      const response = await fetch(`${this.zakenApiUrl}${endPoint}?${userParams}`, {
+        method: 'GET',
+        headers: {
+          'x-api-key': key,
+        },
+        signal: AbortSignal.timeout(2000),
+      });
+      const json = await response.json() as any;
+      return json;
+    } catch (err) {
+      console.info(err);
+    }
   }
 
   private async getApiKey(): Promise<string> {
