@@ -24,7 +24,7 @@ async function getData() {
   if(!response.ok) {
     throw new Error('Network response was not OK');
   };
-  const data = response.json();
+  const data = await response.json();
   if(data.html) {
     replaceElement(data.html);
   }    
