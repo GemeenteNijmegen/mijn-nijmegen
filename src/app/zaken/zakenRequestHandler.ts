@@ -79,18 +79,27 @@ export class ZakenRequestHandler {
 
   async get(zaakConnectorId: string, zaakId: string, session: Session) {
     const user = UserFromSession(session);
-    const zaak = await this.fetchGet(zaakId, zaakConnectorId, user);
-
-    if (zaak) {
-      const formattedZaak = new ZaakFormatter().formatZaak(zaak);
-
+    let timeout = false;
+    let formattedZaak;
+    try {
+      const zaak = await this.fetchGet(zaakId, zaakConnectorId, user);
+      if (zaak) {
+        formattedZaak = new ZaakFormatter().formatZaak(zaak);
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === 'TimeoutError') {
+        timeout = true;
+      }
+    }
+    if (formattedZaak || timeout) {
       const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
       let data = {
         volledigenaam: session.getValue('username'),
-        title: `Zaak - ${formattedZaak.zaak_type}`,
+        title: (formattedZaak) ? `Zaak - ${formattedZaak.zaak_type}` : 'Zaak ophalen niet gelukt',
         shownav: true,
         nav: navigation.items,
         zaak: formattedZaak,
+        timeout,
       };
       // render page
       const html = await render(data, zaakTemplate.default);
