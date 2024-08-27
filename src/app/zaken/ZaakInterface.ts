@@ -25,9 +25,9 @@ export const singleZaakSchema = z.object({
   zaak_type: z.string(),
   status: z.string().optional(),
   status_list: z.array(z.any()).optional(),
-  resultaat: z.string().optional(),
+  resultaat: z.string().optional().nullable(),
   documenten: z.array(z.any()).optional(),
-  taken: z.array(z.any()).optional(),
+  taken: z.array(z.any()).optional().nullable(),
   behandelaars: z.array(z.string()).optional(),
   type: z.enum(['case', 'submission']),
 });
