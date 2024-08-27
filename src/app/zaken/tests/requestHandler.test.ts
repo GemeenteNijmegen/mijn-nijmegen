@@ -48,6 +48,7 @@ const mockedZaak = {
   zaak_type: 'zaaktype 2',
   status: 'open',
   behandelaars: ['Jan Jansen', 'Andries Fietst'],
+  type: 'case',
 };
 
 const mockedDownload = {
@@ -63,9 +64,9 @@ beforeAll(() => {
       json: () => {
         console.debug('mocked fetch', url);
         const urlPathParts = new URL(url).pathname.split('/');
-        if (urlPathParts[3]) {
+        if (urlPathParts[4]) {
           return Promise.resolve(mockedDownload);
-        } else if (urlPathParts[2]) {
+        } else if (urlPathParts[3]) {
           return Promise.resolve(mockedZaak);
         } else {
           return Promise.resolve(mockedZakenList);
@@ -81,32 +82,6 @@ beforeAll(() => {
   };
   secretsMock.on(GetSecretValueCommand).resolves(output);
 });
-
-// jest.mock('../Zaken', () => {
-//   return {
-//     Zaken: jest.fn(() => {
-//       return {
-//         allowDomains: jest.fn(),
-//         list: jest.fn().mockResolvedValue(mockedZakenList),
-//         get: jest.fn().mockResolvedValue(mockedZaak),
-//         setTaken: jest.fn(),
-//       };
-//     }),
-//   };
-// });
-
-
-// jest.mock('../Inzendingen', () => {
-//   return {
-//     Inzendingen: jest.fn(() => {
-//       return {
-//         list: jest.fn().mockResolvedValue(mockedInzendingenList),
-//         get: jest.fn().mockResolvedValue(mockedZaak),
-//         download: jest.fn().mockResolvedValue(mockedDownload),
-//       };
-//     }),
-//   };
-// });
 
 const ddbMock = mockClient(DynamoDBClient);
 const getItemOutput: Partial<GetItemCommandOutput> = {
