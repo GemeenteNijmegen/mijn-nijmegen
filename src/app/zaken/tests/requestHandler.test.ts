@@ -91,6 +91,7 @@ const getItemOutput: Partial<GetItemCommandOutput> = {
         loggedin: { BOOL: true },
         identifier: { S: '900026236' },
         user_type: { S: 'person' },
+        xsrf_token: { S: 'testtoken' },
       },
     },
   },

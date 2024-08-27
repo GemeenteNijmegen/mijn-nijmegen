@@ -90,7 +90,7 @@ export class ZakenRequestHandler {
         nav: navigation.items,
         zaken: zaakSummaries,
         timeout,
-        xsrf_token: xsrfToken,
+        xsrf_token: session.getValue('xsrf_token'),
       };
       // render page
       const html = await render(data, zakenTemplate.default, {
