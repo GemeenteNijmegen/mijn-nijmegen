@@ -15,19 +15,24 @@ function updateZaken() {
 
 async function getData() {
   const token = document.querySelector('meta[name=xsrf-token]').content;
-  const response = await fetch(`?xsrftoken=${token}`, {
+  const response = await fetch('', {
     method: 'GET',
     credentials: "same-origin",
-    headers: { 'accept': 'application/json' },
+    headers: { 
+      'accept': 'application/json',
+      'xsrftoken': token,
+    }
   });
 
   if(!response.ok) {
     throw new Error('Network response was not OK');
   };
   const data = await response.json();
-  if(data.html) {
-    replaceElement(data.html);
-  }    
+  if(data.elements) {
+    for(el of elements) {
+      replaceElement(el);
+    }
+  } 
   // if(data.error) {
     // showErrorMessage(sendingButton, data.error);
   // }

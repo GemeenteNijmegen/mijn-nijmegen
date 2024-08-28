@@ -1,0 +1,26 @@
+
+<table class="responsive-table" id="open-zaken-list">
+    <thead>
+    <tr>
+        <th>Omschrijving</th>
+        <th>Zaaknummer</th>
+        <th>Datum</th>
+        <th>Fase</th>
+        <th>Actie</th>
+    </tr>
+    </thead>
+    <tbody>
+{{#zaken.open}}
+    <tr>
+        <td>{{zaak_type}}</td>
+        <td class="nowrap">{{identifier}}</td>
+        <td class="nowrap">{{registratiedatum}}</td>
+        <td class="nowrap">{{status}}</td>
+        <td><a href="/zaken/{{internal_id}}">Bekijk</a></td>
+    </tr>
+{{/zaken.open}}
+{{^zaken.open}}
+    <tr><td colspan="5">Er zijn geen open zaken gevonden.</td></tr>
+{{/zaken.open}}
+    </tbody>
+</table>

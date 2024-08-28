@@ -18,15 +18,39 @@
             <h1>Mijn zaken</h1>
             <p class="lead">Hier vindt u een overzicht van uw zaken.</p>
             <div class="alert alert-info">Op dit moment vindt u in Mijn Nijmegen informatie over uw aanvragen/meldingen. Het kan dat uw aanvraag of zaak niet in dit overzicht staat, nog niet alles wordt hier getoond. Uiteindelijk vindt u in Mijn Nijmegen al uw online zaken met ons terug, hier werken we aan.</div>
+            <div id="zaken-container" class="tabs-wrapper">
+                <!-- Tab List -->
+                <div class="nav classic-tabs-no-line" role="tablist">
+                    <div class="nav-item">
+                        <button class="nav-link active" role="tab" aria-selected="true" aria-controls="open-zaken-tab" id="example-1">
+                            Lopende zaken
+                        </button>
+                    </div>
+                    <div class="nav-item">
+                        <button class="nav-link" role="tab" aria-selected="false" aria-controls="gesloten-zaken-tab" id="example-2" tabindex="-1">
+                            Afgeronde zaken
+                        </button>
+                    </div>
+                </div>
+                <!-- Tab Content -->
+                    <div class="tab-content" tabindex="0" role="tabpanel" id="open-zaken-tab" aria-labelledby="example-1">
+                        {{#timeout}}
+                            <p>Bezig met ophalen van uw open zaken…</p>
+                        {{/timeout}}
+                        {{^timeout}}
+                            {{>zaken-list-open}}
+                        {{/timeout}}
+                    </div>
+                    <div class="tab-content" tabindex="0" role="tabpanel" id="gesloten-zaken-tab" aria-labelledby="example-2" hidden="">
+                        {{#timeout}}
+                            <p>Bezig met ophalen van uw afgeronde zaken…</p>
+                        {{/timeout}}
+                        {{^timeout}}
+                            {{>zaken-list-closed}}
+                        {{/timeout}}
 
-            {{#timeout}}
-            <div id="zaken-container" data-loaded="false">
-                <p>Bezig met ophalen van uw zaken. Een moment geduld alstublieft.</p>
-            </div>
-            {{/timeout}}
-            {{^timeout}}
-            {{>zaken-list}}
-            {{/timeout}}
+                    </div>
+                </div>
         </div>
     </div>
 

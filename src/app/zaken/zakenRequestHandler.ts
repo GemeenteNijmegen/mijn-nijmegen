@@ -3,7 +3,8 @@ import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
 import * as zaakTemplate from './templates/zaak.mustache';
-import * as zakenListPartial from './templates/zaken-list.mustache';
+import * as zakenListClosedPartial from './templates/zaken-list-closed.mustache';
+import * as zakenListOpenPartial from './templates/zaken-list-open.mustache';
 import * as zakenTemplate from './templates/zaken.mustache';
 import { User, UserFromSession } from './User';
 import { ZaakFormatter } from './ZaakFormatter';
@@ -71,33 +72,43 @@ export class ZakenRequestHandler {
     }
 
     if (xsrfToken) {
-      if (!this.validToken(session, xsrfToken)) {
-        return Response.error(403);
-      }
-      let data = {
-        zaken: zaakSummaries,
-      };
-      const html = await render(data, zakenListPartial.default);
-      return Response.json({
-        html,
-      });
+      return this.jsonResponse(session, zaakSummaries, xsrfToken);
     } else {
-      const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
-      let data = {
-        volledigenaam: user.userName,
-        title: 'Mijn zaken',
-        shownav: true,
-        nav: navigation.items,
-        zaken: zaakSummaries,
-        timeout,
-        xsrf_token: session.getValue('xsrf_token'),
-      };
-      // render page
-      const html = await render(data, zakenTemplate.default, {
-        'zaken-list': zakenListPartial.default,
-      });
-      return Response.html(html, 200, session.getCookie());
+      return this.htmlResponse(session, user, zaakSummaries, timeout);
     }
+  }
+
+  async jsonResponse(session: Session, zaakSummaries: any, xsrfToken: string ) {
+    if (!this.validToken(session, xsrfToken)) {
+      return Response.error(403);
+    }
+    let data = {
+      zaken: zaakSummaries,
+    };
+    const openHtml = await render(data, zakenListOpenPartial.default);
+    const closedHtml = await render(data, zakenListClosedPartial.default);
+    return Response.json({
+      elements: [openHtml, closedHtml],
+    });
+  }
+
+  async htmlResponse(session: Session, user: User, zaakSummaries: any, timeout?: boolean) {
+    const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
+    let data = {
+      volledigenaam: user.userName,
+      title: 'Mijn zaken',
+      shownav: true,
+      nav: navigation.items,
+      zaken: zaakSummaries,
+      timeout,
+      xsrf_token: session.getValue('xsrf_token'),
+    };
+      // render page
+    const html = await render(data, zakenTemplate.default, {
+      'zaken-list-open': zakenListOpenPartial.default,
+      'zaken-list-closed': zakenListClosedPartial.default,
+    });
+    return Response.html(html, 200, session.getCookie());
   }
 
   async get(zaakConnectorId: string, zaakId: string, session: Session) {
