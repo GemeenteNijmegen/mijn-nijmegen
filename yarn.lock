@@ -26,9 +26,9 @@
   integrity sha512-twhuEG+JPOYCYPx/xy5uH2+VUsIEhPTzDY0F1KuB+ocjWWB/KEDiOVL19nHvbPCB6fhWnkykXEMJ4HHcKvjtvg==
 
 "@aws-cdk/cloud-assembly-schema@^36.0.5":
-  version "36.0.18"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/cloud-assembly-schema/-/cloud-assembly-schema-36.0.18.tgz#bd70d653ed9725a3dd812a25af4bf65d299c99ec"
-  integrity sha512-PP6vgYVoydEh7JKjv/UQccUI2dGfEHlfX+hhI4e3arcT73xmiXP5ck9SrToqgPx4aio3tHTQpnDYeD7l3XV/gQ==
+  version "36.0.19"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/cloud-assembly-schema/-/cloud-assembly-schema-36.0.19.tgz#7c3857bd1579b2049bc57e79d824ac3ad96b2e21"
+  integrity sha512-hl8IJpoSMNwUWc1OoTrA4IlFX920/o95oKPiChvQyfcUPedscolM0ThiJqsh1XjpXE1G40JBgOdi3MN1hrrslA==
   dependencies:
     jsonschema "^1.4.1"
     semver "^7.6.3"
@@ -829,19 +829,19 @@
     "@smithy/types" "^3.3.0"
     tslib "^2.6.2"
 
-"@aws-solutions-constructs/aws-lambda-dynamodb@^2.67.0":
-  version "2.67.0"
-  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/aws-lambda-dynamodb/-/aws-lambda-dynamodb-2.67.0.tgz#a1036ead5431d17ad771eb62e31bc014df017c27"
-  integrity sha512-HE9Iysh7q1EgCTpfYCMws04Wex6yzYVq3hwpLgtnF5bSBG1ZFArFyuFIax871+wHuU2l/tLG9kN3uZ+p6RA0Tw==
+"@aws-solutions-constructs/aws-lambda-dynamodb@^2.67.1":
+  version "2.67.1"
+  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/aws-lambda-dynamodb/-/aws-lambda-dynamodb-2.67.1.tgz#5b5734fbb8dc78fc7b4ef4911dc6aa5a6d5ed41d"
+  integrity sha512-V3osRTz98bUQ4vay2EcYroMnQsgL38u8vkjHuvQoxa07tXQipQhCUSDjJIWDUDJRoGp43AhylKl8BO3uqdN6cg==
   dependencies:
     "@aws-cdk/integ-tests-alpha" "2.151.0-alpha.0"
-    "@aws-solutions-constructs/core" "2.67.0"
+    "@aws-solutions-constructs/core" "2.67.1"
     constructs "^10.0.0"
 
-"@aws-solutions-constructs/core@2.67.0":
-  version "2.67.0"
-  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/core/-/core-2.67.0.tgz#a6bbec193c2096f619f2ec28610a5a6a3f3994aa"
-  integrity sha512-coOuN+Ri3q0anQ5KKFIj++lX1N16uWWVlMcyvdvW3YkK+Cz0bF8cNMAUoqW2wCLFipHOA6gBwBEnYNqa0jhhXQ==
+"@aws-solutions-constructs/core@2.67.1":
+  version "2.67.1"
+  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/core/-/core-2.67.1.tgz#20cf485933a58bf1b896422fe8cf6948a8fba463"
+  integrity sha512-DeA4tiUgihjEAre/bBVQ6eGgxZhkC4wbYMVOom/lJHIhQD8u3dVB3AqswaA/UHBxBu/aB5tiWyeca6w65l7y4Q==
   dependencies:
     "@aws-cdk/integ-tests-alpha" "2.151.0-alpha.0"
     constructs "^10.0.0"
@@ -1310,10 +1310,10 @@
   dependencies:
     "@types/aws-lambda" "^8.10.143"
 
-"@gemeentenijmegen/aws-constructs@^0.0.17":
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/aws-constructs/-/aws-constructs-0.0.17.tgz#b52ad2e2daac8b63919e21e70ed260b82df781eb"
-  integrity sha512-rxRUZHe5MQUNwAwHY1b9E68x9m2VkhosqMq7czeQw67LyCFV+jeqtc8O/jXv0DwD/OKNjegNfdu0zAwOUuY5Yg==
+"@gemeentenijmegen/aws-constructs@^0.0.18":
+  version "0.0.18"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/aws-constructs/-/aws-constructs-0.0.18.tgz#d01ea83eedda37efdc64212fef7f54d4c5356bbd"
+  integrity sha512-MXvbyQwfd9wGFJl+jP1xrWIV18Fi/kGjqOrVEpMkC/XlvNH/yJdH6ya1NZDCS+OmBAJcBvRmJ7htv1f1b5eBOw==
 
 "@gemeentenijmegen/projen-project-type@^1.7.4":
   version "1.7.4"
@@ -2258,10 +2258,10 @@
   resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.4.tgz#0b92dcc0cc1c81f6f306a381f28e31b1a56536e9"
   integrity sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==
 
-"@types/aws-lambda@^8.10.143":
-  version "8.10.143"
-  resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.143.tgz#383693fbaadc6994a71d64a7c09e8c244fad8dff"
-  integrity sha512-u5vzlcR14ge/4pMTTMDQr3MF0wEe38B2F9o84uC4F43vN5DGTy63npRrB6jQhyt+C0lGv4ZfiRcRkqJoZuPnmg==
+"@types/aws-lambda@^8.10.143", "@types/aws-lambda@^8.10.144":
+  version "8.10.144"
+  resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.144.tgz#4c9dfed39a41bf92eea0b8ad7bb087dcc0b5864b"
+  integrity sha512-zRN25EUlALZsDlFfFCFEkQYXWj2WWu69pDBTycrsoFE+cS0XEs8vpFlSrq/L8OoJsrMW12LZtpvDHIGwGkQ2yg==
 
 "@types/babel__core@^7.1.14":
   version "7.20.5"
