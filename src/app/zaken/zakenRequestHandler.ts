@@ -11,6 +11,7 @@ import { ZaakFormatter } from './ZaakFormatter';
 import { SingleZaak, singleZaakSchema, ZaakSummariesSchema } from './ZaakInterface';
 import { eventParams } from './zaken.lambda';
 import { ZakenAggregatorConnector } from './ZakenAggregatorConnector';
+import { Spinner } from '../../shared/Icons';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 
@@ -107,6 +108,7 @@ export class ZakenRequestHandler {
     const html = await render(data, zakenTemplate.default, {
       'zaken-list-open': zakenListOpenPartial.default,
       'zaken-list-closed': zakenListClosedPartial.default,
+      'spinner': Spinner.default,
     });
     return Response.html(html, 200, session.getCookie());
   }

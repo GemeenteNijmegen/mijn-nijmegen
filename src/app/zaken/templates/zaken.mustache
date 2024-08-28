@@ -35,7 +35,7 @@
                 <!-- Tab Content -->
                     <div class="tab-content" tabindex="0" role="tabpanel" id="open-zaken-tab" aria-labelledby="example-1">
                         {{#timeout}}
-                            <p>Bezig met ophalen van uw open zaken…</p>
+                            <p>Bezig met ophalen van uw open zaken… {{>spinner}}</p>
                         {{/timeout}}
                         {{^timeout}}
                             {{>zaken-list-open}}
@@ -43,7 +43,7 @@
                     </div>
                     <div class="tab-content" tabindex="0" role="tabpanel" id="gesloten-zaken-tab" aria-labelledby="example-2" hidden="">
                         {{#timeout}}
-                            <p>Bezig met ophalen van uw afgeronde zaken…</p>
+                            <p>Bezig met ophalen van uw afgeronde zaken… {{>spinner}}</p>
                         {{/timeout}}
                         {{^timeout}}
                             {{>zaken-list-closed}}
