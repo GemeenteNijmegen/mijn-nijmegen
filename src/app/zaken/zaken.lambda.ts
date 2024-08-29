@@ -20,6 +20,7 @@ export interface eventParams {
   zaakConnectorId?: string;
   file?: string;
   xsrfToken?: string;
+  responseType?: 'json' | 'html';
 }
 
 function parseEvent(event: APIGatewayProxyEventV2): eventParams {
@@ -32,6 +33,7 @@ function parseEvent(event: APIGatewayProxyEventV2): eventParams {
     file: event?.pathParameters?.file,
     cookies: event.cookies.join(';'),
     xsrfToken: event?.headers?.xsrftoken,
+    responseType: event?.headers?.accept == 'application/json' ? 'json' : 'html',
   };
 }
 

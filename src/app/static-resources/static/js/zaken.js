@@ -19,7 +19,7 @@ async function getData() {
     method: 'GET',
     credentials: "same-origin",
     headers: { 
-      'accept': 'application/json',
+      'Accept': 'application/json',
       'xsrftoken': token,
     }
   });

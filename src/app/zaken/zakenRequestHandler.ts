@@ -4,7 +4,7 @@ import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
 import * as zaakRow from './templates/zaak-row.mustache';
 import * as zaakTemplate from './templates/zaak.mustache';
-import * as zakenListPartial from './templates/zaken-list-open.mustache';
+import * as zakenListPartial from './templates/zaken-table.mustache';
 import * as zakenTemplate from './templates/zaken.mustache';
 import { User, UserFromSession } from './User';
 import { ZaakFormatter } from './ZaakFormatter';
@@ -38,7 +38,7 @@ export class ZakenRequestHandler {
     }
 
     if (!params.zaak) {
-      return this.list(session, params.xsrfToken);
+      return this.list(session, params);
     }
 
     if (params.zaak && params.zaakConnectorId && !params.file) {
@@ -51,54 +51,45 @@ export class ZakenRequestHandler {
     return Response.error(400);
   }
 
-  async list(session: Session, xsrfToken?: string) {
+  async list(session: Session, params: eventParams) {
     const user = UserFromSession(session);
 
     const endpoint = 'zaken';
-    let zaakSummaries;
+    let zakenList;
     let timeout = false;
     try {
-      if (xsrfToken) {
+      if (params.xsrfToken) {
         this.connector.setTimeout(10000); // allow for more time from frontend
       } else {
-        this.connector.setTimeout(2000);
+        this.connector.setTimeout(500);
       }
       const json = await this.connector.fetch(endpoint, user);
       const zaken = ZaakSummariesSchema.parse(json);
-      zaakSummaries = new ZaakFormatter().formatList(zaken);
+      zakenList = new ZaakFormatter().formatList(zaken);
     } catch (err: unknown) {
       if (err instanceof Error && err.name === 'TimeoutError') {
         timeout = true;
       }
     }
 
-    if (xsrfToken) {
-      return this.jsonResponse(session, zaakSummaries, xsrfToken);
+    if (params.responseType == 'json') {
+      return this.jsonResponse(session, zakenList, params.xsrfToken);
     } else {
-      return this.htmlResponse(session, user, zaakSummaries, timeout);
+      return this.htmlResponse(session, user, zakenList, timeout);
     }
   }
 
-  async jsonResponse(session: Session, zaakSummaries: any, xsrfToken: string ) {
-    if (!this.validToken(session, xsrfToken)) {
+  async jsonResponse(session: Session, zaakSummaries: any, xsrfToken?: string ) {
+    if (!xsrfToken || !this.validToken(session, xsrfToken)) {
       return Response.error(403);
     }
-    const openHtml = await render({ zaken: zaakSummaries.open, id: 'open-zaken-list' }, zakenListPartial.default,
-      {
-        'zaak-row': zaakRow.default,
-      });
-    const closedHtml = await render({ zaken: zaakSummaries.closed, id: 'closed-zaken-list' }, zakenListPartial.default,
-      {
-        'zaak-row': zaakRow.default,
-      });
+    const { openHtml, closedHtml } = await this.zakenListsHtml(zaakSummaries);
     return Response.json({
       elements: [openHtml, closedHtml],
     });
   }
 
-  async htmlResponse(session: Session, user: User, zaakSummaries: any, timeout?: boolean) {
-    const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
-
+  private async zakenListsHtml(zaakSummaries: any) {
     let openHtml, closedHtml;
     if (zaakSummaries) {
       openHtml = await render({ zaken: zaakSummaries.open, id: 'open-zaken-list' }, zakenListPartial.default,
@@ -110,6 +101,13 @@ export class ZakenRequestHandler {
           'zaak-row': zaakRow.default,
         });
     }
+    return { openHtml, closedHtml };
+  }
+
+  async htmlResponse(session: Session, user: User, zaakSummaries: any, timeout?: boolean) {
+    const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
+
+    const { openHtml, closedHtml } = await this.zakenListsHtml(zaakSummaries);
 
     let data = {
       'volledigenaam': user.userName,
