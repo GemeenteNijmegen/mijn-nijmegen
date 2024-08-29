@@ -11,13 +11,7 @@
     </thead>
     <tbody>
 {{#zaken.open}}
-    <tr>
-        <td>{{zaak_type}}</td>
-        <td class="nowrap">{{identifier}}</td>
-        <td class="nowrap">{{registratiedatum}}</td>
-        <td class="nowrap">{{status}}</td>
-        <td><a href="/zaken/{{internal_id}}">Bekijk</a></td>
-    </tr>
+    {{>zaak-row}}
 {{/zaken.open}}
 {{^zaken.open}}
     <tr><td colspan="5">Er zijn geen open zaken gevonden.</td></tr>

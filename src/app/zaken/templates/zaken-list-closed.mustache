@@ -10,14 +10,7 @@
     </thead>
     <tbody>
 {{#zaken.gesloten}}
-    <tr>
-        <td>{{zaak_type}}</td>
-        <td>{{identifier}}</td>
-        <td>{{registratiedatum}}</td>
-        <td>{{status}}</td>
-        <td><a href="/zaken/{{internal_id}}">Bekijk</a></td>
-    </tr>
-    
+    {{>zaak-row}}
 {{/zaken.gesloten}}
 {{^zaken.gesloten}}
     <tr><td colspan="5">Er zijn geen gesloten zaken gevonden.</td></tr>

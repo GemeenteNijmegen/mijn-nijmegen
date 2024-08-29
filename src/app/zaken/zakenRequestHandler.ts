@@ -2,6 +2,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
+import * as zaakRow from './templates/zaak-row.mustache';
 import * as zaakTemplate from './templates/zaak.mustache';
 import * as zakenListClosedPartial from './templates/zaken-list-closed.mustache';
 import * as zakenListOpenPartial from './templates/zaken-list-open.mustache';
@@ -108,6 +109,7 @@ export class ZakenRequestHandler {
     const html = await render(data, zakenTemplate.default, {
       'zaken-list-open': zakenListOpenPartial.default,
       'zaken-list-closed': zakenListClosedPartial.default,
+      'zaak': zaakRow.default,
       'spinner': Spinner.default,
     });
     return Response.html(html, 200, session.getCookie());
