@@ -99,15 +99,17 @@ export class ZakenRequestHandler {
   async htmlResponse(session: Session, user: User, zaakSummaries: any, timeout?: boolean) {
     const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
 
-    console.debug(zaakSummaries.open);
-    const openHtml = await render({ zaken: zaakSummaries.open, id: 'open-zaken-list' }, zakenListPartial.default,
-      {
-        'zaak-row': zaakRow.default,
-      });
-    const closedHtml = await render({ zaken: zaakSummaries.closed, id: 'closed-zaken-list' }, zakenListPartial.default,
-      {
-        'zaak-row': zaakRow.default,
-      });
+    let openHtml, closedHtml;
+    if (zaakSummaries) {
+      openHtml = await render({ zaken: zaakSummaries.open, id: 'open-zaken-list' }, zakenListPartial.default,
+        {
+          'zaak-row': zaakRow.default,
+        });
+      closedHtml = await render({ zaken: zaakSummaries.closed, id: 'closed-zaken-list' }, zakenListPartial.default,
+        {
+          'zaak-row': zaakRow.default,
+        });
+    }
 
     let data = {
       'volledigenaam': user.userName,
