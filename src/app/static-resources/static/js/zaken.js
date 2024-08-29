@@ -29,7 +29,7 @@ async function getData() {
   };
   const data = await response.json();
   if(data.elements) {
-    for(el of elements) {
+    for(el of data.elements) {
       replaceElement(el);
     }
   } 
