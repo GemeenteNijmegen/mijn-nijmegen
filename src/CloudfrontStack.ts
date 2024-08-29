@@ -26,6 +26,7 @@ import {
   CacheQueryStringBehavior,
   SecurityPolicyProtocol,
   OriginAccessIdentity,
+  ErrorResponse,
 } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin, S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { RemoteParameters } from 'cdk-remote-stack';
@@ -201,7 +202,8 @@ export class CloudfrontStack extends Stack {
         httpStatus: code,
         responseHttpStatus: code,
         responsePagePath: `/static/http-errors/${code}.html`,
-      };
+        ttl: Duration.seconds(0),
+      } as ErrorResponse;
     });
   }
 
