@@ -89,21 +89,6 @@ export class ZakenRequestHandler {
     });
   }
 
-  private async zakenListsHtml(zaakSummaries: any) {
-    let openHtml, closedHtml;
-    if (zaakSummaries) {
-      openHtml = await render({ zaken: zaakSummaries.open, id: 'open-zaken-list' }, zakenListPartial.default,
-        {
-          'zaak-row': zaakRow.default,
-        });
-      closedHtml = await render({ zaken: zaakSummaries.closed, id: 'closed-zaken-list' }, zakenListPartial.default,
-        {
-          'zaak-row': zaakRow.default,
-        });
-    }
-    return { openHtml, closedHtml };
-  }
-
   async htmlResponse(session: Session, user: User, zaakSummaries: any, timeout?: boolean) {
     const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
 
@@ -125,6 +110,21 @@ export class ZakenRequestHandler {
       spinner: Spinner.default,
     });
     return Response.html(html, 200, session.getCookie());
+  }
+
+  private async zakenListsHtml(zaakSummaries: any) {
+    let openHtml, closedHtml;
+    if (zaakSummaries) {
+      openHtml = await render({ zaken: zaakSummaries.open, id: 'open-zaken-list' }, zakenListPartial.default,
+        {
+          'zaak-row': zaakRow.default,
+        });
+      closedHtml = await render({ zaken: zaakSummaries.closed, id: 'closed-zaken-list' }, zakenListPartial.default,
+        {
+          'zaak-row': zaakRow.default,
+        });
+    }
+    return { openHtml, closedHtml };
   }
 
   async get(zaakConnectorId: string, zaakId: string, session: Session) {

@@ -22,6 +22,9 @@ interface ZakenAggregatorConnectorOptions {
 
 }
 
+/**
+ * Manages connections to the zaakaggregator service
+ */
 export class ZakenAggregatorConnector {
   private keyName: string;
   private apiKey?: string;

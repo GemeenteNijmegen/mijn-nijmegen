@@ -1,14 +1,14 @@
 addEventListener("DOMContentLoaded", (event) => {
-  updateZaken();
+  updateContent();
 });
 
 
 /**
  * Check if zaken have loaded, if not, try to load async
  */
-function updateZaken() {
-  const zakenContainer = document.getElementById('zaken-container');
-  if(zakenContainer.dataset.loaded=='false') {
+function updateContent() {
+  const body = document.querySelector('body');
+  if(body.dataset?.loaded=='false') {
     getData();
   }
 }
