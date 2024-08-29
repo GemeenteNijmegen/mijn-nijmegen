@@ -1,5 +1,5 @@
 
-<table class="responsive-table" id="open-zaken-list">
+<table class="responsive-table" id="{{id}}">
     <thead>
     <tr>
         <th>Omschrijving</th>
@@ -10,11 +10,11 @@
     </tr>
     </thead>
     <tbody>
-{{#zaken.open}}
+{{#zaken}}
     {{>zaak-row}}
-{{/zaken.open}}
-{{^zaken.open}}
-    <tr><td colspan="5">Er zijn geen open zaken gevonden.</td></tr>
-{{/zaken.open}}
+{{/zaken}}
+{{^zaken}}
+    <tr><td colspan="5">Er zijn geen zaken gevonden.</td></tr>
+{{/zaken}}
     </tbody>
 </table>
