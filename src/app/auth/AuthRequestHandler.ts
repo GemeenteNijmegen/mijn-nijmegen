@@ -80,6 +80,7 @@ export class AuthRequestHandler {
           username: { S: username },
           id_token: { S: tokens.id_token },
           refresh_token: { S: tokens.refresh_token },
+          xsrf_token: { S: this.config.OpenIdConnect.generateState() },
           ...additional_session_data,
         });
       } catch (error: any) {

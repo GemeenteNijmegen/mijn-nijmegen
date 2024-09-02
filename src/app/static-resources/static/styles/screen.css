@@ -303,3 +303,5 @@ nav.nijmegen-sidenav li.active svg {
     width: auto;
     flex-shrink: 0;
 }
+
+.spinner{transform-origin:center;animation:spinner_spin .75s infinite linear}@keyframes spinner_spin{100%{transform:rotate(360deg)}}
