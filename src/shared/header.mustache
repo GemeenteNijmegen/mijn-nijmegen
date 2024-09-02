@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
+    {{#xsrf_token}}<meta name="xsrf-token" content="{{ xsrf_token }}">{{/xsrf_token}} 
     <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
     
     <!-- Preload fonts and external styles -->
@@ -51,7 +52,7 @@
     <link rel="stylesheet" href="/static/styles/zaak.css">
     <title>Mijn Nijmegen{{#title}} - {{.}} {{/title}}</title>
     </head>
-<body>
+<body data-loaded="{{#timeout}}false{{/timeout}}">
 <nav class="navbar fixed-top navbar-expand-lg scrolling-navbar navbar-light">
     <ul class="navbar-skiplinks">
         <li>
@@ -59,10 +60,10 @@
         </li>
     </ul>
     <div class="container">
-        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false">
+        {{#shownav}}<button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false">
             <span class="sr-only">Menu</span>
             <span class="navbar-toggler-icon" aria-hidden="true"></span>
-        </button>
+        </button>{{/shownav}}
         <a class="navbar-brand" href="/">
             <span class="sr-only">Homepage Mijn Nijmegen</span>
             <div class="navbar-brand-container">

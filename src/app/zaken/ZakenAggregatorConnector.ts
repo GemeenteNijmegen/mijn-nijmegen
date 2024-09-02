@@ -22,6 +22,9 @@ interface ZakenAggregatorConnectorOptions {
 
 }
 
+/**
+ * Manages connections to the zaakaggregator service
+ */
 export class ZakenAggregatorConnector {
   private keyName: string;
   private apiKey?: string;
@@ -32,6 +35,10 @@ export class ZakenAggregatorConnector {
     this.keyName = options.apiKeySecretName;
     this.baseUrl = options.baseUrl;
     this.timeout = options.timeout;
+  }
+
+  setTimeout(timeout: number) {
+    this.timeout = timeout;
   }
 
   async getApiKey(): Promise<string> {
