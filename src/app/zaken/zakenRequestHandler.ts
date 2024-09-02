@@ -61,7 +61,7 @@ export class ZakenRequestHandler {
       if (params.xsrfToken) {
         this.connector.setTimeout(10000); // allow for more time from frontend
       } else {
-        this.connector.setTimeout(500);
+        this.connector.setTimeout(2000);
       }
       const json = await this.connector.fetch(endpoint, user);
       const zaken = ZaakSummariesSchema.parse(json);
