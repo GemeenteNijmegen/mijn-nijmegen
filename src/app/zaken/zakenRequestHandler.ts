@@ -58,7 +58,7 @@ export class ZakenRequestHandler {
     let zakenList;
     let timeout = false;
     try {
-      if (params.xsrfToken) {
+      if (params.responseType == 'json') {
         this.connector.setTimeout(10000); // allow for more time from frontend
       } else {
         this.connector.setTimeout(2000);
