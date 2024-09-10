@@ -149,7 +149,7 @@ export class ssmParamsConstruct extends Construct {
     });
 
     new SSM.StringParameter(this, 'ssm_brp_2', {
-      stringValue: 'https://proefomgeving.haalcentraal.nl/haalcentraal/api/brp/personen',
+      stringValue: 'api.haal-centraal-brp-dev.csp-nijmegen.nl',
       parameterName: Statics.ssmBrpHaalCentraalApiEndpointUrl,
     });
 
