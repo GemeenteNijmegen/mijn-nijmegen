@@ -21,10 +21,10 @@ export class ZakenRequestHandler {
 
   constructor(dynamoDBClient: DynamoDBClient) {
     this.dynamoDBClient = dynamoDBClient;
-    const env = environmentVariables(['APIGATEWAY_BASEURL', 'APIGATEWAY_APIKEY']);
+    const env = environmentVariables(['ZAKEN_APIGATEWAY_BASEURL', 'ZAKEN_APIGATEWAY_APIKEY']);
     this.connector = new ZakenAggregatorConnector({
-      baseUrl: new URL(env.APIGATEWAY_BASEURL),
-      apiKeySecretName: env.APIGATEWAY_APIKEY,
+      baseUrl: new URL(env.ZAKEN_APIGATEWAY_BASEURL),
+      apiKeySecretName: env.ZAKEN_APIGATEWAY_APIKEY,
       timeout: 2000,
     });
   }

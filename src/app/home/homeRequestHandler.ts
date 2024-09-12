@@ -29,10 +29,10 @@ export class HomeRequestHandler {
     this.dynamoDBClient = dynamoDBClient;
     this.props = props;
 
-    const env = environmentVariables(['APIGATEWAY_BASEURL', 'APIGATEWAY_APIKEY']);
+    const env = environmentVariables(['ZAKEN_APIGATEWAY_BASEURL', 'ZAKEN_APIGATEWAY_APIKEY']);
     this.zakenConnector = new ZakenAggregatorConnector({
-      baseUrl: new URL(env.APIGATEWAY_BASEURL),
-      apiKeySecretName: env.APIGATEWAY_APIKEY,
+      baseUrl: new URL(env.ZAKEN_APIGATEWAY_BASEURL),
+      apiKeySecretName: env.ZAKEN_APIGATEWAY_APIKEY,
       timeout: 2000,
     });
   }
@@ -72,11 +72,10 @@ export class HomeRequestHandler {
     const user = UserFromSession(session);
 
     const endpoint = 'zaken';
-    let zakenList;
     const json = await this.zakenConnector.fetch(endpoint, user);
     const zaken = ZaakSummariesSchema.parse(json);
-    zakenList = new ZaakFormatter().formatList(zaken);
-    return this.zakenListsHtml(zaken);
+    const zakenList = new ZaakFormatter().formatList(zaken);
+    return this.zakenListsHtml(zakenList);
   }
 
   private async zakenListsHtml(zaakSummaries: any) {

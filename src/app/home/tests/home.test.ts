@@ -1,7 +1,9 @@
 import * as fs from 'fs';
 import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
+import { GetSecretValueCommand, GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'aws-sdk-client-mock';
+import { ZaakSummary } from '../../zaken/ZaakInterface';
 import { HomeRequestHandler } from '../homeRequestHandler';
 
 beforeAll(() => {
@@ -14,13 +16,62 @@ beforeAll(() => {
   // Set env variables
   process.env.SESSION_TABLE = 'mijnuitkering-sessions';
   process.env.APPLICATION_URL_BASE = 'https://testing.example.com/';
+  process.env.ZAKEN_APIGATEWAY_BASEURL = 'https://localhost';
+  process.env.ZAKEN_APIGATEWAY_APIKEY = 'test';
+
+  const sampleDate = new Date();
+  const mockedZakenList: ZaakSummary[] = [
+    {
+      identifier: '123',
+      internal_id: 'zaak/hiereenuuid',
+      registratiedatum: sampleDate,
+      verwachtte_einddatum: sampleDate,
+      uiterlijke_einddatum: sampleDate,
+      einddatum: sampleDate,
+      zaak_type: 'zaaktype1',
+      status: 'open',
+    }, {
+      identifier: '456',
+      internal_id: 'zaak/nogeenuuid',
+      registratiedatum: sampleDate,
+      verwachtte_einddatum: sampleDate,
+      uiterlijke_einddatum: sampleDate,
+      einddatum: sampleDate,
+      zaak_type: 'zaaktype1',
+      status: 'open',
+      resultaat: 'vergunning verleend',
+    },
+    {
+      identifier: '234',
+      internal_id: 'inzending/234',
+      registratiedatum: sampleDate,
+      zaak_type: 'inzending',
+      status: 'ontvangen',
+    },
+  ];
 
   const outputDir = path.join(__dirname, 'output');
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
+
+  global.fetch = jest.fn((url: string) =>
+    Promise.resolve({
+      json: () => {
+        console.debug('mocked fetch', url);
+        return Promise.resolve(mockedZakenList);
+      },
+    }),
+  ) as jest.Mock;
 });
 
 
 const ddbMock = mockClient(DynamoDBClient);
+const secretsMock = mockClient(SecretsManagerClient);
+const output: GetSecretValueCommandOutput = {
+  $metadata: {},
+  SecretString: 'ditiseennepgeheim',
+};
+secretsMock.on(GetSecretValueCommand).resolves(output);
+
 
 beforeEach(() => {
   ddbMock.reset();
@@ -29,8 +80,8 @@ beforeEach(() => {
       data: {
         M: {
           loggedin: { BOOL: true },
-          identifier: { S: '12345678' },
-          bsn: { S: '12345678' },
+          identifier: { S: '900222670' },
+          bsn: { S: '900222670' },
           user_type: { S: 'person' },
           state: { S: '12345' },
           username: { S: 'Jan de Tester' },
