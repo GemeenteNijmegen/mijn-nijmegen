@@ -312,7 +312,7 @@ font-src 'self' https://componenten.nijmegen.nl https://fonts.gstatic.com;
 img-src 'self' https://componenten.nijmegen.nl data: https://*.siteimproveanalytics.io;
 object-src 'none';
 `;
-    return cspValues.replace(/[ ]+/g, ' ').trim();
+    return cspValues.split('\n').join(' ').replace(/[ ]+/g, ' ').trim();
   }
 
   /**
