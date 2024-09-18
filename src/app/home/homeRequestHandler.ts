@@ -72,7 +72,7 @@ export class HomeRequestHandler {
     const user = UserFromSession(session);
 
     const endpoint = 'zaken';
-    const json = await this.zakenConnector.fetch(endpoint, user);
+    const json = await this.zakenConnector.fetch(endpoint, user, new URLSearchParams({ maxResults: '5' }));
     const zaken = ZaakSummariesSchema.parse(json);
     const zakenList = new ZaakFormatter().formatList(zaken);
     return this.zakenListsHtml(zakenList);
