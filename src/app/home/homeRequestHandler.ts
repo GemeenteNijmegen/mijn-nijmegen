@@ -79,7 +79,7 @@ export class HomeRequestHandler {
       const json = await this.zakenConnector.fetch(endpoint, user, new URLSearchParams({ maxResults: '5' }));
       const zaken = ZaakSummariesSchema.parse(json);
       const zakenList = new ZaakFormatter().formatList(zaken);
-      zakenHtml = await this.zakenListsHtml(zakenList);
+      zakenHtml = await this.zakenListsHtml(zakenList, timeout);
     } catch (err: unknown) {
       if (err instanceof Error && err.name === 'TimeoutError') {
         timeout = true;
@@ -88,9 +88,9 @@ export class HomeRequestHandler {
     return zakenHtml;
   }
 
-  private async zakenListsHtml(zaakSummaries: any) {
+  private async zakenListsHtml(zaakSummaries: any, timeout: boolean) {
     if (zaakSummaries) {
-      const html = await render({ zaken: zaakSummaries.open, id: 'open-zaken-list' }, zakenListPartial.default,
+      const html = await render({ zaken: zaakSummaries.open, id: 'open-zaken-list', timeout }, zakenListPartial.default,
         {
           'zaak-row': zaakRow.default,
         });
