@@ -4,6 +4,7 @@ import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
 import { eventParams } from './home.lambda';
 import * as homeTemplate from './templates/home.mustache';
+import { Spinner } from '../../shared/Icons';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import * as zaakRow from '../zaken/templates/zaak-row.mustache';
@@ -72,6 +73,7 @@ export class HomeRequestHandler {
         volledigenaam: naam,
         zaken: zaken,
         has_zaken: zaken ? true : false,
+        xsrf_token: session.getValue('xsrf_token'),
         timeout,
       };
       // render page
@@ -97,6 +99,7 @@ export class HomeRequestHandler {
       const html = await render({ zaken: zaakSummaries.open, id: 'open-zaken-list' }, zakenListPartial.default,
         {
           'zaak-row': zaakRow.default,
+          'spinner': Spinner.default,
         });
       return html;
     }
