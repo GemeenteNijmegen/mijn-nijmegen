@@ -73,10 +73,14 @@ export class HomeRequestHandler {
 
     const endpoint = 'zaken';
     this.zakenConnector.setTimeout(1);
-    const json = await this.zakenConnector.fetch(endpoint, user, new URLSearchParams({ maxResults: '5' }));
-    const zaken = ZaakSummariesSchema.parse(json);
-    const zakenList = new ZaakFormatter().formatList(zaken);
-    return this.zakenListsHtml(zakenList);
+    try {
+      const json = await this.zakenConnector.fetch(endpoint, user, new URLSearchParams({ maxResults: '5' }));
+      const zaken = ZaakSummariesSchema.parse(json);
+      const zakenList = new ZaakFormatter().formatList(zaken);
+      return zakenList;
+    } catch (error) {
+      return ''; //empty for now.
+    }
   }
 
   private async zakenListsHtml(zaakSummaries: any) {
