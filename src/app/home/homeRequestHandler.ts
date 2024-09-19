@@ -50,7 +50,15 @@ export class HomeRequestHandler {
 
     const naam = session.getValue('username') ?? 'Onbekende gebruiker';
     const userType = session.getValue('user_type');
-    const zaken = await this.zakenList(session);
+    let zaken;
+    let timeout = false;
+    try {
+      zaken = await this.zakenList(session);
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === 'TimeoutError') {
+        timeout = true;
+      }
+    }
 
     const navigation = new Navigation(userType, { showZaken: this.props.showZaken, currentPath: '/' });
 
@@ -61,6 +69,7 @@ export class HomeRequestHandler {
       volledigenaam: naam,
       zaken: zaken,
       has_zaken: zaken ? true : false,
+      timeout,
     };
     // render page
     const html = await render(data, homeTemplate.default);
@@ -73,24 +82,15 @@ export class HomeRequestHandler {
 
     const endpoint = 'zaken';
     this.zakenConnector.setTimeout(1);
-    let timeout = false;
-    let zakenHtml;
-    try {
-      const json = await this.zakenConnector.fetch(endpoint, user, new URLSearchParams({ maxResults: '5' }));
-      const zaken = ZaakSummariesSchema.parse(json);
-      const zakenList = new ZaakFormatter().formatList(zaken);
-      zakenHtml = await this.zakenListsHtml(zakenList, timeout);
-    } catch (err: unknown) {
-      if (err instanceof Error && err.name === 'TimeoutError') {
-        timeout = true;
-      }
-    }
-    return zakenHtml;
+    const json = await this.zakenConnector.fetch(endpoint, user, new URLSearchParams({ maxResults: '5' }));
+    const zaken = ZaakSummariesSchema.parse(json);
+    const zakenList = new ZaakFormatter().formatList(zaken);
+    return this.zakenListsHtml(zakenList);
   }
 
-  private async zakenListsHtml(zaakSummaries: any, timeout: boolean) {
+  private async zakenListsHtml(zaakSummaries: any) {
     if (zaakSummaries) {
-      const html = await render({ zaken: zaakSummaries.open, id: 'open-zaken-list', timeout }, zakenListPartial.default,
+      const html = await render({ zaken: zaakSummaries.open, id: 'open-zaken-list' }, zakenListPartial.default,
         {
           'zaak-row': zaakRow.default,
         });
