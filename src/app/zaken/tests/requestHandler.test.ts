@@ -106,7 +106,7 @@ beforeAll(() => {
 describe('Request handler class', () => {
   const handler = new ZakenRequestHandler(new DynamoDBClient({ region: process.env.AWS_REGION }));
   test('returns 200 for person', async () => {
-    const result = await handler.handleRequest({ cookies: 'session=12345' });
+    const result = await handler.handleRequest({ cookies: 'session=12345', responseType: 'html' });
     expect(result.statusCode).toBe(200);
     if (result.body) {
       try {
@@ -131,12 +131,12 @@ describe('Request handler class', () => {
     };
     ddbMock.on(GetItemCommand).resolves(getItemOutputForOrganisation);
 
-    const result = await handler.handleRequest({ cookies: 'session=12345' });
+    const result = await handler.handleRequest({ cookies: 'session=12345', responseType: 'html' });
     expect(result.statusCode).toBe(200);
   });
 
   test('returns 200 for single zaak', async () => {
-    const result = await handler.handleRequest({ cookies: 'session=12345', zaakConnectorId: 'zaak', zaakId: '5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886' });
+    const result = await handler.handleRequest({ cookies: 'session=12345', zaakConnectorId: 'zaak', zaakId: '5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886', responseType: 'html' });
     expect(result.statusCode).toBe(200);
     if (result.body) {
       try {
@@ -148,7 +148,7 @@ describe('Request handler class', () => {
   });
 
   test('returns link for download', async () => {
-    const result = await handler.handleRequest({ cookies: 'session=12345', zaakConnectorId: 'inzendingen', zaakId: '5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886', file: 'test.png' });
+    const result = await handler.handleRequest({ cookies: 'session=12345', zaakConnectorId: 'inzendingen', zaakId: '5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886', file: 'test.png', responseType: 'html' });
     expect(result.statusCode).toBe(302);
     expect(result.headers).toHaveProperty('Location');
   });

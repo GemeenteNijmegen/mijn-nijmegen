@@ -2,6 +2,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
+import { eventParams } from './home.lambda';
 import * as homeTemplate from './templates/home.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
@@ -37,16 +38,16 @@ export class HomeRequestHandler {
     });
   }
 
-  async handleRequest(cookies: string) {
-    let session = new Session(cookies, this.dynamoDBClient);
+  async handleRequest(params: eventParams) {
+    let session = new Session(params.cookies, this.dynamoDBClient);
     await session.init();
     if (session.isLoggedIn() == true) {
-      return this.handleLoggedinRequest(session);
+      return this.handleLoggedinRequest(session, params);
     }
     return Response.redirect('/login');
   }
 
-  private async handleLoggedinRequest(session: Session) {
+  private async handleLoggedinRequest(session: Session, params: eventParams) {
 
     const naam = session.getValue('username') ?? 'Onbekende gebruiker';
     const userType = session.getValue('user_type');
@@ -59,22 +60,25 @@ export class HomeRequestHandler {
         timeout = true;
       }
     }
+    if (params.responseType == 'json') {
+      return Response.json({ elements: [zaken] });
+    } else {
+      const navigation = new Navigation(userType, { showZaken: this.props.showZaken, currentPath: '/' });
 
-    const navigation = new Navigation(userType, { showZaken: this.props.showZaken, currentPath: '/' });
+      const data = {
+        title: 'overzicht',
+        shownav: true,
+        nav: navigation.items,
+        volledigenaam: naam,
+        zaken: zaken,
+        has_zaken: zaken ? true : false,
+        timeout,
+      };
+      // render page
+      const html = await render(data, homeTemplate.default);
 
-    const data = {
-      title: 'overzicht',
-      shownav: true,
-      nav: navigation.items,
-      volledigenaam: naam,
-      zaken: zaken,
-      has_zaken: zaken ? true : false,
-      timeout,
-    };
-    // render page
-    const html = await render(data, homeTemplate.default);
-
-    return Response.html(html, 200, session.getCookie());
+      return Response.html(html, 200, session.getCookie());
+    }
   }
 
   private async zakenList(session: Session) {

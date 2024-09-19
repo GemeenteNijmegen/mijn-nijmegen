@@ -20,7 +20,7 @@ export interface eventParams {
   zaakConnectorId?: string;
   file?: string;
   xsrfToken?: string;
-  responseType?: 'json' | 'html';
+  responseType: 'json' | 'html';
 }
 
 function parseEvent(event: APIGatewayProxyEventV2): eventParams {

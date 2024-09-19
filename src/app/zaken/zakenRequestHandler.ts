@@ -14,6 +14,7 @@ import { ZakenAggregatorConnector } from './ZakenAggregatorConnector';
 import { Spinner } from '../../shared/Icons';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import { validateToken } from '../../shared/validateToken';
 
 export class ZakenRequestHandler {
   private dynamoDBClient: DynamoDBClient;
@@ -80,7 +81,7 @@ export class ZakenRequestHandler {
   }
 
   async jsonListResponse(session: Session, zaakSummaries: any, xsrfToken?: string ) {
-    if (!xsrfToken || !this.validToken(session, xsrfToken)) {
+    if (!xsrfToken || !validateToken(session, xsrfToken)) {
       return Response.error(403);
     }
     const { openHtml, closedHtml } = await this.zakenListsHtml(zaakSummaries);
@@ -186,16 +187,6 @@ export class ZakenRequestHandler {
     } else {
       return Response.error(404);
     }
-  }
-
-  async validToken(session: Session, token: string) {
-    const xsrf_token = session.getValue('xsrf_token');
-    const invalid_xsrf_token = xsrf_token == undefined || xsrf_token !== token;
-    if (invalid_xsrf_token) {
-      console.warn('xsrf tokens do not match');
-      return false;
-    }
-    return true;
   }
 }
 
