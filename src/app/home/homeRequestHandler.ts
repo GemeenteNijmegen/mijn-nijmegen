@@ -73,14 +73,19 @@ export class HomeRequestHandler {
 
     const endpoint = 'zaken';
     this.zakenConnector.setTimeout(1);
+    let timeout = false;
+    let zakenHtml;
     try {
       const json = await this.zakenConnector.fetch(endpoint, user, new URLSearchParams({ maxResults: '5' }));
       const zaken = ZaakSummariesSchema.parse(json);
       const zakenList = new ZaakFormatter().formatList(zaken);
-      return zakenList;
-    } catch (error) {
-      return ''; //empty for now.
+      zakenHtml = await this.zakenListsHtml(zakenList);
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === 'TimeoutError') {
+        timeout = true;
+      }
     }
+    return zakenHtml;
   }
 
   private async zakenListsHtml(zaakSummaries: any) {
