@@ -16,11 +16,11 @@ async function sharedZakenRequestHandler() {
 
 export interface eventParams {
   cookies: string;
-  zaak?: string;
+  zaakId?: string;
   zaakConnectorId?: string;
   file?: string;
   xsrfToken?: string;
-  responseType?: 'json' | 'html';
+  responseType: 'json' | 'html';
 }
 
 function parseEvent(event: APIGatewayProxyEventV2): eventParams {
@@ -29,7 +29,7 @@ function parseEvent(event: APIGatewayProxyEventV2): eventParams {
   }
   return {
     zaakConnectorId: event?.pathParameters?.zaaksource,
-    zaak: event?.pathParameters?.zaakid,
+    zaakId: event?.pathParameters?.zaakid,
     file: event?.pathParameters?.file,
     cookies: event.cookies.join(';'),
     xsrfToken: event?.headers?.xsrftoken,
