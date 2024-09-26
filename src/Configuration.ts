@@ -146,7 +146,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     dsRecord: '3766 13 2 11761745E09473E6CE95DB798CF1ADB69B4433E73EEFC9F7FE341561966EA154',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-acceptance',
     pipelineName: 'mijnnijmegen-acceptance',
-    brpHaalCentraalIsLive: true,
+    brpHaalCentraalIsLive: false,
     zakenUseTaken: true,
     zakenIsLive: true,
     zakenUseSubmissions: true,
