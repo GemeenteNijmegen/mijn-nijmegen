@@ -149,6 +149,7 @@
           "**//test/**",
           "**//build-tools/**",
           "src/app/auth/auth.lambda.ts",
+          "src/app/contactgegevens/contactgegevens.lambda.ts",
           "src/app/home/home.lambda.ts",
           "src/app/inzage/inzage.lambda.ts",
           "src/app/login/login.lambda.ts",

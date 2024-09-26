@@ -107,7 +107,6 @@ export class ApiStack extends Stack implements Configurable {
      */
     const zakenFunction = this.zakenFunction(baseUrl, readOnlyRole);
 
-
     //MARK: Routes
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('login', loginFunction.lambda),
@@ -163,11 +162,21 @@ export class ApiStack extends Stack implements Configurable {
       routeKey: apigatewayv2.HttpRouteKey.with('/zaken/{zaaksource}/{zaakid}/download/{file+}', apigatewayv2.HttpMethod.GET),
     });
 
+
     if (configuration.inzageLive) {
       const inzageFunction = this.inzageFunction(baseUrl, readOnlyRole, tlsConfig);
       this.api.addRoutes({
         integration: new HttpLambdaIntegration('inzage', inzageFunction.lambda),
         path: '/inzage',
+        methods: [apigatewayv2.HttpMethod.GET],
+      });
+    }
+
+    if (configuration.mijnContactGegevensLive) {
+      const contactgegevensFunction = this.contactgegevensFunction(baseUrl, readOnlyRole);
+      this.api.addRoutes({
+        integration: new HttpLambdaIntegration('contactgegevens', contactgegevensFunction.lambda),
+        path: '/contactgegevens',
         methods: [apigatewayv2.HttpMethod.GET],
       });
     }
@@ -347,6 +356,26 @@ export class ApiStack extends Stack implements Configurable {
     mtlsConfig.clientCert.grantRead(inzageFunction.lambda);
     mtlsConfig.rootCert.grantRead(inzageFunction.lambda);
     return inzageFunction;
+  }
+
+  private contactgegevensFunction(baseUrl: string, readOnlyRole: Role) {
+    const openklantApiKey = Secret.fromSecretNameV2(this, 'openklant-token', Statics.ssmOpenKlantSecret);
+
+    const contactgegevensFunctie = new ApiFunction(this, 'contactgegevens-function', {
+      description: 'Contactgegevens uit openklant voor de Mijn Nijmegen-applicatie.',
+      codePath: 'app/contactgegevens',
+      table: this.sessionsTable,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: baseUrl,
+      readOnlyRole,
+      environment: {
+        OPENKLANT_API_ENDPOINT: StringParameter.valueForStringParameter(this, Statics.ssmOpenKlantEndpoint),
+        OPENKLANT_API_KEY: openklantApiKey.secretArn,
+      },
+      apiFunction: UitkeringFunction,
+    });
+    openklantApiKey.grantRead(contactgegevensFunctie.lambda);
+    return contactgegevensFunctie;
   }
 
 

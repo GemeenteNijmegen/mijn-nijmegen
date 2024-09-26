@@ -1,0 +1,70 @@
+{
+  "uuid": "d239f28d-8546-4836-9310-6b3e7c201359",
+  "url": "https://lb.zgw.sandbox-marnix.csp-nijmegen.nl/open-klant/klantinteracties/api/v1/partijen/d239f28d-8546-4836-9310-6b3e7c201359",
+  "nummer": "0000000001",
+  "interneNotitie": "",
+  "betrokkenen": [],
+  "categorieRelaties": [],
+  "digitaleAdressen": [
+    {
+      "uuid": "30c73e87-cd3c-4f0e-a25f-9dfaef2ec526",
+      "url": "https://lb.zgw.sandbox-marnix.csp-nijmegen.nl/open-klant/klantinteracties/api/v1/digitaleadressen/30c73e87-cd3c-4f0e-a25f-9dfaef2ec526"
+    }
+  ],
+  "voorkeursDigitaalAdres": {
+    "uuid": "30c73e87-cd3c-4f0e-a25f-9dfaef2ec526",
+    "url": "https://lb.zgw.sandbox-marnix.csp-nijmegen.nl/open-klant/klantinteracties/api/v1/digitaleadressen/30c73e87-cd3c-4f0e-a25f-9dfaef2ec526"
+  },
+  "vertegenwoordigden": [],
+  "rekeningnummers": [],
+  "voorkeursRekeningnummer": null,
+  "partijIdentificatoren": [
+    {
+      "uuid": "4e829f50-6a91-4a2b-b896-51069a2a79b8",
+      "url": "https://lb.zgw.sandbox-marnix.csp-nijmegen.nl/open-klant/klantinteracties/api/v1/partij-identificatoren/4e829f50-6a91-4a2b-b896-51069a2a79b8"
+    }
+  ],
+  "soortPartij": "persoon",
+  "indicatieGeheimhouding": null,
+  "voorkeurstaal": "dut",
+  "indicatieActief": true,
+  "bezoekadres": {
+    "nummeraanduidingId": "",
+    "adresregel1": "",
+    "adresregel2": "",
+    "adresregel3": "",
+    "land": ""
+  },
+  "correspondentieadres": {
+    "nummeraanduidingId": "",
+    "adresregel1": "",
+    "adresregel2": "",
+    "adresregel3": "",
+    "land": ""
+  },
+  "partijIdentificatie": {
+    "contactnaam": {
+      "voorletters": "H",
+      "voornaam": "Hans",
+      "voorvoegselAchternaam": "de",
+      "achternaam": "Jong"
+    },
+    "volledigeNaam": "Hans de Jong"
+  },
+  "_expand": {
+    "digitaleAdressen": [
+      {
+        "uuid": "30c73e87-cd3c-4f0e-a25f-9dfaef2ec526",
+        "url": "https://lb.zgw.sandbox-marnix.csp-nijmegen.nl/open-klant/klantinteracties/api/v1/digitaleadressen/30c73e87-cd3c-4f0e-a25f-9dfaef2ec526",
+        "verstrektDoorBetrokkene": null,
+        "verstrektDoorPartij": {
+          "uuid": "d239f28d-8546-4836-9310-6b3e7c201359",
+          "url": "https://lb.zgw.sandbox-marnix.csp-nijmegen.nl/open-klant/klantinteracties/api/v1/partijen/d239f28d-8546-4836-9310-6b3e7c201359"
+        },
+        "adres": "mail@example.com",
+        "soortDigitaalAdres": "email",
+        "omschrijving": "Email address"
+      }
+    ]
+  }
+}

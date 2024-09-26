@@ -1,0 +1,43 @@
+{{>header}}
+<main>
+    <!-- START: template component(s) -->
+    <div class="container">
+        <div class="row">
+        <nav class="nijmegen-sidenav col-lg-3 col-md-12">
+                <ul class="nijmegen-sidenav__list">
+                {{#nav}}
+                    <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
+                        {{{icon}}}
+                        <a href="{{{url}}}">{{title}}</a>
+                    </li>
+                {{/nav}}
+                </ul>
+        </nav>
+        <div class="col-lg-9 col-md-12">
+                <h1>Mijn Contactgegevens</h1>
+                {{^error}}
+                <p class="lead">Hier vindt u een overzicht van uw contactgegevens.</p>
+                <table class="responsive-table">
+                    <tbody>
+                        <tr>
+                            <td>Email</td>
+                            <td class="nowrap">{{email}}</td>
+                        </tr>
+                        <tr>
+                            <td>Telefoonummer</td>
+                            <td class="nowrap">{{Telefoonummer}}</td>
+                        </tr>
+                    </tbody>
+                </table>    
+                {{/error}}
+                {{#error}}
+                    <h2>Er is iets misgegaan</h2>
+                    <p>{{error}}</p>
+                {{/error}}
+            </div>
+        </div>
+    </div>
+
+    <!-- END: template component(s) -->
+</main>
+{{>footer}}
