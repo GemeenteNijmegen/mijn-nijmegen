@@ -54,6 +54,7 @@ export class HomeRequestHandler {
     const userType = session.getValue('user_type');
     let zaken;
     let timeout = false;
+    (params.responseType == 'json') ? this.zakenConnector.setTimeout(10) : this.zakenConnector.setTimeout(1);
     try {
       zaken = await this.zakenList(session);
     } catch (err: unknown) {
@@ -87,7 +88,6 @@ export class HomeRequestHandler {
     const user = UserFromSession(session);
 
     const endpoint = 'zaken';
-    this.zakenConnector.setTimeout(1);
     const json = await this.zakenConnector.fetch(endpoint, user, new URLSearchParams({ maxResults: '5' }));
     const zaken = ZaakSummariesSchema.parse(json);
     const zakenList = new ZaakFormatter().formatList(zaken);
