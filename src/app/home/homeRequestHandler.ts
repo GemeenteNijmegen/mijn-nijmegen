@@ -78,7 +78,9 @@ export class HomeRequestHandler {
         timeout,
       };
       // render page
-      const html = await render(data, homeTemplate.default);
+      const html = await render(data, homeTemplate.default,
+        { spinner: Spinner.default },
+      );
 
       return Response.html(html, 200, session.getCookie());
     }
@@ -99,7 +101,6 @@ export class HomeRequestHandler {
       const html = await render({ zaken: zaakSummaries.open, id: 'open-zaken-list' }, zakenListPartial.default,
         {
           'zaak-row': zaakRow.default,
-          'spinner': Spinner.default,
         });
       return html;
     }

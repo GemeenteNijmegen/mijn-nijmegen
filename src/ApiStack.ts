@@ -222,6 +222,10 @@ export class ApiStack extends Stack implements Configurable {
       applicationUrlBase: baseUrl,
       readOnlyRole,
       apiFunction: HomeFunction,
+      functionProps: {
+        timeout: Duration.seconds(15), // frontend async calls can take a while
+        memorySize: 1024,
+      },
     });
 
     if (this.configuration.useZakenFromAggregatorAPI) {
