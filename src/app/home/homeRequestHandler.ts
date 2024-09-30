@@ -54,6 +54,7 @@ export class HomeRequestHandler {
     const userType = session.getValue('user_type');
     let zaken;
     let timeout = false;
+    (params.responseType == 'json') ? this.zakenConnector.setTimeout(1000) : this.zakenConnector.setTimeout(10000);
     try {
       zaken = await this.zakenList(session);
     } catch (err: unknown) {
@@ -77,7 +78,9 @@ export class HomeRequestHandler {
         timeout,
       };
       // render page
-      const html = await render(data, homeTemplate.default);
+      const html = await render(data, homeTemplate.default,
+        { spinner: Spinner.default },
+      );
 
       return Response.html(html, 200, session.getCookie());
     }
@@ -87,7 +90,6 @@ export class HomeRequestHandler {
     const user = UserFromSession(session);
 
     const endpoint = 'zaken';
-    this.zakenConnector.setTimeout(1);
     const json = await this.zakenConnector.fetch(endpoint, user, new URLSearchParams({ maxResults: '5' }));
     const zaken = ZaakSummariesSchema.parse(json);
     const zakenList = new ZaakFormatter().formatList(zaken);
@@ -99,7 +101,6 @@ export class HomeRequestHandler {
       const html = await render({ zaken: zaakSummaries.open, id: 'open-zaken-list' }, zakenListPartial.default,
         {
           'zaak-row': zaakRow.default,
-          'spinner': Spinner.default,
         });
       return html;
     }
