@@ -54,7 +54,7 @@ export class HomeRequestHandler {
     const userType = session.getValue('user_type');
     let zaken;
     let timeout = false;
-    (params.responseType == 'json') ? this.zakenConnector.setTimeout(10) : this.zakenConnector.setTimeout(1);
+    (params.responseType == 'json') ? this.zakenConnector.setTimeout(1000) : this.zakenConnector.setTimeout(10000);
     try {
       zaken = await this.zakenList(session);
     } catch (err: unknown) {
