@@ -7,11 +7,12 @@ import * as homeTemplate from './templates/home.mustache';
 import { Spinner, ArrowRight } from '../../shared/Icons';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import * as zakenListPartial from '../zaken/templates/taken.mustache';
 import * as zaakRow from '../zaken/templates/zaak-row.mustache';
-import * as zakenListPartial from '../zaken/templates/zaken-table.mustache';
+import * as takenListPartial from '../zaken/templates/zaken-table.mustache';
 import { UserFromSession } from '../zaken/User';
 import { ZaakFormatter } from '../zaken/ZaakFormatter';
-import { ZaakSummariesSchema } from '../zaken/ZaakInterface';
+import { TaakSummariesSchema, TaakSummary, ZaakSummariesSchema } from '../zaken/ZaakInterface';
 import { ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
 
 
@@ -49,14 +50,13 @@ export class HomeRequestHandler {
   }
 
   private async handleLoggedinRequest(session: Session, params: eventParams) {
-
     const naam = session.getValue('username') ?? 'Onbekende gebruiker';
     const userType = session.getValue('user_type');
-    let zaken;
+    let zaken, taken;
     let timeout = false;
     (params.responseType == 'json') ? this.zakenConnector.setTimeout(1000) : this.zakenConnector.setTimeout(10000);
     try {
-      zaken = await this.zakenList(session);
+      [zaken, taken] = await Promise.all([this.zakenList(session), this.takenList(session)]);
     } catch (err: unknown) {
       if (err instanceof Error && err.name === 'TimeoutError') {
         timeout = true;
@@ -73,6 +73,7 @@ export class HomeRequestHandler {
         nav: navigation.items,
         volledigenaam: naam,
         zaken: zaken,
+        taken: taken,
         has_zaken: zaken ? true : false,
         xsrf_token: session.getValue('xsrf_token'),
         timeout,
@@ -87,6 +88,15 @@ export class HomeRequestHandler {
 
       return Response.html(html, 200, session.getCookie());
     }
+  }
+
+  private async takenList(session: Session) {
+    const user = UserFromSession(session);
+
+    const endpoint = 'taken';
+    const json = await this.zakenConnector.fetch(endpoint, user);
+    const taken = TaakSummariesSchema.parse(json);
+    return this.takenListHtml(taken.filter(taak => taak.is_open));
   }
 
   private async zakenList(session: Session) {
@@ -105,6 +115,14 @@ export class HomeRequestHandler {
         {
           'zaak-row': zaakRow.default,
         });
+      return html;
+    }
+    return false;
+  }
+
+  private async takenListHtml(taakSummaries: TaakSummary[]) {
+    if (taakSummaries) {
+      const html = await render({ zaken: taakSummaries, id: 'open-taken-list' }, takenListPartial.default);
       return html;
     }
     return false;

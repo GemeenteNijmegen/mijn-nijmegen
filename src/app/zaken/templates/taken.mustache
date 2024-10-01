@@ -1,0 +1,39 @@
+{{#taken}}
+    <div class="denhaag-action">
+        <div class="denhaag-action__content">
+            {{title}}
+        </div>
+        <div class="denhaag-action__details">
+
+        {{#is_open}}
+            <div class="denhaag-action__date">
+            <span>
+                voor {{einddatum}}
+            </span>
+            </div>
+            <div class="denhaag-action__actions">
+            <a
+                class="btn btn-primary"
+                href="{{url}}"
+            >
+                Toevoegen
+            </a>
+            </div>
+        {{/is_open}}
+        {{#is_ingediend}}
+        <div class="denhaag-action__date">
+            </div>
+            <div class="denhaag-action__actions">
+            Ingediend ✅
+            </div>
+        {{/is_ingediend}}
+        {{#is_gesloten}}
+        <div class="denhaag-action__date">
+            </div>
+            <div class="denhaag-action__actions">
+            Gesloten ✅
+            </div>
+        {{/is_gesloten}}
+        </div>
+    </div>
+{{/taken}}
