@@ -20,15 +20,15 @@ interface HomeRequestHandlerProps {
   /**
    * Show zaken in navigation
    */
-  showZaken?: boolean;
+  showTaken?: boolean;
 }
 
 export class HomeRequestHandler {
   private dynamoDBClient: DynamoDBClient;
-  private props: HomeRequestHandlerProps;
+  private props?: HomeRequestHandlerProps;
   private zakenConnector: ZakenAggregatorConnector;
 
-  constructor(dynamoDBClient: DynamoDBClient, props: HomeRequestHandlerProps) {
+  constructor(dynamoDBClient: DynamoDBClient, props?: HomeRequestHandlerProps) {
     this.dynamoDBClient = dynamoDBClient;
     this.props = props;
 
@@ -65,7 +65,7 @@ export class HomeRequestHandler {
     if (params.responseType == 'json') {
       return Response.json({ elements: [zaken] });
     } else {
-      const navigation = new Navigation(userType, { showZaken: this.props.showZaken, currentPath: '/' });
+      const navigation = new Navigation(userType, { currentPath: '/' });
 
       const data = {
         title: 'overzicht',
@@ -73,8 +73,9 @@ export class HomeRequestHandler {
         nav: navigation.items,
         volledigenaam: naam,
         zaken: zaken,
-        taken: taken,
         has_zaken: zaken ? true : false,
+        taken: taken,
+        has_taken: taken ? true : false,
         xsrf_token: session.getValue('xsrf_token'),
         timeout,
       };
@@ -91,6 +92,9 @@ export class HomeRequestHandler {
   }
 
   private async takenList(session: Session) {
+    if (!this.props?.showTaken) {
+      return '';
+    }
     const user = UserFromSession(session);
 
     const endpoint = 'taken';

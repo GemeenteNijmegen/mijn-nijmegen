@@ -54,7 +54,7 @@ const parameterStoreMock = mockClient(SSMClient);
 const apiClient = new ApiClient('test', 'test', 'test');
 const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
 
-const requestHandler = new uitkeringsRequestHandler({ apiClient, dynamoDBClient, showZaken: true });
+const requestHandler = new uitkeringsRequestHandler({ apiClient, dynamoDBClient });
 beforeEach(() => {
   ddbMock.mockReset();
   secretsMock.mockReset();

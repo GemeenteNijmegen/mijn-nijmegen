@@ -18,10 +18,12 @@
             <h1>Mijn Nijmegen</h1>
             <p class="lead">Bekijk uw persoonsgegevens, uitkeringsgegevens of lopende zaken.</p>
 
+            {{#has_taken}}
             <div class="header-readmore">
                 <h2>Belangrijke taken om te regelen</h2>
                 {{{taken}}}
             </div>
+            {{/has_taken}}
 
             {{#has_zaken}}
             <div class="header-readmore">
