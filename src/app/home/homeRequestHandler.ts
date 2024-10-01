@@ -4,7 +4,7 @@ import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
 import { eventParams } from './home.lambda';
 import * as homeTemplate from './templates/home.mustache';
-import { Spinner } from '../../shared/Icons';
+import { Spinner, ArrowRight } from '../../shared/Icons';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import * as zaakRow from '../zaken/templates/zaak-row.mustache';
@@ -79,7 +79,10 @@ export class HomeRequestHandler {
       };
       // render page
       const html = await render(data, homeTemplate.default,
-        { spinner: Spinner.default },
+        {
+          'spinner': Spinner.default,
+          'arrow-right': ArrowRight.default,
+        },
       );
 
       return Response.html(html, 200, session.getCookie());
