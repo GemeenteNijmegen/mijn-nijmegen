@@ -17,6 +17,13 @@
         <div class="col-lg-9 col-md-12">
             <h1>Mijn Nijmegen</h1>
             <p class="lead">Bekijk uw persoonsgegevens, uitkeringsgegevens of lopende zaken.</p>
+            {{#has_zaken}}
+            <h2>Mijn zaken</h2>                     
+            {{{zaken}}}
+            {{/has_zaken}}
+             {{#timeout}}
+            <p id="open-zaken-list">Bezig met ophalen van uw open zaken… {{>spinner}}</p>
+            {{/timeout}}
         </div>
     </div>
 

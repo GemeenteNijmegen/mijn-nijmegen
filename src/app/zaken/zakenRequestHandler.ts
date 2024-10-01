@@ -14,6 +14,7 @@ import { ZakenAggregatorConnector } from './ZakenAggregatorConnector';
 import { Spinner } from '../../shared/Icons';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import { validateToken } from '../../shared/validateToken';
 
 export class ZakenRequestHandler {
   private dynamoDBClient: DynamoDBClient;
@@ -21,10 +22,10 @@ export class ZakenRequestHandler {
 
   constructor(dynamoDBClient: DynamoDBClient) {
     this.dynamoDBClient = dynamoDBClient;
-    const env = environmentVariables(['APIGATEWAY_BASEURL', 'APIGATEWAY_APIKEY']);
+    const env = environmentVariables(['ZAKEN_APIGATEWAY_BASEURL', 'ZAKEN_APIGATEWAY_APIKEY']);
     this.connector = new ZakenAggregatorConnector({
-      baseUrl: new URL(env.APIGATEWAY_BASEURL),
-      apiKeySecretName: env.APIGATEWAY_APIKEY,
+      baseUrl: new URL(env.ZAKEN_APIGATEWAY_BASEURL),
+      apiKeySecretName: env.ZAKEN_APIGATEWAY_APIKEY,
       timeout: 2000,
     });
   }
@@ -37,16 +38,16 @@ export class ZakenRequestHandler {
       return Response.redirect('/login');
     }
 
-    if (!params.zaak) {
+    if (!params.zaakId) {
       return this.list(session, params);
     }
 
-    if (params.zaak && params.zaakConnectorId && !params.file) {
-      return this.get(params.zaakConnectorId, params.zaak, session);
+    if (params.zaakId && params.zaakConnectorId && !params.file) {
+      return this.get(params, session);
     }
 
-    if (params.zaak && params.zaakConnectorId && params.file) {
-      return this.download(params.zaakConnectorId, params.zaak, params.file, session);
+    if (params.zaakId && params.zaakConnectorId && params.file) {
+      return this.download(params.zaakConnectorId, params.zaakId, params.file, session);
     }
     return Response.error(400);
   }
@@ -73,14 +74,14 @@ export class ZakenRequestHandler {
     }
 
     if (params.responseType == 'json') {
-      return this.jsonResponse(session, zakenList, params.xsrfToken);
+      return this.jsonListResponse(session, zakenList, params.xsrfToken);
     } else {
-      return this.htmlResponse(session, user, zakenList, timeout);
+      return this.htmlListResponse(session, user, zakenList, timeout);
     }
   }
 
-  async jsonResponse(session: Session, zaakSummaries: any, xsrfToken?: string ) {
-    if (!xsrfToken || !this.validToken(session, xsrfToken)) {
+  async jsonListResponse(session: Session, zaakSummaries: any, xsrfToken?: string ) {
+    if (!xsrfToken || !validateToken(session, xsrfToken)) {
       return Response.error(403);
     }
     const { openHtml, closedHtml } = await this.zakenListsHtml(zaakSummaries);
@@ -89,7 +90,7 @@ export class ZakenRequestHandler {
     });
   }
 
-  async htmlResponse(session: Session, user: User, zaakSummaries: any, timeout?: boolean) {
+  async htmlListResponse(session: Session, user: User, zaakSummaries: any, timeout?: boolean) {
     const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
 
     const { openHtml, closedHtml } = await this.zakenListsHtml(zaakSummaries);
@@ -127,12 +128,15 @@ export class ZakenRequestHandler {
     return { openHtml, closedHtml };
   }
 
-  async get(zaakConnectorId: string, zaakId: string, session: Session) {
+  async get(params: eventParams, session: Session) {
+    if (!params.zaakConnectorId || !params.zaakId) {
+      throw Error('connector and zaakid need to be defined');
+    }
     const user = UserFromSession(session);
     let timeout = false;
     let formattedZaak;
     try {
-      const zaak = await this.fetchGet(zaakId, zaakConnectorId, user);
+      const zaak = await this.fetchGet(params.zaakId, params.zaakConnectorId, user);
       if (zaak) {
         formattedZaak = new ZaakFormatter().formatZaak(zaak);
       }
@@ -141,6 +145,7 @@ export class ZakenRequestHandler {
         timeout = true;
       }
     }
+    //If we get neither a zaak or a timeout flag, the zaak doesn't exist or isn't accessible for the user.
     if (formattedZaak || timeout) {
       const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
       let data = {
@@ -182,16 +187,6 @@ export class ZakenRequestHandler {
     } else {
       return Response.error(404);
     }
-  }
-
-  async validToken(session: Session, token: string) {
-    const xsrf_token = session.getValue('xsrf_token');
-    const invalid_xsrf_token = xsrf_token == undefined || xsrf_token !== token;
-    if (invalid_xsrf_token) {
-      console.warn('xsrf tokens do not match');
-      return false;
-    }
-    return true;
   }
 }
 

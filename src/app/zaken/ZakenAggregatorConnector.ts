@@ -51,8 +51,8 @@ export class ZakenAggregatorConnector {
     return this.apiKey;
   }
 
-  async fetch(endpoint: string, user: User) {
-    const url = this.createUrlForRequest(endpoint, user);
+  async fetch(endpoint: string, user: User, params?: URLSearchParams) {
+    const url = this.createUrlForRequest(endpoint, user, params);
     try {
       const response = await fetch(url, {
         method: 'GET',
@@ -69,13 +69,19 @@ export class ZakenAggregatorConnector {
     }
   }
 
-  private createUrlForRequest(endpoint: string, user: User) {
+  private createUrlForRequest(endpoint: string, user: User, params?: URLSearchParams) {
     const url = new URL(this.baseUrl);
     url.pathname = endpoint;
-    url.search = new URLSearchParams({
+    const allParams = new URLSearchParams({
       userType: user.type,
       userIdentifier: user.identifier,
-    }).toString();
+    });
+    if (params) {
+      for (let [key, val] of params.entries()) {
+        allParams.append(key, val);
+      }
+    }
+    url.search = allParams.toString();
     return url;
   }
 }

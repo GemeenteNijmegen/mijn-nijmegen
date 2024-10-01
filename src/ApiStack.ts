@@ -38,6 +38,7 @@ export interface ApiStackProps extends StackProps, Configurable {
  */
 export class ApiStack extends Stack implements Configurable {
   private sessionsTable: Table;
+  private zakenApiKey?: ISecret;
   configuration: Configuration;
   api: apigatewayv2.HttpApi;
 
@@ -59,6 +60,7 @@ export class ApiStack extends Stack implements Configurable {
     const appDomain = `${subdomain}.nijmegen.nl`;
 
     const readOnlyRole = this.readOnlyRole();
+
     this.setFunctions(`https://${appDomain}/`, readOnlyRole, props.configuration);
     this.allowReadAccessToTable(readOnlyRole, this.sessionsTable);
   }
@@ -212,7 +214,7 @@ export class ApiStack extends Stack implements Configurable {
   }
 
   private homeFunction(baseUrl: string, readOnlyRole: Role) {
-    return new ApiFunction(this, 'home-function', {
+    const homeFunction = new ApiFunction(this, 'home-function', {
       description: 'Home-lambda voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/home',
       table: this.sessionsTable,
@@ -220,7 +222,16 @@ export class ApiStack extends Stack implements Configurable {
       applicationUrlBase: baseUrl,
       readOnlyRole,
       apiFunction: HomeFunction,
+      functionProps: {
+        timeout: Duration.seconds(15), // frontend async calls can take a while
+        memorySize: 1024,
+      },
     });
+
+    if (this.configuration.useZakenFromAggregatorAPI) {
+      this.grantZakenApiAccess(homeFunction);
+    }
+    return homeFunction;
   }
 
   private authFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
@@ -265,6 +276,7 @@ export class ApiStack extends Stack implements Configurable {
     mtlsConfig.privateKey.grantRead(authFunction.lambda);
     mtlsConfig.clientCert.grantRead(authFunction.lambda);
     mtlsConfig.rootCert.grantRead(authFunction.lambda);
+
     return authFunction;
   }
 
@@ -374,16 +386,23 @@ export class ApiStack extends Stack implements Configurable {
     });
 
     if (this.configuration.useZakenFromAggregatorAPI) {
-      const apiKey = Secret.fromSecretNameV2(this, 'zakenapikey', Statics.zaakAggregatorApiGatewayApiKey);
-      zakenFunction.lambda.addEnvironment('APIGATEWAY_BASEURL', StringParameter.valueForStringParameter(this, Statics.ssmZaakAggregatorApiGatewayEndpointUrl));
-      zakenFunction.lambda.addEnvironment('APIGATEWAY_APIKEY', apiKey.secretArn);
-      apiKey.grantRead(zakenFunction.lambda);
+      this.grantZakenApiAccess(zakenFunction);
     }
 
     jwtSecret.grantRead(zakenFunction.lambda);
     tokenSecret.grantRead(zakenFunction.lambda);
     submissionstorageKey.grantRead(zakenFunction.lambda);
     return zakenFunction;
+  }
+
+  private grantZakenApiAccess(handlerFunction: ApiFunction) {
+    if (!this.zakenApiKey) {
+      this.zakenApiKey = Secret.fromSecretNameV2(this, 'zakenapikey', Statics.zaakAggregatorApiGatewayApiKey);
+    }
+    const apiKey = this.zakenApiKey;
+    handlerFunction.lambda.addEnvironment('ZAKEN_APIGATEWAY_BASEURL', StringParameter.valueForStringParameter(this, Statics.ssmZaakAggregatorApiGatewayEndpointUrl));
+    handlerFunction.lambda.addEnvironment('ZAKEN_APIGATEWAY_APIKEY', apiKey.secretArn);
+    apiKey.grantRead(handlerFunction.lambda);
   }
 
   /**
