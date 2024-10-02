@@ -94,7 +94,7 @@ beforeEach(() => {
 
 test('Returns 200', async () => {
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-  const handler = new HomeRequestHandler(dynamoDBClient, { showZaken: false });
+  const handler = new HomeRequestHandler(dynamoDBClient);
   const result = await handler.handleRequest({ cookies: 'session=12345', responseType: 'html' });
 
   expect(result.statusCode).toBe(200);
@@ -104,7 +104,7 @@ test('Returns 200', async () => {
 
 test('Shows overview page', async () => {
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-  const handler = new HomeRequestHandler(dynamoDBClient, { showZaken: true });
+  const handler = new HomeRequestHandler(dynamoDBClient);
   const result = await handler.handleRequest({ cookies: 'session=12345', responseType: 'html' });
   expect(result.body).toMatch('Mijn Nijmegen');
   expect(result.body).toMatch('Jan de Tester');
@@ -114,7 +114,7 @@ test('Shows overview page', async () => {
 
 test('Shows overview page', async () => {
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-  const handler = new HomeRequestHandler(dynamoDBClient, { showZaken: true });
+  const handler = new HomeRequestHandler(dynamoDBClient);
   const result = await handler.handleRequest({ cookies: 'session=12345', responseType: 'json' });
   expect(result.body).toMatch('elements');
   fs.writeFile(path.join(__dirname, 'output', 'test.json'), result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '', () => { });

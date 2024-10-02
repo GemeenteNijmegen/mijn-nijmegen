@@ -49,7 +49,6 @@ export class ApiFunction extends Construct {
         OIDC_CLIENT_ID: SSM.StringParameter.valueForStringParameter(this, Statics.ssmOIDCClientID),
         OIDC_SCOPE: SSM.StringParameter.valueForStringParameter(this, Statics.ssmOIDCScope),
         SESSION_TABLE: props.table.tableName,
-        SHOW_ZAKEN: 'True',
         ...props.environment,
       },
       ...props.functionProps,
