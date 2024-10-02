@@ -2,13 +2,13 @@ addEventListener("DOMContentLoaded", (event) => {
   updateContent();
 });
 
-
 /**
  * Check if zaken have loaded, if not, try to load async
  */
 function updateContent() {
   const body = document.querySelector('body');
   if(body.dataset?.loaded=='false') {
+    body.dataset.loadattempts = '0';
     getData();
   }
 }
@@ -33,9 +33,17 @@ async function getData() {
       replaceElement(el);
     }
   } 
-  // if(data.error) {
-    // showErrorMessage(sendingButton, data.error);
-  // }
+  if(data.error) {
+    console.error(data.error);
+    if(response.status == 408) {
+      // Time out, try again.
+      const attempt = Number(body.dataset.loadattempts) + 1;
+      body.dataset.loadattempts = attempt;
+      if(attempt < 3) {
+        updateContent();
+      }
+    }
+  }
 };
 
 
