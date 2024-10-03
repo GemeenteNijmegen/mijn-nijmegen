@@ -226,6 +226,9 @@ export class ApiStack extends Stack implements Configurable {
         timeout: Duration.seconds(15), // frontend async calls can take a while
         memorySize: 1024,
       },
+      environment: {
+        SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
+      },
     });
 
     if (this.configuration.useZakenFromAggregatorAPI) {

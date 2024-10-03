@@ -2,18 +2,19 @@ addEventListener("DOMContentLoaded", (event) => {
   updateContent();
 });
 
-
 /**
  * Check if zaken have loaded, if not, try to load async
  */
 function updateContent() {
   const body = document.querySelector('body');
   if(body.dataset?.loaded=='false') {
+    body.dataset.loadattempts = '0';
     getData();
   }
 }
 
 async function getData() {
+  const body = document.querySelector('body');
   const token = document.querySelector('meta[name=xsrf-token]').content;
   const response = await fetch('', {
     method: 'GET',
@@ -23,19 +24,28 @@ async function getData() {
       'xsrftoken': token,
     }
   });
+  const data = await response.json();
 
   if(!response.ok) {
-    throw new Error('Network response was not OK');
+    if(response.status == 408) {
+      if(data.error) {
+        // Time out, try again.
+        const attempt = Number(body.dataset.loadattempts) + 1;
+        body.dataset.loadattempts = attempt;
+        if(attempt < 3) {
+          updateContent();
+        }
+      }
+    } else {
+      throw new Error('Network response was not OK');
+    }
   };
-  const data = await response.json();
   if(data.elements) {
     for(el of data.elements) {
       replaceElement(el);
     }
   } 
-  // if(data.error) {
-    // showErrorMessage(sendingButton, data.error);
-  // }
+  
 };
 
 

@@ -12,7 +12,6 @@ import { render } from '../../shared/render';
 interface Config {
   apiClient: ApiClient;
   dynamoDBClient: DynamoDBClient;
-  showZaken: boolean; //Show zaken in menu
 }
 
 export class uitkeringsRequestHandler {
@@ -53,7 +52,7 @@ export class uitkeringsRequestHandler {
     data.volledigenaam = session.getValue('username');
     data.multipleUitkeringen = (data?.uitkeringen?.length > 1);
 
-    const navigation = new Navigation(userType, { showZaken: this.config.showZaken, currentPath: '/uitkeringen' });
+    const navigation = new Navigation(userType, { currentPath: '/uitkeringen' });
     data.nav = navigation.items;
 
     const html = await this.renderHtml(data);
