@@ -32,14 +32,15 @@
         "CHANGELOG": "dist/changelog.md",
         "BUMPFILE": "dist/version.txt",
         "RELEASETAG": "dist/releasetag.txt",
-        "RELEASE_TAG_PREFIX": ""
+        "RELEASE_TAG_PREFIX": "",
+        "BUMP_PACKAGE": "commit-and-tag-version@^12"
       },
       "steps": [
         {
           "builtin": "release/bump-version"
         }
       ],
-      "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
+      "condition": "git log --oneline -1 | grep -qv \"chore(release):\""
     },
     "bundle": {
       "name": "bundle",
@@ -339,7 +340,15 @@
     },
     "package": {
       "name": "package",
-      "description": "Creates the distribution package"
+      "description": "Creates the distribution package",
+      "steps": [
+        {
+          "exec": "mkdir -p dist/js"
+        },
+        {
+          "exec": "npm pack --pack-destination dist/js"
+        }
+      ]
     },
     "post-compile": {
       "name": "post-compile",
@@ -431,7 +440,8 @@
         "CHANGELOG": "dist/changelog.md",
         "BUMPFILE": "dist/version.txt",
         "RELEASETAG": "dist/releasetag.txt",
-        "RELEASE_TAG_PREFIX": ""
+        "RELEASE_TAG_PREFIX": "",
+        "BUMP_PACKAGE": "commit-and-tag-version@^12"
       },
       "steps": [
         {
@@ -447,13 +457,13 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@aws-sdk/client-ssm,@aws-sdk/types,@glen/jest-raw-loader,@playwright/test,@types/aws-lambda,@types/jest,aws-sdk-client-mock,axios-mock-adapter,copyfiles,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jest,jest-aws-client-mock,projen,ts-jest,ts-node,typescript,@aws-lambda-powertools/logger,@aws-sdk/client-dynamodb,@aws-sdk/client-secrets-manager,@aws-solutions-constructs/aws-lambda-dynamodb,@gemeentenijmegen/apiclient,@gemeentenijmegen/apigateway-http,@gemeentenijmegen/aws-constructs,@gemeentenijmegen/projen-project-type,@gemeentenijmegen/session,@gemeentenijmegen/utils,@pepperize/cdk-route53-health-check,@types/mustache,axios,cdk-remote-stack,cookie,dotenv,jsonwebtoken,mustache,object-mapper,openid-client,xml2js,zod"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@aws-sdk/client-ssm,@aws-sdk/types,@glen/jest-raw-loader,@playwright/test,@types/aws-lambda,@types/jest,@types/node,aws-sdk-client-mock,axios-mock-adapter,copyfiles,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jest,jest-aws-client-mock,projen,ts-jest,ts-node,typescript,@aws-lambda-powertools/logger,@aws-sdk/client-dynamodb,@aws-sdk/client-secrets-manager,@aws-solutions-constructs/aws-lambda-dynamodb,@gemeentenijmegen/apiclient,@gemeentenijmegen/apigateway-http,@gemeentenijmegen/aws-constructs,@gemeentenijmegen/projen-project-type,@gemeentenijmegen/session,@gemeentenijmegen/utils,@pepperize/cdk-route53-health-check,@types/mustache,axios,cdk-remote-stack,cookie,dotenv,jsonwebtoken,mustache,object-mapper,openid-client,xml2js,zod"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @aws-sdk/client-ssm @aws-sdk/types @glen/jest-raw-loader @playwright/test @types/aws-lambda @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk aws-sdk-client-mock axios-mock-adapter copyfiles esbuild eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-aws-client-mock jest-junit projen standard-version ts-jest ts-node typescript @aws-lambda-powertools/logger @aws-sdk/client-dynamodb @aws-sdk/client-secrets-manager @aws-solutions-constructs/aws-lambda-dynamodb @gemeentenijmegen/apiclient @gemeentenijmegen/apigateway-http @gemeentenijmegen/aws-constructs @gemeentenijmegen/projen-project-type @gemeentenijmegen/session @gemeentenijmegen/utils @pepperize/cdk-route53-health-check @types/mustache aws-cdk-lib axios cdk-remote-stack constructs cookie dotenv jsonwebtoken mustache object-mapper openid-client xml2js zod"
+          "exec": "yarn upgrade @aws-sdk/client-ssm @aws-sdk/types @glen/jest-raw-loader @playwright/test @types/aws-lambda @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk aws-sdk-client-mock axios-mock-adapter commit-and-tag-version copyfiles esbuild eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-aws-client-mock jest-junit projen ts-jest ts-node typescript @aws-lambda-powertools/logger @aws-sdk/client-dynamodb @aws-sdk/client-secrets-manager @aws-solutions-constructs/aws-lambda-dynamodb @gemeentenijmegen/apiclient @gemeentenijmegen/apigateway-http @gemeentenijmegen/aws-constructs @gemeentenijmegen/projen-project-type @gemeentenijmegen/session @gemeentenijmegen/utils @pepperize/cdk-route53-health-check @types/mustache aws-cdk-lib axios cdk-remote-stack constructs cookie dotenv jsonwebtoken mustache object-mapper openid-client xml2js zod"
         },
         {
           "exec": "npx projen"
