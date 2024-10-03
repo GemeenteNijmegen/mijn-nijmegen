@@ -54,7 +54,7 @@ export class HomeRequestHandler {
     const userType = session.getValue('user_type');
     let zaken, taken;
     let timeout = false;
-    (params.responseType == 'json') ? this.zakenConnector.setTimeout(1000) : this.zakenConnector.setTimeout(10000);
+    (params.responseType == 'json') ? this.zakenConnector.setTimeout(10000) : this.zakenConnector.setTimeout(1000);
     try {
       [zaken, taken] = await Promise.all([this.zakenList(session), this.takenList(session)]);
     } catch (err: unknown) {
@@ -63,7 +63,11 @@ export class HomeRequestHandler {
       }
     }
     if (params.responseType == 'json') {
-      return Response.json({ elements: [zaken] });
+      if (timeout) {
+        return Response.json({ error: 'Het ophalen van gegevens duurde te lang…' }, 408);
+      } else {
+        return Response.json({ elements: [zaken] });
+      }
     } else {
       const navigation = new Navigation(userType, { currentPath: '/' });
 
