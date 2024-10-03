@@ -74,7 +74,11 @@ export class ZakenRequestHandler {
     }
 
     if (params.responseType == 'json') {
-      return this.jsonListResponse(session, zakenList, params.xsrfToken);
+      if (timeout) {
+        return Response.json({ error: 'Het ophalen van gegevens duurde te lang…' }, 408);
+      } else {
+        return this.jsonListResponse(session, zakenList, params.xsrfToken);
+      }
     } else {
       return this.htmlListResponse(session, user, zakenList, timeout);
     }

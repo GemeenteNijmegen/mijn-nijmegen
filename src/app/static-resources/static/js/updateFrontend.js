@@ -14,6 +14,7 @@ function updateContent() {
 }
 
 async function getData() {
+  const body = document.querySelector('body');
   const token = document.querySelector('meta[name=xsrf-token]').content;
   const response = await fetch('', {
     method: 'GET',
@@ -23,11 +24,11 @@ async function getData() {
       'xsrftoken': token,
     }
   });
+  const data = await response.json();
 
   if(!response.ok) {
     if(response.status == 408) {
       if(data.error) {
-        console.error(data.error);
         // Time out, try again.
         const attempt = Number(body.dataset.loadattempts) + 1;
         body.dataset.loadattempts = attempt;
@@ -39,7 +40,6 @@ async function getData() {
       throw new Error('Network response was not OK');
     }
   };
-  const data = await response.json();
   if(data.elements) {
     for(el of data.elements) {
       replaceElement(el);

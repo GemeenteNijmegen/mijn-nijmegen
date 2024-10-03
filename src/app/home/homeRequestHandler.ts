@@ -63,7 +63,7 @@ export class HomeRequestHandler {
       }
     }
     if (params.responseType == 'json') {
-      if (zaken) {
+      if (timeout) {
         return Response.json({ error: 'Het ophalen van gegevens duurde te lang…' }, 408);
       } else {
         return Response.json({ elements: [zaken] });
