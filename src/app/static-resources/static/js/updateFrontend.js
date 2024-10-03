@@ -25,7 +25,19 @@ async function getData() {
   });
 
   if(!response.ok) {
-    throw new Error('Network response was not OK');
+    if(response.status == 408) {
+      if(data.error) {
+        console.error(data.error);
+        // Time out, try again.
+        const attempt = Number(body.dataset.loadattempts) + 1;
+        body.dataset.loadattempts = attempt;
+        if(attempt < 3) {
+          updateContent();
+        }
+      }
+    } else {
+      throw new Error('Network response was not OK');
+    }
   };
   const data = await response.json();
   if(data.elements) {
@@ -33,17 +45,7 @@ async function getData() {
       replaceElement(el);
     }
   } 
-  if(data.error) {
-    console.error(data.error);
-    if(response.status == 408) {
-      // Time out, try again.
-      const attempt = Number(body.dataset.loadattempts) + 1;
-      body.dataset.loadattempts = attempt;
-      if(attempt < 3) {
-        updateContent();
-      }
-    }
-  }
+  
 };
 
 
