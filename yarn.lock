@@ -33,10 +33,10 @@
     jsonschema "^1.4.1"
     semver "^7.6.3"
 
-"@aws-cdk/integ-tests-alpha@2.160.0-alpha.0":
-  version "2.160.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/integ-tests-alpha/-/integ-tests-alpha-2.160.0-alpha.0.tgz#5d4ee01410d69ed25d2413674f61ce68cde28620"
-  integrity sha512-JH9oTKsHk9yIaed2mkCnQsQvAdDp5xKEwzM9FgMzLP9CRoCRTz4V0mc2GYIOnJikcQyibZFcZsQ0kqE2WEHJ5g==
+"@aws-cdk/integ-tests-alpha@2.161.0-alpha.0":
+  version "2.161.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/integ-tests-alpha/-/integ-tests-alpha-2.161.0-alpha.0.tgz#ffc9c67e25fa457eb7893b1a594582f653dbca48"
+  integrity sha512-rh96A4pVExmCaHkYJwET5QTta2fyntMfqE/UOR3kb4MXYbbAvqHL1T4+/k0nODKSdqUfzanVy2jc4cCe2k8mOg==
 
 "@aws-crypto/crc32@5.2.0":
   version "5.2.0"
@@ -834,21 +834,21 @@
     "@smithy/types" "^3.5.0"
     tslib "^2.6.2"
 
-"@aws-solutions-constructs/aws-lambda-dynamodb@^2.71.0":
-  version "2.71.0"
-  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/aws-lambda-dynamodb/-/aws-lambda-dynamodb-2.71.0.tgz#f6f90c8e5b549a85c7bbc9fe4f63b5aaa4d3c37d"
-  integrity sha512-NabipCNsuwPsI+qsIHz10OyUh0N5GezgllzkN82KmTBJiR2ZGtDQlWLjwx19cxdUBuoqgU46M6JhKLbCoGpmkA==
+"@aws-solutions-constructs/aws-lambda-dynamodb@^2.72.0":
+  version "2.72.0"
+  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/aws-lambda-dynamodb/-/aws-lambda-dynamodb-2.72.0.tgz#f2a7e89b4464b502cb649ac72d8e5349ca38457a"
+  integrity sha512-xgSKLnVSHSetViXv0rUAoCQL7SFUSDwlehNtodiCJqxStvrD9nRVssgvcs1BDhc9gjpsvZUKkFm71OnIzF9rbA==
   dependencies:
-    "@aws-cdk/integ-tests-alpha" "2.160.0-alpha.0"
-    "@aws-solutions-constructs/core" "2.71.0"
+    "@aws-cdk/integ-tests-alpha" "2.161.0-alpha.0"
+    "@aws-solutions-constructs/core" "2.72.0"
     constructs "^10.0.0"
 
-"@aws-solutions-constructs/core@2.71.0":
-  version "2.71.0"
-  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/core/-/core-2.71.0.tgz#514589595fb82439e652cfc09a137fbad8ae7f1e"
-  integrity sha512-gaMudy/hcXb4tRoITve8QgXyT4fa/J+DbpnAsXVxi+jHy+AkFElQxNugO7De8trChRsBkls/j5e9eZyle4zFTw==
+"@aws-solutions-constructs/core@2.72.0":
+  version "2.72.0"
+  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/core/-/core-2.72.0.tgz#79236d9402d7819616b7eb00c2cbdc2b577028fc"
+  integrity sha512-lP/dRBIqjaKZcitP94mmFf98adWajliSL9M5D7g07Mo/9MIj3wAECnca/Hlm+I9aIpQJhbR0B3Yv3I2ow+VQpw==
   dependencies:
-    "@aws-cdk/integ-tests-alpha" "2.160.0-alpha.0"
+    "@aws-cdk/integ-tests-alpha" "2.161.0-alpha.0"
     constructs "^10.0.0"
     deep-diff "^1.0.2"
     deepmerge "^4.0.0"
