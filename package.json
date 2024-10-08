@@ -44,7 +44,7 @@
     "projen": "npx projen"
   },
   "devDependencies": {
-    "@aws-sdk/client-ssm": "^3.665.0",
+    "@aws-sdk/client-ssm": "^3.666.0",
     "@aws-sdk/types": "^3.664.0",
     "@glen/jest-raw-loader": "^2.0.0",
     "@playwright/test": "^1.47.2",
@@ -65,15 +65,15 @@
     "jest": "^29.7.0",
     "jest-aws-client-mock": "^0.0.26",
     "jest-junit": "^15",
-    "projen": "^0.88.0",
+    "projen": "^0.88.1",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^4.9.5"
   },
   "dependencies": {
     "@aws-lambda-powertools/logger": "^1.18.1",
-    "@aws-sdk/client-dynamodb": "^3.665.0",
-    "@aws-sdk/client-secrets-manager": "^3.665.0",
+    "@aws-sdk/client-dynamodb": "^3.666.0",
+    "@aws-sdk/client-secrets-manager": "^3.666.0",
     "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.72.0",
     "@gemeentenijmegen/apiclient": "^0.0.19",
     "@gemeentenijmegen/apigateway-http": "^0.0.16",
@@ -87,7 +87,7 @@
     "axios": "^1.7.7",
     "cdk-remote-stack": "^2.1.0",
     "constructs": "^10.0.5",
-    "cookie": "^0.7.1",
+    "cookie": "^0.7.2",
     "dotenv": "^16.4.5",
     "jsonwebtoken": "^9.0.2",
     "mustache": "^4.2.0",
