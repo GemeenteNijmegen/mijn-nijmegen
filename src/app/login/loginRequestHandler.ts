@@ -56,14 +56,14 @@ export class LoginRequestHandler {
     //   clientSecretArn: process.env.NL_WALLET_SIGNICAT_CLIENT_SECRET_ARN!,
     //   scope: process.env.NL_WALLET_SIGNICAT_SCOPE!,
     //   wellknown: process.env.NL_WALLET_SIGNICAT_WELL_KNOWN!,
-    //   // applicationBaseUrl // loaded from env
+    //   redirectUrl: process.env.APPLICATION_URL_BASE + '/auth',
     // });
     this.oidcNlWalletVerId = new OpenIDConnectV2({
       clientId: process.env.NL_WALLET_VERID_CLIENT_ID!,
       clientSecretArn: process.env.NL_WALLET_VERID_CLIENT_SECRET_ARN!,
-      scope: process.env.NL_WALLET_VERID_SCOPE!,
+      // scope: process.env.NL_WALLET_VERID_SCOPE!,
       wellknown: process.env.NL_WALLET_VERID_WELL_KNOWN!,
-      // applicationBaseUrl // loaded from env
+      redirectUrl: process.env.APPLICATION_URL_BASE + '/auth',
     });
   }
 
