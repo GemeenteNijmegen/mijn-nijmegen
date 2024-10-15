@@ -3,6 +3,7 @@ import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-htt
 import { Session } from '@gemeentenijmegen/session';
 import * as loginTemplate from './templates/login.mustache';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
+import { OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
 import { render } from '../../shared/render';
 
 interface LoginRequestHandlerProps {
@@ -40,24 +41,30 @@ interface LoginRequestHandlerProps {
    * Feature flag to incicate if we need to enable conditional disclosure with kvk and bsn
    */
   useYiviKvk?: boolean;
-
-  /**
-   * OIDC Scopes for NL Wallet via Signicat
-   */
-  nlWalletSignicatScope?: string;
-
-  /**
-   * OIDC Scopes for NL Wallet via VerID
-   */
-  nlWalletVerIdScope?: string;
 }
 
 export class LoginRequestHandler {
   private config: LoginRequestHandlerProps;
   private oidc: OpenIDConnect;
+  // private oidcNlWalletSignicat: OpenIDConnectV2;
+  private oidcNlWalletVerId: OpenIDConnectV2;
   constructor(props: LoginRequestHandlerProps) {
     this.config = props;
     this.oidc = new OpenIDConnect();
+    // this.oidcNlWalletSignicat = new OpenIDConnectV2({
+    //   clientId: process.env.NL_WALLET_SIGNICAT_CLIENT_ID!,
+    //   clientSecretArn: process.env.NL_WALLET_SIGNICAT_CLIENT_SECRET_ARN!,
+    //   scope: process.env.NL_WALLET_SIGNICAT_SCOPE!,
+    //   wellknown: process.env.NL_WALLET_SIGNICAT_WELL_KNOWN!,
+    //   // applicationBaseUrl // loaded from env
+    // });
+    this.oidcNlWalletVerId = new OpenIDConnectV2({
+      clientId: process.env.NL_WALLET_VERID_CLIENT_ID!,
+      clientSecretArn: process.env.NL_WALLET_VERID_CLIENT_SECRET_ARN!,
+      scope: process.env.NL_WALLET_VERID_SCOPE!,
+      wellknown: process.env.NL_WALLET_VERID_WELL_KNOWN!,
+      // applicationBaseUrl // loaded from env
+    });
   }
 
   async handleRequest(cookies: string, dynamoDBClient: DynamoDBClient):Promise<ApiGatewayV2Response> {
@@ -108,12 +115,12 @@ export class LoginRequestHandler {
       const eherkenningScope = `${scope} ${this.config.eHerkenningScope}`;
       authMethods.push(this.authMethodData(eherkenningScope, state, 'eherkenning', 'eHerkenning'));
     }
-    if (this.config?.nlWalletSignicatScope) {
-      const nlWalletSignicatScope = `${scope} ${this.config.nlWalletSignicatScope}`;
-      authMethods.push(this.authMethodDataNlWalletSignicat(nlWalletSignicatScope, state, 'nl-wallet-signicat', 'NL Wallet (Signicat)'));
-    }
-    if (this.config?.nlWalletVerIdScope) {
-      const nlWalletVerIdScope = `${scope} ${this.config.nlWalletVerIdScope}`;
+    // if (this.config?.nlWalletSignicatScope) {
+    //   const nlWalletSignicatScope = `${scope} ${this.config.nlWalletSignicatScope}`;
+    //   authMethods.push(this.authMethodDataNlWalletSignicat(nlWalletSignicatScope, state, 'nl-wallet-signicat', 'NL Wallet (Signicat)'));
+    // }
+    if (process.env.NL_WALLET_VERID_SCOPE) {
+      const nlWalletVerIdScope = process.env.NL_WALLET_VERID_SCOPE;
       authMethods.push(this.authMethodDataNlWalletVerId(nlWalletVerIdScope, state, 'nl-wallet-verid', 'NL Wallet (VerID)'));
     }
     return authMethods;
@@ -127,19 +134,18 @@ export class LoginRequestHandler {
     };
   }
 
-  private authMethodDataNlWalletSignicat(scope: string, state: string, name: string, niceName: string) {
-    const oidc = new OpenIDConnect(); // TODO setup for Signicat
-    return {
-      authUrl: oidc.getLoginUrl(state, scope),
-      methodName: name,
-      methodNiceName: niceName,
-    };
-  }
+  // private authMethodDataNlWalletSignicat(scope: string, state: string, name: string, niceName: string) {
+  //   const oidc = new OpenIDConnect(); // TODO setup for Signicat
+  //   return {
+  //     authUrl: oidc.getLoginUrl(state, scope),
+  //     methodName: name,
+  //     methodNiceName: niceName,
+  //   };
+  // }
 
   private authMethodDataNlWalletVerId(scope: string, state: string, name: string, niceName: string) {
-    const oidc = new OpenIDConnect(); // TODO setup for VerID
     return {
-      authUrl: oidc.getLoginUrl(state, scope),
+      authUrl: this.oidcNlWalletVerId.getLoginUrl(state, scope),
       methodName: name,
       methodNiceName: niceName,
     };
