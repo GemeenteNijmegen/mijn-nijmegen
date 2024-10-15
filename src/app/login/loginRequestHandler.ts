@@ -110,11 +110,11 @@ export class LoginRequestHandler {
     }
     if (this.config?.nlWalletSignicatScope) {
       const nlWalletSignicatScope = `${scope} ${this.config.nlWalletSignicatScope}`;
-      authMethods.push(this.authMethodData(nlWalletSignicatScope, state, 'nl-wallet-signicat', 'NL Wallet (Signicat)'));
+      authMethods.push(this.authMethodDataNlWalletSignicat(nlWalletSignicatScope, state, 'nl-wallet-signicat', 'NL Wallet (Signicat)'));
     }
     if (this.config?.nlWalletVerIdScope) {
       const nlWalletVerIdScope = `${scope} ${this.config.nlWalletVerIdScope}`;
-      authMethods.push(this.authMethodData(nlWalletVerIdScope, state, 'nl-wallet-verid', 'NL Wallet (VerID)'));
+      authMethods.push(this.authMethodDataNlWalletVerId(nlWalletVerIdScope, state, 'nl-wallet-verid', 'NL Wallet (VerID)'));
     }
     return authMethods;
   }
@@ -126,4 +126,23 @@ export class LoginRequestHandler {
       methodNiceName: niceName,
     };
   }
+
+  private authMethodDataNlWalletSignicat(scope: string, state: string, name: string, niceName: string) {
+    const oidc = new OpenIDConnect(); // TODO setup for Signicat
+    return {
+      authUrl: oidc.getLoginUrl(state, scope),
+      methodName: name,
+      methodNiceName: niceName,
+    };
+  }
+
+  private authMethodDataNlWalletVerId(scope: string, state: string, name: string, niceName: string) {
+    const oidc = new OpenIDConnect(); // TODO setup for VerID
+    return {
+      authUrl: oidc.getLoginUrl(state, scope),
+      methodName: name,
+      methodNiceName: niceName,
+    };
+  }
+
 }
