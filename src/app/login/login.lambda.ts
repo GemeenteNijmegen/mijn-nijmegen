@@ -14,6 +14,8 @@ const loginRequestHandler = new LoginRequestHandler({
   yiviBsnAttribute: process.env.YIVI_BSN_ATTRIBUTE,
   yiviCondisconScope: process.env.YIVI_CONDISCON_SCOPE,
   eHerkenningScope: process.env.EHERKENNING_SCOPE ?? '',
+  nlWalletSignicatScope: process.env.NL_WALLET_SIGNICAT_SCOPE ?? '',
+  nlWalletVerIdScope: process.env.NL_WALLET_VERID_SCOPE ?? '',
   useYiviKvk: process.env.USE_YIVI_KVK == 'true',
 });
 

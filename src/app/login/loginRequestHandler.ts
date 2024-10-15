@@ -40,6 +40,16 @@ interface LoginRequestHandlerProps {
    * Feature flag to incicate if we need to enable conditional disclosure with kvk and bsn
    */
   useYiviKvk?: boolean;
+
+  /**
+   * OIDC Scopes for NL Wallet via Signicat
+   */
+  nlWalletSignicatScope?: string;
+
+  /**
+   * OIDC Scopes for NL Wallet via VerID
+   */
+  nlWalletVerIdScope?: string;
 }
 
 export class LoginRequestHandler {
@@ -97,6 +107,14 @@ export class LoginRequestHandler {
     if (this.config?.eHerkenningScope) {
       const eherkenningScope = `${scope} ${this.config.eHerkenningScope}`;
       authMethods.push(this.authMethodData(eherkenningScope, state, 'eherkenning', 'eHerkenning'));
+    }
+    if (this.config?.nlWalletSignicatScope) {
+      const nlWalletSignicatScope = `${scope} ${this.config.nlWalletSignicatScope}`;
+      authMethods.push(this.authMethodData(nlWalletSignicatScope, state, 'nl-wallet-signicat', 'NL Wallet (Signicat)'));
+    }
+    if (this.config?.nlWalletVerIdScope) {
+      const nlWalletVerIdScope = `${scope} ${this.config.nlWalletVerIdScope}`;
+      authMethods.push(this.authMethodData(nlWalletVerIdScope, state, 'nl-wallet-verid', 'NL Wallet (VerID)'));
     }
     return authMethods;
   }
