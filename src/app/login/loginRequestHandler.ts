@@ -74,7 +74,7 @@ export class LoginRequestHandler {
         clientId: process.env.NL_WALLET_VERID_CLIENT_ID!,
         clientSecretArn: process.env.NL_WALLET_VERID_CLIENT_SECRET_ARN!,
         wellknown: process.env.NL_WALLET_VERID_WELL_KNOWN!,
-        redirectUrl: process.env.APPLICATION_URL_BASE + '/auth',
+        redirectUrl: process.env.APPLICATION_URL_BASE + 'auth',
       });
     }
   }
