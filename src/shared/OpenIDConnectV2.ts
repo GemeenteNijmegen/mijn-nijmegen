@@ -3,8 +3,8 @@ import { Issuer, TokenSet, generators } from 'openid-client';
 
 export interface OpenIDConnectConfiguration {
   wellknown: string;
-  clientSecretArn: string;
   clientId: string;
+  clientSecretArn?: string;
   redirectUrl: string;
 }
 
@@ -28,9 +28,9 @@ export class OpenIDConnectV2 {
    * @returns {string} the login url
    */
   async getLoginUrl(state: string, scope: string): Promise<string> {
-    await this.init();
+    const issuer = await this.getIssuer();
     const redirectUrl = this.configuration.redirectUrl;
-    const client = new this.issuer!.Client({
+    const client = new issuer.Client({
       client_id: this.configuration.clientId,
       redirect_uris: [redirectUrl],
       response_types: ['code'],
@@ -55,14 +55,14 @@ export class OpenIDConnectV2 {
    * @returns {TokenSet} returns the tokens object on succesful auth
    */
   async authorize(code: string, state: string, returnedState: string): Promise<TokenSet> {
-    await this.init();
+    const issuer = await this.getIssuer();
+    const clientSecret = await this.getOidcClientSecret();
 
     const redirectUrl = this.configuration.redirectUrl;
-
-    const client = new this.issuer!.Client({
+    const client = new issuer.Client({
       client_id: this.configuration.clientId,
       redirect_uris: [redirectUrl],
-      client_secret: this.clientSecret!,
+      client_secret: clientSecret,
       response_types: ['code'],
     });
     const params = client.callbackParams(redirectUrl + '/?code=' + code + '&state=' + returnedState);
@@ -87,16 +87,6 @@ export class OpenIDConnectV2 {
     return generators.state();
   }
 
-  private async init() {
-    if (!this.issuer || !this.clientSecret) {
-      await Promise.all([
-        this.getIssuer(),
-        this.getOidcClientSecret(),
-      ]);
-    }
-    return true;
-  }
-
   /**
    * setup the oidc issuer. For now using env. parameters & hardcoded urls
    * Issuer could also be discovered based on file in .well-known, this
@@ -116,6 +106,9 @@ export class OpenIDConnectV2 {
    */
   private async getOidcClientSecret() {
     if (!this.clientSecret) {
+      if (!this.configuration.clientSecretArn) {
+        throw Error('Client secret arn not configured, cannot load client secret.');
+      }
       const secretsManagerClient = new SecretsManagerClient({});
       const command = new GetSecretValueCommand({ SecretId: this.configuration.clientSecretArn });
       const data = await secretsManagerClient.send(command);

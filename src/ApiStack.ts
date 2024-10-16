@@ -209,6 +209,11 @@ export class ApiStack extends Stack implements Configurable {
         YIVI_BSN_ATTRIBUTE: StringParameter.valueForStringParameter(this, Statics.ssmYiviBsnAttribute),
         YIVI_CONDISCON_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmYiviCondisconScope),
         USE_YIVI_KVK: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviKvk), // Feature flag for kvk bsn conditional disclosure
+
+        // VerId configuration (without secret as its not used to create the url)
+        NL_WALLET_VERID_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics.ssmVerIdClientId),
+        NL_WALLET_VERID_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmVerIdScope),
+        NL_WALLET_VERID_WELL_KNOWN: StringParameter.valueForStringParameter(this, Statics.ssmVerIdWellKnown),
       },
     });
   }
@@ -240,6 +245,7 @@ export class ApiStack extends Stack implements Configurable {
   private authFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
     const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
     const authServiceClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'auth-serice-client-secret', Statics.authServiceClientSecretArn);
+    const verIdClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'verid-client-secret', Statics.ssmVerIdClientSecret);
     const brpHaalCentraalApiKeySecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'brp-haal-centraal-api-key-auth-secret', Statics.haalCentraalApiKeySecret);
 
     const authFunction = new ApiFunction(this, 'auth-function', {
@@ -270,11 +276,18 @@ export class ApiStack extends Stack implements Configurable {
         AUTH_SERVICE_CLIENT_SECRET_ARN: authServiceClientSecret.secretArn,
         AUTH_SERVICE_CLIENT_ID: this.configuration.authenticationServiceConfiguration?.clientId ?? '',
         AUTH_SERVICE_ENDPOINT: this.configuration.authenticationServiceConfiguration?.endpoint ?? '',
+
+        // VerId configuration
+        NL_WALLET_VERID_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics.ssmVerIdClientId),
+        NL_WALLET_VERID_CLIENT_SECRET_ARN: verIdClientSecret.secretArn,
+        NL_WALLET_VERID_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmVerIdScope),
+        NL_WALLET_VERID_WELL_KNOWN: StringParameter.valueForStringParameter(this, Statics.ssmVerIdWellKnown),
       },
       apiFunction: AuthFunction,
     });
     brpHaalCentraalApiKeySecret.grantRead(authFunction.lambda);
     authServiceClientSecret.grantRead(authFunction.lambda);
+    verIdClientSecret.grantRead(authFunction.lambda);
     oidcSecret.grantRead(authFunction.lambda);
     mtlsConfig.privateKey.grantRead(authFunction.lambda);
     mtlsConfig.clientCert.grantRead(authFunction.lambda);

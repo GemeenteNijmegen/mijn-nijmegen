@@ -113,6 +113,30 @@ export class ssmParamsConstruct extends Construct {
       description: 'OIDC scope for eherkenning',
     });
 
+    new SSM.StringParameter(this, 'ssm_auth_20', {
+      stringValue: 'https://',
+      parameterName: Statics.ssmVerIdWellKnown,
+      description: 'OIDC well known url (VerID)',
+    });
+
+    new SSM.StringParameter(this, 'ssm_auth_21', {
+      stringValue: 'openid nin',
+      parameterName: Statics.ssmVerIdScope,
+      description: 'OIDC scope for nl wallet (VerID)',
+    });
+
+    new SSM.StringParameter(this, 'ssm_auth_22', {
+      stringValue: '-',
+      parameterName: Statics.ssmVerIdClientId,
+      description: 'OIDC client id (VerID)',
+    });
+
+    new SecretsManager.Secret(this, 'ssm_auth_23', {
+      secretName: Statics.ssmVerIdClientSecret,
+      description: 'OIDC client secret (VerID)',
+    });
+
+
     new SSM.StringParameter(this, 'ssm_uitkering_2', {
       stringValue: '-',
       parameterName: Statics.ssmMTLSClientCert,
