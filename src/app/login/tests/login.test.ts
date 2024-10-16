@@ -37,7 +37,7 @@ describe('Test login page and urls', () => {
       digidScope: 'idp_scoping:digid',
       oidcScope: 'openid',
     });
-    const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
+    const result = await loginRequestHandler.handleRequest(requestParams(''), dynamoDBClient);
     expect(result.body).toMatch(`${process.env.AUTH_URL_BASE}/broker/sp/oidc/authenticate`);
     expect(result.body).toMatch(encodeURIComponent(`${process.env.APPLICATION_URL_BASE}auth`));
     expect(result.body).toMatch(encodeURIComponent('idp_scoping:digid'));
@@ -51,7 +51,7 @@ describe('Test login page and urls', () => {
       yiviScope: 'idp_scoping:yivi',
       yiviBsnAttribute: 'bsn',
     });
-    const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
+    const result = await loginRequestHandler.handleRequest(requestParams(''), dynamoDBClient);
     expect(result.body).toMatch(encodeURIComponent('idp_scoping:yivi'));
     expect(result.body).toMatch(encodeURIComponent('bsn'));
     expect(result.body).toMatch('<span class="title"> Inloggen </span><span class="assistive">met Yivi</span>');
@@ -68,7 +68,7 @@ describe('Test login page and urls', () => {
       yiviCondisconScope: 'condiscon',
       useYiviKvk: true,
     });
-    const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
+    const result = await loginRequestHandler.handleRequest(requestParams(''), dynamoDBClient);
     expect(result.body).toMatch(encodeURIComponent('idp_scoping:yivi'));
     expect(result.body).toMatch(encodeURIComponent('condiscon'));
     expect(result.body).toMatch('<span class="title"> Inloggen </span><span class="assistive">met Yivi</span>');
@@ -82,7 +82,7 @@ describe('Test login page and urls', () => {
       digidScope: 'idp_scoping:digid',
       oidcScope: 'openid',
     });
-    const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
+    const result = await loginRequestHandler.handleRequest(requestParams(''), dynamoDBClient);
     expect(result.body).not.toMatch(encodeURIComponent('idp_scoping:yivi'));
   });
 
@@ -92,7 +92,7 @@ describe('Test login page and urls', () => {
       oidcScope: 'openid',
       yiviScope: 'idp_scoping:yivi',
     });
-    const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
+    const result = await loginRequestHandler.handleRequest(requestParams(''), dynamoDBClient);
     expect(result.body).toMatch(encodeURIComponent('service:DigiD_Hoog'));
   });
 
@@ -102,7 +102,7 @@ describe('Test login page and urls', () => {
       oidcScope: 'openid',
       yiviScope: 'idp_scoping:yivi',
     });
-    const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
+    const result = await loginRequestHandler.handleRequest(requestParams(''), dynamoDBClient);
     expect(result.body).toMatch(encodeURIComponent('service:DigiD_Midden'));
     expect(result.body).not.toMatch(encodeURIComponent('service:DigiD_Hoog'));
   });
@@ -114,7 +114,7 @@ describe('Test login page and urls', () => {
       yiviScope: 'idp_scoping:yivi',
       eHerkenningScope: 'idp_scoping:eherkenning',
     });
-    const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
+    const result = await loginRequestHandler.handleRequest(requestParams(''), dynamoDBClient);
     expect(result.body).toMatch(encodeURIComponent('idp_scoping:eherkenning'));
     expect(result.body).toMatch('<span class="title"> Inloggen </span><span class="assistive">met eHerkenning</span>');
     if (result.body) {
@@ -128,7 +128,7 @@ test('No redirect if session cookie doesn\'t exist', async () => {
     digidScope: 'idp_scoping:digid',
     oidcScope: 'openid',
   });
-  const result = await loginRequestHandler.handleRequest('demo=12345', dynamoDBClient);
+  const result = await loginRequestHandler.handleRequest(requestParams('demo=12345'), dynamoDBClient);
   expect(result.statusCode).toBe(200);
 });
 
@@ -137,7 +137,7 @@ test('Create session if no session exists', async () => {
     digidScope: 'idp_scoping:digid service: DigiD_Midden',
     oidcScope: 'openid',
   });
-  await loginRequestHandler.handleRequest('', dynamoDBClient);
+  await loginRequestHandler.handleRequest(requestParams(''), dynamoDBClient);
 
   expect(ddbMock.calls().length).toBe(1);
 });
@@ -160,7 +160,7 @@ test('Redirect to home if already logged in', async () => {
     digidScope: 'idp_scoping:digid',
     oidcScope: 'openid',
   });
-  const result = await loginRequestHandler.handleRequest(`session=${sessionId}`, dynamoDBClient);
+  const result = await loginRequestHandler.handleRequest(requestParams(`session=${sessionId}`), dynamoDBClient);
   expect(result?.headers?.Location).toBe('/');
   expect(result.statusCode).toBe(302);
 });
@@ -173,7 +173,7 @@ test('Unknown session returns login page', async () => {
     digidScope: 'idp_scoping:digid',
     oidcScope: 'openid',
   });
-  const result = await loginRequestHandler.handleRequest(`session=${sessionId}`, dynamoDBClient);
+  const result = await loginRequestHandler.handleRequest(requestParams(`session=${sessionId}`), dynamoDBClient);
   expect(ddbMock.calls().length).toBe(2);
   expect(result.statusCode).toBe(200);
 });
@@ -192,7 +192,7 @@ test('Known session without login returns login page, without creating new sessi
     digidScope: 'idp_scoping:digid',
     oidcScope: 'openid',
   });
-  const result = await loginRequestHandler.handleRequest(`session=${sessionId}`, dynamoDBClient);
+  const result = await loginRequestHandler.handleRequest(requestParams(`session=${sessionId}`), dynamoDBClient);
   expect(ddbMock.calls().length).toBe(2);
   expect(result.statusCode).toBe(200);
 });
@@ -202,7 +202,7 @@ test('Request without session returns session cookie', async () => {
     digidScope: 'idp_scoping:digid',
     oidcScope: 'openid',
   });
-  const result = await loginRequestHandler.handleRequest('', dynamoDBClient);
+  const result = await loginRequestHandler.handleRequest(requestParams(''), dynamoDBClient);
   expect(result.cookies).toEqual(
     expect.arrayContaining([expect.stringMatching('session=')]),
   );
@@ -216,10 +216,17 @@ test('DynamoDB error', async () => {
       digidScope: 'idp_scoping:digid service: DigiD_Midden',
       oidcScope: 'openid',
     });
-    await loginRequestHandler.handleRequest('session=12345', dynamoDBClient);
+    await loginRequestHandler.handleRequest(requestParams('session=12345'), dynamoDBClient);
   } catch (error) {
     failed = true;
   }
   expect(ddbMock.calls().length).toBe(1);
   expect(failed).toBe(true);
 });
+
+function requestParams(cookies: string) {
+  return {
+    cookies: cookies,
+    nlwallet: false,
+  };
+}

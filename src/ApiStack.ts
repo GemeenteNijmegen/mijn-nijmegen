@@ -211,6 +211,7 @@ export class ApiStack extends Stack implements Configurable {
         USE_YIVI_KVK: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviKvk), // Feature flag for kvk bsn conditional disclosure
 
         // VerId configuration (without secret as its not used to create the url)
+        USE_NL_WALLET: this.configuration.nlWalletIsLive ? 'true' : 'false',
         NL_WALLET_VERID_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics.ssmVerIdClientId),
         NL_WALLET_VERID_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmVerIdScope),
         NL_WALLET_VERID_WELL_KNOWN: StringParameter.valueForStringParameter(this, Statics.ssmVerIdWellKnown),
@@ -278,6 +279,7 @@ export class ApiStack extends Stack implements Configurable {
         AUTH_SERVICE_ENDPOINT: this.configuration.authenticationServiceConfiguration?.endpoint ?? '',
 
         // VerId configuration
+        USE_NL_WALLET: this.configuration.nlWalletIsLive ? 'true' : 'false',
         NL_WALLET_VERID_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics.ssmVerIdClientId),
         NL_WALLET_VERID_CLIENT_SECRET_ARN: verIdClientSecret.secretArn,
         NL_WALLET_VERID_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmVerIdScope),
