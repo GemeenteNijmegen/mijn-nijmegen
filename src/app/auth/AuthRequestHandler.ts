@@ -84,15 +84,15 @@ export class AuthRequestHandler {
         if (!this.oidcNlWalletSignicat) {
           throw Error('Expected ODIC configuration for NL Wallet using Signicat.');
         }
-        const correctedState = this.correctStateForAuthmethod(this.config.queryStringParamState);
-        tokens = await this.oidcNlWalletSignicat.authorize(this.config.queryStringParamCode, state, correctedState);
+        const correctedState = this.config.queryStringParamState;
+        tokens = await this.oidcNlWalletSignicat.authorize(this.config.queryStringParamCode, state + '-signicat', correctedState);
         user = this.userFromSignicatNlWalletFlow(tokens);
       } else if (this.config.useNlWalletVerId && this.config.queryStringParamState.endsWith('-verid')) {
         if (!this.oidcNlWalletVerId) {
           throw Error('Expected ODIC configuration for NL Wallet using VerID.');
         }
-        const correctedState = this.correctStateForAuthmethod(this.config.queryStringParamState);
-        tokens = await this.oidcNlWalletVerId.authorize(this.config.queryStringParamCode, state, correctedState);
+        const correctedState = this.config.queryStringParamState;
+        tokens = await this.oidcNlWalletVerId.authorize(this.config.queryStringParamCode, state + '-verid', correctedState);
         user = this.userFromVerIdNlWalletFlow(tokens);
       } else {
         // Original flow
@@ -294,16 +294,6 @@ export class AuthRequestHandler {
       throw Error('Could not find bsn in NL wallet login flow (Signicat)');
     }
     return new Person(new Bsn(bsn), { apiClient: this.config.apiClient });
-  }
-
-  private correctStateForAuthmethod(state: string) {
-    if (state.endsWith('-verid')) {
-      return state.substring(state.length - '-verid'.length);
-    }
-    if (state.endsWith('-signicat')) {
-      return state.substring(state.length - '-signicat'.length);
-    }
-    return state;
   }
 
 }
