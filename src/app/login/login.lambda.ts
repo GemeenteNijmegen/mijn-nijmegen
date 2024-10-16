@@ -16,7 +16,8 @@ const loginRequestHandler = new LoginRequestHandler({
   yiviCondisconScope: process.env.YIVI_CONDISCON_SCOPE,
   eHerkenningScope: process.env.EHERKENNING_SCOPE ?? '',
   useYiviKvk: process.env.USE_YIVI_KVK == 'true',
-  useNlWallet: process.env.USE_NL_WALLET == 'true',
+  useNlWalletVerId: process.env.USE_NL_WALLET_VERID == 'true',
+  useNlWalletSignicat: process.env.USE_NL_WALLET_SIGNICAT == 'true',
 });
 
 function parseEvent(event: APIGatewayProxyEventV2): RequestParams {

@@ -10,6 +10,7 @@ import { BrpApi } from './BrpApi';
 
 import { HaalCentraalApi } from './HaalCentraalApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
+import { OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
 
 type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
 const eHerkenningKvkNummerClaim = 'urn:etoegang:1.9:EntityConcernedID:KvKnr';
@@ -36,12 +37,35 @@ export interface AuthRequestHandlerProps {
 
   // Feature toggle
   useYiviKvk?: boolean;
+  useNlWalletVerId?: boolean;
+  useNlWalletSignicat?: boolean;
 }
 
 export class AuthRequestHandler {
   private config: AuthRequestHandlerProps;
+
+  // private oidcNlWalletSignicat?: OpenIDConnectV2;
+  private oidcNlWalletVerId?: OpenIDConnectV2;
+
   constructor(props: AuthRequestHandlerProps) {
     this.config = props;
+    if (props.useNlWalletVerId) {
+      this.oidcNlWalletVerId = new OpenIDConnectV2({
+        clientId: process.env.NL_WALLET_VERID_CLIENT_ID!,
+        clientSecretArn: process.env.NL_WALLET_VERID_CLIENT_SECRET_ARN!,
+        wellknown: process.env.NL_WALLET_VERID_WELL_KNOWN!,
+        redirectUrl: process.env.APPLICATION_URL_BASE + 'auth',
+      });
+    }
+    if (props.useNlWalletSignicat) {
+      // this.oidcNlWalletSignicat = new OpenIDConnectV2({
+      //   clientId: process.env.NL_WALLET_SIGNICAT_CLIENT_ID!,
+      //   clientSecretArn: process.env.NL_WALLET_SIGNICAT_CLIENT_SECRET_ARN!,
+      //   scope: process.env.NL_WALLET_SIGNICAT_SCOPE!,
+      //   wellknown: process.env.NL_WALLET_SIGNICAT_WELL_KNOWN!,
+      //   redirectUrl: process.env.APPLICATION_URL_BASE + '/auth',
+      // });
+    }
   }
 
   async handleRequest() {
@@ -52,11 +76,28 @@ export class AuthRequestHandler {
     }
     const state = session.getValue('state');
     try {
-      // Authorize the request
-      const tokens = await this.config.OpenIdConnect.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
+      let tokens = undefined;
+      let user = undefined;
+      // Find the correct openid connect configuration
+      // Check for valid state for and call token endpoint
+      if (this.config.useNlWalletSignicat && this.config.queryStringParamState.endsWith('-signicat')) {
+        // const correctedState = this.correctStateForAuthmethod(this.config.queryStringParamState);
+        // tokens = this.oidcNlWalletVerId?.authorize(this.config.queryStringParamCode, state, correctedState);
+        // user = this.userFromVerIdNlWalletFlow(tokens);
+        throw Error('Signicat NL Wallet authentication is not yet implemented.');
+      } else if (this.config.useNlWalletVerId && this.config.queryStringParamState.endsWith('-verid')) {
+        if (!this.oidcNlWalletVerId) {
+          throw Error('Expected ODIC configuration for NL Wallet using VerID.');
+        }
+        const correctedState = this.correctStateForAuthmethod(this.config.queryStringParamState);
+        tokens = await this.oidcNlWalletVerId.authorize(this.config.queryStringParamCode, state, correctedState);
+        user = this.userFromVerIdNlWalletFlow(tokens);
+      } else {
+        // Original flow
+        tokens = await this.config.OpenIdConnect.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
+        user = this.userFromTokens(tokens);
+      }
 
-      // Load the principal data
-      const user = this.userFromTokens(tokens);
       if (!user) {
         return Response.redirect('/login');
       }
@@ -235,6 +276,25 @@ export class AuthRequestHandler {
   async exchangeTokenWithOurOwnVerySpecialIdP(access_token: string) {
     return this.config.authenticationService?.exchangeToken(access_token);
   }
+
+  private userFromVerIdNlWalletFlow(tokens: TokenSet) {
+    const bsn = (tokens.claims() as any).nin?.identifier;
+    if (!bsn) {
+      throw Error('Could not find bsn in NL wallet login flow (VerID)');
+    }
+    return new Person(new Bsn(bsn), { apiClient: this.config.apiClient });
+  }
+
+  private correctStateForAuthmethod(state: string) {
+    if (state.endsWith('-verid')) {
+      return state.substring(state.length - '-verid'.length);
+    }
+    if (state.endsWith('-signicat')) {
+      return state.substring(state.length - '-signicat'.length);
+    }
+    return state;
+  }
+
 }
 
 
