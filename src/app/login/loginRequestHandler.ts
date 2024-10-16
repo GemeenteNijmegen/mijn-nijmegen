@@ -93,7 +93,7 @@ export class LoginRequestHandler {
     });
 
     const scope = this.config.oidcScope;
-    const authMethods = this.addAuthMethods(scope, state, params.nlwallet);
+    const authMethods = await this.addAuthMethods(scope, state, params.nlwallet);
 
     const data = {
       title: 'Inloggen',
@@ -107,7 +107,7 @@ export class LoginRequestHandler {
     return Response.html(html, 200, newCookies);
   }
 
-  private addAuthMethods(scope: string, state: string, nlwallet: boolean) {
+  private async addAuthMethods(scope: string, state: string, nlwallet: boolean) {
     const authMethods = [];
     if (this.config?.digidScope) {
       const digidScope = `${scope} ${this.config.digidScope}`;
@@ -131,7 +131,8 @@ export class LoginRequestHandler {
       //   const nlWalletSignicatScope = `${scope} ${this.config.nlWalletSignicatScope}`;
       //   authMethods.push(this.authMethodDataNlWalletSignicat(nlWalletSignicatScope, state, 'nl-wallet-signicat', 'NL Wallet (Signicat)'));
       const nlWalletVerIdScope = process.env.NL_WALLET_VERID_SCOPE!;
-      authMethods.push(this.authMethodDataNlWalletVerId(nlWalletVerIdScope, state, 'nl-wallet-verid', 'NL Wallet (VerID)'));
+      const verIdUrl = await this.authMethodDataNlWalletVerId(nlWalletVerIdScope, state, 'nl-wallet-verid', 'NL Wallet (VerID)');
+      authMethods.push(verIdUrl);
     }
     return authMethods;
   }
@@ -153,12 +154,12 @@ export class LoginRequestHandler {
   //   };
   // }
 
-  private authMethodDataNlWalletVerId(scope: string, state: string, name: string, niceName: string) {
+  private async authMethodDataNlWalletVerId(scope: string, state: string, name: string, niceName: string) {
     if (!this.oidcNlWalletVerId) {
       throw Error('Cannot add VerID authentication, its not configured');
     }
     return {
-      authUrl: this.oidcNlWalletVerId.getLoginUrl(state, scope),
+      authUrl: await this.oidcNlWalletVerId.getLoginUrl(state, scope),
       methodName: name,
       methodNiceName: niceName,
     };
