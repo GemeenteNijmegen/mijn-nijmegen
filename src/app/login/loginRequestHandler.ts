@@ -61,7 +61,7 @@ export interface RequestParams {
 export class LoginRequestHandler {
   private config: LoginRequestHandlerProps;
   private oidc: OpenIDConnect;
-  // private oidcNlWalletSignicat?: OpenIDConnectV2;
+  private oidcNlWalletSignicat?: OpenIDConnectV2;
   private oidcNlWalletVerId?: OpenIDConnectV2;
   constructor(props: LoginRequestHandlerProps) {
     this.config = props;
@@ -76,13 +76,12 @@ export class LoginRequestHandler {
       });
     }
     if (props.useNlWalletSignicat) {
-      // this.oidcNlWalletSignicat = new OpenIDConnectV2({
-      //   clientId: process.env.NL_WALLET_SIGNICAT_CLIENT_ID!,
-      //   clientSecretArn: process.env.NL_WALLET_SIGNICAT_CLIENT_SECRET_ARN!,
-      //   scope: process.env.NL_WALLET_SIGNICAT_SCOPE!,
-      //   wellknown: process.env.NL_WALLET_SIGNICAT_WELL_KNOWN!,
-      //   redirectUrl: process.env.APPLICATION_URL_BASE + '/auth',
-      // });
+      this.oidcNlWalletSignicat = new OpenIDConnectV2({
+        clientId: process.env.NL_WALLET_SIGNICAT_CLIENT_ID!,
+        clientSecretArn: process.env.NL_WALLET_SIGNICAT_CLIENT_SECRET_ARN!,
+        wellknown: process.env.NL_WALLET_SIGNICAT_WELL_KNOWN!,
+        redirectUrl: process.env.APPLICATION_URL_BASE + 'auth',
+      });
     }
   }
 
@@ -134,14 +133,21 @@ export class LoginRequestHandler {
       const eherkenningScope = `${scope} ${this.config.eHerkenningScope}`;
       authMethods.push(this.authMethodData(eherkenningScope, state, 'eherkenning', 'eHerkenning'));
     }
-    if (nlwallet) { // Shows NL wallet links on login page
-      // const nlWalletSignicatScope = `${scope} ${this.config.nlWalletSignicatScope}`;
-      // authMethods.push(this.authMethodDataNlWalletSignicat(nlWalletSignicatScope, state, 'nl-wallet-signicat', 'NL Wallet (Signicat)'));
-      // authMethods.push(verIdUrl);
+
+    // Shows Signicat NL wallet link on login page
+    if (nlwallet && this.config.useNlWalletSignicat) {
+      const nlWalletSignicatScope = process.env.NL_WALLET_SIGNICAT_SCOPE!;
+      const signicatUrl = await this.authMethodDataNlWalletSignicat(nlWalletSignicatScope, state, 'nl-wallet-signicat', 'NL Wallet (Signicat)');
+      authMethods.push(signicatUrl);
+    }
+
+    // Shows VerId NL wallet link on login page
+    if (nlwallet && this.config.useNlWalletVerId) {
       const nlWalletVerIdScope = process.env.NL_WALLET_VERID_SCOPE!;
       const verIdUrl = await this.authMethodDataNlWalletVerId(nlWalletVerIdScope, state, 'nl-wallet-verid', 'NL Wallet (VerID)');
       authMethods.push(verIdUrl);
     }
+
     return authMethods;
   }
 
@@ -153,14 +159,16 @@ export class LoginRequestHandler {
     };
   }
 
-  // private authMethodDataNlWalletSignicat(scope: string, state: string, name: string, niceName: string) {
-  //   const oidc = new OpenIDConnect(); // TODO setup for Signicat
-  //   return {
-  //     authUrl: oidc.getLoginUrl(state + '-signicat', scope),
-  //     methodName: name,
-  //     methodNiceName: niceName,
-  //   };
-  // }
+  private async authMethodDataNlWalletSignicat(scope: string, state: string, name: string, niceName: string) {
+    if (!this.oidcNlWalletSignicat) {
+      throw Error('Cannot add Signicat authentication, its not configured');
+    }
+    return {
+      authUrl: await this.oidcNlWalletSignicat.getLoginUrl(state + '-signicat', scope),
+      methodName: name,
+      methodNiceName: niceName,
+    };
+  }
 
   private async authMethodDataNlWalletVerId(scope: string, state: string, name: string, niceName: string) {
     if (!this.oidcNlWalletVerId) {
