@@ -77,6 +77,7 @@ export class AuthRequestHandler {
     try {
       let tokens = undefined;
       let user = undefined;
+
       // Find the correct openid connect configuration
       // Check for valid state for and call token endpoint
       if (this.config.useNlWalletSignicat && this.config.queryStringParamState.endsWith('-signicat')) {
@@ -85,7 +86,7 @@ export class AuthRequestHandler {
         }
         const correctedState = this.correctStateForAuthmethod(this.config.queryStringParamState);
         tokens = await this.oidcNlWalletSignicat.authorize(this.config.queryStringParamCode, state, correctedState);
-        user = this.userFromVerIdNlWalletFlow(tokens);
+        user = this.userFromSignicatNlWalletFlow(tokens);
       } else if (this.config.useNlWalletVerId && this.config.queryStringParamState.endsWith('-verid')) {
         if (!this.oidcNlWalletVerId) {
           throw Error('Expected ODIC configuration for NL Wallet using VerID.');
@@ -282,6 +283,15 @@ export class AuthRequestHandler {
     const bsn = (tokens.claims() as any).nin?.identifier;
     if (!bsn) {
       throw Error('Could not find bsn in NL wallet login flow (VerID)');
+    }
+    return new Person(new Bsn(bsn), { apiClient: this.config.apiClient });
+  }
+
+  private userFromSignicatNlWalletFlow(tokens: TokenSet) {
+    const claims = (tokens.claims() as any);
+    const bsn = claims['irma-demo.gemeente.personalData.bsn']; // TODO replace with NL Wallet claim
+    if (!bsn) {
+      throw Error('Could not find bsn in NL wallet login flow (Signicat)');
     }
     return new Person(new Bsn(bsn), { apiClient: this.config.apiClient });
   }
