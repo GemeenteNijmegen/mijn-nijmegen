@@ -91,6 +91,11 @@ export interface Configuration {
   readonly zakenUseSubmissions?: boolean;
 
   /**
+   * Feature flag: enables nl wallet login
+   */
+  readonly nlWalletIsLive?: boolean;
+
+  /**
    * Set this to true if you want the verwerkingenlogging inzage-page to be created
    */
   readonly inzageLive?: boolean;
@@ -135,6 +140,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     // },
     inzageLive: true,
     useZakenFromAggregatorAPI: true,
+    nlWalletIsLive: true,
   },
   acceptance: {
     branch: 'acceptance',
