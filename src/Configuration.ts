@@ -145,7 +145,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     inzageLive: true,
     useZakenFromAggregatorAPI: true,
     nlWalletVerIdIsLive: true,
-    nlWalletSignicatIsLive: false,
+    nlWalletSignicatIsLive: true,
   },
   acceptance: {
     branch: 'acceptance',
