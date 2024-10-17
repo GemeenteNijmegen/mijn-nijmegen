@@ -67,10 +67,14 @@ export class OpenIDConnectV2 {
     });
     const params = client.callbackParams(redirectUrl + '/?code=' + code + '&state=' + returnedState);
     if (state !== returnedState) {
+      console.debug(state, returnedState);
       throw new Error('state does not match session state');
     }
+    console.debug('State matches session state');
     let tokenSet;
     try {
+      console.debug('Doing callback with', redirectUrl, params, state);
+      console.debug(JSON.stringify(client.metadata));
       tokenSet = await client.callback(redirectUrl, params, { state: state });
     } catch (err: any) {
       throw new Error(`${err.error} ${err.error_description}`);
