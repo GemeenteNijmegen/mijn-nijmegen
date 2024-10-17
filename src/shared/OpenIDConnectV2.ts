@@ -1,11 +1,12 @@
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
-import { Issuer, TokenSet, generators } from 'openid-client';
+import { ClientMetadata, Issuer, TokenSet, generators } from 'openid-client';
 
 export interface OpenIDConnectConfiguration {
   wellknown: string;
   clientId: string;
   clientSecretArn?: string;
   redirectUrl: string;
+  clientOptions?: Partial<ClientMetadata>;
 }
 
 export class OpenIDConnectV2 {
@@ -64,6 +65,7 @@ export class OpenIDConnectV2 {
       redirect_uris: [redirectUrl],
       client_secret: clientSecret,
       response_types: ['code'],
+      ...this.configuration.clientOptions,
     });
     const params = client.callbackParams(redirectUrl + '/?code=' + code + '&state=' + returnedState);
     if (state !== returnedState) {

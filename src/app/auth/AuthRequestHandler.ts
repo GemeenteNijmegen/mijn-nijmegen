@@ -55,6 +55,9 @@ export class AuthRequestHandler {
         clientSecretArn: process.env.NL_WALLET_VERID_CLIENT_SECRET_ARN!,
         wellknown: process.env.NL_WALLET_VERID_WELL_KNOWN!,
         redirectUrl: process.env.APPLICATION_URL_BASE + 'auth',
+        clientOptions: {
+          id_token_signed_response_alg: 'ES384',
+        },
       });
     }
     if (props.useNlWalletSignicat) {
