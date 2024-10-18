@@ -103,11 +103,11 @@ export class LoginRequestHandler {
       return Response.redirect('/');
     }
 
-    const authMethods = this.addAuthMethods(params.nlwallet);
-
     if (params.method) {
-      return this.setupAuthenticationRedirect(session, params.method, authMethods);
+      return this.setupAuthenticationRedirect(session, params.method);
     }
+
+    const authMethods = this.addAuthMethods(params.nlwallet);
 
     const data = {
       title: 'Inloggen',
@@ -146,8 +146,8 @@ export class LoginRequestHandler {
     };
   }
 
-  private async setupAuthenticationRedirect(session: Session, method: string, knownMethods: AuthMethod[] ) {
-    const supportedMethod = knownMethods.find(known => known.methodName == method);
+  private async setupAuthenticationRedirect(session: Session, method: string) {
+    const supportedMethod = this.addAuthMethods(true).find(known => known.methodName == method);
     if (!supportedMethod) {
       throw Error('Authentication method is not suported!');
     }
