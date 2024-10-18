@@ -74,7 +74,11 @@ export class ZakenRequestHandler {
     }
 
     if (params.responseType == 'json') {
-      return this.jsonListResponse(session, zakenList, params.xsrfToken);
+      if (timeout) {
+        return Response.json({ error: 'Het ophalen van gegevens duurde te lang…' }, 408);
+      } else {
+        return this.jsonListResponse(session, zakenList, params.xsrfToken);
+      }
     } else {
       return this.htmlListResponse(session, user, zakenList, timeout);
     }
@@ -91,7 +95,7 @@ export class ZakenRequestHandler {
   }
 
   async htmlListResponse(session: Session, user: User, zaakSummaries: any, timeout?: boolean) {
-    const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
+    const navigation = new Navigation(user.type, { currentPath: '/zaken' });
 
     const { openHtml, closedHtml } = await this.zakenListsHtml(zaakSummaries);
 
@@ -120,7 +124,7 @@ export class ZakenRequestHandler {
         {
           'zaak-row': zaakRow.default,
         });
-      closedHtml = await render({ zaken: zaakSummaries.closed, id: 'closed-zaken-list' }, zakenListPartial.default,
+      closedHtml = await render({ zaken: zaakSummaries.gesloten, id: 'closed-zaken-list' }, zakenListPartial.default,
         {
           'zaak-row': zaakRow.default,
         });
@@ -147,7 +151,7 @@ export class ZakenRequestHandler {
     }
     //If we get neither a zaak or a timeout flag, the zaak doesn't exist or isn't accessible for the user.
     if (formattedZaak || timeout) {
-      const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
+      const navigation = new Navigation(user.type, { currentPath: '/zaken' });
       let data = {
         volledigenaam: session.getValue('username'),
         title: (formattedZaak) ? `Zaak - ${formattedZaak.zaak_type}` : 'Zaak ophalen niet gelukt',

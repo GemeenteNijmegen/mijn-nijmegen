@@ -4,7 +4,7 @@ import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { HomeRequestHandler } from './homeRequestHandler';
 
 const dynamoDBClient = new DynamoDBClient({});
-const requestHandler = new HomeRequestHandler(dynamoDBClient, { showZaken: process.env.SHOW_ZAKEN == 'True' });
+const requestHandler = new HomeRequestHandler(dynamoDBClient, { showTaken: process.env.SHOW_TAKEN == 'True' });
 
 export interface eventParams {
   cookies: string;
