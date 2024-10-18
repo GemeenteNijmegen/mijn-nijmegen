@@ -77,25 +77,24 @@ export class AuthRequestHandler {
       return Response.redirect('/login');
     }
     const state = session.getValue('state');
+    const method = session.getValue('method');
     try {
       let tokens = undefined;
       let user = undefined;
 
-      // Find the correct openid connect configuration
+      // Find the correct openid connect configuration based on the method set in session
       // Check for valid state for and call token endpoint
-      if (this.config.useNlWalletSignicat && this.config.queryStringParamState.endsWith('-signicat')) {
+      if (this.config.useNlWalletSignicat && method == 'nl-wallet-signicat') {
         if (!this.oidcNlWalletSignicat) {
           throw Error('Expected ODIC configuration for NL Wallet using Signicat.');
         }
-        const correctedState = this.config.queryStringParamState;
-        tokens = await this.oidcNlWalletSignicat.authorize(this.config.queryStringParamCode, state + '-signicat', correctedState);
+        tokens = await this.oidcNlWalletSignicat.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
         user = this.userFromSignicatNlWalletFlow(tokens);
-      } else if (this.config.useNlWalletVerId && this.config.queryStringParamState.endsWith('-verid')) {
+      } else if (this.config.useNlWalletVerId && method == 'nl-wallet-verid') {
         if (!this.oidcNlWalletVerId) {
           throw Error('Expected ODIC configuration for NL Wallet using VerID.');
         }
-        const correctedState = this.config.queryStringParamState;
-        tokens = await this.oidcNlWalletVerId.authorize(this.config.queryStringParamCode, state + '-verid', correctedState);
+        tokens = await this.oidcNlWalletVerId.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
         user = this.userFromVerIdNlWalletFlow(tokens);
       } else {
         // Original flow
