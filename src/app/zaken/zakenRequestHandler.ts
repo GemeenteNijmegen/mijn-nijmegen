@@ -124,7 +124,7 @@ export class ZakenRequestHandler {
         {
           'zaak-row': zaakRow.default,
         });
-      closedHtml = await render({ zaken: zaakSummaries.closed, id: 'closed-zaken-list' }, zakenListPartial.default,
+      closedHtml = await render({ zaken: zaakSummaries.gesloten, id: 'closed-zaken-list' }, zakenListPartial.default,
         {
           'zaak-row': zaakRow.default,
         });

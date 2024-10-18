@@ -10,6 +10,7 @@ import { BrpApi } from './BrpApi';
 
 import { HaalCentraalApi } from './HaalCentraalApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
+import { OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
 
 type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
 const eHerkenningKvkNummerClaim = 'urn:etoegang:1.9:EntityConcernedID:KvKnr';
@@ -36,12 +37,37 @@ export interface AuthRequestHandlerProps {
 
   // Feature toggle
   useYiviKvk?: boolean;
+  useNlWalletVerId?: boolean;
+  useNlWalletSignicat?: boolean;
 }
 
 export class AuthRequestHandler {
   private config: AuthRequestHandlerProps;
+
+  private oidcNlWalletSignicat?: OpenIDConnectV2;
+  private oidcNlWalletVerId?: OpenIDConnectV2;
+
   constructor(props: AuthRequestHandlerProps) {
     this.config = props;
+    if (props.useNlWalletVerId) {
+      this.oidcNlWalletVerId = new OpenIDConnectV2({
+        clientId: process.env.NL_WALLET_VERID_CLIENT_ID!,
+        clientSecretArn: process.env.NL_WALLET_VERID_CLIENT_SECRET_ARN!,
+        wellknown: process.env.NL_WALLET_VERID_WELL_KNOWN!,
+        redirectUrl: process.env.APPLICATION_URL_BASE + 'auth',
+        clientOptions: {
+          id_token_signed_response_alg: 'ES384',
+        },
+      });
+    }
+    if (props.useNlWalletSignicat) {
+      this.oidcNlWalletSignicat = new OpenIDConnectV2({
+        clientId: process.env.NL_WALLET_SIGNICAT_CLIENT_ID!,
+        clientSecretArn: process.env.NL_WALLET_SIGNICAT_CLIENT_SECRET_ARN!,
+        wellknown: process.env.NL_WALLET_SIGNICAT_WELL_KNOWN!,
+        redirectUrl: process.env.APPLICATION_URL_BASE + 'auth',
+      });
+    }
   }
 
   async handleRequest() {
@@ -51,12 +77,31 @@ export class AuthRequestHandler {
       return Response.redirect('/login');
     }
     const state = session.getValue('state');
+    const method = session.getValue('method');
     try {
-      // Authorize the request
-      const tokens = await this.config.OpenIdConnect.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
+      let tokens = undefined;
+      let user = undefined;
 
-      // Load the principal data
-      const user = this.userFromTokens(tokens);
+      // Find the correct openid connect configuration based on the method set in session
+      // Check for valid state for and call token endpoint
+      if (this.config.useNlWalletSignicat && method == 'nl-wallet-signicat') {
+        if (!this.oidcNlWalletSignicat) {
+          throw Error('Expected ODIC configuration for NL Wallet using Signicat.');
+        }
+        tokens = await this.oidcNlWalletSignicat.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
+        user = this.userFromSignicatNlWalletFlow(tokens);
+      } else if (this.config.useNlWalletVerId && method == 'nl-wallet-verid') {
+        if (!this.oidcNlWalletVerId) {
+          throw Error('Expected ODIC configuration for NL Wallet using VerID.');
+        }
+        tokens = await this.oidcNlWalletVerId.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
+        user = this.userFromVerIdNlWalletFlow(tokens);
+      } else {
+        // Original flow
+        tokens = await this.config.OpenIdConnect.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
+        user = this.userFromTokens(tokens);
+      }
+
       if (!user) {
         return Response.redirect('/login');
       }
@@ -235,6 +280,24 @@ export class AuthRequestHandler {
   async exchangeTokenWithOurOwnVerySpecialIdP(access_token: string) {
     return this.config.authenticationService?.exchangeToken(access_token);
   }
+
+  private userFromVerIdNlWalletFlow(tokens: TokenSet) {
+    const bsn = (tokens.claims() as any).nin?.identifier;
+    if (!bsn) {
+      throw Error('Could not find bsn in NL wallet login flow (VerID)');
+    }
+    return new Person(new Bsn(bsn), { apiClient: this.config.apiClient });
+  }
+
+  private userFromSignicatNlWalletFlow(tokens: TokenSet) {
+    const claims = (tokens.claims() as any);
+    const bsn = claims['irma-demo.gemeente.personalData.bsn']; // TODO replace with NL Wallet claim
+    if (!bsn) {
+      throw Error('Could not find bsn in NL wallet login flow (Signicat)');
+    }
+    return new Person(new Bsn(bsn), { apiClient: this.config.apiClient });
+  }
+
 }
 
 
