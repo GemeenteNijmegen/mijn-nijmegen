@@ -305,6 +305,7 @@ export class ApiStack extends Stack implements Configurable {
     brpHaalCentraalApiKeySecret.grantRead(authFunction.lambda);
     authServiceClientSecret.grantRead(authFunction.lambda);
     verIdClientSecret.grantRead(authFunction.lambda);
+    signicatClientSecret.grantRead(authFunction.lambda);
     oidcSecret.grantRead(authFunction.lambda);
     mtlsConfig.privateKey.grantRead(authFunction.lambda);
     mtlsConfig.clientCert.grantRead(authFunction.lambda);
