@@ -56,13 +56,23 @@ interface LoginRequestHandlerProps {
 export interface RequestParams {
   cookies?: string;
   nlwallet: boolean;
+  method?: string;
+}
+
+interface AuthMethod {
+  methodName: string;
+  methodNiceName: string;
 }
 
 export class LoginRequestHandler {
+
   private config: LoginRequestHandlerProps;
+
+  // OIDC configuration
   private oidc: OpenIDConnect;
   private oidcNlWalletSignicat?: OpenIDConnectV2;
   private oidcNlWalletVerId?: OpenIDConnectV2;
+
   constructor(props: LoginRequestHandlerProps) {
     this.config = props;
     this.oidc = new OpenIDConnect();
@@ -92,14 +102,13 @@ export class LoginRequestHandler {
       console.debug('redirect to home');
       return Response.redirect('/');
     }
-    const state = this.oidc.generateState();
-    await session.createSession({
-      loggedin: { BOOL: false },
-      state: { S: state },
-    });
 
-    const scope = this.config.oidcScope;
-    const authMethods = await this.addAuthMethods(scope, state, params.nlwallet);
+    const authMethods = this.addAuthMethods(params.nlwallet);
+
+    if (params.method) {
+      const authUrl = await this.setupAuthenticationRedirect(session, params.method, authMethods);
+      return Response.redirect(authUrl);
+    }
 
     const data = {
       title: 'Inloggen',
@@ -113,72 +122,74 @@ export class LoginRequestHandler {
     return Response.html(html, 200, newCookies);
   }
 
-  private async addAuthMethods(scope: string, state: string, nlwallet: boolean) {
+  private addAuthMethods(nlwallet: boolean): AuthMethod[] {
     const authMethods = [];
     if (this.config?.digidScope) {
-      const digidScope = `${scope} ${this.config.digidScope}`;
-      authMethods.push(this.authMethodData(digidScope, state, 'digid', 'DigiD'));
+      authMethods.push(this.authMethodData('digid', 'DigiD'));
     }
     if (this.config?.yiviScope) {
-      const yiviScopes = [scope, this.config.yiviScope];
-      if (this.config?.useYiviKvk) { // Feature flag
-        yiviScopes.push(this.config.yiviCondisconScope ?? '');
-      } else {
-        yiviScopes.push(this.config.yiviBsnAttribute ?? '');
-      }
-      authMethods.push(this.authMethodData(yiviScopes.join(' '), state, 'yivi', 'Yivi'));
-
+      authMethods.push(this.authMethodData('yivi', 'Yivi'));
     }
     if (this.config?.eHerkenningScope) {
-      const eherkenningScope = `${scope} ${this.config.eHerkenningScope}`;
-      authMethods.push(this.authMethodData(eherkenningScope, state, 'eherkenning', 'eHerkenning'));
+      authMethods.push(this.authMethodData('eherkenning', 'eHerkenning'));
     }
-
-    // Shows Signicat NL wallet link on login page
     if (nlwallet && this.config.useNlWalletSignicat) {
-      const nlWalletSignicatScope = process.env.NL_WALLET_SIGNICAT_SCOPE!;
-      const signicatUrl = await this.authMethodDataNlWalletSignicat(nlWalletSignicatScope, state, 'nl-wallet-signicat', 'NL Wallet (Signicat)');
-      authMethods.push(signicatUrl);
+      authMethods.push(this.authMethodData('nl-wallet-signicat', 'NL Wallet (Signicat)'));
     }
-
-    // Shows VerId NL wallet link on login page
     if (nlwallet && this.config.useNlWalletVerId) {
-      const nlWalletVerIdScope = process.env.NL_WALLET_VERID_SCOPE!;
-      const verIdUrl = await this.authMethodDataNlWalletVerId(nlWalletVerIdScope, state, 'nl-wallet-verid', 'NL Wallet (VerID)');
-      authMethods.push(verIdUrl);
+      authMethods.push(this.authMethodData('nl-wallet-verid', 'NL Wallet (VerID)'));
     }
-
     return authMethods;
   }
 
-  private authMethodData(scope: string, state:string, name:string, niceName:string) {
+  private authMethodData(name:string, niceName:string) {
     return {
-      authUrl: this.oidc.getLoginUrl(state, scope),
       methodName: name,
       methodNiceName: niceName,
     };
   }
 
-  private async authMethodDataNlWalletSignicat(scope: string, state: string, name: string, niceName: string) {
-    if (!this.oidcNlWalletSignicat) {
-      throw Error('Cannot add Signicat authentication, its not configured');
+  private async setupAuthenticationRedirect(session: Session, method: string, knownMethods: AuthMethod[] ) {
+    const supportedMethod = knownMethods.find(known => known.methodName == method);
+    if (!supportedMethod) {
+      throw Error('Authentication method is not suported!');
     }
-    return {
-      authUrl: await this.oidcNlWalletSignicat.getLoginUrl(state + '-signicat', scope),
-      methodName: name,
-      methodNiceName: niceName,
-    };
-  }
 
-  private async authMethodDataNlWalletVerId(scope: string, state: string, name: string, niceName: string) {
-    if (!this.oidcNlWalletVerId) {
-      throw Error('Cannot add VerID authentication, its not configured');
+    const baseOidcScope = this.config.oidcScope;
+
+    const state = this.oidc.generateState();
+    await session.createSession({
+      loggedin: { BOOL: false },
+      state: { S: state },
+      method: { S: method },
+    });
+
+    switch (method) {
+      case 'yivi':
+        const yiviScope = [baseOidcScope];
+        if (this.config?.useYiviKvk) { // Feature flag
+          yiviScope.push(this.config.yiviCondisconScope ?? '');
+        } else {
+          yiviScope.push(this.config.yiviBsnAttribute ?? '');
+        }
+        return this.oidc.getLoginUrl(state, yiviScope.join(' '));
+      case 'digid':
+        return this.oidc.getLoginUrl(state, `${baseOidcScope} ${this.config.digidScope}`);
+      case 'eherkenning':
+        return this.oidc.getLoginUrl(state, `${baseOidcScope} ${this.config.eHerkenningScope}`);
+      case 'nl-wallet-signicat':
+        if (!this.oidcNlWalletSignicat) {
+          throw Error('Nl Wallet Signicat auth method used but not configured!');
+        }
+        return this.oidcNlWalletSignicat.getLoginUrl(state, `${baseOidcScope} ${process.env.NL_WALLET_SIGNICAT_SCOPE}`);
+      case 'nl-wallet-verid':
+        if (!this.oidcNlWalletVerId) {
+          throw Error('Nl Wallet VerID auth method used but not configured!');
+        }
+        return this.oidcNlWalletVerId.getLoginUrl(state, process.env.NL_WALLET_VERID_SCOPE!);
     }
-    return {
-      authUrl: await this.oidcNlWalletVerId.getLoginUrl(state + '-verid', scope),
-      methodName: name,
-      methodNiceName: niceName,
-    };
+
+    throw Error('Unsupported auth method.');
   }
 
 }
