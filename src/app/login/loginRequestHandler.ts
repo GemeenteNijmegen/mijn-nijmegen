@@ -106,8 +106,7 @@ export class LoginRequestHandler {
     const authMethods = this.addAuthMethods(params.nlwallet);
 
     if (params.method) {
-      const authUrl = await this.setupAuthenticationRedirect(session, params.method, authMethods);
-      return Response.redirect(authUrl);
+      return this.setupAuthenticationRedirect(session, params.method, authMethods);
     }
 
     const data = {
@@ -116,10 +115,8 @@ export class LoginRequestHandler {
     };
 
     let template = loginTemplate.default;
-
     const html = await render(data, template);
-    const newCookies = [session.getCookie()];
-    return Response.html(html, 200, newCookies);
+    return Response.html(html);
   }
 
   private addAuthMethods(nlwallet: boolean): AuthMethod[] {
@@ -164,32 +161,43 @@ export class LoginRequestHandler {
       method: { S: method },
     });
 
+    let loginUrl = undefined;
     switch (method) {
       case 'yivi':
-        const yiviScope = [baseOidcScope];
+        const yiviScope = [baseOidcScope, this.config.yiviScope];
         if (this.config?.useYiviKvk) { // Feature flag
           yiviScope.push(this.config.yiviCondisconScope ?? '');
         } else {
           yiviScope.push(this.config.yiviBsnAttribute ?? '');
         }
-        return this.oidc.getLoginUrl(state, yiviScope.join(' '));
+        loginUrl = this.oidc.getLoginUrl(state, yiviScope.join(' '));
+        break;
       case 'digid':
-        return this.oidc.getLoginUrl(state, `${baseOidcScope} ${this.config.digidScope}`);
+        loginUrl = this.oidc.getLoginUrl(state, `${baseOidcScope} ${this.config.digidScope}`);
+        break;
       case 'eherkenning':
-        return this.oidc.getLoginUrl(state, `${baseOidcScope} ${this.config.eHerkenningScope}`);
+        loginUrl = this.oidc.getLoginUrl(state, `${baseOidcScope} ${this.config.eHerkenningScope}`);
+        break;
       case 'nl-wallet-signicat':
         if (!this.oidcNlWalletSignicat) {
           throw Error('Nl Wallet Signicat auth method used but not configured!');
         }
-        return this.oidcNlWalletSignicat.getLoginUrl(state, `${baseOidcScope} ${process.env.NL_WALLET_SIGNICAT_SCOPE}`);
+        loginUrl = await this.oidcNlWalletSignicat.getLoginUrl(state, `${baseOidcScope} ${process.env.NL_WALLET_SIGNICAT_SCOPE}`);
+        break;
       case 'nl-wallet-verid':
         if (!this.oidcNlWalletVerId) {
           throw Error('Nl Wallet VerID auth method used but not configured!');
         }
-        return this.oidcNlWalletVerId.getLoginUrl(state, process.env.NL_WALLET_VERID_SCOPE!);
+        loginUrl = await this.oidcNlWalletVerId.getLoginUrl(state, process.env.NL_WALLET_VERID_SCOPE!);
+        break;
     }
 
-    throw Error('Unsupported auth method.');
+    if (!loginUrl) {
+      throw Error('Unsupported auth method.');
+    }
+
+    return Response.redirect(loginUrl, 302, session.getCookie());
+
   }
 
 }
