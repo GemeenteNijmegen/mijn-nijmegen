@@ -24,6 +24,7 @@ function parseEvent(event: APIGatewayProxyEventV2): RequestParams {
   return {
     cookies: event?.cookies?.join(';'),
     nlwallet: event?.queryStringParameters?.nlwallet === 'true',
+    method: event?.queryStringParameters?.method,
   };
 }
 
