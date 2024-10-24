@@ -17,8 +17,8 @@
         <div class="col-lg-9 col-md-12">
             {{#timeout}}
             <div id="zaak">
-            <h1>Ophalen niet gelukt</h1>
-            <p>Het ophalen van de zaak duurde te lang. Ververs de pagina om deze alsnog te tonen.</p>
+            <h1>Zaak</h1>
+            <p>Bezig met ophalen van zaakinformatie… {{>spinner}}</p>
             </div>
             {{/timeout}}
             {{^timeout}}

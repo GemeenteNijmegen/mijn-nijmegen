@@ -187,6 +187,7 @@ export class ZakenRequestHandler {
       // render page
       const html = await render(data, zaakTemplate.default, {
         taken: takenTemplate.default,
+        spinner: Spinner.default,
       });
       return Response.html(html, 200, session.getCookie());
     } else {
