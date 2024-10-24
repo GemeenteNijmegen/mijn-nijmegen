@@ -2,6 +2,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
+import * as takenTemplate from './templates/taken.mustache';
 import * as zaakRow from './templates/zaak-row.mustache';
 import * as zaakTemplate from './templates/zaak.mustache';
 import * as zakenListPartial from './templates/zaken-table.mustache';
@@ -168,7 +169,9 @@ export class ZakenRequestHandler {
         timeout,
       };
       // render page
-      const html = await render(data, zaakTemplate.default);
+      const html = await render(data, zaakTemplate.default, {
+        taken: takenTemplate.default,
+      });
       return Response.html(html, 200, session.getCookie());
     } else {
       return Response.error(404);
