@@ -180,8 +180,9 @@ export class ZakenRequestHandler {
         title: (formattedZaak) ? `Zaak - ${formattedZaak.zaak_type}` : 'Zaak ophalen niet gelukt',
         shownav: true,
         nav: navigation.items,
-        singlezaak: this.zaakHtml(formattedZaak),
+        singlezaak: await this.zaakHtml(formattedZaak),
         timeout,
+        xsrf_token: session.getValue('xsrf_token'),
       };
       // render page
       const html = await render(data, zaakTemplate.default, {
