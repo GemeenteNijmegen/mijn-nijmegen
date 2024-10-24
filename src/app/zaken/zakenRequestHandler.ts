@@ -137,6 +137,13 @@ export class ZakenRequestHandler {
       throw Error('connector and zaakid need to be defined');
     }
     const user = UserFromSession(session);
+
+    if (params.responseType == 'json') {
+      this.connector.setTimeout(10000); // allow for more time from frontend
+    } else {
+      this.connector.setTimeout(2000);
+    }
+
     let timeout = false;
     let formattedZaak;
     try {
