@@ -47,7 +47,7 @@
     "@aws-sdk/client-ssm": "^3.679.0",
     "@aws-sdk/types": "^3.679.0",
     "@glen/jest-raw-loader": "^2.0.0",
-    "@playwright/test": "^1.48.1",
+    "@playwright/test": "^1.48.2",
     "@types/aws-lambda": "^8.10.145",
     "@types/jest": "^29.5.14",
     "@types/node": "^18",
