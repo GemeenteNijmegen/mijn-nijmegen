@@ -41,7 +41,6 @@ export class OpenIDConnectV2 {
     }
     const authUrl = client.authorizationUrl({
       scope,
-      resource: issuer.metadata.authorization_endpoint,
       state: state,
     });
     return authUrl;
