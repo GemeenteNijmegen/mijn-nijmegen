@@ -91,6 +91,7 @@ export class LoginRequestHandler {
         clientSecretArn: process.env.NL_WALLET_SIGNICAT_CLIENT_SECRET_ARN!,
         wellknown: process.env.NL_WALLET_SIGNICAT_WELL_KNOWN!,
         redirectUrl: process.env.APPLICATION_URL_BASE + 'auth',
+        useUserInfoEndpoint: true,
       });
     }
   }
@@ -182,7 +183,10 @@ export class LoginRequestHandler {
         if (!this.oidcNlWalletSignicat) {
           throw Error('Nl Wallet Signicat auth method used but not configured!');
         }
-        loginUrl = await this.oidcNlWalletSignicat.getLoginUrl(state, `${baseOidcScope} ${process.env.NL_WALLET_SIGNICAT_SCOPE}`);
+        loginUrl = await this.oidcNlWalletSignicat.getLoginUrl(state, `${baseOidcScope} ${process.env.NL_WALLET_SIGNICAT_SCOPE}`, {
+          acr_values: 'theme:nijmegen',
+          prompt: 'login',
+        });
         break;
       case 'nl-wallet-verid':
         if (!this.oidcNlWalletVerId) {

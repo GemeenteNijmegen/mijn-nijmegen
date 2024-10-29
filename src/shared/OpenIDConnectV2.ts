@@ -7,6 +7,10 @@ export interface OpenIDConnectConfiguration {
   clientSecretArn?: string;
   redirectUrl: string;
   clientOptions?: Partial<ClientMetadata>;
+  /**
+   * @default false
+   */
+  useUserInfoEndpoint?: boolean;
 }
 
 export class OpenIDConnectV2 {
@@ -28,7 +32,7 @@ export class OpenIDConnectV2 {
    * This should be checked before accepting the login response.
    * @returns {string} the login url
    */
-  async getLoginUrl(state: string, scope: string): Promise<string> {
+  async getLoginUrl(state: string, scope: string, additionalOptions?: Record<string, string>): Promise<string> {
     const issuer = await this.getIssuer();
     const redirectUrl = this.configuration.redirectUrl;
     const client = new issuer.Client({
@@ -42,6 +46,7 @@ export class OpenIDConnectV2 {
     const authUrl = client.authorizationUrl({
       scope,
       state: state,
+      ...additionalOptions,
     });
     return authUrl;
   }
@@ -84,6 +89,14 @@ export class OpenIDConnectV2 {
     if (claims.aud != this.configuration.clientId) {
       throw new Error('claims aud does not match client id');
     }
+
+    if (this.configuration.useUserInfoEndpoint) {
+      if (!tokenSet.access_token) {
+        throw Error('No access_token to use to request userinfo endpoint');
+      }
+      return client.userinfo(tokenSet.access_token);
+    }
+
     return tokenSet;
 
   }
