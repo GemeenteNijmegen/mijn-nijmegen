@@ -42,6 +42,7 @@ export class OpenIDConnectV2 {
     const authUrl = client.authorizationUrl({
       scope,
       state: state,
+      prompt: 'login',
     });
     return authUrl;
   }
