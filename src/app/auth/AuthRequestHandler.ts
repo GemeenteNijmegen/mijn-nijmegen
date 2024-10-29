@@ -124,7 +124,7 @@ export class AuthRequestHandler {
           user_type: { S: user.type },
           username: { S: username },
           id_token: { S: tokens.id_token },
-          refresh_token: { S: tokens.refresh_token },
+          refresh_token: { S: tokens.refresh_token ?? '' }, // TODO do we use this?
           xsrf_token: { S: this.config.OpenIdConnect.generateState() },
           ...additional_session_data,
         });
