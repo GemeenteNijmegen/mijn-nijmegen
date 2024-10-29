@@ -68,6 +68,7 @@ export class OpenIDConnectV2 {
       redirect_uris: [redirectUrl],
       client_secret: clientSecret,
       response_types: ['code'],
+
       ...this.configuration.clientOptions,
     });
 
@@ -81,8 +82,9 @@ export class OpenIDConnectV2 {
     // Fetch token
     let tokenSet;
     try {
-      tokenSet = await client.callback(redirectUrl, { code, state }, { state: state });
+      tokenSet = await client.callback(redirectUrl, { code, state }, { state: returnedState });
     } catch (err: any) {
+      console.error(err);
       throw new Error(`${err.error} ${err.error_description}`);
     }
 
