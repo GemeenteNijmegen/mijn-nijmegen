@@ -1,5 +1,5 @@
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
-import { ClientMetadata, Issuer, TokenSet, generators } from 'openid-client';
+import { ClientMetadata, Issuer, generators } from 'openid-client';
 
 export interface OpenIDConnectConfiguration {
   wellknown: string;
@@ -57,12 +57,11 @@ export class OpenIDConnectV2 {
    *
    * @param {string} code
    * @param {string} state
-   * @returns {TokenSet} returns the tokens object on succesful auth
+   * @returns {any} returns the parsed claims from either the id_token or the userinfo endpoint
    */
-  async authorize(code: string, state: string, returnedState: string): Promise<TokenSet> {
+  async authorize(code: string, state: string, returnedState: string): Promise<any> {
     const issuer = await this.getIssuer();
     const clientSecret = await this.getOidcClientSecret();
-
     const redirectUrl = this.configuration.redirectUrl;
     const client = new issuer.Client({
       client_id: this.configuration.clientId,
@@ -71,25 +70,32 @@ export class OpenIDConnectV2 {
       response_types: ['code'],
       ...this.configuration.clientOptions,
     });
-    const params = client.callbackParams(redirectUrl + '/?code=' + code + '&state=' + returnedState);
+
+    // Check state
     if (state !== returnedState) {
       console.debug(state, returnedState);
       throw new Error('state does not match session state');
     }
     console.debug('State matches session state');
+
+    // Fetch token
     let tokenSet;
     try {
-      console.debug('Doing callback with', redirectUrl, params, state);
-      console.debug(JSON.stringify(client.metadata));
+      const params = client.callbackParams(redirectUrl + '/?code=' + code + '&state=' + returnedState);
+      console.log(JSON.stringify(params));
+      console.log('Doign callback:', redirectUrl, params);
       tokenSet = await client.callback(redirectUrl, params, { state: state });
     } catch (err: any) {
       throw new Error(`${err.error} ${err.error_description}`);
     }
+
+    // Validate token audience
     const claims = tokenSet.claims();
     if (claims.aud != this.configuration.clientId) {
       throw new Error('claims aud does not match client id');
     }
 
+    // If we need to call userinfo endpoint
     if (this.configuration.useUserInfoEndpoint) {
       if (!tokenSet.access_token) {
         throw Error('No access_token to use to request userinfo endpoint');
@@ -97,7 +103,7 @@ export class OpenIDConnectV2 {
       return client.userinfo(tokenSet.access_token);
     }
 
-    return tokenSet;
+    return claims;
 
   }
 
