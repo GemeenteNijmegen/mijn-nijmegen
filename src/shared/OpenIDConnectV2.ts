@@ -81,10 +81,7 @@ export class OpenIDConnectV2 {
     // Fetch token
     let tokenSet;
     try {
-      const params = client.callbackParams(redirectUrl + '/?code=' + code + '&state=' + returnedState);
-      console.log(JSON.stringify(params));
-      console.log('Doign callback:', redirectUrl, params);
-      tokenSet = await client.callback(redirectUrl, params, { state: state });
+      tokenSet = await client.callback(redirectUrl, { code, state }, { state: state });
     } catch (err: any) {
       throw new Error(`${err.error} ${err.error_description}`);
     }
