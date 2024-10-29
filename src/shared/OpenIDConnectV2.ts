@@ -80,16 +80,31 @@ export class OpenIDConnectV2 {
     console.debug('State matches session state');
 
     // Fetch token
-    let tokenSet;
+    let tokenSet: any;
     try {
-      tokenSet = await client.callback(redirectUrl, { code, state }, { state: returnedState });
+      const resp = await fetch(issuer.metadata.token_endpoint!, {
+        method: 'POST',
+        body: new URLSearchParams({
+          grant_type: 'authorization_code',
+          redirect_uri: redirectUrl,
+          code: code,
+          client_id: this.configuration.clientId,
+          client_secret: clientSecret!,
+        }).toString(),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+      tokenSet = await resp.json();
+      console.log(tokenSet);
+      // tokenSet = await client.callback(redirectUrl, { code, state }, { state: returnedState });
     } catch (err: any) {
       console.error(err);
       throw new Error(`${err.error} ${err.error_description}`);
     }
 
     // Validate token audience
-    const claims = tokenSet.claims();
+    const claims = tokenSet; //.claims();
     if (claims.aud != this.configuration.clientId) {
       throw new Error('claims aud does not match client id');
     }
