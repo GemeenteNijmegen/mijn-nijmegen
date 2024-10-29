@@ -290,8 +290,7 @@ export class AuthRequestHandler {
   }
 
   private userFromSignicatNlWalletFlow(tokens: TokenSet) {
-    const claims = (tokens.claims() as any);
-    const bsn = claims['irma-demo.gemeente.personalData.bsn']; // TODO replace with NL Wallet claim
+    const bsn = (tokens.claims() as any).nin;
     if (!bsn) {
       throw Error('Could not find bsn in NL wallet login flow (Signicat)');
     }
