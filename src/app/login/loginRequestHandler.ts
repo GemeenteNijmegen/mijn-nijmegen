@@ -91,7 +91,6 @@ export class LoginRequestHandler {
         clientSecretArn: process.env.NL_WALLET_SIGNICAT_CLIENT_SECRET_ARN!,
         wellknown: process.env.NL_WALLET_SIGNICAT_WELL_KNOWN!,
         redirectUrl: process.env.APPLICATION_URL_BASE + 'auth',
-        useUserInfoEndpoint: true,
       });
     }
   }

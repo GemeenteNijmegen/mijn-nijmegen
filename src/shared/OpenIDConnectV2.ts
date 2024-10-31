@@ -1,5 +1,5 @@
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
-import { ClientMetadata, Issuer, generators } from 'openid-client';
+import { ClientMetadata, Issuer, TokenSet, generators } from 'openid-client';
 
 export interface OpenIDConnectConfiguration {
   wellknown: string;
@@ -7,10 +7,6 @@ export interface OpenIDConnectConfiguration {
   clientSecretArn?: string;
   redirectUrl: string;
   clientOptions?: Partial<ClientMetadata>;
-  /**
-   * @default false
-   */
-  useUserInfoEndpoint?: boolean;
 }
 
 export class OpenIDConnectV2 {
@@ -59,7 +55,7 @@ export class OpenIDConnectV2 {
    * @param {string} state
    * @returns {any} returns the parsed claims from either the id_token or the userinfo endpoint
    */
-  async authorize(code: string, state: string, returnedState: string): Promise<any> {
+  async authorize(code: string, state: string, returnedState: string): Promise<TokenSet> {
     const issuer = await this.getIssuer();
     const clientSecret = await this.getOidcClientSecret();
     const redirectUrl = this.configuration.redirectUrl;
@@ -78,14 +74,17 @@ export class OpenIDConnectV2 {
     }
     console.debug('State matches session state');
 
-    // Fetch token
-    let tokenSet;
+    // Fetch and validate token
+    let tokenSet: any;
     try {
-      const params = client.callbackParams(redirectUrl + '/?code=' + code + '&state=' + returnedState);
-      console.log(JSON.stringify(params));
-      console.log('Doign callback:', redirectUrl, params);
+      const params = {
+        code: code,
+        state: returnedState,
+        iss: this.issuer?.metadata.issuer,
+      };
       tokenSet = await client.callback(redirectUrl, params, { state: state });
     } catch (err: any) {
+      console.error(err);
       throw new Error(`${err.error} ${err.error_description}`);
     }
 
@@ -95,15 +94,7 @@ export class OpenIDConnectV2 {
       throw new Error('claims aud does not match client id');
     }
 
-    // If we need to call userinfo endpoint
-    if (this.configuration.useUserInfoEndpoint) {
-      if (!tokenSet.access_token) {
-        throw Error('No access_token to use to request userinfo endpoint');
-      }
-      return client.userinfo(tokenSet.access_token);
-    }
-
-    return claims;
+    return tokenSet;
 
   }
 

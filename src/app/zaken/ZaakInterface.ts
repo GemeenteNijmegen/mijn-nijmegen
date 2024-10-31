@@ -5,7 +5,8 @@ export const TaakSummarySchema = z.object({
   url: z.string(),
   einddatum: z.string(),
   is_open: z.boolean(),
-  is_ingediend: z.boolean(),
+  is_afgerond: z.boolean(),
+  is_verwerkt: z.boolean(),
   is_gesloten: z.boolean(),
 });
 export type TaakSummary = z.infer<typeof TaakSummarySchema>;

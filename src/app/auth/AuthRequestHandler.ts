@@ -124,7 +124,7 @@ export class AuthRequestHandler {
           user_type: { S: user.type },
           username: { S: username },
           id_token: { S: tokens.id_token },
-          refresh_token: { S: tokens.refresh_token },
+          refresh_token: { S: tokens.refresh_token ?? '' }, // TODO do we use this?
           xsrf_token: { S: this.config.OpenIdConnect.generateState() },
           ...additional_session_data,
         });
@@ -290,8 +290,7 @@ export class AuthRequestHandler {
   }
 
   private userFromSignicatNlWalletFlow(tokens: TokenSet) {
-    const claims = (tokens.claims() as any);
-    const bsn = claims['irma-demo.gemeente.personalData.bsn']; // TODO replace with NL Wallet claim
+    const bsn = (tokens.claims() as any).nin;
     if (!bsn) {
       throw Error('Could not find bsn in NL wallet login flow (Signicat)');
     }
