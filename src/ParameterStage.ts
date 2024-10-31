@@ -113,6 +113,53 @@ export class ssmParamsConstruct extends Construct {
       description: 'OIDC scope for eherkenning',
     });
 
+    new SSM.StringParameter(this, 'ssm_auth_20', {
+      stringValue: 'https://',
+      parameterName: Statics.ssmVerIdWellKnown,
+      description: 'OIDC well known url (VerID)',
+    });
+
+    new SSM.StringParameter(this, 'ssm_auth_21', {
+      stringValue: 'openid nin',
+      parameterName: Statics.ssmVerIdScope,
+      description: 'OIDC scope for nl wallet (VerID)',
+    });
+
+    new SSM.StringParameter(this, 'ssm_auth_22', {
+      stringValue: '-',
+      parameterName: Statics.ssmVerIdClientId,
+      description: 'OIDC client id (VerID)',
+    });
+
+    new SecretsManager.Secret(this, 'ssm_auth_23', {
+      secretName: Statics.ssmVerIdClientSecret,
+      description: 'OIDC client secret (VerID)',
+    });
+
+    new SSM.StringParameter(this, 'ssm_auth_24', {
+      stringValue: 'https://',
+      parameterName: Statics.ssmSignicatWellKnown,
+      description: 'OIDC well known url (Signicat)',
+    });
+
+    new SSM.StringParameter(this, 'ssm_auth_25', {
+      stringValue: 'openid nin',
+      parameterName: Statics.ssmSignicatScope,
+      description: 'OIDC scope for nl wallet (Signicat)',
+    });
+
+    new SSM.StringParameter(this, 'ssm_auth_26', {
+      stringValue: '-',
+      parameterName: Statics.ssmSignicatClientId,
+      description: 'OIDC client id (Signicat)',
+    });
+
+    new SecretsManager.Secret(this, 'ssm_auth_27', {
+      secretName: Statics.ssmSignicatClientSecret,
+      description: 'OIDC client secret (Signicat)',
+    });
+
+
     new SSM.StringParameter(this, 'ssm_uitkering_2', {
       stringValue: '-',
       parameterName: Statics.ssmMTLSClientCert,

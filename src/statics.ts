@@ -153,6 +153,18 @@ export abstract class Statics {
   static readonly ssmOpenZaakBaseUrl: string = '/cdk/mijn-nijmegen/vip-base-url';
   static readonly ssmOpenZaakTakenBaseUrl: string = '/cdk/mijn-nijmegen/taken-base-url';
 
+  // MARK: NL Wallet configuration
+  // VerID
+  static readonly ssmVerIdWellKnown: string = '/cdk/mijn-nijmegen/verid/well-known';
+  static readonly ssmVerIdScope: string = '/cdk/mijn-nijmegen/verid/scope';
+  static readonly ssmVerIdClientId: string = '/cdk/mijn-nijmegen/verid/clientid';
+  static readonly ssmVerIdClientSecret: string = '/cdk/mijn-nijmegen/verid/clientsecret';
+  // Signicat
+  static readonly ssmSignicatWellKnown: string = '/cdk/mijn-nijmegen/signicat/well-known';
+  static readonly ssmSignicatScope: string = '/cdk/mijn-nijmegen/signicat/scope';
+  static readonly ssmSignicatClientId: string = '/cdk/mijn-nijmegen/signicat/clientid';
+  static readonly ssmSignicatClientSecret: string = '/cdk/mijn-nijmegen/signicat/clientsecret';
+
   static readonly ssmSubmissionstorageBaseUrl: string = '/cdk/mijn-nijmegen/submissionstorage-base-url';
   /**
    * Secrets for zaken

@@ -2,6 +2,8 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
+import * as singleZaakPartial from './templates/singlezaak.mustache';
+import * as takenTemplate from './templates/taken.mustache';
 import * as zaakRow from './templates/zaak-row.mustache';
 import * as zaakTemplate from './templates/zaak.mustache';
 import * as zakenListPartial from './templates/zaken-table.mustache';
@@ -74,7 +76,11 @@ export class ZakenRequestHandler {
     }
 
     if (params.responseType == 'json') {
-      return this.jsonListResponse(session, zakenList, params.xsrfToken);
+      if (timeout) {
+        return Response.json({ error: 'Het ophalen van gegevens duurde te lang…' }, 408);
+      } else {
+        return this.jsonListResponse(session, zakenList, params.xsrfToken);
+      }
     } else {
       return this.htmlListResponse(session, user, zakenList, timeout);
     }
@@ -91,7 +97,7 @@ export class ZakenRequestHandler {
   }
 
   async htmlListResponse(session: Session, user: User, zaakSummaries: any, timeout?: boolean) {
-    const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
+    const navigation = new Navigation(user.type, { currentPath: '/zaken' });
 
     const { openHtml, closedHtml } = await this.zakenListsHtml(zaakSummaries);
 
@@ -120,7 +126,7 @@ export class ZakenRequestHandler {
         {
           'zaak-row': zaakRow.default,
         });
-      closedHtml = await render({ zaken: zaakSummaries.closed, id: 'closed-zaken-list' }, zakenListPartial.default,
+      closedHtml = await render({ zaken: zaakSummaries.gesloten, id: 'closed-zaken-list' }, zakenListPartial.default,
         {
           'zaak-row': zaakRow.default,
         });
@@ -133,6 +139,13 @@ export class ZakenRequestHandler {
       throw Error('connector and zaakid need to be defined');
     }
     const user = UserFromSession(session);
+
+    if (params.responseType == 'json') {
+      this.connector.setTimeout(10000); // allow for more time from frontend
+    } else {
+      this.connector.setTimeout(2000);
+    }
+
     let timeout = false;
     let formattedZaak;
     try {
@@ -145,35 +158,62 @@ export class ZakenRequestHandler {
         timeout = true;
       }
     }
+    if (params.responseType == 'json') {
+      if (timeout) {
+        return Response.json({ error: 'Het ophalen van gegevens duurde te lang…' }, 408);
+      } else {
+        return this.jsonGetResponse(session, formattedZaak, params.xsrfToken);
+      }
+    } else {
+      return this.htmlGetResponse(session, formattedZaak, timeout);
+    }
+
+  }
+
+  private async htmlGetResponse(session: Session, formattedZaak: any, timeout: boolean) {
+    const user = UserFromSession(session);
     //If we get neither a zaak or a timeout flag, the zaak doesn't exist or isn't accessible for the user.
     if (formattedZaak || timeout) {
-      const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
+      const navigation = new Navigation(user.type, { currentPath: '/zaken' });
       let data = {
         volledigenaam: session.getValue('username'),
         title: (formattedZaak) ? `Zaak - ${formattedZaak.zaak_type}` : 'Zaak ophalen niet gelukt',
         shownav: true,
         nav: navigation.items,
-        zaak: formattedZaak,
+        singlezaak: await this.zaakHtml(formattedZaak),
         timeout,
+        xsrf_token: session.getValue('xsrf_token'),
       };
       // render page
-      const html = await render(data, zaakTemplate.default);
+      const html = await render(data, zaakTemplate.default, {
+        taken: takenTemplate.default,
+        spinner: Spinner.default,
+      });
       return Response.html(html, 200, session.getCookie());
     } else {
       return Response.error(404);
     }
   }
 
+  private async jsonGetResponse(session: Session, formattedZaak: any, xsrfToken?: string) {
+    if (!xsrfToken || !validateToken(session, xsrfToken)) {
+      return Response.error(403);
+    }
+    const zaak = await this.zaakHtml(formattedZaak);
+    return Response.json({
+      elements: [zaak],
+    });
+  }
+
+  private async zaakHtml(zaak: any) {
+    return render({ zaak }, singleZaakPartial.default);
+  }
+
   private async fetchGet(zaakId: string, zaakConnectorId: string, user: User) {
     const endpoint = `zaken/${zaakConnectorId}/${zaakId}`;
-    try {
-      const result = await this.connector.fetch(endpoint, user);
-      const json = singleZaakSchema.parse(result);
-      return json as SingleZaak;
-    } catch (err) {
-      console.error(err);
-      return false;
-    }
+    const result = await this.connector.fetch(endpoint, user);
+    const json = singleZaakSchema.parse(result);
+    return json as SingleZaak;
   }
 
   async download(zaakConnectorId: string, zaakId: string, file: string, session: Session) {

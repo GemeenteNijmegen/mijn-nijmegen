@@ -1,5 +1,17 @@
 import { z } from 'zod';
 
+export const TaakSummarySchema = z.object({
+  title: z.string(),
+  url: z.string(),
+  einddatum: z.string(),
+  is_open: z.boolean(),
+  is_afgerond: z.boolean(),
+  is_verwerkt: z.boolean(),
+  is_gesloten: z.boolean(),
+});
+export type TaakSummary = z.infer<typeof TaakSummarySchema>;
+export const TaakSummariesSchema = z.array(TaakSummarySchema);
+
 export const ZaakSummarySchema = z.object({
   identifier: z.string(),
   internal_id: z.string(),

@@ -62,6 +62,9 @@ export class ZakenAggregatorConnector {
         signal: (this.timeout) ? AbortSignal.timeout(this.timeout) : undefined,
       });
       const json = await response.json() as any;
+      if (process.env.DEBUG == 'True') {
+        console.debug(`response for ${endpoint}`, JSON.stringify(json));
+      }
       return json;
     } catch (err) {
       console.info(err);
