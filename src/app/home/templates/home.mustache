@@ -18,6 +18,9 @@
             <h1>Mijn Nijmegen</h1>
             <p class="lead">Bekijk uw persoonsgegevens, uitkeringsgegevens of lopende zaken.</p>
 
+            {{#timeout}}
+            <p id="open-taken-list">Bezig met ophalen van uw open taken… {{>spinner}}</p>
+            {{/timeout}}
             {{#has_taken}}
             <div class="header-readmore">
                 <h2>Belangrijke taken om te regelen</h2>
@@ -32,7 +35,7 @@
             </div>
             {{{zaken}}}
             {{/has_zaken}}
-             {{#timeout}}
+            {{#timeout}}
             <p id="open-zaken-list">Bezig met ophalen van uw open zaken… {{>spinner}}</p>
             {{/timeout}}
         </div>

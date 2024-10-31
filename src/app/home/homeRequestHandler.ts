@@ -66,7 +66,7 @@ export class HomeRequestHandler {
       if (timeout) {
         return Response.json({ error: 'Het ophalen van gegevens duurde te lang…' }, 408);
       } else {
-        return Response.json({ elements: [zaken] });
+        return Response.json({ elements: [zaken, taken] });
       }
     } else {
       const navigation = new Navigation(userType, { currentPath: '/' });
