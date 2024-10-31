@@ -130,7 +130,7 @@ export class HomeRequestHandler {
 
   private async takenListHtml(taakSummaries: TaakSummary[]) {
     if (taakSummaries) {
-      const html = await render({ taken: taakSummaries, id: 'open-taken-list' }, takenListPartial.default);
+      const html = await render({ taken: taakSummaries, takenid: 'open-taken-list' }, takenListPartial.default);
       return html;
     }
     return false;
