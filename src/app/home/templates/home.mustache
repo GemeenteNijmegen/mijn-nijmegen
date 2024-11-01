@@ -19,7 +19,10 @@
             <p class="lead">Bekijk uw persoonsgegevens, uitkeringsgegevens of lopende zaken.</p>
 
             {{#timeout}}
-            <p id="open-taken-list">Bezig met ophalen van uw open taken… {{>spinner}}</p>
+            <div class="header-readmore">
+                <h2>Belangrijke taken om te regelen</h2>
+                <p id="open-taken-list">Bezig met ophalen van uw open taken… {{>spinner}}</p>
+            </div>
             {{/timeout}}
             {{#has_taken}}
             <div class="header-readmore">
@@ -36,7 +39,11 @@
             {{{zaken}}}
             {{/has_zaken}}
             {{#timeout}}
+            <div class="header-readmore">
+                <h2>Mijn zaken</h2>
+                <a href="/zaken">Bekijk alle zaken {{>arrow-right}}</a>
             <p id="open-zaken-list">Bezig met ophalen van uw open zaken… {{>spinner}}</p>
+            </div>
             {{/timeout}}
         </div>
     </div>
