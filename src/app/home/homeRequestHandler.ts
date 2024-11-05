@@ -66,7 +66,7 @@ export class HomeRequestHandler {
       if (timeout) {
         return Response.json({ error: 'Het ophalen van gegevens duurde te lang…' }, 408);
       } else {
-        return Response.json({ elements: [zaken] });
+        return Response.json({ elements: [zaken, taken] });
       }
     } else {
       const navigation = new Navigation(userType, { currentPath: '/' });
@@ -130,7 +130,7 @@ export class HomeRequestHandler {
 
   private async takenListHtml(taakSummaries: TaakSummary[]) {
     if (taakSummaries) {
-      const html = await render({ taken: taakSummaries, id: 'open-taken-list' }, takenListPartial.default);
+      const html = await render({ taken: taakSummaries, takenid: 'open-taken-list' }, takenListPartial.default);
       return html;
     }
     return false;
