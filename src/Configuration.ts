@@ -167,6 +167,8 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     // },
     inzageLive: false,
     useZakenFromAggregatorAPI: true,
+    nlWalletVerIdIsLive: true,
+    nlWalletSignicatIsLive: true,
   },
   production: {
     branch: 'production',
@@ -184,6 +186,8 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenUseSubmissions: true,
     inzageLive: false,
     useZakenFromAggregatorAPI: true,
+    nlWalletVerIdIsLive: false,
+    nlWalletSignicatIsLive: false,
   },
 };
 
