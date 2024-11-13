@@ -119,7 +119,7 @@
     "@aws-lambda-powertools/commons" "^1.18.1"
     lodash.merge "^4.6.2"
 
-"@aws-sdk/client-dynamodb@^3.662.0", "@aws-sdk/client-dynamodb@^3.687.0":
+"@aws-sdk/client-dynamodb@^3.687.0":
   version "3.687.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-dynamodb/-/client-dynamodb-3.687.0.tgz#66a4eaef3fc5a07b14ca9e1134dc4e7cb49fa2e6"
   integrity sha512-9hmYpf8PpqU1fIqIaGdqJg5YERVLMJhosPVPyY7qAszpHNOPe6dLaBnpwcNZNMTctX3diOHL/oUHgGfild0I4A==
@@ -170,7 +170,7 @@
     tslib "^2.6.2"
     uuid "^9.0.1"
 
-"@aws-sdk/client-s3@^3.662.0":
+"@aws-sdk/client-s3@^3.689.0":
   version "3.689.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-s3/-/client-s3-3.689.0.tgz#50d57f13f3932f6332a6247f479f62143520728a"
   integrity sha512-qYD1GJEPeLM6H3x8BuAAMXZltvVce5vGiwtZc9uMkBBo3HyFnmPitIPTPfaD1q8LOn/7KFdkY4MJ4e8D3YpV9g==
@@ -739,7 +739,7 @@
     "@smithy/util-middleware" "^3.0.8"
     tslib "^2.6.2"
 
-"@aws-sdk/s3-request-presigner@^3.662.0":
+"@aws-sdk/s3-request-presigner@^3.689.0":
   version "3.689.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/s3-request-presigner/-/s3-request-presigner-3.689.0.tgz#0d192aae17670167f536e64ba84f72b1eb839116"
   integrity sha512-E9P59HEsPeFuO10yKyYE180J3V1DRVFTa0H0XzrBTP+s2g9g8xvfyGqoDYJw5YHUckqls39jT5nlbrf+kBSrfg==
@@ -1303,40 +1303,40 @@
     "@aws-sdk/client-ssm" "^3.662.0"
     axios "^1.7.7"
 
-"@gemeentenijmegen/apigateway-http@^0.0.16":
-  version "0.0.16"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/apigateway-http/-/apigateway-http-0.0.16.tgz#f26807975b56bb2ac7025dd0ae01401ff7e97e38"
-  integrity sha512-QgSrurGr4d73Y9sNyQVd82DkWIH1oVEqJcakBMaWnVF2txp61ZXHh5uR9t1O67CqkMcXQrU7OnXKpJVpOYea7g==
+"@gemeentenijmegen/apigateway-http@^0.0.17":
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/apigateway-http/-/apigateway-http-0.0.17.tgz#6299a3fded3b859fa87ef1c3c912623c7374b05d"
+  integrity sha512-4TpeQX1zKN/R9YKRtn9lXxCZ8un7ZdcUuO5/6E2m9NQsu+yraU60E0hpER8P7T7DG7cvk4dW9dCX5u3dJF0XpA==
   dependencies:
     "@types/aws-lambda" "^8.10.145"
 
-"@gemeentenijmegen/aws-constructs@^0.0.22":
-  version "0.0.22"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/aws-constructs/-/aws-constructs-0.0.22.tgz#5a73f759db5bdce3a5cef85a2d6c527832deecd3"
-  integrity sha512-UjiIWq46aY0IdnX8JGi+KAtzawLAh1LD070WHHA4bVg1En8jOQlKMClXNnqNEIN0vpA5WjOCPmZqf5xfxp23qw==
+"@gemeentenijmegen/aws-constructs@^0.0.23":
+  version "0.0.23"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/aws-constructs/-/aws-constructs-0.0.23.tgz#c2bc3b01f7b15192eb9eb9eb7b46a03217e616a5"
+  integrity sha512-svNtMJ1xG+eZs9jWsed1apY8rbRSrsyXWfwLYLw1YG5F/WUuOMNBm9/L32YwUbognZyqpazgIFYTENrRI8geyQ==
 
 "@gemeentenijmegen/projen-project-type@^1.8.1":
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/@gemeentenijmegen/projen-project-type/-/projen-project-type-1.8.1.tgz#4d21358f33e341b082ec88ec9fddcb6457100608"
   integrity sha512-w3w8Q8gVQbNQOKl8962iboMoBCH8gxmCC9xO4c5npYj22caAoVRP1JQfIOf+E6bQzXKKakqMsfqWtLb8CX03aA==
 
-"@gemeentenijmegen/session@^0.0.17":
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/session/-/session-0.0.17.tgz#9f8c20de9653907620d805bf17fba1914602f025"
-  integrity sha512-TWVQVI9AwXenSSldXnvUShtG5jpEmv9VynrdkwXNfAxrcAUt+LK6hZAKUW0Vbi90s3C8i3vIf2jeqWkSSMVQ2g==
-  dependencies:
-    "@aws-sdk/client-dynamodb" "^3.662.0"
-    cookie "^0.6.0"
-
-"@gemeentenijmegen/utils@^0.0.18":
+"@gemeentenijmegen/session@^0.0.18":
   version "0.0.18"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/utils/-/utils-0.0.18.tgz#acf0564e12aed5975c89dec6e59dd73986c96d3b"
-  integrity sha512-Tya90031tZ6WMDTE9tDDVgw2ZB8+SVlvoYW/jxSE+DyGnMkm7UPDSeLukJu+jhz/o5U+GAfXoG8Z+UUp7vX/Wg==
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/session/-/session-0.0.18.tgz#d839e4daae3798f3ab5b10e96882b8f37769c121"
+  integrity sha512-Ve2RMvr+kH6ue+dAOz57U1VhCQbyMSFzb5MYqHEMBm/L2ag56y1YigoI+YlgwXkiGEWdfDx60mu4eQyIOqUGcw==
   dependencies:
-    "@aws-sdk/client-s3" "^3.662.0"
-    "@aws-sdk/client-secrets-manager" "^3.662.0"
-    "@aws-sdk/client-ssm" "^3.662.0"
-    "@aws-sdk/s3-request-presigner" "^3.662.0"
+    "@aws-sdk/client-dynamodb" "^3.687.0"
+    cookie "^0.7.2"
+
+"@gemeentenijmegen/utils@^0.0.19":
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/utils/-/utils-0.0.19.tgz#8fc974b045df2a72834147507e6876b3739fdc52"
+  integrity sha512-qNTyq6XWifNhB94oJrMPFT2GOYOM5s6K3c6v2dOA/+69Y5d9fdXINTyp/np+GvkfXNM+lnEiIoxzVXRbVOBxCg==
+  dependencies:
+    "@aws-sdk/client-s3" "^3.689.0"
+    "@aws-sdk/client-secrets-manager" "^3.687.0"
+    "@aws-sdk/client-ssm" "^3.687.0"
+    "@aws-sdk/s3-request-presigner" "^3.689.0"
 
 "@glen/jest-raw-loader@^2.0.0":
   version "2.0.0"
@@ -3259,11 +3259,6 @@ convert-source-map@^2.0.0:
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-2.0.0.tgz#4b560f649fc4e918dd0ab75cf4961e8bc882d82a"
   integrity sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==
 
-cookie@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.6.0.tgz#2798b04b071b0ecbff0dbb62a505a8efa4e19051"
-  integrity sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==
-
 cookie@^0.7.2:
   version "0.7.2"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.7.2.tgz#556369c472a2ba910f2979891b526b3436237ed7"
@@ -3522,9 +3517,9 @@ ejs@^3.1.10:
     jake "^10.8.5"
 
 electron-to-chromium@^1.5.41:
-  version "1.5.56"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.56.tgz#3213f369efc3a41091c3b2c05bc0f406108ac1df"
-  integrity sha512-7lXb9dAvimCFdvUMTyucD4mnIndt/xhRKFAlky0CyFogdnNmdPQNoHI23msF/2V4mpTxMzgMdjK4+YRlFlRQZw==
+  version "1.5.57"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.57.tgz#cb43af8784166bca24565b3418bf5f775a6b1c86"
+  integrity sha512-xS65H/tqgOwUBa5UmOuNSLuslDo7zho0y/lgQw35pnrqiZh7UOWHCeL/Bt6noJATbA6tpQJGCifsFsIRZj1Fqg==
 
 emittery@^0.13.1:
   version "0.13.1"
