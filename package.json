@@ -44,7 +44,7 @@
     "projen": "npx projen"
   },
   "devDependencies": {
-    "@aws-sdk/client-ssm": "^3.696.0",
+    "@aws-sdk/client-ssm": "^3.698.0",
     "@aws-sdk/types": "^3.696.0",
     "@glen/jest-raw-loader": "^2.0.0",
     "@playwright/test": "^1.49.0",
