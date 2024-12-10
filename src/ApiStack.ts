@@ -8,6 +8,7 @@ import { IStringParameter, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
 import { AuthFunction } from './app/auth/auth-function';
+import { ContactgegevensFunction } from './app/contactgegevens/contactgegevens-function';
 import { HomeFunction } from './app/home/home-function';
 import { LoginFunction } from './app/login/login-function';
 import { LogoutFunction } from './app/logout/logout-function';
@@ -408,9 +409,9 @@ export class ApiStack extends Stack implements Configurable {
       readOnlyRole,
       environment: {
         OPENKLANT_API_ENDPOINT: StringParameter.valueForStringParameter(this, Statics.ssmOpenKlantEndpoint),
-        OPENKLANT_API_KEY: openklantApiKey.secretArn,
+        OPENKLANT_API_KEY_ARN: openklantApiKey.secretArn,
       },
-      apiFunction: UitkeringFunction,
+      apiFunction: ContactgegevensFunction,
     });
     openklantApiKey.grantRead(contactgegevensFunctie.lambda);
     return contactgegevensFunctie;

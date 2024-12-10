@@ -5,7 +5,7 @@ import { ContactgegevensRequestHandler } from './ContactgegevensRequestHandler';
 
 const dynamoDBClient = new DynamoDBClient();
 
-const requestHandler = new ContactgegevensRequestHandler({ dynamoDBClient, showZaken: process.env.SHOW_ZAKEN == 'True' });
+const requestHandler = new ContactgegevensRequestHandler({ dynamoDBClient });
 
 function parseEvent(event: APIGatewayProxyEventV2) {
   return {

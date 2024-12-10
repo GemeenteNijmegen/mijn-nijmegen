@@ -13,10 +13,10 @@ export class OpenklantApi {
 
   async getApiKey() {
     if (!this.apikey) {
-      if (!process.env.OPENKLANT_API_KEY) {
-        throw Error('Missing OPENKLANT_API_KEY');
+      if (!process.env.OPENKLANT_API_KEY_ARN) {
+        throw Error('Missing OPENKLANT_API_KEY_ARN');
       }
-      this.apikey = await AWS.getSecret(process.env.OPENKLANT_API_KEY);
+      this.apikey = await AWS.getSecret(process.env.OPENKLANT_API_KEY_ARN);
     }
     return this.apikey;
   }

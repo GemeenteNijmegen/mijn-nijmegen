@@ -1,5 +1,4 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { OpenklantApi } from './OpenKlantApi';
@@ -9,7 +8,6 @@ import { render } from '../../shared/render';
 
 interface Config {
   dynamoDBClient: DynamoDBClient;
-  showZaken: boolean; //Show zaken in menu
 }
 
 export class ContactgegevensRequestHandler {
