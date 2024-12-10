@@ -31,6 +31,17 @@
                         </tr>
                     </tbody>
                 </table>
+                
+                <form action="/submit" method="POST">
+                    <label for="email">E-mailadres</label>
+                    <input type="email" id="email" name="email" value="gebruiker@example.com" required>
+
+                    <label for="phone">Telefoonnummer</label>
+                    <input type="text" id="phone" name="phone" value="123-456-7890" required>
+
+                    <button type="submit">Wijzigingen opslaan</button>
+                </form>
+
                 {{/error}}
                 {{#error}}
                     <h2>Er is iets misgegaan</h2>
