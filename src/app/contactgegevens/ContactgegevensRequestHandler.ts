@@ -48,7 +48,7 @@ export class ContactgegevensRequestHandler {
     const data: any = this.formatOpenKlantResponse(partij);
 
     // Page render basics
-    const navigation = new Navigation(userType, { showZaken: this.config.showZaken, currentPath: '/contactgegevens' });
+    const navigation = new Navigation(userType, { currentPath: '/contactgegevens' });
     data.nav = navigation.items;
     data.volledigenaam = session.getValue('username');
     const html = await this.renderHtml(data);
