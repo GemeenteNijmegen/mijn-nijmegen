@@ -5,6 +5,7 @@ import { OpenklantApi } from './OpenKlantApi';
 import * as template from './templates/contactgegevens.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import { UserFromSession } from '../zaken/User';
 
 interface Config {
   dynamoDBClient: DynamoDBClient;
@@ -22,7 +23,7 @@ export class ContactgegevensRequestHandler {
 
     let session = new Session(cookies, this.config.dynamoDBClient);
     await session.init();
-    console.timeLog('request', 'init session');
+    console.timeLog('request', 'init session done');
     if (session.isLoggedIn() == true) {
       // Get API data
       const response = await this.handleLoggedinRequest(session);
@@ -35,18 +36,17 @@ export class ContactgegevensRequestHandler {
 
   private async handleLoggedinRequest(session: Session) {
 
-    const userType = session.getValue('user_type');
-    const userIdentifier = session.getValue('identifier');
+    const user = UserFromSession(session)
 
     const openklantApi = new OpenklantApi();
     console.time('get-partij');
-    const partij = openklantApi.getPartijWithDigitaleAdresen(userType, userIdentifier);
+    const partij = openklantApi.getPartijWithDigitaleAdresen(user);
     console.timeEnd('get-partij');
 
     const data: any = this.formatOpenKlantResponse(partij);
 
     // Page render basics
-    const navigation = new Navigation(userType, { currentPath: '/contactgegevens' });
+    const navigation = new Navigation(user.type, { currentPath: '/contactgegevens' });
     data.nav = navigation.items;
     data.volledigenaam = session.getValue('username');
     const html = await this.renderHtml(data);

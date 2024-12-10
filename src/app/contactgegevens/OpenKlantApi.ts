@@ -1,4 +1,5 @@
 import { AWS } from '@gemeentenijmegen/utils';
+import { User } from '../zaken/User';
 
 
 export class OpenklantApi {
@@ -21,14 +22,14 @@ export class OpenklantApi {
     return this.apikey;
   }
 
-  async getPartijWithDigitaleAdresen(userType: 'persoon' | 'organization', userIdentifier: string) {
+  async getPartijWithDigitaleAdresen(user: User) {
     console.log('GET', this.endpoint, 'partijen');
 
-    const partyIdentifier = userType == 'persoon' ? 'Burgerservicenummer' : 'Kvknummer';
+    const partyIdentifier = user.type == 'person' ? 'Burgerservicenummer' : 'Kvknummer';
 
     const url = new URL(this.endpoint + '/partijen');
     url.searchParams.set('partijIdentificator__codeSoortObjectId', partyIdentifier);
-    url.searchParams.set('partijIdentificator__objectId', userIdentifier);
+    url.searchParams.set('partijIdentificator__objectId', user.identifier);
     url.searchParams.set('expand', 'digitaleAdressen');
 
     try {
@@ -53,5 +54,25 @@ export class OpenklantApi {
 
   }
 
+  /**
+   * 
+   * TODO support for PseudoID and user
+   * @param user 
+   */
+  // async createPartijWithDigitaleAddressen(user: User, emailAdres: string | undefined, phonenumber: string | undefined){
+    // If user is a organization
+    //  - Check if the contactpersoon exists based on PseudoID
+    //  - If the contactpersoon exists
+    //     - Update email / phone
+    //  - If the contactpersoon does not exist
+    //      - Create / get organization
+    //      - Create contactpersoon in organization
+
+    // If user is a person
+    //  - Check if the user exists
+    //  - If the user exists -> Update email / phone
+    //  - If the user does not exists -> Create user + digitale adressen
+  // }
 
 }
+
