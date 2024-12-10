@@ -79,7 +79,7 @@
     "@gemeentenijmegen/apiclient": "^0.0.21",
     "@gemeentenijmegen/apigateway-http": "^0.0.18",
     "@gemeentenijmegen/aws-constructs": "^0.0.24",
-    "@gemeentenijmegen/projen-project-type": "^1.8.3",
+    "@gemeentenijmegen/projen-project-type": "^1.8.4",
     "@gemeentenijmegen/session": "^0.0.18",
     "@gemeentenijmegen/utils": "^0.0.20",
     "@pepperize/cdk-route53-health-check": "^0.0.635",
