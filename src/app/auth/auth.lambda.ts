@@ -48,6 +48,8 @@ export async function handler(event: any, _context: any):Promise<ApiGatewayV2Res
       yiviKvkNumberAttribute: process.env.YIVI_KVK_NUMBER_ATTRIBUTE ?? '',
       yiviKvkNameAttribute: process.env.YIVI_KVK_NAME_ATTRIBUTE ?? '',
       useYiviKvk: process.env.USE_YIVI_KVK === 'true',
+      useNlWalletVerId: process.env.USE_NL_WALLET_VERID === 'true',
+      useNlWalletSignicat: process.env.USE_NL_WALLET_SIGNICAT === 'true',
     });
     return await requestHandler.handleRequest();
   } catch (err) {

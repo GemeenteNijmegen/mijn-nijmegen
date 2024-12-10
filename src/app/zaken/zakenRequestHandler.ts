@@ -1,132 +1,226 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
-import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
-import { z } from 'zod';
+import { environmentVariables } from '@gemeentenijmegen/utils';
+import * as singleZaakPartial from './templates/singlezaak.mustache';
+import * as takenTemplate from './templates/taken.mustache';
+import * as zaakRow from './templates/zaak-row.mustache';
 import * as zaakTemplate from './templates/zaak.mustache';
+import * as zakenListPartial from './templates/zaken-table.mustache';
 import * as zakenTemplate from './templates/zaken.mustache';
 import { User, UserFromSession } from './User';
 import { ZaakFormatter } from './ZaakFormatter';
-import { SingleZaak, ZaakSummary } from './ZaakInterface';
+import { SingleZaak, singleZaakSchema, ZaakSummariesSchema } from './ZaakInterface';
+import { eventParams } from './zaken.lambda';
+import { ZakenAggregatorConnector } from './ZakenAggregatorConnector';
+import { Spinner } from '../../shared/Icons';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import { validateToken } from '../../shared/validateToken';
 
 export class ZakenRequestHandler {
   private dynamoDBClient: DynamoDBClient;
-  private apiKey?: string;
-  private zakenApiUrl: string;
-  private zakenApiKeyName: string;
+  private connector: ZakenAggregatorConnector;
 
   constructor(dynamoDBClient: DynamoDBClient) {
     this.dynamoDBClient = dynamoDBClient;
-    const env = environmentVariables(['APIGATEWAY_BASEURL', 'APIGATEWAY_APIKEY']);
-    this.zakenApiUrl = env.APIGATEWAY_BASEURL;
-    this.zakenApiKeyName = env.APIGATEWAY_APIKEY;
+    const env = environmentVariables(['ZAKEN_APIGATEWAY_BASEURL', 'ZAKEN_APIGATEWAY_APIKEY']);
+    this.connector = new ZakenAggregatorConnector({
+      baseUrl: new URL(env.ZAKEN_APIGATEWAY_BASEURL),
+      apiKeySecretName: env.ZAKEN_APIGATEWAY_APIKEY,
+      timeout: 2000,
+    });
   }
 
-  async handleRequest(cookies: string, zaakConnectorId?: string, zaak?: string, file?: string ) {
+  async handleRequest(params: eventParams) {
     // do session stuff here
-    let session = new Session(cookies, this.dynamoDBClient);
+    let session = new Session(params.cookies, this.dynamoDBClient);
     await session.init();
     if (session.isLoggedIn() != true) {
       return Response.redirect('/login');
     }
 
-    if (!zaak) {
-      return this.list(session);
+    if (!params.zaakId) {
+      return this.list(session, params);
     }
 
-    if (zaak && zaakConnectorId && !file) {
-      return this.get(zaakConnectorId, zaak, session);
+    if (params.zaakId && params.zaakConnectorId && !params.file) {
+      return this.get(params, session);
     }
 
-    if (zaak && zaakConnectorId && file) {
-      return this.download(zaakConnectorId, zaak, file, session);
+    if (params.zaakId && params.zaakConnectorId && params.file) {
+      return this.download(params.zaakConnectorId, params.zaakId, params.file, session);
     }
     return Response.error(400);
   }
 
-  async list(session: Session) {
+  async list(session: Session, params: eventParams) {
     const user = UserFromSession(session);
-    let zaken: ZaakSummary[];
-    zaken = await this.fetchList(user);
 
-    const zaakSummaries = new ZaakFormatter().formatList(zaken);
+    const endpoint = 'zaken';
+    let zakenList;
+    let timeout = false;
+    try {
+      if (params.responseType == 'json') {
+        this.connector.setTimeout(10000); // allow for more time from frontend
+      } else {
+        this.connector.setTimeout(2000);
+      }
+      const json = await this.connector.fetch(endpoint, user);
+      const zaken = ZaakSummariesSchema.parse(json);
+      zakenList = new ZaakFormatter().formatList(zaken);
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === 'TimeoutError') {
+        timeout = true;
+      }
+    }
 
-    const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
+    if (params.responseType == 'json') {
+      if (timeout) {
+        return Response.json({ error: 'Het ophalen van gegevens duurde te lang…' }, 408);
+      } else {
+        return this.jsonListResponse(session, zakenList, params.xsrfToken);
+      }
+    } else {
+      return this.htmlListResponse(session, user, zakenList, timeout);
+    }
+  }
+
+  async jsonListResponse(session: Session, zaakSummaries: any, xsrfToken?: string ) {
+    if (!xsrfToken || !validateToken(session, xsrfToken)) {
+      return Response.error(403);
+    }
+    const { openHtml, closedHtml } = await this.zakenListsHtml(zaakSummaries);
+    return Response.json({
+      elements: [openHtml, closedHtml],
+    });
+  }
+
+  async htmlListResponse(session: Session, user: User, zaakSummaries: any, timeout?: boolean) {
+    const navigation = new Navigation(user.type, { currentPath: '/zaken' });
+
+    const { openHtml, closedHtml } = await this.zakenListsHtml(zaakSummaries);
+
     let data = {
-      volledigenaam: user.userName,
-      title: 'Mijn zaken',
-      shownav: true,
-      nav: navigation.items,
-      zaken: zaakSummaries,
+      'volledigenaam': user.userName,
+      'title': 'Mijn zaken',
+      'shownav': true,
+      'nav': navigation.items,
+      'open-zaken': openHtml,
+      'closed-zaken': closedHtml,
+      timeout,
+      'xsrf_token': session.getValue('xsrf_token'),
     };
-    // render page
-    const html = await render(data, zakenTemplate.default);
+      // render page
+    const html = await render(data, zakenTemplate.default, {
+      zaak: zaakRow.default,
+      spinner: Spinner.default,
+    });
     return Response.html(html, 200, session.getCookie());
   }
 
-  private async fetchList(user: User) {
-    const key = await this.getApiKey();
-    const response = await fetch(`${this.zakenApiUrl}zaken?` + new URLSearchParams({
-      userType: user.type,
-      userIdentifier: user.identifier,
-    }).toString(), {
-      method: 'GET',
-      headers: {
-        'x-api-key': key,
-      },
-    });
-    return ZaakSummariesSchema.parse(await response.json());
+  private async zakenListsHtml(zaakSummaries: any) {
+    let openHtml, closedHtml;
+    if (zaakSummaries) {
+      openHtml = await render({ zaken: zaakSummaries.open, id: 'open-zaken-list' }, zakenListPartial.default,
+        {
+          'zaak-row': zaakRow.default,
+        });
+      closedHtml = await render({ zaken: zaakSummaries.gesloten, id: 'closed-zaken-list' }, zakenListPartial.default,
+        {
+          'zaak-row': zaakRow.default,
+        });
+    }
+    return { openHtml, closedHtml };
   }
 
-  async get(zaakConnectorId: string, zaakId: string, session: Session) {
+  async get(params: eventParams, session: Session) {
+    if (!params.zaakConnectorId || !params.zaakId) {
+      throw Error('connector and zaakid need to be defined');
+    }
     const user = UserFromSession(session);
-    const zaak = await this.fetchGet(zaakId, zaakConnectorId, user);
 
-    if (zaak) {
-      const formattedZaak = new ZaakFormatter().formatZaak(zaak);
+    if (params.responseType == 'json') {
+      this.connector.setTimeout(10000); // allow for more time from frontend
+    } else {
+      this.connector.setTimeout(2000);
+    }
 
-      const navigation = new Navigation(user.type, { showZaken: true, currentPath: '/zaken' });
+    let timeout = false;
+    let formattedZaak;
+    try {
+      const zaak = await this.fetchGet(params.zaakId, params.zaakConnectorId, user);
+      if (zaak) {
+        formattedZaak = new ZaakFormatter().formatZaak(zaak);
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === 'TimeoutError') {
+        timeout = true;
+      }
+    }
+    if (params.responseType == 'json') {
+      if (timeout) {
+        return Response.json({ error: 'Het ophalen van gegevens duurde te lang…' }, 408);
+      } else {
+        return this.jsonGetResponse(session, formattedZaak, params.xsrfToken);
+      }
+    } else {
+      return this.htmlGetResponse(session, formattedZaak, timeout);
+    }
+
+  }
+
+  private async htmlGetResponse(session: Session, formattedZaak: any, timeout: boolean) {
+    const user = UserFromSession(session);
+    //If we get neither a zaak or a timeout flag, the zaak doesn't exist or isn't accessible for the user.
+    if (formattedZaak || timeout) {
+      const navigation = new Navigation(user.type, { currentPath: '/zaken' });
       let data = {
         volledigenaam: session.getValue('username'),
-        title: `Zaak - ${formattedZaak.zaak_type}`,
+        title: (formattedZaak) ? `Zaak - ${formattedZaak.zaak_type}` : 'Zaak ophalen niet gelukt',
         shownav: true,
         nav: navigation.items,
-        zaak: formattedZaak,
+        singlezaak: await this.zaakHtml(formattedZaak),
+        timeout,
+        xsrf_token: session.getValue('xsrf_token'),
       };
       // render page
-      const html = await render(data, zaakTemplate.default);
+      const html = await render(data, zaakTemplate.default, {
+        taken: takenTemplate.default,
+        spinner: Spinner.default,
+      });
       return Response.html(html, 200, session.getCookie());
     } else {
       return Response.error(404);
     }
   }
 
-  private async fetchGet(zaakId: string, zaakConnectorId: string, user: User) {
-    const key = await this.getApiKey();
-
-    const response = await fetch(`${this.zakenApiUrl}zaken/${zaakConnectorId}/${zaakId}?` + new URLSearchParams({
-      userType: user.type,
-      userIdentifier: user.identifier,
-    }).toString(), {
-      method: 'GET',
-      headers: {
-        'x-api-key': key,
-      },
+  private async jsonGetResponse(session: Session, formattedZaak: any, xsrfToken?: string) {
+    if (!xsrfToken || !validateToken(session, xsrfToken)) {
+      return Response.error(403);
+    }
+    const zaak = await this.zaakHtml(formattedZaak);
+    return Response.json({
+      elements: [zaak],
     });
-    const json = await response.json() as any;
-    json.registratiedatum = new Date(json.registratiedatum);
-    json.verwachtte_einddatum = new Date(json.verwachtte_einddatum);
-    json.uiterlijke_einddatum = new Date(json.uiterlijke_einddatum);
-    json.einddatum = json.einddatum ? new Date(json.einddatum) : undefined;
+  }
+
+  private async zaakHtml(zaak: any) {
+    return render({ zaak }, singleZaakPartial.default);
+  }
+
+  private async fetchGet(zaakId: string, zaakConnectorId: string, user: User) {
+    const endpoint = `zaken/${zaakConnectorId}/${zaakId}`;
+    const result = await this.connector.fetch(endpoint, user);
+    const json = singleZaakSchema.parse(result);
     return json as SingleZaak;
   }
 
   async download(zaakConnectorId: string, zaakId: string, file: string, session: Session) {
     const user = UserFromSession(session);
 
-    const response = await this.fetchDownload(zaakId, zaakConnectorId, file, user);
+    const endpoint = `zaken/${zaakConnectorId}/${zaakId}/download/${file}`;
+    const response = await this.connector.fetch(endpoint, user);
 
     if (response) {
       return Response.redirect(response.downloadUrl);
@@ -134,44 +228,6 @@ export class ZakenRequestHandler {
       return Response.error(404);
     }
   }
-
-  private async fetchDownload(zaakId: string, zaakConnectorId: string, file: string, user: User) {
-    const key = await this.getApiKey();
-
-    const response = await fetch(`${this.zakenApiUrl}zaken/${zaakConnectorId}/${zaakId}/download/${file}?` + new URLSearchParams({
-      userType: user.type,
-      userIdentifier: user.identifier,
-    }).toString(), {
-      method: 'GET',
-      headers: {
-        'x-api-key': key,
-      },
-    });
-    const json = await response.json() as any;
-    return json;
-  }
-
-  private async getApiKey(): Promise<string> {
-    if (!this.apiKey) {
-      this.apiKey = await AWS.getSecret(this.zakenApiKeyName);
-      if (!this.apiKey) {
-        throw Error('No API key found');
-      }
-    }
-    return this.apiKey;
-  }
 }
 
-export const ZaakSummarySchema = z.object({
-  identifier: z.string(),
-  internal_id: z.string(),
-  registratiedatum: z.coerce.date(),
-  verwachtte_einddatum: z.coerce.date().optional(),
-  uiterlijke_einddatum: z.coerce.date().optional(),
-  einddatum: z.coerce.date().optional().nullable(),
-  zaak_type: z.string(),
-  status: z.string().nullable(),
-  resultaat: z.string().optional().nullable(),
-});
 
-export const ZaakSummariesSchema = z.array(ZaakSummarySchema);

@@ -1,6 +1,7 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
-import { LoginRequestHandler } from './loginRequestHandler';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { LoginRequestHandler, RequestParams } from './loginRequestHandler';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
@@ -15,16 +16,22 @@ const loginRequestHandler = new LoginRequestHandler({
   yiviCondisconScope: process.env.YIVI_CONDISCON_SCOPE,
   eHerkenningScope: process.env.EHERKENNING_SCOPE ?? '',
   useYiviKvk: process.env.USE_YIVI_KVK == 'true',
+  useNlWalletVerId: process.env.USE_NL_WALLET_VERID == 'true',
+  useNlWalletSignicat: process.env.USE_NL_WALLET_SIGNICAT == 'true',
 });
 
-function parseEvent(event: any) {
-  return { cookies: event?.cookies?.join(';') };
+function parseEvent(event: APIGatewayProxyEventV2): RequestParams {
+  return {
+    cookies: event?.cookies?.join(';'),
+    nlwallet: event?.queryStringParameters?.nlwallet === 'true',
+    method: event?.queryStringParameters?.method,
+  };
 }
 
-export async function handler (event: any, _context: any):Promise<ApiGatewayV2Response> {
+export async function handler (event: APIGatewayProxyEventV2):Promise<ApiGatewayV2Response> {
   try {
     const params = parseEvent(event);
-    const response = await loginRequestHandler.handleRequest(params.cookies, dynamoDBClient);
+    const response = await loginRequestHandler.handleRequest(params, dynamoDBClient);
     return response;
   } catch (err) {
     console.error(err);

@@ -48,14 +48,15 @@ const mockedZaak = {
   zaak_type: 'zaaktype 2',
   status: 'open',
   behandelaars: ['Jan Jansen', 'Andries Fietst'],
+  type: 'case',
 };
 
 const mockedDownload = {
   downloadUrl: 'https://somebucket.s3.eu-central-1.amazonaws.com/APV1.234/APV1.234.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=<SOMESTRING>%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20240305T135245Z&X-Amz-Expires=5&X-Amz-Security-Token=<REALLYLONGSTRING>X-Amz-Signature=<SIGNATURE>&X-Amz-SignedHeaders=host&x-id=GetObject',
 };
 
-process.env.APIGATEWAY_BASEURL = 'http://localhost/';
-process.env.APIGATEWAY_APIKEY = 'fakekey';
+process.env.ZAKEN_APIGATEWAY_BASEURL = 'http://localhost/';
+process.env.ZAKEN_APIGATEWAY_APIKEY = 'fakekey';
 
 beforeAll(() => {
   global.fetch = jest.fn((url: string) =>
@@ -63,9 +64,9 @@ beforeAll(() => {
       json: () => {
         console.debug('mocked fetch', url);
         const urlPathParts = new URL(url).pathname.split('/');
-        if (urlPathParts[3]) {
+        if (urlPathParts[4]) {
           return Promise.resolve(mockedDownload);
-        } else if (urlPathParts[2]) {
+        } else if (urlPathParts[3]) {
           return Promise.resolve(mockedZaak);
         } else {
           return Promise.resolve(mockedZakenList);
@@ -82,32 +83,6 @@ beforeAll(() => {
   secretsMock.on(GetSecretValueCommand).resolves(output);
 });
 
-// jest.mock('../Zaken', () => {
-//   return {
-//     Zaken: jest.fn(() => {
-//       return {
-//         allowDomains: jest.fn(),
-//         list: jest.fn().mockResolvedValue(mockedZakenList),
-//         get: jest.fn().mockResolvedValue(mockedZaak),
-//         setTaken: jest.fn(),
-//       };
-//     }),
-//   };
-// });
-
-
-// jest.mock('../Inzendingen', () => {
-//   return {
-//     Inzendingen: jest.fn(() => {
-//       return {
-//         list: jest.fn().mockResolvedValue(mockedInzendingenList),
-//         get: jest.fn().mockResolvedValue(mockedZaak),
-//         download: jest.fn().mockResolvedValue(mockedDownload),
-//       };
-//     }),
-//   };
-// });
-
 const ddbMock = mockClient(DynamoDBClient);
 const getItemOutput: Partial<GetItemCommandOutput> = {
   Item: {
@@ -116,6 +91,7 @@ const getItemOutput: Partial<GetItemCommandOutput> = {
         loggedin: { BOOL: true },
         identifier: { S: '900026236' },
         user_type: { S: 'person' },
+        xsrf_token: { S: 'testtoken' },
       },
     },
   },
@@ -130,7 +106,7 @@ beforeAll(() => {
 describe('Request handler class', () => {
   const handler = new ZakenRequestHandler(new DynamoDBClient({ region: process.env.AWS_REGION }));
   test('returns 200 for person', async () => {
-    const result = await handler.handleRequest('session=12345');
+    const result = await handler.handleRequest({ cookies: 'session=12345', responseType: 'html' });
     expect(result.statusCode).toBe(200);
     if (result.body) {
       try {
@@ -155,12 +131,12 @@ describe('Request handler class', () => {
     };
     ddbMock.on(GetItemCommand).resolves(getItemOutputForOrganisation);
 
-    const result = await handler.handleRequest('session=12345');
+    const result = await handler.handleRequest({ cookies: 'session=12345', responseType: 'html' });
     expect(result.statusCode).toBe(200);
   });
 
   test('returns 200 for single zaak', async () => {
-    const result = await handler.handleRequest('session=12345', 'zaak', '5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886');
+    const result = await handler.handleRequest({ cookies: 'session=12345', zaakConnectorId: 'zaak', zaakId: '5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886', responseType: 'html' });
     expect(result.statusCode).toBe(200);
     if (result.body) {
       try {
@@ -172,7 +148,7 @@ describe('Request handler class', () => {
   });
 
   test('returns link for download', async () => {
-    const result = await handler.handleRequest('session=12345', 'inzendingen', '5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886', 'test.png');
+    const result = await handler.handleRequest({ cookies: 'session=12345', zaakConnectorId: 'inzendingen', zaakId: '5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886', file: 'test.png', responseType: 'html' });
     expect(result.statusCode).toBe(302);
     expect(result.headers).toHaveProperty('Location');
   });

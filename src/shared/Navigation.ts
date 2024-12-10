@@ -37,24 +37,19 @@ export class Navigation {
     description: 'Bekijk de overzichtspagina',
     label: 'Bekijk de overzichtspagina',
     icon: MdiOverview.default,
-  }];
-
-  zakenItem = {
+  },
+  {
     priority: 30,
     url: '/zaken',
     title: 'Mijn zaken',
     description: 'Bekijk de status van uw zaken en aanvragen. Nog niet alle zaken zijn te zien, we breiden dit uit.',
     label: 'Bekijk zaken',
     icon: MdiFileMultiple.default,
-  };
+  }];
 
   items: NavigationItem[];
 
-  constructor(navigationType: 'person' | 'organisation', config?: { showZaken?: boolean; currentPath: string }) {
-    if (config?.showZaken) {
-      this.sharedItems.push(this.zakenItem);
-    }
-
+  constructor(navigationType: 'person' | 'organisation', config?: { currentPath: string }) {
     if (navigationType == 'person') {
       this.items = [...this.personItems, ...this.sharedItems];
     } else {

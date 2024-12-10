@@ -91,6 +91,15 @@ export interface Configuration {
   readonly zakenUseSubmissions?: boolean;
 
   /**
+   * Feature flag: enables nl wallet login (VerID)
+   */
+  readonly nlWalletVerIdIsLive?: boolean;
+  /**
+   * Feature flag: enables nl wallet login (Signicat)
+   */
+  readonly nlWalletSignicatIsLive?: boolean;
+
+  /**
    * Set this to true if you want the verwerkingenlogging inzage-page to be created
    */
   readonly inzageLive?: boolean;
@@ -142,6 +151,8 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     inzageLive: true,
     useZakenFromAggregatorAPI: true,
     mijnContactGegevensLive: true,
+    nlWalletVerIdIsLive: true,
+    nlWalletSignicatIsLive: true,
   },
   acceptance: {
     branch: 'acceptance',
@@ -153,7 +164,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     dsRecord: '3766 13 2 11761745E09473E6CE95DB798CF1ADB69B4433E73EEFC9F7FE341561966EA154',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-acceptance',
     pipelineName: 'mijnnijmegen-acceptance',
-    brpHaalCentraalIsLive: true,
+    brpHaalCentraalIsLive: false,
     zakenUseTaken: true,
     zakenIsLive: true,
     zakenUseSubmissions: true,
@@ -163,6 +174,8 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     // },
     inzageLive: false,
     useZakenFromAggregatorAPI: true,
+    nlWalletVerIdIsLive: true,
+    nlWalletSignicatIsLive: true,
   },
   production: {
     branch: 'production',
@@ -180,6 +193,8 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenUseSubmissions: true,
     inzageLive: false,
     useZakenFromAggregatorAPI: true,
+    nlWalletVerIdIsLive: false,
+    nlWalletSignicatIsLive: false,
   },
 };
 

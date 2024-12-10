@@ -38,6 +38,7 @@ export interface ApiStackProps extends StackProps, Configurable {
  */
 export class ApiStack extends Stack implements Configurable {
   private sessionsTable: Table;
+  private zakenApiKey?: ISecret;
   configuration: Configuration;
   api: apigatewayv2.HttpApi;
 
@@ -59,6 +60,7 @@ export class ApiStack extends Stack implements Configurable {
     const appDomain = `${subdomain}.nijmegen.nl`;
 
     const readOnlyRole = this.readOnlyRole();
+
     this.setFunctions(`https://${appDomain}/`, readOnlyRole, props.configuration);
     this.allowReadAccessToTable(readOnlyRole, this.sessionsTable);
   }
@@ -216,12 +218,24 @@ export class ApiStack extends Stack implements Configurable {
         YIVI_BSN_ATTRIBUTE: StringParameter.valueForStringParameter(this, Statics.ssmYiviBsnAttribute),
         YIVI_CONDISCON_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmYiviCondisconScope),
         USE_YIVI_KVK: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviKvk), // Feature flag for kvk bsn conditional disclosure
+
+        // VerId configuration (without secret as its not used to create the url)
+        USE_NL_WALLET_VERID: this.configuration.nlWalletVerIdIsLive ? 'true' : 'false',
+        NL_WALLET_VERID_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics.ssmVerIdClientId),
+        NL_WALLET_VERID_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmVerIdScope),
+        NL_WALLET_VERID_WELL_KNOWN: StringParameter.valueForStringParameter(this, Statics.ssmVerIdWellKnown),
+
+        // NL Wallet - Signicat configuration
+        USE_NL_WALLET_SIGNICAT: this.configuration.nlWalletSignicatIsLive ? 'true' : 'false',
+        NL_WALLET_SIGNICAT_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics.ssmSignicatClientId),
+        NL_WALLET_SIGNICAT_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmSignicatScope),
+        NL_WALLET_SIGNICAT_WELL_KNOWN: StringParameter.valueForStringParameter(this, Statics.ssmSignicatWellKnown),
       },
     });
   }
 
   private homeFunction(baseUrl: string, readOnlyRole: Role) {
-    return new ApiFunction(this, 'home-function', {
+    const homeFunction = new ApiFunction(this, 'home-function', {
       description: 'Home-lambda voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/home',
       table: this.sessionsTable,
@@ -229,12 +243,26 @@ export class ApiStack extends Stack implements Configurable {
       applicationUrlBase: baseUrl,
       readOnlyRole,
       apiFunction: HomeFunction,
+      functionProps: {
+        timeout: Duration.seconds(15), // frontend async calls can take a while
+        memorySize: 1024,
+      },
+      environment: {
+        SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
+      },
     });
+
+    if (this.configuration.useZakenFromAggregatorAPI) {
+      this.grantZakenApiAccess(homeFunction);
+    }
+    return homeFunction;
   }
 
   private authFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
     const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
     const authServiceClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'auth-serice-client-secret', Statics.authServiceClientSecretArn);
+    const verIdClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'verid-client-secret', Statics.ssmVerIdClientSecret);
+    const signicatClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'signicat-client-secret', Statics.ssmSignicatClientSecret);
     const brpHaalCentraalApiKeySecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'brp-haal-centraal-api-key-auth-secret', Statics.haalCentraalApiKeySecret);
 
     const authFunction = new ApiFunction(this, 'auth-function', {
@@ -265,15 +293,33 @@ export class ApiStack extends Stack implements Configurable {
         AUTH_SERVICE_CLIENT_SECRET_ARN: authServiceClientSecret.secretArn,
         AUTH_SERVICE_CLIENT_ID: this.configuration.authenticationServiceConfiguration?.clientId ?? '',
         AUTH_SERVICE_ENDPOINT: this.configuration.authenticationServiceConfiguration?.endpoint ?? '',
+
+        // NL Wallet - VerId configuration
+        USE_NL_WALLET_VERID: this.configuration.nlWalletVerIdIsLive ? 'true' : 'false',
+        NL_WALLET_VERID_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics.ssmVerIdClientId),
+        NL_WALLET_VERID_CLIENT_SECRET_ARN: verIdClientSecret.secretArn,
+        NL_WALLET_VERID_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmVerIdScope),
+        NL_WALLET_VERID_WELL_KNOWN: StringParameter.valueForStringParameter(this, Statics.ssmVerIdWellKnown),
+
+        // NL Wallet - Signicat configuration
+        USE_NL_WALLET_SIGNICAT: this.configuration.nlWalletSignicatIsLive ? 'true' : 'false',
+        NL_WALLET_SIGNICAT_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics.ssmSignicatClientId),
+        NL_WALLET_SIGNICAT_CLIENT_SECRET_ARN: signicatClientSecret.secretArn,
+        NL_WALLET_SIGNICAT_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmSignicatScope),
+        NL_WALLET_SIGNICAT_WELL_KNOWN: StringParameter.valueForStringParameter(this, Statics.ssmSignicatWellKnown),
+
       },
       apiFunction: AuthFunction,
     });
     brpHaalCentraalApiKeySecret.grantRead(authFunction.lambda);
     authServiceClientSecret.grantRead(authFunction.lambda);
+    verIdClientSecret.grantRead(authFunction.lambda);
+    signicatClientSecret.grantRead(authFunction.lambda);
     oidcSecret.grantRead(authFunction.lambda);
     mtlsConfig.privateKey.grantRead(authFunction.lambda);
     mtlsConfig.clientCert.grantRead(authFunction.lambda);
     mtlsConfig.rootCert.grantRead(authFunction.lambda);
+
     return authFunction;
   }
 
@@ -403,16 +449,23 @@ export class ApiStack extends Stack implements Configurable {
     });
 
     if (this.configuration.useZakenFromAggregatorAPI) {
-      const apiKey = Secret.fromSecretNameV2(this, 'zakenapikey', Statics.zaakAggregatorApiGatewayApiKey);
-      zakenFunction.lambda.addEnvironment('APIGATEWAY_BASEURL', StringParameter.valueForStringParameter(this, Statics.ssmZaakAggregatorApiGatewayEndpointUrl));
-      zakenFunction.lambda.addEnvironment('APIGATEWAY_APIKEY', apiKey.secretArn);
-      apiKey.grantRead(zakenFunction.lambda);
+      this.grantZakenApiAccess(zakenFunction);
     }
 
     jwtSecret.grantRead(zakenFunction.lambda);
     tokenSecret.grantRead(zakenFunction.lambda);
     submissionstorageKey.grantRead(zakenFunction.lambda);
     return zakenFunction;
+  }
+
+  private grantZakenApiAccess(handlerFunction: ApiFunction) {
+    if (!this.zakenApiKey) {
+      this.zakenApiKey = Secret.fromSecretNameV2(this, 'zakenapikey', Statics.zaakAggregatorApiGatewayApiKey);
+    }
+    const apiKey = this.zakenApiKey;
+    handlerFunction.lambda.addEnvironment('ZAKEN_APIGATEWAY_BASEURL', StringParameter.valueForStringParameter(this, Statics.ssmZaakAggregatorApiGatewayEndpointUrl));
+    handlerFunction.lambda.addEnvironment('ZAKEN_APIGATEWAY_APIKEY', apiKey.secretArn);
+    apiKey.grantRead(handlerFunction.lambda);
   }
 
   /**
