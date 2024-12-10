@@ -40,6 +40,7 @@ export class OpenklantApi {
           Authorization: `Token ${await this.getApiKey()}`,
         },
       });
+      console.debug('Called open-klant', response.status);
       const json = await response.json() as any;
 
       if (json.count == 0 || json.count > 1) {

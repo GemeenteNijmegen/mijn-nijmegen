@@ -64,8 +64,9 @@ export class ContactgegevensRequestHandler {
   }
 
   private formatOpenKlantResponse(partij: any) {
-    const email = partij._expand.digitaleAdressen.find((adres: any) => adres.soortDigitaalAdres == 'email');
-    const telefoonnummer = partij._expand.digitaleAdressen.find((adres: any) => adres.soortDigitaalAdres == 'telefoonnummer');
+    console.debug(JSON.stringify(partij));
+    const email = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'email');
+    const telefoonnummer = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'telefoonnummer');
     return {
       email: email ? email.adres : undefined,
       telefoonnummer: telefoonnummer ? telefoonnummer.adres : undefined,
