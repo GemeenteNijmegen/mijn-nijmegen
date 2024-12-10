@@ -43,8 +43,8 @@ export class ContactgegevensRequestHandler {
     const partij = openklantApi.getPartijWithDigitaleAdresen(user);
     console.timeEnd('get-partij');
 
-    const data: any = this.formatOpenKlantResponse(partij);
-
+    let data: any = this.formatOpenKlantResponse(partij);
+  
     // Page render basics
     const navigation = new Navigation(user.type, { currentPath: '/contactgegevens' });
     data.nav = navigation.items;

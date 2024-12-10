@@ -21,14 +21,16 @@
                     <tbody>
                         <tr>
                             <td>Email</td>
-                            <td class="nowrap">{{email}}</td>
+                            <td class="nowrap">{{email}}{{^email}}-{{/email}}</td>
+                            <td class="nowrap"><a href="#">Aanpassen</a></td>
                         </tr>
                         <tr>
                             <td>Telefoonummer</td>
-                            <td class="nowrap">{{Telefoonummer}}</td>
+                            <td class="nowrap">{{telefoonnummer}}{{^telefoonnummer}}-{{/telefoonnummer}}</td>
+                            <td class="nowrap"><a href="#">Aanpassen</a></td>
                         </tr>
                     </tbody>
-                </table>    
+                </table>
                 {{/error}}
                 {{#error}}
                     <h2>Er is iets misgegaan</h2>
