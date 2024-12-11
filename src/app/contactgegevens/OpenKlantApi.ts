@@ -80,16 +80,7 @@ export class OpenklantApi {
     url.searchParams.set('expand', 'digitaleAdressen');
 
     try {
-
-      const response = await fetch(url.toString(), {
-        method: 'GET',
-        headers: {
-          Authorization: `Token ${await this.getApiKey()}`,
-        },
-      });
-      console.debug('Called open-klant', response.status);
-      const json = await response.json() as any;
-
+      const json = await this.callApi(url.toString());
       if (json.count == 0 || json.count > 1) {
         throw Error('Multiple partijen found, one expected');
       }
