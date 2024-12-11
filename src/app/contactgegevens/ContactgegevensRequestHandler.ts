@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
@@ -6,7 +7,6 @@ import * as template from './templates/contactgegevens.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import { UserFromSession } from '../zaken/User';
-import { randomUUID } from 'crypto';
 
 interface Config {
   dynamoDBClient: DynamoDBClient;
@@ -55,7 +55,7 @@ export class ContactgegevensRequestHandler {
 
     // Do a CSRF check
     const csrf = session.getValue('csrf');
-    if(csrf !== params.csrf){
+    if (csrf !== params.csrf) {
       throw Error('CSRF mismatch!');
     }
 
@@ -85,7 +85,7 @@ export class ContactgegevensRequestHandler {
 
     // Set a CSRF token
     const csrf = randomUUID();
-    session.updateSession({ csrf });
+    await session.updateSession({ csrf });
 
     // Page render basics
     const navigation = new Navigation(user.type, { currentPath: '/contactgegevens' });

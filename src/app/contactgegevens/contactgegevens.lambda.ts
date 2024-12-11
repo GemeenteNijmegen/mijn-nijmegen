@@ -16,9 +16,9 @@ function parseEvent(event: APIGatewayProxyEventV2) {
   return {
     cookies: event?.cookies?.join(';') ?? '',
     method: event?.requestContext.http.method,
-    csrf: formData?.get('csrf')  ?? undefined,
+    csrf: formData?.get('csrf') ?? undefined,
     email: formData?.get('email') ?? undefined,
-    telefoonnummer: formData?.get('telefoonnummer')  ?? undefined,
+    telefoonnummer: formData?.get('telefoonnummer') ?? undefined,
   };
 }
 
