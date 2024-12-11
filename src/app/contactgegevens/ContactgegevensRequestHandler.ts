@@ -6,6 +6,7 @@ import * as template from './templates/contactgegevens.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import { UserFromSession } from '../zaken/User';
+import { randomUUID } from 'crypto';
 
 interface Config {
   dynamoDBClient: DynamoDBClient;
@@ -17,6 +18,7 @@ interface RequestParameters {
   method: string;
   email?: string;
   telefoonnummer?: string;
+  csrf?: string;
 }
 
 export class ContactgegevensRequestHandler {
@@ -49,7 +51,14 @@ export class ContactgegevensRequestHandler {
 
   }
 
-  private async handleLoggedinPostRequest(session: Session, _params: RequestParameters) {
+  private async handleLoggedinPostRequest(session: Session, params: RequestParameters) {
+
+    // Do a CSRF check
+    const csrf = session.getValue('csrf');
+    if(csrf !== params.csrf){
+      throw Error('CSRF mismatch!');
+    }
+
     const user = UserFromSession(session);
     const openKlantPartij = await this.config.openKlantApi.createNatuurlijkPersoon();
     await this.config.openKlantApi.addPartijIdentificatie(user, openKlantPartij.uuid);
@@ -74,10 +83,15 @@ export class ContactgegevensRequestHandler {
 
     let data: any = this.formatOpenKlantResponse(partij);
 
+    // Set a CSRF token
+    const csrf = randomUUID();
+    session.updateSession({ csrf });
+
     // Page render basics
     const navigation = new Navigation(user.type, { currentPath: '/contactgegevens' });
     data.nav = navigation.items;
     data.volledigenaam = session.getValue('username');
+    data.csrf = csrf;
     const html = await this.renderHtml(data);
 
     return Response.html(html, 200, session.getCookie());

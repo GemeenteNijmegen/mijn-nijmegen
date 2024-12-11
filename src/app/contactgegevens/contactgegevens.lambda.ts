@@ -10,9 +10,15 @@ const openKlantApi = new OpenklantApi();
 const requestHandler = new ContactgegevensRequestHandler({ dynamoDBClient, openKlantApi });
 
 function parseEvent(event: APIGatewayProxyEventV2) {
+
+  const formData = new URLSearchParams(event?.body);
+
   return {
     cookies: event?.cookies?.join(';') ?? '',
     method: event?.requestContext.http.method,
+    csrf: formData?.get('csrf')  ?? undefined,
+    email: formData?.get('email') ?? undefined,
+    telefoonnummer: formData?.get('telefoonnummer')  ?? undefined,
   };
 }
 
