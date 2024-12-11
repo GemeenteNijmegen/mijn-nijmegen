@@ -186,8 +186,8 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     zakenUseSubmissions: true,
     inzageLive: false,
     useZakenFromAggregatorAPI: true,
-    nlWalletVerIdIsLive: false,
-    nlWalletSignicatIsLive: false,
+    nlWalletVerIdIsLive: true,
+    nlWalletSignicatIsLive: true,
   },
 };
 
