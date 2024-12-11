@@ -2,21 +2,24 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { ContactgegevensRequestHandler } from './ContactgegevensRequestHandler';
+import { OpenklantApi } from './OpenKlantApi';
 
 const dynamoDBClient = new DynamoDBClient();
+const openKlantApi = new OpenklantApi();
 
-const requestHandler = new ContactgegevensRequestHandler({ dynamoDBClient });
+const requestHandler = new ContactgegevensRequestHandler({ dynamoDBClient, openKlantApi });
 
 function parseEvent(event: APIGatewayProxyEventV2) {
   return {
     cookies: event?.cookies?.join(';') ?? '',
+    method: event?.requestContext.http.method,
   };
 }
 
-exports.handler = async (event: any, _context: any) => {
+exports.handler = async (event: APIGatewayProxyEventV2) => {
   try {
     const params = parseEvent(event);
-    return await requestHandler.handleRequest(params.cookies);
+    return await requestHandler.handleRequest(params);
 
   } catch (err) {
     console.error(err);

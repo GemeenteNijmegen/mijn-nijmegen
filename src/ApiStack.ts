@@ -178,7 +178,7 @@ export class ApiStack extends Stack implements Configurable {
       this.api.addRoutes({
         integration: new HttpLambdaIntegration('contactgegevens', contactgegevensFunction.lambda),
         path: '/contactgegevens',
-        methods: [apigatewayv2.HttpMethod.GET],
+        methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.POST],
       });
     }
   }

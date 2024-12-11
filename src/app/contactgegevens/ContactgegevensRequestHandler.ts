@@ -9,6 +9,14 @@ import { UserFromSession } from '../zaken/User';
 
 interface Config {
   dynamoDBClient: DynamoDBClient;
+  openKlantApi: OpenklantApi;
+}
+
+interface RequestParameters {
+  cookies: string;
+  method: string;
+  email?: string;
+  telefoonnummer?: string;
 }
 
 export class ContactgegevensRequestHandler {
@@ -17,34 +25,55 @@ export class ContactgegevensRequestHandler {
     this.config = config;
   }
 
-  async handleRequest(cookies: string) {
+  async handleRequest(params: RequestParameters) {
     console.time('request');
     console.timeLog('request', 'start request');
 
-    let session = new Session(cookies, this.config.dynamoDBClient);
+    let session = new Session(params.cookies, this.config.dynamoDBClient);
     await session.init();
     console.timeLog('request', 'init session done');
-    if (session.isLoggedIn() == true) {
-      // Get API data
+    if (session.isLoggedIn() !== true) {
+      console.timeEnd('request');
+      return Response.redirect('/login');
+    }
+
+    if (params.method == 'POST') {
+      const response = await this.handleLoggedinPostRequest(session, params);
+      console.timeEnd('request');
+      return response;
+    } else {
       const response = await this.handleLoggedinRequest(session);
       console.timeEnd('request');
       return response;
     }
-    console.timeEnd('request');
-    return Response.redirect('/login');
+
+  }
+
+  private async handleLoggedinPostRequest(session: Session, _params: RequestParameters) {
+    const user = UserFromSession(session);
+    const openKlantPartij = await this.config.openKlantApi.createNatuurlijkPersoon();
+    await this.config.openKlantApi.addPartijIdentificatie(user, openKlantPartij.uuid);
+
+    // if(params.email){
+    //   const openKlantEmail = this.config.openKlantApi.addDigitaalAddress('email', params.email, openKlantPartij.uuid);
+    // }
+
+    // if(params.telefoonnummer) {
+    //   const openKlantTelefoonnummer = this.config.openKlantApi.addDigitaalAddress('telefoonnummer', params.telefoonnummer, openKlantPartij.uuid);
+    // }
+
   }
 
   private async handleLoggedinRequest(session: Session) {
 
-    const user = UserFromSession(session)
+    const user = UserFromSession(session);
 
-    const openklantApi = new OpenklantApi();
     console.time('get-partij');
-    const partij = openklantApi.getPartijWithDigitaleAdresen(user);
+    const partij = this.config.openKlantApi.getPartijWithDigitaleAdresen(user);
     console.timeEnd('get-partij');
 
     let data: any = this.formatOpenKlantResponse(partij);
-  
+
     // Page render basics
     const navigation = new Navigation(user.type, { currentPath: '/contactgegevens' });
     data.nav = navigation.items;

@@ -1,5 +1,6 @@
 import { AWS } from '@gemeentenijmegen/utils';
 import { User } from '../zaken/User';
+import { OpenKlantPartij, OpenKlantPartijIdentificiatie, OpenKlantPartijIdentificiatieWithUuid, OpenKlantPartijWithUuid } from './model/partij';
 
 
 export class OpenklantApi {
@@ -20,6 +21,52 @@ export class OpenklantApi {
       this.apikey = await AWS.getSecret(process.env.OPENKLANT_API_KEY_ARN);
     }
     return this.apikey;
+  }
+
+  async createNatuurlijkPersoon(): Promise<OpenKlantPartijWithUuid> {
+    const input: OpenKlantPartij = {
+      soortPartij: 'persoon',
+      indicatieActief: true,
+      indicatieGeheimhouding: false,
+      rekeningnummers: [],
+      digitaleAdressen: [],
+      voorkeursDigitaalAdres: null,
+      voorkeursRekeningnummer: null,
+      voorkeurstaal: 'dut',
+    };
+    try {
+      const url = new URL(this.endpoint + '/partijen');
+      return await this.callApi(url.toString(), input);
+    } catch (err) {
+      console.error(err);
+      throw Error('Could not create partij');
+    }
+
+  }
+
+  async addPartijIdentificatie(user: User, partijUuid: string) : Promise<OpenKlantPartijIdentificiatieWithUuid> {
+
+    if (user.type != 'person') {
+      throw Error('Only persons supported for now!');
+    }
+
+    const input: OpenKlantPartijIdentificiatie = {
+      partijIdentificator: {
+        codeRegister: 'BRP',
+        codeSoortObjectId: 'Burgerservicenummer',
+        objectId: user.identifier,
+      },
+      identificeerdePartij: { uuid: partijUuid },
+    };
+
+    try {
+      const url = new URL(this.endpoint + '/partij-identificatie');
+      return await this.callApi(url.toString(), input);
+    } catch (err) {
+      console.error(err);
+      throw Error('Could not create partij');
+    }
+
   }
 
   async getPartijWithDigitaleAdresen(user: User) {
@@ -55,25 +102,19 @@ export class OpenklantApi {
 
   }
 
-  /**
-   * 
-   * TODO support for PseudoID and user
-   * @param user 
-   */
-  // async createPartijWithDigitaleAddressen(user: User, emailAdres: string | undefined, phonenumber: string | undefined){
-    // If user is a organization
-    //  - Check if the contactpersoon exists based on PseudoID
-    //  - If the contactpersoon exists
-    //     - Update email / phone
-    //  - If the contactpersoon does not exist
-    //      - Create / get organization
-    //      - Create contactpersoon in organization
+  private async callApi(url: string, data?: any) {
+    const response = await fetch(url.toString(), {
+      method: 'POST',
+      headers: {
+        Authorization: `Token ${await this.getApiKey()}`,
+      },
+      body: data ? JSON.stringify(data) : undefined,
+    });
+    console.debug('POST to', url.toString(), '-', response.status);
+    const json = await response.json() as any;
+    return json;
+  }
 
-    // If user is a person
-    //  - Check if the user exists
-    //  - If the user exists -> Update email / phone
-    //  - If the user does not exists -> Create user + digitale adressen
-  // }
 
 }
 
