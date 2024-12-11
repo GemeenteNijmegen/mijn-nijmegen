@@ -46,10 +46,10 @@
     "projen": "npx projen"
   },
   "devDependencies": {
-    "@aws-sdk/client-ssm": "^3.699.0",
-    "@aws-sdk/types": "^3.696.0",
+    "@aws-sdk/client-ssm": "^3.709.0",
+    "@aws-sdk/types": "^3.709.0",
     "@glen/jest-raw-loader": "^2.0.0",
-    "@playwright/test": "^1.49.0",
+    "@playwright/test": "^1.49.1",
     "@stylistic/eslint-plugin": "^2",
     "@types/aws-lambda": "^8.10.146",
     "@types/jest": "^29.5.14",
@@ -75,15 +75,15 @@
   },
   "dependencies": {
     "@aws-lambda-powertools/logger": "^1.18.1",
-    "@aws-sdk/client-dynamodb": "^3.705.0",
-    "@aws-sdk/client-secrets-manager": "^3.699.0",
+    "@aws-sdk/client-dynamodb": "^3.709.0",
+    "@aws-sdk/client-secrets-manager": "^3.709.0",
     "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.74.0",
-    "@gemeentenijmegen/apiclient": "^0.0.21",
-    "@gemeentenijmegen/apigateway-http": "^0.0.18",
-    "@gemeentenijmegen/aws-constructs": "^0.0.24",
+    "@gemeentenijmegen/apiclient": "^0.0.22",
+    "@gemeentenijmegen/apigateway-http": "^0.0.19",
+    "@gemeentenijmegen/aws-constructs": "^0.0.25",
     "@gemeentenijmegen/projen-project-type": "^1.8.4",
-    "@gemeentenijmegen/session": "^0.0.18",
-    "@gemeentenijmegen/utils": "^0.0.20",
+    "@gemeentenijmegen/session": "^0.0.19",
+    "@gemeentenijmegen/utils": "^0.0.21",
     "@pepperize/cdk-route53-health-check": "^0.0.635",
     "@types/mustache": "^4.2.5",
     "aws-cdk-lib": "^2.22.0",
@@ -97,7 +97,7 @@
     "object-mapper": "^6.2.0",
     "openid-client": "^5.7.1",
     "xml2js": "^0.6.2",
-    "zod": "^3.23.8"
+    "zod": "^3.24.0"
   },
   "license": "EUPL-1.2",
   "publishConfig": {
