@@ -53,7 +53,7 @@ export class ContactgegevensRequestHandler {
     }
 
     const user = UserFromSession(session);
-    const openKlantPartij = await this.config.openKlantApi.createNatuurlijkPersoon();
+    const openKlantPartij = await this.config.openKlantApi.createNatuurlijkPersoon(user.userName ?? 'Onbekende gebruiker');
     await this.config.openKlantApi.addPartijIdentificatie(user, openKlantPartij.uuid);
 
     if (params.email) {

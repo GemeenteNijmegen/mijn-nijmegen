@@ -3,7 +3,7 @@ import { User } from '../zaken/User';
 import { OpenKlantDigitaalAdres, OpenKlantDigitaalAdresWithUuid, OpenKlantPartij, OpenKlantPartijIdentificiatie, OpenKlantPartijIdentificiatieWithUuid, OpenKlantPartijWithUuid } from './model/partij';
 
 export interface IOpenKlantAPI {
-  createNatuurlijkPersoon(): Promise<OpenKlantPartijWithUuid>;
+  createNatuurlijkPersoon(naam: string): Promise<OpenKlantPartijWithUuid>;
   addPartijIdentificatie(user: User, partijUuid: string) : Promise<OpenKlantPartijIdentificiatieWithUuid>;
   setDigitaalAdress(user: User, partijUuid: string, type: 'email' | 'telefoonnummer', adres: string) : Promise<OpenKlantDigitaalAdresWithUuid>;
   getPartijWithDigitaleAdresen(user: User) : Promise<OpenKlantPartijWithUuid | undefined>;
@@ -19,7 +19,7 @@ export class OpenklantApi implements IOpenKlantAPI {
     this.apikey = apikey;
   }
 
-  async createNatuurlijkPersoon(): Promise<OpenKlantPartijWithUuid> {
+  async createNatuurlijkPersoon(naam: string): Promise<OpenKlantPartijWithUuid> {
     const input: OpenKlantPartij = {
       soortPartij: 'persoon',
       indicatieActief: true,
@@ -29,6 +29,11 @@ export class OpenklantApi implements IOpenKlantAPI {
       voorkeursDigitaalAdres: null,
       voorkeursRekeningnummer: null,
       voorkeurstaal: 'dut',
+      partijIdentificatie: {
+        contactnaam: naam,
+        naam: naam,
+        volledigeNaam: naam,
+      },
     };
     try {
       const url = new URL(this.endpoint + '/partijen');
@@ -146,7 +151,7 @@ export class OpenKlantAPIMock implements IOpenKlantAPI {
   setDigitaalAdress(_user: User, _partijUuid: string, _type: 'email' | 'telefoonnummer', _adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
     throw Error('This method should be mocked');
   }
-  async createNatuurlijkPersoon(): Promise<OpenKlantPartijWithUuid> {
+  async createNatuurlijkPersoon(_naam: string): Promise<OpenKlantPartijWithUuid> {
     throw Error('This method should be mocked');
   }
   async addPartijIdentificatie(_user: User, _partijUuid: string) : Promise<OpenKlantPartijIdentificiatieWithUuid> {
