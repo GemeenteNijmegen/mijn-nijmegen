@@ -1,11 +1,11 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
+import { IOpenKlantAPI } from './OpenKlantApi';
 import * as template from './templates/contactgegevens.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import { UserFromSession } from '../zaken/User';
-import { IOpenKlantAPI } from './OpenKlantApi';
 
 interface Config {
   readonly dynamoDBClient: DynamoDBClient;
@@ -26,7 +26,7 @@ export class ContactgegevensRequestHandler {
     this.config = config;
   }
 
-  async handleRequest(params: RequestParameters)  : Promise<ApiGatewayV2Response> {
+  async handleRequest(params: RequestParameters) : Promise<ApiGatewayV2Response> {
     let session = new Session(params.cookies, this.config.dynamoDBClient);
     await session.init();
     if (session.isLoggedIn() !== true) {
@@ -57,19 +57,19 @@ export class ContactgegevensRequestHandler {
     const openKlantPartij = await this.config.openKlantApi.createNatuurlijkPersoon();
     await this.config.openKlantApi.addPartijIdentificatie(user, openKlantPartij.uuid);
 
-    if(params.email){
-      this.config.openKlantApi.setDigitaalAdress(user, openKlantPartij.uuid, 'email', params.email);
+    if (params.email) {
+      await this.config.openKlantApi.setDigitaalAdress(user, openKlantPartij.uuid, 'email', params.email);
     } else {
       // Delete telefoonummer if exists
     }
 
-    if(params.telefoonnummer) {
-      this.config.openKlantApi.setDigitaalAdress(user, openKlantPartij.uuid, 'telefoonnummer', params.telefoonnummer);
+    if (params.telefoonnummer) {
+      await this.config.openKlantApi.setDigitaalAdress(user, openKlantPartij.uuid, 'telefoonnummer', params.telefoonnummer);
     } else {
       // Delete telefoonummer if exists
     }
 
-    return Response.redirect('/contactgegevens', 302, session.getCookie())
+    return Response.redirect('/contactgegevens', 302, session.getCookie());
   }
 
   private async handleLoggedinRequest(session: Session) : Promise<ApiGatewayV2Response> {
@@ -80,7 +80,7 @@ export class ContactgegevensRequestHandler {
     console.debug('Found a partij with uuid:', partij?.uuid);
 
     let data: any = {};
-    if(partij){
+    if (partij) {
       data = this.formatOpenKlantResponse(partij);
     }
 

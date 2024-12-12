@@ -1,10 +1,10 @@
-import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from "@aws-sdk/client-dynamodb";
-import { ContactgegevensRequestHandler } from "../ContactgegevensRequestHandler";
-import { IOpenKlantAPI, OpenKlantAPIMock } from "../OpenKlantApi";
-import { randomUUID } from "crypto";
-import { mockClient } from "aws-sdk-client-mock";
-import { OpenKlantPartijWithUuid } from "../model/partij";
-import { User } from "../../zaken/User";
+import { randomUUID } from 'crypto';
+import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
+import { mockClient } from 'aws-sdk-client-mock';
+import { User } from '../../zaken/User';
+import { ContactgegevensRequestHandler } from '../ContactgegevensRequestHandler';
+import { OpenKlantPartijWithUuid } from '../model/partij';
+import { IOpenKlantAPI, OpenKlantAPIMock } from '../OpenKlantApi';
 
 const ddbMock = mockClient(DynamoDBClient);
 const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
@@ -44,7 +44,7 @@ describe('Contactgegevens handler', () => {
       telefoonnummer: '+1234567890',
       xsrf_token: 'abc',
     });
-    expect(response).rejects.toThrow('xsrf_token mismatch!')
+    await expect(response).rejects.toThrow('xsrf_token mismatch!');
   });
 
   test('handle get', async () => {
@@ -65,7 +65,7 @@ describe('Contactgegevens handler', () => {
       method: 'GET',
     });
     expect(response.statusCode).toBe(200);
-    expect(response.body).toMatch("</form>")
+    expect(response.body).toMatch('</form>');
   });
 
   test('check if xsrf token is included', async () => {
@@ -76,13 +76,13 @@ describe('Contactgegevens handler', () => {
       method: 'GET',
     });
     expect(response.statusCode).toBe(200);
-    expect(response.body).toMatch(xsrf_token)
+    expect(response.body).toMatch(xsrf_token);
   });
-  
+
 
 });
 
-function getHandler(openKlantApi?: IOpenKlantAPI){
+function getHandler(openKlantApi?: IOpenKlantAPI) {
   const handler = new ContactgegevensRequestHandler({
     dynamoDBClient,
     openKlantApi: openKlantApi ?? mockOpenKlantApi({}),
@@ -110,8 +110,9 @@ function mockOpenKlantApi(config: {
     } as OpenKlantPartijWithUuid;
   });
   jest.spyOn(openKlantApiMock, 'addPartijIdentificatie').mockImplementation(appendUuid);
+  jest.spyOn(openKlantApiMock, 'setDigitaalAdress').mockImplementation(appendUuid);
   jest.spyOn(openKlantApiMock, 'getPartijWithDigitaleAdresen').mockImplementation(async (user: User) => {
-    if(config.partijNotFound){
+    if (config.partijNotFound) {
       return undefined as unknown as OpenKlantPartijWithUuid; // Type hacking i dont know why
     }
     const partij: OpenKlantPartijWithUuid = {
@@ -125,11 +126,11 @@ function mockOpenKlantApi(config: {
       voorkeursDigitaalAdres: null,
       voorkeursRekeningnummer: null,
       partijIdentificatie: {
-        naam:  user.userName ?? 'username',
+        naam: user.userName ?? 'username',
         volledigeNaam: user.userName ?? 'username',
         contactnaam: null,
-      }
-    }
+      },
+    };
     return partij;
   });
   return openKlantApiMock;
@@ -146,8 +147,8 @@ function setupSessionResponse(loggedin: boolean) {
           state: { S: 'state' },
           user_type: { S: 'person' },
           username: { S: 'username' },
-          xsrf_token: {S: xsrf_token},
-        }
+          xsrf_token: { S: xsrf_token },
+        },
       },
     },
   };

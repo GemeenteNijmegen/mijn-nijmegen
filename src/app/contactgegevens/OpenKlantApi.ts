@@ -98,10 +98,10 @@ export class OpenklantApi implements IOpenKlantAPI {
 
     try {
       const json = await this.callApi('GET', url);
-      if (json.count == 0){
+      if (json.count == 0) {
         return undefined;
       }
-      if(json.count > 1) {
+      if (json.count > 1) {
         throw Error('Multiple partijen found, one expected');
       }
       return json.results[0];
