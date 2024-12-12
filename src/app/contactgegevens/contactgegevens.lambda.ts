@@ -11,7 +11,7 @@ const requestHandler = new ContactgegevensRequestHandler({ dynamoDBClient, openK
 
 function parseEvent(event: APIGatewayProxyEventV2) {
 
-  const formData = new URLSearchParams(event?.body);
+  const formData = new URLSearchParams(decodeBody(event));
 
   return {
     cookies: event?.cookies?.join(';') ?? '',
@@ -32,3 +32,13 @@ exports.handler = async (event: APIGatewayProxyEventV2) => {
     return Response.error(500);
   }
 };
+
+function decodeBody(event: APIGatewayProxyEventV2){
+  if(!event.body){
+    return undefined;
+  }
+  if(!event.isBase64Encoded){
+    return event.body;
+  }
+  return Buffer.from(event.body, 'base64').toString('utf-8');
+}

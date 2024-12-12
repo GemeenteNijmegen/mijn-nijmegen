@@ -48,6 +48,7 @@ export class ContactgegevensRequestHandler {
     // Do a xsrf_token check
     const xsrf = session.getValue('xsrf_token');
     if (xsrf !== params.xsrf_token) {
+      console.debug('XSRF Token mismatch', xsrf, params.xsrf_token);
       throw Error('xsrf_token mismatch!');
     }
 
