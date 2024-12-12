@@ -2,8 +2,13 @@ import { AWS } from '@gemeentenijmegen/utils';
 import { User } from '../zaken/User';
 import { OpenKlantPartij, OpenKlantPartijIdentificiatie, OpenKlantPartijIdentificiatieWithUuid, OpenKlantPartijWithUuid } from './model/partij';
 
+export interface IOpenKlantAPI {
+  createNatuurlijkPersoon(): Promise<OpenKlantPartijWithUuid>;
+  addPartijIdentificatie(user: User, partijUuid: string) : Promise<OpenKlantPartijIdentificiatieWithUuid>;
+  getPartijWithDigitaleAdresen(user: User) : Promise<OpenKlantPartijWithUuid>;
+}
 
-export class OpenklantApi {
+export class OpenklantApi implements IOpenKlantAPI {
 
   private endpoint: string;
   private apikey?: string;
@@ -11,16 +16,6 @@ export class OpenklantApi {
   constructor(endpoint?: string, apikey?: string) {
     this.endpoint = endpoint ? endpoint : process.env.OPENKLANT_API_ENDPOINT!;
     this.apikey = apikey;
-  }
-
-  async getApiKey() {
-    if (!this.apikey) {
-      if (!process.env.OPENKLANT_API_KEY_ARN) {
-        throw Error('Missing OPENKLANT_API_KEY_ARN');
-      }
-      this.apikey = await AWS.getSecret(process.env.OPENKLANT_API_KEY_ARN);
-    }
-    return this.apikey;
   }
 
   async createNatuurlijkPersoon(): Promise<OpenKlantPartijWithUuid> {
@@ -36,7 +31,7 @@ export class OpenklantApi {
     };
     try {
       const url = new URL(this.endpoint + '/partijen');
-      return await this.callApi(url.toString(), input);
+      return await this.callApi('POST', url, input);
     } catch (err) {
       console.error(err);
       throw Error('Could not create partij');
@@ -61,7 +56,7 @@ export class OpenklantApi {
 
     try {
       const url = new URL(this.endpoint + '/partij-identificatie');
-      return await this.callApi(url.toString(), input);
+      return await this.callApi('POST', url, input);
     } catch (err) {
       console.error(err);
       throw Error('Could not create partij');
@@ -69,9 +64,7 @@ export class OpenklantApi {
 
   }
 
-  async getPartijWithDigitaleAdresen(user: User) {
-    console.log('GET', this.endpoint, 'partijen');
-
+  async getPartijWithDigitaleAdresen(user: User) : Promise<OpenKlantPartijWithUuid> {
     const partyIdentifier = user.type == 'person' ? 'Burgerservicenummer' : 'Kvknummer';
 
     const url = new URL(this.endpoint + '/partijen');
@@ -80,7 +73,7 @@ export class OpenklantApi {
     url.searchParams.set('expand', 'digitaleAdressen');
 
     try {
-      const json = await this.callApi(url.toString());
+      const json = await this.callApi('GET', url);
       if (json.count == 0 || json.count > 1) {
         throw Error('Multiple partijen found, one expected');
       }
@@ -93,19 +86,39 @@ export class OpenklantApi {
 
   }
 
-  private async callApi(url: string, data?: any) {
+  private async callApi(method: string, url: URL, data?: any) {
     const response = await fetch(url.toString(), {
-      method: 'POST',
+      method: method,
       headers: {
         Authorization: `Token ${await this.getApiKey()}`,
       },
       body: data ? JSON.stringify(data) : undefined,
     });
-    console.debug('POST to', url.toString(), '-', response.status);
+    console.debug(method, 'to', url.pathname, '-', response.status);
     const json = await response.json() as any;
     return json;
   }
 
+  private async getApiKey() {
+    if (!this.apikey) {
+      if (!process.env.OPENKLANT_API_KEY_ARN) {
+        throw Error('Missing OPENKLANT_API_KEY_ARN');
+      }
+      this.apikey = await AWS.getSecret(process.env.OPENKLANT_API_KEY_ARN);
+    }
+    return this.apikey;
+  }
 
 }
 
+export class OpenKlantAPIMock {
+  async createNatuurlijkPersoon(): Promise<OpenKlantPartijWithUuid> {
+    throw Error('This method should be mocked');
+  }
+  async addPartijIdentificatie(_user: User, _partijUuid: string) : Promise<OpenKlantPartijIdentificiatieWithUuid> {
+    throw Error('This method should be mocked');
+  }
+  async getPartijWithDigitaleAdresen(_user: User) : Promise<OpenKlantPartijWithUuid> {
+    throw Error('This method should be mocked');
+  }
+}

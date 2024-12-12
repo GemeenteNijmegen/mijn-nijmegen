@@ -1,15 +1,15 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
-import { OpenklantApi } from './OpenKlantApi';
 import * as template from './templates/contactgegevens.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import { UserFromSession } from '../zaken/User';
+import { IOpenKlantAPI } from './OpenKlantApi';
 
 interface Config {
   dynamoDBClient: DynamoDBClient;
-  openKlantApi: OpenklantApi;
+  openKlantApi: IOpenKlantAPI;
 }
 
 interface RequestParameters {
