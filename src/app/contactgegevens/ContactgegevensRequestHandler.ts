@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
@@ -18,7 +17,7 @@ interface RequestParameters {
   method: string;
   email?: string;
   telefoonnummer?: string;
-  csrf?: string;
+  xsrf_token?: string;
 }
 
 export class ContactgegevensRequestHandler {
@@ -28,14 +27,9 @@ export class ContactgegevensRequestHandler {
   }
 
   async handleRequest(params: RequestParameters) {
-    console.time('request');
-    console.timeLog('request', 'start request');
-
     let session = new Session(params.cookies, this.config.dynamoDBClient);
     await session.init();
-    console.timeLog('request', 'init session done');
     if (session.isLoggedIn() !== true) {
-      console.timeEnd('request');
       return Response.redirect('/login');
     }
 
@@ -53,10 +47,10 @@ export class ContactgegevensRequestHandler {
 
   private async handleLoggedinPostRequest(session: Session, params: RequestParameters) {
 
-    // Do a CSRF check
-    const csrf = session.getValue('csrf');
-    if (csrf !== params.csrf) {
-      throw Error('CSRF mismatch!');
+    // Do a xsrf_token check
+    const xsrf = session.getValue('xsrf_token');
+    if (xsrf !== params.xsrf_token) {
+      throw Error('xsrf_token mismatch!');
     }
 
     const user = UserFromSession(session);
@@ -77,21 +71,15 @@ export class ContactgegevensRequestHandler {
 
     const user = UserFromSession(session);
 
-    console.time('get-partij');
-    const partij = this.config.openKlantApi.getPartijWithDigitaleAdresen(user);
-    console.timeEnd('get-partij');
+    const partij = await this.config.openKlantApi.getPartijWithDigitaleAdresen(user);
 
     let data: any = this.formatOpenKlantResponse(partij);
-
-    // Set a CSRF token
-    const csrf = randomUUID();
-    await session.updateSession({ csrf });
 
     // Page render basics
     const navigation = new Navigation(user.type, { currentPath: '/contactgegevens' });
     data.nav = navigation.items;
     data.volledigenaam = session.getValue('username');
-    data.csrf = csrf;
+    data.xsrf_token = session.getValue('xsrf_token');
     const html = await this.renderHtml(data);
 
     return Response.html(html, 200, session.getCookie());
