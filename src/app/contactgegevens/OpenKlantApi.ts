@@ -1,11 +1,12 @@
 import { AWS } from '@gemeentenijmegen/utils';
 import { User } from '../zaken/User';
-import { OpenKlantPartij, OpenKlantPartijIdentificiatie, OpenKlantPartijIdentificiatieWithUuid, OpenKlantPartijWithUuid } from './model/partij';
+import { OpenKlantDigitaalAdres, OpenKlantDigitaalAdresWithUuid, OpenKlantPartij, OpenKlantPartijIdentificiatie, OpenKlantPartijIdentificiatieWithUuid, OpenKlantPartijWithUuid } from './model/partij';
 
 export interface IOpenKlantAPI {
   createNatuurlijkPersoon(): Promise<OpenKlantPartijWithUuid>;
   addPartijIdentificatie(user: User, partijUuid: string) : Promise<OpenKlantPartijIdentificiatieWithUuid>;
-  getPartijWithDigitaleAdresen(user: User) : Promise<OpenKlantPartijWithUuid>;
+  setDigitaalAdress(user: User, partijUuid: string, type: 'email' | 'telefoonnummer', adres: string) : Promise<OpenKlantDigitaalAdresWithUuid>;
+  getPartijWithDigitaleAdresen(user: User) : Promise<OpenKlantPartijWithUuid | undefined>;
 }
 
 export class OpenklantApi implements IOpenKlantAPI {
@@ -64,7 +65,30 @@ export class OpenklantApi implements IOpenKlantAPI {
 
   }
 
-  async getPartijWithDigitaleAdresen(user: User) : Promise<OpenKlantPartijWithUuid> {
+  async setDigitaalAdress(user: User, partijUuid: string, type: 'email' | 'telefoonnummer', adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
+
+    if (user.type != 'person') {
+      throw Error('Only persons supported for now!');
+    }
+
+    const input: OpenKlantDigitaalAdres = {
+      verstrektDoorPartij: { uuid: partijUuid },
+      verstrektDoorBetrokkene: null,
+      soortDigitaalAdres: type,
+      adres: adres,
+      omschrijving: type,
+    };
+
+    try {
+      const url = new URL(this.endpoint + '/digitaleadressen');
+      return await this.callApi('POST', url, input);
+    } catch (err) {
+      console.error(err);
+      throw Error('Could not digitaal adress');
+    }
+  }
+
+  async getPartijWithDigitaleAdresen(user: User) : Promise<OpenKlantPartijWithUuid | undefined> {
     const partyIdentifier = user.type == 'person' ? 'Burgerservicenummer' : 'Kvknummer';
 
     const url = new URL(this.endpoint + '/partijen');
@@ -74,7 +98,10 @@ export class OpenklantApi implements IOpenKlantAPI {
 
     try {
       const json = await this.callApi('GET', url);
-      if (json.count == 0 || json.count > 1) {
+      if (json.count == 0){
+        return undefined;
+      }
+      if(json.count > 1) {
         throw Error('Multiple partijen found, one expected');
       }
       return json.results[0];
@@ -111,7 +138,10 @@ export class OpenklantApi implements IOpenKlantAPI {
 
 }
 
-export class OpenKlantAPIMock {
+export class OpenKlantAPIMock implements IOpenKlantAPI {
+  setDigitaalAdress(_user: User, _partijUuid: string, _type: 'email' | 'telefoonnummer', _adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
+    throw Error('This method should be mocked');
+  }
   async createNatuurlijkPersoon(): Promise<OpenKlantPartijWithUuid> {
     throw Error('This method should be mocked');
   }

@@ -1,5 +1,5 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
+import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import * as template from './templates/contactgegevens.mustache';
 import { Navigation } from '../../shared/Navigation';
@@ -8,8 +8,8 @@ import { UserFromSession } from '../zaken/User';
 import { IOpenKlantAPI } from './OpenKlantApi';
 
 interface Config {
-  dynamoDBClient: DynamoDBClient;
-  openKlantApi: IOpenKlantAPI;
+  readonly dynamoDBClient: DynamoDBClient;
+  readonly openKlantApi: IOpenKlantAPI;
 }
 
 interface RequestParameters {
@@ -21,12 +21,12 @@ interface RequestParameters {
 }
 
 export class ContactgegevensRequestHandler {
-  private config: Config;
+  readonly config: Config;
   constructor(config: Config) {
     this.config = config;
   }
 
-  async handleRequest(params: RequestParameters) {
+  async handleRequest(params: RequestParameters)  : Promise<ApiGatewayV2Response> {
     let session = new Session(params.cookies, this.config.dynamoDBClient);
     await session.init();
     if (session.isLoggedIn() !== true) {
@@ -45,7 +45,7 @@ export class ContactgegevensRequestHandler {
 
   }
 
-  private async handleLoggedinPostRequest(session: Session, params: RequestParameters) {
+  private async handleLoggedinPostRequest(session: Session, params: RequestParameters): Promise<ApiGatewayV2Response> {
 
     // Do a xsrf_token check
     const xsrf = session.getValue('xsrf_token');
@@ -57,23 +57,32 @@ export class ContactgegevensRequestHandler {
     const openKlantPartij = await this.config.openKlantApi.createNatuurlijkPersoon();
     await this.config.openKlantApi.addPartijIdentificatie(user, openKlantPartij.uuid);
 
-    // if(params.email){
-    //   const openKlantEmail = this.config.openKlantApi.addDigitaalAddress('email', params.email, openKlantPartij.uuid);
-    // }
+    if(params.email){
+      this.config.openKlantApi.setDigitaalAdress(user, openKlantPartij.uuid, 'email', params.email);
+    } else {
+      // Delete telefoonummer if exists
+    }
 
-    // if(params.telefoonnummer) {
-    //   const openKlantTelefoonnummer = this.config.openKlantApi.addDigitaalAddress('telefoonnummer', params.telefoonnummer, openKlantPartij.uuid);
-    // }
+    if(params.telefoonnummer) {
+      this.config.openKlantApi.setDigitaalAdress(user, openKlantPartij.uuid, 'telefoonnummer', params.telefoonnummer);
+    } else {
+      // Delete telefoonummer if exists
+    }
 
+    return Response.redirect('/contactgegevens', 302, session.getCookie())
   }
 
-  private async handleLoggedinRequest(session: Session) {
+  private async handleLoggedinRequest(session: Session) : Promise<ApiGatewayV2Response> {
 
     const user = UserFromSession(session);
 
     const partij = await this.config.openKlantApi.getPartijWithDigitaleAdresen(user);
+    console.debug('Found a partij with uuid:', partij?.uuid);
 
-    let data: any = this.formatOpenKlantResponse(partij);
+    let data: any = {};
+    if(partij){
+      data = this.formatOpenKlantResponse(partij);
+    }
 
     // Page render basics
     const navigation = new Navigation(user.type, { currentPath: '/contactgegevens' });
@@ -95,7 +104,6 @@ export class ContactgegevensRequestHandler {
   }
 
   private formatOpenKlantResponse(partij: any) {
-    console.debug(JSON.stringify(partij));
     const email = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'email');
     const telefoonnummer = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'telefoonnummer');
     return {
