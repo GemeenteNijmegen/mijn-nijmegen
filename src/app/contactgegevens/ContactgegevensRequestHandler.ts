@@ -35,11 +35,9 @@ export class ContactgegevensRequestHandler {
 
     if (params.method == 'POST') {
       const response = await this.handleLoggedinPostRequest(session, params);
-      console.timeEnd('request');
       return response;
     } else {
       const response = await this.handleLoggedinRequest(session);
-      console.timeEnd('request');
       return response;
     }
 
@@ -77,11 +75,13 @@ export class ContactgegevensRequestHandler {
     const user = UserFromSession(session);
 
     const partij = await this.config.openKlantApi.getPartijWithDigitaleAdresen(user);
-    console.debug('Found a partij with uuid:', partij?.uuid);
-
+    
     let data: any = {};
     if (partij) {
+      console.debug('Found a partij with uuid:', partij.uuid);
       data = this.formatOpenKlantResponse(partij);
+    } else {
+      console.log('Did not find a partij.')
     }
 
     // Page render basics
@@ -104,8 +104,9 @@ export class ContactgegevensRequestHandler {
   }
 
   private formatOpenKlantResponse(partij: any) {
-    const email = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'email');
-    const telefoonnummer = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'telefoonnummer');
+    console.debug('Formattting data render', JSON.stringify(partij));
+    const email = partij?._expand?.digitale_adressen?.find((adres: any) => adres.soortDigitaalAdres == 'email');
+    const telefoonnummer = partij?._expand?.digitale_adressen?.find((adres: any) => adres.soortDigitaalAdres == 'telefoonnummer');
     return {
       email: email ? email.adres : undefined,
       telefoonnummer: telefoonnummer ? telefoonnummer.adres : undefined,

@@ -10,6 +10,9 @@ const ddbMock = mockClient(DynamoDBClient);
 const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
 
 const xsrf_token = randomUUID();
+const exampleEmail = 'test@example.com';
+const examplePhone = '+316123456';
+
 
 describe('Contactgegevens handler', () => {
 
@@ -57,6 +60,18 @@ describe('Contactgegevens handler', () => {
     expect(response.statusCode).toBe(200);
   });
 
+  test('prefill data if partij found', async () => {
+    setupSessionResponse(true);
+    const handler = getHandler();
+    const response = await handler.handleRequest({
+      cookies: 'session=123;',
+      method: 'GET',
+    });
+    expect(response.body).toMatch(exampleEmail);
+    expect(response.body).toMatch(examplePhone);
+    expect(response.statusCode).toBe(200);
+  });
+
   test('handle partij not found renders form', async () => {
     setupSessionResponse(true);
     const handler = getHandler(mockOpenKlantApi({ partijNotFound: true }));
@@ -93,6 +108,7 @@ function getHandler(openKlantApi?: IOpenKlantAPI) {
 
 function mockOpenKlantApi(config: {
   partijNotFound?: boolean;
+  includeDigitaleAdressen?: boolean;
 }) {
   const openKlantApiMock = new OpenKlantAPIMock();
   const appendUuid = (obj: any) => Promise.resolve({ uuid: randomUUID(), ...obj });
@@ -130,6 +146,24 @@ function mockOpenKlantApi(config: {
         volledigeNaam: user.userName ?? 'username',
         contactnaam: null,
       },
+      _expand: {
+        digitale_adressen: [
+          {
+            adres: exampleEmail,
+            omschrijving: 'email',
+            soortDigitaalAdres: 'email',
+            uuid: randomUUID(),
+            url: 'https://example.com',
+          },
+          {
+            adres: examplePhone,
+            omschrijving: 'telefoonnummer',
+            soortDigitaalAdres: 'telefoonnummer',
+            uuid: randomUUID(),
+            url: 'https://example.com',
+          }
+        ]
+      }
     };
     return partij;
   });
