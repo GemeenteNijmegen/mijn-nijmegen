@@ -56,7 +56,7 @@ export class OpenklantApi implements IOpenKlantAPI {
     };
 
     try {
-      const url = new URL(this.endpoint + '/partij-identificatie');
+      const url = new URL(this.endpoint + '/partij-identificatoren');
       return await this.callApi('POST', url, input);
     } catch (err) {
       console.error(err);
@@ -117,7 +117,8 @@ export class OpenklantApi implements IOpenKlantAPI {
     const response = await fetch(url.toString(), {
       method: method,
       headers: {
-        Authorization: `Token ${await this.getApiKey()}`,
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${await this.getApiKey()}`,
       },
       body: data ? JSON.stringify(data) : undefined,
     });
