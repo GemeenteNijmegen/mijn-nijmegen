@@ -40,27 +40,29 @@ describe('Contactgegevens handler', () => {
   test('handle invalid phone number', async () => {
     setupSessionResponse(true);
     const handler = getHandler();
-    const response = handler.handleRequest({
+    const response = await handler.handleRequest({
       cookies: 'session=123;',
       method: 'POST',
       email: undefined,
       telefoonnummer: 'abc',
       xsrf_token: xsrf_token,
     });
-    await expect(response).rejects.toThrow('Invalid telefoonnummer');
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toMatch('name="telefoonnummer" class="form-control is-invalid"');
   });
 
   test('handle invalid email', async () => {
     setupSessionResponse(true);
     const handler = getHandler();
-    const response = handler.handleRequest({
+    const response = await handler.handleRequest({
       cookies: 'session=123;',
       method: 'POST',
       email: 'test@example',
       telefoonnummer: undefined,
       xsrf_token: xsrf_token,
     });
-    await expect(response).rejects.toThrow('Invalid email');
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toMatch('name="email" class="form-control is-invalid"');
   });
 
   test('handle no existing party post', async () => {

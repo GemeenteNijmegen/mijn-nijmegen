@@ -7,7 +7,7 @@ import { OpenKlantLogic } from './OpenKlantLogic';
 import * as template from './templates/contactgegevens.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
-import { UserFromSession } from '../zaken/User';
+import { User, UserFromSession } from '../zaken/User';
 
 interface Config {
   readonly dynamoDBClient: DynamoDBClient;
@@ -20,6 +20,7 @@ interface RequestParameters {
   email?: string;
   telefoonnummer?: string;
   xsrf_token?: string;
+  error?: string[];
 }
 
 export class ContactgegevensRequestHandler {
@@ -54,19 +55,24 @@ export class ContactgegevensRequestHandler {
       throw Error('xsrf_token mismatch!');
     }
 
-    // Do input validation
+    const user = UserFromSession(session);
+
+    // Do input validation & redirect on errors
+    const errors: string[] = [];
     if (params.email && !validator.isEmail(params.email)) {
-      throw Error('Invalid email');
+      errors.push('email');
     }
     if (params.telefoonnummer && !validator.isMobilePhone(params.telefoonnummer)) {
-      throw Error('Invalid telefoonnummer');
+      errors.push('telefoonnummer');
+    }
+    if (errors.length != 0) {
+      const html = await this.renderPage(session, user, params.email, params.telefoonnummer, errors);
+      return Response.html(html, 200, session.getCookie());
     }
 
     const openKlantCaller = new OpenKlantLogic({
       openKlantApi: this.config.openKlantApi,
     });
-
-    const user = UserFromSession(session);
 
     if (user.type == 'person') {
       await openKlantCaller.updateContactgegevensNatuurlijkPersoon(user, params.email, params.telefoonnummer);
@@ -83,22 +89,32 @@ export class ContactgegevensRequestHandler {
 
     const partij = await this.config.openKlantApi.getPartijWithDigitaleAdresen(user);
 
-    let data: any = {};
     if (partij) {
       console.debug('Found a partij with uuid:', partij.uuid);
-      data = this.formatOpenKlantResponse(partij);
     } else {
       console.log('Did not find a partij.');
     }
 
+    const data = this.formatOpenKlantResponse(partij);
+    const html = await this.renderPage(session, user, data.email, data.telefoonnummer);
+    return Response.html(html, 200, session.getCookie());
+  }
+
+  async renderPage(session: Session, user: User, email?: string, telefoonnummer?: string, errors?: string[]) {
+
     // Page render basics
     const navigation = new Navigation(user.type, { currentPath: '/contactgegevens' });
-    data.nav = navigation.items;
-    data.volledigenaam = session.getValue('username');
-    data.xsrf_token = session.getValue('xsrf_token');
+    const data: any = {
+      nav: navigation.items,
+      volledigenaam: session.getValue('username'),
+      xsrf_token: session.getValue('xsrf_token'),
+      email: email,
+      emailError: errors?.includes('email'),
+      telefoonnummer: telefoonnummer,
+      telefoonnummerError: errors?.includes('telefoonnummer'),
+    };
     const html = await this.renderHtml(data);
-
-    return Response.html(html, 200, session.getCookie());
+    return html;
   }
 
   async renderHtml(data: any) {
