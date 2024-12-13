@@ -38,6 +38,32 @@ describe('Contactgegevens handler', () => {
     expect(response.statusCode).toBe(302);
   });
 
+  test('handle invalid phone number', async () => {
+    setupSessionResponse(true);
+    const handler = getHandler();
+    const response = handler.handleRequest({
+      cookies: 'session=123;',
+      method: 'POST',
+      email: undefined,
+      telefoonnummer: 'abc',
+      xsrf_token: xsrf_token,
+    });
+    await expect(response).rejects.toThrow('Invalid telefoonnummer');
+  });
+
+  test('handle invalid email', async () => {
+    setupSessionResponse(true);
+    const handler = getHandler();
+    const response = handler.handleRequest({
+      cookies: 'session=123;',
+      method: 'POST',
+      email: 'test@example',
+      telefoonnummer: undefined,
+      xsrf_token: xsrf_token,
+    });
+    await expect(response).rejects.toThrow('Invalid email');
+  });
+
   test('handle no existing party post', async () => {
     setupSessionResponse(true);
     const handler = getHandler(mockOpenKlantApi({

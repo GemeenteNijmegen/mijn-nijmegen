@@ -7,6 +7,7 @@ import * as template from './templates/contactgegevens.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import { UserFromSession } from '../zaken/User';
+import * as validator from 'validator';
 
 interface Config {
   readonly dynamoDBClient: DynamoDBClient;
@@ -51,6 +52,14 @@ export class ContactgegevensRequestHandler {
     if (xsrf !== params.xsrf_token) {
       console.debug('XSRF Token mismatch', xsrf, params.xsrf_token);
       throw Error('xsrf_token mismatch!');
+    }
+
+    // Do input validation
+    if(params.email && !validator.isEmail(params.email)){
+      throw Error('Invalid email');
+    }
+    if(params.telefoonnummer && !validator.isMobilePhone(params.telefoonnummer)){
+      throw Error('Invalid telefoonnummer');
     }
 
     const openKlantCaller = new OpenKlantLogic({

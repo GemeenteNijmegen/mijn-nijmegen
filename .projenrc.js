@@ -35,8 +35,10 @@ const project = new GemeenteNijmegenCdkApp({
     'xml2js',
     'jsonwebtoken',
     'zod',
+    'validator'
   ], /* Runtime dependencies of this module. */
   devDeps: [
+    '@types/validator',
     '@types/aws-lambda',
     '@aws-sdk/types',
     '@aws-sdk/client-ssm',

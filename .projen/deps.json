@@ -34,6 +34,10 @@
       "type": "build"
     },
     {
+      "name": "@types/validator",
+      "type": "build"
+    },
+    {
       "name": "@typescript-eslint/eslint-plugin",
       "version": "^8",
       "type": "build"
@@ -199,6 +203,10 @@
     },
     {
       "name": "openid-client",
+      "type": "runtime"
+    },
+    {
+      "name": "validator",
       "type": "runtime"
     },
     {
