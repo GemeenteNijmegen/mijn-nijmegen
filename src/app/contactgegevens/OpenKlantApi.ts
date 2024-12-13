@@ -5,7 +5,9 @@ import { OpenKlantDigitaalAdres, OpenKlantDigitaalAdresWithUuid, OpenKlantPartij
 export interface IOpenKlantAPI {
   createNatuurlijkPersoon(naam: string): Promise<OpenKlantPartijWithUuid>;
   addPartijIdentificatie(user: User, partijUuid: string) : Promise<OpenKlantPartijIdentificiatieWithUuid>;
-  setDigitaalAdress(user: User, partijUuid: string, type: 'email' | 'telefoonnummer', adres: string) : Promise<OpenKlantDigitaalAdresWithUuid>;
+  createDigitaalAdress(partijUuid: string, type: 'email' | 'telefoonnummer', adres: string) : Promise<OpenKlantDigitaalAdresWithUuid>;
+  updateDigitaalAdress(uuid: string, adres: string) : Promise<OpenKlantDigitaalAdresWithUuid>;
+  deleteDigitaalAdress(uuid: string) : Promise<OpenKlantDigitaalAdresWithUuid>;
   getPartijWithDigitaleAdresen(user: User) : Promise<OpenKlantPartijWithUuid | undefined>;
 }
 
@@ -18,6 +20,7 @@ export class OpenklantApi implements IOpenKlantAPI {
     this.endpoint = endpoint ? endpoint : process.env.OPENKLANT_API_ENDPOINT!;
     this.apikey = apikey;
   }
+
 
   async createNatuurlijkPersoon(naam: string): Promise<OpenKlantPartijWithUuid> {
     const input: OpenKlantPartij = {
@@ -70,12 +73,7 @@ export class OpenklantApi implements IOpenKlantAPI {
 
   }
 
-  async setDigitaalAdress(user: User, partijUuid: string, type: 'email' | 'telefoonnummer', adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
-
-    if (user.type != 'person') {
-      throw Error('Only persons supported for now!');
-    }
-
+  async createDigitaalAdress(partijUuid: string, type: 'email' | 'telefoonnummer', adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
     const input: OpenKlantDigitaalAdres = {
       verstrektDoorPartij: { uuid: partijUuid },
       verstrektDoorBetrokkene: null,
@@ -90,6 +88,26 @@ export class OpenklantApi implements IOpenKlantAPI {
     } catch (err) {
       console.error(err);
       throw Error('Could not digitaal adress');
+    }
+  }
+
+  async updateDigitaalAdress(uuid: string, adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
+    try {
+      const url = new URL(this.endpoint + '/digitaleadressen');
+      return await this.callApi('PATCH', url, { uuid, adres });
+    } catch (err) {
+      console.error(err);
+      throw Error('Could not update digitaal adres');
+    }
+  }
+
+  async deleteDigitaalAdress(uuid: string): Promise<OpenKlantDigitaalAdresWithUuid> {
+    try {
+      const url = new URL(this.endpoint + '/digitaleadressen');
+      return await this.callApi('DELETEW', url, { uuid });
+    } catch (err) {
+      console.error(err);
+      throw Error('Could not delete digitaal adres');
     }
   }
 
@@ -148,7 +166,13 @@ export class OpenklantApi implements IOpenKlantAPI {
 }
 
 export class OpenKlantAPIMock implements IOpenKlantAPI {
-  setDigitaalAdress(_user: User, _partijUuid: string, _type: 'email' | 'telefoonnummer', _adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
+  updateDigitaalAdress(_uuid: string, _adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
+    throw Error('This method should be mocked');
+  }
+  deleteDigitaalAdress(_uuid: string): Promise<OpenKlantDigitaalAdresWithUuid> {
+    throw Error('This method should be mocked');
+  }
+  createDigitaalAdress(_partijUuid: string, _type: 'email' | 'telefoonnummer', _adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
     throw Error('This method should be mocked');
   }
   async createNatuurlijkPersoon(_naam: string): Promise<OpenKlantPartijWithUuid> {

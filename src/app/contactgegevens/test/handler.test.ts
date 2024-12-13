@@ -34,7 +34,7 @@ describe('Contactgegevens handler', () => {
     expect(handler.config.openKlantApi.getPartijWithDigitaleAdresen).toHaveBeenCalledTimes(1);
     expect(handler.config.openKlantApi.createNatuurlijkPersoon).toHaveBeenCalledTimes(0);
     expect(handler.config.openKlantApi.addPartijIdentificatie).toHaveBeenCalledTimes(0);
-    expect(handler.config.openKlantApi.setDigitaalAdress).toHaveBeenCalledTimes(2);
+    expect(handler.config.openKlantApi.updateDigitaalAdress).toHaveBeenCalledTimes(2);
     expect(response.statusCode).toBe(302);
   });
 
@@ -53,7 +53,7 @@ describe('Contactgegevens handler', () => {
     expect(handler.config.openKlantApi.getPartijWithDigitaleAdresen).toHaveBeenCalledTimes(1);
     expect(handler.config.openKlantApi.createNatuurlijkPersoon).toHaveBeenCalledTimes(1);
     expect(handler.config.openKlantApi.addPartijIdentificatie).toHaveBeenCalledTimes(1);
-    expect(handler.config.openKlantApi.setDigitaalAdress).toHaveBeenCalledTimes(2);
+    expect(handler.config.openKlantApi.createDigitaalAdress).toHaveBeenCalledTimes(2);
     expect(response.statusCode).toBe(302);
   });
 
@@ -146,7 +146,9 @@ function mockOpenKlantApi(config: {
     } as OpenKlantPartijWithUuid;
   });
   jest.spyOn(openKlantApiMock, 'addPartijIdentificatie').mockImplementation(appendUuid);
-  jest.spyOn(openKlantApiMock, 'setDigitaalAdress').mockImplementation(appendUuid);
+  jest.spyOn(openKlantApiMock, 'createDigitaalAdress').mockImplementation(appendUuid);
+  jest.spyOn(openKlantApiMock, 'updateDigitaalAdress').mockImplementation(appendUuid);
+  jest.spyOn(openKlantApiMock, 'deleteDigitaalAdress').mockImplementation(jest.fn());
   jest.spyOn(openKlantApiMock, 'getPartijWithDigitaleAdresen').mockImplementation(async (user: User) => {
     if (config.partijNotFound) {
       return undefined as unknown as OpenKlantPartijWithUuid; // Type hacking i dont know why

@@ -2,11 +2,11 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { IOpenKlantAPI } from './OpenKlantApi';
+import { OpenKlantLogic } from './OpenKlantLogic';
 import * as template from './templates/contactgegevens.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import { UserFromSession } from '../zaken/User';
-import { OpenKlantLogic } from './OpenKlantLogic';
 
 interface Config {
   readonly dynamoDBClient: DynamoDBClient;
@@ -54,12 +54,12 @@ export class ContactgegevensRequestHandler {
     }
 
     const openKlantCaller = new OpenKlantLogic({
-      openKlantApi: this.config.openKlantApi
+      openKlantApi: this.config.openKlantApi,
     });
 
     const user = UserFromSession(session);
 
-    if(user.type == 'person'){
+    if (user.type == 'person') {
       await openKlantCaller.updateContactgegevensNatuurlijkPersoon(user, params.email, params.telefoonnummer);
     } else {
       throw Error('Beheren van contactgegevens voor een organisatie is nog niet geimplementeerd');
