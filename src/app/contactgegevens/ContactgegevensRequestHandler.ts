@@ -6,6 +6,7 @@ import * as template from './templates/contactgegevens.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import { UserFromSession } from '../zaken/User';
+import { OpenKlantLogic } from './OpenKlantLogic';
 
 interface Config {
   readonly dynamoDBClient: DynamoDBClient;
@@ -52,26 +53,16 @@ export class ContactgegevensRequestHandler {
       throw Error('xsrf_token mismatch!');
     }
 
+    const openKlantCaller = new OpenKlantLogic({
+      openKlantApi: this.config.openKlantApi
+    });
+
     const user = UserFromSession(session);
 
-    let openKlantPartij = await this.config.openKlantApi.getPartijWithDigitaleAdresen(user);
-
-    // Create the partij if it does not exist yet
-    if (!openKlantPartij) {
-      openKlantPartij = await this.config.openKlantApi.createNatuurlijkPersoon(user.userName ?? 'Onbekende gebruiker');
-      await this.config.openKlantApi.addPartijIdentificatie(user, openKlantPartij.uuid);
-    }
-
-    if (params.email) {
-      await this.config.openKlantApi.setDigitaalAdress(user, openKlantPartij.uuid, 'email', params.email);
+    if(user.type == 'person'){
+      await openKlantCaller.updateContactgegevensNatuurlijkPersoon(user, params.email, params.telefoonnummer);
     } else {
-      // Delete telefoonummer if exists
-    }
-
-    if (params.telefoonnummer) {
-      await this.config.openKlantApi.setDigitaalAdress(user, openKlantPartij.uuid, 'telefoonnummer', params.telefoonnummer);
-    } else {
-      // Delete telefoonummer if exists
+      throw Error('Beheren van contactgegevens voor een organisatie is nog niet geimplementeerd');
     }
 
     return Response.redirect('/contactgegevens', 302, session.getCookie());
