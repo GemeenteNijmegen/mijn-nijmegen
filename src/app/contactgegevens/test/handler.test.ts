@@ -31,6 +31,26 @@ describe('Contactgegevens handler', () => {
       telefoonnummer: '+1234567890',
       xsrf_token: xsrf_token,
     });
+    expect(handler.config.openKlantApi.getPartijWithDigitaleAdresen).toHaveBeenCalledTimes(1);
+    expect(handler.config.openKlantApi.createNatuurlijkPersoon).toHaveBeenCalledTimes(0);
+    expect(handler.config.openKlantApi.addPartijIdentificatie).toHaveBeenCalledTimes(0);
+    expect(handler.config.openKlantApi.setDigitaalAdress).toHaveBeenCalledTimes(2);
+    expect(response.statusCode).toBe(302);
+  });
+
+  test('handle no existing party post', async () => {
+    setupSessionResponse(true);
+    const handler = getHandler(mockOpenKlantApi({
+      partijNotFound: true,
+    }));
+    const response = await handler.handleRequest({
+      cookies: 'session=123;',
+      method: 'POST',
+      email: 'test@example.com',
+      telefoonnummer: '+1234567890',
+      xsrf_token: xsrf_token,
+    });
+    expect(handler.config.openKlantApi.getPartijWithDigitaleAdresen).toHaveBeenCalledTimes(1);
     expect(handler.config.openKlantApi.createNatuurlijkPersoon).toHaveBeenCalledTimes(1);
     expect(handler.config.openKlantApi.addPartijIdentificatie).toHaveBeenCalledTimes(1);
     expect(handler.config.openKlantApi.setDigitaalAdress).toHaveBeenCalledTimes(2);
@@ -147,7 +167,7 @@ function mockOpenKlantApi(config: {
         contactnaam: null,
       },
       _expand: {
-        digitale_adressen: [
+        digitaleAdressen: [
           {
             adres: exampleEmail,
             omschrijving: 'email',
@@ -161,9 +181,9 @@ function mockOpenKlantApi(config: {
             soortDigitaalAdres: 'telefoonnummer',
             uuid: randomUUID(),
             url: 'https://example.com',
-          }
-        ]
-      }
+          },
+        ],
+      },
     };
     return partij;
   });

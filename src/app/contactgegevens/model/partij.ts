@@ -36,7 +36,7 @@ export const OpenKlantPartijSchema = z.object({
   ]).optional(),
   indicatieGeheimhouding: z.boolean(),
   _expand: z.object({
-    digitale_adressen: z.array(
+    digitaleAdressen: z.array(
       z.object({
         uuid: z.string(),
         url: z.string(),

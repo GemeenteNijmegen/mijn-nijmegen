@@ -128,7 +128,7 @@ export class OpenklantApi implements IOpenKlantAPI {
       body: data ? JSON.stringify(data) : undefined,
     });
     console.debug(method, 'to', url.pathname, '-', response.status);
-    if(!response.ok){
+    if (!response.ok) {
       console.debug('Received response', await response.text());
     }
     const json = await response.json() as any;

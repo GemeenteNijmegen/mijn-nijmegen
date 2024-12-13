@@ -33,11 +33,11 @@ exports.handler = async (event: APIGatewayProxyEventV2) => {
   }
 };
 
-function decodeBody(event: APIGatewayProxyEventV2){
-  if(!event.body){
+function decodeBody(event: APIGatewayProxyEventV2) {
+  if (!event.body) {
     return undefined;
   }
-  if(!event.isBase64Encoded){
+  if (!event.isBase64Encoded) {
     return event.body;
   }
   return Buffer.from(event.body, 'base64').toString('utf-8');

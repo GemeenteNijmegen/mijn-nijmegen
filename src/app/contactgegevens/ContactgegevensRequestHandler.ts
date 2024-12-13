@@ -57,7 +57,7 @@ export class ContactgegevensRequestHandler {
     let openKlantPartij = await this.config.openKlantApi.getPartijWithDigitaleAdresen(user);
 
     // Create the partij if it does not exist yet
-    if(!openKlantPartij){
+    if (!openKlantPartij) {
       openKlantPartij = await this.config.openKlantApi.createNatuurlijkPersoon(user.userName ?? 'Onbekende gebruiker');
       await this.config.openKlantApi.addPartijIdentificatie(user, openKlantPartij.uuid);
     }
@@ -82,13 +82,13 @@ export class ContactgegevensRequestHandler {
     const user = UserFromSession(session);
 
     const partij = await this.config.openKlantApi.getPartijWithDigitaleAdresen(user);
-    
+
     let data: any = {};
     if (partij) {
       console.debug('Found a partij with uuid:', partij.uuid);
       data = this.formatOpenKlantResponse(partij);
     } else {
-      console.log('Did not find a partij.')
+      console.log('Did not find a partij.');
     }
 
     // Page render basics
@@ -112,8 +112,8 @@ export class ContactgegevensRequestHandler {
 
   private formatOpenKlantResponse(partij: any) {
     console.debug('Formattting data render', JSON.stringify(partij));
-    const email = partij?._expand?.digitale_adressen?.find((adres: any) => adres.soortDigitaalAdres == 'email');
-    const telefoonnummer = partij?._expand?.digitale_adressen?.find((adres: any) => adres.soortDigitaalAdres == 'telefoonnummer');
+    const email = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'email');
+    const telefoonnummer = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'telefoonnummer');
     return {
       email: email ? email.adres : undefined,
       telefoonnummer: telefoonnummer ? telefoonnummer.adres : undefined,
