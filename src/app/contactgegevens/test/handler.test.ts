@@ -11,8 +11,7 @@ const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
 
 const xsrf_token = randomUUID();
 const exampleEmail = 'test@example.com';
-const examplePhone = '+316123456';
-
+const examplePhone = '+31612121123';
 
 describe('Contactgegevens handler', () => {
 
@@ -28,7 +27,7 @@ describe('Contactgegevens handler', () => {
       cookies: 'session=123;',
       method: 'POST',
       email: 'test@example.com',
-      telefoonnummer: '+1234567890',
+      telefoonnummer: examplePhone,
       xsrf_token: xsrf_token,
     });
     expect(handler.config.openKlantApi.getPartijWithDigitaleAdresen).toHaveBeenCalledTimes(1);
@@ -73,7 +72,7 @@ describe('Contactgegevens handler', () => {
       cookies: 'session=123;',
       method: 'POST',
       email: 'test@example.com',
-      telefoonnummer: '+1234567890',
+      telefoonnummer: examplePhone,
       xsrf_token: xsrf_token,
     });
     expect(handler.config.openKlantApi.getPartijWithDigitaleAdresen).toHaveBeenCalledTimes(1);
@@ -90,7 +89,7 @@ describe('Contactgegevens handler', () => {
       cookies: 'session=123;',
       method: 'POST',
       email: 'test@example.com',
-      telefoonnummer: '+1234567890',
+      telefoonnummer: examplePhone,
       xsrf_token: 'abc',
     });
     await expect(response).rejects.toThrow('xsrf_token mismatch!');
