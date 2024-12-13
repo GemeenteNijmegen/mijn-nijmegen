@@ -80,6 +80,7 @@ export class ContactgegevensRequestHandler {
       throw Error('Beheren van contactgegevens voor een organisatie is nog niet geimplementeerd');
     }
 
+    // Do a redirect so we load the actual stored data from open klant.
     return Response.redirect('/contactgegevens', 302, session.getCookie());
   }
 

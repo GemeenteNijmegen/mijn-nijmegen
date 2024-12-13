@@ -1,5 +1,6 @@
 
 import { z } from 'zod';
+import { queryResponse } from './Query';
 
 const uuidSchema = z.object({ uuid: z.string() });
 
@@ -64,6 +65,16 @@ export type OpenKlantPartij = z.infer<typeof OpenKlantPartijSchema>;
  * A OpenKlant 2.0 Partij (API response includes uuid)
  */
 export type OpenKlantPartijWithUuid = z.infer<typeof OpenKlantPartijSchemaWithUuid>;
+
+/**
+ * Query for partijen
+ */
+export const QueryResponseOpenKlantPartijSchemaWithUuid = queryResponse(OpenKlantPartijSchemaWithUuid);
+
+/**
+ * Query type for partijen
+ */
+export type QueryOpenKlantPartijWithUuid = z.infer<typeof QueryResponseOpenKlantPartijSchemaWithUuid>;
 
 
 /**

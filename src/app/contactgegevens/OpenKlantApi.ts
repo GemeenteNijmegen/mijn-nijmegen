@@ -1,13 +1,13 @@
 import { AWS } from '@gemeentenijmegen/utils';
 import { User } from '../zaken/User';
-import { OpenKlantDigitaalAdres, OpenKlantDigitaalAdresWithUuid, OpenKlantPartij, OpenKlantPartijIdentificiatie, OpenKlantPartijIdentificiatieWithUuid, OpenKlantPartijWithUuid } from './model/partij';
+import { OpenKlantDigitaalAdres, OpenKlantDigitaalAdresWithUuid, OpenKlantPartij, OpenKlantPartijIdentificiatie, OpenKlantPartijIdentificiatieWithUuid, OpenKlantPartijWithUuid, QueryOpenKlantPartijWithUuid } from './model/partij';
 
 export interface IOpenKlantAPI {
   createNatuurlijkPersoon(naam: string): Promise<OpenKlantPartijWithUuid>;
   addPartijIdentificatie(user: User, partijUuid: string) : Promise<OpenKlantPartijIdentificiatieWithUuid>;
   createDigitaalAdress(partijUuid: string, type: 'email' | 'telefoonnummer', adres: string) : Promise<OpenKlantDigitaalAdresWithUuid>;
   updateDigitaalAdress(uuid: string, adres: string) : Promise<OpenKlantDigitaalAdresWithUuid>;
-  deleteDigitaalAdress(uuid: string) : Promise<OpenKlantDigitaalAdresWithUuid>;
+  deleteDigitaalAdress(uuid: string) : Promise<void>;
   getPartijWithDigitaleAdresen(user: User) : Promise<OpenKlantPartijWithUuid | undefined>;
 }
 
@@ -101,10 +101,10 @@ export class OpenklantApi implements IOpenKlantAPI {
     }
   }
 
-  async deleteDigitaalAdress(uuid: string): Promise<OpenKlantDigitaalAdresWithUuid> {
+  async deleteDigitaalAdress(uuid: string) {
     try {
       const url = new URL(this.endpoint + `/digitaleadressen/${uuid}`);
-      return await this.callApi('DELETE', url);
+      return await this.callApi<void>('DELETE', url);
     } catch (err) {
       console.error(err);
       throw Error('Could not delete digitaal adres');
@@ -120,7 +120,7 @@ export class OpenklantApi implements IOpenKlantAPI {
     url.searchParams.set('expand', 'digitaleAdressen');
 
     try {
-      const json = await this.callApi('GET', url);
+      const json = await this.callApi<QueryOpenKlantPartijWithUuid>('GET', url);
       if (json.count == 0) {
         return undefined;
       }
@@ -136,7 +136,7 @@ export class OpenklantApi implements IOpenKlantAPI {
 
   }
 
-  private async callApi(method: string, url: URL, data?: any) {
+  private async callApi<T>(method: string, url: URL, data?: any) : Promise<T> {
     const response = await fetch(url.toString(), {
       method: method,
       headers: {
@@ -166,13 +166,13 @@ export class OpenklantApi implements IOpenKlantAPI {
 }
 
 export class OpenKlantAPIMock implements IOpenKlantAPI {
-  updateDigitaalAdress(_uuid: string, _adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
+  async updateDigitaalAdress(_uuid: string, _adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
     throw Error('This method should be mocked');
   }
-  deleteDigitaalAdress(_uuid: string): Promise<OpenKlantDigitaalAdresWithUuid> {
+  async deleteDigitaalAdress(_uuid: string) {
     throw Error('This method should be mocked');
   }
-  createDigitaalAdress(_partijUuid: string, _type: 'email' | 'telefoonnummer', _adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
+  async createDigitaalAdress(_partijUuid: string, _type: 'email' | 'telefoonnummer', _adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
     throw Error('This method should be mocked');
   }
   async createNatuurlijkPersoon(_naam: string): Promise<OpenKlantPartijWithUuid> {
