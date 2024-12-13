@@ -93,8 +93,8 @@ export class OpenklantApi implements IOpenKlantAPI {
 
   async updateDigitaalAdress(uuid: string, adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
     try {
-      const url = new URL(this.endpoint + '/digitaleadressen');
-      return await this.callApi('PATCH', url, { uuid, adres });
+      const url = new URL(this.endpoint + `/digitaleadressen/${uuid}`);
+      return await this.callApi('PATCH', url, { adres });
     } catch (err) {
       console.error(err);
       throw Error('Could not update digitaal adres');
@@ -103,8 +103,8 @@ export class OpenklantApi implements IOpenKlantAPI {
 
   async deleteDigitaalAdress(uuid: string): Promise<OpenKlantDigitaalAdresWithUuid> {
     try {
-      const url = new URL(this.endpoint + '/digitaleadressen');
-      return await this.callApi('DELETEW', url, { uuid });
+      const url = new URL(this.endpoint + `/digitaleadressen/${uuid}`);
+      return await this.callApi('DELETE', url);
     } catch (err) {
       console.error(err);
       throw Error('Could not delete digitaal adres');
