@@ -30,7 +30,7 @@ export class OpenklantApi implements IOpenKlantAPI {
       voorkeursRekeningnummer: null,
       voorkeurstaal: 'dut',
       partijIdentificatie: {
-        contactnaam: naam,
+        contactnaam: null,
         naam: naam,
         volledigeNaam: naam,
       },
