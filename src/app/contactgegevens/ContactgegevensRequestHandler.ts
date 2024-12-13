@@ -53,8 +53,14 @@ export class ContactgegevensRequestHandler {
     }
 
     const user = UserFromSession(session);
-    const openKlantPartij = await this.config.openKlantApi.createNatuurlijkPersoon(user.userName ?? 'Onbekende gebruiker');
-    await this.config.openKlantApi.addPartijIdentificatie(user, openKlantPartij.uuid);
+
+    let openKlantPartij = await this.config.openKlantApi.getPartijWithDigitaleAdresen(user);
+
+    // Create the partij if it does not exist yet
+    if(!openKlantPartij){
+      openKlantPartij = await this.config.openKlantApi.createNatuurlijkPersoon(user.userName ?? 'Onbekende gebruiker');
+      await this.config.openKlantApi.addPartijIdentificatie(user, openKlantPartij.uuid);
+    }
 
     if (params.email) {
       await this.config.openKlantApi.setDigitaalAdress(user, openKlantPartij.uuid, 'email', params.email);
