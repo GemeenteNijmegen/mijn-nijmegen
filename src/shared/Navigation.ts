@@ -1,4 +1,4 @@
-import { MdiAccount, MdiCurrencyEur, MdiFileMultiple, MdiOverview } from './Icons';
+import { MdiAccount, MdiAddressBook, MdiCurrencyEur, MdiFileMultiple, MdiOverview } from './Icons';
 
 interface NavigationItem {
   priority: number; // Sort based on priority
@@ -34,7 +34,7 @@ export class Navigation {
     title: 'Mijn contactgegevens',
     description: 'Beheer uw contactgegevens.',
     label: 'Beheer mijn contactgegevens',
-    icon: MdiAccount.default,
+    icon: MdiAddressBook.default,
   };
 
 
