@@ -35,8 +35,7 @@ export class Navigation {
     description: 'Beheer uw contactgegevens.',
     label: 'Beheer mijn contactgegevens',
     icon: MdiAccount.default,
-  }
-
+  };
 
 
   organisationItems: NavigationItem[] = [];
@@ -60,10 +59,10 @@ export class Navigation {
 
   items: NavigationItem[];
 
-  constructor(navigationType: 'person' | 'organisation', config?: { currentPath: string, showContactgegevens?: boolean }) {
+  constructor(navigationType: 'person' | 'organisation', config?: { currentPath: string; showContactgegevens?: boolean }) {
     if (navigationType == 'person') {
       this.items = [...this.personItems, ...this.sharedItems];
-      if(config?.showContactgegevens){
+      if (config?.showContactgegevens) {
         this.items.push(this.contactgegevens);
       }
     } else {

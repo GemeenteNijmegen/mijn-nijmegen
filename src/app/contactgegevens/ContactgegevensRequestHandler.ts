@@ -104,8 +104,8 @@ export class ContactgegevensRequestHandler {
   async renderPage(session: Session, user: User, email?: string, telefoonnummer?: string, errors?: string[]) {
 
     // Page render basics
-    const navigation = new Navigation(user.type, { 
-      currentPath: '/contactgegevens', 
+    const navigation = new Navigation(user.type, {
+      currentPath: '/contactgegevens',
       showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
     });
     const data: any = {

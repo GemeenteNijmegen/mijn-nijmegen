@@ -177,7 +177,7 @@ export class ZakenRequestHandler {
     const user = UserFromSession(session);
     //If we get neither a zaak or a timeout flag, the zaak doesn't exist or isn't accessible for the user.
     if (formattedZaak || timeout) {
-      const navigation = new Navigation(user.type, { 
+      const navigation = new Navigation(user.type, {
         currentPath: '/zaken',
         showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
       });
