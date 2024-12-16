@@ -69,7 +69,10 @@ export class HomeRequestHandler {
         return Response.json({ elements: [zaken, taken] });
       }
     } else {
-      const navigation = new Navigation(userType, { currentPath: '/' });
+      const navigation = new Navigation(userType, { 
+        currentPath: '/',
+        showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
+      });
 
       const data = {
         title: 'overzicht',

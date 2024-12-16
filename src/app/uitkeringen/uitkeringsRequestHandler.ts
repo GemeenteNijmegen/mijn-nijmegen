@@ -52,7 +52,10 @@ export class uitkeringsRequestHandler {
     data.volledigenaam = session.getValue('username');
     data.multipleUitkeringen = (data?.uitkeringen?.length > 1);
 
-    const navigation = new Navigation(userType, { currentPath: '/uitkeringen' });
+    const navigation = new Navigation(userType, {
+      currentPath: '/uitkeringen',
+      showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
+    });
     data.nav = navigation.items;
 
     const html = await this.renderHtml(data);

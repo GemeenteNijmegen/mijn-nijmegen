@@ -97,7 +97,10 @@ export class ZakenRequestHandler {
   }
 
   async htmlListResponse(session: Session, user: User, zaakSummaries: any, timeout?: boolean) {
-    const navigation = new Navigation(user.type, { currentPath: '/zaken' });
+    const navigation = new Navigation(user.type, {
+      currentPath: '/zaken',
+      showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
+    });
 
     const { openHtml, closedHtml } = await this.zakenListsHtml(zaakSummaries);
 
@@ -174,7 +177,10 @@ export class ZakenRequestHandler {
     const user = UserFromSession(session);
     //If we get neither a zaak or a timeout flag, the zaak doesn't exist or isn't accessible for the user.
     if (formattedZaak || timeout) {
-      const navigation = new Navigation(user.type, { currentPath: '/zaken' });
+      const navigation = new Navigation(user.type, { 
+        currentPath: '/zaken',
+        showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
+      });
       let data = {
         volledigenaam: session.getValue('username'),
         title: (formattedZaak) ? `Zaak - ${formattedZaak.zaak_type}` : 'Zaak ophalen niet gelukt',

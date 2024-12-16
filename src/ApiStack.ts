@@ -250,6 +250,7 @@ export class ApiStack extends Stack implements Configurable {
       },
       environment: {
         SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
+        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
       },
     });
 
@@ -339,6 +340,7 @@ export class ApiStack extends Stack implements Configurable {
         MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
         HAALCENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
+        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
       },
       apiFunction: PersoonsgegevensFunction,
     });
@@ -362,6 +364,7 @@ export class ApiStack extends Stack implements Configurable {
         MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
         UITKERING_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmUitkeringsApiEndpointUrl),
+        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
       },
       apiFunction: UitkeringFunction,
     });
@@ -388,6 +391,7 @@ export class ApiStack extends Stack implements Configurable {
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
         INZAGE_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmInzageApiEndpointUrl),
         INZAGE_API_KEY_ARN: inzageApiKey.secretArn,
+        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
       },
       apiFunction: UitkeringFunction,
     });
@@ -410,6 +414,7 @@ export class ApiStack extends Stack implements Configurable {
       environment: {
         OPENKLANT_API_ENDPOINT: StringParameter.valueForStringParameter(this, Statics.ssmOpenKlantEndpoint),
         OPENKLANT_API_KEY_ARN: openklantApiKey.secretArn,
+        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
       },
       apiFunction: ContactgegevensFunction,
     });
@@ -440,6 +445,7 @@ export class ApiStack extends Stack implements Configurable {
         IS_LIVE: this.configuration.zakenIsLive ? 'true' : 'false',
         USE_TAKEN: this.configuration.zakenUseTaken ? 'true' : 'false',
         SUBMISSIONS_LIVE: this.configuration.zakenUseSubmissions ? 'true' : 'false',
+        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
       },
       readOnlyRole,
       apiFunction: ZakenFunction,

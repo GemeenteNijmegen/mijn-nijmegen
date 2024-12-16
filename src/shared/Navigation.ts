@@ -28,6 +28,17 @@ export class Navigation {
     },
   ];
 
+  contactgegevens: NavigationItem = {
+    priority: 50,
+    url: '/contactgegevens',
+    title: 'Mijn contactgegevens',
+    description: 'Beheer uw contactgegevens.',
+    label: 'Beheer mijn contactgegevens',
+    icon: MdiAccount.default,
+  }
+
+
+
   organisationItems: NavigationItem[] = [];
 
   sharedItems: NavigationItem[] = [{
@@ -49,9 +60,12 @@ export class Navigation {
 
   items: NavigationItem[];
 
-  constructor(navigationType: 'person' | 'organisation', config?: { currentPath: string }) {
+  constructor(navigationType: 'person' | 'organisation', config?: { currentPath: string, showContactgegevens?: boolean }) {
     if (navigationType == 'person') {
       this.items = [...this.personItems, ...this.sharedItems];
+      if(config?.showContactgegevens){
+        this.items.push(this.contactgegevens);
+      }
     } else {
       this.items = [...this.organisationItems, ...this.sharedItems];
     }
