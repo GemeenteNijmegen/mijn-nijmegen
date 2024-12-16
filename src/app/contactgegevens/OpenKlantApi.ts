@@ -104,7 +104,7 @@ export class OpenklantApi implements IOpenKlantAPI {
   async deleteDigitaalAdress(uuid: string) {
     try {
       const url = new URL(this.endpoint + `/digitaleadressen/${uuid}`);
-      return await this.callApi<void>('DELETE', url);
+      return await this.callApiWithoutResponse('DELETE', url);
     } catch (err) {
       console.error(err);
       throw Error('Could not delete digitaal adres');
@@ -151,6 +151,22 @@ export class OpenklantApi implements IOpenKlantAPI {
     }
     const json = await response.json() as any;
     return json;
+  }
+
+  private async callApiWithoutResponse(method: string, url: URL, data?: any) : Promise<void> {
+    const response = await fetch(url.toString(), {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${await this.getApiKey()}`,
+      },
+      body: data ? JSON.stringify(data) : undefined,
+    });
+    console.debug(method, 'to', url.pathname, '-', response.status);
+    if (!response.ok) {
+      console.debug('Received response', await response.text());
+    }
+    return;
   }
 
   private async getApiKey() {
