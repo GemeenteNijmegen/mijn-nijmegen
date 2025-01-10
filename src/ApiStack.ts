@@ -8,6 +8,7 @@ import { IStringParameter, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
 import { AuthFunction } from './app/auth/auth-function';
+import { ContactgegevensFunction } from './app/contactgegevens/contactgegevens-function';
 import { HomeFunction } from './app/home/home-function';
 import { LoginFunction } from './app/login/login-function';
 import { LogoutFunction } from './app/logout/logout-function';
@@ -107,7 +108,6 @@ export class ApiStack extends Stack implements Configurable {
      */
     const zakenFunction = this.zakenFunction(baseUrl, readOnlyRole);
 
-
     //MARK: Routes
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('login', loginFunction.lambda),
@@ -163,12 +163,22 @@ export class ApiStack extends Stack implements Configurable {
       routeKey: apigatewayv2.HttpRouteKey.with('/zaken/{zaaksource}/{zaakid}/download/{file+}', apigatewayv2.HttpMethod.GET),
     });
 
+
     if (configuration.inzageLive) {
       const inzageFunction = this.inzageFunction(baseUrl, readOnlyRole, tlsConfig);
       this.api.addRoutes({
         integration: new HttpLambdaIntegration('inzage', inzageFunction.lambda),
         path: '/inzage',
         methods: [apigatewayv2.HttpMethod.GET],
+      });
+    }
+
+    if (configuration.mijnContactGegevensLive) {
+      const contactgegevensFunction = this.contactgegevensFunction(baseUrl, readOnlyRole);
+      this.api.addRoutes({
+        integration: new HttpLambdaIntegration('contactgegevens', contactgegevensFunction.lambda),
+        path: '/contactgegevens',
+        methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.POST],
       });
     }
   }
@@ -240,6 +250,7 @@ export class ApiStack extends Stack implements Configurable {
       },
       environment: {
         SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
+        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
       },
     });
 
@@ -329,6 +340,7 @@ export class ApiStack extends Stack implements Configurable {
         MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
         HAALCENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
+        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
       },
       apiFunction: PersoonsgegevensFunction,
     });
@@ -352,6 +364,7 @@ export class ApiStack extends Stack implements Configurable {
         MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
         UITKERING_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmUitkeringsApiEndpointUrl),
+        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
       },
       apiFunction: UitkeringFunction,
     });
@@ -378,6 +391,7 @@ export class ApiStack extends Stack implements Configurable {
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
         INZAGE_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmInzageApiEndpointUrl),
         INZAGE_API_KEY_ARN: inzageApiKey.secretArn,
+        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
       },
       apiFunction: UitkeringFunction,
     });
@@ -385,6 +399,27 @@ export class ApiStack extends Stack implements Configurable {
     mtlsConfig.clientCert.grantRead(inzageFunction.lambda);
     mtlsConfig.rootCert.grantRead(inzageFunction.lambda);
     return inzageFunction;
+  }
+
+  private contactgegevensFunction(baseUrl: string, readOnlyRole: Role) {
+    const openklantApiKey = Secret.fromSecretNameV2(this, 'openklant-token', Statics.ssmOpenKlantSecret);
+
+    const contactgegevensFunctie = new ApiFunction(this, 'contactgegevens-function', {
+      description: 'Contactgegevens uit openklant voor de Mijn Nijmegen-applicatie.',
+      codePath: 'app/contactgegevens',
+      table: this.sessionsTable,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: baseUrl,
+      readOnlyRole,
+      environment: {
+        OPENKLANT_API_ENDPOINT: StringParameter.valueForStringParameter(this, Statics.ssmOpenKlantEndpoint),
+        OPENKLANT_API_KEY_ARN: openklantApiKey.secretArn,
+        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+      },
+      apiFunction: ContactgegevensFunction,
+    });
+    openklantApiKey.grantRead(contactgegevensFunctie.lambda);
+    return contactgegevensFunctie;
   }
 
 
@@ -410,6 +445,7 @@ export class ApiStack extends Stack implements Configurable {
         IS_LIVE: this.configuration.zakenIsLive ? 'true' : 'false',
         USE_TAKEN: this.configuration.zakenUseTaken ? 'true' : 'false',
         SUBMISSIONS_LIVE: this.configuration.zakenUseSubmissions ? 'true' : 'false',
+        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
       },
       readOnlyRole,
       apiFunction: ZakenFunction,
