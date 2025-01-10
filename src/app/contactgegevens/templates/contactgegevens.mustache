@@ -1,0 +1,51 @@
+{{>header}}
+<main>
+    <!-- START: template component(s) -->
+    <div class="container">
+        <div class="row">
+        <nav class="nijmegen-sidenav col-lg-3 col-md-12">
+                <ul class="nijmegen-sidenav__list">
+                {{#nav}}
+                    <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
+                        {{{icon}}}
+                        <a href="{{{url}}}">{{title}}</a>
+                    </li>
+                {{/nav}}
+                </ul>
+        </nav>
+        <div class="col-lg-9 col-md-12">
+                <h1>Mijn Contactgegevens</h1>
+                <div class="alert alert-info">U kunt uw contactgegevens beheren in Mijn Nijmegen. Houd er rekening mee dat we u in sommige gevallen nog om uw contactgegevens kunnen vragen, omdat deze gegevens nog niet overal volledig worden gebruikt. Uiteindelijk worden de contactgegevens uit Mijn Nijmegen voor al uw online zaken met ons gebruikt, hier werken we aan.</div>
+                {{^error}}
+                <p class="lead">Hier vindt u een overzicht van uw contactgegevens.</p>
+
+                <form method="POST" autocomplete="off">
+
+                    <div class="md-form">
+                        <label for="input-example1">E-mailadres</label>
+                        <input type="text" name="email" class="form-control {{#emailError}}is-invalid{{/emailError}}" placeholder="e-mail" value="{{email}}">
+                    </div>
+
+                    <div class="md-form">
+                        <label for="input-example1">Telefoonnummer</label>
+                        <input type="text" name="telefoonnummer" class="form-control {{#telefoonnummerError}}is-invalid{{/telefoonnummerError}}" placeholder="+31 (6)" value="{{telefoonnummer}}">
+                    </div>
+
+                    <input type="hidden" name="xsrf_token" value="{{xsrf_token}}"/>
+
+                    <button type="submit" class="btn btn-primary">Wijzigingen opslaan</button>
+
+                </form>
+
+                {{/error}}
+                {{#error}}
+                    <h2>Er is iets misgegaan</h2>
+                    <p>{{error}}</p>
+                {{/error}}
+            </div>
+        </div>
+    </div>
+
+    <!-- END: template component(s) -->
+</main>
+{{>footer}}

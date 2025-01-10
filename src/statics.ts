@@ -153,6 +153,8 @@ export abstract class Statics {
   static readonly ssmOpenZaakBaseUrl: string = '/cdk/mijn-nijmegen/vip-base-url';
   static readonly ssmOpenZaakTakenBaseUrl: string = '/cdk/mijn-nijmegen/taken-base-url';
 
+  static readonly ssmOpenKlantSecret = '/cdk/mijn-nijmegen/open-klant/api-key';
+  static readonly ssmOpenKlantEndpoint = '/cdk/mijn-nijmegen/open-klant/endpoint';
   // MARK: NL Wallet configuration
   // VerID
   static readonly ssmVerIdWellKnown: string = '/cdk/mijn-nijmegen/verid/well-known';

@@ -1,5 +1,6 @@
 import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
 import { Stack, Tags, Stage, aws_ssm as SSM, aws_secretsmanager as SecretsManager, StageProps, Aspects } from 'aws-cdk-lib';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { Configurable } from './Configuration';
 import { Statics } from './statics';
@@ -201,6 +202,7 @@ export class ssmParamsConstruct extends Construct {
     });
 
     this.addZaakParameters();
+    this.addOpenKlantParameters();
   }
 
   private addZaakParameters() {
@@ -270,4 +272,18 @@ export class ssmParamsConstruct extends Construct {
     });
 
   }
+
+
+  addOpenKlantParameters() {
+    new SecretsManager.Secret(this, 'openklant-api-key', {
+      secretName: Statics.ssmOpenKlantSecret,
+      description: 'OpenKlant API key',
+    });
+    new StringParameter(this, 'openklant-api-endpiont', {
+      parameterName: Statics.ssmOpenKlantEndpoint,
+      description: 'OpenKlant API endpoint',
+      stringValue: '-',
+    });
+  }
+
 }

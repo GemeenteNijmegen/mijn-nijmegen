@@ -53,7 +53,10 @@ export class PersoonsgegevensRequestHandler {
     const brpData = await brpApi.getBrpData(bsn);
     const data = brpData;
 
-    const navigation = new Navigation(userType, { currentPath: '/persoonsgegevens' });
+    const navigation = new Navigation(userType, {
+      currentPath: '/persoonsgegevens',
+      showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
+    });
     data.volledigenaam = session.getValue('username');
 
     data.title = 'Mijn gegevens';

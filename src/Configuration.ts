@@ -120,6 +120,12 @@ export interface Configuration {
    * of the zaakaggregator in parallel to existing functionality.
    */
   readonly useZakenFromAggregatorAPI?: boolean;
+
+  /**
+   * Experimental feature for dispalying and editing contact gegevens.
+   * @default false
+   */
+  readonly mijnContactGegevensLive?: boolean;
 }
 
 
@@ -144,6 +150,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     // },
     inzageLive: true,
     useZakenFromAggregatorAPI: true,
+    mijnContactGegevensLive: true,
     nlWalletVerIdIsLive: true,
     nlWalletSignicatIsLive: true,
   },
