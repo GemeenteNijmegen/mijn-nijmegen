@@ -4,9 +4,9 @@ import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import * as template from './templates/persoonsgegevens.mustache';
+import { BrpApi } from '../../shared/BrpApi';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
-import { BrpApi } from '../../shared/BrpApi';
 
 interface Config {
   apiClient: ApiClient;

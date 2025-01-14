@@ -7,9 +7,9 @@ import { Bsn } from '@gemeentenijmegen/utils';
 import { IdTokenClaims, TokenSet } from 'openid-client';
 import { AuthenticationService } from './AuthenticationService';
 
+import { BrpApi } from '../../shared/BrpApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
-import { BrpApi } from '../../shared/BrpApi';
 
 type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
 const eHerkenningKvkNummerClaim = 'urn:etoegang:1.9:EntityConcernedID:KvKnr';
