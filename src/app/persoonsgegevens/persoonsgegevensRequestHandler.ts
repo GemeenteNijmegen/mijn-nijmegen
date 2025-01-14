@@ -3,10 +3,10 @@ import { ApiClient } from '@gemeentenijmegen/apiclient';
 
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
-import { BrpApi } from './BrpApi';
 import * as template from './templates/persoonsgegevens.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import { BrpApi } from '../../shared/BrpApi';
 
 interface Config {
   apiClient: ApiClient;
