@@ -212,7 +212,9 @@ export class ZakenRequestHandler {
   }
 
   private async zaakHtml(zaak: any) {
-    return render({ zaak }, singleZaakPartial.default);
+    return render({ zaak }, singleZaakPartial.default, {
+      taken: takenTemplate.default,
+    });
   }
 
   private async fetchGet(zaakId: string, zaakConnectorId: string, user: User) {
