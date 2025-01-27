@@ -40,7 +40,11 @@ export interface AuthRequestHandlerProps {
   useNlWalletVerId?: boolean;
   useNlWalletSignicat?: boolean;
 
-  // Haal Centraal
+  /**
+   * If a haal centraal API is provided prefere this over the
+   * old IRMA BRP API.
+   * @default - the IRMA BRP API is used
+   */
   haalCentraalApi?: HaalCentraalApi;
 }
 

@@ -72,6 +72,7 @@ export async function handler(event: any, _context: any):Promise<ApiGatewayV2Res
       useYiviKvk: process.env.USE_YIVI_KVK === 'true',
       useNlWalletVerId: process.env.USE_NL_WALLET_VERID === 'true',
       useNlWalletSignicat: process.env.USE_NL_WALLET_SIGNICAT === 'true',
+      haalCentraalApi: haalCentraalApi,
     });
     return await requestHandler.handleRequest();
   } catch (err) {

@@ -45,8 +45,6 @@ export class HaalCentraalApi {
 
   constructor(private config: Config) { }
 
-
-
   async getName(bsn: Bsn) {
     const response = await this.request({
       endpoint: 'personen',
@@ -54,10 +52,7 @@ export class HaalCentraalApi {
       burgerservicenummer: [bsn],
       fields: ['naam'],
     });
-    if (!response?.personen || response.personen.length > 1) {
-      throw Error('Multiple results for single BSN');
-    }
-    return response.personen[0].naam.volledigeNaam;
+    return response.naam.volledigeNaam;
   }
 
   async getBrpData(bsn: Bsn, fields: Fields[]) {
@@ -67,10 +62,7 @@ export class HaalCentraalApi {
       burgerservicenummer: [bsn],
       fields: fields,
     });
-    if (!response?.personen || response.personen.length > 1) {
-      throw Error('Multiple results for single BSN');
-    }
-    return response.personen[0].naam.volledigeNaam;
+    return response;
   }
 
   async request(requestConfiguration: requestConfiguration): Promise<any> {
@@ -84,17 +76,21 @@ export class HaalCentraalApi {
       'Content-type': 'application/json',
       'X-API-KEY': this.config.apiKey,
     });
-    if (data?.personen?.length != 1) {
-      throw Error('Expected a response of exactly one persoon got: ' + data?.personen?.length);
+
+    // Check response
+    if (!data?.personen || data.personen.length == 0) {
+      throw Error('No results for BSN');
     }
-    const persoon = data.personen[0];
+    if (data.personen.length > 1) {
+      throw Error('Multiple results for single BSN but got: ' + data?.personen?.length);
+    }
 
     // Check overleden datum
-    if (persoon.overlijden?.datum) {
+    if (data.personen[0].overlijden?.datum) {
       throw new Error('Persoon lijkt overleden');
     }
 
-    return persoon;
+    return data.personen[0];
 
   } catch(error: any) {
     console.error(error);
