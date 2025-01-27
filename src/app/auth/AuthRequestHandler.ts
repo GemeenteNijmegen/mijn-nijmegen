@@ -10,6 +10,7 @@ import { AuthenticationService } from './AuthenticationService';
 import { BrpApi } from '../../shared/BrpApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
+import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 
 type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
 const eHerkenningKvkNummerClaim = 'urn:etoegang:1.9:EntityConcernedID:KvKnr';
@@ -38,6 +39,9 @@ export interface AuthRequestHandlerProps {
   useYiviKvk?: boolean;
   useNlWalletVerId?: boolean;
   useNlWalletSignicat?: boolean;
+
+  // Haal Centraal
+  haalCentraalApi?: HaalCentraalApi;
 }
 
 export class AuthRequestHandler {
@@ -248,11 +252,11 @@ export class AuthRequestHandler {
     }
 
     if (bsn) {
-      return new Person(bsn, { apiClient: this.config.apiClient });
+      return new Person(bsn, { apiClient: this.config.apiClient, haalCentraal: this.config.haalCentraalApi });
     }
 
     if (kvk) {
-      return new Organisation(kvk.kvkNumber, kvk.organisationName, { apiClient: this.config.apiClient });
+      return new Organisation(kvk.kvkNumber, kvk.organisationName, { apiClient: this.config.apiClient, haalCentraal: this.config.haalCentraalApi });
     }
 
     throw Error('User authentication failed: No BSN or KVK found in request');
@@ -301,6 +305,7 @@ export class AuthRequestHandler {
 
 interface UserConfig {
   apiClient: ApiClient;
+  haalCentraal?: HaalCentraalApi;
 }
 
 /**
@@ -333,10 +338,9 @@ export class Person implements User {
   async getUserName(): Promise<string> {
     if (typeof this.userName !== 'string') {
       try {
-        if (process.env.HAALCENTRAAL_LIVE == 'true') {
-          // const brpApi = new HaalCentraalApi();
-          // const brpData = await brpApi.getBrpData(this.bsn.bsn);
-          // this.userName = brpData?.naam?.volledigeNaam ? brpData.naam.volledigeNaam : 'Onbekende gebruiker';
+        if (this.config.haalCentraal) {
+          const brpName = await this.config.haalCentraal.getName(this.bsn);
+          this.userName = brpName ?? 'Onbekende gebruiker';
         } else {
           const brpApi = new BrpApi(this.config.apiClient);
           const brpData = await brpApi.getBrpData(this.bsn.bsn);

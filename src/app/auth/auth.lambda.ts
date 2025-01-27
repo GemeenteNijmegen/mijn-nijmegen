@@ -1,21 +1,43 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
-import { AWS } from '@gemeentenijmegen/utils';
+import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
 import { AuthenticationService } from './AuthenticationService';
 import { AuthRequestHandler } from './AuthRequestHandler';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
+import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 const apiClient = new ApiClient();
 const OIDC = new OpenIDConnect();
 
-// This is proof of cocept the API is actually secured with an classical API key
-let authenticationService: AuthenticationService | undefined = undefined;
+let authenticationService: AuthenticationService | undefined = undefined; // This is proof of cocept the API is actually secured with an classical API key
+let haalCentraalApi: HaalCentraalApi | undefined = undefined;
 async function init() {
   if (process.env.USE_AUTH_SERVICE === 'true') {
     const clientSecret = await AWS.getSecret(process.env.AUTH_SERVICE_CLIENT_SECRET_ARN!);
     authenticationService = new AuthenticationService(process.env.AUTH_SERVICE_ENDPOINT!, process.env.AUTH_SERVICE_CLIENT_ID!, clientSecret);
+  }
+
+  // Construct the haal centraal API client
+  if(process.env.HAAL_CENTRAAL_LIVE === 'true'){
+    const haalCentraalValues = environmentVariables([
+      'HAAL_CENTRAAL_CERT_SSM',
+      'HAAL_CENTRAAL_CA_SSM',
+      'HAAL_CENTRAAL_PRIVATE_KEY_ARN',
+      'HAAL_CENTRAAL_API_KEY_ARN',
+      'HAAL_CENTRAAL_BASE_URL',
+    ])
+    const haalCentraalApiClient = await ApiClient.fromParameterStore(
+      haalCentraalValues.HAAL_CENTRAAL_CERT_SSM,
+      haalCentraalValues.HAAL_CENTRAAL_CA_SSM,
+      haalCentraalValues.HAAL_CENTRAAL_PRIVATE_KEY_ARN,
+    );
+    haalCentraalApi = new HaalCentraalApi({
+      apiclient: haalCentraalApiClient,
+      apiKey: await AWS.getSecret(haalCentraalValues.HAAL_CENTRAAL_API_KEY_ARN),
+      baseUrl: haalCentraalValues.HAAL_CENTRAAL_BASE_URL,
+    })
   }
 }
 const initaliation = init();
