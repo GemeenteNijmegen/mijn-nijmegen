@@ -1,7 +1,11 @@
 import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Bsn } from '@gemeentenijmegen/utils';
 
-export class BrpApi {
+export interface IBrpApi {
+  getBrpData(bsn: string): Promise<any>;
+}
+
+export class BrpApi implements IBrpApi {
 
   private endpoint: string;
   private client: ApiClient;

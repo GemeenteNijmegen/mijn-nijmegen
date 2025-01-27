@@ -1,7 +1,7 @@
 import { Session } from '@gemeentenijmegen/session';
-import { BrpApi } from './brpApi';
 import { InzageApi } from './inzageApi';
 import * as template from './templates/inzage.mustache';
+import { BrpApi } from '../../shared/BrpApi';
 import { render } from '../../shared/render';
 
 interface InzageRequestHandlerParams {
