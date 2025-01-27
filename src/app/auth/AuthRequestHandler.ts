@@ -6,9 +6,8 @@ import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
 import { IdTokenClaims, TokenSet } from 'openid-client';
 import { AuthenticationService } from './AuthenticationService';
-import { BrpApi } from './BrpApi';
 
-import { HaalCentraalApi } from './HaalCentraalApi';
+import { BrpApi } from '../../shared/BrpApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
 
@@ -335,9 +334,9 @@ export class Person implements User {
     if (typeof this.userName !== 'string') {
       try {
         if (process.env.HAALCENTRAAL_LIVE == 'true') {
-          const brpApi = new HaalCentraalApi();
-          const brpData = await brpApi.getBrpData(this.bsn.bsn);
-          this.userName = brpData?.naam?.volledigeNaam ? brpData.naam.volledigeNaam : 'Onbekende gebruiker';
+          // const brpApi = new HaalCentraalApi();
+          // const brpData = await brpApi.getBrpData(this.bsn.bsn);
+          // this.userName = brpData?.naam?.volledigeNaam ? brpData.naam.volledigeNaam : 'Onbekende gebruiker';
         } else {
           const brpApi = new BrpApi(this.config.apiClient);
           const brpData = await brpApi.getBrpData(this.bsn.bsn);
