@@ -274,7 +274,7 @@ export class ApiStack extends Stack implements Configurable {
     const brpHaalCentraalApiKeySecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'brp-haal-centraal-api-key-auth-secret', Statics.haalCentraalApiKeySecret);
     const brpHaalCentraalPrivateKeySecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'brp-haal-centraal-private-key-secret', Statics.ssmHaalCentraalPrivateKey);
     const brpHaalCentraalCertParameter = StringParameter.fromStringParameterName(this, 'brp-haal-centraal-cert', Statics.ssmHaalCentraalCert);
-    const brpHaalCentraalCaParameter = StringParameter.fromStringParameterName(this, 'brp-haal-centraal-cert', Statics.ssmHaalCentraalCa);
+    const brpHaalCentraalCaParameter = StringParameter.fromStringParameterName(this, 'brp-haal-centraal-ca', Statics.ssmHaalCentraalCa);
 
     const authFunction = new ApiFunction(this, 'auth-function', {
       description: 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.',
