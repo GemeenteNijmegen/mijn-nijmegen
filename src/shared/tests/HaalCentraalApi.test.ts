@@ -1,6 +1,6 @@
 import { ApiClient } from '@gemeentenijmegen/apiclient';
-import { HaalCentraalApi } from '../HaalCentraalApi';
 import { Bsn } from '@gemeentenijmegen/utils';
+import { HaalCentraalApi } from '../HaalCentraalApi';
 
 describe('Haal Centraal API', () => {
 

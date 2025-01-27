@@ -287,7 +287,7 @@ export class ssmParamsConstruct extends Construct {
     });
   }
 
-  addHaalCentraalParameters(){
+  addHaalCentraalParameters() {
 
     new StringParameter(this, 'haal-centraal-cert', {
       parameterName: Statics.ssmHaalCentraalCert,

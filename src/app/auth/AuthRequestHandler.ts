@@ -8,9 +8,9 @@ import { IdTokenClaims, TokenSet } from 'openid-client';
 import { AuthenticationService } from './AuthenticationService';
 
 import { BrpApi } from '../../shared/BrpApi';
+import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
-import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 
 type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
 const eHerkenningKvkNummerClaim = 'urn:etoegang:1.9:EntityConcernedID:KvKnr';
