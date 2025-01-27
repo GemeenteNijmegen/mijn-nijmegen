@@ -41,6 +41,12 @@ export class ZaakFormatter {
         return {
           ...taak,
           has_attachments: taak.attachments?.length > 0,
+          attachments: taak.attachments?.map(attachment => {
+            return {
+              ...attachment,
+              url: `/zaken/${zaak.internal_id}/taak/${taak.uuid}/download/${attachment?.url}`,
+            };
+          }),
         };
       }),
       has_statuses: zaak.status_list && zaak.status_list?.length > 0 ? true : false,

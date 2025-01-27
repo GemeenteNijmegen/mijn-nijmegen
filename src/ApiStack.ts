@@ -163,6 +163,12 @@ export class ApiStack extends Stack implements Configurable {
       routeKey: apigatewayv2.HttpRouteKey.with('/zaken/{zaaksource}/{zaakid}/download/{file+}', apigatewayv2.HttpMethod.GET),
     });
 
+    new apigatewayv2.HttpRoute(this, 'download-taak-route', {
+      httpApi: this.api,
+      integration: new HttpLambdaIntegration('zaak', zakenFunction.lambda),
+      routeKey: apigatewayv2.HttpRouteKey.with('/zaken/{zaaksource}/{zaakid}/taak/{taakid}/download/{file+}', apigatewayv2.HttpMethod.GET),
+    });
+
 
     if (configuration.inzageLive) {
       const inzageFunction = this.inzageFunction(baseUrl, readOnlyRole, tlsConfig);

@@ -17,6 +17,7 @@ async function sharedZakenRequestHandler() {
 export interface eventParams {
   cookies: string;
   zaakId?: string;
+  taakId?: string;
   zaakConnectorId?: string;
   file?: string;
   xsrfToken?: string;
