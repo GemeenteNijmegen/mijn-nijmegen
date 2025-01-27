@@ -273,6 +273,7 @@ export class ApiStack extends Stack implements Configurable {
     const signicatClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'signicat-client-secret', Statics.ssmSignicatClientSecret);
     const brpHaalCentraalApiKeySecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'brp-haal-centraal-api-key-auth-secret', Statics.haalCentraalApiKeySecret);
     const brpHaalCentraalPrivateKeySecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'brp-haal-centraal-private-key-secret', Statics.ssmHaalCentraalPrivateKey);
+    const brpHaalCentraalCertParameter = StringParameter.fromStringParameterName(this, 'brp-haal-centraal-cert', Statics.ssmHaalCentraalCert);
 
     const authFunction = new ApiFunction(this, 'auth-function', {
       description: 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.',
@@ -330,6 +331,7 @@ export class ApiStack extends Stack implements Configurable {
     });
     brpHaalCentraalApiKeySecret.grantRead(authFunction.lambda);
     brpHaalCentraalPrivateKeySecret.grantRead(authFunction.lambda);
+    brpHaalCentraalCertParameter.grantRead(authFunction.lambda);
     authServiceClientSecret.grantRead(authFunction.lambda);
     verIdClientSecret.grantRead(authFunction.lambda);
     signicatClientSecret.grantRead(authFunction.lambda);
