@@ -1699,10 +1699,10 @@
   resolved "https://registry.yarnpkg.com/@oozcitak/util/-/util-8.3.8.tgz#10f65fe1891fd8cde4957360835e78fd1936bfdd"
   integrity sha512-T8TbSnGsxo6TDBJx/Sgv/BlVJL3tshxZP7Aq5R1mSnM5OcHY2dQaxLMu2+E8u3gN0MLOzdjurqN4ZRVuzQycOQ==
 
-"@pepperize/cdk-route53-health-check@^0.0.654":
-  version "0.0.654"
-  resolved "https://registry.yarnpkg.com/@pepperize/cdk-route53-health-check/-/cdk-route53-health-check-0.0.654.tgz#4a0523a396ed0d5bcd43edacf78d3190f113fdba"
-  integrity sha512-EJVUhl4W+BVxelt85yT+1VRdNOLUMaAd5Tb/36Q5ltp5nTM6CyVaRdJ+wGwA00RDoktmqHqHg97UfPvgMDpoTQ==
+"@pepperize/cdk-route53-health-check@^0.0.655":
+  version "0.0.655"
+  resolved "https://registry.yarnpkg.com/@pepperize/cdk-route53-health-check/-/cdk-route53-health-check-0.0.655.tgz#4aabbdd66b775aa95be1f9b2609139d76ef7ec00"
+  integrity sha512-7lscpWqm061++xzT3yKiAmE2Ezp5L0Igq5XDtETRDz4gk8rpNAF2r3fYWwiHmbB4JRD07pXfq8XRVEW29FjGgw==
 
 "@playwright/test@^1.50.0":
   version "1.50.0"
