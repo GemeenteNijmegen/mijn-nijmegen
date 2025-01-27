@@ -125,7 +125,7 @@
     "@aws-lambda-powertools/commons" "^1.18.1"
     lodash.merge "^4.6.2"
 
-"@aws-sdk/client-dynamodb@^3.721.0", "@aws-sdk/client-dynamodb@^3.734.0":
+"@aws-sdk/client-dynamodb@^3.734.0":
   version "3.734.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-dynamodb/-/client-dynamodb-3.734.0.tgz#94efb28cda6c67759180458b0eb06125f8310708"
   integrity sha512-Rlirc4UiNQrG/LFS/uc9Cnnp8aB9wMp/dykRZ1bd5jgD9BwdkkaNQi/lZzQNp3grKRgZypD6mYU6n5HuvOz86A==
@@ -174,7 +174,7 @@
     tslib "^2.6.2"
     uuid "^9.0.1"
 
-"@aws-sdk/client-s3@^3.721.0":
+"@aws-sdk/client-s3@^3.735.0":
   version "3.735.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-s3/-/client-s3-3.735.0.tgz#c8b8c8303530982a82ae83b763f1941cb6c60c08"
   integrity sha512-6NcxX06c4tnnu6FTFiyS8shoYLy+8TvIDkYjJ5r9tvbaysOptUKQdolOuh7+Lz95QyaqiznpCsNTxsfywLXcqw==
@@ -236,7 +236,7 @@
     "@smithy/util-waiter" "^4.0.2"
     tslib "^2.6.2"
 
-"@aws-sdk/client-secrets-manager@^3.721.0", "@aws-sdk/client-secrets-manager@^3.734.0":
+"@aws-sdk/client-secrets-manager@^3.734.0":
   version "3.734.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-secrets-manager/-/client-secrets-manager-3.734.0.tgz#51c9f9fec485f518f7475f282c0eecd603d3dc5e"
   integrity sha512-qxcS5VEE6lt+lBIKd1tuiL2w8ruYSfnMpX+bseuuGiO1t5+UI5HOc8nkK7gGqklLxgl4jGFL762e47HtNue7Eg==
@@ -283,7 +283,7 @@
     tslib "^2.6.2"
     uuid "^9.0.1"
 
-"@aws-sdk/client-ssm@^3.721.0", "@aws-sdk/client-ssm@^3.735.0":
+"@aws-sdk/client-ssm@^3.735.0":
   version "3.735.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-ssm/-/client-ssm-3.735.0.tgz#568f8ef7709f61a7116f104c7b932cb2e0cbc67f"
   integrity sha512-2c8WioubGgXKN4mIpc+VGLfBLXZpGvLjo2AkDAAj6KZ6SieYuNXH+xbPpLA4Spm47diZRP3diyuAZcl7d1/isQ==
@@ -692,7 +692,7 @@
     "@smithy/util-middleware" "^4.0.1"
     tslib "^2.6.2"
 
-"@aws-sdk/s3-request-presigner@^3.721.0":
+"@aws-sdk/s3-request-presigner@^3.735.0":
   version "3.735.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/s3-request-presigner/-/s3-request-presigner-3.735.0.tgz#f15e8e9849a4ec773294cc628cc04bf4a47d2360"
   integrity sha512-PzfS4rWDLlp22NORWmezA8ZH6uwz7fAmYfdIbWsPKoy1Rpm+/6Kqn7Nx+Taz6UKNhGPtexutCoJqsMxCy0ZmxQ==
@@ -1308,49 +1308,50 @@
     "@eslint/core" "^0.10.0"
     levn "^0.4.1"
 
-"@gemeentenijmegen/apiclient@^0.0.23":
-  version "0.0.23"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/apiclient/-/apiclient-0.0.23.tgz#a9f3d2202685fafa9f689fc24d51ca1f71ef0b67"
-  integrity sha512-0D+k9NI6Ws9nYOUKmGyuWDV7THGtCBM/nS+O6JVHQUuS/RGd2FFCmtPf5EzFhFNgX2t92CcYN1avvKGbedr5Nw==
+"@gemeentenijmegen/apiclient@^0.0.25":
+  version "0.0.25"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/apiclient/-/apiclient-0.0.25.tgz#9a91c4fb91409166596418076eb4440d942ffdba"
+  integrity sha512-L/ZtTNhtH0ZHlfZ30Sgty7QCgNMK0i0cjAOrmhWIkorOEzHXYjpKsdimlE75VsjbJmJpsDDx6V5qB5Y1YbfH1w==
   dependencies:
-    "@aws-sdk/client-secrets-manager" "^3.721.0"
-    "@aws-sdk/client-ssm" "^3.721.0"
+    "@aws-sdk/client-secrets-manager" "^3.734.0"
+    "@aws-sdk/client-ssm" "^3.735.0"
+    "@gemeentenijmegen/utils" "^0.0.24"
     axios "^1.7.9"
 
-"@gemeentenijmegen/apigateway-http@^0.0.20":
-  version "0.0.20"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/apigateway-http/-/apigateway-http-0.0.20.tgz#596bc8b2910ba7f377630eefec2c61acb5993ed8"
-  integrity sha512-aNqlMfePFxpwPrPVhiJ9XdjHzGNJvN07sTEvanR89W/xfmv/KEh82lqi4B0VryYj+tKZ9zufB9nXUyWeiS3xfw==
+"@gemeentenijmegen/apigateway-http@^0.0.21":
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/apigateway-http/-/apigateway-http-0.0.21.tgz#f062afa496997502f50f2cbe55675a9b94680170"
+  integrity sha512-lOLM4hCh4e5buaujEV7zCnyELSPOS1XlNPO/fXT00huzdh/PIsP7eViF7HZx/JJSKlvd5IVTZL6hBB/LdEkGUg==
   dependencies:
-    "@types/aws-lambda" "^8.10.146"
+    "@types/aws-lambda" "^8.10.147"
 
 "@gemeentenijmegen/aws-constructs@^0.0.29":
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@gemeentenijmegen/aws-constructs/-/aws-constructs-0.0.29.tgz#85a0bffc299f0d2958da6dcbb33eb4a631ea19c0"
   integrity sha512-fPM7gTsd91Pmt8zTq0yCJ80h5CLxfXGmvFl3NrNS2AytolHXCqlakMW810eIsGjlklcjsQKVkyMN0y9OP5iyxw==
 
-"@gemeentenijmegen/projen-project-type@^1.8.5":
-  version "1.8.5"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/projen-project-type/-/projen-project-type-1.8.5.tgz#5e7a9829745a0a74728c9574bf1cd14b4c105519"
-  integrity sha512-5kny1AoJ6psNachzu/63GDWN1zew3662a0eHN80OnRPN0T+ocoXzeuSXnRa+iyKZAeM3Hi5YVTKAwPA66vf/Ow==
+"@gemeentenijmegen/projen-project-type@^1.8.6":
+  version "1.8.6"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/projen-project-type/-/projen-project-type-1.8.6.tgz#e989ac8bae3457f33cde749b91081435428d5f63"
+  integrity sha512-QDZU8APmu2PpSK7GBcnZ132wZJ3kSjkKxsg4Q1KPZdkCIJUBWbFsePpch2ZqxTS1lIHuoFc3w9snj+dVF75SBw==
 
-"@gemeentenijmegen/session@^0.0.20":
-  version "0.0.20"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/session/-/session-0.0.20.tgz#ac2e2cd4a6a5a38518bd498f9f076c8c5864c209"
-  integrity sha512-qbXJEpx0me67kVxaiMGMtHdcaLAI8/F4Uywl4tQ8opPLf9RYCdQtccuHlzenKlHqgbseQNnpnCgXnuJiNH7Rbg==
+"@gemeentenijmegen/session@^0.0.21":
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/session/-/session-0.0.21.tgz#adc1315689c4e44e7b3dbd72c35b25ee6e384fa2"
+  integrity sha512-2OdKYx3lCfYbvOucAyuBlvP5EJd6snT/nS5F+R/t6xCjng8aXQkwcm4x2exbWHl8Oouz/3LXb4KgPBd4jC0VdA==
   dependencies:
-    "@aws-sdk/client-dynamodb" "^3.721.0"
+    "@aws-sdk/client-dynamodb" "^3.734.0"
     cookie "^0.7.2"
 
-"@gemeentenijmegen/utils@^0.0.23":
-  version "0.0.23"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/utils/-/utils-0.0.23.tgz#a30789d05b1d128cd423ed1bf7733c06e44eb45f"
-  integrity sha512-xh3ZNnKnSjkPBWb49Xip0SOkMhZSmNBc3NsTBnv2pwEXzGi/t/s1esgxMD2vyqHkE42+cCXDd4/NHcRBOf09OA==
+"@gemeentenijmegen/utils@^0.0.24":
+  version "0.0.24"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/utils/-/utils-0.0.24.tgz#ccf7e84c7f5ff9df3f49d111532bc91cc3fd6d95"
+  integrity sha512-It8oe5wFS25LQPq2jJ8FXkCMuCoDhxnyKXMSLDnBYs5l8162IhJSVLsjH29gq5PIJiRPqE2gNVeMMqdELfq2ZQ==
   dependencies:
-    "@aws-sdk/client-s3" "^3.721.0"
-    "@aws-sdk/client-secrets-manager" "^3.721.0"
-    "@aws-sdk/client-ssm" "^3.721.0"
-    "@aws-sdk/s3-request-presigner" "^3.721.0"
+    "@aws-sdk/client-s3" "^3.735.0"
+    "@aws-sdk/client-secrets-manager" "^3.734.0"
+    "@aws-sdk/client-ssm" "^3.735.0"
+    "@aws-sdk/s3-request-presigner" "^3.735.0"
 
 "@glen/jest-raw-loader@^2.0.0":
   version "2.0.0"
@@ -2297,7 +2298,7 @@
   resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.4.tgz#0b92dcc0cc1c81f6f306a381f28e31b1a56536e9"
   integrity sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==
 
-"@types/aws-lambda@^8.10.146", "@types/aws-lambda@^8.10.147":
+"@types/aws-lambda@^8.10.147":
   version "8.10.147"
   resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.147.tgz#dc5c89aa32f47a9b35e52c32630545c83afa6f2f"
   integrity sha512-nD0Z9fNIZcxYX5Mai2CTmFD7wX7UldCkW2ezCF8D1T5hdiLsnTWDGRpfRYntU6VjTdLQjOvyszru7I1c1oCQew==

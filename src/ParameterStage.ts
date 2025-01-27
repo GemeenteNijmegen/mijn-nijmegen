@@ -203,6 +203,7 @@ export class ssmParamsConstruct extends Construct {
 
     this.addZaakParameters();
     this.addOpenKlantParameters();
+    this.addHaalCentraalParameters();
   }
 
   private addZaakParameters() {
@@ -284,6 +285,38 @@ export class ssmParamsConstruct extends Construct {
       description: 'OpenKlant API endpoint',
       stringValue: '-',
     });
+  }
+
+  addHaalCentraalParameters() {
+
+    new StringParameter(this, 'haal-centraal-cert', {
+      parameterName: Statics.ssmHaalCentraalCert,
+      description: 'HaalCentraal - cert',
+      stringValue: '-',
+    });
+
+    new StringParameter(this, 'haal-centraal-ca', {
+      parameterName: Statics.ssmHaalCentraalCa,
+      description: 'HaalCentraal - ca',
+      stringValue: '-',
+    });
+
+    new StringParameter(this, 'haal-centraal-base-url', {
+      parameterName: Statics.ssmHaalCentraalBaseUrl,
+      description: 'HaalCentraal - base url',
+      stringValue: '-',
+    });
+
+    new SecretsManager.Secret(this, 'haal-centraal-private-key', {
+      secretName: Statics.ssmHaalCentraalPrivateKey,
+      description: 'HaalCentraal - Mtls private key',
+    });
+
+    new SecretsManager.Secret(this, 'haal-centraal-api-key', {
+      secretName: Statics.ssmHaalCentraalApiKey,
+      description: 'HaalCentraal - API key',
+    });
+
   }
 
 }
