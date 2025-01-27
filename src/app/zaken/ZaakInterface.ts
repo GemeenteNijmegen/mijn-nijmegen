@@ -3,12 +3,19 @@ import { z } from 'zod';
 export const TaakSummarySchema = z.object({
   title: z.string(),
   url: z.string(),
+  zaak_uuid: z.string(),
+  uuid: z.string(),
   einddatum: z.string(),
   is_open: z.boolean(),
   is_afgerond: z.boolean(),
   is_verwerkt: z.boolean(),
   is_gesloten: z.boolean(),
-});
+  attachments: z.array(z.object({
+    title: z.string(),
+    url: z.string(),
+  }).optional().nullable(),
+  ),
+}).passthrough();
 export type TaakSummary = z.infer<typeof TaakSummarySchema>;
 export const TaakSummariesSchema = z.array(TaakSummarySchema);
 
@@ -39,7 +46,7 @@ export const singleZaakSchema = z.object({
   status_list: z.array(z.any()).optional(),
   resultaat: z.string().optional().nullable(),
   documenten: z.array(z.any()).optional(),
-  taken: z.array(z.any()).optional().nullable(),
+  taken: z.array(TaakSummarySchema).optional().nullable(),
   behandelaars: z.array(z.string()).optional(),
   type: z.enum(['case', 'submission']),
 });

@@ -40,16 +40,14 @@ export class ZakenRequestHandler {
       return Response.redirect('/login');
     }
 
-    if (!params.zaakId) {
+    if (!params.zaakId && !params.taakId) {
       return this.list(session, params);
-    }
-
-    if (params.zaakId && params.zaakConnectorId && !params.file) {
-      return this.get(params, session);
-    }
-
-    if (params.zaakId && params.zaakConnectorId && params.file) {
+    } else if (params.taakId && params.zaakConnectorId && params.file) {
+      return this.downloadTaak(params.zaakConnectorId, params.taakId, params.file, session);
+    } else if (params.zaakId && params.zaakConnectorId && params.file) {
       return this.download(params.zaakConnectorId, params.zaakId, params.file, session);
+    } else if (params.zaakId && params.zaakConnectorId) {
+      return this.get(params, session);
     }
     return Response.error(400);
   }
@@ -228,6 +226,19 @@ export class ZakenRequestHandler {
     const user = UserFromSession(session);
 
     const endpoint = `zaken/${zaakConnectorId}/${zaakId}/download/${file}`;
+    const response = await this.connector.fetch(endpoint, user);
+
+    if (response) {
+      return Response.redirect(response.downloadUrl);
+    } else {
+      return Response.error(404);
+    }
+  }
+
+  async downloadTaak(zaakConnectorId: string, taakId: string, file: string, session: Session) {
+    const user = UserFromSession(session);
+
+    const endpoint = `taken/${zaakConnectorId}/download/${taakId}/${file}`;
     const response = await this.connector.fetch(endpoint, user);
 
     if (response) {
