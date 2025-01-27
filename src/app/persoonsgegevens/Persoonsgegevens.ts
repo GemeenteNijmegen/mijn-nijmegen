@@ -9,8 +9,6 @@ export interface Persoonsgegevens {
   readonly nederlandseNationaliteit: string;
   readonly geslacht: string;
   readonly adres: string;
-  //readonly postcode: string;
-  // readonly woonplaats: string;
 }
 
 export class PersoonsgegevensMapper {
@@ -30,8 +28,6 @@ export class PersoonsgegevensMapper {
         persoon.Adres.Straat + ' ' + persoon.Adres.Huisnummer,
         persoon.Adres.Postcode + ' ' + persoon.Adres.Woonplaats,
       ].join('\n'),
-      // postcode: persoon.Adres.Postcode,
-      // woonplaats: persoon.Adres.Woonplaats,
     };
   }
 
