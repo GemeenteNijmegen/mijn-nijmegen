@@ -76,7 +76,7 @@ beforeEach(() => {
   ddbMock.mockImplementation(() => getItemOutput);
 });
 
-const apiClient = new ApiClient('', '', '');
+const apiClient = new ApiClient('abc', 'abc', 'abd');
 const dynamoDBClient = new DynamoDBClient({});
 const showZaken = true;
 const handler = new PersoonsgegevensRequestHandler({ apiClient, dynamoDBClient, showZaken });

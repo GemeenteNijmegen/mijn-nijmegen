@@ -4,8 +4,8 @@ import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-htt
 import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
 import { AuthenticationService } from './AuthenticationService';
 import { AuthRequestHandler } from './AuthRequestHandler';
-import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
+import { OpenIDConnect } from '../../shared/OpenIDConnect';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 const apiClient = new ApiClient();
@@ -20,14 +20,14 @@ async function init() {
   }
 
   // Construct the haal centraal API client
-  if(process.env.HAAL_CENTRAAL_LIVE === 'true'){
+  if (process.env.HAAL_CENTRAAL_LIVE === 'true') {
     const haalCentraalValues = environmentVariables([
       'HAAL_CENTRAAL_CERT_SSM',
       'HAAL_CENTRAAL_CA_SSM',
       'HAAL_CENTRAAL_PRIVATE_KEY_ARN',
       'HAAL_CENTRAAL_API_KEY_ARN',
       'HAAL_CENTRAAL_BASE_URL',
-    ])
+    ]);
     const haalCentraalApiClient = await ApiClient.fromParameterStore(
       haalCentraalValues.HAAL_CENTRAAL_CERT_SSM,
       haalCentraalValues.HAAL_CENTRAAL_CA_SSM,
@@ -37,7 +37,7 @@ async function init() {
       apiclient: haalCentraalApiClient,
       apiKey: await AWS.getSecret(haalCentraalValues.HAAL_CENTRAAL_API_KEY_ARN),
       baseUrl: haalCentraalValues.HAAL_CENTRAAL_BASE_URL,
-    })
+    });
   }
 }
 const initaliation = init();

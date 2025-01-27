@@ -309,7 +309,6 @@ export class ApiStack extends Stack implements Configurable {
         NL_WALLET_SIGNICAT_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmSignicatScope),
         NL_WALLET_SIGNICAT_WELL_KNOWN: StringParameter.valueForStringParameter(this, Statics.ssmSignicatWellKnown),
 
-
         // Haal Centraal
         HAAL_CENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
         HAAL_CENTRAAL_CERT_SSM: Statics.ssmHaalCentraalCert,
@@ -349,6 +348,15 @@ export class ApiStack extends Stack implements Configurable {
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
         HAALCENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+
+        // Haal Centraal
+        HAAL_CENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
+        HAAL_CENTRAAL_CERT_SSM: Statics.ssmHaalCentraalCert,
+        HAAL_CENTRAAL_CA_SSM: Statics.ssmHaalCentraalCa,
+        HAAL_CENTRAAL_PRIVATE_KEY_ARN: Statics.ssmHaalCentraalPrivateKey,
+        HAAL_CENTRAAL_API_KEY_ARN: Statics.ssmHaalCentraalApiKey,
+        HAAL_CENTRAAL_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmHaalCentraalBaseUrl),
+
       },
       apiFunction: PersoonsgegevensFunction,
     });

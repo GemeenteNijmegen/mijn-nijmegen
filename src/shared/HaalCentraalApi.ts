@@ -50,9 +50,9 @@ export class HaalCentraalApi {
       endpoint: 'personen',
       type: 'RaadpleegMetBurgerservicenummer',
       burgerservicenummer: [bsn],
-      fields: ['naam'],
+      fields: ['adressering'], // Use this over naam as this is the nicely formated version of the name
     });
-    return response.naam.volledigeNaam;
+    return response.adressering.aanschrijfwijze;
   }
 
   async getBrpData(bsn: Bsn, fields: Fields[]) {
