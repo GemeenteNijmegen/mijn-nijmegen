@@ -38,6 +38,9 @@ describe('Haal Centraal API', () => {
           voorletters: 'P.J.',
           volledigeNaam: 'Pieter Jan de Vries',
         },
+        adressering: {
+          aanschrijfwijze: 'P.J. de Vries',
+        },
       }],
     });
     client.postData = mockPostData;
@@ -49,7 +52,7 @@ describe('Haal Centraal API', () => {
     });
     const result = await api.getName(new Bsn('900026236'));
     expect(client.postData).toHaveBeenCalledTimes(1);
-    expect(result).toBe('Pieter Jan de Vries');
+    expect(result).toBe('P.J. de Vries');
   });
 
   test('Get data', async () => {
