@@ -196,11 +196,6 @@ export class ssmParamsConstruct extends Construct {
       parameterName: Statics.ssmBrpApiEndpointUrl,
     });
 
-    new SSM.StringParameter(this, 'ssm_brp_2', {
-      stringValue: 'api.haal-centraal-brp-dev.csp-nijmegen.nl',
-      parameterName: Statics.ssmBrpHaalCentraalApiEndpointUrl,
-    });
-
     this.addZaakParameters();
     this.addOpenKlantParameters();
     this.addHaalCentraalParameters();
@@ -260,11 +255,6 @@ export class ssmParamsConstruct extends Construct {
     new SecretsManager.Secret(this, 'inzage_secret_1', {
       secretName: Statics.ssmInzageApiKey,
       description: 'Verwerkingen logging Api key',
-    });
-
-    new SecretsManager.Secret(this, 'haalcentraal_secret_1', {
-      secretName: Statics.haalCentraalApiKeySecret,
-      description: 'BRP Api key haal centraal',
     });
 
     new SecretsManager.Secret(this, 'zaakaggregator-api-key', {
