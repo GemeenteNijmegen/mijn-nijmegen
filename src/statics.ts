@@ -176,6 +176,13 @@ export abstract class Statics {
 
   static readonly submissionstorageKey: string = '/cdk/mijn-nijmegen/submissionstorage-key';
 
+  // MARK: HaalCentraal configuration
+  static readonly ssmHaalCentraalCert = '/cdk/mijn-nijmegen/haal-centraal/cert';
+  static readonly ssmHaalCentraalCa = '/cdk/mijn-nijmegen/haal-centraal/ca';
+  static readonly ssmHaalCentraalPrivateKey = '/cdk/mijn-nijmegen/haal-centraal/private-key';
+  static readonly ssmHaalCentraalApiKey = '/cdk/mijn-nijmegen/haal-centraal/api-key';
+  static readonly ssmHaalCentraalBaseUrl = '/cdk/mijn-nijmegen/haal-centraal/base-url';
+
   /**
    * Secret for verwerkingenlogging inzage
    */
