@@ -8,7 +8,12 @@ export interface Persoonsgegevens {
   readonly geboortedatum: string;
   readonly nederlandseNationaliteit: string;
   readonly geslacht: string;
-  readonly adres: string;
+
+  readonly adresHaalCentraal?: string;
+  readonly straat?: string;
+  readonly huisnummer?: string;
+  readonly postcode?: string;
+  readonly woonplaats?: string;
 }
 
 export class PersoonsgegevensMapper {
@@ -24,10 +29,11 @@ export class PersoonsgegevensMapper {
       geboortedatum: persoon.Persoonsgegevens.Geboortedatum,
       nederlandseNationaliteit: persoon.Persoonsgegevens.NederlandseNationaliteit,
       geslacht: persoon.Persoonsgegevens.Geslacht,
-      adres: [
-        persoon.Adres.Straat + ' ' + persoon.Adres.Huisnummer,
-        persoon.Adres.Postcode + ' ' + persoon.Adres.Woonplaats,
-      ].join('\n'),
+
+      straat: persoon.Adres.Straat,
+      huisnummer: persoon.Adres.Huisnummer,
+      postcode: persoon.Adres.Postcode,
+      woonplaats: persoon.Adres.Woonplaats,
     };
   }
 
@@ -42,7 +48,7 @@ export class PersoonsgegevensMapper {
       geboortedatum: data.geboorte.datum.datum,
       nederlandseNationaliteit: data.nationaliteiten[0].code, // TODO this is a code...
       geslacht: data.geslacht.code, // TODO fix this code / mapping?
-      adres: [
+      adresHaalCentraal: [
         data.adressering.adresregel1,
         data.adressering.adresregel2,
         data.adressering.adresregel3,
