@@ -2,6 +2,7 @@ import fs from 'fs';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { BrpApi } from '../BrpApi';
 
+
 async function getStringFromFilePath(filePath: string): Promise<string> {
   return new Promise((res, rej) => {
     fs.readFile(filePath, (err, data) => {
