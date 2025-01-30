@@ -1,4 +1,4 @@
-import { LANDCODE_NEDERLAND } from "../../shared/HaalCentraalApi";
+import { LANDCODE_NEDERLAND } from '../../shared/HaalCentraalApi';
 
 export interface Persoonsgegevens {
   readonly bsn: string;
