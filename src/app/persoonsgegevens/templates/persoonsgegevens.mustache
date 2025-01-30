@@ -32,6 +32,14 @@
                             <td>BSN</td>
                             <td>{{persoonsgegevens.bsn}}</td>
                         </tr>
+
+                        {{#persoonsgegevens.naam}}
+                        <tr>
+                            <td>Naam (aanschijfwijze)</td>
+                            <td>{{persoonsgegevens.naam}}</td>
+                        </tr>
+                        {{/persoonsgegevens.naam}}
+
                         <tr>
                             <td>Initialen</td>
                             <td>{{persoonsgegevens.voorletters}}</td>
@@ -48,10 +56,14 @@
                             <td>Geslachtsnaam</td>
                             <td>{{persoonsgegevens.geslachtsnaam}}</td>
                         </tr>
+
+                        {{#persoonsgegevens.achternaam}}
                         <tr>
                             <td>Achternaam</td>
                             <td>{{persoonsgegevens.achternaam}}</td>
                         </tr>
+                        {{/persoonsgegevens.achternaam}}
+
                         <tr>
                             <td>Geboortedatum</td>
                             <td>{{persoonsgegevens.geboortedatum}}</td>

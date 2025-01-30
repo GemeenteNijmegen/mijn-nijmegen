@@ -1,10 +1,13 @@
+import { LANDCODE_NEDERLAND } from "../../shared/HaalCentraalApi";
+
 export interface Persoonsgegevens {
   readonly bsn: string;
+  readonly naam?: string;
   readonly voorletters: string;
   readonly voornamen: string;
   readonly voorvoegsel: string;
   readonly geslachtsnaam: string;
-  readonly achternaam: string;
+  readonly achternaam?: string;
   readonly geboortedatum: string;
   readonly nederlandseNationaliteit: string;
   readonly geslacht: string;
@@ -38,21 +41,27 @@ export class PersoonsgegevensMapper {
   }
 
   static fromHaalCentraal(data: any): Persoonsgegevens {
+
     return {
       bsn: data.burgerservicenummer,
+      naam: data.adressering.aanschrijfwijze.naam,
       voorletters: data.naam.voorletters,
       voornamen: data.naam.voornamen,
       voorvoegsel: data.naam.voorvoegsel,
       geslachtsnaam: data.naam.geslachtsnaam,
-      achternaam: data.naam.geslachtsnaam, // TODO this is the name hell we fixed in layer7
       geboortedatum: data.geboorte.datum.datum,
-      nederlandseNationaliteit: data.nationaliteiten[0].code, // TODO this is a code...
-      geslacht: data.geslacht.code, // TODO fix this code / mapping?
+      nederlandseNationaliteit: data.nationaliteiten[0].code == LANDCODE_NEDERLAND ? 'Ja' : 'Nee',
+      geslacht: PersoonsgegevensMapper.capitalizeFirstLetter(data.geslacht.omschrijving),
       adresHaalCentraal: [
-        data.adressering.adresregel1,
-        data.adressering.adresregel2,
-        data.adressering.adresregel3,
+        data.adressering.adresregel1 ?? '',
+        data.adressering.adresregel2 ?? '',
+        data.adressering.adresregel3 ?? '',
       ].join('\n'),
     };
   }
+
+  private static capitalizeFirstLetter(str: string) {
+    return String(str).charAt(0).toUpperCase() + String(str).slice(1);
+  }
+
 }
