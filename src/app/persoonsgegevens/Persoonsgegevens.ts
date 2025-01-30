@@ -51,17 +51,13 @@ export class PersoonsgegevensMapper {
       geslachtsnaam: data.naam.geslachtsnaam,
       geboortedatum: data.geboorte.datum.datum,
       nederlandseNationaliteit: data.nationaliteiten[0].code == LANDCODE_NEDERLAND ? 'Ja' : 'Nee',
-      geslacht: PersoonsgegevensMapper.capitalizeFirstLetter(data.geslacht.omschrijving),
+      geslacht: data.geslacht.code,
       adresHaalCentraal: [
         data.adressering.adresregel1 ?? '',
         data.adressering.adresregel2 ?? '',
         data.adressering.adresregel3 ?? '',
       ].join('\n'),
     };
-  }
-
-  private static capitalizeFirstLetter(str: string) {
-    return String(str).charAt(0).toUpperCase() + String(str).slice(1);
   }
 
 }
