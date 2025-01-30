@@ -41,6 +41,8 @@ interface requestConfiguration {
   burgerservicenummer: Bsn[];
 }
 
+export const LANDCODE_NEDERLAND = '6030';
+
 export class HaalCentraalApi {
 
   constructor(private config: Config) { }
