@@ -26,6 +26,13 @@ interface TLSConfig {
   rootCert: IStringParameter;
 }
 
+interface HaalCentraalConfig {
+  apiKey: ISecret;
+  privateKey: ISecret;
+  clientCert: IStringParameter;
+  rootCert: IStringParameter;
+}
+
 export interface ApiStackProps extends StackProps, Configurable {
   sessionsTable: SessionsTable;
   branch: string;
@@ -73,6 +80,7 @@ export class ApiStack extends Stack implements Configurable {
    */
   setFunctions(baseUrl: string, readOnlyRole: Role, configuration: Configuration) {
     const tlsConfig = this.mtlsConfig();
+    const haalCentraalConfig = this.haalCentraalConfig();
     /**
      * The login function generates a login URL and renders the login page.
      */
@@ -86,7 +94,7 @@ export class ApiStack extends Stack implements Configurable {
     /**
      * The auth function receives the callback from the OIDC-provider, validates the received ID-Token, and sets the session to loggedin.
      */
-    const authFunction = this.authFunction(baseUrl, readOnlyRole, tlsConfig);
+    const authFunction = this.authFunction(baseUrl, readOnlyRole, tlsConfig, haalCentraalConfig);
 
     /**
      * The Home function show the homepage.
@@ -96,7 +104,7 @@ export class ApiStack extends Stack implements Configurable {
     /**
      * The Persoonsgegevens function show the homepage.
      */
-    const persoonsGegevensFunction = this.persoonsgegevensFunction(baseUrl, readOnlyRole, tlsConfig);
+    const persoonsGegevensFunction = this.persoonsgegevensFunction(baseUrl, readOnlyRole, tlsConfig, haalCentraalConfig);
 
     /**
      * The uitkeringenfunction show your current uitkering.
@@ -163,6 +171,12 @@ export class ApiStack extends Stack implements Configurable {
       routeKey: apigatewayv2.HttpRouteKey.with('/zaken/{zaaksource}/{zaakid}/download/{file+}', apigatewayv2.HttpMethod.GET),
     });
 
+    new apigatewayv2.HttpRoute(this, 'download-taak-route', {
+      httpApi: this.api,
+      integration: new HttpLambdaIntegration('zaak', zakenFunction.lambda),
+      routeKey: apigatewayv2.HttpRouteKey.with('/zaken/{zaaksource}/{zaakid}/taak/{taakid}/download/{file+}', apigatewayv2.HttpMethod.GET),
+    });
+
 
     if (configuration.inzageLive) {
       const inzageFunction = this.inzageFunction(baseUrl, readOnlyRole, tlsConfig);
@@ -189,6 +203,19 @@ export class ApiStack extends Stack implements Configurable {
     const rootCert = StringParameter.fromStringParameterName(this, 'tlsrootca', Statics.ssmMTLSRootCA);
     const tlsConfig = { privateKey, clientCert, rootCert };
     return tlsConfig;
+  }
+
+  private haalCentraalConfig() : HaalCentraalConfig {
+    const brpHaalCentraalApiKeySecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'brp-haal-centraal-api-key-auth-secret', Statics.ssmHaalCentraalApiKey);
+    const brpHaalCentraalPrivateKeySecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'brp-haal-centraal-private-key-secret', Statics.ssmHaalCentraalPrivateKey);
+    const brpHaalCentraalCertParameter = StringParameter.fromStringParameterName(this, 'brp-haal-centraal-cert', Statics.ssmHaalCentraalCert);
+    const brpHaalCentraalCaParameter = StringParameter.fromStringParameterName(this, 'brp-haal-centraal-ca', Statics.ssmHaalCentraalCa);
+    return {
+      privateKey: brpHaalCentraalPrivateKeySecret,
+      clientCert: brpHaalCentraalCertParameter,
+      rootCert: brpHaalCentraalCaParameter,
+      apiKey: brpHaalCentraalApiKeySecret,
+    };
   }
 
   private logoutFunction(baseUrl: string, readOnlyRole: Role) {
@@ -260,12 +287,11 @@ export class ApiStack extends Stack implements Configurable {
     return homeFunction;
   }
 
-  private authFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
+  private authFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig, haalCentraalConfig: HaalCentraalConfig) {
     const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
     const authServiceClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'auth-serice-client-secret', Statics.authServiceClientSecretArn);
     const verIdClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'verid-client-secret', Statics.ssmVerIdClientSecret);
     const signicatClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'signicat-client-secret', Statics.ssmSignicatClientSecret);
-    const brpHaalCentraalApiKeySecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'brp-haal-centraal-api-key-auth-secret', Statics.haalCentraalApiKeySecret);
 
     const authFunction = new ApiFunction(this, 'auth-function', {
       description: 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.',
@@ -281,9 +307,6 @@ export class ApiStack extends Stack implements Configurable {
         MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
         MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
-        BRP_HAAL_CENTRAAL_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpHaalCentraalApiEndpointUrl),
-        BRP_API_KEY: brpHaalCentraalApiKeySecret.secretArn,
-        HAALCENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
         DIGID_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmDIGIDScope),
         EHERKENNING_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmEherkenningScope),
         YIVI_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmYiviScope),
@@ -310,10 +333,21 @@ export class ApiStack extends Stack implements Configurable {
         NL_WALLET_SIGNICAT_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmSignicatScope),
         NL_WALLET_SIGNICAT_WELL_KNOWN: StringParameter.valueForStringParameter(this, Statics.ssmSignicatWellKnown),
 
+        // Haal Centraal
+        HAAL_CENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
+        HAAL_CENTRAAL_CERT_SSM: haalCentraalConfig.clientCert.parameterName,
+        HAAL_CENTRAAL_CA_SSM: haalCentraalConfig.rootCert.parameterName,
+        HAAL_CENTRAAL_PRIVATE_KEY_ARN: haalCentraalConfig.privateKey.secretArn,
+        HAAL_CENTRAAL_API_KEY_ARN: haalCentraalConfig.apiKey.secretArn,
+        HAAL_CENTRAAL_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmHaalCentraalBaseUrl),
+
       },
       apiFunction: AuthFunction,
     });
-    brpHaalCentraalApiKeySecret.grantRead(authFunction.lambda);
+    haalCentraalConfig.apiKey.grantRead(authFunction.lambda);
+    haalCentraalConfig.privateKey.grantRead(authFunction.lambda);
+    haalCentraalConfig.clientCert.grantRead(authFunction.lambda);
+    haalCentraalConfig.rootCert.grantRead(authFunction.lambda);
     authServiceClientSecret.grantRead(authFunction.lambda);
     verIdClientSecret.grantRead(authFunction.lambda);
     signicatClientSecret.grantRead(authFunction.lambda);
@@ -325,7 +359,7 @@ export class ApiStack extends Stack implements Configurable {
     return authFunction;
   }
 
-  private persoonsgegevensFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
+  private persoonsgegevensFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig, haalCentraalConfig: HaalCentraalConfig) {
 
     const persoonsGegevensFunction = new ApiFunction(this, 'persoonsgegevens-function', {
       description: 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.',
@@ -341,9 +375,23 @@ export class ApiStack extends Stack implements Configurable {
         BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
         HAALCENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+
+        // Haal Centraal
+        HAAL_CENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
+        HAAL_CENTRAAL_CERT_SSM: haalCentraalConfig.clientCert.parameterName,
+        HAAL_CENTRAAL_CA_SSM: haalCentraalConfig.rootCert.parameterName,
+        HAAL_CENTRAAL_PRIVATE_KEY_ARN: haalCentraalConfig.privateKey.secretArn,
+        HAAL_CENTRAAL_API_KEY_ARN: haalCentraalConfig.apiKey.secretArn,
+        HAAL_CENTRAAL_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmHaalCentraalBaseUrl),
+
       },
       apiFunction: PersoonsgegevensFunction,
     });
+
+    haalCentraalConfig.apiKey.grantRead(persoonsGegevensFunction.lambda);
+    haalCentraalConfig.privateKey.grantRead(persoonsGegevensFunction.lambda);
+    haalCentraalConfig.clientCert.grantRead(persoonsGegevensFunction.lambda);
+    haalCentraalConfig.rootCert.grantRead(persoonsGegevensFunction.lambda);
     mtlsConfig.privateKey.grantRead(persoonsGegevensFunction.lambda);
     mtlsConfig.clientCert.grantRead(persoonsGegevensFunction.lambda);
     mtlsConfig.rootCert.grantRead(persoonsGegevensFunction.lambda);

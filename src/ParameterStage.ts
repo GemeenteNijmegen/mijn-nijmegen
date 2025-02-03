@@ -196,13 +196,9 @@ export class ssmParamsConstruct extends Construct {
       parameterName: Statics.ssmBrpApiEndpointUrl,
     });
 
-    new SSM.StringParameter(this, 'ssm_brp_2', {
-      stringValue: 'api.haal-centraal-brp-dev.csp-nijmegen.nl',
-      parameterName: Statics.ssmBrpHaalCentraalApiEndpointUrl,
-    });
-
     this.addZaakParameters();
     this.addOpenKlantParameters();
+    this.addHaalCentraalParameters();
   }
 
   private addZaakParameters() {
@@ -261,11 +257,6 @@ export class ssmParamsConstruct extends Construct {
       description: 'Verwerkingen logging Api key',
     });
 
-    new SecretsManager.Secret(this, 'haalcentraal_secret_1', {
-      secretName: Statics.haalCentraalApiKeySecret,
-      description: 'BRP Api key haal centraal',
-    });
-
     new SecretsManager.Secret(this, 'zaakaggregator-api-key', {
       secretName: Statics.zaakAggregatorApiGatewayApiKey,
       description: 'Api key zaakaggregator',
@@ -284,6 +275,38 @@ export class ssmParamsConstruct extends Construct {
       description: 'OpenKlant API endpoint',
       stringValue: '-',
     });
+  }
+
+  addHaalCentraalParameters() {
+
+    new StringParameter(this, 'haal-centraal-cert', {
+      parameterName: Statics.ssmHaalCentraalCert,
+      description: 'HaalCentraal - cert',
+      stringValue: '-',
+    });
+
+    new StringParameter(this, 'haal-centraal-ca', {
+      parameterName: Statics.ssmHaalCentraalCa,
+      description: 'HaalCentraal - ca',
+      stringValue: '-',
+    });
+
+    new StringParameter(this, 'haal-centraal-base-url', {
+      parameterName: Statics.ssmHaalCentraalBaseUrl,
+      description: 'HaalCentraal - base url',
+      stringValue: '-',
+    });
+
+    new SecretsManager.Secret(this, 'haal-centraal-private-key', {
+      secretName: Statics.ssmHaalCentraalPrivateKey,
+      description: 'HaalCentraal - Mtls private key',
+    });
+
+    new SecretsManager.Secret(this, 'haal-centraal-api-key', {
+      secretName: Statics.ssmHaalCentraalApiKey,
+      description: 'HaalCentraal - API key',
+    });
+
   }
 
 }

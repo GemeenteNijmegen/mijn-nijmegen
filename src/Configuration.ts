@@ -140,7 +140,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     dsRecord: '1092 13 2 1F367460EB372760AA306E8BA29C64AD04BCA7AB515E30CA99FE710A1484A0FE',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-development',
     pipelineName: 'mijnnijmegen-development',
-    brpHaalCentraalIsLive: true,
+    brpHaalCentraalIsLive: false,
     zakenUseTaken: true,
     zakenIsLive: true,
     zakenUseSubmissions: true,
