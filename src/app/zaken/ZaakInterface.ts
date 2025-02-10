@@ -48,6 +48,6 @@ export const singleZaakSchema = z.object({
   documenten: z.array(z.any()).optional(),
   taken: z.array(TaakSummarySchema).optional().nullable(),
   behandelaars: z.array(z.string()).optional(),
-  type: z.enum(['case', 'submission']),
+  type: z.enum(['case', 'submission', 'case_with_submission']),
 });
 export type SingleZaak = z.infer<typeof singleZaakSchema>;
