@@ -1,12 +1,12 @@
-import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Bsn } from '@gemeentenijmegen/utils';
+import { ApiClient } from '../ApiClient';
 import { HaalCentraalApi } from '../HaalCentraalApi';
 
 describe('Haal Centraal API', () => {
 
   test('Error on overlijden', async () => {
 
-    const client = new ApiClient();
+    const client = new ApiClient({});
     const mockPostData = jest.fn().mockResolvedValueOnce({
       personen: [{
         overlijden: {
@@ -18,7 +18,6 @@ describe('Haal Centraal API', () => {
 
     const api = new HaalCentraalApi({
       apiclient: client,
-      apiKey: 'ABC',
       baseUrl: 'https://example.com',
     });
     const result = api.getName(new Bsn('900026236'));
@@ -28,7 +27,7 @@ describe('Haal Centraal API', () => {
 
   test('Get naam', async () => {
 
-    const client = new ApiClient();
+    const client = new ApiClient({});
     const mockPostData = jest.fn().mockResolvedValueOnce({
       personen: [{
         naam: {
@@ -47,7 +46,6 @@ describe('Haal Centraal API', () => {
 
     const api = new HaalCentraalApi({
       apiclient: client,
-      apiKey: 'ABC',
       baseUrl: 'https://example.com',
     });
     const result = await api.getName(new Bsn('900026236'));
@@ -57,7 +55,7 @@ describe('Haal Centraal API', () => {
 
   test('Get data', async () => {
 
-    const client = new ApiClient();
+    const client = new ApiClient({});
     const mockPostData = jest.fn().mockResolvedValueOnce({
       personen: [{
         aNummer: '00000000',
@@ -76,7 +74,6 @@ describe('Haal Centraal API', () => {
 
     const api = new HaalCentraalApi({
       apiclient: client,
-      apiKey: 'ABC',
       baseUrl: 'https://example.com',
     });
     const result = await api.getBrpData(new Bsn('900026236'), [
@@ -90,12 +87,11 @@ describe('Haal Centraal API', () => {
   });
 
   test('Error on undefined response', async () => {
-    const client = new ApiClient();
+    const client = new ApiClient({});
     const mockPostData = jest.fn().mockResolvedValueOnce(undefined);
     client.postData = mockPostData;
     const api = new HaalCentraalApi({
       apiclient: client,
-      apiKey: 'ABC',
       baseUrl: 'https://example.com',
     });
     const result = api.getName(new Bsn('900026236'));
@@ -103,7 +99,7 @@ describe('Haal Centraal API', () => {
   });
 
   test('Error on multiple presonen respone', async () => {
-    const client = new ApiClient();
+    const client = new ApiClient({});
     const mockPostData = jest.fn().mockResolvedValueOnce({
       personen: [{
         aNummer: '00000000',
@@ -133,7 +129,6 @@ describe('Haal Centraal API', () => {
     client.postData = mockPostData;
     const api = new HaalCentraalApi({
       apiclient: client,
-      apiKey: 'ABC',
       baseUrl: 'https://example.com',
     });
     const result = api.getName(new Bsn('900026236'));

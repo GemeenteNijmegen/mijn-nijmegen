@@ -1303,10 +1303,10 @@
     "@eslint/core" "^0.12.0"
     levn "^0.4.1"
 
-"@gemeentenijmegen/apiclient@^0.0.26":
-  version "0.0.26"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/apiclient/-/apiclient-0.0.26.tgz#cba6956adcab11b6135ab8883c12c52e5f48624d"
-  integrity sha512-2kZPWG4bykX9I/sl3eEil7IOxtSjD08xp0I7ErkR4cGHOw/Dy0Yeu0kUIAxFFAnzuHV4mlcnhb84iSAI3n0Ixw==
+"@gemeentenijmegen/apiclient@^0.0.27":
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/apiclient/-/apiclient-0.0.27.tgz#0c44a735666352f13f8f76c4cda6f9820037c14d"
+  integrity sha512-PJCgri+xeZ7obAFFRFoyIkXsg0I06mKyT0CY3A/oIklQJVB53Rt3Btrd574lVdy6gDgY6pvaoQdlbado1KCx8w==
   dependencies:
     "@aws-sdk/client-secrets-manager" "^3.741.0"
     "@aws-sdk/client-ssm" "^3.741.0"
@@ -1704,10 +1704,10 @@
   resolved "https://registry.yarnpkg.com/@oozcitak/util/-/util-8.3.8.tgz#10f65fe1891fd8cde4957360835e78fd1936bfdd"
   integrity sha512-T8TbSnGsxo6TDBJx/Sgv/BlVJL3tshxZP7Aq5R1mSnM5OcHY2dQaxLMu2+E8u3gN0MLOzdjurqN4ZRVuzQycOQ==
 
-"@pepperize/cdk-route53-health-check@^0.0.683":
-  version "0.0.683"
-  resolved "https://registry.yarnpkg.com/@pepperize/cdk-route53-health-check/-/cdk-route53-health-check-0.0.683.tgz#ab509eefb5e42058db678c11be13b3f81b362599"
-  integrity sha512-h6Ow5VUadStvRm5T/UttYDqsqe1Dau2tfDbr3C0ViUqiETnwfKznmKfI72lUu5nNJMtS2kqFSPsvZO0HwJTkEw==
+"@pepperize/cdk-route53-health-check@^0.0.684":
+  version "0.0.684"
+  resolved "https://registry.yarnpkg.com/@pepperize/cdk-route53-health-check/-/cdk-route53-health-check-0.0.684.tgz#b8c521afe146e3736f28139a0f18490be7fb8c83"
+  integrity sha512-uxCqt0Zo33whdnNBHl2HCp4NKF9VUpeM8gvCP7NIiTfBm38a7Jp9j/JuGygg3BPvxcWNi538KssT+G3l1TxYZA==
 
 "@playwright/test@^1.50.1":
   version "1.50.1"
@@ -3574,9 +3574,9 @@ ejs@^3.1.10:
     jake "^10.8.5"
 
 electron-to-chromium@^1.5.73:
-  version "1.5.106"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.106.tgz#ed07e5eb617eacbfbb96d22f077c28315f2a5bc9"
-  integrity sha512-12keJGdXQWPnfVOu6/6ZzZgPPNodiDOSe3LjA8qk2yXTjnCnw2LeGUsAmtlNAmH4UW0K7tOLcz0j9lI2eJCJRA==
+  version "1.5.107"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.107.tgz#0a12a0b50e6f925cde8bf9c16c13d514c54c694b"
+  integrity sha512-dJr1o6yCntRkXElnhsHh1bAV19bo/hKyFf7tCcWgpXbuFIF0Lakjgqv5LRfSDaNzAII8Fnxg2tqgHkgCvxdbxw==
 
 emittery@^0.13.1:
   version "0.13.1"
@@ -6802,17 +6802,17 @@ tinyglobby@^0.2.12:
     fdir "^6.4.3"
     picomatch "^4.0.2"
 
-tldts-core@^6.1.78:
-  version "6.1.78"
-  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-6.1.78.tgz#47b477d9742870daa01dbd5ff9a598a48379728c"
-  integrity sha512-jS0svNsB99jR6AJBmfmEWuKIgz91Haya91Z43PATaeHJ24BkMoNRb/jlaD37VYjb0mYf6gRL/HOnvS1zEnYBiw==
+tldts-core@^6.1.79:
+  version "6.1.79"
+  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-6.1.79.tgz#2d98689a161fbafe38a6640a54f5d4c88bd941a1"
+  integrity sha512-HM+Ud/2oQuHt4I43Nvjc213Zji/z25NSH5OkJskJwHXNtYh9DTRlHMDFhms9dFMP7qyve/yVaXFIxmcJ7TdOjw==
 
 tldts@^6.1.32:
-  version "6.1.78"
-  resolved "https://registry.yarnpkg.com/tldts/-/tldts-6.1.78.tgz#ee94576653a60d421ff94162c4e9060f2e62467b"
-  integrity sha512-fSgYrW0ITH0SR/CqKMXIruYIPpNu5aDgUp22UhYoSrnUQwc7SBqifEBFNce7AAcygUPBo6a/gbtcguWdmko4RQ==
+  version "6.1.79"
+  resolved "https://registry.yarnpkg.com/tldts/-/tldts-6.1.79.tgz#1804eddc48f8ae22a0e20937c9d92634ace7580b"
+  integrity sha512-wjlYwK8lC/WcywLWf3A7qbK07SexezXjTRVwuPWXHvcjD7MnpPS2RXY5rLO3g12a8CNc7Y7jQRQsV7XyuBZjig==
   dependencies:
-    tldts-core "^6.1.78"
+    tldts-core "^6.1.79"
 
 tmpl@1.0.5:
   version "1.0.5"

@@ -1,8 +1,7 @@
-import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Bsn } from '@gemeentenijmegen/utils';
+import { ApiClient } from './ApiClient';
 
 interface Config {
-  readonly apiKey: string;
   readonly baseUrl: string;
   readonly apiclient: ApiClient;
 }
@@ -76,7 +75,6 @@ export class HaalCentraalApi {
     });
     const data = await this.config.apiclient.postData(url, body, {
       'Content-type': 'application/json',
-      'X-API-KEY': this.config.apiKey,
     });
 
     // Check response
