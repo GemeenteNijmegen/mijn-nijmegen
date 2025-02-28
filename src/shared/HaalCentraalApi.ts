@@ -53,7 +53,7 @@ export class HaalCentraalApi {
       burgerservicenummer: [bsn],
       fields: ['adressering'], // Use this over naam as this is the nicely formated version of the name
     });
-    return response.adressering.aanschrijfwijze;
+    return response.adressering.aanschrijfwijze.naam;
   }
 
   async getBrpData(bsn: Bsn, fields: Fields[]) {

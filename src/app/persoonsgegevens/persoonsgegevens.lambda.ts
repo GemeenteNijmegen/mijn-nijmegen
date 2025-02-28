@@ -1,10 +1,11 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
-import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
+import { environmentVariables } from '@gemeentenijmegen/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
-import { PersoonsgegevensRequestHandler } from './persoonsgegevensRequestHandler';
+import { ApiClient as ApiClientV2 } from '../../shared/ApiClient';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
+import { PersoonsgegevensRequestHandler } from './persoonsgegevensRequestHandler';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 const apiClient = new ApiClient();
@@ -22,19 +23,22 @@ async function init() {
   if (process.env.HAAL_CENTRAAL_LIVE === 'true') {
     const haalCentraalValues = environmentVariables([
       'HAAL_CENTRAAL_CERT_SSM',
-      'HAAL_CENTRAAL_CA_SSM',
       'HAAL_CENTRAAL_PRIVATE_KEY_ARN',
       'HAAL_CENTRAAL_API_KEY_ARN',
       'HAAL_CENTRAAL_BASE_URL',
     ]);
-    const haalCentraalApiClient = await ApiClient.fromParameterStore(
-      haalCentraalValues.HAAL_CENTRAAL_CERT_SSM,
-      haalCentraalValues.HAAL_CENTRAAL_CA_SSM,
-      haalCentraalValues.HAAL_CENTRAAL_PRIVATE_KEY_ARN,
-    );
+    const haalCentraalApiClient = new ApiClientV2({
+      apikey: {
+        'header': 'X-API-KEY',
+        keyArn: haalCentraalValues.HAAL_CENTRAAL_API_KEY_ARN,
+      },
+      mtls: {
+        cert: haalCentraalValues.HAAL_CENTRAAL_CERT_SSM,
+        keyArn: haalCentraalValues.HAAL_CENTRAAL_PRIVATE_KEY_ARN,
+      },
+    });
     haalCentraalApi = new HaalCentraalApi({
       apiclient: haalCentraalApiClient,
-      apiKey: await AWS.getSecret(haalCentraalValues.HAAL_CENTRAAL_API_KEY_ARN),
       baseUrl: haalCentraalValues.HAAL_CENTRAAL_BASE_URL,
     });
   }

@@ -248,7 +248,7 @@ export class AuthRequestHandler {
       bsn = this.bsnFromDigidLogin(claims);
     }
 
-    if ( authMethod == 'eherkenning') {
+    if (authMethod == 'eherkenning') {
       kvk = this.kvkFromEherkenningLogin(claims);
     }
     if (bsn || kvk) {
@@ -273,7 +273,7 @@ export class AuthRequestHandler {
    * @param scope
    * @returns authentication method that is used
    */
-  authMethodFromScope(scope: string) : AuthenticationMethod {
+  authMethodFromScope(scope: string): AuthenticationMethod {
     if (scope.includes(this.config.yiviScope)) {
       return 'yivi';
     } else if (scope.includes(this.config.eherkenningScope)) {
