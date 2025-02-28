@@ -3,9 +3,9 @@ import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { environmentVariables } from '@gemeentenijmegen/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { PersoonsgegevensRequestHandler } from './persoonsgegevensRequestHandler';
 import { ApiClient as ApiClientV2 } from '../../shared/ApiClient';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
-import { PersoonsgegevensRequestHandler } from './persoonsgegevensRequestHandler';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 const apiClient = new ApiClient();
@@ -29,7 +29,7 @@ async function init() {
     ]);
     const haalCentraalApiClient = new ApiClientV2({
       apikey: {
-        'header': 'X-API-KEY',
+        header: 'X-API-KEY',
         keyArn: haalCentraalValues.HAAL_CENTRAAL_API_KEY_ARN,
       },
       mtls: {

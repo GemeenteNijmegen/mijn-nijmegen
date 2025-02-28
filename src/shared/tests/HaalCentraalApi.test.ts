@@ -38,7 +38,9 @@ describe('Haal Centraal API', () => {
           volledigeNaam: 'Pieter Jan de Vries',
         },
         adressering: {
-          aanschrijfwijze: 'P.J. de Vries',
+          aanschrijfwijze: {
+            naam: 'P.J. de Vries',
+          },
         },
       }],
     });
