@@ -83,7 +83,7 @@
                 <h2>Adresgegevens</h2>
 
                 {{! HaalCentraal has only a formated adres }}
-                {{#persoonsgegevens.adresHaalCentraal}}
+                {{#persoonsgegevens.adresHaalCentraal.length}}
                     <table class="responsive-table">
                         <thead>
                             <tr>
@@ -92,11 +92,13 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{{.}}</td>
+                                {{#persoonsgegevens.adresHaalCentraal}}
+                                    <td>{{.}}</td>
+                                {{/persoonsgegevens.adresHaalCentraal}}
                             </tr>
                         </tbody>
                     </table>
-                {{/persoonsgegevens.adresHaalCentraal}}
+                {{/persoonsgegevens.adresHaalCentraal.length}}
 
                 {{! Old style }}
                 {{^persoonsgegevens.adresHaalCentraal}}
