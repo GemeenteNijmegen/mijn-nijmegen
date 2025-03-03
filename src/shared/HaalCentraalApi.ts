@@ -63,7 +63,7 @@ export class HaalCentraalApi {
       burgerservicenummer: [bsn],
       fields: fields,
     });
-    response;
+    return response;
   }
 
   async request(requestConfiguration: requestConfiguration): Promise<any> {

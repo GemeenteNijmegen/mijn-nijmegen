@@ -61,7 +61,7 @@ export class PersoonsgegevensMapper {
   }
   private static hasNederlandseNationaliteit(nationaliteiten?: any[]) {
     if (!nationaliteiten || nationaliteiten.length == 0) {
-      return 'Nee'
+      return 'Nee';
     }
     for (const nationaliteit of nationaliteiten) {
       if (nationaliteit.nationaliteit.code == LANDCODE_NEDERLAND) {
