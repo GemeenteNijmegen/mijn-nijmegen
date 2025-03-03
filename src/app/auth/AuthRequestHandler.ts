@@ -20,6 +20,8 @@ export interface AuthRequestHandlerProps {
   cookies: string;
   queryStringParamCode: string;
   queryStringParamState: string;
+  queryStringParamError?: string;
+
   dynamoDBClient: DynamoDBClient;
   apiClient: ApiClient;
   OpenIdConnect: OpenIDConnect;
@@ -78,11 +80,21 @@ export class AuthRequestHandler {
   }
 
   async handleRequest() {
+
+    // Handle errors and cancelation by IdP
+    if (this.config.queryStringParamError) {
+      console.log('Not starting authentication: ', this.config.queryStringParamError);
+      return Response.redirect('/login');
+    }
+
+    // Initalize the session
     let session = new Session(this.config.cookies, this.config.dynamoDBClient);
     await session.init();
     if (session.sessionId === false) {
       return Response.redirect('/login');
     }
+
+    // Start validation of the request
     const state = session.getValue('state');
     const method = session.getValue('method');
     try {
@@ -248,7 +260,7 @@ export class AuthRequestHandler {
       bsn = this.bsnFromDigidLogin(claims);
     }
 
-    if ( authMethod == 'eherkenning') {
+    if (authMethod == 'eherkenning') {
       kvk = this.kvkFromEherkenningLogin(claims);
     }
     if (bsn || kvk) {
@@ -273,7 +285,7 @@ export class AuthRequestHandler {
    * @param scope
    * @returns authentication method that is used
    */
-  authMethodFromScope(scope: string) : AuthenticationMethod {
+  authMethodFromScope(scope: string): AuthenticationMethod {
     if (scope.includes(this.config.yiviScope)) {
       return 'yivi';
     } else if (scope.includes(this.config.eherkenningScope)) {

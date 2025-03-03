@@ -3,6 +3,7 @@ import { ApiClient } from '@gemeentenijmegen/apiclient';
 
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
+import { Bsn } from '@gemeentenijmegen/utils';
 import { Persoonsgegevens, PersoonsgegevensMapper } from './Persoonsgegevens';
 import * as template from './templates/persoonsgegevens.mustache';
 import { BrpApi } from '../../shared/BrpApi';
@@ -34,7 +35,7 @@ interface Config {
 
 export class PersoonsgegevensRequestHandler {
 
-  constructor(private config: Config) {}
+  constructor(private config: Config) { }
 
   async handleRequest(cookies: string) {
     console.time('request');
@@ -84,10 +85,10 @@ export class PersoonsgegevensRequestHandler {
     try {
       if (this.config.haalCentraalApi) {
         console.timeLog('request', 'starting HAAL CENTRAAL BRP API call');
-        const brpData = await this.config.haalCentraalApi.getBrpData(new bsn(bsn), [
-          'burgerservicenummer', 'naam', 'adressering', 'geslacht', 'nationaliteiten',
+        const brpData = await this.config.haalCentraalApi.getBrpData(new Bsn(bsn), [
+          'burgerservicenummer', 'naam', 'adressering', 'geslacht', 'nationaliteiten', 'geboorte',
         ]);
-        data.persoonsgegevens = PersoonsgegevensMapper.fromHaalCentraal(brpData.personen[0]);
+        data.persoonsgegevens = PersoonsgegevensMapper.fromHaalCentraal(brpData);
         console.timeLog('request', 'finished HAAL CENTRAAL BRP API call');
       } else {
         console.timeLog('request', 'starting IRMA BRP API call');

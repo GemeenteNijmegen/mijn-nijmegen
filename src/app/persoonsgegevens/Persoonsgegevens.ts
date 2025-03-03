@@ -12,7 +12,7 @@ export interface Persoonsgegevens {
   readonly nederlandseNationaliteit: string;
   readonly geslacht: string;
 
-  readonly adresHaalCentraal?: string;
+  readonly adresHaalCentraal?: string[];
   readonly straat?: string;
   readonly huisnummer?: string;
   readonly postcode?: string;
@@ -47,17 +47,29 @@ export class PersoonsgegevensMapper {
       naam: data.adressering.aanschrijfwijze.naam,
       voorletters: data.naam.voorletters,
       voornamen: data.naam.voornamen,
-      voorvoegsel: data.naam.voorvoegsel,
+      voorvoegsel: data.naam.voorvoegsel ?? '',
       geslachtsnaam: data.naam.geslachtsnaam,
       geboortedatum: data.geboorte.datum.datum,
-      nederlandseNationaliteit: data.nationaliteiten[0].code == LANDCODE_NEDERLAND ? 'Ja' : 'Nee',
+      nederlandseNationaliteit: PersoonsgegevensMapper.hasNederlandseNationaliteit(data.nationaliteiten),
       geslacht: data.geslacht.code,
       adresHaalCentraal: [
-        data.adressering.adresregel1 ?? '',
-        data.adressering.adresregel2 ?? '',
-        data.adressering.adresregel3 ?? '',
-      ].join('\n'),
+        data.adressering.adresregel1,
+        data.adressering.adresregel2,
+        data.adressering.adresregel3,
+      ].filter(regel => regel != undefined),
     };
+  }
+  private static hasNederlandseNationaliteit(nationaliteiten?: any[]) {
+    if (!nationaliteiten || nationaliteiten.length == 0) {
+      return 'Nee';
+    }
+    for (const nationaliteit of nationaliteiten) {
+      if (nationaliteit.nationaliteit.code == LANDCODE_NEDERLAND) {
+        return 'Ja';
+      }
+    }
+    return 'Nee';
   }
 
 }
+
