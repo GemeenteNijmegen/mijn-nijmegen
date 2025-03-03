@@ -30,7 +30,6 @@ interface HaalCentraalConfig {
   apiKey: ISecret;
   privateKey: ISecret;
   clientCert: IStringParameter;
-  rootCert: IStringParameter;
 }
 
 export interface ApiStackProps extends StackProps, Configurable {
@@ -205,15 +204,13 @@ export class ApiStack extends Stack implements Configurable {
     return tlsConfig;
   }
 
-  private haalCentraalConfig() : HaalCentraalConfig {
+  private haalCentraalConfig(): HaalCentraalConfig {
     const brpHaalCentraalApiKeySecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'brp-haal-centraal-api-key-auth-secret', Statics.ssmHaalCentraalApiKey);
     const brpHaalCentraalPrivateKeySecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'brp-haal-centraal-private-key-secret', Statics.ssmHaalCentraalPrivateKey);
     const brpHaalCentraalCertParameter = StringParameter.fromStringParameterName(this, 'brp-haal-centraal-cert', Statics.ssmHaalCentraalCert);
-    const brpHaalCentraalCaParameter = StringParameter.fromStringParameterName(this, 'brp-haal-centraal-ca', Statics.ssmHaalCentraalCa);
     return {
       privateKey: brpHaalCentraalPrivateKeySecret,
       clientCert: brpHaalCentraalCertParameter,
-      rootCert: brpHaalCentraalCaParameter,
       apiKey: brpHaalCentraalApiKeySecret,
     };
   }
@@ -336,7 +333,6 @@ export class ApiStack extends Stack implements Configurable {
         // Haal Centraal
         HAAL_CENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
         HAAL_CENTRAAL_CERT_SSM: haalCentraalConfig.clientCert.parameterName,
-        HAAL_CENTRAAL_CA_SSM: haalCentraalConfig.rootCert.parameterName,
         HAAL_CENTRAAL_PRIVATE_KEY_ARN: haalCentraalConfig.privateKey.secretArn,
         HAAL_CENTRAAL_API_KEY_ARN: haalCentraalConfig.apiKey.secretArn,
         HAAL_CENTRAAL_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmHaalCentraalBaseUrl),
@@ -347,7 +343,6 @@ export class ApiStack extends Stack implements Configurable {
     haalCentraalConfig.apiKey.grantRead(authFunction.lambda);
     haalCentraalConfig.privateKey.grantRead(authFunction.lambda);
     haalCentraalConfig.clientCert.grantRead(authFunction.lambda);
-    haalCentraalConfig.rootCert.grantRead(authFunction.lambda);
     authServiceClientSecret.grantRead(authFunction.lambda);
     verIdClientSecret.grantRead(authFunction.lambda);
     signicatClientSecret.grantRead(authFunction.lambda);
@@ -379,7 +374,6 @@ export class ApiStack extends Stack implements Configurable {
         // Haal Centraal
         HAAL_CENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
         HAAL_CENTRAAL_CERT_SSM: haalCentraalConfig.clientCert.parameterName,
-        HAAL_CENTRAAL_CA_SSM: haalCentraalConfig.rootCert.parameterName,
         HAAL_CENTRAAL_PRIVATE_KEY_ARN: haalCentraalConfig.privateKey.secretArn,
         HAAL_CENTRAAL_API_KEY_ARN: haalCentraalConfig.apiKey.secretArn,
         HAAL_CENTRAAL_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmHaalCentraalBaseUrl),
@@ -391,7 +385,6 @@ export class ApiStack extends Stack implements Configurable {
     haalCentraalConfig.apiKey.grantRead(persoonsGegevensFunction.lambda);
     haalCentraalConfig.privateKey.grantRead(persoonsGegevensFunction.lambda);
     haalCentraalConfig.clientCert.grantRead(persoonsGegevensFunction.lambda);
-    haalCentraalConfig.rootCert.grantRead(persoonsGegevensFunction.lambda);
     mtlsConfig.privateKey.grantRead(persoonsGegevensFunction.lambda);
     mtlsConfig.clientCert.grantRead(persoonsGegevensFunction.lambda);
     mtlsConfig.rootCert.grantRead(persoonsGegevensFunction.lambda);

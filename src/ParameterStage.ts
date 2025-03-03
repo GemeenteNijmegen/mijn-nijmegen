@@ -1,11 +1,11 @@
 import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
-import { Stack, Tags, Stage, aws_ssm as SSM, aws_secretsmanager as SecretsManager, StageProps, Aspects } from 'aws-cdk-lib';
+import { Aspects, aws_ssm as SSM, aws_secretsmanager as SecretsManager, Stack, Stage, StageProps, Tags } from 'aws-cdk-lib';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { Configurable } from './Configuration';
 import { Statics } from './statics';
 
-export interface ParameterStageProps extends StageProps, Configurable {}
+export interface ParameterStageProps extends StageProps, Configurable { }
 
 /**
  * Stage for creating SSM parameters. This needs to run
@@ -282,12 +282,6 @@ export class ssmParamsConstruct extends Construct {
     new StringParameter(this, 'haal-centraal-cert', {
       parameterName: Statics.ssmHaalCentraalCert,
       description: 'HaalCentraal - cert',
-      stringValue: '-',
-    });
-
-    new StringParameter(this, 'haal-centraal-ca', {
-      parameterName: Statics.ssmHaalCentraalCa,
-      description: 'HaalCentraal - ca',
       stringValue: '-',
     });
 

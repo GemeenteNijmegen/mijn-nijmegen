@@ -47,10 +47,10 @@ export class PersoonsgegevensMapper {
       naam: data.adressering.aanschrijfwijze.naam,
       voorletters: data.naam.voorletters,
       voornamen: data.naam.voornamen,
-      voorvoegsel: data.naam.voorvoegsel,
+      voorvoegsel: data.naam.voorvoegsel ?? '-', // TODO not always present
       geslachtsnaam: data.naam.geslachtsnaam,
       geboortedatum: data.geboorte.datum.datum,
-      nederlandseNationaliteit: data.nationaliteiten[0].code == LANDCODE_NEDERLAND ? 'Ja' : 'Nee',
+      nederlandseNationaliteit: data.nationaliteiten[0].code == LANDCODE_NEDERLAND ? 'Ja' : 'Nee', // TODO loop
       geslacht: data.geslacht.code,
       adresHaalCentraal: [
         data.adressering.adresregel1 ?? '',

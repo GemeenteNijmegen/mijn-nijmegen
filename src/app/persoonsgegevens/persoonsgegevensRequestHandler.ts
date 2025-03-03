@@ -86,9 +86,9 @@ export class PersoonsgegevensRequestHandler {
       if (this.config.haalCentraalApi) {
         console.timeLog('request', 'starting HAAL CENTRAAL BRP API call');
         const brpData = await this.config.haalCentraalApi.getBrpData(new Bsn(bsn), [
-          'burgerservicenummer', 'naam', 'adressering', 'geslacht', 'nationaliteiten',
+          'burgerservicenummer', 'naam', 'adressering', 'geslacht', 'nationaliteiten', 'geboorte',
         ]);
-        data.persoonsgegevens = PersoonsgegevensMapper.fromHaalCentraal(brpData.personen[0]);
+        data.persoonsgegevens = PersoonsgegevensMapper.fromHaalCentraal(brpData);
         console.timeLog('request', 'finished HAAL CENTRAAL BRP API call');
       } else {
         console.timeLog('request', 'starting IRMA BRP API call');
