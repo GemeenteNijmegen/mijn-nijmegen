@@ -51,6 +51,7 @@ function parseEvent(event: any) {
     cookies: event?.cookies?.join(';'),
     code: event?.queryStringParameters?.code,
     state: event?.queryStringParameters?.state,
+    error: event?.queryStringParameters?.error,
   };
 }
 
@@ -63,6 +64,7 @@ export async function handler(event: any, _context: any): Promise<ApiGatewayV2Re
       cookies: params.cookies,
       queryStringParamCode: params.code,
       queryStringParamState: params.state,
+      queryStringParamError: params.error,
       dynamoDBClient,
       apiClient,
       authenticationService: authenticationService,
