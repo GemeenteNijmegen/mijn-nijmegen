@@ -4,12 +4,12 @@ import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
+import { Persoonsgegevens, PersoonsgegevensMapper } from './Persoonsgegevens';
+import * as template from './templates/persoonsgegevens.mustache';
 import { BrpApi } from '../../shared/BrpApi';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
-import { Persoonsgegevens, PersoonsgegevensMapper } from './Persoonsgegevens';
-import * as template from './templates/persoonsgegevens.mustache';
 
 interface RenderData {
   volledigenaam: string;
@@ -86,7 +86,7 @@ export class PersoonsgegevensRequestHandler {
       if (this.config.haalCentraalApi) {
         console.timeLog('request', 'starting HAAL CENTRAAL BRP API call');
         const brpData = await this.config.haalCentraalApi.getBrpData(new Bsn(bsn), [
-          'burgerservicenummer', 'naam', 'adressering', 'geslacht', 'nationaliteiten', 'geboorte', 'verblijfplaatsBinnenland'
+          'burgerservicenummer', 'naam', 'adressering', 'geslacht', 'nationaliteiten', 'geboorte', 'verblijfplaatsBinnenland',
         ]);
         data.persoonsgegevens = PersoonsgegevensMapper.fromHaalCentraal(brpData);
         console.timeLog('request', 'finished HAAL CENTRAAL BRP API call');
