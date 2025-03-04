@@ -47,7 +47,7 @@ export class PersoonsgegevensMapper {
       voornamen: data.naam.voornamen,
       voorvoegsel: data.naam.voorvoegsel ?? '',
       geslachtsnaam: data.naam.geslachtsnaam,
-      geboortedatum: data.geboorte.datum.langFormat,
+      geboortedatum: data.geboorte.datum.langFormaat,
       nederlandseNationaliteit: PersoonsgegevensMapper.hasNederlandseNationaliteit(data.nationaliteiten),
       geslacht: data.geslacht.code,
 
