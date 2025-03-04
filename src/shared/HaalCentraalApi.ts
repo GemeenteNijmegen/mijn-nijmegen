@@ -40,7 +40,12 @@ interface requestConfiguration {
   burgerservicenummer: Bsn[];
 }
 
-export const LANDCODE_NEDERLAND = '6030';
+/**
+ * De landcode voor nederlandse nationalaiteit
+ * @see https://github.com/BRP-API/Haal-Centraal-BRP-tabellen-bevragen/blob/master/docs/Benodigde-tabellen.md
+ * @see https://publicaties.rvig.nl/Landelijke_tabellen/Landelijke_tabellen_32_t_m_61_excl_tabel_35/Landelijke_Tabellen_32_t_m_61_in_pdf_formaat tabel 32.
+ */
+export const LANDCODE_NEDERLANDSE = '0001';
 
 export class HaalCentraalApi {
 

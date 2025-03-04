@@ -29,7 +29,7 @@ describe('Nationaliteit', () => {
   {
     type: 'Nationaliteit',
     nationaliteit: {
-      code: '6030',
+      code: '0001',
       omschrijving: 'Nederlandse',
     },
   };
