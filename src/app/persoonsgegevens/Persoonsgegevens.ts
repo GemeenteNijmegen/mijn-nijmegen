@@ -11,12 +11,10 @@ export interface Persoonsgegevens {
   readonly geboortedatum: string;
   readonly nederlandseNationaliteit: string;
   readonly geslacht: string;
-
-  // readonly adresHaalCentraal?: string[];
-  readonly straat?: string;
-  readonly huisnummer?: string;
-  readonly postcode?: string;
-  readonly woonplaats?: string;
+  readonly straat: string;
+  readonly huisnummer: string;
+  readonly postcode: string;
+  readonly woonplaats: string;
 }
 
 export class PersoonsgegevensMapper {
