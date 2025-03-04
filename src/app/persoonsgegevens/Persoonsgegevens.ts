@@ -12,7 +12,7 @@ export interface Persoonsgegevens {
   readonly nederlandseNationaliteit: string;
   readonly geslacht: string;
 
-  readonly adresHaalCentraal?: string[];
+  // readonly adresHaalCentraal?: string[];
   readonly straat?: string;
   readonly huisnummer?: string;
   readonly postcode?: string;
@@ -52,11 +52,11 @@ export class PersoonsgegevensMapper {
       geboortedatum: data.geboorte.datum.datum,
       nederlandseNationaliteit: PersoonsgegevensMapper.hasNederlandseNationaliteit(data.nationaliteiten),
       geslacht: data.geslacht.code,
-      adresHaalCentraal: [
-        data.adressering.adresregel1,
-        data.adressering.adresregel2,
-        data.adressering.adresregel3,
-      ].filter(regel => regel != undefined),
+
+      straat: data.verblijfplaats.verblijfadres.officieleStraatnaam,
+      huisnummer: data.verblijfplaats.verblijfadres.huisnummer,
+      postcode: data.verblijfplaats.verblijfadres.postcode,
+      woonplaats: data.verblijfplaats.verblijfadres.woonplaats,
     };
   }
   private static hasNederlandseNationaliteit(nationaliteiten?: any[]) {
