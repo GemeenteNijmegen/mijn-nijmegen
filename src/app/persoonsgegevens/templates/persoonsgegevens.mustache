@@ -80,28 +80,7 @@
                 </table>
                 </section>
                 <section>
-                <h2>Adresgegevens</h2>
-
-                {{! HaalCentraal has only a formated adres }}
-                {{#persoonsgegevens.adresHaalCentraal.length}}
-                    <table class="responsive-table">
-                        <thead>
-                            <tr>
-                                <th>Adres</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{#persoonsgegevens.adresHaalCentraal}}
-                                <tr>
-                                    <td>{{.}}</td>
-                                </tr>
-                            {{/persoonsgegevens.adresHaalCentraal}}
-                        </tbody>
-                    </table>
-                {{/persoonsgegevens.adresHaalCentraal.length}}
-
-                {{! Old style }}
-                {{^persoonsgegevens.adresHaalCentraal}}
+                    <h2>Adresgegevens</h2>
                     <table class="responsive-table">
                         <thead>
                             <tr>
@@ -124,8 +103,6 @@
                             </tr>
                         </tbody>
                     </table>
-                {{/persoonsgegevens.adresHaalCentraal}}
-
                 </section>
                 {{/error}}
                 {{#error}}
