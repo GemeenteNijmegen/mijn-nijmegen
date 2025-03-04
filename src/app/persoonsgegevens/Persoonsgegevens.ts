@@ -1,4 +1,4 @@
-import { LANDCODE_NEDERLAND } from '../../shared/HaalCentraalApi';
+import { LANDCODE_NEDERLANDSE } from '../../shared/HaalCentraalApi';
 
 export interface Persoonsgegevens {
   readonly bsn: string;
@@ -66,7 +66,7 @@ export class PersoonsgegevensMapper {
       return 'Nee';
     }
     for (const nationaliteit of nationaliteiten) {
-      if (nationaliteit.nationaliteit.code == LANDCODE_NEDERLAND) {
+      if (nationaliteit.nationaliteit.code == LANDCODE_NEDERLANDSE) {
         return 'Ja';
       }
     }
