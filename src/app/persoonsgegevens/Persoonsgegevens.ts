@@ -40,6 +40,9 @@ export class PersoonsgegevensMapper {
 
   static fromHaalCentraal(data: any): Persoonsgegevens {
 
+    const geboorteDatumIso = data.geboorte.datum.datum as string;
+    const geboortedatum = PersoonsgegevensMapper.isoDateToDutchFormat(geboorteDatumIso);
+
     return {
       bsn: data.burgerservicenummer,
       naam: data.adressering.aanschrijfwijze.naam,
@@ -47,7 +50,7 @@ export class PersoonsgegevensMapper {
       voornamen: data.naam.voornamen,
       voorvoegsel: data.naam.voorvoegsel ?? '',
       geslachtsnaam: data.naam.geslachtsnaam,
-      geboortedatum: data.geboorte.datum.datum,
+      geboortedatum: geboortedatum,
       nederlandseNationaliteit: PersoonsgegevensMapper.hasNederlandseNationaliteit(data.nationaliteiten),
       geslacht: data.geslacht.code,
 
@@ -57,7 +60,8 @@ export class PersoonsgegevensMapper {
       woonplaats: data.verblijfplaats.verblijfadres.woonplaats,
     };
   }
-  private static hasNederlandseNationaliteit(nationaliteiten?: any[]) {
+
+  static hasNederlandseNationaliteit(nationaliteiten?: any[]) {
     if (!nationaliteiten || nationaliteiten.length == 0) {
       return 'Nee';
     }
@@ -67,6 +71,13 @@ export class PersoonsgegevensMapper {
       }
     }
     return 'Nee';
+  }
+
+  static isoDateToDutchFormat(geboorteDatumIso: string) {
+    const year = geboorteDatumIso.substring(0, 4);
+    const month = geboorteDatumIso.substring(5, 7);
+    const day = geboorteDatumIso.substring(8, 10);
+    return `${day}-${month}-${year}`;
   }
 
 }
