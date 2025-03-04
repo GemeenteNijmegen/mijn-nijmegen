@@ -4,6 +4,7 @@ import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-htt
 import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
 import { AuthenticationService } from './AuthenticationService';
 import { AuthRequestHandler } from './AuthRequestHandler';
+import { ApiClient as ApiClientV2 } from '../../shared/ApiClient';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 
@@ -23,19 +24,22 @@ async function init() {
   if (process.env.HAAL_CENTRAAL_LIVE === 'true') {
     const haalCentraalValues = environmentVariables([
       'HAAL_CENTRAAL_CERT_SSM',
-      'HAAL_CENTRAAL_CA_SSM',
       'HAAL_CENTRAAL_PRIVATE_KEY_ARN',
       'HAAL_CENTRAAL_API_KEY_ARN',
       'HAAL_CENTRAAL_BASE_URL',
     ]);
-    const haalCentraalApiClient = await ApiClient.fromParameterStore(
-      haalCentraalValues.HAAL_CENTRAAL_CERT_SSM,
-      haalCentraalValues.HAAL_CENTRAAL_CA_SSM,
-      haalCentraalValues.HAAL_CENTRAAL_PRIVATE_KEY_ARN,
-    );
+    const haalCentraalApiClient = new ApiClientV2({
+      mtls: {
+        cert: haalCentraalValues.HAAL_CENTRAAL_CERT_SSM,
+        keyArn: haalCentraalValues.HAAL_CENTRAAL_PRIVATE_KEY_ARN,
+      },
+      apikey: {
+        header: 'X-API-KEY',
+        keyArn: haalCentraalValues.HAAL_CENTRAAL_API_KEY_ARN,
+      },
+    });
     haalCentraalApi = new HaalCentraalApi({
       apiclient: haalCentraalApiClient,
-      apiKey: await AWS.getSecret(haalCentraalValues.HAAL_CENTRAAL_API_KEY_ARN),
       baseUrl: haalCentraalValues.HAAL_CENTRAAL_BASE_URL,
     });
   }
@@ -47,10 +51,11 @@ function parseEvent(event: any) {
     cookies: event?.cookies?.join(';'),
     code: event?.queryStringParameters?.code,
     state: event?.queryStringParameters?.state,
+    error: event?.queryStringParameters?.error,
   };
 }
 
-export async function handler(event: any, _context: any):Promise<ApiGatewayV2Response> {
+export async function handler(event: any, _context: any): Promise<ApiGatewayV2Response> {
   await initaliation;
 
   try {
@@ -59,6 +64,7 @@ export async function handler(event: any, _context: any):Promise<ApiGatewayV2Res
       cookies: params.cookies,
       queryStringParamCode: params.code,
       queryStringParamState: params.state,
+      queryStringParamError: params.error,
       dynamoDBClient,
       apiClient,
       authenticationService: authenticationService,

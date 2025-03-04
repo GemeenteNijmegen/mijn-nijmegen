@@ -129,7 +129,7 @@ export interface Configuration {
 }
 
 
-const EnvironmentConfigurations: {[key:string]: Configuration} = {
+const EnvironmentConfigurations: { [key: string]: Configuration } = {
   development: {
     branch: 'development',
     buildEnvironment: Statics.gnBuildEnvironment,
@@ -140,7 +140,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     dsRecord: '1092 13 2 1F367460EB372760AA306E8BA29C64AD04BCA7AB515E30CA99FE710A1484A0FE',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-development',
     pipelineName: 'mijnnijmegen-development',
-    brpHaalCentraalIsLive: false,
+    brpHaalCentraalIsLive: true,
     zakenUseTaken: true,
     zakenIsLive: true,
     zakenUseSubmissions: true,
@@ -164,7 +164,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     dsRecord: '3766 13 2 11761745E09473E6CE95DB798CF1ADB69B4433E73EEFC9F7FE341561966EA154',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-acceptance',
     pipelineName: 'mijnnijmegen-acceptance',
-    brpHaalCentraalIsLive: false,
+    brpHaalCentraalIsLive: true,
     zakenUseTaken: true,
     zakenIsLive: true,
     zakenUseSubmissions: true,

@@ -1,8 +1,7 @@
-import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Bsn } from '@gemeentenijmegen/utils';
+import { ApiClient } from './ApiClient';
 
 interface Config {
-  readonly apiKey: string;
   readonly baseUrl: string;
   readonly apiclient: ApiClient;
 }
@@ -41,7 +40,12 @@ interface requestConfiguration {
   burgerservicenummer: Bsn[];
 }
 
-export const LANDCODE_NEDERLAND = '6030';
+/**
+ * De landcode voor nederlandse nationalaiteit
+ * @see https://github.com/BRP-API/Haal-Centraal-BRP-tabellen-bevragen/blob/master/docs/Benodigde-tabellen.md
+ * @see https://publicaties.rvig.nl/Landelijke_tabellen/Landelijke_tabellen_32_t_m_61_excl_tabel_35/Landelijke_Tabellen_32_t_m_61_in_pdf_formaat tabel 32.
+ */
+export const LANDCODE_NEDERLANDSE = '0001';
 
 export class HaalCentraalApi {
 
@@ -54,7 +58,7 @@ export class HaalCentraalApi {
       burgerservicenummer: [bsn],
       fields: ['adressering'], // Use this over naam as this is the nicely formated version of the name
     });
-    return response.adressering.aanschrijfwijze;
+    return response.adressering.aanschrijfwijze.naam;
   }
 
   async getBrpData(bsn: Bsn, fields: Fields[]) {
@@ -76,7 +80,6 @@ export class HaalCentraalApi {
     });
     const data = await this.config.apiclient.postData(url, body, {
       'Content-type': 'application/json',
-      'X-API-KEY': this.config.apiKey,
     });
 
     // Check response

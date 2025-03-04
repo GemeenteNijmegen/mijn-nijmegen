@@ -1,4 +1,4 @@
-import { LANDCODE_NEDERLAND } from '../../shared/HaalCentraalApi';
+import { LANDCODE_NEDERLANDSE } from '../../shared/HaalCentraalApi';
 
 export interface Persoonsgegevens {
   readonly bsn: string;
@@ -11,12 +11,10 @@ export interface Persoonsgegevens {
   readonly geboortedatum: string;
   readonly nederlandseNationaliteit: string;
   readonly geslacht: string;
-
-  readonly adresHaalCentraal?: string;
-  readonly straat?: string;
-  readonly huisnummer?: string;
-  readonly postcode?: string;
-  readonly woonplaats?: string;
+  readonly straat: string;
+  readonly huisnummer: string;
+  readonly postcode: string;
+  readonly woonplaats: string;
 }
 
 export class PersoonsgegevensMapper {
@@ -47,17 +45,30 @@ export class PersoonsgegevensMapper {
       naam: data.adressering.aanschrijfwijze.naam,
       voorletters: data.naam.voorletters,
       voornamen: data.naam.voornamen,
-      voorvoegsel: data.naam.voorvoegsel,
+      voorvoegsel: data.naam.voorvoegsel ?? '',
       geslachtsnaam: data.naam.geslachtsnaam,
-      geboortedatum: data.geboorte.datum.datum,
-      nederlandseNationaliteit: data.nationaliteiten[0].code == LANDCODE_NEDERLAND ? 'Ja' : 'Nee',
+      geboortedatum: data.geboorte.datum.langFormaat,
+      nederlandseNationaliteit: PersoonsgegevensMapper.hasNederlandseNationaliteit(data.nationaliteiten),
       geslacht: data.geslacht.code,
-      adresHaalCentraal: [
-        data.adressering.adresregel1 ?? '',
-        data.adressering.adresregel2 ?? '',
-        data.adressering.adresregel3 ?? '',
-      ].join('\n'),
+
+      straat: data.verblijfplaats.verblijfadres.officieleStraatnaam,
+      huisnummer: data.verblijfplaats.verblijfadres.huisnummer,
+      postcode: data.verblijfplaats.verblijfadres.postcode,
+      woonplaats: data.verblijfplaats.verblijfadres.woonplaats,
     };
   }
 
+  static hasNederlandseNationaliteit(nationaliteiten?: any[]) {
+    if (!nationaliteiten || nationaliteiten.length == 0) {
+      return 'Nee';
+    }
+    for (const nationaliteit of nationaliteiten) {
+      if (nationaliteit.nationaliteit.code == LANDCODE_NEDERLANDSE) {
+        return 'Ja';
+      }
+    }
+    return 'Nee';
+  }
+
 }
+

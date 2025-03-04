@@ -80,42 +80,29 @@
                 </table>
                 </section>
                 <section>
-                <h2>Adresgegevens</h2>
-                <table class="responsive-table">
-                    <thead>
-                        <tr>
-                            <th>Kenmerk</th>
-                            <th>Waarde</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        {{! HaalCentraal has only a formated adres }}
-                        {{#persoonsgegevens.adresHaalCentraal}}
-                        <tr>
-                            <td>Adres</td>
-                            <td>{{persoonsgegevens.adresHaalCentraal}}</td>
-                        </tr>
-                        {{/persoonsgegevens.adresHaalCentraal}}
-
-                        {{! Old style }}
-                        {{^persoonsgegevens.adresHaalCentraal}}
-                        <tr>
-                            <td>Straat en huisnummer</td>
-                            <td>{{persoonsgegevens.straat}} {{persoonsgegevens.huisnummer}}</td>
-                        </tr>
-                        <tr>
-                            <td>Postcode</td>
-                            <td>{{persoonsgegevens.postcode}}</td>
-                        </tr>
-                        <tr>
-                            <td>Woonplaats</td>
-                            <td>{{persoonsgegevens.woonplaats}}</td>
-                        </tr>
-                        {{/persoonsgegevens.adresHaalCentraal}}
-
-                    </tbody>
-                </table>
+                    <h2>Adresgegevens</h2>
+                    <table class="responsive-table">
+                        <thead>
+                            <tr>
+                                <th>Kenmerk</th>
+                                <th>Waarde</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Straat en huisnummer</td>
+                                <td>{{persoonsgegevens.straat}} {{persoonsgegevens.huisnummer}}</td>
+                            </tr>
+                            <tr>
+                                <td>Postcode</td>
+                                <td>{{persoonsgegevens.postcode}}</td>
+                            </tr>
+                            <tr>
+                                <td>Woonplaats</td>
+                                <td>{{persoonsgegevens.woonplaats}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </section>
                 {{/error}}
                 {{#error}}
