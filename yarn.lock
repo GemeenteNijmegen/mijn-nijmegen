@@ -1325,10 +1325,10 @@
   resolved "https://registry.yarnpkg.com/@gemeentenijmegen/aws-constructs/-/aws-constructs-0.0.31.tgz#5b2c8ae6e815e518f5cda099409bc4e5ffe6fe94"
   integrity sha512-Fj5fWAYRv6Bx0TYVAPGO2rChi/SRGiSIJQrQMPwhXQm6SiG6vtxOH1HwtEpTWKgtaDOj0vR1s4AERa07p77k0w==
 
-"@gemeentenijmegen/projen-project-type@^1.8.8":
-  version "1.8.8"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/projen-project-type/-/projen-project-type-1.8.8.tgz#ef3843dbba9be4571f38e26dd50fded79a195f13"
-  integrity sha512-iLuk7H30MAwTKwdT/SQ19gZ9nksSxUd8kfKrjtRdiYMh3kQLLnsQCe9ebiMLpH/Y0D7FEVlt82twcRcwMZ79Hw==
+"@gemeentenijmegen/projen-project-type@^1.9.0":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/projen-project-type/-/projen-project-type-1.9.0.tgz#0703526b215edd59319c3e44b152bc14c2205f3b"
+  integrity sha512-G44N8eEmAQsi2kemQ2wjAmDVw2Jya4hT6q1IODs13mdgNWqfBGCRXAI44HvNBfhyJHxdVLLCCsB7uzQvYgDufQ==
 
 "@gemeentenijmegen/session@^0.0.23":
   version "0.0.23"
@@ -1704,17 +1704,17 @@
   resolved "https://registry.yarnpkg.com/@oozcitak/util/-/util-8.3.8.tgz#10f65fe1891fd8cde4957360835e78fd1936bfdd"
   integrity sha512-T8TbSnGsxo6TDBJx/Sgv/BlVJL3tshxZP7Aq5R1mSnM5OcHY2dQaxLMu2+E8u3gN0MLOzdjurqN4ZRVuzQycOQ==
 
-"@pepperize/cdk-route53-health-check@^0.0.686":
-  version "0.0.686"
-  resolved "https://registry.yarnpkg.com/@pepperize/cdk-route53-health-check/-/cdk-route53-health-check-0.0.686.tgz#606f60343b05ffe61c8f0c18a9415a199a9b6978"
-  integrity sha512-WWcKkhhFs/MqBU85cS3cGouiFhsFasx6bT34Dcu/Z0f8yo7FK/u0nUUDS4BuYh7AL9qVDw43Hmj9X00PVp//gg==
+"@pepperize/cdk-route53-health-check@^0.0.687":
+  version "0.0.687"
+  resolved "https://registry.yarnpkg.com/@pepperize/cdk-route53-health-check/-/cdk-route53-health-check-0.0.687.tgz#aecaee9211282f959736e1d3b580afa3b7ea96cb"
+  integrity sha512-uYLt52a0pl36Vv1IEdmsC0CSyW+rzbGRRGttfYn3gPITsWb+Gu/9SpVmrDOq9AzRjZ2VYTwoufiR8rueWEJKbg==
 
-"@playwright/test@^1.50.1":
-  version "1.50.1"
-  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.50.1.tgz#027d00ca77ec79688764eb765cfe9a688807bf0b"
-  integrity sha512-Jii3aBg+CEDpgnuDxEp/h7BimHcUTDlpEtce89xEumlJ5ef2hqepZ+PWp1DDpYC/VO9fmWVI1IlEaoI5fK9FXQ==
+"@playwright/test@^1.51.0":
+  version "1.51.0"
+  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.51.0.tgz#8d5c8400b465a0bfdbcf993e390ceecb903ea6d2"
+  integrity sha512-dJ0dMbZeHhI+wb77+ljx/FeC8VBP6j/rj9OAojO08JI80wTZy6vRk9KvHKiDCUh4iMpEiseMgqRBIeW+eKX6RA==
   dependencies:
-    playwright "1.50.1"
+    playwright "1.51.0"
 
 "@rtsao/scc@^1.1.0":
   version "1.1.0"
@@ -2788,9 +2788,9 @@ aws-cdk-lib@^2.22.0:
     yaml "1.10.2"
 
 aws-cdk@^2:
-  version "2.1002.0"
-  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.1002.0.tgz#02e26335f28660293556decd76a6453db92b3e51"
-  integrity sha512-2lq1ho1Rq/sDMTieA6zna9aogk3qHM3Oq/mF7QCx2Jj0+e8/ZJOJW+5xU9oUBclRpUIxfUevC93H3eCSr1VW6g==
+  version "2.1003.0"
+  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.1003.0.tgz#db3bcd839f86b9b7f0f3d2d3359cefb768458462"
+  integrity sha512-FORPDGW8oUg4tXFlhX+lv/j+152LO9wwi3/CwNr1WY3c3HwJUtc0fZGb2B3+Fzy6NhLWGHJclUsJPEhjEt8Nhg==
   optionalDependencies:
     fsevents "2.3.2"
 
@@ -3574,9 +3574,9 @@ ejs@^3.1.10:
     jake "^10.8.5"
 
 electron-to-chromium@^1.5.73:
-  version "1.5.112"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.112.tgz#8d3d95d4d5653836327890282c8eda5c6f26626d"
-  integrity sha512-oen93kVyqSb3l+ziUgzIOlWt/oOuy4zRmpwestMn4rhFWAoFJeFuCVte9F2fASjeZZo7l/Cif9TiyrdW4CwEMA==
+  version "1.5.113"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.113.tgz#1175b8ba4170541e44e9afa8b992e5bbfff0d150"
+  integrity sha512-wjT2O4hX+wdWPJ76gWSkMhcHAV2PTMX+QetUCPYEdCIe+cxmgzzSSiGRCKW8nuh4mwKZlpv0xvoW7OF2X+wmHg==
 
 emittery@^0.13.1:
   version "0.13.1"
@@ -6049,17 +6049,17 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.50.1:
-  version "1.50.1"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.50.1.tgz#6a0484f1f1c939168f40f0ab3828c4a1592c4504"
-  integrity sha512-ra9fsNWayuYumt+NiM069M6OkcRb1FZSK8bgi66AtpFoWkg2+y0bJSNmkFrWhMbEBbVKC/EruAHH3g0zmtwGmQ==
+playwright-core@1.51.0:
+  version "1.51.0"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.51.0.tgz#bb23ea6bb6298242d088ae5e966ffcf8dc9827e8"
+  integrity sha512-x47yPE3Zwhlil7wlNU/iktF7t2r/URR3VLbH6EknJd/04Qc/PSJ0EY3CMXipmglLG+zyRxW6HNo2EGbKLHPWMg==
 
-playwright@1.50.1:
-  version "1.50.1"
-  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.50.1.tgz#2f93216511d65404f676395bfb97b41aa052b180"
-  integrity sha512-G8rwsOQJ63XG6BbKj2w5rHeavFjy5zynBA9zsJMMtBoe/Uf757oG12NXz6e6OirF7RCrTVAKFXbLmn1RbL7Qaw==
+playwright@1.51.0:
+  version "1.51.0"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.51.0.tgz#9ba154497ba62bc6dc199c58ee19295eb35a4707"
+  integrity sha512-442pTfGM0xxfCYxuBa/Pu6B2OqxqqaYq39JS8QDMGThUvIOCd6s0ANDog3uwA0cHavVlnTQzGCN7Id2YekDSXA==
   dependencies:
-    playwright-core "1.50.1"
+    playwright-core "1.51.0"
   optionalDependencies:
     fsevents "2.3.2"
 
@@ -6802,17 +6802,17 @@ tinyglobby@^0.2.12:
     fdir "^6.4.3"
     picomatch "^4.0.2"
 
-tldts-core@^6.1.82:
-  version "6.1.82"
-  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-6.1.82.tgz#b93e0312378f67cfc15ea1da9bc1b699ec621ae9"
-  integrity sha512-Jabl32m21tt/d/PbDO88R43F8aY98Piiz6BVH9ShUlOAiiAELhEqwrAmBocjAqnCfoUeIsRU+h3IEzZd318F3w==
+tldts-core@^6.1.83:
+  version "6.1.83"
+  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-6.1.83.tgz#8f31172cb5763cc1128d4e18ee5095aa2f990eb8"
+  integrity sha512-I2wb9OJc6rXyh9d4aInhSNWChNI+ra6qDnFEGEwe9OoA68lE4Temw29bOkf1Uvwt8VZS079t1BFZdXVBmmB4dw==
 
 tldts@^6.1.32:
-  version "6.1.82"
-  resolved "https://registry.yarnpkg.com/tldts/-/tldts-6.1.82.tgz#1c06e884bcdbcccbaf73bd552e2f188ad670a4a9"
-  integrity sha512-KCTjNL9F7j8MzxgfTgjT+v21oYH38OidFty7dH00maWANAI2IsLw2AnThtTJi9HKALHZKQQWnNebYheadacD+g==
+  version "6.1.83"
+  resolved "https://registry.yarnpkg.com/tldts/-/tldts-6.1.83.tgz#2ba9aa8db0cbcc2d75291f148f8acf9ac469429a"
+  integrity sha512-FHxxNJJ0WNsEBPHyC1oesQb3rRoxpuho/z2g3zIIAhw1WHJeQsUzK1jYK8TI1/iClaa4fS3Z2TCA9mtxXsENSg==
   dependencies:
-    tldts-core "^6.1.82"
+    tldts-core "^6.1.83"
 
 tmpl@1.0.5:
   version "1.0.5"
