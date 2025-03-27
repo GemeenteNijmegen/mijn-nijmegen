@@ -74,11 +74,6 @@ export abstract class Statics {
   static readonly ssmUitkeringsApiEndpointUrl: string = '/cdk/mijn-nijmegen/uitkerings-api-url';
 
   /**
-   * Uitkeringsgegevens API endpoint
-   */
-  static readonly ssmInzageApiEndpointUrl: string = '/cdk/mijn-nijmegen/inzage-api-url';
-
-  /**
    * URL for the API Gateway for zaken
    * This will be extracted and hosted on a stable domain later
    */
@@ -171,11 +166,6 @@ export abstract class Statics {
   static readonly ssmHaalCentraalPrivateKey = '/cdk/mijn-nijmegen/haal-centraal/private-key';
   static readonly ssmHaalCentraalApiKey = '/cdk/mijn-nijmegen/haal-centraal/api-key';
   static readonly ssmHaalCentraalBaseUrl = '/cdk/mijn-nijmegen/haal-centraal/base-url';
-
-  /**
-   * Secret for verwerkingenlogging inzage
-   */
-  static readonly ssmInzageApiKey: string = '/cdk/mijn-inzage/vw-inzage-api-key';
 
   /**
    * PoC authentication service

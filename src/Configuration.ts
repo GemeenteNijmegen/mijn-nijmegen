@@ -100,11 +100,6 @@ export interface Configuration {
   readonly nlWalletSignicatIsLive?: boolean;
 
   /**
-   * Set this to true if you want the verwerkingenlogging inzage-page to be created
-   */
-  readonly inzageLive?: boolean;
-
-  /**
    * Enable PoC authentication service adding a configuration for it
    * Note requires configuration of the client secret through secretmanaget
    * @default - no authenticaiton service
@@ -148,7 +143,6 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     //   clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
     //   endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
     // },
-    inzageLive: true,
     useZakenFromAggregatorAPI: true,
     mijnContactGegevensLive: true,
     nlWalletVerIdIsLive: true,
@@ -172,7 +166,6 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     //   clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
     //   endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
     // },
-    inzageLive: false,
     useZakenFromAggregatorAPI: true,
     nlWalletVerIdIsLive: true,
     nlWalletSignicatIsLive: true,
@@ -191,7 +184,6 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     zakenUseTaken: false,
     zakenIsLive: true,
     zakenUseSubmissions: true,
-    inzageLive: false,
     useZakenFromAggregatorAPI: true,
     nlWalletVerIdIsLive: true,
     nlWalletSignicatIsLive: true,
