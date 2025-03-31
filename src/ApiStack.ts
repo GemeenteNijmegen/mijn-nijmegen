@@ -176,16 +176,6 @@ export class ApiStack extends Stack implements Configurable {
       routeKey: apigatewayv2.HttpRouteKey.with('/zaken/{zaaksource}/{zaakid}/taak/{taakid}/download/{file+}', apigatewayv2.HttpMethod.GET),
     });
 
-
-    if (configuration.inzageLive) {
-      const inzageFunction = this.inzageFunction(baseUrl, readOnlyRole, tlsConfig);
-      this.api.addRoutes({
-        integration: new HttpLambdaIntegration('inzage', inzageFunction.lambda),
-        path: '/inzage',
-        methods: [apigatewayv2.HttpMethod.GET],
-      });
-    }
-
     if (configuration.mijnContactGegevensLive) {
       const contactgegevensFunction = this.contactgegevensFunction(baseUrl, readOnlyRole);
       this.api.addRoutes({
@@ -413,33 +403,6 @@ export class ApiStack extends Stack implements Configurable {
     mtlsConfig.clientCert.grantRead(uitkeringenFunction.lambda);
     mtlsConfig.rootCert.grantRead(uitkeringenFunction.lambda);
     return uitkeringenFunction;
-  }
-
-  private inzageFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
-    const inzageApiKey = Secret.fromSecretNameV2(this, 'inzage-key', Statics.ssmInzageApiKey);
-
-    const inzageFunction = new ApiFunction(this, 'inzage-function', {
-      description: 'Inzage-lambda voor de Mijn Nijmegen-applicatie.',
-      codePath: 'app/inzage',
-      table: this.sessionsTable,
-      tablePermissions: 'ReadWrite',
-      applicationUrlBase: baseUrl,
-      readOnlyRole,
-      environment: {
-        MTLS_PRIVATE_KEY_ARN: mtlsConfig.privateKey.secretArn,
-        MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
-        MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
-        BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
-        INZAGE_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmInzageApiEndpointUrl),
-        INZAGE_API_KEY_ARN: inzageApiKey.secretArn,
-        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
-      },
-      apiFunction: UitkeringFunction,
-    });
-    mtlsConfig.privateKey.grantRead(inzageFunction.lambda);
-    mtlsConfig.clientCert.grantRead(inzageFunction.lambda);
-    mtlsConfig.rootCert.grantRead(inzageFunction.lambda);
-    return inzageFunction;
   }
 
   private contactgegevensFunction(baseUrl: string, readOnlyRole: Role) {
