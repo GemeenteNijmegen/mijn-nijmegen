@@ -60,7 +60,7 @@
     "axios-mock-adapter": "^1.22.0",
     "commit-and-tag-version": "^12",
     "copyfiles": "^2.4.1",
-    "esbuild": "^0.25.1",
+    "esbuild": "^0.25.2",
     "eslint": "^9",
     "eslint-import-resolver-typescript": "^3.10.0",
     "eslint-plugin-import": "^2.31.0",
