@@ -39,7 +39,7 @@ export class PersoonsgegevensMapper {
   }
 
   static fromHaalCentraal(data: any): Persoonsgegevens | undefined {
-    if(!data.burgerservicenummer){
+    if (!data.burgerservicenummer) {
       throw Error('[formHaalCentraal mapper] No data.burgerservicenummer');
     }
     return {
