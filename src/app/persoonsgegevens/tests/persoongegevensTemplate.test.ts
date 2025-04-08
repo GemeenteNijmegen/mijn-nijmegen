@@ -1,11 +1,11 @@
 import * as fs from 'fs';
 import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
-import { mockClient } from 'aws-sdk-client-mock';
-import { PersoonsgegevensRequestHandler } from '../persoonsgegevensRequestHandler';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
-import { PersoonsgegevensMapper } from '../Persoonsgegevens';
+import { mockClient } from 'aws-sdk-client-mock';
 import { HaalCentraalApi } from '../../../shared/HaalCentraalApi';
+import { PersoonsgegevensMapper } from '../Persoonsgegevens';
+import { PersoonsgegevensRequestHandler } from '../persoonsgegevensRequestHandler';
 
 
 beforeAll(() => {
@@ -71,30 +71,30 @@ test('Persoonsgegevens volledige HC data', async () => {
   const fakeHaalCentraalData = {
     burgerservicenummer: '987654321',
     naam: {
-        voornamen: 'Voor Namen',
-        voorvoegsel: 'VoorVoegsel',
-        geslachtsnaam: 'Geslachtsnaam',
+      voornamen: 'Voor Namen',
+      voorvoegsel: 'VoorVoegsel',
+      geslachtsnaam: 'Geslachtsnaam',
     },
-    adressering: { 
+    adressering: {
       aanschrijfwijze: { naam: 'Happyflow Data Aanschrijfwijze' },
     },
-    geslacht: { code:'M'},
+    geslacht: { code: 'M' },
     nationaliteiten: [{ nationaliteit: { code: 'NL' } }],
     geboorte: { datum: { langFormaat: '1985-12-12' } },
-    verblijfplaats: { 
+    verblijfplaats: {
       verblijfadres: {
         officieleStraatnaam: 'Teststraat',
         huisnummer: '1',
         postcode: '1234AB',
-        woonplaats: 'Nijmegen'
-      }
+        woonplaats: 'Nijmegen',
+      },
     },
   };
 
 
   const mapperSpy = jest.spyOn(PersoonsgegevensMapper, 'fromHaalCentraal');
   const logSpy = jest.spyOn(global.console, 'log');
-  
+
   const handler = createHandler(fakeHaalCentraalData);
   const result = await handler.handleRequest('session=12345');
 
@@ -107,7 +107,7 @@ test('Persoonsgegevens volledige HC data', async () => {
   fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
   // Should not trigger, if it does, it gives an empty page
   const errorFound = logSpy.mock.calls.some(call =>
-    call.some(arg => String(arg).includes('TypeError: Cannot read properties of undefined'))
+    call.some(arg => String(arg).includes('TypeError: Cannot read properties of undefined')),
   );
   expect(errorFound).toBe(false);
   expect(result.body).not.toMatch('<h2>Er is iets misgegaan</h2>');
@@ -139,7 +139,7 @@ test('Persoonsgegevens template undefined data', async () => {
   fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
   // Should not trigger, if it does, it gives an empty page
   const errorFound = logSpy.mock.calls.some(call =>
-    call.some(arg => String(arg).includes('TypeError: Cannot read properties of undefined'))
+    call.some(arg => String(arg).includes('TypeError: Cannot read properties of undefined')),
   );
   expect(errorFound).toBe(false);
   expect(result.body).not.toMatch('<h2>Er is iets misgegaan</h2>');
