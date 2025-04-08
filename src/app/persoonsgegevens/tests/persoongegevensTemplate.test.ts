@@ -106,24 +106,22 @@ test('Persoonsgegevens volledige HC data', async () => {
   const outputFilename = path.join(__dirname, 'output', `persoonsgegevens_volledige_hc_data_${timestamp}.html`);
   fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
   // Should not trigger, if it does, it gives an empty page
-  expect(logSpy).not.toHaveBeenCalledWith('TypeError: Cannot read properties of undefined ');
+  const errorFound = logSpy.mock.calls.some(call =>
+    call.some(arg => String(arg).includes('TypeError: Cannot read properties of undefined'))
+  );
+  expect(errorFound).toBe(false);
+  expect(result.body).not.toMatch('<h2>Er is iets misgegaan</h2>');
 });
 
 test('Persoonsgegevens template undefined data', async () => {
   const fakeHaalCentraalData = {
-    burgerservicenummer: '987654321',
-    naam: {
-        voornamen: 'Voor Namen',
-        voorvoegsel: 'Voor Voegsel',
-        geslachtsnaam: 'Geslachtsnaam',
-    },
-    adressering: { 
-      aanschrijfwijze: { naam: 'Bob Voorbeeld Aanschrijfwijze' },
-    },
-    geslacht: { code:'M'},
-    nationaliteiten: [{ nationaliteit: { code: 'NL' } }],
-    geboorte: { datum: { langFormaat: '1985-12-12' } },
-    verblijfplaats: { verblijfadres: {}}
+    burgerservicenummer: undefined,
+    naam: undefined,
+    adressering: undefined,
+    geslacht: undefined,
+    nationaliteiten: undefined,
+    geboorte: undefined,
+    verblijfplaats: undefined,
   };
 
   const logSpy = jest.spyOn(global.console, 'log');
@@ -144,4 +142,5 @@ test('Persoonsgegevens template undefined data', async () => {
     call.some(arg => String(arg).includes('TypeError: Cannot read properties of undefined'))
   );
   expect(errorFound).toBe(false);
+  expect(result.body).not.toMatch('<h2>Er is iets misgegaan</h2>');
 });
