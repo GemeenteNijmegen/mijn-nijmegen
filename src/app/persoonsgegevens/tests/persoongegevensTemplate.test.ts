@@ -115,7 +115,7 @@ test('Persoonsgegevens volledige HC data', async () => {
 
 test('Persoonsgegevens template undefined data', async () => {
   const fakeHaalCentraalData = {
-    burgerservicenummer: undefined,
+    burgerservicenummer: '987654321',
     naam: undefined,
     adressering: undefined,
     geslacht: undefined,
@@ -143,4 +143,37 @@ test('Persoonsgegevens template undefined data', async () => {
   );
   expect(errorFound).toBe(false);
   expect(result.body).not.toMatch('<h2>Er is iets misgegaan</h2>');
+});
+
+test('Persoonsgegevens template bsn undefined should give errorpage', async () => {
+  // All data could be undefined for some reason, however, bsn is the minimum expectation.
+  const fakeHaalCentraalData = {
+    burgerservicenummer: undefined,
+    naam: undefined,
+    adressering: undefined,
+    geslacht: undefined,
+    nationaliteiten: undefined,
+    geboorte: undefined,
+    verblijfplaats: undefined,
+  };
+
+  const logSpy = jest.spyOn(global.console, 'log');
+  const mapperSpy = jest.spyOn(PersoonsgegevensMapper, 'fromHaalCentraal');
+  const handler = createHandler(fakeHaalCentraalData);
+  const result = await handler.handleRequest('session=12345');
+
+
+  expect((handler as any).config.haalCentraalApi.getBrpData).toHaveBeenCalled();
+  expect(mapperSpy).toHaveBeenCalledWith(fakeHaalCentraalData);
+  expect(result.statusCode).toBe(200);
+
+  const timestamp = new Date().toISOString().replace(/:/g, '-');
+  const outputFilename = path.join(__dirname, 'output', `persoonsgegevens_undefined_data_${timestamp}.html`);
+  fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
+  // Should not trigger, if it does, it gives an empty page
+  const errorFound = logSpy.mock.calls.some(call =>
+    call.some(arg => String(arg).includes('TypeError: Cannot read properties of undefined'))
+  );
+  expect(errorFound).toBe(true);
+  expect(result.body).toMatch('<h2>Er is iets misgegaan</h2>');
 });
