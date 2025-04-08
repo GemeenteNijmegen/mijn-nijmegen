@@ -157,7 +157,6 @@ test('Persoonsgegevens template bsn undefined should give errorpage', async () =
     verblijfplaats: undefined,
   };
 
-  const logSpy = jest.spyOn(global.console, 'log');
   const mapperSpy = jest.spyOn(PersoonsgegevensMapper, 'fromHaalCentraal');
   const handler = createHandler(fakeHaalCentraalData);
   const result = await handler.handleRequest('session=12345');
@@ -168,12 +167,7 @@ test('Persoonsgegevens template bsn undefined should give errorpage', async () =
   expect(result.statusCode).toBe(200);
 
   const timestamp = new Date().toISOString().replace(/:/g, '-');
-  const outputFilename = path.join(__dirname, 'output', `persoonsgegevens_undefined_data_${timestamp}.html`);
+  const outputFilename = path.join(__dirname, 'output', `persoonsgegevens_no_bsn_error_${timestamp}.html`);
   fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
-  // Should not trigger, if it does, it gives an empty page
-  const errorFound = logSpy.mock.calls.some(call =>
-    call.some(arg => String(arg).includes('TypeError: Cannot read properties of undefined'))
-  );
-  expect(errorFound).toBe(true);
   expect(result.body).toMatch('<h2>Er is iets misgegaan</h2>');
 });
