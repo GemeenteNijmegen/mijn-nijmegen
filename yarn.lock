@@ -796,18 +796,18 @@
     "@smithy/types" "^4.2.0"
     tslib "^2.6.2"
 
-"@aws-solutions-constructs/aws-lambda-dynamodb@^2.82.0":
-  version "2.82.0"
-  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/aws-lambda-dynamodb/-/aws-lambda-dynamodb-2.82.0.tgz#51fc197af9278b0ea55a6d3449162201b5c00330"
-  integrity sha512-Y2xX/a7Vu1ktkjwVf3lJPgvm8tFwUFvdVQ2iILompbp24A/MMtXb8kZfve0ArTGMlsZq/96GUPtgpXyyZE2LZw==
+"@aws-solutions-constructs/aws-lambda-dynamodb@^2.83.0":
+  version "2.83.0"
+  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/aws-lambda-dynamodb/-/aws-lambda-dynamodb-2.83.0.tgz#377b64ada6827342766d27153cfffea5a8a9c353"
+  integrity sha512-Xp1PviVjv3CcHtTjBZoHwxiwknNMX3R+iAorWiKFG3rsYZam+vZI6Req2jWmeflQKE2vZhc++XYDJtE/isN4tg==
   dependencies:
-    "@aws-solutions-constructs/core" "2.82.0"
+    "@aws-solutions-constructs/core" "2.83.0"
     constructs "^10.0.0"
 
-"@aws-solutions-constructs/core@2.82.0":
-  version "2.82.0"
-  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/core/-/core-2.82.0.tgz#197d527a7c252f404957d7c24631bc902641b721"
-  integrity sha512-4D/JUAQcgdZEnR4V7JikiG0IYSngnfIv+PfoQDQyfeTM5vPpebzaD2lvjmwWhkpNhVUXNHm3B9Hfocu8mHzYwA==
+"@aws-solutions-constructs/core@2.83.0":
+  version "2.83.0"
+  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/core/-/core-2.83.0.tgz#83551b95a125a25c899ad5ee3d62ce152ded77c5"
+  integrity sha512-afFWkJkS3bQx5zIOT7Zm4UwGWkE8EU90+PB1MLtNhDeg1A3Tsq7DLNaeW6zDytPDnJaohdVRnemJraxwIBXK5Q==
   dependencies:
     constructs "^10.0.0"
     deep-diff "^1.0.2"
@@ -1747,10 +1747,10 @@
   resolved "https://registry.yarnpkg.com/@oozcitak/util/-/util-8.3.8.tgz#10f65fe1891fd8cde4957360835e78fd1936bfdd"
   integrity sha512-T8TbSnGsxo6TDBJx/Sgv/BlVJL3tshxZP7Aq5R1mSnM5OcHY2dQaxLMu2+E8u3gN0MLOzdjurqN4ZRVuzQycOQ==
 
-"@pepperize/cdk-route53-health-check@^0.0.710":
-  version "0.0.710"
-  resolved "https://registry.yarnpkg.com/@pepperize/cdk-route53-health-check/-/cdk-route53-health-check-0.0.710.tgz#1aaa67f0f4fa8f574342390c98d1194146a25977"
-  integrity sha512-JLj12zfCHtcfX0clu526vVgAYj0ZEwAJUnsikyxU525viKAVYwj+yGXijvjvNh28JL7047blsuiDll1BJ67B/g==
+"@pepperize/cdk-route53-health-check@^0.0.712":
+  version "0.0.712"
+  resolved "https://registry.yarnpkg.com/@pepperize/cdk-route53-health-check/-/cdk-route53-health-check-0.0.712.tgz#7105d889fca154277e0a9d17b63eb26e34542b40"
+  integrity sha512-FBJFymKcFSqtQvQBFz0jst/T1pTWDQ5r4jjoqGC208ToDdcpXIwxkQO1VgAxwwWPf4/dHEmDnE6Sa7V4vBnu6Q==
 
 "@playwright/test@^1.51.1":
   version "1.51.1"
