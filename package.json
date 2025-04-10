@@ -49,7 +49,7 @@
     "@glen/jest-raw-loader": "^2.0.0",
     "@playwright/test": "^1.51.1",
     "@stylistic/eslint-plugin": "^2",
-    "@types/aws-lambda": "^8.10.148",
+    "@types/aws-lambda": "^8.10.149",
     "@types/jest": "^29.5.14",
     "@types/node": "^18",
     "@types/validator": "^13.12.3",
@@ -74,7 +74,7 @@
   },
   "dependencies": {
     "@aws-lambda-powertools/logger": "^1.18.1",
-    "@aws-sdk/client-dynamodb": "^3.782.0",
+    "@aws-sdk/client-dynamodb": "^3.786.0",
     "@aws-sdk/client-secrets-manager": "^3.782.0",
     "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.83.0",
     "@gemeentenijmegen/apiclient": "^0.0.29",
