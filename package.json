@@ -83,7 +83,7 @@
     "@gemeentenijmegen/projen-project-type": "^1.10.1",
     "@gemeentenijmegen/session": "^0.0.24",
     "@gemeentenijmegen/utils": "^0.0.27",
-    "@pepperize/cdk-route53-health-check": "^0.0.714",
+    "@pepperize/cdk-route53-health-check": "^0.0.715",
     "@types/mustache": "^4.2.5",
     "aws-cdk-lib": "^2.22.0",
     "axios": "^1.8.4",
