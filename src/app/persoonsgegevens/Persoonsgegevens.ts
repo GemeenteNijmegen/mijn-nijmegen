@@ -11,10 +11,7 @@ export interface Persoonsgegevens {
   readonly geboortedatum: string;
   readonly nederlandseNationaliteit: string;
   readonly geslacht: string;
-  readonly straat: string;
-  readonly huisnummer: string;
-  readonly postcode: string;
-  readonly woonplaats: string;
+  readonly adresregels: string[];
 }
 
 export class PersoonsgegevensMapper {
@@ -31,17 +28,14 @@ export class PersoonsgegevensMapper {
       nederlandseNationaliteit: persoon.Persoonsgegevens.NederlandseNationaliteit,
       geslacht: persoon.Persoonsgegevens.Geslacht,
 
-      straat: persoon.Adres.Straat,
-      huisnummer: persoon.Adres.Huisnummer,
-      postcode: persoon.Adres.Postcode,
-      woonplaats: persoon.Adres.Woonplaats,
+      adresregels: [
+        `${persoon.Adres.Straat} ${persoon.Adres.Huisnummer}`,
+        `${persoon.Adres.Postcode} ${persoon.Adres.Woonplaats}`,
+      ],
     };
   }
 
-  static fromHaalCentraal(data: any): Persoonsgegevens | undefined {
-    if (!data.burgerservicenummer) {
-      throw Error('[formHaalCentraal mapper] No data.burgerservicenummer');
-    }
+  static fromHaalCentraal(data: any): Persoonsgegevens {
     return {
       bsn: data.burgerservicenummer,
       naam: data.adressering?.aanschrijfwijze?.naam ?? '',
@@ -53,10 +47,11 @@ export class PersoonsgegevensMapper {
       nederlandseNationaliteit: data.nationaliteiten ? PersoonsgegevensMapper.hasNederlandseNationaliteit(data.nationaliteiten) : '',
       geslacht: data.geslacht?.code ?? '',
 
-      straat: data.verblijfplaats?.verblijfadres?.officieleStraatnaam ?? '',
-      huisnummer: data.verblijfplaats?.verblijfadres?.huisnummer ?? '',
-      postcode: data.verblijfplaats?.verblijfadres?.postcode ?? '',
-      woonplaats: data.verblijfplaats?.verblijfadres?.woonplaats ?? '',
+      adresregels: [
+        data.adressering?.adresregel1,
+        data.adressering?.adresregel2,
+        data.adressering?.adresregel3,
+      ].filter(regel => regel),
     };
   }
 
@@ -64,12 +59,18 @@ export class PersoonsgegevensMapper {
     if (!nationaliteiten || nationaliteiten.length == 0) {
       return 'Nee';
     }
+    let result = 'Nee';
     for (const nationaliteit of nationaliteiten) {
-      if (nationaliteit.nationaliteit.code == LANDCODE_NEDERLANDSE) {
+      if (nationaliteit.type == 'Nationaliteit'
+        && nationaliteit.nationaliteit.code == LANDCODE_NEDERLANDSE) {
         return 'Ja';
+      } else if (nationaliteit.type == 'BehandeldAlsNederlander') {
+        result = 'Behandeld als Nederlander';
+      } else if (nationaliteit.type == 'NationaliteitOnbekend') {
+        result = 'Onbekend';
       }
     }
-    return 'Nee';
+    return result;
   }
 
 }

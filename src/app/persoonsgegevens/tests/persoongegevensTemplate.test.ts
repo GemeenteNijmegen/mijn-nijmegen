@@ -144,30 +144,3 @@ test('Persoonsgegevens template undefined data', async () => {
   expect(errorFound).toBe(false);
   expect(result.body).not.toMatch('<h2>Er is iets misgegaan</h2>');
 });
-
-test('Persoonsgegevens template bsn undefined should give errorpage', async () => {
-  // All data could be undefined for some reason, however, bsn is the minimum expectation.
-  const fakeHaalCentraalData = {
-    burgerservicenummer: undefined,
-    naam: undefined,
-    adressering: undefined,
-    geslacht: undefined,
-    nationaliteiten: undefined,
-    geboorte: undefined,
-    verblijfplaats: undefined,
-  };
-
-  const mapperSpy = jest.spyOn(PersoonsgegevensMapper, 'fromHaalCentraal');
-  const handler = createHandler(fakeHaalCentraalData);
-  const result = await handler.handleRequest('session=12345');
-
-
-  expect((handler as any).config.haalCentraalApi.getBrpData).toHaveBeenCalled();
-  expect(mapperSpy).toHaveBeenCalledWith(fakeHaalCentraalData);
-  expect(result.statusCode).toBe(200);
-
-  const timestamp = new Date().toISOString().replace(/:/g, '-');
-  const outputFilename = path.join(__dirname, 'output', `persoonsgegevens_no_bsn_error_${timestamp}.html`);
-  fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
-  expect(result.body).toMatch('<h2>Er is iets misgegaan</h2>');
-});
