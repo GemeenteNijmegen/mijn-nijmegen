@@ -6,7 +6,7 @@ describe('Adres mapping', () => {
     const response = PersoonsgegevensMapper.fromHaalCentraal(responses.regulier.personen[0]);
     expect(response.adresregels).toStrictEqual([
       'Anna van Saksenlaan 71',
-      '2593 HW  \'S-GRAVENHAGE'
+      '2593 HW  \'S-GRAVENHAGE',
     ]);
   });
 
@@ -15,7 +15,7 @@ describe('Adres mapping', () => {
     expect(response.adresregels).toStrictEqual([
       'Av. Vasco de Quiroga 3000/7',
       '01210 Mexico-Stad',
-      'Edificio Calakmul, Colonia'
+      'Edificio Calakmul, Colonia',
     ]);
   });
 
@@ -24,7 +24,7 @@ describe('Adres mapping', () => {
     expect(response.adresregels).toStrictEqual([
       'Av. Vasco de Quiroga 3000/7',
       '01210 Mexico-Stad',
-      'Edificio Calakmul, Colonia'
+      'Edificio Calakmul, Colonia',
     ]);
   });
 
