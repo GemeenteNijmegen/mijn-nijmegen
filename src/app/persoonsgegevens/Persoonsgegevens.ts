@@ -35,18 +35,20 @@ export class PersoonsgegevensMapper {
     };
   }
 
-  static fromHaalCentraal(data: any): Persoonsgegevens {
-
+  static fromHaalCentraal(data: any): Persoonsgegevens | undefined {
+    if (!data.burgerservicenummer) {
+      throw Error('[formHaalCentraal mapper] No data.burgerservicenummer');
+    }
     return {
       bsn: data.burgerservicenummer,
-      naam: data.adressering.aanschrijfwijze.naam,
-      voorletters: data.naam.voorletters,
-      voornamen: data.naam.voornamen,
-      voorvoegsel: data.naam.voorvoegsel ?? '',
-      geslachtsnaam: data.naam.geslachtsnaam,
-      geboortedatum: data.geboorte.datum.langFormaat,
-      nederlandseNationaliteit: PersoonsgegevensMapper.hasNederlandseNationaliteit(data.nationaliteiten),
-      geslacht: data.geslacht.code,
+      naam: data.adressering?.aanschrijfwijze?.naam ?? '',
+      voorletters: data.naam?.voorletters ?? '',
+      voornamen: data.naam?.voornamen ?? '',
+      voorvoegsel: data.naam?.voorvoegsel ?? '',
+      geslachtsnaam: data.naam?.geslachtsnaam ?? '',
+      geboortedatum: data.geboorte?.datum?.langFormaat ?? '',
+      nederlandseNationaliteit: data.nationaliteiten ? PersoonsgegevensMapper.hasNederlandseNationaliteit(data.nationaliteiten) : '',
+      geslacht: data.geslacht?.code ?? '',
 
       adresregels: [
         data.adressering.adresregel1,
