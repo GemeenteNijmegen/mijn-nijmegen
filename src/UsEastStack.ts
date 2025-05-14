@@ -28,7 +28,7 @@ export class UsEastStack extends Stack {
   /** Because the hosted zone SSM parameters are stored in eu-west-1,
    * we use the 'remoteParameters'-package to retrieve these cross-region.
    */
-  getZoneAttributesFromEuWest(parameters: RemoteParameters, id: string, name: string): { hostedZoneId: string; zoneName: string} {
+  getZoneAttributesFromEuWest(parameters: RemoteParameters, id: string, name: string): { hostedZoneId: string; zoneName: string } {
     const zoneId = parameters.get(id);
     const zoneName = parameters.get(name);
     return {

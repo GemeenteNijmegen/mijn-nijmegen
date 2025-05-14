@@ -1,11 +1,12 @@
-import * as fs from 'fs';
-import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { GetSecretValueCommand, GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'aws-sdk-client-mock';
 import * as dotenv from 'dotenv';
+import * as fs from 'fs';
+import path from 'path';
 import { ZaakSummary } from '../ZaakInterface';
 import { ZakenRequestHandler } from '../zakenRequestHandler';
+
 dotenv.config();
 
 const sampleDate = new Date();
@@ -65,6 +66,7 @@ beforeAll(() => {
         console.debug('mocked fetch', url);
         const urlPathParts = new URL(url).pathname.split('/');
         if (urlPathParts[4]) {
+          console.debug(urlPathParts);
           return Promise.resolve(mockedDownload);
         } else if (urlPathParts[3]) {
           return Promise.resolve(mockedZaak);
@@ -137,6 +139,7 @@ describe('Request handler class', () => {
 
   test('returns 200 for single zaak', async () => {
     const result = await handler.handleRequest({ cookies: 'session=12345', zaakConnectorId: 'zaak', zaakId: '5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886', responseType: 'html' });
+    console.debug(result);
     expect(result.statusCode).toBe(200);
     if (result.body) {
       try {
@@ -152,4 +155,5 @@ describe('Request handler class', () => {
     expect(result.statusCode).toBe(302);
     expect(result.headers).toHaveProperty('Location');
   });
+
 });

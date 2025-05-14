@@ -95,6 +95,10 @@
       "type": "build"
     },
     {
+      "name": "jest-fetch-mock",
+      "type": "build"
+    },
+    {
       "name": "jest-junit",
       "version": "^16",
       "type": "build"

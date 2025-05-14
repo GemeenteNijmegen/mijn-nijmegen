@@ -13,7 +13,7 @@ export interface SessionStackProps extends StackProps {
  * The table (and this stack) requires a KMS key.
  */
 export class SessionsStack extends Stack {
-  sessionsTable : SessionsTable;
+  sessionsTable: SessionsTable;
 
   constructor(scope: Construct, id: string, props: SessionStackProps) {
     super(scope, id);

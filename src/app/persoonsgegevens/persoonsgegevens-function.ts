@@ -17,7 +17,7 @@ export class PersoonsgegevensFunction extends lambda.Function {
     super(scope, id, {
       description: 'src/app/persoonsgegevens/persoonsgegevens.lambda.ts',
       ...props,
-      runtime: new lambda.Runtime('nodejs22.x', lambda.RuntimeFamily.NODEJS),
+      runtime: new lambda.Runtime('nodejs20.x', lambda.RuntimeFamily.NODEJS),
       handler: 'index.handler',
       code: lambda.Code.fromAsset(path.join(__dirname, '../../../assets/app/persoonsgegevens/persoonsgegevens.lambda')),
     });

@@ -62,6 +62,10 @@ export class ZakenAggregatorConnector {
         signal: (this.timeout) ? AbortSignal.timeout(this.timeout) : undefined,
       });
       const json = await response.json() as any;
+      if(!json) {
+        console.debug('not a json response, returning body');
+        return response.body;
+      }
       if (process.env.DEBUG == 'True') {
         console.debug(`response for ${endpoint}`, JSON.stringify(json));
       }
@@ -71,7 +75,7 @@ export class ZakenAggregatorConnector {
       throw err;
     }
   }
-
+  
   private createUrlForRequest(endpoint: string, user: User, params?: URLSearchParams) {
     const url = new URL(this.baseUrl);
     url.pathname = endpoint;
