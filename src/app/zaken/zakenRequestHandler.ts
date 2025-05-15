@@ -235,10 +235,11 @@ export class ZakenRequestHandler {
         //response is binary, return file
         return {
           statusCode: 200,
-          body: response,
+          body: Buffer.from(response).toString('base64'),
           headers: {
             'Content-type': 'application/octet-stream',
             'Content-Disposition': `attachment;filename=file.pdf`, //TODO use decent filename
+            "Content-Length": response.byteLength,
           },
         } as ApiGatewayV2Response;
       }
