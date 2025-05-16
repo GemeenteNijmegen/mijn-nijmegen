@@ -60,21 +60,21 @@ export class ZakenAggregatorConnector {
         headers: {
           'x-api-key': await this.getApiKey(),
           //application/octet-stream required for binary response from gatewayV1
-          "Accept": 'application/octet-stream,application/json', 
+          'Accept': 'application/octet-stream,application/json',
         },
         signal: (this.timeout) ? AbortSignal.timeout(this.timeout) : undefined,
       });
-      if(response.headers.get('content-type') == 'application/octet-stream') {
+      if (response.headers.get('content-type') == 'application/octet-stream') {
         const contentDispositionHeaderString = response.headers.get('Content-disposition');
         let filename = 'file.pdf';
-        if(contentDispositionHeaderString != null) {
+        if (contentDispositionHeaderString != null) {
           const cdHeader = contentDisposition.parse(contentDispositionHeaderString);
-          filename = cdHeader.parameters['filename'];
+          filename = cdHeader.parameters.filename;
         }
-        return { 
+        return {
           response,
           filename,
-        }
+        };
       }
       const json = await response.json() as any;
       if (process.env.DEBUG == 'True') {
@@ -86,7 +86,7 @@ export class ZakenAggregatorConnector {
       throw err;
     }
   }
-  
+
   private createUrlForRequest(endpoint: string, user: User, params?: URLSearchParams) {
     const url = new URL(this.baseUrl);
     url.pathname = endpoint;

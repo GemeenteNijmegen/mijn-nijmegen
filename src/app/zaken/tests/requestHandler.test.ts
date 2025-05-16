@@ -1,9 +1,9 @@
+import * as fs from 'fs';
+import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { GetSecretValueCommand, GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'aws-sdk-client-mock';
 import * as dotenv from 'dotenv';
-import * as fs from 'fs';
-import path from 'path';
 import { ZaakSummary } from '../ZaakInterface';
 import { ZakenRequestHandler } from '../zakenRequestHandler';
 
@@ -75,8 +75,8 @@ beforeAll(() => {
         }
       },
       headers: {
-        get: () => jest.fn()
-      }
+        get: () => jest.fn(),
+      },
     }),
   ) as jest.Mock;
 

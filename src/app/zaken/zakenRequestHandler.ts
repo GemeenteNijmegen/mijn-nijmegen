@@ -2,10 +2,6 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
-import { Spinner } from '../../shared/Icons';
-import { Navigation } from '../../shared/Navigation';
-import { render } from '../../shared/render';
-import { validateToken } from '../../shared/validateToken';
 import * as singleZaakPartial from './templates/singlezaak.mustache';
 import * as takenTemplate from './templates/taken.mustache';
 import * as zaakRow from './templates/zaak-row.mustache';
@@ -17,6 +13,10 @@ import { ZaakFormatter } from './ZaakFormatter';
 import { SingleZaak, singleZaakSchema, ZaakSummariesSchema } from './ZaakInterface';
 import { eventParams } from './zaken.lambda';
 import { ZakenAggregatorConnector } from './ZakenAggregatorConnector';
+import { Spinner } from '../../shared/Icons';
+import { Navigation } from '../../shared/Navigation';
+import { render } from '../../shared/render';
+import { validateToken } from '../../shared/validateToken';
 
 export class ZakenRequestHandler {
   private dynamoDBClient: DynamoDBClient;
@@ -230,7 +230,7 @@ export class ZakenRequestHandler {
     const response = await this.connector.fetch(endpoint, user);
 
     if (response) {
-      if(response?.downloadUrl) {
+      if (response?.downloadUrl) {
         return Response.redirect(response.downloadUrl);
       } else {
         //response is binary, return file
