@@ -239,8 +239,8 @@ export class ZakenRequestHandler {
           headers: {
             'Content-type': 'application/octet-stream',
             'Content-Disposition': `attachment;filename=file.pdf`, //TODO use decent filename
-            "Content-Length": response.byteLength,
           },
+          isBase64Encoded: true,
         } as ApiGatewayV2Response;
       }
     } else {
