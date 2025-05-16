@@ -1,8 +1,8 @@
-import * as fs from 'fs';
-import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { GetSecretValueCommand, GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'aws-sdk-client-mock';
+import * as fs from 'fs';
+import path from 'path';
 import { ZaakSummary } from '../../zaken/ZaakInterface';
 import { HomeRequestHandler } from '../homeRequestHandler';
 
@@ -59,6 +59,9 @@ beforeAll(() => {
         console.debug('mocked fetch', url);
         return Promise.resolve(mockedZakenList);
       },
+      headers: {
+        get: () => jest.fn()
+      }
     }),
   ) as jest.Mock;
 });
