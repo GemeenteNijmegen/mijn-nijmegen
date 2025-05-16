@@ -224,8 +224,9 @@ export class ZakenRequestHandler {
 
   async download(zaakConnectorId: string, zaakId: string, file: string, session: Session) {
     const user = UserFromSession(session);
-
     const endpoint = `zaken/${zaakConnectorId}/${zaakId}/download/${file}`;
+
+    this.connector.setTimeout(10000);
     const response = await this.connector.fetch(endpoint, user);
 
     if (response) {
@@ -235,10 +236,10 @@ export class ZakenRequestHandler {
         //response is binary, return file
         return {
           statusCode: 200,
-          body: Buffer.from(response).toString('base64'),
+          body: Buffer.from(await response.content.arrayBuffer()).toString('base64'),
           headers: {
             'Content-type': 'application/octet-stream',
-            'Content-Disposition': `attachment;filename=file.pdf`, //TODO use decent filename
+            'Content-Disposition': response.filename,
           },
           isBase64Encoded: true,
         } as ApiGatewayV2Response;

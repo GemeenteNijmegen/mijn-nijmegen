@@ -74,6 +74,9 @@ beforeAll(() => {
           return Promise.resolve(mockedZakenList);
         }
       },
+      headers: {
+        get: () => jest.fn()
+      }
     }),
   ) as jest.Mock;
 

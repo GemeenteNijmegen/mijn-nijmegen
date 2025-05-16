@@ -1,4 +1,5 @@
 import { AWS } from '@gemeentenijmegen/utils';
+import contentDisposition from 'content-disposition';
 import { User } from './User';
 
 interface ZakenAggregatorConnectorOptions {
@@ -64,7 +65,16 @@ export class ZakenAggregatorConnector {
         signal: (this.timeout) ? AbortSignal.timeout(this.timeout) : undefined,
       });
       if(response.headers.get('content-type') == 'application/octet-stream') {
-        return await response.arrayBuffer();
+        const contentDispositionHeaderString = response.headers.get('Content-disposition');
+        let filename = 'file.pdf';
+        if(contentDispositionHeaderString != null) {
+          const cdHeader = contentDisposition.parse(contentDispositionHeaderString);
+          filename = cdHeader.parameters['filename'];
+        }
+        return { 
+          response,
+          filename,
+        }
       }
       const json = await response.json() as any;
       if (process.env.DEBUG == 'True') {
