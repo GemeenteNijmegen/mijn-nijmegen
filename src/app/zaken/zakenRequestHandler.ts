@@ -1,5 +1,5 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
+import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
 import * as singleZaakPartial from './templates/singlezaak.mustache';
@@ -224,12 +224,26 @@ export class ZakenRequestHandler {
 
   async download(zaakConnectorId: string, zaakId: string, file: string, session: Session) {
     const user = UserFromSession(session);
-
     const endpoint = `zaken/${zaakConnectorId}/${zaakId}/download/${file}`;
+
+    this.connector.setTimeout(10000);
     const response = await this.connector.fetch(endpoint, user);
 
     if (response) {
-      return Response.redirect(response.downloadUrl);
+      if (response?.downloadUrl) {
+        return Response.redirect(response.downloadUrl);
+      } else {
+        //response is binary, return file
+        return {
+          statusCode: 200,
+          body: Buffer.from(await response.content.arrayBuffer()).toString('base64'),
+          headers: {
+            'Content-type': 'application/octet-stream',
+            'Content-Disposition': response.filename,
+          },
+          isBase64Encoded: true,
+        } as ApiGatewayV2Response;
+      }
     } else {
       return Response.error(404);
     }
