@@ -1,32 +1,32 @@
 import {
-  Stack,
-  StackProps,
-  Duration,
+  aws_s3_deployment,
   aws_certificatemanager as CertificateManager,
+  Duration,
+  aws_iam as IAM,
   aws_route53 as Route53,
   aws_route53_targets as Route53Targets,
-  aws_ssm as SSM,
   aws_s3 as S3,
-  aws_s3_deployment,
-  aws_iam as IAM,
+  aws_ssm as SSM,
+  Stack,
+  StackProps,
 } from 'aws-cdk-lib';
 import {
-  Distribution,
-  PriceClass,
-  OriginRequestPolicy,
-  ViewerProtocolPolicy,
   AllowedMethods,
-  ResponseHeadersPolicy,
-  HeadersFrameOption,
-  HeadersReferrerPolicy,
-  CachePolicy,
-  OriginRequestHeaderBehavior,
   CacheCookieBehavior,
   CacheHeaderBehavior,
+  CachePolicy,
   CacheQueryStringBehavior,
-  SecurityPolicyProtocol,
-  OriginAccessIdentity,
+  Distribution,
   ErrorResponse,
+  HeadersFrameOption,
+  HeadersReferrerPolicy,
+  OriginAccessIdentity,
+  OriginRequestHeaderBehavior,
+  OriginRequestPolicy,
+  PriceClass,
+  ResponseHeadersPolicy,
+  SecurityPolicyProtocol,
+  ViewerProtocolPolicy,
 } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin, S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { RemoteParameters } from 'cdk-remote-stack';
@@ -325,9 +325,7 @@ object-src 'none';
   staticResourcesBucket() {
     const bucket = new S3.Bucket(this, 'resources-bucket', {
       blockPublicAccess: S3.BlockPublicAccess.BLOCK_ALL,
-      eventBridgeEnabled: true,
       enforceSSL: true,
-      encryption: S3.BucketEncryption.UNENCRYPTED,
     });
 
     return bucket;

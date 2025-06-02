@@ -26,6 +26,10 @@
       "type": "build"
     },
     {
+      "name": "@types/content-disposition",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "type": "build"
     },
@@ -179,6 +183,10 @@
     {
       "name": "constructs",
       "version": "^10.0.5",
+      "type": "runtime"
+    },
+    {
+      "name": "content-disposition",
       "type": "runtime"
     },
     {
