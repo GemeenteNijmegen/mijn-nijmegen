@@ -1,6 +1,8 @@
+import { Logger } from '@aws-lambda-powertools/logger';
 import { AWS } from '@gemeentenijmegen/utils';
 import contentDisposition from 'content-disposition';
 import { User } from './User';
+import { logger } from '../../shared/Logger';
 
 interface ZakenAggregatorConnectorOptions {
   /**
@@ -65,12 +67,19 @@ export class ZakenAggregatorConnector {
         signal: (this.timeout) ? AbortSignal.timeout(this.timeout) : undefined,
       });
       if (response.headers.get('content-type') == 'application/octet-stream') {
+        logger.debug('fetch content-type octet-stream');
         const contentDispositionHeaderString = response.headers.get('Content-disposition');
         let filename = 'file.pdf';
         if (contentDispositionHeaderString != null) {
           const cdHeader = contentDisposition.parse(contentDispositionHeaderString);
           filename = cdHeader.parameters.filename;
         }
+        logger.debug('fetch return response and filename',
+          {
+            response,
+            filename,
+          },
+        );
         return {
           response,
           filename,

@@ -14,6 +14,7 @@ import { SingleZaak, singleZaakSchema, ZaakSummariesSchema } from './ZaakInterfa
 import { eventParams } from './zaken.lambda';
 import { ZakenAggregatorConnector } from './ZakenAggregatorConnector';
 import { Spinner } from '../../shared/Icons';
+import { logger } from '../../shared/Logger';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import { validateToken } from '../../shared/validateToken';
@@ -234,9 +235,12 @@ export class ZakenRequestHandler {
         return Response.redirect(response.downloadUrl);
       } else {
         //response is binary, return file
+        logger.debug('fetch content-type octet-stream');
+        const contentArrayBuffer = await response.content.arrayBuffer();
+        logger.debug('response retrieved contentarraybuffer', contentArrayBuffer);
         return {
           statusCode: 200,
-          body: Buffer.from(await response.content.arrayBuffer()).toString('base64'),
+          body: Buffer.from(contentArrayBuffer).toString('base64'),
           headers: {
             'Content-type': 'application/octet-stream',
             'Content-Disposition': response.filename,
