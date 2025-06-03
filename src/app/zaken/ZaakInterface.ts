@@ -19,6 +19,20 @@ export const TaakSummarySchema = z.object({
 export type TaakSummary = z.infer<typeof TaakSummarySchema>;
 export const TaakSummariesSchema = z.array(TaakSummarySchema);
 
+/**
+ * Response schema from zaakaggregator for taak summaries
+ */
+export const TaakSummariesResponseSchema = z.object({
+  incompleteResults: z.boolean(),
+  results: TaakSummariesSchema,
+});
+
+/**
+ * Response type from zaakaggregator for taak summaries
+ */
+export type TaakSummariesResponse = z.infer<typeof TaakSummariesResponseSchema>;
+
+
 export const ZaakSummarySchema = z.object({
   identifier: z.string(),
   internal_id: z.string(),
@@ -33,6 +47,19 @@ export const ZaakSummarySchema = z.object({
 export const ZaakSummariesSchema = z.array(ZaakSummarySchema);
 
 export type ZaakSummary = z.infer<typeof ZaakSummarySchema>;
+
+/**
+ * Response schema from zaakaggregator for zaak summaries
+ */
+export const ZaakSummariesResponseSchema = z.object({
+  incompleteResults: z.boolean(),
+  results: ZaakSummariesSchema,
+});
+
+/**
+ * Response type from zaakaggregator for zaak summaries
+ */
+export type ZaakSummariesResponse = z.infer<typeof ZaakSummariesResponseSchema>;
 
 export const singleZaakSchema = z.object({
   identifier: z.string(),
