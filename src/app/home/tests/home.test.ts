@@ -59,6 +59,9 @@ beforeAll(() => {
         console.debug('mocked fetch', url);
         return Promise.resolve(mockedZakenList);
       },
+      headers: {
+        get: () => jest.fn(),
+      },
     }),
   ) as jest.Mock;
 });

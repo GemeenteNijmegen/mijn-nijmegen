@@ -6,9 +6,9 @@ import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
 import { IdTokenClaims, TokenSet } from 'openid-client';
 import { AuthenticationService } from './AuthenticationService';
-import { BrpApi } from './BrpApi';
 
-import { HaalCentraalApi } from './HaalCentraalApi';
+import { BrpApi } from '../../shared/BrpApi';
+import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
 
@@ -20,6 +20,8 @@ export interface AuthRequestHandlerProps {
   cookies: string;
   queryStringParamCode: string;
   queryStringParamState: string;
+  queryStringParamError?: string;
+
   dynamoDBClient: DynamoDBClient;
   apiClient: ApiClient;
   OpenIdConnect: OpenIDConnect;
@@ -39,6 +41,13 @@ export interface AuthRequestHandlerProps {
   useYiviKvk?: boolean;
   useNlWalletVerId?: boolean;
   useNlWalletSignicat?: boolean;
+
+  /**
+   * If a haal centraal API is provided prefere this over the
+   * old IRMA BRP API.
+   * @default - the IRMA BRP API is used
+   */
+  haalCentraalApi?: HaalCentraalApi;
 }
 
 export class AuthRequestHandler {
@@ -71,11 +80,21 @@ export class AuthRequestHandler {
   }
 
   async handleRequest() {
+
+    // Handle errors and cancelation by IdP
+    if (this.config.queryStringParamError) {
+      console.log('Not starting authentication: ', this.config.queryStringParamError);
+      return Response.redirect('/login');
+    }
+
+    // Initalize the session
     let session = new Session(this.config.cookies, this.config.dynamoDBClient);
     await session.init();
     if (session.sessionId === false) {
       return Response.redirect('/login');
     }
+
+    // Start validation of the request
     const state = session.getValue('state');
     const method = session.getValue('method');
     try {
@@ -241,7 +260,7 @@ export class AuthRequestHandler {
       bsn = this.bsnFromDigidLogin(claims);
     }
 
-    if ( authMethod == 'eherkenning') {
+    if (authMethod == 'eherkenning') {
       kvk = this.kvkFromEherkenningLogin(claims);
     }
     if (bsn || kvk) {
@@ -249,11 +268,11 @@ export class AuthRequestHandler {
     }
 
     if (bsn) {
-      return new Person(bsn, { apiClient: this.config.apiClient });
+      return new Person(bsn, { apiClient: this.config.apiClient, haalCentraal: this.config.haalCentraalApi });
     }
 
     if (kvk) {
-      return new Organisation(kvk.kvkNumber, kvk.organisationName, { apiClient: this.config.apiClient });
+      return new Organisation(kvk.kvkNumber, kvk.organisationName, { apiClient: this.config.apiClient, haalCentraal: this.config.haalCentraalApi });
     }
 
     throw Error('User authentication failed: No BSN or KVK found in request');
@@ -266,7 +285,7 @@ export class AuthRequestHandler {
    * @param scope
    * @returns authentication method that is used
    */
-  authMethodFromScope(scope: string) : AuthenticationMethod {
+  authMethodFromScope(scope: string): AuthenticationMethod {
     if (scope.includes(this.config.yiviScope)) {
       return 'yivi';
     } else if (scope.includes(this.config.eherkenningScope)) {
@@ -302,6 +321,7 @@ export class AuthRequestHandler {
 
 interface UserConfig {
   apiClient: ApiClient;
+  haalCentraal?: HaalCentraalApi;
 }
 
 /**
@@ -334,10 +354,9 @@ export class Person implements User {
   async getUserName(): Promise<string> {
     if (typeof this.userName !== 'string') {
       try {
-        if (process.env.HAALCENTRAAL_LIVE == 'true') {
-          const brpApi = new HaalCentraalApi();
-          const brpData = await brpApi.getBrpData(this.bsn.bsn);
-          this.userName = brpData?.naam?.volledigeNaam ? brpData.naam.volledigeNaam : 'Onbekende gebruiker';
+        if (this.config.haalCentraal) {
+          const brpName = await this.config.haalCentraal.getName(this.bsn);
+          this.userName = brpName ?? 'Onbekende gebruiker';
         } else {
           const brpApi = new BrpApi(this.config.apiClient);
           const brpData = await brpApi.getBrpData(this.bsn.bsn);

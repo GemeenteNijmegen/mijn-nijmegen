@@ -37,11 +37,23 @@ export class ZaakFormatter {
       has_documenten: zaak.documenten && zaak.documenten?.length > 0 ? true : false,
       documenten: zaak.documenten?.sort(this.sortDocuments),
       has_taken: zaak.taken && zaak.taken?.length > 0 ? true : false,
+      taken: zaak.taken?.map(taak => {
+        return {
+          ...taak,
+          has_attachments: taak.attachments?.length > 0,
+          attachments: taak.attachments?.map(attachment => {
+            return {
+              ...attachment,
+              url: `/zaken/${zaak.internal_id}/taak/${taak.uuid}/download/${attachment?.url}`,
+            };
+          }),
+        };
+      }),
       has_statuses: zaak.status_list && zaak.status_list?.length > 0 ? true : false,
       behandelaars: zaak.behandelaars?.sort((a, b) => a < b ? -1 : 1).join(', '),
       has_behandelaars: zaak.behandelaars && zaak.behandelaars.length > 0 ? true : false,
-      is_submission: zaak.type == 'submission',
-      is_case: zaak.type == 'case',
+      is_submission: zaak.type == 'submission' || zaak.type == 'case_with_submission',
+      is_case: zaak.type == 'case' || zaak.type == 'case_with_submission',
     };
   }
 

@@ -26,11 +26,19 @@
       "type": "build"
     },
     {
+      "name": "@types/content-disposition",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "type": "build"
     },
     {
       "name": "@types/node",
+      "type": "build"
+    },
+    {
+      "name": "@types/validator",
       "type": "build"
     },
     {
@@ -45,7 +53,7 @@
     },
     {
       "name": "aws-cdk",
-      "version": "^2.22.0",
+      "version": "^2",
       "type": "build"
     },
     {
@@ -92,7 +100,7 @@
     },
     {
       "name": "jest-junit",
-      "version": "^15",
+      "version": "^16",
       "type": "build"
     },
     {
@@ -178,6 +186,10 @@
       "type": "runtime"
     },
     {
+      "name": "content-disposition",
+      "type": "runtime"
+    },
+    {
       "name": "cookie",
       "type": "runtime"
     },
@@ -199,6 +211,10 @@
     },
     {
       "name": "openid-client",
+      "type": "runtime"
+    },
+    {
+      "name": "validator",
       "type": "runtime"
     },
     {

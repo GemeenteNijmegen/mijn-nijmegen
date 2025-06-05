@@ -17,6 +17,7 @@ async function sharedZakenRequestHandler() {
 export interface eventParams {
   cookies: string;
   zaakId?: string;
+  taakId?: string;
   zaakConnectorId?: string;
   file?: string;
   xsrfToken?: string;
@@ -30,6 +31,7 @@ function parseEvent(event: APIGatewayProxyEventV2): eventParams {
   return {
     zaakConnectorId: event?.pathParameters?.zaaksource,
     zaakId: event?.pathParameters?.zaakid,
+    taakId: event?.pathParameters?.taakid,
     file: event?.pathParameters?.file,
     cookies: event.cookies.join(';'),
     xsrfToken: event?.headers?.xsrftoken,

@@ -100,11 +100,6 @@ export interface Configuration {
   readonly nlWalletSignicatIsLive?: boolean;
 
   /**
-   * Set this to true if you want the verwerkingenlogging inzage-page to be created
-   */
-  readonly inzageLive?: boolean;
-
-  /**
    * Enable PoC authentication service adding a configuration for it
    * Note requires configuration of the client secret through secretmanaget
    * @default - no authenticaiton service
@@ -120,10 +115,16 @@ export interface Configuration {
    * of the zaakaggregator in parallel to existing functionality.
    */
   readonly useZakenFromAggregatorAPI?: boolean;
+
+  /**
+   * Experimental feature for dispalying and editing contact gegevens.
+   * @default false
+   */
+  readonly mijnContactGegevensLive?: boolean;
 }
 
 
-const EnvironmentConfigurations: {[key:string]: Configuration} = {
+const EnvironmentConfigurations: { [key: string]: Configuration } = {
   development: {
     branch: 'development',
     buildEnvironment: Statics.gnBuildEnvironment,
@@ -142,8 +143,8 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     //   clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
     //   endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
     // },
-    inzageLive: true,
     useZakenFromAggregatorAPI: true,
+    mijnContactGegevensLive: true,
     nlWalletVerIdIsLive: true,
     nlWalletSignicatIsLive: true,
   },
@@ -157,7 +158,7 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     dsRecord: '3766 13 2 11761745E09473E6CE95DB798CF1ADB69B4433E73EEFC9F7FE341561966EA154',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-acceptance',
     pipelineName: 'mijnnijmegen-acceptance',
-    brpHaalCentraalIsLive: false,
+    brpHaalCentraalIsLive: true,
     zakenUseTaken: true,
     zakenIsLive: true,
     zakenUseSubmissions: true,
@@ -165,10 +166,9 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     //   clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
     //   endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
     // },
-    inzageLive: false,
     useZakenFromAggregatorAPI: true,
     nlWalletVerIdIsLive: true,
-    nlWalletSignicatIsLive: true,
+    nlWalletSignicatIsLive: false,
   },
   production: {
     branch: 'production',
@@ -180,11 +180,10 @@ const EnvironmentConfigurations: {[key:string]: Configuration} = {
     dsRecord: '40951 13 2 1EFF20C0264CD1FDE6C7C858398BC2141768CC014A7BB27997F323076B7C47ED',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-production',
     pipelineName: 'mijnnijmegen-production',
-    brpHaalCentraalIsLive: false,
+    brpHaalCentraalIsLive: true,
     zakenUseTaken: false,
     zakenIsLive: true,
     zakenUseSubmissions: true,
-    inzageLive: false,
     useZakenFromAggregatorAPI: true,
     nlWalletVerIdIsLive: true,
     nlWalletSignicatIsLive: true,

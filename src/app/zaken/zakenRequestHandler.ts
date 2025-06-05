@@ -1,5 +1,5 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
+import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
 import * as singleZaakPartial from './templates/singlezaak.mustache';
@@ -40,16 +40,14 @@ export class ZakenRequestHandler {
       return Response.redirect('/login');
     }
 
-    if (!params.zaakId) {
+    if (!params.zaakId && !params.taakId) {
       return this.list(session, params);
-    }
-
-    if (params.zaakId && params.zaakConnectorId && !params.file) {
-      return this.get(params, session);
-    }
-
-    if (params.zaakId && params.zaakConnectorId && params.file) {
+    } else if (params.taakId && params.zaakConnectorId && params.file) {
+      return this.downloadTaak(params.zaakConnectorId, params.taakId, params.file, session);
+    } else if (params.zaakId && params.zaakConnectorId && params.file) {
       return this.download(params.zaakConnectorId, params.zaakId, params.file, session);
+    } else if (params.zaakId && params.zaakConnectorId) {
+      return this.get(params, session);
     }
     return Response.error(400);
   }
@@ -97,7 +95,10 @@ export class ZakenRequestHandler {
   }
 
   async htmlListResponse(session: Session, user: User, zaakSummaries: any, timeout?: boolean) {
-    const navigation = new Navigation(user.type, { currentPath: '/zaken' });
+    const navigation = new Navigation(user.type, {
+      currentPath: '/zaken',
+      showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
+    });
 
     const { openHtml, closedHtml } = await this.zakenListsHtml(zaakSummaries);
 
@@ -174,7 +175,10 @@ export class ZakenRequestHandler {
     const user = UserFromSession(session);
     //If we get neither a zaak or a timeout flag, the zaak doesn't exist or isn't accessible for the user.
     if (formattedZaak || timeout) {
-      const navigation = new Navigation(user.type, { currentPath: '/zaken' });
+      const navigation = new Navigation(user.type, {
+        currentPath: '/zaken',
+        showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
+      });
       let data = {
         volledigenaam: session.getValue('username'),
         title: (formattedZaak) ? `Zaak - ${formattedZaak.zaak_type}` : 'Zaak ophalen niet gelukt',
@@ -206,7 +210,9 @@ export class ZakenRequestHandler {
   }
 
   private async zaakHtml(zaak: any) {
-    return render({ zaak }, singleZaakPartial.default);
+    return render({ zaak }, singleZaakPartial.default, {
+      taken: takenTemplate.default,
+    });
   }
 
   private async fetchGet(zaakId: string, zaakConnectorId: string, user: User) {
@@ -218,8 +224,35 @@ export class ZakenRequestHandler {
 
   async download(zaakConnectorId: string, zaakId: string, file: string, session: Session) {
     const user = UserFromSession(session);
-
     const endpoint = `zaken/${zaakConnectorId}/${zaakId}/download/${file}`;
+
+    this.connector.setTimeout(10000);
+    const response = await this.connector.fetch(endpoint, user);
+
+    if (response) {
+      if (response?.downloadUrl) {
+        return Response.redirect(response.downloadUrl);
+      } else {
+        //response is binary, return file
+        return {
+          statusCode: 200,
+          body: Buffer.from(await response.content.arrayBuffer()).toString('base64'),
+          headers: {
+            'Content-type': 'application/octet-stream',
+            'Content-Disposition': response.filename,
+          },
+          isBase64Encoded: true,
+        } as ApiGatewayV2Response;
+      }
+    } else {
+      return Response.error(404);
+    }
+  }
+
+  async downloadTaak(zaakConnectorId: string, taakId: string, file: string, session: Session) {
+    const user = UserFromSession(session);
+
+    const endpoint = `taken/${zaakConnectorId}/download/${taakId}/${file}`;
     const response = await this.connector.fetch(endpoint, user);
 
     if (response) {

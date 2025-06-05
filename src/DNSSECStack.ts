@@ -1,4 +1,4 @@
-import { aws_route53 as Route53, Stack, StackProps, aws_ssm as SSM } from 'aws-cdk-lib';
+import { aws_route53 as Route53, Stack, StackProps, aws_ssm as SSM, Duration } from 'aws-cdk-lib';
 import { RemoteParameters } from 'cdk-remote-stack';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
@@ -33,6 +33,7 @@ export class DNSSECStack extends Stack {
     const parameters = new RemoteParameters(this, 'params', {
       path: `${Statics.ssmZonePath}/`,
       region: props.applicationRegion,
+      timeout: Duration.seconds(10),
     });
     const zoneId = parameters.get(Statics.ssmZoneIdNew);
 

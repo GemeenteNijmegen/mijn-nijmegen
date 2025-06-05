@@ -1,0 +1,203 @@
+import { AWS } from '@gemeentenijmegen/utils';
+import { User } from '../zaken/User';
+import { OpenKlantDigitaalAdres, OpenKlantDigitaalAdresWithUuid, OpenKlantPartij, OpenKlantPartijIdentificiatie, OpenKlantPartijIdentificiatieWithUuid, OpenKlantPartijWithUuid, QueryOpenKlantPartijWithUuid } from './model/partij';
+
+export interface IOpenKlantAPI {
+  createNatuurlijkPersoon(naam: string): Promise<OpenKlantPartijWithUuid>;
+  addPartijIdentificatie(user: User, partijUuid: string) : Promise<OpenKlantPartijIdentificiatieWithUuid>;
+  createDigitaalAdress(partijUuid: string, type: 'email' | 'telefoonnummer', adres: string) : Promise<OpenKlantDigitaalAdresWithUuid>;
+  updateDigitaalAdress(uuid: string, adres: string) : Promise<OpenKlantDigitaalAdresWithUuid>;
+  deleteDigitaalAdress(uuid: string) : Promise<void>;
+  getPartijWithDigitaleAdresen(user: User) : Promise<OpenKlantPartijWithUuid | undefined>;
+}
+
+export class OpenklantApi implements IOpenKlantAPI {
+
+  private endpoint: string;
+  private apikey?: string;
+
+  constructor(endpoint?: string, apikey?: string) {
+    this.endpoint = endpoint ? endpoint : process.env.OPENKLANT_API_ENDPOINT!;
+    this.apikey = apikey;
+  }
+
+
+  async createNatuurlijkPersoon(naam: string): Promise<OpenKlantPartijWithUuid> {
+    const input: OpenKlantPartij = {
+      soortPartij: 'persoon',
+      indicatieActief: true,
+      indicatieGeheimhouding: false,
+      rekeningnummers: [],
+      digitaleAdressen: [],
+      voorkeursDigitaalAdres: null,
+      voorkeursRekeningnummer: null,
+      voorkeurstaal: 'dut',
+      partijIdentificatie: {
+        contactnaam: null,
+        naam: naam,
+        volledigeNaam: naam,
+      },
+    };
+    try {
+      const url = new URL(this.endpoint + '/partijen');
+      return await this.callApi('POST', url, input);
+    } catch (err) {
+      console.error(err);
+      throw Error('Could not create partij');
+    }
+
+  }
+
+  async addPartijIdentificatie(user: User, partijUuid: string) : Promise<OpenKlantPartijIdentificiatieWithUuid> {
+
+    if (user.type != 'person') {
+      throw Error('Only persons supported for now!');
+    }
+
+    const input: OpenKlantPartijIdentificiatie = {
+      partijIdentificator: {
+        codeRegister: 'BRP',
+        codeSoortObjectId: 'Burgerservicenummer',
+        objectId: user.identifier,
+      },
+      identificeerdePartij: { uuid: partijUuid },
+    };
+
+    try {
+      const url = new URL(this.endpoint + '/partij-identificatoren');
+      return await this.callApi('POST', url, input);
+    } catch (err) {
+      console.error(err);
+      throw Error('Could not create partij');
+    }
+
+  }
+
+  async createDigitaalAdress(partijUuid: string, type: 'email' | 'telefoonnummer', adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
+    const input: OpenKlantDigitaalAdres = {
+      verstrektDoorPartij: { uuid: partijUuid },
+      verstrektDoorBetrokkene: null,
+      soortDigitaalAdres: type,
+      adres: adres,
+      omschrijving: type,
+    };
+
+    try {
+      const url = new URL(this.endpoint + '/digitaleadressen');
+      return await this.callApi('POST', url, input);
+    } catch (err) {
+      console.error(err);
+      throw Error('Could not digitaal adress');
+    }
+  }
+
+  async updateDigitaalAdress(uuid: string, adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
+    try {
+      const url = new URL(this.endpoint + `/digitaleadressen/${uuid}`);
+      return await this.callApi('PATCH', url, { adres });
+    } catch (err) {
+      console.error(err);
+      throw Error('Could not update digitaal adres');
+    }
+  }
+
+  async deleteDigitaalAdress(uuid: string) {
+    try {
+      const url = new URL(this.endpoint + `/digitaleadressen/${uuid}`);
+      return await this.callApiWithoutResponse('DELETE', url);
+    } catch (err) {
+      console.error(err);
+      throw Error('Could not delete digitaal adres');
+    }
+  }
+
+  async getPartijWithDigitaleAdresen(user: User) : Promise<OpenKlantPartijWithUuid | undefined> {
+    const partyIdentifier = user.type == 'person' ? 'Burgerservicenummer' : 'Kvknummer';
+
+    const url = new URL(this.endpoint + '/partijen');
+    url.searchParams.set('partijIdentificator__codeSoortObjectId', partyIdentifier);
+    url.searchParams.set('partijIdentificator__objectId', user.identifier);
+    url.searchParams.set('expand', 'digitaleAdressen');
+
+    try {
+      const json = await this.callApi<QueryOpenKlantPartijWithUuid>('GET', url);
+      if (json.count == 0) {
+        return undefined;
+      }
+      if (json.count > 1) {
+        throw Error('Multiple partijen found, one expected');
+      }
+      return json.results[0];
+
+    } catch (err) {
+      console.error(err);
+      throw Error('Could not get partij');
+    }
+
+  }
+
+  private async callApi<T>(method: string, url: URL, data?: any) : Promise<T> {
+    const response = await fetch(url.toString(), {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${await this.getApiKey()}`,
+      },
+      body: data ? JSON.stringify(data) : undefined,
+    });
+    console.debug(method, 'to', url.pathname, '-', response.status);
+    if (!response.ok) {
+      console.debug('Received response', await response.text());
+    }
+    const json = await response.json() as any;
+    return json;
+  }
+
+  private async callApiWithoutResponse(method: string, url: URL, data?: any) : Promise<void> {
+    const response = await fetch(url.toString(), {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${await this.getApiKey()}`,
+      },
+      body: data ? JSON.stringify(data) : undefined,
+    });
+    console.debug(method, 'to', url.pathname, '-', response.status);
+    if (!response.ok) {
+      console.debug('Received response', await response.text());
+    }
+    return;
+  }
+
+  private async getApiKey() {
+    if (!this.apikey) {
+      if (!process.env.OPENKLANT_API_KEY_ARN) {
+        throw Error('Missing OPENKLANT_API_KEY_ARN');
+      }
+      this.apikey = await AWS.getSecret(process.env.OPENKLANT_API_KEY_ARN);
+    }
+    return this.apikey;
+  }
+
+}
+
+export class OpenKlantAPIMock implements IOpenKlantAPI {
+  async updateDigitaalAdress(_uuid: string, _adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
+    throw Error('This method should be mocked');
+  }
+  async deleteDigitaalAdress(_uuid: string) {
+    throw Error('This method should be mocked');
+  }
+  async createDigitaalAdress(_partijUuid: string, _type: 'email' | 'telefoonnummer', _adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
+    throw Error('This method should be mocked');
+  }
+  async createNatuurlijkPersoon(_naam: string): Promise<OpenKlantPartijWithUuid> {
+    throw Error('This method should be mocked');
+  }
+  async addPartijIdentificatie(_user: User, _partijUuid: string) : Promise<OpenKlantPartijIdentificiatieWithUuid> {
+    throw Error('This method should be mocked');
+  }
+  async getPartijWithDigitaleAdresen(_user: User) : Promise<OpenKlantPartijWithUuid> {
+    throw Error('This method should be mocked');
+  }
+}

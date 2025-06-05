@@ -10,7 +10,7 @@ import * as header from './header.mustache';
  * @param {{[key:string] : string} | undefined} partials name and template string
  * @returns string
  */
-export async function render(data: any, template: string, partials?: {[key: string]: string }) {
+export async function render(data: any, template: string, partials?: { [key: string]: string }) {
   const fullPartials = {
     header: header.default,
     footer: footer.default,

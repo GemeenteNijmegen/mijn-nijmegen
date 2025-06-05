@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
-import { SecretsManagerClient, GetSecretValueCommandOutput, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
+import { GetSecretValueCommand, GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Bsn } from '@gemeentenijmegen/utils';
 import { mockClient } from 'aws-sdk-client-mock';
@@ -313,7 +313,7 @@ describe('Yivi logins', () => {
       claims: () => claims,
       scope: 'openid idp_scoping:yivi',
     };
-    expect(() => {handler.userFromTokens(tokens as any);}).toThrow();
+    expect(() => { handler.userFromTokens(tokens as any); }).toThrow();
   });
 
 
@@ -395,7 +395,7 @@ describe('Yivi logins (kvk feature flag off)', () => {
       claims: () => claims,
       scope: 'openid idp_scoping:yivi pbdf.signicat.kvkTradeRegister.kvkNumber pbdf.signicat.kvkTradeRegister.name',
     };
-    expect(() => {handler.userFromTokens(tokens as any);}).toThrow();
+    expect(() => { handler.userFromTokens(tokens as any); }).toThrow();
   });
 });
 

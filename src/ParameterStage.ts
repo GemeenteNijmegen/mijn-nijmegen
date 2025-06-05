@@ -1,10 +1,11 @@
 import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
-import { Stack, Tags, Stage, aws_ssm as SSM, aws_secretsmanager as SecretsManager, StageProps, Aspects } from 'aws-cdk-lib';
+import { Aspects, aws_ssm as SSM, aws_secretsmanager as SecretsManager, Stack, Stage, StageProps, Tags } from 'aws-cdk-lib';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { Configurable } from './Configuration';
 import { Statics } from './statics';
 
-export interface ParameterStageProps extends StageProps, Configurable {}
+export interface ParameterStageProps extends StageProps, Configurable { }
 
 /**
  * Stage for creating SSM parameters. This needs to run
@@ -175,11 +176,6 @@ export class ssmParamsConstruct extends Construct {
       parameterName: Statics.ssmUitkeringsApiEndpointUrl,
     });
 
-    new SSM.StringParameter(this, 'ssm_inzage_1', {
-      stringValue: 'https://g423bazyr0.execute-api.eu-west-1.amazonaws.com/dev/',
-      parameterName: Statics.ssmInzageApiEndpointUrl,
-    });
-
     new SecretsManager.Secret(this, 'secret_1', {
       secretName: Statics.secretOIDCClientSecret,
       description: 'OpenIDConnect client secret',
@@ -195,12 +191,9 @@ export class ssmParamsConstruct extends Construct {
       parameterName: Statics.ssmBrpApiEndpointUrl,
     });
 
-    new SSM.StringParameter(this, 'ssm_brp_2', {
-      stringValue: 'api.haal-centraal-brp-dev.csp-nijmegen.nl',
-      parameterName: Statics.ssmBrpHaalCentraalApiEndpointUrl,
-    });
-
     this.addZaakParameters();
+    this.addOpenKlantParameters();
+    this.addHaalCentraalParameters();
   }
 
   private addZaakParameters() {
@@ -254,20 +247,50 @@ export class ssmParamsConstruct extends Construct {
       description: 'OAuth client secret for mijn-nijmegen to use with authenticaiton service (Poc)',
     });
 
-    new SecretsManager.Secret(this, 'inzage_secret_1', {
-      secretName: Statics.ssmInzageApiKey,
-      description: 'Verwerkingen logging Api key',
-    });
-
-    new SecretsManager.Secret(this, 'haalcentraal_secret_1', {
-      secretName: Statics.haalCentraalApiKeySecret,
-      description: 'BRP Api key haal centraal',
-    });
-
     new SecretsManager.Secret(this, 'zaakaggregator-api-key', {
       secretName: Statics.zaakAggregatorApiGatewayApiKey,
       description: 'Api key zaakaggregator',
     });
 
   }
+
+
+  addOpenKlantParameters() {
+    new SecretsManager.Secret(this, 'openklant-api-key', {
+      secretName: Statics.ssmOpenKlantSecret,
+      description: 'OpenKlant API key',
+    });
+    new StringParameter(this, 'openklant-api-endpiont', {
+      parameterName: Statics.ssmOpenKlantEndpoint,
+      description: 'OpenKlant API endpoint',
+      stringValue: '-',
+    });
+  }
+
+  addHaalCentraalParameters() {
+
+    new StringParameter(this, 'haal-centraal-cert', {
+      parameterName: Statics.ssmHaalCentraalCert,
+      description: 'HaalCentraal - cert',
+      stringValue: '-',
+    });
+
+    new StringParameter(this, 'haal-centraal-base-url', {
+      parameterName: Statics.ssmHaalCentraalBaseUrl,
+      description: 'HaalCentraal - base url',
+      stringValue: '-',
+    });
+
+    new SecretsManager.Secret(this, 'haal-centraal-private-key', {
+      secretName: Statics.ssmHaalCentraalPrivateKey,
+      description: 'HaalCentraal - Mtls private key',
+    });
+
+    new SecretsManager.Secret(this, 'haal-centraal-api-key', {
+      secretName: Statics.ssmHaalCentraalApiKey,
+      description: 'HaalCentraal - API key',
+    });
+
+  }
+
 }
