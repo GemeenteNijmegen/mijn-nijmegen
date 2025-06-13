@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const TaakSummarySchema = z.object({
   title: z.string(),
   url: z.string(),
-  zaak_uuid: z.string(),
+  zaak_uuid: z.string().optional(),
   uuid: z.string(),
   einddatum: z.string(),
   is_open: z.boolean(),
