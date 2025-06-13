@@ -7,7 +7,7 @@ import { Spinner, ArrowRight } from '../../shared/Icons';
 import { logger } from '../../shared/Logger';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
-import * as homeTemplate from '../home/templates/home.mustache';
+import * as takenTemplate from './templates/taken.mustache';
 import * as takenListPartial from '../zaken/templates/taken.mustache';
 import { UserFromSession } from '../zaken/User';
 import { TaakSummariesResponseSchema, TaakSummariesSchema, TaakSummary } from '../zaken/ZaakInterface';
@@ -76,7 +76,7 @@ export class TaakrequestHandler {
         timeout,
       };
       // render page
-      const html = await render(data, homeTemplate.default,
+      const html = await render(data, takenTemplate.default,
         {
           'spinner': Spinner.default,
           'arrow-right': ArrowRight.default,
@@ -98,7 +98,7 @@ export class TaakrequestHandler {
     if (json.results) {
       try {
         const taken = TaakSummariesResponseSchema.parse(json);
-        return await this.takenListHtml(taken.results.filter(taak => taak.is_open), taken.incompleteResults);
+        return await this.takenListHtml(taken.results, taken.incompleteResults);
       } catch (error) {
         logger.error('Failed parsing taken');
         throw (error);
@@ -112,7 +112,7 @@ export class TaakrequestHandler {
 
   private async takenListHtml(taakSummaries: TaakSummary[], incompleteResults?: boolean) {
     if (taakSummaries) {
-      const html = await render({ taken: taakSummaries, takenid: 'open-taken-list', incompleteResults }, takenListPartial.default);
+      const html = await render({ taken: taakSummaries, takenid: 'taken-list', incompleteResults }, takenListPartial.default);
       return html;
     }
     return false;
