@@ -13,8 +13,8 @@ export const TaakSummarySchema = z.object({
   attachments: z.array(z.object({
     title: z.string(),
     url: z.string(),
-  }).optional().nullable(),
-  ),
+  }),
+  ).optional().nullable(),
 }).passthrough();
 export type TaakSummary = z.infer<typeof TaakSummarySchema>;
 export const TaakSummariesSchema = z.array(TaakSummarySchema);
