@@ -1,4 +1,3 @@
-import { Logger } from '@aws-lambda-powertools/logger';
 import { AWS } from '@gemeentenijmegen/utils';
 import contentDisposition from 'content-disposition';
 import { User } from './User';
