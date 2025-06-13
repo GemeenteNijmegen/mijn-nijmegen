@@ -12,6 +12,7 @@ import { HomeFunction } from './app/home/home-function';
 import { LoginFunction } from './app/login/login-function';
 import { LogoutFunction } from './app/logout/logout-function';
 import { PersoonsgegevensFunction } from './app/persoonsgegevens/persoonsgegevens-function';
+import { TakenFunction } from './app/taken/taken-function';
 import { UitkeringFunction } from './app/uitkeringen/uitkering-function';
 import { ZakenFunction } from './app/zaken/zaken-function';
 import { Configurable, Configuration } from './Configuration';
@@ -63,7 +64,7 @@ export class ApiStack extends Stack implements Configurable {
     });
 
     const subdomain = Statics.subDomain(props.branch);
-    this.baseUrl = `${subdomain}.nijmegen.nl`;
+    this.baseUrl = `https://${subdomain}.nijmegen.nl`;
 
     this.setFunctions(props.configuration);
   }
@@ -106,10 +107,16 @@ export class ApiStack extends Stack implements Configurable {
      */
     const uitkeringenFunction = this.uitkeringenFunction(tlsConfig);
 
+
     /**
      * The zaken function show your current zaken.
      */
     const zakenFunction = this.zakenFunction();
+
+    /**
+     * The taken function show your current taken.
+     */
+    const takenFunction = this.takenFunction();
 
     /**
      * The taken function show your current zaken.
@@ -157,6 +164,12 @@ export class ApiStack extends Stack implements Configurable {
       httpApi: this.api,
       integration: new HttpLambdaIntegration('zaken', zakenFunction.lambda),
       routeKey: apigatewayv2.HttpRouteKey.with('/zaken', apigatewayv2.HttpMethod.GET),
+    });
+
+    new apigatewayv2.HttpRoute(this, 'taken-route', {
+      httpApi: this.api,
+      integration: new HttpLambdaIntegration('taken', takenFunction.lambda),
+      routeKey: apigatewayv2.HttpRouteKey.with('/taken', apigatewayv2.HttpMethod.GET),
     });
 
     new apigatewayv2.HttpRoute(this, 'zaak-route', {
@@ -470,6 +483,30 @@ export class ApiStack extends Stack implements Configurable {
     handlerFunction.lambda.addEnvironment('ZAKEN_APIGATEWAY_BASEURL', StringParameter.valueForStringParameter(this, Statics.ssmZaakAggregatorApiGatewayEndpointUrl));
     handlerFunction.lambda.addEnvironment('ZAKEN_APIGATEWAY_APIKEY', apiKey.secretArn);
     apiKey.grantRead(handlerFunction.lambda);
+  }
+
+  private takenFunction() {
+    const takenFunction = new ApiFunction(this, 'taken-function', {
+      description: 'Taken-lambda voor de Mijn Nijmegen-applicatie.',
+      codePath: 'app/taken',
+      table: this.sessionsTable,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: this.baseUrl,
+      apiFunction: TakenFunction,
+      functionProps: {
+        timeout: Duration.seconds(15), // frontend async calls can take a while
+        memorySize: 1024,
+      },
+      environment: {
+        SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
+        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+      },
+    });
+
+    if (this.configuration.useZakenFromAggregatorAPI) {
+      this.grantZakenApiAccess(takenFunction);
+    }
+    return takenFunction;
   }
 
   /**

@@ -65,6 +65,9 @@
           "spawn": "bundle:app/persoonsgegevens/persoonsgegevens.lambda"
         },
         {
+          "spawn": "bundle:app/taken/taken.lambda"
+        },
+        {
           "spawn": "bundle:app/uitkeringen/uitkering.lambda"
         },
         {
@@ -177,6 +180,24 @@
       "steps": [
         {
           "exec": "esbuild --bundle src/app/persoonsgegevens/persoonsgegevens.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/persoonsgegevens/persoonsgegevens.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+        }
+      ]
+    },
+    "bundle:app/taken/taken.lambda": {
+      "name": "bundle:app/taken/taken.lambda",
+      "description": "Create a JavaScript bundle from src/app/taken/taken.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/taken/taken.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/taken/taken.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+        }
+      ]
+    },
+    "bundle:app/taken/taken.lambda:watch": {
+      "name": "bundle:app/taken/taken.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/app/taken/taken.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/taken/taken.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/taken/taken.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
         }
       ]
     },
