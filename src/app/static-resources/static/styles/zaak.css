@@ -4359,3 +4359,7 @@ tr td, tr th {
 td.nowrap {
   white-space: nowrap;
 }
+
+.taken-list div {
+  margin-bottom: 1rem;
+}

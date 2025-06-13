@@ -157,7 +157,7 @@ export class HomeRequestHandler {
 
   private async takenListHtml(taakSummaries: TaakSummary[], incompleteResults?: boolean) {
     if (taakSummaries) {
-      const html = await render({ taken: taakSummaries, takenid: 'open-taken-list', incompleteResults }, takenListPartial.default);
+      const html = await render({ taken: taakSummaries, takenid: 'taken-list', incompleteResults }, takenListPartial.default);
       return html;
     }
     return false;
