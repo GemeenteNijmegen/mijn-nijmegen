@@ -15,11 +15,11 @@
                 </ul>
         </nav>
         <div class="col-lg-9 col-md-12">
-            <h1>Mijn Taken</h1>
+            <h1>Mijn taken</h1>
             <p class="lead">Bekijk de taken die u nog uit moet voeren.</p>
             <div>
             {{#timeout}}
-            <p id="open-taken-list">Bezig met ophalen van uw open taken… {{>spinner}}</p>
+            <p id="taken-list">Bezig met ophalen van uw open taken… {{>spinner}}</p>
             {{/timeout}}
             {{#has_taken}}
             {{{taken}}}
