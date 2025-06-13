@@ -2,7 +2,6 @@ import { aws_secretsmanager, Duration, Stack, StackProps } from 'aws-cdk-lib';
 import * as apigatewayv2 from 'aws-cdk-lib/aws-apigatewayv2';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
-import { AccountPrincipal, PrincipalWithConditions, Role } from 'aws-cdk-lib/aws-iam';
 import { ISecret, Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { IStringParameter, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
@@ -16,7 +15,6 @@ import { PersoonsgegevensFunction } from './app/persoonsgegevens/persoonsgegeven
 import { UitkeringFunction } from './app/uitkeringen/uitkering-function';
 import { ZakenFunction } from './app/zaken/zaken-function';
 import { Configurable, Configuration } from './Configuration';
-import { DynamoDbReadOnlyPolicy } from './iam/dynamodb-readonly-policy';
 import { SessionsTable } from './SessionsTable';
 import { Statics } from './statics';
 
@@ -46,6 +44,7 @@ export interface ApiStackProps extends StackProps, Configurable {
 export class ApiStack extends Stack implements Configurable {
   private sessionsTable: Table;
   private zakenApiKey?: ISecret;
+  private baseUrl: string;
   configuration: Configuration;
   api: apigatewayv2.HttpApi;
 
@@ -64,12 +63,9 @@ export class ApiStack extends Stack implements Configurable {
     });
 
     const subdomain = Statics.subDomain(props.branch);
-    const appDomain = `${subdomain}.nijmegen.nl`;
+    this.baseUrl = `${subdomain}.nijmegen.nl`;
 
-    const readOnlyRole = this.readOnlyRole();
-
-    this.setFunctions(`https://${appDomain}/`, readOnlyRole, props.configuration);
-    this.allowReadAccessToTable(readOnlyRole, this.sessionsTable);
+    this.setFunctions(props.configuration);
   }
 
   /**
@@ -77,43 +73,48 @@ export class ApiStack extends Stack implements Configurable {
    * add routes to the gateway.
    * @param {string} baseUrl the application url
    */
-  setFunctions(baseUrl: string, readOnlyRole: Role, configuration: Configuration) {
+  setFunctions(configuration: Configuration) {
     const tlsConfig = this.mtlsConfig();
     const haalCentraalConfig = this.haalCentraalConfig();
     /**
      * The login function generates a login URL and renders the login page.
      */
-    const loginFunction = this.loginFunction(baseUrl, readOnlyRole);
+    const loginFunction = this.loginFunction();
 
     /**
      * The logout-function sets logout, unsets the session object and renders the logged-out page.
      */
-    const logoutFunction = this.logoutFunction(baseUrl, readOnlyRole);
+    const logoutFunction = this.logoutFunction();
 
     /**
      * The auth function receives the callback from the OIDC-provider, validates the received ID-Token, and sets the session to loggedin.
      */
-    const authFunction = this.authFunction(baseUrl, readOnlyRole, tlsConfig, haalCentraalConfig);
+    const authFunction = this.authFunction(tlsConfig, haalCentraalConfig);
 
     /**
      * The Home function show the homepage.
      */
-    const homeFunction = this.homeFunction(baseUrl, readOnlyRole);
+    const homeFunction = this.homeFunction();
 
     /**
      * The Persoonsgegevens function show the homepage.
      */
-    const persoonsGegevensFunction = this.persoonsgegevensFunction(baseUrl, readOnlyRole, tlsConfig, haalCentraalConfig);
+    const persoonsGegevensFunction = this.persoonsgegevensFunction(tlsConfig, haalCentraalConfig);
 
     /**
      * The uitkeringenfunction show your current uitkering.
      */
-    const uitkeringenFunction = this.uitkeringenFunction(baseUrl, readOnlyRole, tlsConfig);
+    const uitkeringenFunction = this.uitkeringenFunction(tlsConfig);
 
     /**
      * The zaken function show your current zaken.
      */
-    const zakenFunction = this.zakenFunction(baseUrl, readOnlyRole);
+    const zakenFunction = this.zakenFunction();
+
+    /**
+     * The taken function show your current zaken.
+     */
+    // const takenFunction = this.takenFunction();
 
     //MARK: Routes
     this.api.addRoutes({
@@ -177,7 +178,7 @@ export class ApiStack extends Stack implements Configurable {
     });
 
     if (configuration.mijnContactGegevensLive) {
-      const contactgegevensFunction = this.contactgegevensFunction(baseUrl, readOnlyRole);
+      const contactgegevensFunction = this.contactgegevensFunction();
       this.api.addRoutes({
         integration: new HttpLambdaIntegration('contactgegevens', contactgegevensFunction.lambda),
         path: '/contactgegevens',
@@ -205,26 +206,24 @@ export class ApiStack extends Stack implements Configurable {
     };
   }
 
-  private logoutFunction(baseUrl: string, readOnlyRole: Role) {
+  private logoutFunction() {
     return new ApiFunction(this, 'logout-function', {
       description: 'Uitlog-pagina voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/logout',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
-      applicationUrlBase: baseUrl,
-      readOnlyRole,
+      applicationUrlBase: this.baseUrl,
       apiFunction: LogoutFunction,
     });
   }
 
-  private loginFunction(baseUrl: string, readOnlyRole: Role) {
+  private loginFunction() {
     return new ApiFunction(this, 'login-function', {
       description: 'Login-pagina voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/login',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
-      applicationUrlBase: baseUrl,
-      readOnlyRole,
+      applicationUrlBase: this.baseUrl,
       apiFunction: LoginFunction,
       environment: {
         DIGID_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmDIGIDScope),
@@ -249,14 +248,13 @@ export class ApiStack extends Stack implements Configurable {
     });
   }
 
-  private homeFunction(baseUrl: string, readOnlyRole: Role) {
+  private homeFunction() {
     const homeFunction = new ApiFunction(this, 'home-function', {
       description: 'Home-lambda voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/home',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
-      applicationUrlBase: baseUrl,
-      readOnlyRole,
+      applicationUrlBase: this.baseUrl,
       apiFunction: HomeFunction,
       functionProps: {
         timeout: Duration.seconds(15), // frontend async calls can take a while
@@ -274,7 +272,7 @@ export class ApiStack extends Stack implements Configurable {
     return homeFunction;
   }
 
-  private authFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig, haalCentraalConfig: HaalCentraalConfig) {
+  private authFunction(mtlsConfig: TLSConfig, haalCentraalConfig: HaalCentraalConfig) {
     const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
     const authServiceClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'auth-serice-client-secret', Statics.authServiceClientSecretArn);
     const verIdClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'verid-client-secret', Statics.ssmVerIdClientSecret);
@@ -285,8 +283,7 @@ export class ApiStack extends Stack implements Configurable {
       codePath: 'app/auth',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
-      applicationUrlBase: baseUrl,
-      readOnlyRole,
+      applicationUrlBase: this.baseUrl,
       timeout: Duration.seconds(6), // Too long but required for poc authentication service
       environment: {
         CLIENT_SECRET_ARN: oidcSecret.secretArn,
@@ -344,15 +341,14 @@ export class ApiStack extends Stack implements Configurable {
     return authFunction;
   }
 
-  private persoonsgegevensFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig, haalCentraalConfig: HaalCentraalConfig) {
+  private persoonsgegevensFunction(mtlsConfig: TLSConfig, haalCentraalConfig: HaalCentraalConfig) {
 
     const persoonsGegevensFunction = new ApiFunction(this, 'persoonsgegevens-function', {
       description: 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/persoonsgegevens',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
-      applicationUrlBase: baseUrl,
-      readOnlyRole,
+      applicationUrlBase: this.baseUrl,
       environment: {
         MTLS_PRIVATE_KEY_ARN: mtlsConfig.privateKey.secretArn,
         MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
@@ -381,14 +377,13 @@ export class ApiStack extends Stack implements Configurable {
     return persoonsGegevensFunction;
   }
 
-  private uitkeringenFunction(baseUrl: string, readOnlyRole: Role, mtlsConfig: TLSConfig) {
+  private uitkeringenFunction(mtlsConfig: TLSConfig) {
     const uitkeringenFunction = new ApiFunction(this, 'uitkeringen-function', {
       description: 'Uitkeringen-lambda voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/uitkeringen',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
-      applicationUrlBase: baseUrl,
-      readOnlyRole,
+      applicationUrlBase: this.baseUrl,
       environment: {
         MTLS_PRIVATE_KEY_ARN: mtlsConfig.privateKey.secretArn,
         MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
@@ -405,7 +400,7 @@ export class ApiStack extends Stack implements Configurable {
     return uitkeringenFunction;
   }
 
-  private contactgegevensFunction(baseUrl: string, readOnlyRole: Role) {
+  private contactgegevensFunction() {
     const openklantApiKey = Secret.fromSecretNameV2(this, 'openklant-token', Statics.ssmOpenKlantSecret);
 
     const contactgegevensFunctie = new ApiFunction(this, 'contactgegevens-function', {
@@ -413,8 +408,7 @@ export class ApiStack extends Stack implements Configurable {
       codePath: 'app/contactgegevens',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
-      applicationUrlBase: baseUrl,
-      readOnlyRole,
+      applicationUrlBase: this.baseUrl,
       environment: {
         OPENKLANT_API_ENDPOINT: StringParameter.valueForStringParameter(this, Statics.ssmOpenKlantEndpoint),
         OPENKLANT_API_KEY_ARN: openklantApiKey.secretArn,
@@ -427,7 +421,7 @@ export class ApiStack extends Stack implements Configurable {
   }
 
 
-  private zakenFunction(baseUrl: string, readOnlyRole: Role) {
+  private zakenFunction() {
     const jwtSecret = Secret.fromSecretNameV2(this, 'jwt-token-secret', Statics.vipJwtSecret);
     const tokenSecret = Secret.fromSecretNameV2(this, 'taken-token-secret', Statics.vipTakenSecret);
     const submissionstorageKey = Secret.fromSecretNameV2(this, 'taken-submission-secret', Statics.submissionstorageKey);
@@ -436,7 +430,7 @@ export class ApiStack extends Stack implements Configurable {
       codePath: 'app/zaken',
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
-      applicationUrlBase: baseUrl,
+      applicationUrlBase: this.baseUrl,
       environment: {
         VIP_JWT_SECRET_ARN: jwtSecret.secretArn,
         VIP_TAKEN_SECRET_ARN: tokenSecret.secretArn,
@@ -451,7 +445,6 @@ export class ApiStack extends Stack implements Configurable {
         SUBMISSIONS_LIVE: this.configuration.zakenUseSubmissions ? 'true' : 'false',
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
       },
-      readOnlyRole,
       apiFunction: ZakenFunction,
       functionProps: {
         timeout: Duration.seconds(15),
@@ -493,38 +486,5 @@ export class ApiStack extends Stack implements Configurable {
       .replace(/^https?:\/\//, '') //protocol
       .replace(/\/$/, ''); //optional trailing slash
     return cleanedUrl;
-  }
-  /**
-   * Create a role with read-only access to the application
-   *
-   * @returns Role
-   */
-  readOnlyRole(): Role {
-    const readOnlyRole = new Role(this, 'read-only-role', {
-      roleName: 'mijnnijmegen-full-read',
-      description: 'Read-only role for Mijn Nijmegen with access to lambdas, logging, session store',
-      assumedBy: new PrincipalWithConditions(
-        new AccountPrincipal(Statics.iamAccountId), //IAM account
-        {
-          Bool: {
-            'aws:MultiFactorAuthPresent': true,
-          },
-        },
-      ),
-    });
-
-    new StringParameter(this, 'ssm_readonly', {
-      stringValue: readOnlyRole.roleArn,
-      parameterName: Statics.ssmReadOnlyRoleArn,
-    });
-    return readOnlyRole;
-  }
-
-  allowReadAccessToTable(role: Role, table: Table) {
-    role.addManagedPolicy(
-      new DynamoDbReadOnlyPolicy(this, 'read-policy', {
-        tableArn: table.tableArn,
-      }),
-    );
   }
 }
