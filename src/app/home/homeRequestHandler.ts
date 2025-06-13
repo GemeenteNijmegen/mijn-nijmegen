@@ -112,10 +112,10 @@ export class HomeRequestHandler {
     if (json.results) {
       try {
         const taken = TaakSummariesResponseSchema.parse(json);
-        return this.takenListHtml(taken.results.filter(taak => taak.is_open), taken.incompleteResults);
-      } catch(error) {
+        return await this.takenListHtml(taken.results.filter(taak => taak.is_open), taken.incompleteResults);
+      } catch (error) {
         logger.error('Failed parsing taken');
-        throw(error);
+        throw (error);
       }
     }
 
