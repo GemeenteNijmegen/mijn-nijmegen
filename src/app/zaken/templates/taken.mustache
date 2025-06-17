@@ -50,4 +50,9 @@
         </div>
     </div>
 {{/taken}}
+{{^taken}}
+    {{^incompleteResults}}
+        <p>U heeft geen openstaande taken.</p>
+    {{/incompleteResults}}
+{{/taken}}
 </div>
