@@ -90,7 +90,7 @@ export class ZakenAggregatorConnector {
       }
       return json;
     } catch (err) {
-      console.info(err);
+      console.info('fetch error', err);
       throw err;
     }
   }

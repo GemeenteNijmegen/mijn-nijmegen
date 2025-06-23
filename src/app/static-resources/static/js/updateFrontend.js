@@ -8,7 +8,7 @@ addEventListener("DOMContentLoaded", (event) => {
 function updateContent() {
   const body = document.querySelector('body');
   if(body.dataset?.loaded=='false') {
-    body.dataset.loadattempts = '0';
+    body.dataset.loadattempts = body.dataset.loadattempts ?? '0';
     getData();
   }
 }

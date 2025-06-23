@@ -1800,6 +1800,7 @@
         border-style: var(--denhaag-action-border-style);
         border-width: var(--denhaag-action-border-width);
         border-color: var(--denhaag-action-border-color);
+        margin-bottom: .5em;
     }
 
 
