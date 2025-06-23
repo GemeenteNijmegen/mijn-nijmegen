@@ -10,7 +10,7 @@ import * as zakenListPartial from './templates/zaken-table.mustache';
 import * as zakenTemplate from './templates/zaken.mustache';
 import { User, UserFromSession } from './User';
 import { ZaakFormatter } from './ZaakFormatter';
-import { SingleZaak, singleZaakSchema, ZaakSummariesSchema } from './ZaakInterface';
+import { SingleZaak, singleZaakSchema, ZaakSummariesResponseSchema, ZaakSummariesSchema } from './ZaakInterface';
 import { eventParams } from './zaken.lambda';
 import { ZakenAggregatorConnector } from './ZakenAggregatorConnector';
 import { Spinner } from '../../shared/Icons';
@@ -66,11 +66,21 @@ export class ZakenRequestHandler {
         this.connector.setTimeout(2000);
       }
       const json = await this.connector.fetch(endpoint, user);
-      const zaken = ZaakSummariesSchema.parse(json);
-      zakenList = new ZaakFormatter().formatList(zaken);
+
+      // Handle new style response from zaakaggregator
+      if (json.results) {
+        const zaken = ZaakSummariesResponseSchema.parse(json);
+        zakenList = new ZaakFormatter().formatList(zaken.results);
+      } else { // Handle old style response from zaakaggregator
+        const zaken = ZaakSummariesSchema.parse(json);
+        zakenList = new ZaakFormatter().formatList(zaken);
+      }
+
     } catch (err: unknown) {
       if (err instanceof Error && err.name === 'TimeoutError') {
         timeout = true;
+      } else {
+        logger.error('Failed to get zaken from zaakaggregator', { err });
       }
     }
 
@@ -85,7 +95,7 @@ export class ZakenRequestHandler {
     }
   }
 
-  async jsonListResponse(session: Session, zaakSummaries: any, xsrfToken?: string ) {
+  async jsonListResponse(session: Session, zaakSummaries: any, xsrfToken?: string) {
     if (!xsrfToken || !validateToken(session, xsrfToken)) {
       return Response.error(403);
     }
@@ -113,7 +123,7 @@ export class ZakenRequestHandler {
       timeout,
       'xsrf_token': session.getValue('xsrf_token'),
     };
-      // render page
+    // render page
     const html = await render(data, zakenTemplate.default, {
       zaak: zaakRow.default,
       spinner: Spinner.default,
