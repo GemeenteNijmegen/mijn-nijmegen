@@ -244,7 +244,7 @@ export class ZakenRequestHandler {
           body: Buffer.from(contentArrayBuffer).toString('base64'),
           headers: {
             'Content-type': 'application/octet-stream',
-            'Content-Disposition': result.filename,
+            'Content-Disposition': `attachment;filename=${result.filename}`,
           },
           isBase64Encoded: true,
         } as ApiGatewayV2Response;
