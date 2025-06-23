@@ -8,7 +8,7 @@ addEventListener("DOMContentLoaded", (event) => {
 function updateContent() {
   const body = document.querySelector('body');
   if(body.dataset?.loaded=='false') {
-    body.dataset.loadattempts = '0';
+    body.dataset.loadattempts = body.dataset.loadattempts ?? '0';
     getData();
   }
 }
@@ -32,11 +32,13 @@ async function getData() {
         // Time out, try again.
         const attempt = Number(body.dataset.loadattempts) + 1;
         body.dataset.loadattempts = attempt;
+        console.log(`attempted loading ${attempt} times`);
         if(attempt < 3) {
           updateContent();
         }
       }
     } else {
+      showNotice();
       throw new Error('Network response was not OK');
     }
   };
@@ -74,4 +76,14 @@ function replaceElement(data) {
   const element = htmlStringToElement(data);
   const old = document.getElementById(element.id);
   old.replaceWith(element);
+}
+
+function showNotice() {
+  let notice = `<div class="col-lg-9 col-md-12 alert alert-warning">
+    Het laden van uw gegevens is niet gelukt. Ververs de pagina om het opnieuw te proberen. Werkt het nog steeds niet, probeer het dan op een 
+    later moment opnieuw.
+  </div>`;
+  const sidebar = document.querySelector('.nijmegen-sidebar');
+  const element = htmlStringToElement(notice);
+  sidebar.insertAdjacentElement('afterend', element);
 }

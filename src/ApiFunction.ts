@@ -1,10 +1,8 @@
 import { aws_lambda as Lambda, aws_dynamodb, aws_ssm as SSM, RemovalPolicy, Duration, Stack } from 'aws-cdk-lib';
 import { Alarm } from 'aws-cdk-lib/aws-cloudwatch';
-import { Role } from 'aws-cdk-lib/aws-iam';
 import { FunctionProps } from 'aws-cdk-lib/aws-lambda';
 import { FilterPattern, IFilterPattern, MetricFilter, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
-import { LambdaReadOnlyPolicy } from './iam/lambda-readonly-policy';
 import { Statics } from './statics';
 
 type T = Lambda.Function;
@@ -19,7 +17,6 @@ export interface ApiFunctionProps {
   environment?: { [key: string]: string };
   monitorFilterPattern?: IFilterPattern;
   timeout?: Duration;
-  readOnlyRole: Role;
   /**
    * The default 'Lambda Function' props can be overridden or amended using
    * properties provided in this property. These will map to the props of the lambda
@@ -56,7 +53,6 @@ export class ApiFunction extends Construct {
     props.table.grantReadWriteData(this.lambda.grantPrincipal);
 
     this.monitor(props.monitorFilterPattern);
-    this.allowAccessToReadOnlyRole(props.readOnlyRole);
   }
 
   /**
@@ -86,14 +82,5 @@ export class ApiFunction extends Construct {
       alarmDescription: `This alarm triggers if the function ${this.node.id} is logging more than 5 errors over n minutes.`,
     });
     alarm.applyRemovalPolicy(RemovalPolicy.DESTROY);
-  }
-
-  private allowAccessToReadOnlyRole(role: Role) {
-    role.addManagedPolicy(
-      new LambdaReadOnlyPolicy(this, 'read-policy', {
-        functionArn: this.lambda.functionArn,
-        logGroupArn: this.lambda.logGroup.logGroupArn,
-      }),
-    );
   }
 }
