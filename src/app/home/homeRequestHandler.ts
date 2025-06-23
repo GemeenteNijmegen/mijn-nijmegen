@@ -3,8 +3,7 @@ import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
 import { eventParams } from './home.lambda';
-import * as homeTemplate from './templates/home.mustache';
-import { Spinner, ArrowRight } from '../../shared/Icons';
+import { ArrowRight, Spinner } from '../../shared/Icons';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import * as takenListPartial from '../zaken/templates/taken.mustache';
@@ -12,8 +11,10 @@ import * as zaakRow from '../zaken/templates/zaak-row.mustache';
 import * as zakenListPartial from '../zaken/templates/zaken-table.mustache';
 import { UserFromSession } from '../zaken/User';
 import { ZaakFormatter } from '../zaken/ZaakFormatter';
-import { TaakSummariesSchema, TaakSummary, ZaakSummariesSchema } from '../zaken/ZaakInterface';
+import { TaakSummariesResponseSchema, TaakSummariesSchema, TaakSummary, ZaakSummariesResponseSchema, ZaakSummariesSchema } from '../zaken/ZaakInterface';
 import { ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
+import * as homeTemplate from './templates/home.mustache';
+import { logger } from '../../shared/Logger';
 
 
 interface HomeRequestHandlerProps {
@@ -106,6 +107,19 @@ export class HomeRequestHandler {
 
     const endpoint = 'taken';
     const json = await this.zakenConnector.fetch(endpoint, user);
+
+    // Handle new style response from zaakaggregator
+    if (json.results) {
+      try {
+        const taken = TaakSummariesResponseSchema.parse(json);
+        return await this.takenListHtml(taken.results.filter(taak => taak.is_open), taken.incompleteResults);
+      } catch (error) {
+        logger.error('Failed parsing taken');
+        throw (error);
+      }
+    }
+
+    // Handle old style response from zaakaggregator
     const taken = TaakSummariesSchema.parse(json);
     return this.takenListHtml(taken.filter(taak => taak.is_open));
   }
@@ -115,14 +129,24 @@ export class HomeRequestHandler {
 
     const endpoint = 'zaken';
     const json = await this.zakenConnector.fetch(endpoint, user, new URLSearchParams({ maxResults: '5' }));
+
+    // Handle new style response from zaakaggregator
+    if (json.results) {
+      const zaken = ZaakSummariesResponseSchema.parse(json);
+      const zakenList = new ZaakFormatter().formatList(zaken.results);
+      return this.zakenListsHtml(zakenList, zaken.incompleteResults);
+    }
+
+    // Handle old style response from zaakaggregator
     const zaken = ZaakSummariesSchema.parse(json);
     const zakenList = new ZaakFormatter().formatList(zaken);
     return this.zakenListsHtml(zakenList);
+
   }
 
-  private async zakenListsHtml(zaakSummaries: any) {
+  private async zakenListsHtml(zaakSummaries: any, incompleteResults?: boolean) {
     if (zaakSummaries) {
-      const html = await render({ zaken: zaakSummaries.open, id: 'open-zaken-list' }, zakenListPartial.default,
+      const html = await render({ zaken: zaakSummaries.open, id: 'open-zaken-list', incompleteResults }, zakenListPartial.default,
         {
           'zaak-row': zaakRow.default,
         });
@@ -131,9 +155,9 @@ export class HomeRequestHandler {
     return false;
   }
 
-  private async takenListHtml(taakSummaries: TaakSummary[]) {
+  private async takenListHtml(taakSummaries: TaakSummary[], incompleteResults?: boolean) {
     if (taakSummaries) {
-      const html = await render({ taken: taakSummaries, takenid: 'open-taken-list' }, takenListPartial.default);
+      const html = await render({ taken: taakSummaries, takenid: 'taken-list', incompleteResults }, takenListPartial.default);
       return html;
     }
     return false;

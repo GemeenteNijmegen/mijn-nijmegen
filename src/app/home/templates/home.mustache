@@ -17,13 +17,13 @@
         <div class="col-lg-9 col-md-12">
             <h1>Mijn Nijmegen</h1>
             <p class="lead">Bekijk uw persoonsgegevens, uitkeringsgegevens of lopende zaken.</p>
-            <div class="alert alert-info">Wij horen graag van u wat u vindt van inloggen met DigiD of Yivi om iets aan te vragen bij de gemeente. <a href="https://www.nijmegen.nl/onderzoek-id-wallets/">Help mee met ons onderzoek</a>.</div>
             <div>
             {{#timeout}}
             <div class="header-readmore">
                 <h2>Belangrijke taken om te regelen</h2>
+                <a href="/taken">Bekijk alle taken {{>arrow-right}}</a>
             </div>
-            <p id="open-taken-list">Bezig met ophalen van uw open taken… {{>spinner}}</p>
+            <p id="taken-list">Bezig met ophalen van uw open taken… {{>spinner}}</p>
             {{/timeout}}
             {{#has_taken}}
             <div class="header-readmore">

@@ -1800,6 +1800,7 @@
         border-style: var(--denhaag-action-border-style);
         border-width: var(--denhaag-action-border-width);
         border-color: var(--denhaag-action-border-color);
+        margin-bottom: .5em;
     }
 
 
@@ -4358,4 +4359,8 @@ tr td, tr th {
 
 td.nowrap {
   white-space: nowrap;
+}
+
+.taken-list div {
+  margin-bottom: 1rem;
 }

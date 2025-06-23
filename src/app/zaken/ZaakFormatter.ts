@@ -40,7 +40,7 @@ export class ZaakFormatter {
       taken: zaak.taken?.map(taak => {
         return {
           ...taak,
-          has_attachments: taak.attachments?.length > 0,
+          has_attachments: taak.attachments && taak.attachments?.length > 0,
           attachments: taak.attachments?.map(attachment => {
             return {
               ...attachment,
