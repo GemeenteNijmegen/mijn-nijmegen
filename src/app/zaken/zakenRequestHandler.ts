@@ -14,6 +14,7 @@ import { SingleZaak, singleZaakSchema, ZaakSummariesSchema } from './ZaakInterfa
 import { eventParams } from './zaken.lambda';
 import { ZakenAggregatorConnector } from './ZakenAggregatorConnector';
 import { Spinner } from '../../shared/Icons';
+import { logger } from '../../shared/Logger';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import { validateToken } from '../../shared/validateToken';
@@ -227,19 +228,23 @@ export class ZakenRequestHandler {
     const endpoint = `zaken/${zaakConnectorId}/${zaakId}/download/${file}`;
 
     this.connector.setTimeout(10000);
-    const response = await this.connector.fetch(endpoint, user);
+    const result = await this.connector.fetch(endpoint, user);
 
-    if (response) {
-      if (response?.downloadUrl) {
-        return Response.redirect(response.downloadUrl);
+    if (result) {
+      if (result?.downloadUrl) {
+        return Response.redirect(result.downloadUrl);
       } else {
+        const response = result.response;
         //response is binary, return file
+        logger.debug('fetch content-type octet-stream');
+        const contentArrayBuffer = await response.arrayBuffer();
+        logger.debug('response retrieved contentarraybuffer', contentArrayBuffer);
         return {
           statusCode: 200,
-          body: Buffer.from(await response.content.arrayBuffer()).toString('base64'),
+          body: Buffer.from(contentArrayBuffer).toString('base64'),
           headers: {
             'Content-type': 'application/octet-stream',
-            'Content-Disposition': response.filename,
+            'Content-Disposition': `attachment;filename=${result.filename}`,
           },
           isBase64Encoded: true,
         } as ApiGatewayV2Response;
