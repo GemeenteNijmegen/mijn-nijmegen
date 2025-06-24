@@ -130,18 +130,9 @@ export class HomeRequestHandler {
     const endpoint = 'zaken';
     const json = await this.zakenConnector.fetch(endpoint, user, new URLSearchParams({ maxResults: '5' }));
 
-    // Handle new style response from zaakaggregator
-    if (json.results) {
-      const zaken = ZaakSummariesResponseSchema.parse(json);
-      const zakenList = new ZaakFormatter().formatList(zaken.results);
-      return this.zakenListsHtml(zakenList, zaken.incompleteResults);
-    }
-
-    // Handle old style response from zaakaggregator
-    const zaken = ZaakSummariesSchema.parse(json);
-    const zakenList = new ZaakFormatter().formatList(zaken);
-    return this.zakenListsHtml(zakenList);
-
+    const zaken = ZaakSummariesResponseSchema.parse(json);
+    const zakenList = new ZaakFormatter().formatList(zaken.results);
+    return this.zakenListsHtml(zakenList, zaken.incompleteResults);
   }
 
   private async zakenListsHtml(zaakSummaries: any, incompleteResults?: boolean) {

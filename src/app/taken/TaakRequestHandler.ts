@@ -93,21 +93,13 @@ export class TaakrequestHandler {
 
     const endpoint = 'taken';
     const json = await this.connector.fetch(endpoint, user);
-
-    // Handle new style response from zaakaggregator
-    if (json.results) {
-      try {
-        const taken = TaakSummariesResponseSchema.parse(json);
-        return await this.takenListHtml(taken.results, taken.incompleteResults);
-      } catch (error) {
-        logger.error('Failed parsing taken');
-        throw (error);
-      }
+    try {
+      const taken = TaakSummariesResponseSchema.parse(json);
+      return await this.takenListHtml(taken.results, taken.incompleteResults);
+    } catch (error) {
+      logger.error('Failed parsing taken');
+      throw (error);
     }
-
-    // Handle old style response from zaakaggregator
-    const taken = TaakSummariesSchema.parse(json);
-    return this.takenListHtml(taken);
   }
 
   private async takenListHtml(taakSummaries: TaakSummary[], incompleteResults?: boolean) {
