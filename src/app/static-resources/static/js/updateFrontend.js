@@ -35,6 +35,8 @@ async function getData() {
         console.log(`attempted loading ${attempt} times`);
         if(attempt < 3) {
           updateContent();
+        } else {
+          showNotice();
         }
       }
     } else {
