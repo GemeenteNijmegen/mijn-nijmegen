@@ -85,7 +85,7 @@ function showNotice() {
     Het laden van uw gegevens is niet gelukt. Ververs de pagina om het opnieuw te proberen. Werkt het nog steeds niet, probeer het dan op een 
     later moment opnieuw.
   </div>`;
-  const sidebar = document.querySelector('.nijmegen-sidebar');
+  const content = document.querySelector('.nijmegen-sidenav + *');
   const element = htmlStringToElement(notice);
-  sidebar.insertAdjacentElement('afterend', element);
+  sidebar.insertAdjacentElement('afterend', content);
 }
