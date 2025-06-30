@@ -87,5 +87,5 @@ function showNotice() {
   </div>`;
   const content = document.querySelector('.nijmegen-sidenav + *');
   const element = htmlStringToElement(notice);
-  content.insertAdjacentElement('afterend', element);
+  content.insertAdjacentElement('afterbegin', element);
 }
