@@ -1371,10 +1371,10 @@
   resolved "https://registry.yarnpkg.com/@gemeentenijmegen/aws-constructs/-/aws-constructs-0.0.38.tgz#8a0fab63a3616fa56dce1b630b732bce35a64df4"
   integrity sha512-9oGJVdZKjgARMpq6BpcMl7/5FHIjAQei6ePFzIfc+bUbrhU+7Q3Thk5knOTmBstAUY9ntjbwT99wT3CjkrQNXA==
 
-"@gemeentenijmegen/projen-project-type@^1.10.7":
-  version "1.10.7"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/projen-project-type/-/projen-project-type-1.10.7.tgz#42f1c479d49525f15029e7a19c6cce734c147742"
-  integrity sha512-IZpdszKkzQx/PEQkdHbcwaZqGLkH9wzXDrZ9sMOKX1UGMy4T2EYriLKPSUUEJ92zoP6VrzcwF50S6a2168Djyw==
+"@gemeentenijmegen/projen-project-type@^1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/projen-project-type/-/projen-project-type-1.11.0.tgz#838074568a1be5adc3982bae1ef92200a164bd16"
+  integrity sha512-MU135ZQrmCzUTkX9Gz9KogxqIbOdRU9g+BrNej0TSw8XP4sqD1YKsHob5DXzXH+dyYTHMxnQ3g3l3CT1tUICrQ==
 
 "@gemeentenijmegen/session@^0.0.27":
   version "0.0.27"
@@ -2967,9 +2967,9 @@ aws-cdk-lib@^2.22.0:
     yaml "1.10.2"
 
 aws-cdk@^2:
-  version "2.1020.1"
-  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.1020.1.tgz#97716539f80d3b74dc70cdf2bf38eb4232d94fa2"
-  integrity sha512-4UG9qzf6ZSDjINubcukPZChVj6PvDJAHiURAw0jYSkUhObPkX7Zo9uNUIlXzrM+hpB2N2jwRKY9b3sN+KDbtAQ==
+  version "2.1020.2"
+  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.1020.2.tgz#7e0a4113666a6d162cf40b6b1ebf9e310c22dd44"
+  integrity sha512-yWdt3dJh4aPm1VNyEgfG3lozGrvddw0i7avt+Cl9KOYixmisQtAg39/aZqzVVqjzVZVEanXmz+tlhzzh75Z69A==
   optionalDependencies:
     fsevents "2.3.2"
 
@@ -7680,7 +7680,7 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zod@^3.25.69:
-  version "3.25.69"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.69.tgz#bf63dd5b91b28a02424395e13cb1abf5146d9084"
-  integrity sha512-cjUx+boz8dfYGssYKLGNTF5VUF6NETpcZCDTN3knhUUXQTAAvErzRhV3pgeCZm2YsL4HOwtEHPonlsshPu2I0A==
+zod@^3.25.71:
+  version "3.25.71"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.71.tgz#f87a19c06b061426564607726c05a4d3b9ac3fa9"
+  integrity sha512-BsBc/NPk7h8WsUWYWYL+BajcJPY8YhjelaWu2NMLuzgraKAz4Lb4/6K11g9jpuDetjMiqhZ6YaexFLOC0Ogi3Q==
