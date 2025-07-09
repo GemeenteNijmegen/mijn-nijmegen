@@ -1371,10 +1371,10 @@
   dependencies:
     "@types/aws-lambda" "^8.10.150"
 
-"@gemeentenijmegen/aws-constructs@^0.0.39":
-  version "0.0.39"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/aws-constructs/-/aws-constructs-0.0.39.tgz#9af8a27ec0b5cc2fe03820b02e1b0bc131d79f12"
-  integrity sha512-/kAeKtpD4Y67EqXWo+NQ+VQL998n38bFgB12yErKvkIRgvPp8AAj8FZFZ7/o0V/DuDLvruQN5GDbXlMnnykNlg==
+"@gemeentenijmegen/aws-constructs@^0.0.40":
+  version "0.0.40"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/aws-constructs/-/aws-constructs-0.0.40.tgz#50325e7ad348645cc4bd09b6b8730f6de8dd94b7"
+  integrity sha512-c/uglbEhEjADi6IGqbZnRbmQK6ET5W0bnzbOGYoIlu8kdn1zgZQaynU8FbCgSI2NSLLayvj1GLM3DDUAPIY0Og==
 
 "@gemeentenijmegen/projen-project-type@^1.11.0":
   version "1.11.0"
@@ -2469,16 +2469,16 @@
   integrity sha512-t+8/QWTAhOFlrF1IVZqKnMRJi84EgkIK5Kh0p2JV4OLywUvCwJPFxbJAl7XAow7DVIHsF+xW9f1MVzg0L6Szjw==
 
 "@types/node@*":
-  version "24.0.10"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-24.0.10.tgz#f65a169779bf0d70203183a1890be7bee8ca2ddb"
-  integrity sha512-ENHwaH+JIRTDIEEbDK6QSQntAYGtbvdDXnMXnZaZ6k13Du1dPMmprkEHIL7ok2Wl2aZevetwTAb5S+7yIF+enA==
+  version "24.0.12"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-24.0.12.tgz#3cf8719572145cfecf4cf9d180d8e7f74a61af00"
+  integrity sha512-LtOrbvDf5ndC9Xi+4QZjVL0woFymF/xSTKZKPgrrl7H7XoeDvnD+E2IclKVDyaK9UM756W/3BXqSU+JEHopA9g==
   dependencies:
     undici-types "~7.8.0"
 
 "@types/node@^18":
-  version "18.19.115"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.19.115.tgz#cd94caf14472021b4443c99bcd7aac6bb5c4f672"
-  integrity sha512-kNrFiTgG4a9JAn1LMQeLOv3MvXIPokzXziohMrMsvpYgLpdEt/mMiVYc4sGKtDfyxM5gIDF4VgrPRyCw4fHOYg==
+  version "18.19.117"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.19.117.tgz#2728b60db63a38cb8764da2ca83c18109faab9ee"
+  integrity sha512-hcxGs9TfQGghOM8atpRT+bBMUX7V8WosdYt98bQ59wUToJck55eCOlemJ+0FpOZOQw5ff7LSi9+IO56KvYEFyQ==
   dependencies:
     undici-types "~5.26.4"
 
@@ -7686,7 +7686,7 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zod@^3.25.75:
-  version "3.25.75"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.75.tgz#8ff9be2fbbcb381a9236f9f74a8879ca29dcc504"
-  integrity sha512-OhpzAmVzabPOL6C3A3gpAifqr9MqihV/Msx3gor2b2kviCgcb+HM9SEOpMWwwNp9MRunWnhtAKUoo0AHhjyPPg==
+zod@^3.25.76:
+  version "3.25.76"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.76.tgz#26841c3f6fd22a6a2760e7ccb719179768471e34"
+  integrity sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==
