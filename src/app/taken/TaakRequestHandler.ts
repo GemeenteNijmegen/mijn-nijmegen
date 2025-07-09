@@ -3,15 +3,15 @@ import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
 import { eventParams } from './taken.lambda';
-import * as takenTemplate from './templates/taken.mustache';
-import { Spinner, ArrowRight } from '../../shared/Icons';
+import { ArrowRight, Checkmark, Spinner } from '../../shared/Icons';
 import { logger } from '../../shared/Logger';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import * as takenListPartial from '../zaken/templates/taken.mustache';
 import { UserFromSession } from '../zaken/User';
-import { TaakSummariesResponseSchema, TaakSummariesSchema, TaakSummary } from '../zaken/ZaakInterface';
+import { TaakSummariesResponseSchema, TaakSummary } from '../zaken/ZaakInterface';
 import { ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
+import * as takenTemplate from './templates/taken.mustache';
 
 export class TaakrequestHandler {
   private dynamoDBClient: DynamoDBClient;
@@ -80,6 +80,7 @@ export class TaakrequestHandler {
         {
           'spinner': Spinner.default,
           'arrow-right': ArrowRight.default,
+          'checkmark': Checkmark.default,
         },
       );
 
