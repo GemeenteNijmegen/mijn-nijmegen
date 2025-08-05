@@ -3,7 +3,8 @@ import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
 import { eventParams } from './home.lambda';
-import { ArrowRight, Spinner } from '../../shared/Icons';
+import { ArrowRight, Checkmark, Spinner } from '../../shared/Icons';
+import { logger } from '../../shared/Logger';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import * as takenListPartial from '../zaken/templates/taken.mustache';
@@ -11,10 +12,9 @@ import * as zaakRow from '../zaken/templates/zaak-row.mustache';
 import * as zakenListPartial from '../zaken/templates/zaken-table.mustache';
 import { UserFromSession } from '../zaken/User';
 import { ZaakFormatter } from '../zaken/ZaakFormatter';
-import { TaakSummariesResponseSchema, TaakSummariesSchema, TaakSummary, ZaakSummariesResponseSchema, ZaakSummariesSchema } from '../zaken/ZaakInterface';
+import { TaakSummariesResponseSchema, TaakSummariesSchema, TaakSummary, ZaakSummariesResponseSchema } from '../zaken/ZaakInterface';
 import { ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
 import * as homeTemplate from './templates/home.mustache';
-import { logger } from '../../shared/Logger';
 
 
 interface HomeRequestHandlerProps {
@@ -92,6 +92,7 @@ export class HomeRequestHandler {
         {
           'spinner': Spinner.default,
           'arrow-right': ArrowRight.default,
+          'checkmark': Checkmark.default,
         },
       );
 
@@ -130,18 +131,9 @@ export class HomeRequestHandler {
     const endpoint = 'zaken';
     const json = await this.zakenConnector.fetch(endpoint, user, new URLSearchParams({ maxResults: '5' }));
 
-    // Handle new style response from zaakaggregator
-    if (json.results) {
-      const zaken = ZaakSummariesResponseSchema.parse(json);
-      const zakenList = new ZaakFormatter().formatList(zaken.results);
-      return this.zakenListsHtml(zakenList, zaken.incompleteResults);
-    }
-
-    // Handle old style response from zaakaggregator
-    const zaken = ZaakSummariesSchema.parse(json);
-    const zakenList = new ZaakFormatter().formatList(zaken);
-    return this.zakenListsHtml(zakenList);
-
+    const zaken = ZaakSummariesResponseSchema.parse(json);
+    const zakenList = new ZaakFormatter().formatList(zaken.results);
+    return this.zakenListsHtml(zakenList, zaken.incompleteResults);
   }
 
   private async zakenListsHtml(zaakSummaries: any, incompleteResults?: boolean) {
