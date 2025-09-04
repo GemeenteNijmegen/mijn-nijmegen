@@ -55,7 +55,7 @@
     "@types/content-disposition": "^0.5.9",
     "@types/jest": "^29.5.14",
     "@types/node": "^18",
-    "@types/validator": "^13.15.2",
+    "@types/validator": "^13.15.3",
     "@typescript-eslint/eslint-plugin": "^8",
     "@typescript-eslint/parser": "^8",
     "aws-cdk": "^2",
