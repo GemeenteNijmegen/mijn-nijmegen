@@ -1,5 +1,5 @@
 import { EndpointHealthCheck, HealthCheckerRegions } from '@pepperize/cdk-route53-health-check';
-import { aws_certificatemanager as CertificateManager, Stack, StackProps, aws_ssm as SSM } from 'aws-cdk-lib';
+import { aws_certificatemanager as CertificateManager, aws_ssm as SSM, Stack, StackProps } from 'aws-cdk-lib';
 import { Alarm, ComparisonOperator } from 'aws-cdk-lib/aws-cloudwatch';
 import { RemoteParameters } from 'cdk-remote-stack';
 import { Construct } from 'constructs';
@@ -22,7 +22,7 @@ export class UsEastStack extends Stack {
     super(scope, id, props);
     this.branch = props.branch;
     this.createCertificate();
-    this.monitorLoginPage(props.branch);
+    // this.monitorLoginPage(props.branch);
   }
 
   /** Because the hosted zone SSM parameters are stored in eu-west-1,
