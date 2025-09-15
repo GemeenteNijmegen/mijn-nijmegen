@@ -17,26 +17,34 @@
                 <h1>Mijn Contactgegevens</h1>
                 {{^error}}
 
-                <form method="POST" autocomplete="off">
+                <form method="post">
 
                     <div class="md-form">
                         <label for="email">E-mailadres</label>
-                        <input type="text" id="email" name="email" class="form-control {{#emailError}}is-invalid{{/emailError}}" placeholder="e-mail" value="{{email}}">
+                        <input type="text" id="email" name="email" autocomplete="email" class="form-control {{#emailError}}is-invalid{{/emailError}}" value="{{email}}">
                     </div>
 
                     <div class="md-form">
                         <label for="telefoonnummer">Telefoonnummer</label>
-                        <input type="text" id="telefoonnummer" name="telefoonnummer" class="form-control {{#telefoonnummerError}}is-invalid{{/telefoonnummerError}}" placeholder="+31 (6)" value="{{telefoonnummer}}">
+                        <input type="text" id="telefoonnummer" name="telefoonnummer" autocomplete="tel" class="form-control {{#telefoonnummerError}}is-invalid{{/telefoonnummerError}}" value="{{telefoonnummer}}">
                     </div>
 
+
                     <div class="md-form">
-                        <span>Welk kantaal heeft uw voorkeur?</span>
-
-                        <label for="voorkeur-telefoon">SMS</label>
-                        <input type="radio" id="voorkeur-telefoon" name="voorkeur" class="form-control" value="telefoonnummer" />
-
-                        <label for="voorkeur-email">E-mail</label>
-                        <input type="radio"  id="voorkeur-email" name="voorkeur" class="form-control" value="email" />
+                      <span>Welk kanaal heeft uw voorkeur?</span>
+                      <div ref="component" class="form-group has-feedback formio-component formio-component-radio_nijmegen formio-component-selectedid" id="e5p8f8j">
+                        <div class="form-radio radio">
+                          <div ref="wrapper" class="form-check">
+                              <input id="voorkeur-telefoon" value="telefoonnummer" class="form-check-input" type="radio" name="voorkeur">
+                              <label for="voorkeur-telefoon" class="form-check-label label-position-right">Telefoon</label>
+                          </div>
+                          
+                          <div ref="wrapper" class="form-check">
+                              <input id="voorkeur-email" value="email" class="form-check-input" type="radio" name="voorkeur">
+                              <label for="voorkeur-email" class="form-check-label label-position-right">E-mail</label>
+                          </div>
+                          
+                        </div>
                     </div>
 
 
