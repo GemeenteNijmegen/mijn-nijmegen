@@ -13,7 +13,18 @@ export enum SoortDigitaalAdres {
 
 export class OpenKlantLogic {
 
+  /**
+   * Validates a phoone number using the open-klant regex for phonenumbers
+   * @param phonenumber
+   * @returns
+   */
+  static isValidPhonenumber(phonenumber: string) {
+    const regex = /(0[8-9]00[0-9]{4,7})|(0[1-9][0-9]{8})|(\+[0-9]{9,20}|1400|140[0-9]{2,3})/;
+    return regex.test(phonenumber);
+  }
+
   private config: OpenKlantLogicConfig;
+
   constructor(config: OpenKlantLogicConfig) {
     this.config = config;
   }
@@ -64,11 +75,6 @@ export class OpenKlantLogic {
     }
 
     // No value provided & digitaal adres does not exist -> OK - do nothing
-  }
-
-  static isValidPhonenumber(phonenumber: string) {
-    const regex = /(0[8-9]00[0-9]{4,7})|(0[1-9][0-9]{8})|(\+[0-9]{9,20}|1400|140[0-9]{2,3})/
-    return regex.test(phonenumber);
   }
 
 }
