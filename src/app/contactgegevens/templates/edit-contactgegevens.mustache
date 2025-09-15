@@ -23,14 +23,25 @@
                 <form method="POST" autocomplete="off">
 
                     <div class="md-form">
-                        <label for="input-example1">E-mailadres</label>
-                        <input type="text" name="email" class="form-control {{#emailError}}is-invalid{{/emailError}}" placeholder="e-mail" value="{{email}}">
+                        <label for="email">E-mailadres</label>
+                        <input type="text" id="email" name="email" class="form-control {{#emailError}}is-invalid{{/emailError}}" placeholder="e-mail" value="{{email}}">
                     </div>
 
                     <div class="md-form">
-                        <label for="input-example1">Telefoonnummer</label>
-                        <input type="text" name="telefoonnummer" class="form-control {{#telefoonnummerError}}is-invalid{{/telefoonnummerError}}" placeholder="+31 (6)" value="{{telefoonnummer}}">
+                        <label for="telefoonnummer">Telefoonnummer</label>
+                        <input type="text" id="telefoonnummer" name="telefoonnummer" class="form-control {{#telefoonnummerError}}is-invalid{{/telefoonnummerError}}" placeholder="+31 (6)" value="{{telefoonnummer}}">
                     </div>
+
+                    <div class="md-form">
+                        <span>Welk kantaal heeft uw voorkeur?</span>
+                        
+                        <label for="voorkeur-telefoon">SMS</label>
+                        <input type="radio" id="voorkeur-telefoon" name="voorkeur" class="form-control" value="telefoonnummer" />
+
+                        <label for="voorkeur-email">E-mail</label>
+                        <input type="radio"  id="voorkeur-email" name="voorkeur" class="form-control" value="email" />
+                    </div>
+
 
                     <input type="hidden" name="xsrf_token" value="{{xsrf_token}}"/>
 
