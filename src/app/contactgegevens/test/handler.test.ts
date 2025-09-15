@@ -50,7 +50,7 @@ describe('Contactgegevens handler', () => {
       path: '/contactgegvens/edit',
     });
     expect(response.statusCode).toBe(200);
-    expect(response.body).toMatch('name="telefoonnummer" class="form-control is-invalid"');
+    expect(response.body).toMatch('name="telefoonnummer" autocomplete="tel" class="form-control is-invalid"');
   });
 
   test('handle invalid email', async () => {
@@ -65,7 +65,7 @@ describe('Contactgegevens handler', () => {
       path: '/contactgegvens/edit',
     });
     expect(response.statusCode).toBe(200);
-    expect(response.body).toMatch('name="email" class="form-control is-invalid"');
+    expect(response.body).toMatch('name="email" autocomplete="email" class="form-control is-invalid"');
   });
 
   test('handle no existing party post', async () => {
