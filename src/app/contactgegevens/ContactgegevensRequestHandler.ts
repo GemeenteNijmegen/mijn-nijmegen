@@ -2,13 +2,13 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import * as validator from 'validator';
+import { Navigation } from '../../shared/Navigation';
+import { render } from '../../shared/render';
+import { User, UserFromSession } from '../zaken/User';
 import { IOpenKlantAPI } from './OpenKlantApi';
 import { OpenKlantLogic } from './OpenKlantLogic';
 import * as template from './templates/contactgegevens.mustache';
 import * as editTemplate from './templates/edit-contactgegevens.mustache';
-import { Navigation } from '../../shared/Navigation';
-import { render } from '../../shared/render';
-import { User, UserFromSession } from '../zaken/User';
 
 interface Config {
   readonly dynamoDBClient: DynamoDBClient;
@@ -116,7 +116,7 @@ export class ContactgegevensRequestHandler {
     if (params.email && !validator.isEmail(params.email)) {
       errors.push('email');
     }
-    if (params.telefoonnummer && !validator.isMobilePhone(params.telefoonnummer)) {
+    if (params.telefoonnummer && !validator.isMobilePhone(params.telefoonnummer) && !OpenKlantLogic.isValidPhonenumber(params.telefoonnummer)) {
       errors.push('telefoonnummer');
     }
     if (errors.length != 0) {
