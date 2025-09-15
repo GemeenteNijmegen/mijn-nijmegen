@@ -17,7 +17,30 @@
                 <h1>Mijn Contactgegevens</h1>
                 <div class="alert alert-info">U kunt uw contactgegevens beheren in Mijn Nijmegen. Houd er rekening mee dat we u in sommige gevallen nog om uw contactgegevens kunnen vragen, omdat deze gegevens nog niet overal volledig worden gebruikt. Uiteindelijk worden de contactgegevens uit Mijn Nijmegen voor al uw online zaken met ons gebruikt, hier werken we aan.</div>
                 {{^error}}
+
                 <p class="lead">Hier vindt u een overzicht van uw contactgegevens.</p>
+
+
+                <table class="responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Waarde</th>
+                            <th>Acties</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>E-mail</td>
+                            <td>{{email}}</td>
+                        </tr>
+                        <tr>
+                            <td>Telefoonnummer</td>
+                            <td>{{telefoonnummer}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
 
                 <form method="POST" autocomplete="off">
 
