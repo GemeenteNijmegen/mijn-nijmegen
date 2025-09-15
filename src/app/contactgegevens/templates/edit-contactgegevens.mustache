@@ -20,32 +20,23 @@
 
                 <p class="lead">Hier vindt u een overzicht van uw contactgegevens.</p>
 
-                <ul role="list" class="utrecht-link-list utrecht-link-list--html-ul">
-                    <li class="utrecht-link-list__item">
-                        <a href="/contactgegevens/edit" class="utrecht-link utrecht-link--html-a utrecht-link-list__link">
-                            <span class="utrecht-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-chevron-right">
-                                    <path d="M9 6l6 6l-6 6"></path>
-                                </svg>
-                            </span>
-                            <span class="utrecht-link-list__link-text">Aanpassen</span>
-                        </a>
-                    </li>
-                </ul>
+                <form method="POST" autocomplete="off">
 
-                <table class="responsive-table">
-                    <tbody>
-                        <tr>
-                            <td>E-mailadres</td>
-                            <td>{{email}}</td>
-                        </tr>
-                        <tr>
-                            <td>Telefoonnummer</td>
-                            <td>{{telefoonnummer}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <div class="md-form">
+                        <label for="input-example1">E-mailadres</label>
+                        <input type="text" name="email" class="form-control {{#emailError}}is-invalid{{/emailError}}" placeholder="e-mail" value="{{email}}">
+                    </div>
 
+                    <div class="md-form">
+                        <label for="input-example1">Telefoonnummer</label>
+                        <input type="text" name="telefoonnummer" class="form-control {{#telefoonnummerError}}is-invalid{{/telefoonnummerError}}" placeholder="+31 (6)" value="{{telefoonnummer}}">
+                    </div>
+
+                    <input type="hidden" name="xsrf_token" value="{{xsrf_token}}"/>
+
+                    <button type="submit" class="btn btn-primary">Wijzigingen opslaan</button>
+
+                </form>
 
                 {{/error}}
                 {{#error}}

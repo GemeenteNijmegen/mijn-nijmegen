@@ -29,6 +29,7 @@ describe('Contactgegevens handler', () => {
       email: 'test@example.com',
       telefoonnummer: examplePhone,
       xsrf_token: xsrf_token,
+      path: '/contactgegvens/edit',
     });
     expect(handler.config.openKlantApi.getPartijWithDigitaleAdresen).toHaveBeenCalledTimes(1);
     expect(handler.config.openKlantApi.createNatuurlijkPersoon).toHaveBeenCalledTimes(0);
@@ -46,6 +47,7 @@ describe('Contactgegevens handler', () => {
       email: undefined,
       telefoonnummer: 'abc',
       xsrf_token: xsrf_token,
+      path: '/contactgegvens/edit',
     });
     expect(response.statusCode).toBe(200);
     expect(response.body).toMatch('name="telefoonnummer" class="form-control is-invalid"');
@@ -60,6 +62,7 @@ describe('Contactgegevens handler', () => {
       email: 'test@example',
       telefoonnummer: undefined,
       xsrf_token: xsrf_token,
+      path: '/contactgegvens/edit',
     });
     expect(response.statusCode).toBe(200);
     expect(response.body).toMatch('name="email" class="form-control is-invalid"');
@@ -76,6 +79,7 @@ describe('Contactgegevens handler', () => {
       email: 'test@example.com',
       telefoonnummer: examplePhone,
       xsrf_token: xsrf_token,
+      path: '/contactgegvens/edit',
     });
     expect(handler.config.openKlantApi.getPartijWithDigitaleAdresen).toHaveBeenCalledTimes(1);
     expect(handler.config.openKlantApi.createNatuurlijkPersoon).toHaveBeenCalledTimes(1);
@@ -93,6 +97,7 @@ describe('Contactgegevens handler', () => {
       email: 'test@example.com',
       telefoonnummer: examplePhone,
       xsrf_token: 'abc',
+      path: '/contactgegvens/edit',
     });
     await expect(response).rejects.toThrow('xsrf_token mismatch!');
   });
@@ -103,6 +108,17 @@ describe('Contactgegevens handler', () => {
     const response = await handler.handleRequest({
       cookies: 'session=123;',
       method: 'GET',
+    });
+    expect(response.statusCode).toBe(200);
+  });
+
+  test('handle get edit page', async () => {
+    setupSessionResponse(true);
+    const handler = getHandler();
+    const response = await handler.handleRequest({
+      cookies: 'session=123;',
+      method: 'GET',
+      path: '/contactgegvens/edit',
     });
     expect(response.statusCode).toBe(200);
   });
@@ -125,6 +141,7 @@ describe('Contactgegevens handler', () => {
     const response = await handler.handleRequest({
       cookies: 'session=123;',
       method: 'GET',
+      path: '/contactgegvens/edit',
     });
     expect(response.statusCode).toBe(200);
     expect(response.body).toMatch('</form>');
@@ -136,6 +153,7 @@ describe('Contactgegevens handler', () => {
     const response = await handler.handleRequest({
       cookies: 'session=123;',
       method: 'GET',
+      path: '/contactgegevens/edit',
     });
     expect(response.statusCode).toBe(200);
     expect(response.body).toMatch(xsrf_token);

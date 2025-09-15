@@ -5,6 +5,7 @@ import * as validator from 'validator';
 import { IOpenKlantAPI } from './OpenKlantApi';
 import { OpenKlantLogic } from './OpenKlantLogic';
 import * as template from './templates/contactgegevens.mustache';
+import * as editTemplate from './templates/edit-contactgegevens.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import { User, UserFromSession } from '../zaken/User';
@@ -21,6 +22,7 @@ interface RequestParameters {
   telefoonnummer?: string;
   xsrf_token?: string;
   error?: string[];
+  path?: string;
 }
 
 export class ContactgegevensRequestHandler {
@@ -29,23 +31,75 @@ export class ContactgegevensRequestHandler {
     this.config = config;
   }
 
-  async handleRequest(params: RequestParameters) : Promise<ApiGatewayV2Response> {
+  async handleRequest(params: RequestParameters): Promise<ApiGatewayV2Response> {
+
     let session = new Session(params.cookies, this.config.dynamoDBClient);
+
     await session.init();
     if (session.isLoggedIn() !== true) {
       return Response.redirect('/login');
     }
 
-    if (params.method == 'POST') {
-      const response = await this.handleLoggedinPostRequest(session, params);
-      return response;
+    if (params.path?.endsWith('edit') && params.method == 'GET') {
+      return this.handleLoggedinEditRequest(session);
+    } else if (params.path?.endsWith('edit') && params.method == 'POST') {
+      return this.handleLoggedinPostRequest(session, params);
     } else {
-      const response = await this.handleLoggedinRequest(session);
-      return response;
+      return this.handleLoggedinOverviewRequest(session);
     }
 
   }
 
+  /**
+   * Renders the overview page showing the currently known contactgegevens
+   * @param session
+   * @returns
+   */
+  private async handleLoggedinOverviewRequest(session: Session): Promise<ApiGatewayV2Response> {
+    const user = UserFromSession(session);
+    const partij = await this.config.openKlantApi.getPartijWithDigitaleAdresen(user);
+    if (partij) {
+      console.debug('Found a partij with uuid:', partij.uuid);
+    } else {
+      console.log('Did not find a partij.');
+    }
+    const data = this.formatOpenKlantResponse(partij);
+    const html = await this.renderOverviewPage(session, user, data.email, data.telefoonnummer);
+    return Response.html(html, 200, session.getCookie());
+  }
+
+
+  /**
+   * Renders the edit page (shows the prefilled form) with currently known contactgegevens
+   * @param session
+   * @returns
+   */
+  private async handleLoggedinEditRequest(session: Session): Promise<ApiGatewayV2Response> {
+    const user = UserFromSession(session);
+    try {
+      const partij = await this.config.openKlantApi.getPartijWithDigitaleAdresen(user);
+      if (partij) {
+        console.debug('Found a partij with uuid:', partij.uuid);
+      } else {
+        console.log('Did not find a partij.');
+      }
+      const data = this.formatOpenKlantResponse(partij);
+      const html = await this.renderEditPage(session, user, data.email, data.telefoonnummer);
+      return Response.html(html, 200, session.getCookie());
+
+    } catch (error) {
+      console.error(error);
+      const html = await this.renderEditPage(session, user, undefined, undefined);
+      return Response.html(html, 200, session.getCookie());
+    }
+  }
+
+  /**
+   * Processes the post request and when succesful redirects to the contactgegevens page
+   * @param session
+   * @param params
+   * @returns
+   */
   private async handleLoggedinPostRequest(session: Session, params: RequestParameters): Promise<ApiGatewayV2Response> {
 
     // Do a xsrf_token check
@@ -66,7 +120,7 @@ export class ContactgegevensRequestHandler {
       errors.push('telefoonnummer');
     }
     if (errors.length != 0) {
-      const html = await this.renderPage(session, user, params.email, params.telefoonnummer, errors);
+      const html = await this.renderEditPage(session, user, params.email, params.telefoonnummer, errors);
       return Response.html(html, 200, session.getCookie());
     }
 
@@ -84,31 +138,25 @@ export class ContactgegevensRequestHandler {
     return Response.redirect('/contactgegevens', 302, session.getCookie());
   }
 
-  private async handleLoggedinRequest(session: Session) : Promise<ApiGatewayV2Response> {
-
-    const user = UserFromSession(session);
-
-    const partij = await this.config.openKlantApi.getPartijWithDigitaleAdresen(user);
-
-    if (partij) {
-      console.debug('Found a partij with uuid:', partij.uuid);
-    } else {
-      console.log('Did not find a partij.');
-    }
-
-    const data = this.formatOpenKlantResponse(partij);
-    const html = await this.renderPage(session, user, data.email, data.telefoonnummer);
-    return Response.html(html, 200, session.getCookie());
-  }
-
-  async renderPage(session: Session, user: User, email?: string, telefoonnummer?: string, errors?: string[]) {
-
-    // Page render basics
+  /**
+   * Renders the edit page
+   * @param session
+   * @param user
+   * @param email
+   * @param telefoonnummer
+   * @param errors
+   * @param errorMessage
+   * @returns
+   */
+  async renderEditPage(session: Session, user: User, email?: string, telefoonnummer?: string, errors?: string[], errorMessage?: string) {
     const navigation = new Navigation(user.type, {
       currentPath: '/contactgegevens',
       showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
     });
-    const data: any = {
+
+    const data = {
+      title: 'Mijn contactgegevens bewerken',
+      shownav: true,
       nav: navigation.items,
       volledigenaam: session.getValue('username'),
       xsrf_token: session.getValue('xsrf_token'),
@@ -116,16 +164,39 @@ export class ContactgegevensRequestHandler {
       emailError: errors?.includes('email'),
       telefoonnummer: telefoonnummer,
       telefoonnummerError: errors?.includes('telefoonnummer'),
+      errorMessage: errorMessage,
     };
-    const html = await this.renderHtml(data);
+
+    const html = await render(data, editTemplate.default);
     return html;
   }
 
-  async renderHtml(data: any) {
-    data.title = 'Mijn contactgegevens';
-    data.shownav = true;
+  /**
+   * Renders the overview page
+   * @param session
+   * @param user
+   * @param email
+   * @param telefoonnummer
+   * @param errorMessage
+   * @returns
+   */
+  async renderOverviewPage(session: Session, user: User, email?: string, telefoonnummer?: string, errorMessage?: string) {
 
-    // render page
+    // Page render basics
+    const navigation = new Navigation(user.type, {
+      currentPath: '/contactgegevens',
+      showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
+    });
+
+    const data = {
+      nav: navigation.items,
+      volledigenaam: session.getValue('username'),
+      email: email,
+      telefoonnummer: telefoonnummer,
+      errorMessage: errorMessage,
+      title: 'Mijn contactgegevens',
+      shownav: true,
+    };
     const html = await render(data, template.default);
     return html;
   }

@@ -20,6 +20,7 @@ function parseEvent(event: APIGatewayProxyEventV2) {
     email: formData?.get('email') ?? undefined,
     telefoonnummer: formData?.get('telefoonnummer') ?? undefined,
     error: event?.queryStringParameters?.error?.split(','),
+    path: event?.rawPath,
   };
 }
 
