@@ -137,7 +137,7 @@ export class ContactgegevensRequestHandler {
     });
 
     if (user.type == 'person') {
-      await openKlantCaller.updateContactgegevensNatuurlijkPersoon(user, params.email, params.telefoonnummer);
+      await openKlantCaller.updateContactgegevensNatuurlijkPersoon(user, params.email, params.telefoonnummer, params.voorkeur);
     } else {
       throw Error('Beheren van contactgegevens voor een organisatie is nog niet geimplementeerd');
     }

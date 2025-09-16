@@ -4,11 +4,12 @@ import { OpenKlantDigitaalAdres, OpenKlantDigitaalAdresWithUuid, OpenKlantPartij
 
 export interface IOpenKlantAPI {
   createNatuurlijkPersoon(naam: string): Promise<OpenKlantPartijWithUuid>;
-  addPartijIdentificatie(user: User, partijUuid: string) : Promise<OpenKlantPartijIdentificiatieWithUuid>;
-  createDigitaalAdress(partijUuid: string, type: 'email' | 'telefoonnummer', adres: string) : Promise<OpenKlantDigitaalAdresWithUuid>;
-  updateDigitaalAdress(uuid: string, adres: string) : Promise<OpenKlantDigitaalAdresWithUuid>;
-  deleteDigitaalAdress(uuid: string) : Promise<void>;
-  getPartijWithDigitaleAdresen(user: User) : Promise<OpenKlantPartijWithUuid | undefined>;
+  addPartijIdentificatie(user: User, partijUuid: string): Promise<OpenKlantPartijIdentificiatieWithUuid>;
+  createDigitaalAdress(partijUuid: string, type: 'email' | 'telefoonnummer', adres: string): Promise<OpenKlantDigitaalAdresWithUuid>;
+  updateDigitaalAdress(uuid: string, adres: string): Promise<OpenKlantDigitaalAdresWithUuid>;
+  updatePartij(partij: OpenKlantPartijWithUuid): Promise<OpenKlantPartijWithUuid>;
+  deleteDigitaalAdress(uuid: string): Promise<void>;
+  getPartijWithDigitaleAdresen(user: User): Promise<OpenKlantPartijWithUuid | undefined>;
 }
 
 export class OpenklantApi implements IOpenKlantAPI {
@@ -48,7 +49,7 @@ export class OpenklantApi implements IOpenKlantAPI {
 
   }
 
-  async addPartijIdentificatie(user: User, partijUuid: string) : Promise<OpenKlantPartijIdentificiatieWithUuid> {
+  async addPartijIdentificatie(user: User, partijUuid: string): Promise<OpenKlantPartijIdentificiatieWithUuid> {
 
     if (user.type != 'person') {
       throw Error('Only persons supported for now!');
@@ -111,7 +112,7 @@ export class OpenklantApi implements IOpenKlantAPI {
     }
   }
 
-  async getPartijWithDigitaleAdresen(user: User) : Promise<OpenKlantPartijWithUuid | undefined> {
+  async getPartijWithDigitaleAdresen(user: User): Promise<OpenKlantPartijWithUuid | undefined> {
     const partyIdentifier = user.type == 'person' ? 'Burgerservicenummer' : 'Kvknummer';
 
     const url = new URL(this.endpoint + '/partijen');
@@ -136,7 +137,17 @@ export class OpenklantApi implements IOpenKlantAPI {
 
   }
 
-  private async callApi<T>(method: string, url: URL, data?: any) : Promise<T> {
+  async updatePartij(partij: OpenKlantPartijWithUuid): Promise<OpenKlantPartijWithUuid> {
+    try {
+      const url = new URL(this.endpoint + `/partij/${partij.uuid}`);
+      return await this.callApi('PATCH', url, { partij });
+    } catch (err) {
+      console.error(err);
+      throw Error('Could not update partij');
+    }
+  }
+
+  private async callApi<T>(method: string, url: URL, data?: any): Promise<T> {
     const response = await fetch(url.toString(), {
       method: method,
       headers: {
@@ -153,7 +164,7 @@ export class OpenklantApi implements IOpenKlantAPI {
     return json;
   }
 
-  private async callApiWithoutResponse(method: string, url: URL, data?: any) : Promise<void> {
+  private async callApiWithoutResponse(method: string, url: URL, data?: any): Promise<void> {
     const response = await fetch(url.toString(), {
       method: method,
       headers: {
@@ -182,6 +193,9 @@ export class OpenklantApi implements IOpenKlantAPI {
 }
 
 export class OpenKlantAPIMock implements IOpenKlantAPI {
+  updatePartij(_partij: OpenKlantPartijWithUuid): Promise<OpenKlantPartijWithUuid> {
+    throw Error('This method should be mocked.');
+  }
   async updateDigitaalAdress(_uuid: string, _adres: string): Promise<OpenKlantDigitaalAdresWithUuid> {
     throw Error('This method should be mocked');
   }
@@ -194,10 +208,10 @@ export class OpenKlantAPIMock implements IOpenKlantAPI {
   async createNatuurlijkPersoon(_naam: string): Promise<OpenKlantPartijWithUuid> {
     throw Error('This method should be mocked');
   }
-  async addPartijIdentificatie(_user: User, _partijUuid: string) : Promise<OpenKlantPartijIdentificiatieWithUuid> {
+  async addPartijIdentificatie(_user: User, _partijUuid: string): Promise<OpenKlantPartijIdentificiatieWithUuid> {
     throw Error('This method should be mocked');
   }
-  async getPartijWithDigitaleAdresen(_user: User) : Promise<OpenKlantPartijWithUuid> {
+  async getPartijWithDigitaleAdresen(_user: User): Promise<OpenKlantPartijWithUuid> {
     throw Error('This method should be mocked');
   }
 }

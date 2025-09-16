@@ -1,5 +1,5 @@
 import { User } from '../zaken/User';
-import { OpenKlantPartijWithUuid } from './model/partij';
+import { OpenKlantDigitaalAdresWithUuid, OpenKlantPartijWithUuid } from './model/partij';
 import { IOpenKlantAPI } from './OpenKlantApi';
 
 interface OpenKlantLogicConfig {
@@ -29,7 +29,7 @@ export class OpenKlantLogic {
     this.config = config;
   }
 
-  async updateContactgegevensNatuurlijkPersoon(user: User, email?: string, telefoonnummer?: string) {
+  async updateContactgegevensNatuurlijkPersoon(user: User, email?: string, telefoonnummer?: string, voorkeur?: string) {
 
     // Get the partij if it exists
     let openKlantPartij = await this.config.openKlantApi.getPartijWithDigitaleAdresen(user);
@@ -42,8 +42,17 @@ export class OpenKlantLogic {
     }
 
     // Update digitale adressen
-    await this.updateDigitaalAdres(openKlantPartij, SoortDigitaalAdres.EMAIL, email);
-    await this.updateDigitaalAdres(openKlantPartij, SoortDigitaalAdres.TELEFOONNUMMER, telefoonnummer);
+    const openKlantEmail = await this.updateDigitaalAdres(openKlantPartij, SoortDigitaalAdres.EMAIL, email);
+    const openKlantTelefoonnummer = await this.updateDigitaalAdres(openKlantPartij, SoortDigitaalAdres.TELEFOONNUMMER, telefoonnummer);
+
+    // Save kanaal voorkeur
+    if (voorkeur) {
+      const adres = voorkeur == 'email' ? openKlantEmail : openKlantTelefoonnummer;
+      if (!adres) {
+        throw Error('This adres does not exist anymore!');
+      }
+      await this.updateVoorkeurDigitaalAdres(openKlantPartij, adres);
+    }
 
   }
 
@@ -55,26 +64,38 @@ export class OpenKlantLogic {
    * @param type
    * @param value
    */
-  async updateDigitaalAdres(partij: OpenKlantPartijWithUuid, type: SoortDigitaalAdres, value: string | undefined) {
+  async updateDigitaalAdres(
+    partij: OpenKlantPartijWithUuid,
+    type: SoortDigitaalAdres,
+    value: string | undefined,
+  ): Promise<OpenKlantDigitaalAdresWithUuid | undefined> {
+
     const existing = partij._expand?.digitaleAdressen?.find(adres => adres.soortDigitaalAdres == type);
 
     // No value provided & digitaal adres exists -> delete
     if (!value && existing) {
       await this.config.openKlantApi.deleteDigitaalAdress(existing.uuid);
+      return undefined;
     }
 
     // Value provided & digitaal adres exists -> update
     if (value && existing) {
       // Update digitaal adres
-      await this.config.openKlantApi.updateDigitaalAdress(existing.uuid, value);
+      return this.config.openKlantApi.updateDigitaalAdress(existing.uuid, value);
     }
 
     // Value provided & digitaal adres does not exist -> create
     if (value && !existing) {
-      await this.config.openKlantApi.createDigitaalAdress(partij.uuid, type, value);
+      return this.config.openKlantApi.createDigitaalAdress(partij.uuid, type, value);
     }
 
     // No value provided & digitaal adres does not exist -> OK - do nothing
+    return undefined;
+  }
+
+  async updateVoorkeurDigitaalAdres(partij: OpenKlantPartijWithUuid, voorkeursDigitaalAdres: OpenKlantDigitaalAdresWithUuid) {
+    partij.voorkeursDigitaalAdres = { uuid: voorkeursDigitaalAdres.uuid };
+    return this.config.openKlantApi.updatePartij(partij);
   }
 
 }
