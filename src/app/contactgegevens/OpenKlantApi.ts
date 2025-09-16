@@ -161,6 +161,7 @@ export class OpenklantApi implements IOpenKlantAPI {
     this.logger.debug(`${method} to ${url.pathname} - ${response.status}`);
     if (!response.ok) {
       this.logger.debug('Received response', { responseBody: await response.text() });
+      throw Error('API call returned a non 2xx status code.');
     }
     const json = await response.json() as any;
     return json;
