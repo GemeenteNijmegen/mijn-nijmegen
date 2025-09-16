@@ -435,6 +435,7 @@ export class ApiStack extends Stack implements Configurable {
 
   private contactgegevensFunction() {
     const openklantApiKey = Secret.fromSecretNameV2(this, 'openklant-token', Statics.ssmOpenKlantSecret);
+    const notifyApiKey = Secret.fromSecretNameV2(this, 'notfiy-apikey', Statics.ssmNotifySecret);
 
     const contactgegevensFunctie = new ApiFunction(this, 'contactgegevens-function', {
       description: 'Contactgegevens uit openklant voor de Mijn Nijmegen-applicatie.',
@@ -447,6 +448,7 @@ export class ApiStack extends Stack implements Configurable {
         OPENKLANT_API_KEY_ARN: openklantApiKey.secretArn,
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
         POWERTOOLS_LOG_LEVEL: this.configuration.logLevel ?? 'INFO',
+        NOTIFY_API_KEY_ARN: notifyApiKey.secretArn,
       },
       apiFunction: ContactgegevensFunction,
     });
