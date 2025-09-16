@@ -222,16 +222,18 @@ export class ContactgegevensRequestHandler {
     const email = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'email');
     const telefoonnummer = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'telefoonnummer');
 
-    const voorkeur = partij?.voorkeursDigitaalAdres?.uuid;
-    const emailIsVoorkeur = voorkeur == email?.uuid;
-    const telefoonIsVoorkeur = voorkeur == telefoonnummer?.uuid;
-
     let voorkeurString = undefined;
-    if (emailIsVoorkeur) {
-      voorkeurString = 'email';
-    } else if (telefoonIsVoorkeur) {
-      voorkeurString = 'telefoon';
+    const voorkeur = partij?.voorkeursDigitaalAdres?.uuid;
+    if (voorkeur) {
+      const emailIsVoorkeur = voorkeur == email?.uuid;
+      const telefoonIsVoorkeur = voorkeur == telefoonnummer?.uuid;
+      if (emailIsVoorkeur) {
+        voorkeurString = 'email';
+      } else if (telefoonIsVoorkeur) {
+        voorkeurString = 'telefoon';
+      }
     }
+
 
     const data = {
       email: email ? email.adres : undefined,
