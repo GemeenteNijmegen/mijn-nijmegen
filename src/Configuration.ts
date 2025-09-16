@@ -127,6 +127,12 @@ export interface Configuration {
    * @default false
    */
   readonly mijnProductenLive?: boolean;
+
+  /**
+   * Sets the log level for parts of this application
+   * @default INFO
+   */
+  readonly logLevel?: 'DEBUG' | 'INFO' | 'ERROR';
 }
 
 
@@ -154,6 +160,7 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     nlWalletVerIdIsLive: true,
     nlWalletSignicatIsLive: true,
     mijnProductenLive: true,
+    logLevel: 'DEBUG'
   },
   acceptance: {
     branch: 'acceptance',
@@ -176,6 +183,7 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     useZakenFromAggregatorAPI: true,
     nlWalletVerIdIsLive: true,
     nlWalletSignicatIsLive: false,
+    logLevel: 'DEBUG',
   },
   production: {
     branch: 'production',
