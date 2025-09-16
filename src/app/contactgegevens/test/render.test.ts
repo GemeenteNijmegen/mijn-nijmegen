@@ -1,5 +1,5 @@
 
-import { writeFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { Navigation } from '../../../shared/Navigation';
 import { render } from '../../../shared/render';
 import * as editTemplate from '../templates/edit-contactgegevens.mustache';
@@ -27,6 +27,8 @@ test('Render edit page', async () => {
   };
 
   const html = await render(data, editTemplate.default);
-
+  if (!existsSync('test-reports')) {
+    mkdirSync('test-reports');
+  }
   writeFileSync('test-reports/edit-contactgegevens.html', html);
 });
