@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto';
+import { Logger } from '@aws-lambda-powertools/logger';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
 import { User } from '../../zaken/User';
@@ -166,6 +167,7 @@ function getHandler(openKlantApi?: IOpenKlantAPI) {
   const handler = new ContactgegevensRequestHandler({
     dynamoDBClient,
     openKlantApi: openKlantApi ?? mockOpenKlantApi({}),
+    logger: new Logger(),
   });
   return handler;
 }

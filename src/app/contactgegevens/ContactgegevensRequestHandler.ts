@@ -1,18 +1,20 @@
+import { Logger } from '@aws-lambda-powertools/logger';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import * as validator from 'validator';
-import { Navigation } from '../../shared/Navigation';
-import { render } from '../../shared/render';
-import { User, UserFromSession } from '../zaken/User';
 import { IOpenKlantAPI } from './OpenKlantApi';
 import { OpenKlantLogic } from './OpenKlantLogic';
 import * as template from './templates/contactgegevens.mustache';
 import * as editTemplate from './templates/edit-contactgegevens.mustache';
+import { Navigation } from '../../shared/Navigation';
+import { render } from '../../shared/render';
+import { User, UserFromSession } from '../zaken/User';
 
 interface Config {
   readonly dynamoDBClient: DynamoDBClient;
   readonly openKlantApi: IOpenKlantAPI;
+  readonly logger: Logger;
 }
 
 interface RequestParameters {
@@ -28,8 +30,10 @@ interface RequestParameters {
 
 export class ContactgegevensRequestHandler {
   readonly config: Config;
+  readonly logger: Logger;
   constructor(config: Config) {
     this.config = config;
+    this.logger = config.logger;
   }
 
   async handleRequest(params: RequestParameters): Promise<ApiGatewayV2Response> {
@@ -60,9 +64,9 @@ export class ContactgegevensRequestHandler {
     const user = UserFromSession(session);
     const partij = await this.config.openKlantApi.getPartijWithDigitaleAdresen(user);
     if (partij) {
-      console.debug('Found a partij with uuid:', partij.uuid);
+      this.logger.debug('Found a partij with uuid:', partij.uuid);
     } else {
-      console.log('Did not find a partij.');
+      this.logger.debug('Did not find a partij.');
     }
     const data = this.formatOpenKlantResponse(partij);
     const html = await this.renderOverviewPage(session, user, data.email, data.telefoonnummer, data.voorkeur);
@@ -80,16 +84,16 @@ export class ContactgegevensRequestHandler {
     try {
       const partij = await this.config.openKlantApi.getPartijWithDigitaleAdresen(user);
       if (partij) {
-        console.debug('Found a partij with uuid:', partij.uuid);
+        this.logger.debug('Found a partij with uuid:', partij.uuid);
       } else {
-        console.log('Did not find a partij.');
+        this.logger.debug('Did not find a partij.');
       }
       const data = this.formatOpenKlantResponse(partij);
       const html = await this.renderEditPage(session, user, data.email, data.telefoonnummer, data.voorkeur);
       return Response.html(html, 200, session.getCookie());
 
     } catch (error) {
-      console.error(error);
+      this.logger.error('Error', { error });
       const html = await this.renderEditPage(session, user, undefined, undefined, undefined);
       return Response.html(html, 200, session.getCookie());
     }
@@ -104,7 +108,7 @@ export class ContactgegevensRequestHandler {
     // Do a xsrf_token check
     const xsrf = session.getValue('xsrf_token');
     if (xsrf !== params.xsrf_token) {
-      console.debug('XSRF Token mismatch', xsrf, params.xsrf_token);
+      this.logger.debug('XSRF Token mismatch', xsrf, params.xsrf_token);
       throw Error('xsrf_token mismatch!');
     }
 
@@ -218,7 +222,7 @@ export class ContactgegevensRequestHandler {
   }
 
   private formatOpenKlantResponse(partij: any) {
-    console.debug('Formattting data render', JSON.stringify(partij));
+    this.logger.debug('Formattting data render', JSON.stringify(partij));
     const email = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'email');
     const telefoonnummer = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'telefoonnummer');
 

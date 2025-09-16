@@ -1,3 +1,4 @@
+import { Logger } from '@aws-lambda-powertools/logger';
 import { AWS } from '@gemeentenijmegen/utils';
 import { User } from '../zaken/User';
 import { OpenKlantDigitaalAdres, OpenKlantDigitaalAdresWithUuid, OpenKlantPartij, OpenKlantPartijIdentificiatie, OpenKlantPartijIdentificiatieWithUuid, OpenKlantPartijWithUuid, QueryOpenKlantPartijWithUuid } from './model/partij';
@@ -14,14 +15,15 @@ export interface IOpenKlantAPI {
 
 export class OpenklantApi implements IOpenKlantAPI {
 
+  private logger: Logger;
   private endpoint: string;
   private apikey?: string;
 
-  constructor(endpoint?: string, apikey?: string) {
+  constructor(endpoint: string | undefined, apikey: string | undefined, logger: Logger) {
     this.endpoint = endpoint ? endpoint : process.env.OPENKLANT_API_ENDPOINT!;
     this.apikey = apikey;
+    this.logger = logger;
   }
-
 
   async createNatuurlijkPersoon(naam: string): Promise<OpenKlantPartijWithUuid> {
     const input: OpenKlantPartij = {
@@ -43,7 +45,7 @@ export class OpenklantApi implements IOpenKlantAPI {
       const url = new URL(this.endpoint + '/partijen');
       return await this.callApi('POST', url, input);
     } catch (err) {
-      console.error(err);
+      this.logger.error('Error', { err });
       throw Error('Could not create partij');
     }
 
@@ -68,7 +70,7 @@ export class OpenklantApi implements IOpenKlantAPI {
       const url = new URL(this.endpoint + '/partij-identificatoren');
       return await this.callApi('POST', url, input);
     } catch (err) {
-      console.error(err);
+      this.logger.error('Error', { err });
       throw Error('Could not create partij');
     }
 
@@ -87,7 +89,7 @@ export class OpenklantApi implements IOpenKlantAPI {
       const url = new URL(this.endpoint + '/digitaleadressen');
       return await this.callApi('POST', url, input);
     } catch (err) {
-      console.error(err);
+      this.logger.error('Error', { err });
       throw Error('Could not digitaal adress');
     }
   }
@@ -97,7 +99,7 @@ export class OpenklantApi implements IOpenKlantAPI {
       const url = new URL(this.endpoint + `/digitaleadressen/${uuid}`);
       return await this.callApi('PATCH', url, { adres });
     } catch (err) {
-      console.error(err);
+      this.logger.error('Error', { err });
       throw Error('Could not update digitaal adres');
     }
   }
@@ -107,7 +109,7 @@ export class OpenklantApi implements IOpenKlantAPI {
       const url = new URL(this.endpoint + `/digitaleadressen/${uuid}`);
       return await this.callApiWithoutResponse('DELETE', url);
     } catch (err) {
-      console.error(err);
+      this.logger.error('Error', { err });
       throw Error('Could not delete digitaal adres');
     }
   }
@@ -131,7 +133,7 @@ export class OpenklantApi implements IOpenKlantAPI {
       return json.results[0];
 
     } catch (err) {
-      console.error(err);
+      this.logger.error('Error', { err });
       throw Error('Could not get partij');
     }
 
@@ -142,7 +144,7 @@ export class OpenklantApi implements IOpenKlantAPI {
       const url = new URL(this.endpoint + `/partijen/${partij.uuid}`);
       return await this.callApi('PATCH', url, partij);
     } catch (err) {
-      console.error(err);
+      this.logger.error('Error', { err });
       throw Error('Could not update partij');
     }
   }
@@ -156,9 +158,9 @@ export class OpenklantApi implements IOpenKlantAPI {
       },
       body: data ? JSON.stringify(data) : undefined,
     });
-    console.debug(method, 'to', url.pathname, '-', response.status);
+    this.logger.debug(`${method} to ${url.pathname} - ${response.status}`);
     if (!response.ok) {
-      console.debug('Received response', await response.text());
+      this.logger.debug('Received response', { responseBody: await response.text() });
     }
     const json = await response.json() as any;
     return json;
@@ -173,9 +175,9 @@ export class OpenklantApi implements IOpenKlantAPI {
       },
       body: data ? JSON.stringify(data) : undefined,
     });
-    console.debug(method, 'to', url.pathname, '-', response.status);
+    this.logger.debug(`${method} to ${url.pathname} - ${response.status}`);
     if (!response.ok) {
-      console.debug('Received response', await response.text());
+      this.logger.debug('Received response', { responseBody: await response.text() });
     }
     return;
   }

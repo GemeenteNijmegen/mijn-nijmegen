@@ -97,7 +97,7 @@ export class OpenKlantLogic {
     const input = {
       uuid: partij.uuid,
       voorkeursDigitaalAdres: { uuid: voorkeursDigitaalAdres.uuid },
-    }
+    };
     return this.config.openKlantApi.updatePartij(input);
   }
 

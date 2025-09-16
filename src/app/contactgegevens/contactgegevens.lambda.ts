@@ -1,3 +1,4 @@
+import { Logger } from '@aws-lambda-powertools/logger';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
@@ -5,12 +6,15 @@ import { ContactgegevensRequestHandler } from './ContactgegevensRequestHandler';
 import { OpenklantApi } from './OpenKlantApi';
 
 const dynamoDBClient = new DynamoDBClient();
-const openKlantApi = new OpenklantApi();
 
-const requestHandler = new ContactgegevensRequestHandler({ dynamoDBClient, openKlantApi });
+const logger = new Logger({ serviceName: 'Contactgegevens' });
+const openKlantApi = new OpenklantApi(undefined, undefined, logger);
+const requestHandler = new ContactgegevensRequestHandler({ dynamoDBClient, openKlantApi, logger });
+
 
 function parseEvent(event: APIGatewayProxyEventV2) {
 
+  logger.debug('Raw event', { event });
   const formData = new URLSearchParams(decodeBody(event));
 
   return {
