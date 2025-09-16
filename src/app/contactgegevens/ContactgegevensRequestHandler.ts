@@ -3,13 +3,14 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import * as validator from 'validator';
+import { Navigation } from '../../shared/Navigation';
+import { render } from '../../shared/render';
+import { User, UserFromSession } from '../zaken/User';
 import { IOpenKlantAPI } from './OpenKlantApi';
 import { OpenKlantLogic } from './OpenKlantLogic';
 import * as template from './templates/contactgegevens.mustache';
 import * as editTemplate from './templates/edit-contactgegevens.mustache';
-import { Navigation } from '../../shared/Navigation';
-import { render } from '../../shared/render';
-import { User, UserFromSession } from '../zaken/User';
+import * as verifyTemplate from './templates/verify-contactgegevens.mustache';
 
 interface Config {
   readonly dynamoDBClient: DynamoDBClient;
@@ -26,6 +27,7 @@ interface RequestParameters {
   xsrf_token?: string;
   error?: string[];
   path?: string;
+  verificationCode?: string;
 }
 
 export class ContactgegevensRequestHandler {
@@ -49,6 +51,10 @@ export class ContactgegevensRequestHandler {
       return this.handleLoggedinEditRequest(session);
     } else if (params.path?.endsWith('edit') && params.method == 'POST') {
       return this.handleLoggedinPostRequest(session, params);
+    } else if (params.path?.endsWith('verify') && params.method == 'GET') {
+      return this.handleVerify(session);
+    } else if (params.path?.endsWith('verify') && params.method == 'POST') {
+      return this.handleVerifyPost(session, params);
     } else {
       return this.handleLoggedinOverviewRequest(session);
     }
@@ -151,6 +157,55 @@ export class ContactgegevensRequestHandler {
   }
 
   /**
+   * Returns the page for the verification screen
+   * @param session 
+   * @returns 
+   */
+  private async handleVerify(session: Session): Promise<ApiGatewayV2Response> {
+    const user = UserFromSession(session);
+    const html = await this.renderVerificationPage(session, user);
+    return Response.html(html, 200, session.getCookie());
+  }
+
+  /**
+   * Processes the post request and when succesful redirects to the contactgegevens page
+   * @returns
+   */
+  private async handleVerifyPost(session: Session, params: RequestParameters): Promise<ApiGatewayV2Response> {
+
+    // Do a xsrf_token check
+    const xsrf = session.getValue('xsrf_token');
+    if (xsrf !== params.xsrf_token) {
+      this.logger.debug('XSRF Token mismatch', xsrf, params.xsrf_token);
+      throw Error('xsrf_token mismatch!');
+    }
+
+    const user = UserFromSession(session);
+
+    const errors: string[] = [];
+
+    // TODO handle verification using code here (call notify to check if we are succesful)
+
+    if (errors.length != 0) {
+      const html = await this.renderVerificationPage(session, user, 'Er ging iets fout');
+      return Response.html(html, 200, session.getCookie());
+    }
+
+    const openKlantCaller = new OpenKlantLogic({
+      openKlantApi: this.config.openKlantApi,
+    });
+
+    if (user.type == 'person') {
+      await openKlantCaller.updateContactgegevensNatuurlijkPersoon(user, params.email, params.telefoonnummer, params.voorkeur);
+    } else {
+      throw Error('Beheren van contactgegevens voor een organisatie is nog niet geimplementeerd');
+    }
+
+    // Do a redirect so we load the actual stored data from open klant.
+    return Response.redirect('/contactgegevens', 302, session.getCookie());
+  }
+
+  /**
    * Renders the edit page
    * @returns
    */
@@ -218,6 +273,28 @@ export class ContactgegevensRequestHandler {
       shownav: true,
     };
     const html = await render(data, template.default);
+    return html;
+  }
+
+  /**
+   * Renders the verification page
+   * @returns
+   */
+  async renderVerificationPage(session: Session, user: User, errorMessage?: string) {
+    // Page render basics
+    const navigation = new Navigation(user.type, {
+      currentPath: '/contactgegevens',
+      showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
+    });
+    const data = {
+      nav: navigation.items,
+      volledigenaam: session.getValue('username'),
+      errorMessage: errorMessage,
+      title: 'Mijn contactgegevens',
+      shownav: true,
+      xsrf_token: session.getValue('xsrf_token'),
+    };
+    const html = await render(data, verifyTemplate.default);
     return html;
   }
 

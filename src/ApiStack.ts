@@ -203,6 +203,11 @@ export class ApiStack extends Stack implements Configurable {
         path: '/contactgegevens/edit',
         methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.POST],
       });
+      this.api.addRoutes({
+        integration: new HttpLambdaIntegration('contactgegevens-verify', contactgegevensFunction.lambda),
+        path: '/contactgegevens/verify',
+        methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.POST],
+      });
     }
 
     if (configuration.mijnProductenLive) {
