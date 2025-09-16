@@ -37,6 +37,15 @@ export class Navigation {
     icon: MdiAddressBook.default,
   };
 
+  producten: NavigationItem = {
+    priority: 60,
+    url: '/producten',
+    title: 'Mijn producten',
+    description: 'Bekijk uw producten.',
+    label: 'Bekijk uw producten',
+    icon: MdiAddressBook.default,
+  };
+
 
   organisationItems: NavigationItem[] = [];
 
@@ -59,11 +68,14 @@ export class Navigation {
 
   items: NavigationItem[];
 
-  constructor(navigationType: 'person' | 'organisation', config?: { currentPath: string; showContactgegevens?: boolean }) {
+  constructor(navigationType: 'person' | 'organisation', config?: { currentPath: string; showContactgegevens?: boolean; showProducten?: boolean }) {
     if (navigationType == 'person') {
       this.items = [...this.personItems, ...this.sharedItems];
       if (config?.showContactgegevens) {
         this.items.push(this.contactgegevens);
+      }
+      if (config?.showProducten) {
+        this.items.push(this.producten);
       }
     } else {
       this.items = [...this.organisationItems, ...this.sharedItems];

@@ -73,6 +73,7 @@ export class HomeRequestHandler {
       const navigation = new Navigation(userType, {
         currentPath: '/',
         showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
+        showProducten: process.env.SHOW_PRODUCTEN == 'True',
       });
 
       const data = {
