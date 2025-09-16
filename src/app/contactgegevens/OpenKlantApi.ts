@@ -7,7 +7,7 @@ export interface IOpenKlantAPI {
   addPartijIdentificatie(user: User, partijUuid: string): Promise<OpenKlantPartijIdentificiatieWithUuid>;
   createDigitaalAdress(partijUuid: string, type: 'email' | 'telefoonnummer', adres: string): Promise<OpenKlantDigitaalAdresWithUuid>;
   updateDigitaalAdress(uuid: string, adres: string): Promise<OpenKlantDigitaalAdresWithUuid>;
-  updatePartij(partij: OpenKlantPartijWithUuid): Promise<OpenKlantPartijWithUuid>;
+  updatePartij(partij: any): Promise<OpenKlantPartijWithUuid>;
   deleteDigitaalAdress(uuid: string): Promise<void>;
   getPartijWithDigitaleAdresen(user: User): Promise<OpenKlantPartijWithUuid | undefined>;
 }
@@ -140,7 +140,7 @@ export class OpenklantApi implements IOpenKlantAPI {
   async updatePartij(partij: OpenKlantPartijWithUuid): Promise<OpenKlantPartijWithUuid> {
     try {
       const url = new URL(this.endpoint + `/partijen/${partij.uuid}`);
-      return await this.callApi('PATCH', url, { partij });
+      return await this.callApi('PATCH', url, partij);
     } catch (err) {
       console.error(err);
       throw Error('Could not update partij');

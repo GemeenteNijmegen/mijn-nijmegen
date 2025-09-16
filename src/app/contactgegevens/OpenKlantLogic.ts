@@ -94,8 +94,11 @@ export class OpenKlantLogic {
   }
 
   async updateVoorkeurDigitaalAdres(partij: OpenKlantPartijWithUuid, voorkeursDigitaalAdres: OpenKlantDigitaalAdresWithUuid) {
-    partij.voorkeursDigitaalAdres = { uuid: voorkeursDigitaalAdres.uuid };
-    return this.config.openKlantApi.updatePartij(partij);
+    const input = {
+      uuid: partij.uuid,
+      voorkeursDigitaalAdres: { uuid: voorkeursDigitaalAdres.uuid },
+    }
+    return this.config.openKlantApi.updatePartij(input);
   }
 
 }

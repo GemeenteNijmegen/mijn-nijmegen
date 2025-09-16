@@ -2,13 +2,13 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import * as validator from 'validator';
+import { Navigation } from '../../shared/Navigation';
+import { render } from '../../shared/render';
+import { User, UserFromSession } from '../zaken/User';
 import { IOpenKlantAPI } from './OpenKlantApi';
 import { OpenKlantLogic } from './OpenKlantLogic';
 import * as template from './templates/contactgegevens.mustache';
 import * as editTemplate from './templates/edit-contactgegevens.mustache';
-import { Navigation } from '../../shared/Navigation';
-import { render } from '../../shared/render';
-import { User, UserFromSession } from '../zaken/User';
 
 interface Config {
   readonly dynamoDBClient: DynamoDBClient;
@@ -222,7 +222,7 @@ export class ContactgegevensRequestHandler {
     const email = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'email');
     const telefoonnummer = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'telefoonnummer');
 
-    const voorkeur = partij?.voorkeursDigitaalAdres;
+    const voorkeur = partij?.voorkeursDigitaalAdres.uuid;
     const emailIsVoorkeur = voorkeur == email?.uuid;
     const telefoonIsVoorkeur = voorkeur == telefoonnummer?.uuid;
 
@@ -233,11 +233,12 @@ export class ContactgegevensRequestHandler {
       voorkeurString = 'telefoon';
     }
 
-    return {
+    const data = {
       email: email ? email.adres : undefined,
       telefoonnummer: telefoonnummer ? telefoonnummer.adres : undefined,
       voorkeur: voorkeurString,
     };
+    return data;
   }
 
 }
