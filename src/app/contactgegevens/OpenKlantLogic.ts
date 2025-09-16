@@ -19,7 +19,7 @@ export class OpenKlantLogic {
    * @returns
    */
   static isValidPhonenumber(phonenumber: string) {
-    const regex = /(0[8-9]00[0-9]{4,7})|(0[1-9][0-9]{8})|(\+[0-9]{9,20}|1400|140[0-9]{2,3})/;
+    const regex = /^(0[8-9]00[0-9]{4,7})|(0[1-9][0-9]{8})|(\+[0-9]{9,20}|1400|140[0-9]{2,3})$/;
     return regex.test(phonenumber);
   }
 
