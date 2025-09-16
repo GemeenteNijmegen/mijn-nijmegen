@@ -65,6 +65,9 @@
           "spawn": "bundle:app/persoonsgegevens/persoonsgegevens.lambda"
         },
         {
+          "spawn": "bundle:app/producten/producten.lambda"
+        },
+        {
           "spawn": "bundle:app/taken/taken.lambda"
         },
         {
@@ -180,6 +183,24 @@
       "steps": [
         {
           "exec": "esbuild --bundle src/app/persoonsgegevens/persoonsgegevens.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/persoonsgegevens/persoonsgegevens.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+        }
+      ]
+    },
+    "bundle:app/producten/producten.lambda": {
+      "name": "bundle:app/producten/producten.lambda",
+      "description": "Create a JavaScript bundle from src/app/producten/producten.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/producten/producten.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/producten/producten.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+        }
+      ]
+    },
+    "bundle:app/producten/producten.lambda:watch": {
+      "name": "bundle:app/producten/producten.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/app/producten/producten.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/producten/producten.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/producten/producten.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
         }
       ]
     },

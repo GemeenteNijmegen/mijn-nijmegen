@@ -16,6 +16,8 @@
     "bundle:app/logout/logout.lambda:watch": "npx projen bundle:app/logout/logout.lambda:watch",
     "bundle:app/persoonsgegevens/persoonsgegevens.lambda": "npx projen bundle:app/persoonsgegevens/persoonsgegevens.lambda",
     "bundle:app/persoonsgegevens/persoonsgegevens.lambda:watch": "npx projen bundle:app/persoonsgegevens/persoonsgegevens.lambda:watch",
+    "bundle:app/producten/producten.lambda": "npx projen bundle:app/producten/producten.lambda",
+    "bundle:app/producten/producten.lambda:watch": "npx projen bundle:app/producten/producten.lambda:watch",
     "bundle:app/taken/taken.lambda": "npx projen bundle:app/taken/taken.lambda",
     "bundle:app/taken/taken.lambda:watch": "npx projen bundle:app/taken/taken.lambda:watch",
     "bundle:app/uitkeringen/uitkering.lambda": "npx projen bundle:app/uitkeringen/uitkering.lambda",
