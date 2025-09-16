@@ -24,7 +24,7 @@
                         <label for="email">E-mailadres</label>
                         <input type="text" id="email" name="email" autocomplete="email" class="form-control {{#emailError}}is-invalid{{/emailError}}" value="{{email}}">
                          <div class="invalid-feedback">
-                            <span class="sr-only">Invoer onjuist: </span>Het e-mailadres is onjuist.
+                            <span class="sr-only">Invoer onjuist: </span>Het e-mailadres is onjuist. Uw wijzigingen zijn nog niet opgeslagen.
                         </div>
                     </div>
 
@@ -32,7 +32,7 @@
                         <label for="telefoonnummer">Telefoonnummer</label>
                         <input type="text" id="telefoonnummer" name="telefoonnummer" autocomplete="tel" class="form-control {{#telefoonnummerError}}is-invalid{{/telefoonnummerError}}" value="{{telefoonnummer}}">
                         <div class="invalid-feedback">
-                            <span class="sr-only">Invoer onjuist: </span>Het telefoonnummer is onjuist.
+                            <span class="sr-only">Invoer onjuist: </span>Het telefoonnummer is onjuist. Uw wijzigingen zijn nog niet opgeslagen.
                         </div>
                     </div>
 
@@ -53,13 +53,13 @@
                           
                           {{#voorkeurEmailMaarGeenEmail}}
                             <div class="alert alert-danger">
-                            Voer een E-mail in als dit als voorkeurstkanaal wil gebruiken.
+                            Voer een E-mail in als u dit als voorkeurskanaal wil gebruiken. Uw wijzigingen zijn nog niet opgeslagen.
                             </div>
                           {{/voorkeurEmailMaarGeenEmail}}
 
                           {{#voorkeurTelefoonlMaarGeenTelefoon}}
                             <div class="alert alert-danger">
-                            Voer een telefoonnummer in als dit als voorkeurstkanaal wil gebruiken.
+                            Voer een telefoonnummer in als u dit als voorkeurskanaal wil gebruiken. Uw wijzigingen zijn nog niet opgeslagen.
                           </div>
                           {{/voorkeurTelefoonlMaarGeenTelefoon}}
 
