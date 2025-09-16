@@ -192,7 +192,7 @@ export class ssmParamsConstruct extends Construct {
     });
 
     this.addZaakParameters();
-    this.addOpenKlantParameters()
+    this.addOpenKlantParameters();
     this.addNotifyParameters();
     this.addHaalCentraalParameters();
   }
@@ -274,7 +274,7 @@ export class ssmParamsConstruct extends Construct {
       secretName: Statics.ssmNotifySecret,
       description: 'NotifyNL API key',
     });
-    
+
   }
 
   addHaalCentraalParameters() {

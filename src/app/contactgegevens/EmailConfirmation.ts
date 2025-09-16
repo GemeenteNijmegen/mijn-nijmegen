@@ -30,7 +30,7 @@ class EmailVerificationService {
   constructor(
     baseUrl: string = 'https://verificatie.notifynl.nl/api/verification-requests/',
     defaultApiKey: string,
-    defaultTemplateId: string = "b3cbd491-61b0-4427-8ee8-9dbc2fa614b1"
+    defaultTemplateId: string = 'b3cbd491-61b0-4427-8ee8-9dbc2fa614b1',
   ) {
     this.baseUrl = baseUrl.replace(/\/$/, ''); // Remove trailing slash
     this.defaultApiKey = defaultApiKey;
@@ -47,13 +47,13 @@ class EmailVerificationService {
   async sendVerificationEmail(
     email: string,
     templateId?: string,
-    apiKey?: string
+    apiKey?: string,
   ): Promise<EmailVerificationResponse> {
     try {
       const requestBody: EmailVerificationRequest = {
         email,
         templateId: templateId || this.defaultTemplateId,
-        apiKey: apiKey || this.defaultApiKey
+        apiKey: apiKey || this.defaultApiKey,
       };
 
       const response = await fetch(`${this.baseUrl}`, {
@@ -61,7 +61,7 @@ class EmailVerificationService {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
@@ -69,16 +69,16 @@ class EmailVerificationService {
       }
 
       const data = await response.json();
-      
+
       return {
         success: true,
         message: 'Verification email sent successfully',
-        data
+        data,
       };
 
     } catch (error) {
       console.error('Error sending verification email:', error);
-      
+
       return {
         success: false,
         message: error instanceof Error ? error.message : 'Unknown error occurred',
@@ -94,12 +94,12 @@ class EmailVerificationService {
    */
   async verifyEmailCode(
     code: string,
-    email: string
+    email: string,
   ): Promise<CodeVerificationResponse> {
     try {
       const requestBody: CodeVerificationRequest = {
         code,
-        email
+        email,
       };
 
       const response = await fetch(`${this.baseUrl}/verify`, {
@@ -107,7 +107,7 @@ class EmailVerificationService {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
@@ -115,17 +115,17 @@ class EmailVerificationService {
       }
 
       const data = await response.json();
-      
+
       return {
         success: true,
         verified: true,
         message: 'Email verified successfully',
-        data
+        data,
       };
 
     } catch (error) {
       console.error('Error verifying email code:', error);
-      
+
       return {
         success: false,
         verified: false,

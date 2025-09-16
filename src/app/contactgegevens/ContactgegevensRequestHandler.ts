@@ -2,15 +2,17 @@ import { Logger } from '@aws-lambda-powertools/logger';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
+import { AWS } from '@gemeentenijmegen/utils';
 import * as validator from 'validator';
-import { Navigation } from '../../shared/Navigation';
-import { render } from '../../shared/render';
-import { User, UserFromSession } from '../zaken/User';
+import EmailVerificationService from './EmailConfirmation';
 import { IOpenKlantAPI } from './OpenKlantApi';
 import { OpenKlantLogic } from './OpenKlantLogic';
 import * as template from './templates/contactgegevens.mustache';
 import * as editTemplate from './templates/edit-contactgegevens.mustache';
 import * as verifyTemplate from './templates/verify-contactgegevens.mustache';
+import { Navigation } from '../../shared/Navigation';
+import { render } from '../../shared/render';
+import { User, UserFromSession } from '../zaken/User';
 
 interface Config {
   readonly dynamoDBClient: DynamoDBClient;
@@ -111,6 +113,10 @@ export class ContactgegevensRequestHandler {
    */
   private async handleLoggedinPostRequest(session: Session, params: RequestParameters): Promise<ApiGatewayV2Response> {
 
+
+    const notifyNl = await AWS.getSecret(process.env.NOTIFY_API_KEY_ARN!);
+    const verificationService = new EmailVerificationService(undefined, notifyNl, undefined);
+
     // Do a xsrf_token check
     const xsrf = session.getValue('xsrf_token');
     if (xsrf !== params.xsrf_token) {
@@ -142,24 +148,33 @@ export class ContactgegevensRequestHandler {
       return Response.html(html, 200, session.getCookie());
     }
 
-    const openKlantCaller = new OpenKlantLogic({
-      openKlantApi: this.config.openKlantApi,
-    });
-
     if (user.type == 'person') {
-      await openKlantCaller.updateContactgegevensNatuurlijkPersoon(user, params.email, params.telefoonnummer, params.voorkeur);
+
+      // start notifiy email verification
+      const verificationCode = await verificationService.sendVerificationEmail(params.email!);
+      // await session.setValue('verificationCode', verificationCode);
+
+      if (params.email) {
+        await session.setValue('emailToBe', params.email);
+      }
+      if (params.telefoonnummer) {
+        await session.setValue('telefoonnummerToBe', params.telefoonnummer);
+      }
+      if (params.voorkeur) {
+        await session.setValue('voorkeurToBe', params.voorkeur);
+      }
     } else {
       throw Error('Beheren van contactgegevens voor een organisatie is nog niet geimplementeerd');
     }
 
     // Do a redirect so we load the actual stored data from open klant.
-    return Response.redirect('/contactgegevens', 302, session.getCookie());
+    return Response.redirect('/contactgegevens/verify', 302, session.getCookie());
   }
 
   /**
    * Returns the page for the verification screen
-   * @param session 
-   * @returns 
+   * @param session
+   * @returns
    */
   private async handleVerify(session: Session): Promise<ApiGatewayV2Response> {
     const user = UserFromSession(session);
@@ -173,6 +188,10 @@ export class ContactgegevensRequestHandler {
    */
   private async handleVerifyPost(session: Session, params: RequestParameters): Promise<ApiGatewayV2Response> {
 
+    const notifyNl = await AWS.getSecret(process.env.NOTIFY_API_KEY_ARN!);
+    const verificationService = new EmailVerificationService(undefined, notifyNl, undefined);
+
+
     // Do a xsrf_token check
     const xsrf = session.getValue('xsrf_token');
     if (xsrf !== params.xsrf_token) {
@@ -182,13 +201,20 @@ export class ContactgegevensRequestHandler {
 
     const user = UserFromSession(session);
 
-    const errors: string[] = [];
+    // Get values from session
+    const email = session.getValue('emailToBe', params.email);
+    const telefoonnummer = session.getValue('telefoonnummerToBe', params.telefoonnummer);
+    const voorkeur = session.getValue('voorkeurToBe', params.voorkeur);
 
-    // TODO handle verification using code here (call notify to check if we are succesful)
+    if (!params.verificationCode) {
+      throw Error('No verification code entered!');
+    }
 
-    if (errors.length != 0) {
-      const html = await this.renderVerificationPage(session, user, 'Er ging iets fout');
-      return Response.html(html, 200, session.getCookie());
+    // check verification using notify
+    const verifed = await verificationService.verifyEmailCode(params.verificationCode, email);
+
+    if (!verifed.verified) {
+      throw Error('Invalid verification code');
     }
 
     const openKlantCaller = new OpenKlantLogic({
@@ -196,7 +222,7 @@ export class ContactgegevensRequestHandler {
     });
 
     if (user.type == 'person') {
-      await openKlantCaller.updateContactgegevensNatuurlijkPersoon(user, params.email, params.telefoonnummer, params.voorkeur);
+      await openKlantCaller.updateContactgegevensNatuurlijkPersoon(user, email, telefoonnummer, voorkeur);
     } else {
       throw Error('Beheren van contactgegevens voor een organisatie is nog niet geimplementeerd');
     }
