@@ -22,6 +22,7 @@
     "src/app/login/login-function.ts",
     "src/app/logout/logout-function.ts",
     "src/app/persoonsgegevens/persoonsgegevens-function.ts",
+    "src/app/producten/producten-function.ts",
     "src/app/taken/taken-function.ts",
     "src/app/uitkeringen/uitkering-function.ts",
     "src/app/zaken/zaken-function.ts",

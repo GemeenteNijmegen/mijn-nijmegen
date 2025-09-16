@@ -121,6 +121,12 @@ export interface Configuration {
    * @default false
    */
   readonly mijnContactGegevensLive?: boolean;
+
+  /**
+   * Feature showing Mijn Producten
+   * @default false
+   */
+  readonly mijnProductenLive?: boolean;
 }
 
 
@@ -147,6 +153,7 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     mijnContactGegevensLive: true,
     nlWalletVerIdIsLive: true,
     nlWalletSignicatIsLive: true,
+    mijnProductenLive: true,
   },
   acceptance: {
     branch: 'acceptance',

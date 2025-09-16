@@ -12,6 +12,7 @@ import { HomeFunction } from './app/home/home-function';
 import { LoginFunction } from './app/login/login-function';
 import { LogoutFunction } from './app/logout/logout-function';
 import { PersoonsgegevensFunction } from './app/persoonsgegevens/persoonsgegevens-function';
+import { ProductenFunction } from './app/producten/producten-function';
 import { TakenFunction } from './app/taken/taken-function';
 import { UitkeringFunction } from './app/uitkeringen/uitkering-function';
 import { ZakenFunction } from './app/zaken/zaken-function';
@@ -201,6 +202,15 @@ export class ApiStack extends Stack implements Configurable {
         integration: new HttpLambdaIntegration('contactgegevens-edit', contactgegevensFunction.lambda),
         path: '/contactgegevens/edit',
         methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.POST],
+      });
+    }
+
+    if (configuration.mijnProductenLive) {
+      const productenFunction = this.productenFunction();
+      this.api.addRoutes({
+        integration: new HttpLambdaIntegration('producten', productenFunction.lambda),
+        path: '/producten',
+        methods: [apigatewayv2.HttpMethod.GET],
       });
     }
   }
@@ -512,6 +522,21 @@ export class ApiStack extends Stack implements Configurable {
       this.grantZakenApiAccess(takenFunction);
     }
     return takenFunction;
+  }
+
+
+  private productenFunction() {
+    //TODO open producten secrets
+    const productenFunction = new ApiFunction(this, 'producten-function', {
+      description: 'Producten lambda om producten op te halen en tonen',
+      codePath: 'app/producten',
+      table: this.sessionsTable,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: this.baseUrl,
+      environment: {},
+      apiFunction: ProductenFunction,
+    });
+    return productenFunction;
   }
 
   /**
