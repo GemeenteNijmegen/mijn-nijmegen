@@ -65,7 +65,7 @@ export class ContactgegevensRequestHandler {
       console.log('Did not find a partij.');
     }
     const data = this.formatOpenKlantResponse(partij);
-    const html = await this.renderOverviewPage(session, user, data.email, data.telefoonnummer);
+    const html = await this.renderOverviewPage(session, user, data.email, data.telefoonnummer, data.voorkeur);
     return Response.html(html, 200, session.getCookie());
   }
 
@@ -85,20 +85,18 @@ export class ContactgegevensRequestHandler {
         console.log('Did not find a partij.');
       }
       const data = this.formatOpenKlantResponse(partij);
-      const html = await this.renderEditPage(session, user, data.email, data.telefoonnummer);
+      const html = await this.renderEditPage(session, user, data.email, data.telefoonnummer, data.voorkeur);
       return Response.html(html, 200, session.getCookie());
 
     } catch (error) {
       console.error(error);
-      const html = await this.renderEditPage(session, user, undefined, undefined);
+      const html = await this.renderEditPage(session, user, undefined, undefined, undefined);
       return Response.html(html, 200, session.getCookie());
     }
   }
 
   /**
    * Processes the post request and when succesful redirects to the contactgegevens page
-   * @param session
-   * @param params
    * @returns
    */
   private async handleLoggedinPostRequest(session: Session, params: RequestParameters): Promise<ApiGatewayV2Response> {
@@ -130,7 +128,7 @@ export class ContactgegevensRequestHandler {
     }
 
     if (errors.length != 0) {
-      const html = await this.renderEditPage(session, user, params.email, params.telefoonnummer, errors);
+      const html = await this.renderEditPage(session, user, params.email, params.telefoonnummer, params.voorkeur, errors);
       return Response.html(html, 200, session.getCookie());
     }
 
@@ -150,15 +148,17 @@ export class ContactgegevensRequestHandler {
 
   /**
    * Renders the edit page
-   * @param session
-   * @param user
-   * @param email
-   * @param telefoonnummer
-   * @param errors
-   * @param errorMessage
    * @returns
    */
-  async renderEditPage(session: Session, user: User, email?: string, telefoonnummer?: string, errors?: string[], errorMessage?: string) {
+  async renderEditPage(
+    session: Session,
+    user: User,
+    email?: string,
+    telefoonnummer?: string,
+    voorkeur?: string,
+    errors?: string[],
+    errorMessage?: string,
+  ) {
     const navigation = new Navigation(user.type, {
       currentPath: '/contactgegevens',
       showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
@@ -174,6 +174,8 @@ export class ContactgegevensRequestHandler {
       emailError: errors?.includes('email'),
       telefoonnummer: telefoonnummer,
       telefoonnummerError: errors?.includes('telefoonnummer'),
+      voorkeurEmail: voorkeur == 'email',
+      voorkeurTelefoon: voorkeur == 'telefoon',
       errorMessage: errorMessage,
       voorkeurTelefoonlMaarGeenTelefoon: errors?.includes('voorkeurTelefoonlMaarGeenTelefoon'),
       voorkeurEmailMaarGeenEmail: errors?.includes('voorkeurEmailMaarGeenEmail'),
@@ -192,7 +194,7 @@ export class ContactgegevensRequestHandler {
    * @param errorMessage
    * @returns
    */
-  async renderOverviewPage(session: Session, user: User, email?: string, telefoonnummer?: string, errorMessage?: string) {
+  async renderOverviewPage(session: Session, user: User, email?: string, telefoonnummer?: string, voorkeur?: string, errorMessage?: string) {
 
     // Page render basics
     const navigation = new Navigation(user.type, {
@@ -205,6 +207,8 @@ export class ContactgegevensRequestHandler {
       volledigenaam: session.getValue('username'),
       email: email,
       telefoonnummer: telefoonnummer,
+      voorkeurEmail: voorkeur == 'email',
+      voorkeurTelefoon: voorkeur == 'telefoon',
       errorMessage: errorMessage,
       title: 'Mijn contactgegevens',
       shownav: true,
@@ -217,9 +221,22 @@ export class ContactgegevensRequestHandler {
     console.debug('Formattting data render', JSON.stringify(partij));
     const email = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'email');
     const telefoonnummer = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'telefoonnummer');
+
+    const voorkeur = partij?.voorkeursDigitaalAdres;
+    const emailIsVoorkeur = voorkeur == email?.uuid;
+    const telefoonIsVoorkeur = voorkeur == telefoonnummer?.uuid;
+
+    let voorkeurString = undefined;
+    if (emailIsVoorkeur) {
+      voorkeurString = 'email';
+    } else if (telefoonIsVoorkeur) {
+      voorkeurString = 'telefoon';
+    }
+
     return {
       email: email ? email.adres : undefined,
       telefoonnummer: telefoonnummer ? telefoonnummer.adres : undefined,
+      voorkeur: voorkeurString,
     };
   }
 
