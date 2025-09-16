@@ -303,4 +303,18 @@ export class ssmParamsConstruct extends Construct {
 
   }
 
+  addProductenParameters() {
+
+    new StringParameter(this, 'producten-base-url', {
+      parameterName: Statics.ssmHaalCentraalBaseUrl,
+      description: 'Open producten - base url',
+      stringValue: '-',
+    });
+
+
+    new SecretsManager.Secret(this, 'producten-token', {
+      secretName: Statics.ssmHaalCentraalApiKey,
+      description: 'Open producten token',
+    });
+  }
 }

@@ -50,13 +50,13 @@ export class ProductenRequestHandler {
 
     // Setup view
     const navigation = new Navigation('person', {
-      currentPath: '/persoonsgegevens',
+      currentPath: '/producten',
       showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
       showProducten: process.env.SHOW_PRODUCTEN== 'True',
     });
     const data: RenderData = {
       volledigenaam: session.getValue('username'),
-      title: 'Mijn gegevens',
+      title: 'Mijn Producten',
       shownav: true,
       nav: navigation.items,
       error: undefined,

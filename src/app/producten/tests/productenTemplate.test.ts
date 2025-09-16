@@ -64,7 +64,7 @@ function createHandler(): ProductenRequestHandler {
   });
 }
 
-test('Persoonsgegevens template undefined data', async () => {
+test('Producten unique and refresh html', async () => {
 
   const handler = createHandler();
   const logSpy = jest.spyOn(global.console, 'log');
@@ -72,8 +72,12 @@ test('Persoonsgegevens template undefined data', async () => {
 
 
   const timestamp = new Date().toISOString().replace(/:/g, '-');
-  const outputFilename = path.join(__dirname, 'output', `persoonsgegevens_undefined_data_${timestamp}.html`);
+  const outputFilename = path.join(__dirname, 'output', `producten_data_${timestamp}.html`);
   fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
+  const outputFilenameRF = path.join(__dirname, 'output', 'producten_data_torefresh.html');
+  fs.writeFileSync(outputFilenameRF, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
+
+
   // Should not trigger, if it does, it gives an empty page
   const errorFound = logSpy.mock.calls.some(call =>
     call.some(arg => String(arg).includes('TypeError: Cannot read properties of undefined')),
