@@ -139,7 +139,7 @@ export class OpenklantApi implements IOpenKlantAPI {
 
   async updatePartij(partij: OpenKlantPartijWithUuid): Promise<OpenKlantPartijWithUuid> {
     try {
-      const url = new URL(this.endpoint + `/partij/${partij.uuid}`);
+      const url = new URL(this.endpoint + `/partijen/${partij.uuid}`);
       return await this.callApi('PATCH', url, { partij });
     } catch (err) {
       console.error(err);
