@@ -19,6 +19,7 @@ function parseEvent(event: APIGatewayProxyEventV2) {
     xsrf_token: formData?.get('xsrf_token') ?? undefined,
     email: formData?.get('email') ?? undefined,
     telefoonnummer: formData?.get('telefoonnummer') ?? undefined,
+    voorkeur: formData?.get('voorkeur') ?? undefined,
     error: event?.queryStringParameters?.error?.split(','),
     path: event?.rawPath,
   };

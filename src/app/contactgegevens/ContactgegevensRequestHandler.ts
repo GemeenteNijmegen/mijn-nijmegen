@@ -2,13 +2,13 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import * as validator from 'validator';
-import { Navigation } from '../../shared/Navigation';
-import { render } from '../../shared/render';
-import { User, UserFromSession } from '../zaken/User';
 import { IOpenKlantAPI } from './OpenKlantApi';
 import { OpenKlantLogic } from './OpenKlantLogic';
 import * as template from './templates/contactgegevens.mustache';
 import * as editTemplate from './templates/edit-contactgegevens.mustache';
+import { Navigation } from '../../shared/Navigation';
+import { render } from '../../shared/render';
+import { User, UserFromSession } from '../zaken/User';
 
 interface Config {
   readonly dynamoDBClient: DynamoDBClient;
@@ -20,6 +20,7 @@ interface RequestParameters {
   method: string;
   email?: string;
   telefoonnummer?: string;
+  voorkeur?: string;
   xsrf_token?: string;
   error?: string[];
   path?: string;
@@ -119,6 +120,15 @@ export class ContactgegevensRequestHandler {
     if (params.telefoonnummer && !validator.isMobilePhone(params.telefoonnummer) && !OpenKlantLogic.isValidPhonenumber(params.telefoonnummer)) {
       errors.push('telefoonnummer');
     }
+
+    if (!params.telefoonnummer && params.voorkeur == 'telefoon') {
+      errors.push('voorkeurTelefoonlMaarGeenTelefoon');
+    }
+
+    if (!params.email && params.voorkeur == 'email') {
+      errors.push('voorkeurEmailMaarGeenEmail');
+    }
+
     if (errors.length != 0) {
       const html = await this.renderEditPage(session, user, params.email, params.telefoonnummer, errors);
       return Response.html(html, 200, session.getCookie());
@@ -165,6 +175,8 @@ export class ContactgegevensRequestHandler {
       telefoonnummer: telefoonnummer,
       telefoonnummerError: errors?.includes('telefoonnummer'),
       errorMessage: errorMessage,
+      voorkeurTelefoonlMaarGeenTelefoon: errors?.includes('voorkeurTelefoonlMaarGeenTelefoon'),
+      voorkeurEmailMaarGeenEmail: errors?.includes('voorkeurEmailMaarGeenEmail'),
     };
 
     const html = await render(data, editTemplate.default);
