@@ -160,7 +160,7 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     nlWalletVerIdIsLive: true,
     nlWalletSignicatIsLive: true,
     mijnProductenLive: true,
-    logLevel: 'DEBUG'
+    logLevel: 'DEBUG',
   },
   acceptance: {
     branch: 'acceptance',

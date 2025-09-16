@@ -441,7 +441,7 @@ export class ApiStack extends Stack implements Configurable {
         OPENKLANT_API_ENDPOINT: StringParameter.valueForStringParameter(this, Statics.ssmOpenKlantEndpoint),
         OPENKLANT_API_KEY_ARN: openklantApiKey.secretArn,
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
-        POWERTOOLS_LOG_LEVEL: this.configuration.logLevel ?? 'INFO'
+        POWERTOOLS_LOG_LEVEL: this.configuration.logLevel ?? 'INFO',
       },
       apiFunction: ContactgegevensFunction,
     });
