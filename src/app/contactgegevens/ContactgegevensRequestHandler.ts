@@ -222,7 +222,7 @@ export class ContactgegevensRequestHandler {
     const email = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'email');
     const telefoonnummer = partij?._expand?.digitaleAdressen?.find((adres: any) => adres.soortDigitaalAdres == 'telefoonnummer');
 
-    const voorkeur = partij?.voorkeursDigitaalAdres.uuid;
+    const voorkeur = partij?.voorkeursDigitaalAdres?.uuid;
     const emailIsVoorkeur = voorkeur == email?.uuid;
     const telefoonIsVoorkeur = voorkeur == telefoonnummer?.uuid;
 
