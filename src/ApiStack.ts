@@ -296,6 +296,7 @@ export class ApiStack extends Stack implements Configurable {
       environment: {
         SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+        SHOW_PRODUCTEN: this.configuration.mijnProductenLive ? 'True' : 'False',
       },
     });
 
@@ -541,7 +542,11 @@ export class ApiStack extends Stack implements Configurable {
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
       applicationUrlBase: this.baseUrl,
-      environment: {},
+      environment: {
+        SHOW_PRODUCTEN: this.configuration.mijnProductenLive ? 'True' : 'False',
+        SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
+        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+      },
       apiFunction: ProductenFunction,
     });
     return productenFunction;
