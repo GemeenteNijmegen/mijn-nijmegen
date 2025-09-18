@@ -1,12 +1,12 @@
 
 import { Session } from '@gemeentenijmegen/session';
-import { Contactgegevens } from './ContactgegevensService';
+import { Navigation } from '../../shared/Navigation';
+import { render } from '../../shared/render';
 import { UserFromSession } from '../zaken/User';
+import { Contactgegevens } from './ContactgegevensService';
 import * as overviewTemplate from './templates/contactgegevens.mustache';
 import * as editTemplate from './templates/edit-contactgegevens.mustache';
 import * as verifyTemplate from './templates/verify-contactgegevens.mustache';
-import { Navigation } from '../../shared/Navigation';
-import { render } from '../../shared/render';
 
 export interface ErrorFlags {
   invalidTelefoon?: boolean;
@@ -41,7 +41,7 @@ export class RenderingService {
     return render(data, overviewTemplate.default);
   }
 
-  async renderEdit(contactgegevens: Contactgegevens, errors?: ErrorFlags) {
+  async renderEdit(contactgegevens: Contactgegevens, type: string, errors?: ErrorFlags) {
     const data = {
       ...this.getPageRanderingData(),
       volledigenaam: this.session.getValue('username'),
@@ -50,6 +50,8 @@ export class RenderingService {
       telefoonnummer: contactgegevens.telefoonnummer,
       voorkeurEmail: contactgegevens.voorkeur === 'email',
       voorkeurTelefoon: contactgegevens.voorkeur === 'telefoon',
+      editEmail: type == 'email',
+      editPhonenumber: type == 'phonenumber',
       ...errors,
     };
     return render(data, editTemplate.default);
@@ -58,6 +60,8 @@ export class RenderingService {
   async renderVerify(errors?: ErrorFlags) {
     const data = {
       ...this.getPageRanderingData(),
+      // editEmail: type == 'email',
+      // editPhonenumber: type == 'phonenumber',
       ...errors,
     };
     return render(data, verifyTemplate.default);

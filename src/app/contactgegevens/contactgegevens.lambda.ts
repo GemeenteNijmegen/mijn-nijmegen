@@ -15,6 +15,7 @@ const env = environmentVariables([
   'VERIFICATION_SMS_TEMPLATE_UUID',
   'NOTIFY_ISSUER_UUID',
   'NOTIFY_SECRET',
+  'NOTIFY_BASEURL',
 ]);
 
 const logger = new Logger({ serviceName: 'Contactgegevens' });
@@ -47,6 +48,7 @@ function parseEvent(event: APIGatewayProxyEventV2): RequestParameters {
     error: event?.queryStringParameters?.error?.split(','),
     path: event?.rawPath,
     verificationCode: formData?.get('verificationCode') ?? undefined,
+    type: event?.queryStringParameters?.type ?? undefined,
   };
 }
 
@@ -67,7 +69,7 @@ async function setupHandler() {
   if (!requestHandler) {
     const secrets = await getSecrets();
     const verificationService = new NotifyNlVerificationService({
-      baseUrl: 'https://verificatie.notifynl.nl/api/verification-requests/',
+      baseUrl: 'https://api.notifynl.nl',
       emailTemplate: env.VERIFICATION_EMAIL_TEMPLATE_UUID,
       smsTemplate: env.VERIFICATION_SMS_TEMPLATE_UUID,
       notifyIssuer: secrets.NOTIFY_ISSUER_UUID,

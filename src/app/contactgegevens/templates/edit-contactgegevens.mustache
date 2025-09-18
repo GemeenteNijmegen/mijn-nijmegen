@@ -20,6 +20,7 @@
 
                 <form method="post">
 
+                    {{#editEmail}}
                     <div class="md-form">
                         <label for="email">E-mailadres</label>
                         <input type="text" id="email" name="email" autocomplete="email" class="form-control {{#emailError}}is-invalid{{/emailError}}" value="{{email}}">
@@ -27,7 +28,9 @@
                             <span class="sr-only">Invoer onjuist: </span>Het e-mailadres is onjuist. Uw wijzigingen zijn nog niet opgeslagen.
                         </div>
                     </div>
+                    {{/editEmail}}
 
+                    {{#editPhonenumber}}
                     <div class="md-form">
                         <label for="telefoonnummer">Telefoonnummer</label>
                         <input type="text" id="telefoonnummer" name="telefoonnummer" autocomplete="tel" class="form-control {{#telefoonnummerError}}is-invalid{{/telefoonnummerError}}" value="{{telefoonnummer}}">
@@ -35,6 +38,7 @@
                             <span class="sr-only">Invoer onjuist: </span>Het telefoonnummer is onjuist. Uw wijzigingen zijn nog niet opgeslagen.
                         </div>
                     </div>
+                    {{/editPhonenumber}}
 
                     <div class="md-form">
                       <span>Welk kanaal heeft uw voorkeur?</span>

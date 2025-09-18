@@ -96,15 +96,16 @@ export class NotifyNlVerificationService implements VerificationService {
   }
 
   private async sendEmail(verificationCode: string, email: string) {
-    const response = await fetch(this.config.baseUrl, {
+    const input = {
+      template_id: this.config.emailTemplate,
+      email_address: email,
+      personalisation: {
+        verificationCode: verificationCode,
+      },
+    };
+    const response = await fetch(`${this.config.baseUrl}/v2/notifications/email`, {
       method: 'POST',
-      body: JSON.stringify({
-        template_id: this.config.emailTemplate,
-        email_address: email,
-        personalisation: {
-          verificationCode: verificationCode,
-        }
-      }),
+      body: JSON.stringify(input),
       headers: {
         'Content-type': 'application/json',
         'Authorization': `Bearer ${this.jwtToken()}`,
@@ -119,7 +120,8 @@ export class NotifyNlVerificationService implements VerificationService {
   }
 
   private async sendSms(verificationCode: string, phonenumber: string) {
-    const response = await fetch(this.config.baseUrl, {
+    console.debug('Sending code', verificationCode, 'to', phonenumber);
+    const response = await fetch(`${this.config.baseUrl}/v2/notifications/email`, {
       method: 'POST',
       body: JSON.stringify({
         template_id: this.config.smsTemplate,
@@ -144,7 +146,7 @@ export class NotifyNlVerificationService implements VerificationService {
   private jwtToken() {
     const token = jwt.sign({
       iss: this.config.notifyIssuer,
-      iat: Date.now(),
+      iat: Math.floor(Date.now() / 1000),
     }, this.config.notifySecret);
     return token;
   }

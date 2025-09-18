@@ -24,6 +24,7 @@ export interface RequestParameters {
   error?: string[];
   path?: string;
   verificationCode?: string;
+  type?: string;
 }
 
 export class ContactgegevensRequestHandler {
@@ -59,7 +60,7 @@ export class ContactgegevensRequestHandler {
 
     // Route to correct handler
     if (path?.endsWith('edit') && method == 'GET') {
-      return this.handleEditRequest(session);
+      return this.handleEditRequest(session, params);
     } else if (path?.endsWith('edit') && method == 'POST') {
       return this.handleEditPostRequest(session, params);
     } else if (path?.endsWith('verify') && method == 'GET') {
@@ -90,11 +91,11 @@ export class ContactgegevensRequestHandler {
    * @param session
    * @returns
    */
-  private async handleEditRequest(session: Session): Promise<ApiGatewayV2Response> {
+  private async handleEditRequest(session: Session, params: RequestParameters): Promise<ApiGatewayV2Response> {
     const user = UserFromSession(session);
     const contactgegevens = await this.config.contactgegevens.getContactgegevens(user);
     const renderingService = new RenderingService(session);
-    const html = await renderingService.renderEdit(contactgegevens);
+    const html = await renderingService.renderEdit(contactgegevens, params.type ?? 'email');
     return Response.html(html, 200, session.getCookie());
   }
 
@@ -124,7 +125,7 @@ export class ContactgegevensRequestHandler {
       // Check for errors in the submitted data
       const errors = RequestValidator.validate(params);
       if (RequestValidator.hasErrors(errors)) {
-        const html = await renderService.renderEdit(contactgegevens, errors);
+        const html = await renderService.renderEdit(contactgegevens, params.type ?? 'email', errors);
         return Response.html(html, 200, session.getCookie());
       }
 
@@ -149,7 +150,7 @@ export class ContactgegevensRequestHandler {
 
     } catch (error) {
       this.logger.error('Error', { error });
-      const html = await renderService.renderEdit({}, { generalError: true });
+      const html = await renderService.renderEdit({}, params.type ?? 'email', { generalError: true });
       return Response.html(html, 200, session.getCookie());
     }
   }
