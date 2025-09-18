@@ -101,7 +101,9 @@ export class NotifyNlVerificationService implements VerificationService {
       body: JSON.stringify({
         template_id: this.config.emailTemplate,
         email_address: email,
-        verificationCode: verificationCode,
+        personalisation: {
+          verificationCode: verificationCode,
+        }
       }),
       headers: {
         'Content-type': 'application/json',
@@ -120,7 +122,9 @@ export class NotifyNlVerificationService implements VerificationService {
       body: JSON.stringify({
         template_id: this.config.smsTemplate,
         phone_number: phonenumber,
-        verificationCode: verificationCode,
+        personalisation: {
+          verificationCode: verificationCode,
+        },
       }),
       headers: {
         'Content-type': 'application/json',
