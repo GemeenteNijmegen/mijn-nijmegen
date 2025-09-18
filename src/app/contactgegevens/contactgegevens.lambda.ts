@@ -2,17 +2,26 @@ import { Logger } from '@aws-lambda-powertools/logger';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
-import { ContactgegevensRequestHandler } from './ContactgegevensRequestHandler';
+import { ContactgegevensService } from './ContactgegevensService';
 import { OpenklantApi } from './OpenKlantApi';
+import { ContactgegevensRequestHandler, RequestParameters } from './RequestHandler';
+import { NotifyNlVerificationService } from './VerificationService';
 
 const dynamoDBClient = new DynamoDBClient();
 
 const logger = new Logger({ serviceName: 'Contactgegevens' });
 const openKlantApi = new OpenklantApi(undefined, undefined, logger);
-const requestHandler = new ContactgegevensRequestHandler({ dynamoDBClient, openKlantApi, logger });
+const contactgegevens = new ContactgegevensService(openKlantApi, logger);
+const verificationService = new NotifyNlVerificationService('apikey', 'baseurl', 'emailTemplate', 'smsTemplate');
+
+const requestHandler = new ContactgegevensRequestHandler({
+  dynamoDBClient,
+  contactgegevens,
+  verification: verificationService,
+}, logger);
 
 
-function parseEvent(event: APIGatewayProxyEventV2) {
+function parseEvent(event: APIGatewayProxyEventV2): RequestParameters {
 
   logger.debug('Raw event', { event });
   const formData = new URLSearchParams(decodeBody(event));
@@ -26,6 +35,7 @@ function parseEvent(event: APIGatewayProxyEventV2) {
     voorkeur: formData?.get('voorkeur') ?? undefined,
     error: event?.queryStringParameters?.error?.split(','),
     path: event?.rawPath,
+    verificationCode: formData?.get('verificationCode') ?? undefined,
   };
 }
 
