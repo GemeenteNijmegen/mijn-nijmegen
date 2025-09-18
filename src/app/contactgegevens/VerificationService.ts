@@ -111,6 +111,8 @@ export class NotifyNlVerificationService implements VerificationService {
       },
     });
     if (!response.ok) {
+      const text = await response.text();
+      console.error('Failed to send verification', text);
       throw Error('Sending E-mail failed');
     }
     return response;
@@ -132,6 +134,8 @@ export class NotifyNlVerificationService implements VerificationService {
       },
     });
     if (!response.ok) {
+      const text = await response.text();
+      console.error('Failed to send verification', text);
       throw Error('Sending SMS failed');
     }
     return response;

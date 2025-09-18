@@ -16,12 +16,12 @@
         <div class="col-lg-9 col-md-12">
                 <h1>Mijn contactgegevens</h1>
                 
-                {{^errorMessage}}
+                {{^generalError}}
 
                 <form method="post">
                     <div class="md-form">
                         <label for="email">Verificatie code e-mailadres</label>
-                        <input type="text" id="email" name="verificationCode" class="form-control {{#emailError}}is-invalid{{/emailError}}">
+                        <input type="text" id="email" name="verificationCode" class="form-control {{#invalidVerificationCode}}is-invalid{{/invalidVerificationCode}}">
                          <div class="invalid-feedback">
                             <span class="sr-only">Invoer onjuist: </span>De verificatie code voor uw e-mailadres is onjuist. Uw wijziging is nog niet opgeslagen.
                         </div>
@@ -33,11 +33,10 @@
 
                 </form>
 
-                {{/errorMessage}}
-                {{#errorMessage}}
+                {{/generalError}}
+                {{#generalError}}
                     <h2>Er is iets misgegaan</h2>
-                    <p>{{errorMessage}}</p>
-                {{/errorMessage}}
+                {{/generalError}}
             </div>
         </div>
     </div>
