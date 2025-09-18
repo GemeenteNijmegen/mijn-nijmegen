@@ -436,7 +436,22 @@ export class ApiStack extends Stack implements Configurable {
 
   private contactgegevensFunction() {
     const openklantApiKey = Secret.fromSecretNameV2(this, 'openklant-token', Statics.ssmOpenKlantSecret);
-    const notifyApiKey = Secret.fromSecretNameV2(this, 'notfiy-apikey', Statics.ssmNotifySecret);
+    // const notifyApiKey = Secret.fromSecretNameV2(this, 'notfiy-apikey', Statics.ssmNotifySecret);
+
+    const notifyIssuer = new Secret(this, 'notify-issuer', {
+      description: 'Issuer part of the Notify API key',
+    });
+    const notifySecret = new Secret(this, 'notify-secret', {
+      description: 'Secret part of the Notify API key',
+    });
+    const verificationEmailParam = new StringParameter(this, 'ssm-verification-email-template', {
+      stringValue: '-',
+      description: 'NotifyNl template ID for verification email',
+    });
+    const verificationSmsParam = new StringParameter(this, 'ssm-verification-sms-template', {
+      stringValue: '-',
+      description: 'NotifyNl template ID for verification SMS',
+    });
 
     const contactgegevensFunctie = new ApiFunction(this, 'contactgegevens-function', {
       description: 'Contactgegevens uit openklant voor de Mijn Nijmegen-applicatie.',
@@ -449,11 +464,18 @@ export class ApiStack extends Stack implements Configurable {
         OPENKLANT_API_KEY_ARN: openklantApiKey.secretArn,
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
         POWERTOOLS_LOG_LEVEL: this.configuration.logLevel ?? 'INFO',
-        NOTIFY_API_KEY_ARN: notifyApiKey.secretArn,
+
+        // Verification using text/email from notify
+        VERIFICATION_EMAIL_TEMPLATE_UUID: verificationEmailParam.stringValue,
+        VERIFICATION_SMS_TEMPLATE_UUID: verificationSmsParam.stringValue,
+        NOTIFY_ISSUER_UUID: notifyIssuer.secretArn,
+        NOTIFY_SECRET: notifySecret.secretArn,
       },
       apiFunction: ContactgegevensFunction,
     });
     openklantApiKey.grantRead(contactgegevensFunctie.lambda);
+    notifyIssuer.grantRead(contactgegevensFunctie.lambda);
+    notifySecret.grantRead(contactgegevensFunctie.lambda);
     return contactgegevensFunctie;
   }
 

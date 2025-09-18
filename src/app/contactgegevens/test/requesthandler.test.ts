@@ -22,8 +22,14 @@ describe('ContactgegevensRequestHandler', () => {
   beforeEach(() => {
     config = {
       dynamoDBClient,
-      contactgegevens: new ContactgegevensService(new OpenKlantAPIMock()) as any,
-      verification: new NotifyNlVerificationService('apikey', 'baseurl', 'emailTemplate', 'smsTemplate') as any,
+      contactgegevens: new ContactgegevensService(new OpenKlantAPIMock()) as jest.Mocked<ContactgegevensService>,
+      verification: new NotifyNlVerificationService({
+        baseUrl: '',
+        notifyIssuer: 'notifyIssuer',
+        emailTemplate: '',
+        notifySecret: '',
+        smsTemplate: '',
+      }) as jest.Mocked<NotifyNlVerificationService>,
     };
     handler = new ContactgegevensRequestHandler(config, console as any);
   });

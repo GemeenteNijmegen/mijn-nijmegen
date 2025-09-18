@@ -1,4 +1,5 @@
 import { Session } from '@gemeentenijmegen/session';
+import jwt from 'jsonwebtoken';
 
 export type VerificationType = 'sms' | 'email';
 
@@ -16,16 +17,18 @@ interface CheckVerificationResponse {
   error?: string;
 }
 
+export interface NotifyNlVerificationServiceConfig {
+  notifyIssuer: string;
+  notifySecret: string;
+  baseUrl: string;
+  emailTemplate: string;
+  smsTemplate: string;
+}
 export class NotifyNlVerificationService implements VerificationService {
 
   static readonly VERIFICAIION_CODE_IN_SESSION = 'verificationCode';
 
-  constructor(
-    private apiKey: string,
-    private baseUrl: string = 'https://verificatie.notifynl.nl/api/verification-requests/',
-    private emailTemplate: string,
-    private smsTemplate: string,
-  ) { }
+  constructor(private config: NotifyNlVerificationServiceConfig) { }
 
   private generateCode() {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -41,9 +44,11 @@ export class NotifyNlVerificationService implements VerificationService {
       await session.setValue(NotifyNlVerificationService.VERIFICAIION_CODE_IN_SESSION, code);
 
       // Send code using notify nl using the right channel
-      const templateId = type == 'email' ? this.emailTemplate : this.smsTemplate;
-
-      // TODO api call to notify
+      if (type == 'email') {
+        await this.sendEmail(code, adres);
+      } else if (type == 'sms') {
+        await this.sendSms(code, adres);
+      }
 
       return {};
 
@@ -88,6 +93,52 @@ export class NotifyNlVerificationService implements VerificationService {
       };
     }
 
+  }
+
+  private async sendEmail(verificationCode: string, email: string) {
+    const response = await fetch(this.config.baseUrl, {
+      method: 'POST',
+      body: JSON.stringify({
+        template_id: this.config.emailTemplate,
+        email_address: email,
+        verificationCode: verificationCode,
+      }),
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${this.jwtToken()}`,
+      },
+    });
+    if (!response.ok) {
+      throw Error('Sending E-mail failed');
+    }
+    return response;
+  }
+
+  private async sendSms(verificationCode: string, phonenumber: string) {
+    const response = await fetch(this.config.baseUrl, {
+      method: 'POST',
+      body: JSON.stringify({
+        template_id: this.config.smsTemplate,
+        phone_number: phonenumber,
+        verificationCode: verificationCode,
+      }),
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${this.jwtToken()}`,
+      },
+    });
+    if (!response.ok) {
+      throw Error('Sending SMS failed');
+    }
+    return response;
+  }
+
+  private jwtToken() {
+    const token = jwt.sign({
+      iss: this.config.notifyIssuer,
+      iat: Date.now(),
+    }, this.config.notifySecret);
+    return token;
   }
 
 }
