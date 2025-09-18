@@ -452,6 +452,10 @@ export class ApiStack extends Stack implements Configurable {
       stringValue: '-',
       description: 'NotifyNl template ID for verification SMS',
     });
+    const notifyBaseurl = new StringParameter(this, 'ssm-notify-base-url', {
+      stringValue: '-',
+      description: 'NotifyNl base url',
+    });
 
     const contactgegevensFunctie = new ApiFunction(this, 'contactgegevens-function', {
       description: 'Contactgegevens uit openklant voor de Mijn Nijmegen-applicatie.',
@@ -470,6 +474,7 @@ export class ApiStack extends Stack implements Configurable {
         VERIFICATION_SMS_TEMPLATE_UUID: verificationSmsParam.stringValue,
         NOTIFY_ISSUER_UUID: notifyIssuer.secretArn,
         NOTIFY_SECRET: notifySecret.secretArn,
+        NOTIFY_BASEURL: notifyBaseurl.stringValue,
       },
       apiFunction: ContactgegevensFunction,
     });

@@ -69,7 +69,7 @@ async function setupHandler() {
   if (!requestHandler) {
     const secrets = await getSecrets();
     const verificationService = new NotifyNlVerificationService({
-      baseUrl: 'https://api.notifynl.nl',
+      baseUrl: env.NOTIFY_BASEURL,
       emailTemplate: env.VERIFICATION_EMAIL_TEMPLATE_UUID,
       smsTemplate: env.VERIFICATION_SMS_TEMPLATE_UUID,
       notifyIssuer: secrets.NOTIFY_ISSUER_UUID,
