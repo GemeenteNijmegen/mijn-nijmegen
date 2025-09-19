@@ -2,11 +2,11 @@ import { Logger } from '@aws-lambda-powertools/logger';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
+import { UserFromSession } from '../zaken/User';
 import { Contactgegevens, ContactgegevensSchema, ContactgegevensService } from './ContactgegevensService';
 import { ErrorFlags, RenderingService } from './RenderingService';
 import { RequestValidator } from './Validator';
 import { VerificationService } from './VerificationService';
-import { UserFromSession } from '../zaken/User';
 
 export interface Config {
   readonly dynamoDBClient: DynamoDBClient;
@@ -141,10 +141,11 @@ export class ContactgegevensRequestHandler {
       }
 
       // Start verification
-      await this.config.verification.startVerification(session, params.email!, 'email');
-
-      // TODO when building this in the interface as well
-      // await this.config.verification.startVerification(session, params.telefoonnummer!, 'sms');
+      if (params.type == 'email') {
+        await this.config.verification.startVerification(session, params.email!, 'email');
+      } else if (params.type == 'telefoon') {
+        await this.config.verification.startVerification(session, params.telefoonnummer!, 'sms');
+      }
 
       return Response.redirect('/contactgegevens/verify', 302, session.getCookie());
 
@@ -182,15 +183,20 @@ export class ContactgegevensRequestHandler {
         voorkeur: session.getValue('voorkeurToBe', params.voorkeur),
       };
 
-      if (!contactgegevens.email) {
-        throw Error('Expected email to be set'); // TODO this breaks when deleting an email
-      }
 
       // check verification using notify
-      const verified = await this.config.verification.checkVerification(session, params.verificationCode, contactgegevens.email, 'email');
-
-      // TODO later also do sms verification
-      // const verified = await this.config.verification.checkVerification(session, params.verificationCode, contactgegevens.telefoonnummer, 'sms');
+      let verified = undefined;
+      if (params.type == 'email') {
+        if (!contactgegevens.email) {
+          throw Error('Expected email to be set');
+        }
+        verified = await this.config.verification.checkVerification(session, params.verificationCode, contactgegevens.email, 'email');
+      } else if (params.type == 'telefoon') {
+        if (!contactgegevens.telefoonnummer) {
+          throw Error('Expected telefoonnummer to be set');
+        }
+        verified = await this.config.verification.checkVerification(session, params.verificationCode, contactgegevens.telefoonnummer, 'sms');
+      }
 
       if (!verified || !verified.verified) {
         errors.invalidVerificationCode = true;

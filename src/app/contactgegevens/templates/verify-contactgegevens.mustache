@@ -19,7 +19,7 @@
                 {{^generalError}}
 
                 <form method="post">
-                    <div class="md-form">
+                    <div class="md-form" action="?type={{#editEmail}}email{{/editEmail}}{{#editPhonenumber}}telefoon{{/editPhonenumber}}">
                         <label for="email">Verificatie code e-mailadres</label>
                         <input type="text" id="email" name="verificationCode" class="form-control {{#invalidVerificationCode}}is-invalid{{/invalidVerificationCode}}">
                          <div class="invalid-feedback">

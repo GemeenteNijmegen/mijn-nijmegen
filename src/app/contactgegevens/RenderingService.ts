@@ -1,12 +1,12 @@
 
 import { Session } from '@gemeentenijmegen/session';
-import { Navigation } from '../../shared/Navigation';
-import { render } from '../../shared/render';
-import { UserFromSession } from '../zaken/User';
 import { Contactgegevens } from './ContactgegevensService';
+import { UserFromSession } from '../zaken/User';
 import * as overviewTemplate from './templates/contactgegevens.mustache';
 import * as editTemplate from './templates/edit-contactgegevens.mustache';
 import * as verifyTemplate from './templates/verify-contactgegevens.mustache';
+import { Navigation } from '../../shared/Navigation';
+import { render } from '../../shared/render';
 
 export interface ErrorFlags {
   invalidTelefoon?: boolean;
