@@ -71,6 +71,7 @@ export class NotifyNlVerificationService implements VerificationService {
       const sessionCode = session.getValue(NotifyNlVerificationService.VERIFICAIION_CODE_IN_SESSION, code);
 
       if (!code || !sessionCode) {
+        console.debug('Submitted code:', code, ", session code:", sessionCode)
         throw new Error('Missing verification code in form or session');
       }
 
