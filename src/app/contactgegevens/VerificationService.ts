@@ -36,6 +36,7 @@ export class NotifyNlVerificationService implements VerificationService {
   }
 
   async startVerification(session: Session, adres: string, type: VerificationType): Promise<VerificationResponse> {
+    console.debug('Starting emailverification for', adres);
     try {
       // Get code
       const code = this.generateCode();
@@ -63,23 +64,18 @@ export class NotifyNlVerificationService implements VerificationService {
   }
 
   async checkVerification(session: Session, code: string, adres: string, type: VerificationType): Promise<CheckVerificationResponse> {
+    console.debug('Checking', type, 'verification for', adres);
 
     try {
 
       const sessionCode = session.getValue(NotifyNlVerificationService.VERIFICAIION_CODE_IN_SESSION, code);
 
       if (!code || !sessionCode) {
-        return {
-          verified: false,
-          error: 'missing code',
-        };
+        throw new Error('Missing verification code in form or session');
       }
 
       if (code !== sessionCode) {
-        return {
-          verified: false,
-          error: 'wrong code',
-        };
+        throw new Error('Invalid verification code');
       }
 
       return { verified: true };
