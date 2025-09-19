@@ -73,7 +73,7 @@
     "jest-aws-client-mock": "^0.0.26",
     "jest-junit": "^16",
     "projen": "^0.95.6",
-    "ts-jest": "^29.4.2",
+    "ts-jest": "^29.4.3",
     "ts-node": "^10.9.2",
     "typescript": "^4.9.5"
   },
@@ -86,7 +86,7 @@
     "@gemeentenijmegen/apigateway-http": "^0.0.30",
     "@gemeentenijmegen/aws-constructs": "^0.0.42",
     "@gemeentenijmegen/projen-project-type": "^1.11.3",
-    "@gemeentenijmegen/session": "^0.0.29",
+    "@gemeentenijmegen/session": "^0.0.30",
     "@gemeentenijmegen/utils": "^0.0.36",
     "@pepperize/cdk-route53-health-check": "^0.0.754",
     "@types/mustache": "^4.2.6",
