@@ -42,6 +42,7 @@ export class NotifyNlVerificationService implements VerificationService {
       const code = this.generateCode();
 
       // Store code in session
+      console.debug('Setting verification code in session to: ', code);
       await session.setValue(NotifyNlVerificationService.VERIFICAIION_CODE_IN_SESSION, code);
 
       // Send code using notify nl using the right channel
@@ -68,7 +69,7 @@ export class NotifyNlVerificationService implements VerificationService {
 
     try {
 
-      const sessionCode = session.getValue(NotifyNlVerificationService.VERIFICAIION_CODE_IN_SESSION, code);
+      const sessionCode = session.getValue(NotifyNlVerificationService.VERIFICAIION_CODE_IN_SESSION);
 
       if (!code || !sessionCode) {
         console.debug('Submitted code:', code, ", session code:", sessionCode)
@@ -82,7 +83,7 @@ export class NotifyNlVerificationService implements VerificationService {
       return { verified: true };
 
     } catch (error) {
-      console.error('Error sending verification email:', error);
+      console.error('Error checking verification', type, error);
 
       return {
         verified: false,
