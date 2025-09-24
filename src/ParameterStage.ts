@@ -193,6 +193,7 @@ export class ssmParamsConstruct extends Construct {
 
     this.addZaakParameters();
     this.addOpenKlantParameters();
+    this.addNotifyParameters();
     this.addHaalCentraalParameters();
   }
 
@@ -267,6 +268,15 @@ export class ssmParamsConstruct extends Construct {
     });
   }
 
+
+  addNotifyParameters() {
+    new SecretsManager.Secret(this, 'notify-api-key', {
+      secretName: Statics.ssmNotifySecret,
+      description: 'NotifyNL API key',
+    });
+
+  }
+
   addHaalCentraalParameters() {
 
     new StringParameter(this, 'haal-centraal-cert', {
@@ -293,4 +303,18 @@ export class ssmParamsConstruct extends Construct {
 
   }
 
+  addProductenParameters() {
+
+    new StringParameter(this, 'producten-base-url', {
+      parameterName: Statics.ssmHaalCentraalBaseUrl,
+      description: 'Open producten - base url',
+      stringValue: '-',
+    });
+
+
+    new SecretsManager.Secret(this, 'producten-token', {
+      secretName: Statics.ssmHaalCentraalApiKey,
+      description: 'Open producten token',
+    });
+  }
 }
