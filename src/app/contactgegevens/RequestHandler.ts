@@ -2,11 +2,11 @@ import { Logger } from '@aws-lambda-powertools/logger';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
-import { UserFromSession } from '../zaken/User';
 import { Contactgegevens, ContactgegevensSchema, ContactgegevensService } from './ContactgegevensService';
 import { ErrorFlags, RenderingService } from './RenderingService';
 import { RequestValidator } from './Validator';
 import { VerificationService } from './VerificationService';
+import { UserFromSession } from '../zaken/User';
 
 export interface Config {
   readonly dynamoDBClient: DynamoDBClient;
