@@ -1,12 +1,12 @@
 import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
-import { Stack, StackProps, Tags, pipelines, CfnParameter, Aspects } from 'aws-cdk-lib';
+import { Aspects, CfnParameter, Stack, StackProps, Tags, pipelines } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { ApiStage } from './ApiStage';
 import { Configurable } from './Configuration';
 import { ParameterStage } from './ParameterStage';
 import { Statics } from './statics';
 
-export interface PipelineStackProps extends StackProps, Configurable {}
+export interface PipelineStackProps extends StackProps, Configurable { }
 
 /**
  * The pipeline runs in a build environment, and is responsible for deploying
@@ -51,8 +51,7 @@ export class PipelineStack extends Stack {
       },
       commands: [
         'yarn install --frozen-lockfile',
-        'npx projen build',
-        'npx projen synth',
+        'yarn build',
       ],
     });
 

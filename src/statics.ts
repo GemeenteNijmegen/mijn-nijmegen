@@ -140,6 +140,9 @@ export abstract class Statics {
 
   static readonly ssmOpenKlantSecret = '/cdk/mijn-nijmegen/open-klant/api-key';
   static readonly ssmOpenKlantEndpoint = '/cdk/mijn-nijmegen/open-klant/endpoint';
+
+  // MARK: NOTIFY configuration
+  static readonly ssmNotifySecret = '/cdk/mijn-nijmegen/open-klant/notify-key';
   // MARK: NL Wallet configuration
   // VerID
   static readonly ssmVerIdWellKnown: string = '/cdk/mijn-nijmegen/verid/well-known';

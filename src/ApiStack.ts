@@ -12,6 +12,7 @@ import { HomeFunction } from './app/home/home-function';
 import { LoginFunction } from './app/login/login-function';
 import { LogoutFunction } from './app/logout/logout-function';
 import { PersoonsgegevensFunction } from './app/persoonsgegevens/persoonsgegevens-function';
+import { ProductenFunction } from './app/producten/producten-function';
 import { TakenFunction } from './app/taken/taken-function';
 import { UitkeringFunction } from './app/uitkeringen/uitkering-function';
 import { ZakenFunction } from './app/zaken/zaken-function';
@@ -195,7 +196,26 @@ export class ApiStack extends Stack implements Configurable {
       this.api.addRoutes({
         integration: new HttpLambdaIntegration('contactgegevens', contactgegevensFunction.lambda),
         path: '/contactgegevens',
+        methods: [apigatewayv2.HttpMethod.GET],
+      });
+      this.api.addRoutes({
+        integration: new HttpLambdaIntegration('contactgegevens-edit', contactgegevensFunction.lambda),
+        path: '/contactgegevens/edit',
         methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.POST],
+      });
+      this.api.addRoutes({
+        integration: new HttpLambdaIntegration('contactgegevens-verify', contactgegevensFunction.lambda),
+        path: '/contactgegevens/verify',
+        methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.POST],
+      });
+    }
+
+    if (configuration.mijnProductenLive) {
+      const productenFunction = this.productenFunction();
+      this.api.addRoutes({
+        integration: new HttpLambdaIntegration('producten', productenFunction.lambda),
+        path: '/producten',
+        methods: [apigatewayv2.HttpMethod.GET],
       });
     }
   }
@@ -276,6 +296,7 @@ export class ApiStack extends Stack implements Configurable {
       environment: {
         SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+        SHOW_PRODUCTEN: this.configuration.mijnProductenLive ? 'True' : 'False',
       },
     });
 
@@ -415,6 +436,26 @@ export class ApiStack extends Stack implements Configurable {
 
   private contactgegevensFunction() {
     const openklantApiKey = Secret.fromSecretNameV2(this, 'openklant-token', Statics.ssmOpenKlantSecret);
+    // const notifyApiKey = Secret.fromSecretNameV2(this, 'notfiy-apikey', Statics.ssmNotifySecret);
+
+    const notifyIssuer = new Secret(this, 'notify-issuer', {
+      description: 'Issuer part of the Notify API key',
+    });
+    const notifySecret = new Secret(this, 'notify-secret', {
+      description: 'Secret part of the Notify API key',
+    });
+    const verificationEmailParam = new StringParameter(this, 'ssm-verification-email-template', {
+      stringValue: '-',
+      description: 'NotifyNl template ID for verification email',
+    });
+    const verificationSmsParam = new StringParameter(this, 'ssm-verification-sms-template', {
+      stringValue: '-',
+      description: 'NotifyNl template ID for verification SMS',
+    });
+    const notifyBaseurl = new StringParameter(this, 'ssm-notify-base-url', {
+      stringValue: '-',
+      description: 'NotifyNl base url',
+    });
 
     const contactgegevensFunctie = new ApiFunction(this, 'contactgegevens-function', {
       description: 'Contactgegevens uit openklant voor de Mijn Nijmegen-applicatie.',
@@ -426,10 +467,20 @@ export class ApiStack extends Stack implements Configurable {
         OPENKLANT_API_ENDPOINT: StringParameter.valueForStringParameter(this, Statics.ssmOpenKlantEndpoint),
         OPENKLANT_API_KEY_ARN: openklantApiKey.secretArn,
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+        POWERTOOLS_LOG_LEVEL: this.configuration.logLevel ?? 'INFO',
+
+        // Verification using text/email from notify
+        VERIFICATION_EMAIL_TEMPLATE_UUID: verificationEmailParam.stringValue,
+        VERIFICATION_SMS_TEMPLATE_UUID: verificationSmsParam.stringValue,
+        NOTIFY_ISSUER_UUID: notifyIssuer.secretArn,
+        NOTIFY_SECRET: notifySecret.secretArn,
+        NOTIFY_BASEURL: notifyBaseurl.stringValue,
       },
       apiFunction: ContactgegevensFunction,
     });
     openklantApiKey.grantRead(contactgegevensFunctie.lambda);
+    notifyIssuer.grantRead(contactgegevensFunctie.lambda);
+    notifySecret.grantRead(contactgegevensFunctie.lambda);
     return contactgegevensFunctie;
   }
 
@@ -507,6 +558,25 @@ export class ApiStack extends Stack implements Configurable {
       this.grantZakenApiAccess(takenFunction);
     }
     return takenFunction;
+  }
+
+
+  private productenFunction() {
+    //TODO open producten secrets
+    const productenFunction = new ApiFunction(this, 'producten-function', {
+      description: 'Producten lambda om producten op te halen en tonen',
+      codePath: 'app/producten',
+      table: this.sessionsTable,
+      tablePermissions: 'ReadWrite',
+      applicationUrlBase: this.baseUrl,
+      environment: {
+        SHOW_PRODUCTEN: this.configuration.mijnProductenLive ? 'True' : 'False',
+        SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
+        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+      },
+      apiFunction: ProductenFunction,
+    });
+    return productenFunction;
   }
 
   /**
