@@ -1,6 +1,6 @@
-import { EndpointHealthCheck, HealthCheckerRegions } from '@pepperize/cdk-route53-health-check';
 import { aws_certificatemanager as CertificateManager, aws_ssm as SSM, Stack, StackProps } from 'aws-cdk-lib';
-import { Alarm, ComparisonOperator } from 'aws-cdk-lib/aws-cloudwatch';
+import { Alarm, ComparisonOperator, Metric } from 'aws-cdk-lib/aws-cloudwatch';
+import { CfnHealthCheck, HealthCheckType } from 'aws-cdk-lib/aws-route53';
 import { RemoteParameters } from 'cdk-remote-stack';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
@@ -22,7 +22,7 @@ export class UsEastStack extends Stack {
     super(scope, id, props);
     this.branch = props.branch;
     this.createCertificate();
-    // this.monitorLoginPage(props.branch);
+    this.monitorLoginPage(props.branch);
   }
 
   /** Because the hosted zone SSM parameters are stored in eu-west-1,
@@ -73,16 +73,29 @@ export class UsEastStack extends Stack {
    */
   monitorLoginPage(branch: string) {
     const domain = `${Statics.subDomain(branch)}.nijmegen.nl`;
-    const healthCheck = new EndpointHealthCheck(this, 'healthcheck', {
-      domainName: domain,
-      resourcePath: '/login',
-      searchString: 'Inloggen Mijn Nijmegen',
-      regions: [HealthCheckerRegions.AP_NORTHEAST_1, HealthCheckerRegions.EU_WEST_1, HealthCheckerRegions.SA_EAST_1],
+
+    // Create health check using native CDK Route53 construct
+    const healthCheck = new CfnHealthCheck(this, 'healthcheck', {
+      healthCheckConfig: {
+        type: HealthCheckType.HTTPS_STR_MATCH,
+        fullyQualifiedDomainName: domain,
+        port: 443,
+        resourcePath: '/login',
+        searchString: 'Inloggen Mijn Nijmegen',
+        requestInterval: 30,
+        failureThreshold: 3,
+      },
     });
 
     new Alarm(this, 'healthcheck-alarm', {
       alarmName: 'mijn-nijmegen-healthcheck-critical-lvl',
-      metric: healthCheck.metricHealthCheckStatus(),
+      metric: new Metric({
+        metricName: 'HealthCheckStatus',
+        namespace: 'AWS/Route53',
+        dimensionsMap: {
+          HealthCheckId: healthCheck.attrHealthCheckId,
+        },
+      }),
       comparisonOperator: ComparisonOperator.LESS_THAN_THRESHOLD,
       threshold: 1,
       evaluationPeriods: 1,

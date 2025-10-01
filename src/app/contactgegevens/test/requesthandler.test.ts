@@ -91,6 +91,7 @@ describe('ContactgegevensRequestHandler', () => {
       path: 'verify',
       xsrf_token: 'abcdef',
       verificationCode: 'validCode',
+      type: 'email',
     };
     (NotifyNlVerificationService.prototype.checkVerification as jest.Mock).mockResolvedValue({ verified: true });
     (ContactgegevensService.prototype.updateContactgegevensNatuurlijkPersoon as jest.Mock).mockResolvedValue(undefined);
