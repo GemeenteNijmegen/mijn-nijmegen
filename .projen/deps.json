@@ -160,10 +160,6 @@
       "type": "runtime"
     },
     {
-      "name": "@pepperize/cdk-route53-health-check",
-      "type": "runtime"
-    },
-    {
       "name": "@types/mustache",
       "type": "runtime"
     },
