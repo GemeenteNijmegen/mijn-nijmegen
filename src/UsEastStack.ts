@@ -1,6 +1,6 @@
 import { aws_certificatemanager as CertificateManager, aws_ssm as SSM, Stack, StackProps } from 'aws-cdk-lib';
 import { Alarm, ComparisonOperator, Metric } from 'aws-cdk-lib/aws-cloudwatch';
-import { CfnHealthCheck } from 'aws-cdk-lib/aws-route53';
+import { CfnHealthCheck, HealthCheckType } from 'aws-cdk-lib/aws-route53';
 import { RemoteParameters } from 'cdk-remote-stack';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
@@ -77,7 +77,7 @@ export class UsEastStack extends Stack {
     // Create health check using native CDK Route53 construct
     const healthCheck = new CfnHealthCheck(this, 'healthcheck', {
       healthCheckConfig: {
-        type: 'HTTPS',
+        type: HealthCheckType.HTTPS_STR_MATCH,
         fullyQualifiedDomainName: domain,
         port: 443,
         resourcePath: '/login',
