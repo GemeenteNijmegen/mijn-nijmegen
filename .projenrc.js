@@ -23,7 +23,6 @@ const project = new GemeenteNijmegenCdkApp({
     'dotenv',
     '@aws-sdk/client-secrets-manager',
     '@aws-solutions-constructs/aws-lambda-dynamodb',
-    '@pepperize/cdk-route53-health-check',
     'cdk-remote-stack',
     'openid-client',
     'mustache',
@@ -82,6 +81,5 @@ const project = new GemeenteNijmegenCdkApp({
     'test/playwright/screenshots',
   ],
 });
-
 
 project.synth();
