@@ -51,6 +51,9 @@ const project = new GemeenteNijmegenCdkApp({
     'aws-sdk-client-mock',
     '@glen/jest-raw-loader',
     'jest-aws-client-mock',
+    'esbuild',
+    '@utrecht/document-css@1.5.0',
+    '@utrecht/button-css@2.3.0',
   ], /* Build dependencies for this module. */
   mutableBuild: true,
   jestOptions: {
@@ -79,7 +82,22 @@ const project = new GemeenteNijmegenCdkApp({
     'src/app/**/tests/output',
     'test/playwright/report',
     'test/playwright/screenshots',
+    'src/app/static-resources/static/styles/ds.*',
   ],
 });
+
+project.addTask('bundle:css-bundle', {
+  exec: [
+    'esbuild ./src/app/static-resources/static/styles/ds-input.js',
+    '--bundle',
+    '--target=node22',
+    '--platform=node',
+    '--outfile=./src/app/static-resources/static/styles/ds.js',
+    '--loader:.css=css',
+    '--loader:.mustache=text',
+    '--sourcemap',
+  ].join(' '),
+});
+
 
 project.synth();

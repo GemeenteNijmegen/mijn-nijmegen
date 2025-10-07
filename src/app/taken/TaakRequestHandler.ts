@@ -61,7 +61,7 @@ export class TaakrequestHandler {
       }
     } else {
       const navigation = new Navigation(user.type, {
-        currentPath: '/',
+        currentPath: '/taken',
         showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
       });
 
