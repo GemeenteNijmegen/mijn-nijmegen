@@ -56,7 +56,7 @@ export class Navigation {
     description: 'Bekijk de overzichtspagina',
     label: 'Bekijk de overzichtspagina',
     icon: MdiOverview.default,
-  },{
+  }, {
     priority: 20,
     url: '/taken',
     title: 'Mijn taken',
