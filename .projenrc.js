@@ -86,7 +86,7 @@ const project = new GemeenteNijmegenCdkApp({
   ],
 });
 
-project.addTask('bundle:css-bundle', {
+const cssBundleTask = project.addTask('bundle:css-bundle', {
   exec: [
     'esbuild ./src/app/static-resources/static/styles/ds-input.js',
     '--bundle',
@@ -97,7 +97,8 @@ project.addTask('bundle:css-bundle', {
     '--loader:.mustache=text',
     '--sourcemap',
   ].join(' '),
+  description: 'Bundle css from DS',
 });
-
+project.preCompileTask.spawn(cssBundleTask);
 
 project.synth();

@@ -260,6 +260,7 @@
     },
     "bundle:css-bundle": {
       "name": "bundle:css-bundle",
+      "description": "Bundle css from DS",
       "steps": [
         {
           "exec": "esbuild ./src/app/static-resources/static/styles/ds-input.js --bundle --target=node22 --platform=node --outfile=./src/app/static-resources/static/styles/ds.js --loader:.css=css --loader:.mustache=text --sourcemap"
@@ -418,7 +419,12 @@
     },
     "pre-compile": {
       "name": "pre-compile",
-      "description": "Prepare the project for compilation"
+      "description": "Prepare the project for compilation",
+      "steps": [
+        {
+          "spawn": "bundle:css-bundle"
+        }
+      ]
     },
     "release:production": {
       "name": "release:production",
