@@ -2,6 +2,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { HomeRequestHandler } from './homeRequestHandler';
+import '../styles/styles.js';
 
 const dynamoDBClient = new DynamoDBClient({});
 const requestHandler = new HomeRequestHandler(dynamoDBClient, { showTaken: process.env.SHOW_TAKEN == 'True' });
