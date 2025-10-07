@@ -1,4 +1,4 @@
-import { MdiAccount, MdiAddressBook, MdiCurrencyEur, MdiFileMultiple, MdiOverview } from './Icons';
+import { MdiAccount, MdiAddressBook, MdiCurrencyEur, MdiFileMultiple, MdiOverview, Tasks } from './Icons';
 
 interface NavigationItem {
   priority: number; // Sort based on priority
@@ -12,14 +12,14 @@ interface NavigationItem {
 export class Navigation {
   personItems = [
     {
-      priority: 20,
+      priority: 40,
       url: '/persoonsgegevens',
       title: 'Mijn gegevens',
       description: 'Bekijk uw persoons- en adresgegevens.',
       label: 'Bekijk mijn persoonsgegevens',
       icon: MdiAccount.default,
     }, {
-      priority: 40,
+      priority: 50,
       url: '/uitkeringen',
       title: 'Mijn uitkeringen',
       description: 'Bekijk uw uitkeringsgegevens.',
@@ -29,7 +29,7 @@ export class Navigation {
   ];
 
   contactgegevens: NavigationItem = {
-    priority: 50,
+    priority: 60,
     url: '/contactgegevens',
     title: 'Mijn contactgegevens',
     description: 'Beheer uw contactgegevens.',
@@ -38,7 +38,7 @@ export class Navigation {
   };
 
   producten: NavigationItem = {
-    priority: 60,
+    priority: 70,
     url: '/producten',
     title: 'Mijn producten',
     description: 'Bekijk uw producten.',
@@ -56,6 +56,13 @@ export class Navigation {
     description: 'Bekijk de overzichtspagina',
     label: 'Bekijk de overzichtspagina',
     icon: MdiOverview.default,
+  },{
+    priority: 20,
+    url: '/taken',
+    title: 'Mijn taken',
+    description: 'Bekijk uw taken.',
+    label: 'Bekijk taken',
+    icon: Tasks.default,
   },
   {
     priority: 30,
