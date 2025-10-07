@@ -51,7 +51,7 @@
     "@aws-sdk/client-ssm": "^3.901.0",
     "@aws-sdk/types": "^3.901.0",
     "@glen/jest-raw-loader": "^2.0.0",
-    "@playwright/test": "^1.55.1",
+    "@playwright/test": "^1.56.0",
     "@stylistic/eslint-plugin": "^2",
     "@types/aws-lambda": "^8.10.155",
     "@types/content-disposition": "^0.5.9",
