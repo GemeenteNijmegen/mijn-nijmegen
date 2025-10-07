@@ -99,6 +99,6 @@ const cssBundleTask = project.addTask('bundle:css-bundle', {
   ].join(' '),
   description: 'Bundle css from DS',
 });
-project.preCompileTask.spawn(cssBundleTask);
+project.compileTask.spawn(cssBundleTask);
 
 project.synth();

@@ -301,7 +301,12 @@
     },
     "compile": {
       "name": "compile",
-      "description": "Only compile"
+      "description": "Only compile",
+      "steps": [
+        {
+          "spawn": "bundle:css-bundle"
+        }
+      ]
     },
     "default": {
       "name": "default",
@@ -419,12 +424,7 @@
     },
     "pre-compile": {
       "name": "pre-compile",
-      "description": "Prepare the project for compilation",
-      "steps": [
-        {
-          "spawn": "bundle:css-bundle"
-        }
-      ]
+      "description": "Prepare the project for compilation"
     },
     "release:production": {
       "name": "release:production",
