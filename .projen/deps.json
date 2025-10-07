@@ -52,6 +52,16 @@
       "type": "build"
     },
     {
+      "name": "@utrecht/button-css",
+      "version": "2.3.0",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/document-css",
+      "version": "1.5.0",
+      "type": "build"
+    },
+    {
       "name": "aws-cdk",
       "version": "^2",
       "type": "build"

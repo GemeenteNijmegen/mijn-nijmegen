@@ -258,6 +258,14 @@
         }
       ]
     },
+    "bundle:css-bundle": {
+      "name": "bundle:css-bundle",
+      "steps": [
+        {
+          "exec": "esbuild ./src/app/static-resources/static/styles/ds-input.js --bundle --target=node22 --platform=node --outfile=./src/app/static-resources/static/styles/ds.js --loader:.css=css --loader:.mustache=text --sourcemap"
+        }
+      ]
+    },
     "clobber": {
       "name": "clobber",
       "description": "hard resets to HEAD of origin and cleans the local repo",
@@ -508,7 +516,7 @@
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @aws-sdk/client-ssm @aws-sdk/types @glen/jest-raw-loader @playwright/test @stylistic/eslint-plugin @types/aws-lambda @types/content-disposition @types/jest @types/node @types/validator @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk aws-sdk-client-mock axios-mock-adapter commit-and-tag-version copyfiles esbuild eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-aws-client-mock jest-junit projen ts-jest ts-node typescript @aws-lambda-powertools/logger @aws-sdk/client-dynamodb @aws-sdk/client-secrets-manager @aws-solutions-constructs/aws-lambda-dynamodb @gemeentenijmegen/apiclient @gemeentenijmegen/apigateway-http @gemeentenijmegen/aws-constructs @gemeentenijmegen/projen-project-type @gemeentenijmegen/session @gemeentenijmegen/utils @types/mustache aws-cdk-lib axios cdk-remote-stack constructs content-disposition cookie dotenv jsonwebtoken mustache object-mapper openid-client validator xml2js zod"
+          "exec": "yarn upgrade @aws-sdk/client-ssm @aws-sdk/types @glen/jest-raw-loader @playwright/test @stylistic/eslint-plugin @types/aws-lambda @types/content-disposition @types/jest @types/node @types/validator @typescript-eslint/eslint-plugin @typescript-eslint/parser @utrecht/button-css @utrecht/document-css aws-cdk aws-sdk-client-mock axios-mock-adapter commit-and-tag-version copyfiles esbuild eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-aws-client-mock jest-junit projen ts-jest ts-node typescript @aws-lambda-powertools/logger @aws-sdk/client-dynamodb @aws-sdk/client-secrets-manager @aws-solutions-constructs/aws-lambda-dynamodb @gemeentenijmegen/apiclient @gemeentenijmegen/apigateway-http @gemeentenijmegen/aws-constructs @gemeentenijmegen/projen-project-type @gemeentenijmegen/session @gemeentenijmegen/utils @types/mustache aws-cdk-lib axios cdk-remote-stack constructs content-disposition cookie dotenv jsonwebtoken mustache object-mapper openid-client validator xml2js zod"
         },
         {
           "exec": "npx projen"
