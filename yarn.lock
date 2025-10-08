@@ -1367,10 +1367,10 @@
   resolved "https://registry.yarnpkg.com/@gemeentenijmegen/aws-constructs/-/aws-constructs-0.0.43.tgz#593c7ce07e33a41411dc7e6cb3df880196892687"
   integrity sha512-9GD8Rm+6VOPyGF5UCOIazQTcCrPlUWJdT+oku8eo0J677Gpq7ttfeA52CrQfrIyknDCgKrNiw83Eg2yJ8N662Q==
 
-"@gemeentenijmegen/design-tokens@^1.0.0-alpha.1":
-  version "1.0.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/design-tokens/-/design-tokens-1.0.0-alpha.1.tgz#a69da30b59d9ee26e67ca65a28e74418b2d4ca94"
-  integrity sha512-CsFUXqLStcLp1fR50/4Bk3wIn9wOzSmu6SKAMkPrxgDC/6RaXAa5KN1Wc0o0XTUjG+Jo5Dz4eQw5AvVQ0h7ROA==
+"@gemeentenijmegen/design-tokens@^0.0.2-alpha.41":
+  version "0.0.2-alpha.41"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/design-tokens/-/design-tokens-0.0.2-alpha.41.tgz#53847bf00c71e8c042be438ff4539baf7c0dc68d"
+  integrity sha512-vErYB3USNPw12nPKXjU9jCyo6k+DkspxpZzLKAz2NEQnfIqVUb8Bdv/skqY4mzhDMOMTvSV0tBVoIMssLvouNQ==
 
 "@gemeentenijmegen/projen-project-type@^1.11.4":
   version "1.11.4"
