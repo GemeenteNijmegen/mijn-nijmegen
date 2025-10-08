@@ -7,11 +7,9 @@
         <p class="lead">U kunt kiezen om met DigiD in te loggen of met Yivi. Organisaties kunnen ook met eherkenning inloggen.</p>
         <div class="login-selector">
             {{#authMethods}}
-            <div>
                 <a href="/login?method={{methodName}}" class="utrecht-button utrecht-button--primary-action btn-{{methodName}}">
                     Inloggen met {{methodNiceName}}
                 </a>
-            </div>
             {{/authMethods}}
         </div>
         <p>Door in te loggen geeft u uw BSN (BurgerServiceNummer) door. Dit is een uniek nummer waaraan uw persoonlijke gegevens zijn gekoppeld. Wij vragen uw BSN zodat u alleen uw gegevens ziet. Met Yivi ziet u welke gegevens van u gevraagd worden als u inlogt. <a href="https://www.nijmegen.nl/diensten/privacy/yivi-nieuwe-manier-van-inloggen/">Lees meer over Yivi</a>.
