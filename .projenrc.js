@@ -52,6 +52,7 @@ const project = new GemeenteNijmegenCdkApp({
     '@glen/jest-raw-loader',
     'jest-aws-client-mock',
     'esbuild',
+    '@gemeentenijmegen/design-tokens',
     '@utrecht/document-css@1.5.0',
     '@utrecht/button-css@2.3.0',
   ], /* Build dependencies for this module. */
@@ -86,7 +87,7 @@ const project = new GemeenteNijmegenCdkApp({
   ],
 });
 
-project.addTask('bundle:css-bundle', {
+const cssBundleTask = project.addTask('bundle:css-bundle', {
   exec: [
     'esbuild ./src/app/static-resources/static/styles/ds-input.js',
     '--bundle',
@@ -97,7 +98,8 @@ project.addTask('bundle:css-bundle', {
     '--loader:.mustache=text',
     '--sourcemap',
   ].join(' '),
+  description: 'Bundle css from DS',
 });
-
+project.compileTask.spawn(cssBundleTask);
 
 project.synth();

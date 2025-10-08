@@ -84,7 +84,7 @@ body a {
     text-decoration: underline;
 }
 
-.btn, .navbar a {
+.btn, .navbar a, .utrecht-button {
     text-decoration: none;
 }
 
@@ -102,7 +102,7 @@ main {
     background-repeat: no-repeat;
     background-position: left .25em center;
     background-size: 2.5em;
-    text-indent: 1.75em;
+    text-indent: 2.5em;
     width: auto;
 }
 
@@ -111,7 +111,7 @@ main {
     background-repeat: no-repeat;
     background-position: left .25em center;
     background-size: 2.5em;
-    text-indent: 1.75em;
+    text-indent: 2.5em;
     width: auto;
 }
 
@@ -120,7 +120,7 @@ main {
     background-repeat: no-repeat;
     background-position: left .25em center;
     background-size: 2.5em;
-    text-indent: 1.75em;
+    text-indent: 2.5em;
     width: auto;
 }
 

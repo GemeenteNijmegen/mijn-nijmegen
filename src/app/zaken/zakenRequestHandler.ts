@@ -122,6 +122,7 @@ export class ZakenRequestHandler {
       'closed-zaken': closedHtml,
       timeout,
       'xsrf_token': session.getValue('xsrf_token'),
+      'header_additions': '<link rel="stylesheet" href="/static/styles/zaak.css">',
     };
     // render page
     const html = await render(data, zakenTemplate.default, {
@@ -198,6 +199,7 @@ export class ZakenRequestHandler {
         singlezaak: await this.zaakHtml(formattedZaak),
         timeout,
         xsrf_token: session.getValue('xsrf_token'),
+        header_additions: '<link rel="stylesheet" href="/static/styles/zaak.css">',
       };
       // render page
       const html = await render(data, zaakTemplate.default, {
