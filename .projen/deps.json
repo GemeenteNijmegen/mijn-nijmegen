@@ -9,6 +9,10 @@
       "type": "build"
     },
     {
+      "name": "@gemeentenijmegen/design-tokens",
+      "type": "build"
+    },
+    {
       "name": "@glen/jest-raw-loader",
       "type": "build"
     },
