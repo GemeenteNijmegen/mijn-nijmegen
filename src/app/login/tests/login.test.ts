@@ -53,9 +53,9 @@ describe('Test login page and urls', () => {
     expect(redirect.headers?.Location).toMatch(encodeURIComponent('idp_scoping:yivi'));
     expect(redirect.headers?.Location).toMatch(encodeURIComponent('bsn'));
     const result = await loginRequestHandler.handleRequest(requestParams(''), dynamoDBClient);
-    expect(result.body).toMatch('<span class="title"> Inloggen </span><span class="assistive">met Yivi</span>');
+    expect(result.body).toMatch('Inloggen met Yivi');
     if (result.body) {
-      fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
+      fs.writeFile(path.join(__dirname, 'output', 'test-yivi.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
     }
   });
 
@@ -71,7 +71,7 @@ describe('Test login page and urls', () => {
     expect(redirect.headers?.Location).toMatch(encodeURIComponent('idp_scoping:yivi'));
     expect(redirect.headers?.Location).toMatch('condiscon');
     const result = await loginRequestHandler.handleRequest(requestParams(''), dynamoDBClient);
-    expect(result.body).toMatch('<span class="title"> Inloggen </span><span class="assistive">met Yivi</span>');
+    expect(result.body).toMatch('Inloggen met Yivi');
     if (result.body) {
       fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
     }
@@ -116,7 +116,7 @@ describe('Test login page and urls', () => {
     });
     const result = await loginRequestHandler.handleRequest(requestParams(''), dynamoDBClient);
     expect(result.body).toMatch(('/login?method=eherkenning'));
-    expect(result.body).toMatch('<span class="title"> Inloggen </span><span class="assistive">met eHerkenning</span>');
+    expect(result.body).toMatch('Inloggen met eHerkenning');
     if (result.body) {
       fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
     }
