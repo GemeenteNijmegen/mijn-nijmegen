@@ -87,6 +87,7 @@ export class HomeRequestHandler {
         has_taken: taken ? true : false,
         xsrf_token: session.getValue('xsrf_token'),
         timeout,
+        header_additions: '<link rel="stylesheet" href="/static/styles/zaak.css">',
       };
       // render page
       const html = await render(data, homeTemplate.default,
