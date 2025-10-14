@@ -1,9 +1,11 @@
 import { MdiAccount, MdiAddressBook, MdiCurrencyEur, MdiFileMultiple, MdiOverview, Tasks } from './Icons';
 
 interface NavigationItem {
-  priority: number; // Sort based on priority
   url: string;
   title: string;
+}
+interface MenuBarNavigationItem extends NavigationItem {
+  priority: number; // Sort based on priority
   description: string;
   label: string;
   icon: string;
@@ -28,7 +30,7 @@ export class Navigation {
     },
   ];
 
-  contactgegevens: NavigationItem = {
+  contactgegevens: MenuBarNavigationItem = {
     priority: 60,
     url: '/contactgegevens',
     title: 'Mijn contactgegevens',
@@ -37,7 +39,7 @@ export class Navigation {
     icon: MdiAddressBook.default,
   };
 
-  producten: NavigationItem = {
+  producten: MenuBarNavigationItem = {
     priority: 70,
     url: '/producten',
     title: 'Mijn producten',
@@ -47,9 +49,9 @@ export class Navigation {
   };
 
 
-  organisationItems: NavigationItem[] = [];
+  organisationItems: MenuBarNavigationItem[] = [];
 
-  sharedItems: NavigationItem[] = [{
+  sharedItems: MenuBarNavigationItem[] = [{
     priority: 10,
     url: '/',
     title: 'Overzicht',
@@ -73,7 +75,7 @@ export class Navigation {
     icon: MdiFileMultiple.default,
   }];
 
-  items: NavigationItem[];
+  items: MenuBarNavigationItem[];
 
   constructor(navigationType: 'person' | 'organisation', config?: { currentPath: string; showContactgegevens?: boolean; showProducten?: boolean }) {
     if (navigationType == 'person') {
@@ -88,10 +90,25 @@ export class Navigation {
       this.items = [...this.organisationItems, ...this.sharedItems];
     }
     this.items = this.items
-      .sort((a:NavigationItem, b: NavigationItem) => a.priority - b.priority)
-      .map((item: NavigationItem) => {
+      .sort((a: MenuBarNavigationItem, b: MenuBarNavigationItem) => a.priority - b.priority)
+      .map((item: MenuBarNavigationItem) => {
         if (item.url == config?.currentPath) { item.current = true; }
         return item;
       });
+  }
+}
+
+export class BreadCrumbs {
+  items: { previous: NavigationItem, current: NavigationItem, items: NavigationItem[] } | false = false;
+  constructor(items: NavigationItem[]) {
+    if (items.length > 1) {
+      const previous = items[items.length - 2];
+      const current = items.pop()!;
+      this.items = {
+        previous,
+        current,
+        items,
+      }
+    }
   }
 }

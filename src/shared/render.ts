@@ -1,6 +1,7 @@
 import Mustache from 'mustache';
 import * as footer from './footer.mustache';
 import * as header from './header.mustache';
+import * as breadcrumbs from './breadcrumbs.mustache';
 
 /**
  * Render data in a mustache template
@@ -14,6 +15,7 @@ export async function render(data: any, template: string, partials?: { [key: str
   const fullPartials = {
     header: header.default,
     footer: footer.default,
+    breadcrumbs: breadcrumbs.default,
     ...partials,
   };
 
