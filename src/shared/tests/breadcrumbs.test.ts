@@ -1,4 +1,4 @@
-import { BreadCrumbs } from "../Navigation";
+import { BreadCrumbs } from '../Navigation';
 
 interface NavigationItem {
   url: string;
@@ -9,14 +9,14 @@ describe('BreadCrumbs', () => {
   describe('constructor', () => {
     it('should set items to false when given an empty array', () => {
       const breadcrumbs = new BreadCrumbs([]);
-      
+
       expect(breadcrumbs.items).toBe(false);
     });
 
     it('should set items to false when given a single item', () => {
       const navItem: NavigationItem = { url: '/home', title: 'Home' };
       const breadcrumbs = new BreadCrumbs([navItem]);
-      
+
       expect(breadcrumbs.items).toBe(false);
     });
 
@@ -24,7 +24,7 @@ describe('BreadCrumbs', () => {
       const navItem1: NavigationItem = { url: '/home', title: 'Home' };
       const navItem2: NavigationItem = { url: '/about', title: 'About' };
       const breadcrumbs = new BreadCrumbs([navItem1, navItem2]);
-      
+
       expect(breadcrumbs.items).not.toBe(false);
       if (breadcrumbs.items !== false) {
         expect(breadcrumbs.items.previous).toBe(navItem1);
@@ -38,9 +38,9 @@ describe('BreadCrumbs', () => {
       const navItem1: NavigationItem = { url: '/home', title: 'Home' };
       const navItem2: NavigationItem = { url: '/products', title: 'Products' };
       const navItem3: NavigationItem = { url: '/products/shoes', title: 'Shoes' };
-      
+
       const breadcrumbs = new BreadCrumbs([navItem1, navItem2, navItem3]);
-      
+
       expect(breadcrumbs.items).not.toBe(false);
       if (breadcrumbs.items !== false) {
         expect(breadcrumbs.items.previous).toBe(navItem2);
@@ -56,9 +56,9 @@ describe('BreadCrumbs', () => {
       const navItem3: NavigationItem = { url: '/products/shoes', title: 'Shoes' };
       const navItem4: NavigationItem = { url: '/products/shoes/nike', title: 'Nike' };
       const navItem5: NavigationItem = { url: '/products/shoes/nike/air-max', title: 'Air Max' };
-      
+
       const breadcrumbs = new BreadCrumbs([navItem1, navItem2, navItem3, navItem4, navItem5]);
-      
+
       expect(breadcrumbs.items).not.toBe(false);
       if (breadcrumbs.items !== false) {
         expect(breadcrumbs.items.previous).toBe(navItem4);
@@ -73,13 +73,13 @@ describe('BreadCrumbs', () => {
       const navItem2: NavigationItem = { url: '/about', title: 'About' };
       const navItem3: NavigationItem = { url: '/contact', title: 'Contact' };
       const testArray = [navItem1, navItem2, navItem3];
-      
+
       const breadcrumbs = new BreadCrumbs(testArray);
-      
+
       // The original array is mutated (last item removed by pop())
       expect(testArray).toEqual([navItem1, navItem2]);
       expect(testArray.length).toBe(2);
-      
+
       // But the items array in breadcrumbs.items still contains all except last
       if (breadcrumbs.items !== false) {
         expect(breadcrumbs.items.items).toEqual([navItem1, navItem2]);
@@ -90,9 +90,9 @@ describe('BreadCrumbs', () => {
       const navItem1: NavigationItem = { url: '/home', title: 'Home' };
       const navItem2: NavigationItem = { url: '/products', title: 'Products' };
       const navItem3: NavigationItem = { url: '/products/shoes', title: 'Shoes' };
-      
+
       const breadcrumbs = new BreadCrumbs([navItem1, navItem2, navItem3]);
-      
+
       if (breadcrumbs.items !== false) {
         expect(breadcrumbs.items.items).toHaveLength(2);
         expect(breadcrumbs.items.items).not.toContain(navItem3);
@@ -105,9 +105,9 @@ describe('BreadCrumbs', () => {
       const navItem1: NavigationItem = { url: '/home', title: 'Home' };
       const navItem2: NavigationItem = { url: '/products', title: 'Products' };
       const navItem3: NavigationItem = { url: '/products/shoes', title: 'Shoes' };
-      
+
       const breadcrumbs = new BreadCrumbs([navItem1, navItem2, navItem3]);
-      
+
       if (breadcrumbs.items !== false) {
         expect(breadcrumbs.items.previous.url).toBe('/products');
         expect(breadcrumbs.items.previous.title).toBe('Products');
@@ -118,9 +118,9 @@ describe('BreadCrumbs', () => {
       const navItem1: NavigationItem = { url: '/home', title: 'Home' };
       const navItem2: NavigationItem = { url: '/products', title: 'Products' };
       const navItem3: NavigationItem = { url: '/products/shoes', title: 'Shoes' };
-      
+
       const breadcrumbs = new BreadCrumbs([navItem1, navItem2, navItem3]);
-      
+
       if (breadcrumbs.items !== false) {
         expect(breadcrumbs.items.current.url).toBe('/products/shoes');
         expect(breadcrumbs.items.current.title).toBe('Shoes');

@@ -16,7 +16,7 @@ beforeAll(() => {
   global.fetch = jest.fn((url: string) =>
     Promise.resolve({
       json: () => {
-        console.debug('mocked fetch', url);  
+        console.debug('mocked fetch', url);
         return Promise.resolve([]);
       },
       headers: {

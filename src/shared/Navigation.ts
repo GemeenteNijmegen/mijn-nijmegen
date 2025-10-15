@@ -99,7 +99,7 @@ export class Navigation {
 }
 
 export class BreadCrumbs {
-  items: { previous: NavigationItem, current: NavigationItem, items: NavigationItem[] } | false = false;
+  items: { previous: NavigationItem; current: NavigationItem; items: NavigationItem[] } | false = false;
   constructor(items: NavigationItem[]) {
     if (items.length > 1) {
       const previous = items[items.length - 2];
@@ -108,7 +108,7 @@ export class BreadCrumbs {
         previous,
         current,
         items,
-      }
+      };
     }
   }
 }

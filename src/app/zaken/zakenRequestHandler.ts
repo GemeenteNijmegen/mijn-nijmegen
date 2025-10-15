@@ -222,14 +222,14 @@ export class ZakenRequestHandler {
       }, {
         title: 'Mijn zaken',
         url: '/zaken',
-      }
+      },
     ];
-    if(formattedZaak && path) {
+    if (formattedZaak && path) {
       crumbs.push(
-      {
-        title: formattedZaak?.zaak_type ?? 'Zaak',
-        url: path,
-      });
+        {
+          title: formattedZaak?.zaak_type ?? 'Zaak',
+          url: path,
+        });
     }
     return new BreadCrumbs(crumbs);
   }

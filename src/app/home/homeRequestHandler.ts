@@ -75,7 +75,7 @@ export class HomeRequestHandler {
         showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
         showProducten: process.env.SHOW_PRODUCTEN == 'True',
       });
-      
+
       const data = {
         title: 'overzicht',
         shownav: true,

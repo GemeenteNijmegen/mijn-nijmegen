@@ -61,7 +61,7 @@ export class TaakrequestHandler {
         return Response.json({ elements: [taken] });
       }
     } else {
-      
+
 
       const data = {
         title: 'overzicht',
@@ -88,11 +88,11 @@ export class TaakrequestHandler {
     }
   }
 
-  private setupNavigation(user: User,) {
+  private setupNavigation(user: User) {
     const navigation = new Navigation(user.type, {
-        currentPath: '/taken',
-        showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
-      });
+      currentPath: '/taken',
+      showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
+    });
     const breadcrumbs = new BreadCrumbs([
       {
         title: 'Home',
@@ -100,7 +100,7 @@ export class TaakrequestHandler {
       }, {
         title: 'Mijn taken',
         url: '/taken',
-      }
+      },
     ]);
     return { navigation, breadcrumbs };
   }
