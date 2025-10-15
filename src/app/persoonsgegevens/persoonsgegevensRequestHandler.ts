@@ -8,7 +8,7 @@ import { Persoonsgegevens, PersoonsgegevensMapper } from './Persoonsgegevens';
 import * as template from './templates/persoonsgegevens.mustache';
 import { BrpApi } from '../../shared/BrpApi';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
-import { Navigation } from '../../shared/Navigation';
+import { BreadCrumbs, Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 
 interface RenderData {
@@ -16,6 +16,7 @@ interface RenderData {
   title: string;
   shownav: boolean;
   nav: any;
+  breadcrumbs: any;
   persoonsgegevens?: Persoonsgegevens;
   error?: string;
 }
@@ -72,11 +73,14 @@ export class PersoonsgegevensRequestHandler {
       currentPath: '/persoonsgegevens',
       showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
     });
+
+    const breadcrumbs = this.setupBreadcrumbs();
     const data: RenderData = {
       volledigenaam: session.getValue('username'),
       title: 'Mijn gegevens',
       shownav: true,
       nav: navigation.items,
+      breadcrumbs: breadcrumbs.items,
       persoonsgegevens: undefined,
       error: undefined,
     };
@@ -106,5 +110,18 @@ export class PersoonsgegevensRequestHandler {
     // render page
     const html = await render(data, template.default);
     return Response.html(html, 200, session.getCookie());
+  }
+
+  private setupBreadcrumbs() {
+    const crumbs = [
+      {
+        title: 'Home',
+        url: '/',
+      }, {
+        title: 'Mijn gegevens',
+        url: '/persoonsgegevens',
+      },
+    ];
+    return new BreadCrumbs(crumbs);
   }
 }

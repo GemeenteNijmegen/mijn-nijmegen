@@ -6,7 +6,7 @@ import { Session } from '@gemeentenijmegen/session';
 import * as template from './templates/uitkeringen.mustache';
 import * as uitkering from './templates/uitkerings-item.mustache';
 import { UitkeringsApi } from './UitkeringsApi';
-import { Navigation } from '../../shared/Navigation';
+import { BreadCrumbs, Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 
 interface Config {
@@ -56,8 +56,10 @@ export class uitkeringsRequestHandler {
       currentPath: '/uitkeringen',
       showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
     });
-    data.nav = navigation.items;
 
+    const breadcrumbs = this.setupBreadcrumbs();
+    data.nav = navigation.items;
+    data.breadcrumbs = breadcrumbs.items;
     const html = await this.renderHtml(data);
 
     return Response.html(html, 200, session.getCookie());
@@ -72,5 +74,18 @@ export class uitkeringsRequestHandler {
       uitkering: uitkering.default,
     });
     return html;
+  }
+
+  private setupBreadcrumbs() {
+    const crumbs = [
+      {
+        title: 'Home',
+        url: '/',
+      }, {
+        title: 'Mijn uitkeringen',
+        url: '/uitkeringen',
+      },
+    ];
+    return new BreadCrumbs(crumbs);
   }
 }
