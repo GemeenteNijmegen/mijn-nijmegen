@@ -9,6 +9,10 @@
       "type": "build"
     },
     {
+      "name": "@gemeentenijmegen/components-css",
+      "type": "build"
+    },
+    {
       "name": "@gemeentenijmegen/design-tokens",
       "type": "build"
     },

@@ -53,6 +53,7 @@ const project = new GemeenteNijmegenCdkApp({
     'jest-aws-client-mock',
     'esbuild',
     '@gemeentenijmegen/design-tokens',
+    '@gemeentenijmegen/components-css',
     '@utrecht/document-css@1.5.0',
     '@utrecht/button-css@2.3.0',
   ], /* Build dependencies for this module. */
