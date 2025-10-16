@@ -38,8 +38,8 @@ const project = new GemeenteNijmegenCdkApp({
     'content-disposition',
   ], /* Runtime dependencies of this module. */
   devDeps: [
-    '@types/validator',
-    '@types/content-disposition',
+  '@types/validator',
+  '@types/content-disposition',
     '@types/aws-lambda',
     '@aws-sdk/types',
     '@aws-sdk/client-ssm',
@@ -56,6 +56,7 @@ const project = new GemeenteNijmegenCdkApp({
     '@gemeentenijmegen/components-css',
     '@utrecht/document-css@1.5.0',
     '@utrecht/button-css@2.3.0',
+    '@utrecht/paragraph-css@2.3.1',
   ], /* Build dependencies for this module. */
   mutableBuild: true,
   jestOptions: {
