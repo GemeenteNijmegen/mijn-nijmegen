@@ -311,3 +311,11 @@ nav.nijmegen-sidenav li.active svg {
 }
 
 .spinner{transform-origin:center;animation:spinner_spin .75s infinite linear}@keyframes spinner_spin{100%{transform:rotate(360deg)}}
+
+
+/**
+ * Design system compatibility 
+ */
+footer.nijmegen-footer {
+    margin-top: 2rem;
+}
