@@ -38,8 +38,8 @@ const project = new GemeenteNijmegenCdkApp({
     'content-disposition',
   ], /* Runtime dependencies of this module. */
   devDeps: [
-  '@types/validator',
-  '@types/content-disposition',
+    '@types/validator',
+    '@types/content-disposition',
     '@types/aws-lambda',
     '@aws-sdk/types',
     '@aws-sdk/client-ssm',
