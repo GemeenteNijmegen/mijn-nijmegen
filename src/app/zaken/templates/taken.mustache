@@ -55,5 +55,8 @@
     {{^incompleteResults}}
         <p>U heeft geen openstaande taken.</p>
     {{/incompleteResults}}
+    {{^hasCompletedAllTasks}}
+        <p>U heeft al uw openstaande taken afgerond.</p>
+    {{/hasCompletedAllTasks}}
 {{/taken}}
 </div>

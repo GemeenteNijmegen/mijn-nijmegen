@@ -12,7 +12,7 @@ import * as zaakRow from '../zaken/templates/zaak-row.mustache';
 import * as zakenListPartial from '../zaken/templates/zaken-table.mustache';
 import { UserFromSession } from '../zaken/User';
 import { ZaakFormatter } from '../zaken/ZaakFormatter';
-import { TaakSummariesResponseSchema, TaakSummariesSchema, TaakSummary, ZaakSummariesResponseSchema } from '../zaken/ZaakInterface';
+import { TaakSummariesResponseSchema, TaakSummary, ZaakSummariesResponseSchema } from '../zaken/ZaakInterface';
 import { ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
 import * as homeTemplate from './templates/home.mustache';
 
@@ -111,20 +111,19 @@ export class HomeRequestHandler {
     const endpoint = 'taken';
     const json = await this.zakenConnector.fetch(endpoint, user);
 
-    // Handle new style response from zaakaggregator
-    if (json.results) {
-      try {
-        const taken = TaakSummariesResponseSchema.parse(json);
-        return await this.takenListHtml(taken.results.filter(taak => taak.is_open), taken.incompleteResults);
-      } catch (error) {
-        logger.error('Failed parsing taken');
-        throw (error);
-      }
+    try {
+      const taken = TaakSummariesResponseSchema.parse(json);
+
+      const homePageTaken = taken.results.filter(taak => taak.is_open);
+
+      const hasCompletedAllTasks = taken.results.length > 0 && homePageTaken.length == 0;
+
+      return await this.takenListHtml(homePageTaken, taken.incompleteResults, hasCompletedAllTasks);
+    } catch (error) {
+      logger.error('Failed parsing taken');
+      throw (error);
     }
 
-    // Handle old style response from zaakaggregator
-    const taken = TaakSummariesSchema.parse(json);
-    return this.takenListHtml(taken.filter(taak => taak.is_open));
   }
 
   private async zakenList(session: Session) {
@@ -149,9 +148,9 @@ export class HomeRequestHandler {
     return false;
   }
 
-  private async takenListHtml(taakSummaries: TaakSummary[], incompleteResults?: boolean) {
+  private async takenListHtml(taakSummaries: TaakSummary[], incompleteResults?: boolean, hasCompletedAllTasks?: boolean) {
     if (taakSummaries) {
-      const html = await render({ taken: taakSummaries, takenid: 'taken-list', incompleteResults }, takenListPartial.default);
+      const html = await render({ taken: taakSummaries, takenid: 'taken-list', incompleteResults, hasCompletedAllTasks }, takenListPartial.default);
       return html;
     }
     return false;
