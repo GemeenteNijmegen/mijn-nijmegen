@@ -1,14 +1,14 @@
-import * as fs from 'fs';
-import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { GetSecretValueCommand, GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'aws-sdk-client-mock';
+import * as fs from 'fs';
+import path from 'path';
 import { ZaakSummary } from '../../zaken/ZaakInterface';
 import { HomeRequestHandler } from '../homeRequestHandler';
 
 beforeAll(() => {
 
-  if (process.env.VERBOSETESTS!='True') {
+  if (process.env.VERBOSETESTS != 'True') {
     global.console.error = jest.fn();
     global.console.time = jest.fn();
     global.console.log = jest.fn();
@@ -111,7 +111,7 @@ test('Shows overview page', async () => {
   const result = await handler.handleRequest({ cookies: 'session=12345', responseType: 'html' });
   expect(result.body).toMatch('Mijn Nijmegen');
   expect(result.body).toMatch('Jan de Tester');
-  fs.writeFile(path.join(__dirname, 'output', 'test2.html'), result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '', () => { });
+  fs.writeFile(path.join(__dirname, 'output', 'test2.html'), result.body ? result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '', () => { });
 });
 
 // Test does not seem to make html - but json - and does not find zaaktype. And has duplicate name
@@ -120,5 +120,6 @@ xtest('Shows overview page - disabled', async () => {
   const handler = new HomeRequestHandler(dynamoDBClient);
   const result = await handler.handleRequest({ cookies: 'session=12345', responseType: 'json' });
   expect(result.body).toMatch('<td>zaaktype1</td>');
-  fs.writeFile(path.join(__dirname, 'output', 'test.json'), result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '', () => { });
+  fs.writeFile(path.join(__dirname, 'output', 'test.json'), result.body ? result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '', () => { });
 });
+
