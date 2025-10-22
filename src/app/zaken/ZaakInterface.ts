@@ -10,6 +10,7 @@ export const TaakSummarySchema = z.object({
   is_afgerond: z.boolean(),
   is_verwerkt: z.boolean(),
   is_gesloten: z.boolean(),
+  laatstBewerktOp: z.string(),
   attachments: z.array(z.object({
     title: z.string(),
     url: z.string(),

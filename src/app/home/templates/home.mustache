@@ -6,85 +6,72 @@
         {{>breadcrumbs}}
 
         <div class="row">
-        <nav class="nijmegen-sidenav col-lg-3 col-md-12">
+            <nav class="nijmegen-sidenav col-lg-3 col-md-12">
                 <ul class="nijmegen-sidenav__list">
-                {{#nav}}
+                    {{#nav}}
                     <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
                         {{{icon}}}
                         <a href="{{{url}}}">{{title}}</a>
                     </li>
-                {{/nav}}
+                    {{/nav}}
                 </ul>
-        </nav>
-        <div class="col-lg-9 col-md-12">
-            <h1>Mijn Nijmegen</h1>
-            <p class="lead">Bekijk uw persoonsgegevens, uitkeringsgegevens of lopende zaken.</p>
-            <div>
-            {{#timeout}}
-            <div class="header-readmore">
-                <h2>Belangrijke taken om te regelen</h2>
-                <a href="/taken">Bekijk alle taken {{>arrow-right}}</a>
-            </div>
-            <p id="taken-list">Bezig met ophalen van uw open taken… {{>spinner}}</p>
-            {{/timeout}}
-            {{#has_taken}}
-            <div class="header-readmore">
-                <h2>Belangrijke taken om te regelen</h2>
-                <a href="/taken">Bekijk alle taken {{>arrow-right}}</a>
-            </div>
-            {{{taken}}}
-            {{/has_taken}}
-            </div>
-            <div>
-            {{#has_zaken}}
-            <div class="header-readmore">
-                <h2>Mijn zaken</h2>
-                <a href="/zaken">Bekijk alle zaken {{>arrow-right}}</a>
-            </div>
-            {{{zaken}}}
-            {{/has_zaken}}
-            {{#timeout}}
-            <div class="header-readmore">
-                <h2>Mijn zaken</h2>
-                <a href="/zaken">Bekijk alle zaken {{>arrow-right}}</a>
-            </div>
-            <p id="open-zaken-list">Bezig met ophalen van uw open zaken… {{>spinner}}</p>
-            {{/timeout}}
-            </div>
-            <div>
-                <h2>Andere portalen</h2>
-                <ul role="list" class="utrecht-link-list utrecht-link-list--html-ul">
-                        <li class="utrecht-link-list__item">
-                            <a href="https://parkeerproducten.nijmegen.nl/loginSelection" class="utrecht-link utrecht-link--html-a utrecht-link-list__link">
-                                <span class="utrecht-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-chevron-right">
-                                        <path d="M9 6l6 6l-6 6"></path>
-                                    </svg>
-                                </span>
-                                <span class="utrecht-link-list__link-text">Parkeren</span>
+            </nav>
+            <div class="col-lg-9 col-md-12">
+                <h1>Mijn Nijmegen</h1>
+                <p class="lead">Bekijk uw persoonsgegevens, uitkeringsgegevens of lopende zaken.</p>
+                <div>
+                    {{#timeout}}
+                    <div class="header-readmore">
+                        <h2>Belangrijke taken om te regelen</h2>
+                        <a href="/taken">Bekijk alle taken {{>arrow-right}}</a>
+                    </div>
+                    <p id="taken-list">Bezig met ophalen van uw open taken… {{>spinner}}</p>
+                    {{/timeout}}
+                    {{#has_taken}}
+                    <div class="header-readmore">
+                        <h2>Belangrijke taken om te regelen</h2>
+                        <a href="/taken">Bekijk alle taken {{>arrow-right}}</a>
+                    </div>
+                    {{{taken}}}
+                    {{/has_taken}}
+                </div>
+                <div>
+                    {{#has_zaken}}
+                    <div class="header-readmore">
+                        <h2>Mijn zaken</h2>
+                        <a href="/zaken">Bekijk alle zaken {{>arrow-right}}</a>
+                    </div>
+                    {{{zaken}}}
+                    {{/has_zaken}}
+                    {{#timeout}}
+                    <div class="header-readmore">
+                        <h2>Mijn zaken</h2>
+                        <a href="/zaken">Bekijk alle zaken {{>arrow-right}}</a>
+                    </div>
+                    <p id="open-zaken-list">Bezig met ophalen van uw open zaken… {{>spinner}}</p>
+                    {{/timeout}}
+                </div>
+                <div>
+                    <h2>Andere portalen</h2>
+                    <ul class="nijmegen-link-list">
+                        <li class="nijmegen-link-list__item">
+                            <a href="https://parkeerproducten.nijmegen.nl/loginSelection"
+                                class="nijmegen-link-list__link">
+                                Parkeren
                             </a>
                         </li>
-                        <li class="utrecht-link-list__item">
-                            <a href="https://belastingen.nijmegen.nl/view/LOGIN" class="utrecht-link utrecht-link--html-a utrecht-link-list__link">
-                                <span class="utrecht-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-chevron-right">
-                                        <path d="M9 6l6 6l-6 6"></path>
-                                    </svg>
-                                </span>
-                                <span class="utrecht-link-list__link-text">Belastingen</span>
+                        <li class="nijmegen-link-list__item">
+                            <a href="https://belastingen.nijmegen.nl/view/LOGIN" class="nijmegen-link-list__link">
+                                Belastingen
                             </a>
                         </li>
-                        <li class="utrecht-link-list__item">
-                            <a href="https://subsidies.nijmegen.nl/inloggen" class="utrecht-link utrecht-link--html-a utrecht-link-list__link">
-                                <span class="utrecht-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-chevron-right">
-                                        <path d="M9 6l6 6l-6 6"></path>
-                                    </svg>
-                                </span>
-                                <span class="utrecht-link-list__link-text">Subsidie</span>
+                        <li class="nijmegen-link-list__item">
+                            <a href="https://subsidies.nijmegen.nl/inloggen" class="nijmegen-link-list__link">
+                                Subsidie
                             </a>
                         </li>
-                </ul>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
