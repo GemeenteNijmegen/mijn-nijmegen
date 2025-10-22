@@ -115,7 +115,13 @@ export class HomeRequestHandler {
     if (json.results) {
       try {
         const taken = TaakSummariesResponseSchema.parse(json);
-        return await this.takenListHtml(taken.results.filter(taak => taak.is_open), taken.incompleteResults);
+        const takenToRender = taken.results.filter(taak => {
+          const isOpen = taak.is_open;
+          const isRecentAfgerond = taak.is_afgerond && this.isLessThanDaysAgo(taak.laatstBewerktOp);
+          const isRecentVerwerkt = taak.is_verwerkt && this.isLessThanDaysAgo(taak.laatstBewerktOp);
+          return isOpen || isRecentAfgerond || isRecentVerwerkt;
+        });
+        return await this.takenListHtml(takenToRender, taken.incompleteResults);
       } catch (error) {
         logger.error('Failed parsing taken');
         throw (error);
@@ -156,4 +162,17 @@ export class HomeRequestHandler {
     }
     return false;
   }
+
+  private isLessThanDaysAgo(dateString: string, days = 2) {
+    const parsedDate = new Date(dateString + 'T00:00:00');
+    if (isNaN(parsedDate.getTime())) {
+      throw new Error("Invalid date format. Expected 'YYYY-MM-DD'");
+    }
+    const diffMs = Date.now() - parsedDate.getMilliseconds();
+    const hoursDiff = diffMs / (1000 * 60 * 60); // 1000 ms * 60 sec * 60 min
+    // True if date is in the past and within X days ago
+    return diffMs > 0 && hoursDiff < days * 24;
+  }
+
+
 }
