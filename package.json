@@ -91,7 +91,7 @@
     "@gemeentenijmegen/apiclient": "^0.0.35",
     "@gemeentenijmegen/apigateway-http": "^0.0.32",
     "@gemeentenijmegen/aws-constructs": "^0.0.44",
-    "@gemeentenijmegen/projen-project-type": "^1.11.6",
+    "@gemeentenijmegen/projen-project-type": "^1.11.7",
     "@gemeentenijmegen/session": "^0.0.31",
     "@gemeentenijmegen/utils": "^0.0.38",
     "@types/mustache": "^4.2.6",
