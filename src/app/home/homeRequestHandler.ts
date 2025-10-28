@@ -15,6 +15,7 @@ import { ZaakFormatter } from '../zaken/ZaakFormatter';
 import { TaakSummariesResponseSchema, TaakSummariesSchema, TaakSummary, ZaakSummariesResponseSchema } from '../zaken/ZaakInterface';
 import { ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
 import * as homeTemplate from './templates/home.mustache';
+import { Util } from './Util';
 
 
 interface HomeRequestHandlerProps {
@@ -115,7 +116,13 @@ export class HomeRequestHandler {
     if (json.results) {
       try {
         const taken = TaakSummariesResponseSchema.parse(json);
-        return await this.takenListHtml(taken.results.filter(taak => taak.is_open), taken.incompleteResults);
+        const takenToRender = taken.results.filter(taak => {
+          const isOpen = taak.is_open;
+          const isRecentAfgerond = taak.is_afgerond && Util.isLessThanDaysAgo(taak.laatstBewerktOp);
+          const isRecentVerwerkt = taak.is_verwerkt && Util.isLessThanDaysAgo(taak.laatstBewerktOp);
+          return isOpen || isRecentAfgerond || isRecentVerwerkt;
+        });
+        return await this.takenListHtml(takenToRender, taken.incompleteResults);
       } catch (error) {
         logger.error('Failed parsing taken');
         throw (error);
@@ -156,4 +163,5 @@ export class HomeRequestHandler {
     }
     return false;
   }
+
 }
