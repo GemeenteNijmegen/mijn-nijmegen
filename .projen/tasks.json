@@ -83,7 +83,7 @@
       "description": "Create a JavaScript bundle from src/app/auth/auth.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/auth/auth.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/auth/auth.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+          "exec": "esbuild --bundle src/app/auth/auth.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/auth/auth.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
         }
       ]
     },
@@ -92,7 +92,7 @@
       "description": "Continuously update the JavaScript bundle from src/app/auth/auth.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/auth/auth.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/auth/auth.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+          "exec": "esbuild --bundle src/app/auth/auth.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/auth/auth.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
         }
       ]
     },
@@ -101,7 +101,7 @@
       "description": "Create a JavaScript bundle from src/app/contactgegevens/contactgegevens.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/contactgegevens/contactgegevens.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/contactgegevens/contactgegevens.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+          "exec": "esbuild --bundle src/app/contactgegevens/contactgegevens.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/contactgegevens/contactgegevens.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
         }
       ]
     },
@@ -110,7 +110,7 @@
       "description": "Continuously update the JavaScript bundle from src/app/contactgegevens/contactgegevens.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/contactgegevens/contactgegevens.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/contactgegevens/contactgegevens.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+          "exec": "esbuild --bundle src/app/contactgegevens/contactgegevens.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/contactgegevens/contactgegevens.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
         }
       ]
     },
@@ -119,7 +119,7 @@
       "description": "Create a JavaScript bundle from src/app/home/home.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/home/home.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/home/home.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+          "exec": "esbuild --bundle src/app/home/home.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/home/home.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
         }
       ]
     },
@@ -128,7 +128,7 @@
       "description": "Continuously update the JavaScript bundle from src/app/home/home.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/home/home.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/home/home.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+          "exec": "esbuild --bundle src/app/home/home.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/home/home.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
         }
       ]
     },
@@ -137,7 +137,7 @@
       "description": "Create a JavaScript bundle from src/app/login/login.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/login/login.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/login/login.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+          "exec": "esbuild --bundle src/app/login/login.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/login/login.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
         }
       ]
     },
@@ -146,7 +146,7 @@
       "description": "Continuously update the JavaScript bundle from src/app/login/login.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/login/login.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/login/login.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+          "exec": "esbuild --bundle src/app/login/login.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/login/login.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
         }
       ]
     },
@@ -155,7 +155,7 @@
       "description": "Create a JavaScript bundle from src/app/logout/logout.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/logout/logout.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/logout/logout.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+          "exec": "esbuild --bundle src/app/logout/logout.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/logout/logout.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
         }
       ]
     },
@@ -164,7 +164,7 @@
       "description": "Continuously update the JavaScript bundle from src/app/logout/logout.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/logout/logout.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/logout/logout.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+          "exec": "esbuild --bundle src/app/logout/logout.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/logout/logout.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
         }
       ]
     },
@@ -173,7 +173,7 @@
       "description": "Create a JavaScript bundle from src/app/persoonsgegevens/persoonsgegevens.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/persoonsgegevens/persoonsgegevens.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/persoonsgegevens/persoonsgegevens.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+          "exec": "esbuild --bundle src/app/persoonsgegevens/persoonsgegevens.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/persoonsgegevens/persoonsgegevens.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
         }
       ]
     },
@@ -182,7 +182,7 @@
       "description": "Continuously update the JavaScript bundle from src/app/persoonsgegevens/persoonsgegevens.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/persoonsgegevens/persoonsgegevens.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/persoonsgegevens/persoonsgegevens.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+          "exec": "esbuild --bundle src/app/persoonsgegevens/persoonsgegevens.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/persoonsgegevens/persoonsgegevens.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
         }
       ]
     },
@@ -191,7 +191,7 @@
       "description": "Create a JavaScript bundle from src/app/producten/producten.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/producten/producten.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/producten/producten.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+          "exec": "esbuild --bundle src/app/producten/producten.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/producten/producten.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
         }
       ]
     },
@@ -200,7 +200,7 @@
       "description": "Continuously update the JavaScript bundle from src/app/producten/producten.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/producten/producten.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/producten/producten.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+          "exec": "esbuild --bundle src/app/producten/producten.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/producten/producten.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
         }
       ]
     },
@@ -209,7 +209,7 @@
       "description": "Create a JavaScript bundle from src/app/taken/taken.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/taken/taken.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/taken/taken.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+          "exec": "esbuild --bundle src/app/taken/taken.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/taken/taken.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
         }
       ]
     },
@@ -218,7 +218,7 @@
       "description": "Continuously update the JavaScript bundle from src/app/taken/taken.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/taken/taken.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/taken/taken.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+          "exec": "esbuild --bundle src/app/taken/taken.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/taken/taken.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
         }
       ]
     },
@@ -227,7 +227,7 @@
       "description": "Create a JavaScript bundle from src/app/uitkeringen/uitkering.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/uitkeringen/uitkering.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/uitkeringen/uitkering.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+          "exec": "esbuild --bundle src/app/uitkeringen/uitkering.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/uitkeringen/uitkering.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
         }
       ]
     },
@@ -236,7 +236,7 @@
       "description": "Continuously update the JavaScript bundle from src/app/uitkeringen/uitkering.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/uitkeringen/uitkering.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/uitkeringen/uitkering.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+          "exec": "esbuild --bundle src/app/uitkeringen/uitkering.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/uitkeringen/uitkering.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
         }
       ]
     },
@@ -245,7 +245,7 @@
       "description": "Create a JavaScript bundle from src/app/zaken/zaken.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/zaken/zaken.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/zaken/zaken.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
+          "exec": "esbuild --bundle src/app/zaken/zaken.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/zaken/zaken.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text"
         }
       ]
     },
@@ -254,7 +254,7 @@
       "description": "Continuously update the JavaScript bundle from src/app/zaken/zaken.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/app/zaken/zaken.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/app/zaken/zaken.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
+          "exec": "esbuild --bundle src/app/zaken/zaken.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/app/zaken/zaken.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.mustache=text --watch"
         }
       ]
     },

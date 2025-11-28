@@ -1386,10 +1386,10 @@
   resolved "https://registry.yarnpkg.com/@gemeentenijmegen/design-tokens/-/design-tokens-0.0.2-alpha.78.tgz#00359235ad9b5998e0bde91325bfd22ebbe5b6a3"
   integrity sha512-ojeBdGaZbqyQOd5RYNDHmhtzuTCYPkPMpdiHv7433DNu3Z/1d8q6WXoFkYdeP8IHJ5tuunlLFYTHSsHvfbux0w==
 
-"@gemeentenijmegen/projen-project-type@^1.11.8":
-  version "1.11.8"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/projen-project-type/-/projen-project-type-1.11.8.tgz#b2505252da6816338df5b92fbc51f6b435ea628d"
-  integrity sha512-SfSLInSig8X5I7xyCrCiZSuwgk8Lw+9q7GuaNrtuNnGCScxnEe5cLcPZYd73usJUkB8isN/OcN0OppUXrx9cug==
+"@gemeentenijmegen/projen-project-type@^1.11.10":
+  version "1.11.10"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/projen-project-type/-/projen-project-type-1.11.10.tgz#d06643d09b1239c995550f69d15a36991a020b9b"
+  integrity sha512-O9jzKIB2QvbkKAUqW9GUb1DmDT7dIeGl/h8qsIIFH3MjacEqWPTrgfCrJae+N9hr/SbSS6cJjy8jgSY20NqJrw==
 
 "@gemeentenijmegen/session@^0.0.31":
   version "0.0.31"
