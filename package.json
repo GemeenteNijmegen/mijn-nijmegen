@@ -51,8 +51,8 @@
   "devDependencies": {
     "@aws-sdk/client-ssm": "^3.940.0",
     "@aws-sdk/types": "^3.936.0",
-    "@gemeentenijmegen/components-css": "^0.0.1-alpha.53",
-    "@gemeentenijmegen/design-tokens": "^0.0.2-alpha.78",
+    "@gemeentenijmegen/components-css": "^0.0.1-alpha.56",
+    "@gemeentenijmegen/design-tokens": "^0.0.2-alpha.81",
     "@glen/jest-raw-loader": "^2.0.0",
     "@playwright/test": "^1.57.0",
     "@stylistic/eslint-plugin": "^2",
@@ -79,7 +79,7 @@
     "jest-aws-client-mock": "^0.0.26",
     "jest-junit": "^16",
     "projen": "^0.98.26",
-    "ts-jest": "^29.4.5",
+    "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "typescript": "^4.9.5"
   },
@@ -92,7 +92,7 @@
     "@gemeentenijmegen/apigateway-http": "^0.0.33",
     "@gemeentenijmegen/aws-constructs": "^0.0.45",
     "@gemeentenijmegen/projen-project-type": "^1.11.10",
-    "@gemeentenijmegen/session": "^0.0.31",
+    "@gemeentenijmegen/session": "^0.0.32",
     "@gemeentenijmegen/utils": "^0.0.38",
     "@types/mustache": "^4.2.6",
     "aws-cdk-lib": "^2.22.0",
