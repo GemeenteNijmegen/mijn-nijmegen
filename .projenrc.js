@@ -36,7 +36,7 @@ const project = new GemeenteNijmegenCdkApp({
     'zod',
     'validator',
     'content-disposition',
-  ], /* Runtime dependencies of this module. */
+  ],
   devDeps: [
     '@types/validator',
     '@types/content-disposition',
@@ -50,7 +50,6 @@ const project = new GemeenteNijmegenCdkApp({
     '@playwright/test',
     'aws-sdk-client-mock',
     '@glen/jest-raw-loader',
-    // 'jest-aws-client-mock',
     'esbuild',
     '@gemeentenijmegen/design-tokens',
     '@gemeentenijmegen/components-css',
@@ -59,8 +58,10 @@ const project = new GemeenteNijmegenCdkApp({
     '@utrecht/paragraph-css@2.3.1',
     'vitest',
     'aws-sdk-client-mock',
-  ], /* Build dependencies for this module. */
-  mutableBuild: true,
+  ],
+  buildWorkflowOptions: {
+    mutableBuild: true,
+  },
   jest: false, // Disable jest and use vitest
   eslintOptions: {
     devdirs: ['src/**/tests', '/test', '/build-tools'],
