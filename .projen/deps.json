@@ -1,10 +1,6 @@
 {
   "dependencies": [
     {
-      "name": "@aws-sdk/client-ssm",
-      "type": "build"
-    },
-    {
       "name": "@aws-sdk/types",
       "type": "build"
     },
@@ -14,10 +10,6 @@
     },
     {
       "name": "@gemeentenijmegen/design-tokens",
-      "type": "build"
-    },
-    {
-      "name": "@glen/jest-raw-loader",
       "type": "build"
     },
     {
@@ -89,10 +81,6 @@
       "type": "build"
     },
     {
-      "name": "copyfiles",
-      "type": "build"
-    },
-    {
       "name": "esbuild",
       "type": "build"
     },
@@ -138,7 +126,7 @@
       "type": "runtime"
     },
     {
-      "name": "@aws-solutions-constructs/aws-lambda-dynamodb",
+      "name": "@aws-sdk/client-ssm",
       "type": "runtime"
     },
     {

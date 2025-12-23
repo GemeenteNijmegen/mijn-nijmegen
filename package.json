@@ -48,11 +48,9 @@
     "projen": "npx projen"
   },
   "devDependencies": {
-    "@aws-sdk/client-ssm": "^3.956.0",
     "@aws-sdk/types": "^3.956.0",
     "@gemeentenijmegen/components-css": "^0.0.1-alpha.61",
     "@gemeentenijmegen/design-tokens": "^0.0.2-alpha.86",
-    "@glen/jest-raw-loader": "^2.0.0",
     "@playwright/test": "^1.57.0",
     "@stylistic/eslint-plugin": "^2",
     "@types/aws-lambda": "^8.10.159",
@@ -68,7 +66,6 @@
     "aws-sdk-client-mock": "^2.2.0",
     "axios-mock-adapter": "^1.22.0",
     "commit-and-tag-version": "^12",
-    "copyfiles": "^2.4.1",
     "esbuild": "^0.27.2",
     "eslint": "^9",
     "eslint-import-resolver-typescript": "^3.10.1",
@@ -82,7 +79,7 @@
     "@aws-lambda-powertools/logger": "^1.18.1",
     "@aws-sdk/client-dynamodb": "^3.956.0",
     "@aws-sdk/client-secrets-manager": "^3.956.0",
-    "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.96.0",
+    "@aws-sdk/client-ssm": "^3.957.0",
     "@gemeentenijmegen/apiclient": "^0.0.38",
     "@gemeentenijmegen/apigateway-http": "^0.0.34",
     "@gemeentenijmegen/aws-constructs": "^0.0.46",
