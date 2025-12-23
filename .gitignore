@@ -30,6 +30,7 @@ jspm_packages/
 *.tgz
 .yarn-integrity
 .cache
+test-reports
 src/app/**/tests/output
 src/app/static-resources/static/styles/ds.*
 test-reports/junit.xml
