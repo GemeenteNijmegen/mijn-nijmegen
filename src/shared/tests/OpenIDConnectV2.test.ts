@@ -1,5 +1,6 @@
 import { GetSecretValueCommand, GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'aws-sdk-client-mock';
+import { describe, expect, test } from 'vitest';
 import { OpenIDConnectV2 } from '../OpenIDConnectV2';
 
 const describeLiveOIDC = process.env.LIVE_OIDC_TESTS === 'true' ? describe : describe.skip;

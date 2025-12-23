@@ -1,7 +1,7 @@
 import Mustache from 'mustache';
-import * as breadcrumbs from './breadcrumbs.mustache';
-import * as footer from './footer.mustache';
-import * as header from './header.mustache';
+import * as breadcrumbs from './breadcrumbs.mustache?raw';
+import * as footer from './footer.mustache?raw';
+import * as header from './header.mustache?raw';
 
 /**
  * Render data in a mustache template

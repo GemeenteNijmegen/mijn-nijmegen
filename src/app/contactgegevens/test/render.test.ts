@@ -1,8 +1,9 @@
 
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { test } from 'vitest';
 import { Navigation } from '../../../shared/Navigation';
 import { render } from '../../../shared/render';
-import * as editTemplate from '../templates/edit-contactgegevens.mustache';
+import * as editTemplate from '../templates/edit-contactgegevens.mustache?raw';
 
 test('Render edit page', async () => {
 

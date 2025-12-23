@@ -1,18 +1,15 @@
+import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
+import { mockClient } from 'aws-sdk-client-mock';
 import * as fs from 'fs';
 import * as path from 'path';
-import { DynamoDBClient, GetItemCommandOutput, GetItemCommand } from '@aws-sdk/client-dynamodb';
-import { mockClient } from 'aws-sdk-client-mock';
+import { beforeAll, beforeEach, describe, expect, test } from 'vitest';
 import { LoginRequestHandler } from '../loginRequestHandler';
 
 const ddbMock = mockClient(DynamoDBClient);
 const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
 
 beforeAll(() => {
-  if (process.env.VERBOSETESTS != 'True') {
-    global.console.error = jest.fn();
-    global.console.time = jest.fn();
-    global.console.log = jest.fn();
-  }
+
 
   // Set env variables
   process.env.SESSION_TABLE = 'mijnuitkering-sessions';
@@ -55,7 +52,7 @@ describe('Test login page and urls', () => {
     const result = await loginRequestHandler.handleRequest(requestParams(''), dynamoDBClient);
     expect(result.body).toMatch('Inloggen met Yivi');
     if (result.body) {
-      fs.writeFile(path.join(__dirname, 'output', 'test-yivi.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
+      fs.writeFile(path.join(__dirname, 'output', 'test-yivi.html'), result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => { });
     }
   });
 
@@ -73,7 +70,7 @@ describe('Test login page and urls', () => {
     const result = await loginRequestHandler.handleRequest(requestParams(''), dynamoDBClient);
     expect(result.body).toMatch('Inloggen met Yivi');
     if (result.body) {
-      fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
+      fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => { });
     }
   });
 
@@ -118,7 +115,7 @@ describe('Test login page and urls', () => {
     expect(result.body).toMatch(('/login?method=eherkenning'));
     expect(result.body).toMatch('Inloggen met eHerkenning');
     if (result.body) {
-      fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
+      fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => { });
     }
   });
 });

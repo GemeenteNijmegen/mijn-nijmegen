@@ -2,16 +2,16 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
-import { eventParams } from './taken.lambda';
 import { ArrowRight, Checkmark, Spinner } from '../../shared/Icons';
 import { logger } from '../../shared/Logger';
 import { BreadCrumbs, Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
-import * as takenListPartial from '../zaken/templates/taken.mustache';
+import * as takenListPartial from '../zaken/templates/taken.mustache?raw';
 import { User, UserFromSession } from '../zaken/User';
 import { TaakSummariesResponseSchema, TaakSummary } from '../zaken/ZaakInterface';
 import { ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
-import * as takenTemplate from './templates/taken.mustache';
+import { eventParams } from './taken.lambda';
+import * as takenTemplate from './templates/taken.mustache?raw';
 
 export class TaakrequestHandler {
   private dynamoDBClient: DynamoDBClient;

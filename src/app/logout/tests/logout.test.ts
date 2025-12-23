@@ -1,14 +1,10 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { beforeAll, beforeEach, expect, test } from 'vitest';
 import { handleLogoutRequest } from '../handleLogoutRequest';
 
 const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
 
 beforeAll(() => {
-  if (process.env.VERBOSETESTS!='True') {
-    global.console.error = jest.fn();
-    global.console.time = jest.fn();
-    global.console.log = jest.fn();
-  }
 
   // Set env variables
   process.env.SESSION_TABLE = 'mijnuitkering-sessions';

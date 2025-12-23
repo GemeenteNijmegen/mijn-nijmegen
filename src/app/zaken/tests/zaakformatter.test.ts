@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest';
 import { ZaakFormatter } from '../ZaakFormatter';
 import { SingleZaak } from '../ZaakInterface';
 
@@ -24,7 +25,7 @@ describe('Zaakformatter can format single zaak', () => {
   });
 });
 
-describe('Zaakformatter can format lists', () => {
+test('Zaakformatter can format lists', () => {
   const zaken = [
     {
       identifier: 'TDL28.627',

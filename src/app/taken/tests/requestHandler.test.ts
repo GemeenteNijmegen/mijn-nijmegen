@@ -1,9 +1,10 @@
-import * as fs from 'fs';
-import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { GetSecretValueCommand, GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'aws-sdk-client-mock';
 import * as dotenv from 'dotenv';
+import * as fs from 'fs';
+import path from 'path';
+import { beforeAll, describe, expect, test, vi } from 'vitest';
 import { TaakrequestHandler } from '../TaakRequestHandler';
 
 dotenv.config();
@@ -13,17 +14,16 @@ process.env.ZAKEN_APIGATEWAY_BASEURL = 'http://localhost/';
 process.env.ZAKEN_APIGATEWAY_APIKEY = 'fakekey';
 
 beforeAll(() => {
-  global.fetch = jest.fn((url: string) =>
+  global.fetch = vi.fn((url: string) =>
     Promise.resolve({
       json: () => {
-        console.debug('mocked fetch', url);
         return Promise.resolve([]);
       },
       headers: {
-        get: () => jest.fn(),
+        get: () => vi.fn(),
       },
     }),
-  ) as jest.Mock;
+  ) as any; // jest.Mock (fix later)
 
   const secretsMock = mockClient(SecretsManagerClient);
   const output: GetSecretValueCommandOutput = {
@@ -60,7 +60,7 @@ describe('Request handler class', () => {
     expect(result.statusCode).toBe(200);
     if (result.body) {
       try {
-        fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
+        fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => { });
       } catch (error) {
         console.debug(error);
       }

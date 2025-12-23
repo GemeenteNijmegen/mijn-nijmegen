@@ -15,6 +15,9 @@ export class UitkeringsApi {
   async getUitkeringen(bsn: string) {
     try {
       const aBsn = new Bsn(bsn);
+
+      console.log('ENDPOINT: ', this.endpoint);
+
       const data = await this.client.postData(this.endpoint, this.body(aBsn.bsn), {
         'Content-type': 'text/xml',
         'SoapAction': 'https://data-test.nijmegen.nl/mijnNijmegenData/getData',

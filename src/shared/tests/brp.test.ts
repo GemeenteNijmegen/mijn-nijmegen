@@ -1,24 +1,18 @@
-import fs from 'fs';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
+import fs from 'fs';
+import { expect, test } from 'vitest';
 import { BrpApi } from '../BrpApi';
-
 
 async function getStringFromFilePath(filePath: string): Promise<string> {
   return new Promise((res, rej) => {
     fs.readFile(filePath, (err, data) => {
-      if (err) {return rej(err);}
+      if (err) { return rej(err); }
       return res(data.toString());
     });
   });
 }
 
-beforeAll(() => {
-  if (process.env.VERBOSETESTS!='True') {
-    global.console.error = jest.fn();
-    global.console.time = jest.fn();
-    global.console.log = jest.fn();
-  }
-});
+
 
 // This test doesn't run in CI by default, depends on unavailable secrets
 test('Api', async () => {

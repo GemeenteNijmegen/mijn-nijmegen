@@ -39,9 +39,6 @@ test/__snapshots__/*
 .DS_Store
 test/playwright/report
 test/playwright/screenshots
-/test-reports/
-junit.xml
-/coverage/
 !/.github/workflows/build.yml
 /dist/changelog.md
 /dist/version.txt

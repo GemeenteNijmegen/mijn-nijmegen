@@ -4,12 +4,12 @@ import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
-import { Persoonsgegevens, PersoonsgegevensMapper } from './Persoonsgegevens';
-import * as template from './templates/persoonsgegevens.mustache';
 import { BrpApi } from '../../shared/BrpApi';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { BreadCrumbs, Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import { Persoonsgegevens, PersoonsgegevensMapper } from './Persoonsgegevens';
+import * as template from './templates/persoonsgegevens.mustache?raw';
 
 interface RenderData {
   volledigenaam: string;

@@ -3,11 +3,11 @@ import { ApiClient } from '@gemeentenijmegen/apiclient';
 
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
-import * as template from './templates/uitkeringen.mustache';
-import * as uitkering from './templates/uitkerings-item.mustache';
-import { UitkeringsApi } from './UitkeringsApi';
 import { BreadCrumbs, Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import * as template from './templates/uitkeringen.mustache?raw';
+import * as uitkering from './templates/uitkerings-item.mustache?raw';
+import { UitkeringsApi } from './UitkeringsApi';
 
 interface Config {
   apiClient: ApiClient;

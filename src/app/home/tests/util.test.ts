@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import { Util } from '../Util';
 
 test('Date util', () => {

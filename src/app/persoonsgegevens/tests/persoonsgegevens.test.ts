@@ -1,24 +1,20 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import * as fs from 'fs';
-import * as path from 'path';
 import { DynamoDBClient, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
-import { SecretsManagerClient, GetSecretValueCommandOutput } from '@aws-sdk/client-secrets-manager';
-import { SSMClient, GetParameterCommandOutput } from '@aws-sdk/client-ssm';
+import { GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
+import { GetParameterCommandOutput, SSMClient } from '@aws-sdk/client-ssm';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
+import { mockClient } from 'aws-sdk-client-mock';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { mockClient } from 'jest-aws-client-mock';
+import * as fs from 'fs';
+import * as path from 'path';
+import { beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
 import { PersoonsgegevensRequestHandler } from '../persoonsgegevensRequestHandler';
 
 
-if (process.env.VERBOSETESTS!='True') {
-  global.console.error = jest.fn();
-  global.console.time = jest.fn();
-  global.console.log = jest.fn();
-}
 
 beforeAll(() => {
-  global.console.log = jest.fn();
+  global.console.log = vi.fn();
   // Set env variables
   process.env.SESSION_TABLE = 'mijnnijmegen-sessions';
   process.env.AUTH_URL_BASE = 'https://authenticatie-accp.nijmegen.nl';
@@ -34,7 +30,7 @@ beforeAll(() => {
     $metadata: {},
     SecretString: 'test',
   };
-  secretsMock.mockImplementation(() => secretsOutput);
+  secretsMock.resolves(secretsOutput);
   const ssmOutput: GetParameterCommandOutput = {
     $metadata: {},
     Parameter: {
@@ -42,8 +38,8 @@ beforeAll(() => {
     },
   };
 
-  secretsMock.mockImplementation(() => secretsOutput);
-  parameterStoreMock.mockImplementation(() => ssmOutput);
+  secretsMock.resolves(secretsOutput);
+  parameterStoreMock.resolves(ssmOutput);
 });
 
 
@@ -54,13 +50,13 @@ const parameterStoreMock = mockClient(SSMClient);
 
 
 beforeEach(() => {
-  ddbMock.mockReset();
-  secretsMock.mockReset();
+  ddbMock.reset();
+  secretsMock.reset();
   const output: GetSecretValueCommandOutput = {
     $metadata: {},
     SecretString: 'ditiseennepgeheim',
   };
-  secretsMock.mockImplementation(() => output);
+  secretsMock.resolves(output);
   axiosMock.reset();
   const getItemOutput: Partial<GetItemCommandOutput> = {
     Item: {
@@ -73,7 +69,7 @@ beforeEach(() => {
       },
     },
   };
-  ddbMock.mockImplementation(() => getItemOutput);
+  ddbMock.resolves(getItemOutput);
 });
 
 const apiClient = new ApiClient('abc', 'abc', 'abd');
@@ -135,7 +131,7 @@ describe('Requests', () => {
         },
       },
     };
-    ddbMock.mockImplementation(() => getItemOutput);
+    ddbMock.resolves(getItemOutput);
 
     const result = await handler.handleRequest('session=12345');
     expect(result.statusCode).toBe(302);
@@ -145,7 +141,7 @@ describe('Requests', () => {
 
 
 describe('Unexpected requests', () => {
-  test('No cookies set should redirect to login page', async() => {
+  test('No cookies set should redirect to login page', async () => {
 
     const result = await handler.handleRequest('');
     expect(result.statusCode).toBe(302);
@@ -156,7 +152,7 @@ describe('Unexpected requests', () => {
 async function getStringFromFilePath(filePath: string) {
   return new Promise((res, rej) => {
     fs.readFile(path.join(__dirname, filePath), (err, data) => {
-      if (err) {return rej(err);}
+      if (err) { return rej(err); }
       return res(data.toString());
     });
   });

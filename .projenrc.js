@@ -50,29 +50,18 @@ const project = new GemeenteNijmegenCdkApp({
     '@playwright/test',
     'aws-sdk-client-mock',
     '@glen/jest-raw-loader',
-    'jest-aws-client-mock',
+    // 'jest-aws-client-mock',
     'esbuild',
     '@gemeentenijmegen/design-tokens',
     '@gemeentenijmegen/components-css',
     '@utrecht/document-css@1.5.0',
     '@utrecht/button-css@2.3.0',
     '@utrecht/paragraph-css@2.3.1',
+    'vitest',
+    'aws-sdk-client-mock',
   ], /* Build dependencies for this module. */
   mutableBuild: true,
-  jestOptions: {
-    jestConfig: {
-      setupFiles: ['dotenv/config'],
-      moduleFileExtensions: [
-        'js', 'json', 'jsx', 'ts', 'tsx', 'node', 'mustache',
-      ],
-      transform: {
-        '\\.[jt]sx?$': 'ts-jest',
-        '^.+\\.mustache$': '@glen/jest-raw-loader',
-      },
-      testPathIgnorePatterns: ['/node_modules/', '/cdk.out', '/test/playwright'],
-      roots: ['src', 'test'],
-    },
-  },
+  jest: false, // Disable jest and use vitest
   eslintOptions: {
     devdirs: ['src/**/tests', '/test', '/build-tools'],
   },
@@ -103,5 +92,7 @@ const cssBundleTask = project.addTask('bundle:css-bundle', {
   description: 'Bundle css from DS',
 });
 project.compileTask.spawn(cssBundleTask);
+
+project.tasks.tryFind('test')?.reset(`vitest --run`);
 
 project.synth();

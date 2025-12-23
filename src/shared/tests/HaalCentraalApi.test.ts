@@ -1,4 +1,5 @@
 import { Bsn } from '@gemeentenijmegen/utils';
+import { describe, expect, test, vi } from 'vitest';
 import { ApiClient } from '../ApiClient';
 import { HaalCentraalApi } from '../HaalCentraalApi';
 
@@ -7,7 +8,7 @@ describe('Haal Centraal API', () => {
   test('Error on overlijden', async () => {
 
     const client = new ApiClient({});
-    const mockPostData = jest.fn().mockResolvedValueOnce({
+    const mockPostData = vi.fn().mockResolvedValueOnce({
       personen: [{
         overlijden: {
           datum: 'xxxx',
@@ -28,7 +29,7 @@ describe('Haal Centraal API', () => {
   test('Get naam', async () => {
 
     const client = new ApiClient({});
-    const mockPostData = jest.fn().mockResolvedValueOnce({
+    const mockPostData = vi.fn().mockResolvedValueOnce({
       personen: [{
         naam: {
           voornamen: 'Pieter Jan',
@@ -58,7 +59,7 @@ describe('Haal Centraal API', () => {
   test('Get data', async () => {
 
     const client = new ApiClient({});
-    const mockPostData = jest.fn().mockResolvedValueOnce({
+    const mockPostData = vi.fn().mockResolvedValueOnce({
       personen: [{
         aNummer: '00000000',
         burgerservicenummer: '900026236',
@@ -90,7 +91,7 @@ describe('Haal Centraal API', () => {
 
   test('Error on undefined response', async () => {
     const client = new ApiClient({});
-    const mockPostData = jest.fn().mockResolvedValueOnce(undefined);
+    const mockPostData = vi.fn().mockResolvedValueOnce(undefined);
     client.postData = mockPostData;
     const api = new HaalCentraalApi({
       apiclient: client,
@@ -102,7 +103,7 @@ describe('Haal Centraal API', () => {
 
   test('Error on multiple presonen respone', async () => {
     const client = new ApiClient({});
-    const mockPostData = jest.fn().mockResolvedValueOnce({
+    const mockPostData = vi.fn().mockResolvedValueOnce({
       personen: [{
         aNummer: '00000000',
         burgerservicenummer: '900026236',
