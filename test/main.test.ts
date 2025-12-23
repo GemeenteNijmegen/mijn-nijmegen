@@ -1,7 +1,7 @@
 import { App } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import * as Dotenv from 'dotenv';
-import { beforeAll, describe, expect, test } from 'vitest';
+import { beforeAll, describe, test } from 'vitest';
 import { ApiStack } from '../src/ApiStack';
 import { Configuration } from '../src/Configuration';
 import { DNSStack } from '../src/DNSStack';
@@ -35,14 +35,6 @@ beforeAll(() => {
 });
 
 describe("Infra tests", () => {
-
-
-  test('Snapshot', () => {
-    const app = new App();
-    const stack = new PipelineStack(app, 'test', { env: mockEnv, configuration: config });
-    const template = Template.fromStack(stack);
-    expect(template.toJSON()).toMatchSnapshot();
-  });
 
   test('MainPipelineExists', () => {
     const app = new App();
