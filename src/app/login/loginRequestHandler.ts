@@ -1,10 +1,10 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
-import * as loginTemplate from './templates/login.mustache';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
 import { render } from '../../shared/render';
+import * as loginTemplate from './templates/login.mustache?raw';
 
 interface LoginRequestHandlerProps {
   /**
@@ -95,7 +95,7 @@ export class LoginRequestHandler {
     }
   }
 
-  async handleRequest(params: RequestParams, dynamoDBClient: DynamoDBClient):Promise<ApiGatewayV2Response> {
+  async handleRequest(params: RequestParams, dynamoDBClient: DynamoDBClient): Promise<ApiGatewayV2Response> {
     let session = new Session(params.cookies!, dynamoDBClient);
     await session.init();
     if (session.isLoggedIn() === true) {
@@ -139,7 +139,7 @@ export class LoginRequestHandler {
     return authMethods;
   }
 
-  private authMethodData(name:string, niceName:string) {
+  private authMethodData(name: string, niceName: string) {
     return {
       methodName: name,
       methodNiceName: niceName,

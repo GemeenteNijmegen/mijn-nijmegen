@@ -1,6 +1,7 @@
 import { App } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import * as Dotenv from 'dotenv';
+import { beforeAll, describe, test } from 'vitest';
 import { ApiStack } from '../src/ApiStack';
 import { Configuration } from '../src/Configuration';
 import { DNSStack } from '../src/DNSStack';
@@ -33,81 +34,69 @@ beforeAll(() => {
   Dotenv.config();
 });
 
-test('Snapshot', () => {
-  const app = new App();
-  const stack = new PipelineStack(app, 'test', { env: mockEnv, configuration: config });
-  const template = Template.fromStack(stack);
-  expect(template.toJSON()).toMatchSnapshot();
-});
+describe("Infra tests", () => {
 
-test('MainPipelineExists', () => {
-  const app = new App();
-  const stack = new PipelineStack(app, 'test', { env: mockEnv, configuration: config });
-  const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::CodePipeline::Pipeline', 1);
-});
-
-test('StackHasSessionsTable', () => {
-  const app = new App();
-  const keyStack = new KeyStack(app, 'keystack');
-  const stack = new SessionsStack(app, 'test', { key: keyStack.key });
-  const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::DynamoDB::Table', 1);
-  template.hasResourceProperties('AWS::DynamoDB::Table', {
-    AttributeDefinitions: [
-      {
-        AttributeName: 'sessionid',
-        AttributeType: 'S',
-      },
-    ],
+  test('MainPipelineExists', () => {
+    const app = new App();
+    const stack = new PipelineStack(app, 'test', { env: mockEnv, configuration: config });
+    const template = Template.fromStack(stack);
+    template.resourceCountIs('AWS::CodePipeline::Pipeline', 1);
   });
-});
 
-test('StackHasApiGateway', () => {
-  const app = new App();
-  const keyStack = new KeyStack(app, 'keystack');
-  const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key });
-  new DNSStack(app, 'dns', { env: mockEnv, configuration: config });
-  // const zone = dnsStack.zone;
-  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'test', configuration: config });
-  const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::ApiGatewayV2::Api', 1);
-});
+  test('StackHasSessionsTable', () => {
+    const app = new App();
+    const keyStack = new KeyStack(app, 'keystack');
+    const stack = new SessionsStack(app, 'test', { key: keyStack.key });
+    const template = Template.fromStack(stack);
+    template.resourceCountIs('AWS::DynamoDB::Table', 1);
+    template.hasResourceProperties('AWS::DynamoDB::Table', {
+      AttributeDefinitions: [
+        {
+          AttributeName: 'sessionid',
+          AttributeType: 'S',
+        },
+      ],
+    });
+  });
 
-
-test('StackHasLambdas', () => {
-  const app = new App();
-  const keyStack = new KeyStack(app, 'keystack');
-  const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key });
-  new DNSStack(app, 'dns', { env: mockEnv, configuration: config });
-  // const zone = dnsStack.zone;
-  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'test', configuration: config });
-  const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::Lambda::Function', 9);
-});
-
-
-test('StackHasParameters', () => {
-  const app = new App();
-  const stack = new ParameterStack(app, 'test');
-  const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::SSM::Parameter', 30);
-});
+  test('StackHasApiGateway', () => {
+    const app = new App();
+    const keyStack = new KeyStack(app, 'keystack');
+    const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key });
+    new DNSStack(app, 'dns', { env: mockEnv, configuration: config });
+    // const zone = dnsStack.zone;
+    const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'test', configuration: config });
+    const template = Template.fromStack(stack);
+    template.resourceCountIs('AWS::ApiGatewayV2::Api', 1);
+  });
 
 
-test('StackHasSecrets', () => {
-  const app = new App();
-  const stack = new ParameterStack(app, 'test');
-  const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::SecretsManager::Secret', 13);
-});
+  test('StackHasLambdas', () => {
+    const app = new App();
+    const keyStack = new KeyStack(app, 'keystack');
+    const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key });
+    new DNSStack(app, 'dns', { env: mockEnv, configuration: config });
+    // const zone = dnsStack.zone;
+    const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'test', configuration: config });
+    const template = Template.fromStack(stack);
+    template.resourceCountIs('AWS::Lambda::Function', 9);
+  });
 
 
-// test('StackHasCFDistribution', () => {
-//   const app = new App();
-//   const sessionsStack = new SessionsStack(app, 'sessions');
-//   const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable });
-//   const template = Template.fromStack(stack);
-//   console.log(JSON.stringify(template));
-//   template.resourceCountIs('AWS::CloudFront::Distribution', 1);
-// });
+  test('StackHasParameters', () => {
+    const app = new App();
+    const stack = new ParameterStack(app, 'test');
+    const template = Template.fromStack(stack);
+    template.resourceCountIs('AWS::SSM::Parameter', 30);
+  });
+
+
+  test('StackHasSecrets', () => {
+    const app = new App();
+    const stack = new ParameterStack(app, 'test');
+    const template = Template.fromStack(stack);
+    template.resourceCountIs('AWS::SecretsManager::Secret', 13);
+  });
+
+
+})

@@ -1,18 +1,12 @@
+import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
+import { mockClient } from 'aws-sdk-client-mock';
 import * as fs from 'fs';
 import path from 'path';
-import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
-import { ApiClient } from '@gemeentenijmegen/apiclient';
-import { mockClient } from 'aws-sdk-client-mock';
-import { create } from 'axios';
+import { beforeAll, beforeEach, expect, test, vi } from 'vitest';
 import { ProductenRequestHandler } from '../productenRequestHandler';
 
-
 beforeAll(() => {
-  if (process.env.VERBOSETESTS !== 'True') {
-    global.console.error = jest.fn();
-    global.console.time = jest.fn();
-    // global.console.log = jest.fn();
-  }
+
   // Mock isloggedin session
   process.env.SESSION_TABLE = 'mijnproducten-sessions';
   process.env.APPLICATION_URL_BASE = 'https://testing.example.com/';
@@ -43,7 +37,7 @@ beforeEach(() => {
     },
   };
   ddbMock.on(GetItemCommand).resolves(getItemOutput);
-  jest.restoreAllMocks();
+  vi.restoreAllMocks();
 });
 
 /**
@@ -67,15 +61,15 @@ function createHandler(): ProductenRequestHandler {
 test('Producten unique and refresh html', async () => {
 
   const handler = createHandler();
-  const logSpy = jest.spyOn(global.console, 'log');
+  const logSpy = vi.spyOn(global.console, 'log');
   const result = await handler.handleRequest('session=12345') as any;
 
 
   const timestamp = new Date().toISOString().replace(/:/g, '-');
   const outputFilename = path.join(__dirname, 'output', `producten_data_${timestamp}.html`);
-  fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
+  fs.writeFileSync(outputFilename, result.body ? result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
   const outputFilenameRF = path.join(__dirname, 'output', 'producten_data_torefresh.html');
-  fs.writeFileSync(outputFilenameRF, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
+  fs.writeFileSync(outputFilenameRF, result.body ? result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
 
 
   // Should not trigger, if it does, it gives an empty page

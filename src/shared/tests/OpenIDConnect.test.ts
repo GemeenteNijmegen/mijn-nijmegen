@@ -1,5 +1,6 @@
 import { GetSecretValueCommand, GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'aws-sdk-client-mock';
+import { beforeAll, expect, test } from 'vitest';
 import { OpenIDConnect } from '../OpenIDConnect';
 
 beforeAll(() => {

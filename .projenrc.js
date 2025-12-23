@@ -14,6 +14,8 @@ const project = new GemeenteNijmegenCdkApp({
     '@aws-lambda-powertools/logger',
     '@aws-sdk/client-dynamodb',
     '@aws-sdk/client-secrets-manager',
+    '@aws-sdk/client-secrets-manager',
+    '@aws-sdk/client-ssm',
     '@gemeentenijmegen/projen-project-type',
     '@gemeentenijmegen/aws-constructs',
     '@gemeentenijmegen/apiclient',
@@ -21,8 +23,6 @@ const project = new GemeenteNijmegenCdkApp({
     '@gemeentenijmegen/session',
     '@gemeentenijmegen/utils',
     'dotenv',
-    '@aws-sdk/client-secrets-manager',
-    '@aws-solutions-constructs/aws-lambda-dynamodb',
     'cdk-remote-stack',
     'openid-client',
     'mustache',
@@ -36,43 +36,27 @@ const project = new GemeenteNijmegenCdkApp({
     'zod',
     'validator',
     'content-disposition',
-  ], /* Runtime dependencies of this module. */
+  ],
   devDeps: [
     '@types/validator',
     '@types/content-disposition',
     '@types/aws-lambda',
     '@aws-sdk/types',
-    '@aws-sdk/client-ssm',
-    'aws-sdk-client-mock',
     'axios-mock-adapter',
-    'copyfiles',
     '@playwright/test',
-    '@playwright/test',
-    'aws-sdk-client-mock',
-    '@glen/jest-raw-loader',
-    'jest-aws-client-mock',
     'esbuild',
     '@gemeentenijmegen/design-tokens',
     '@gemeentenijmegen/components-css',
     '@utrecht/document-css@1.5.0',
     '@utrecht/button-css@2.3.0',
     '@utrecht/paragraph-css@2.3.1',
-  ], /* Build dependencies for this module. */
-  mutableBuild: true,
-  jestOptions: {
-    jestConfig: {
-      setupFiles: ['dotenv/config'],
-      moduleFileExtensions: [
-        'js', 'json', 'jsx', 'ts', 'tsx', 'node', 'mustache',
-      ],
-      transform: {
-        '\\.[jt]sx?$': 'ts-jest',
-        '^.+\\.mustache$': '@glen/jest-raw-loader',
-      },
-      testPathIgnorePatterns: ['/node_modules/', '/cdk.out', '/test/playwright'],
-      roots: ['src', 'test'],
-    },
+    'vitest',
+    'aws-sdk-client-mock',
+  ],
+  buildWorkflowOptions: {
+    mutableBuild: true,
   },
+  jest: false, // Disable jest and use vitest
   eslintOptions: {
     devdirs: ['src/**/tests', '/test', '/build-tools'],
   },
@@ -82,6 +66,7 @@ const project = new GemeenteNijmegenCdkApp({
     },
   },
   gitignore: [
+    'test-reports',
     'src/app/**/tests/output',
     'test/playwright/report',
     'test/playwright/screenshots',
@@ -103,5 +88,7 @@ const cssBundleTask = project.addTask('bundle:css-bundle', {
   description: 'Bundle css from DS',
 });
 project.compileTask.spawn(cssBundleTask);
+
+project.tasks.tryFind('test')?.reset(`vitest --run`);
 
 project.synth();

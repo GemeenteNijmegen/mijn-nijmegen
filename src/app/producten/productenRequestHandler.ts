@@ -1,9 +1,9 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
-import * as template from './templates/producten.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import * as template from './templates/producten.mustache?raw';
 
 interface RenderData {
   volledigenaam: string;
@@ -52,7 +52,7 @@ export class ProductenRequestHandler {
     const navigation = new Navigation('person', {
       currentPath: '/producten',
       showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
-      showProducten: process.env.SHOW_PRODUCTEN== 'True',
+      showProducten: process.env.SHOW_PRODUCTEN == 'True',
     });
     const data: RenderData = {
       volledigenaam: session.getValue('username'),

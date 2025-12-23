@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { GetSecretValueCommand, GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
@@ -6,7 +5,9 @@ import { Bsn } from '@gemeentenijmegen/utils';
 import { mockClient } from 'aws-sdk-client-mock';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import { randomUUID } from 'crypto';
 import { IdTokenClaims } from 'openid-client';
+import { beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
 import { OpenIDConnect } from '../../../shared/OpenIDConnect';
 import { AuthenticationService } from '../AuthenticationService';
 import { AuthRequestHandler, AuthRequestHandlerProps, Organisation, Person } from '../AuthRequestHandler';
@@ -25,14 +26,14 @@ function mockedOidcClient(authorized = true) {
   const oidc = new OpenIDConnect();
   oidc.getOidcClientSecret = async () => '123';
   if (authorized) {
-    oidc.authorize = jest.fn().mockResolvedValue({
+    oidc.authorize = vi.fn().mockResolvedValue({
       claims: () => {
         return { sub: '900222670' };
       },
       scope: 'openid idp_scoping:digid',
     });
   } else {
-    oidc.authorize = jest.fn().mockRejectedValue('state does not match session state');
+    oidc.authorize = vi.fn().mockRejectedValue('state does not match session state');
   }
   return oidc;
 }
@@ -40,11 +41,6 @@ function mockedOidcClient(authorized = true) {
 const axiosMock = new MockAdapter(axios);
 beforeAll(() => {
 
-  if (process.env.VERBOSETESTS != 'True') {
-    // global.console.error = jest.fn();
-    // global.console.time = jest.fn();
-    // global.console.log = jest.fn();
-  }
 
   // Set env variables
   process.env.SESSION_TABLE = 'mijnuitkering-sessions';
@@ -105,7 +101,7 @@ function setupSessionResponse(loggedin: boolean) {
 }
 
 const idp = new AuthenticationService('https://example.com/oauth', randomUUID(), randomUUID());
-jest.spyOn(idp, 'exchangeToken').mockResolvedValue('token');
+vi.spyOn(idp, 'exchangeToken').mockResolvedValue('token');
 
 describe('Auth handler', () => {
   test('Successful auth redirects to home', async () => {

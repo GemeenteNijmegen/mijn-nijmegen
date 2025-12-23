@@ -31,6 +31,7 @@ import {
 import { HttpOrigin, S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { RemoteParameters } from 'cdk-remote-stack';
 import { Construct } from 'constructs';
+import { join } from 'path';
 import { Statics } from './statics';
 
 export interface CloudFrontStackProps extends StackProps {
@@ -367,8 +368,9 @@ object-src 'none';
    */
   deployBucket(bucket: S3.Bucket, distribution: Distribution) {
     //Deploy static resources to s3
+    const staticResources = join(__dirname, 'app', 'static-resources');
     new aws_s3_deployment.BucketDeployment(this, 'staticResources', {
-      sources: [aws_s3_deployment.Source.asset('./src/app/static-resources/')],
+      sources: [aws_s3_deployment.Source.asset(staticResources)],
       destinationBucket: bucket,
       distribution: distribution,
       distributionPaths: ['/static/*', '/.well-known/'],

@@ -1,4 +1,6 @@
+import { describe, expect, test } from 'vitest';
 import { Navigation } from '../Navigation';
+
 describe('Navigation construction', () => {
   test('Regular navigation retrieves 4 items', async () => {
     const navigation = new Navigation('person');

@@ -1,18 +1,14 @@
-import * as fs from 'fs';
-import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { GetSecretValueCommand, GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'aws-sdk-client-mock';
+import * as fs from 'fs';
+import path from 'path';
+import { beforeAll, beforeEach, expect, test, vi } from 'vitest';
 import { ZaakSummary } from '../../zaken/ZaakInterface';
 import { HomeRequestHandler } from '../homeRequestHandler';
 
 beforeAll(() => {
 
-  if (process.env.VERBOSETESTS != 'True') {
-    global.console.error = jest.fn();
-    global.console.time = jest.fn();
-    global.console.log = jest.fn();
-  }
   // Set env variables
   process.env.SESSION_TABLE = 'mijnuitkering-sessions';
   process.env.APPLICATION_URL_BASE = 'https://testing.example.com/';
@@ -53,17 +49,16 @@ beforeAll(() => {
   const outputDir = path.join(__dirname, 'output');
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
 
-  global.fetch = jest.fn((url: string) =>
+  global.fetch = vi.fn((url: string) =>
     Promise.resolve({
       json: () => {
-        console.debug('mocked fetch', url);
         return Promise.resolve(mockedZakenList);
       },
       headers: {
-        get: () => jest.fn(),
+        get: () => vi.fn(),
       },
     }),
-  ) as jest.Mock;
+  ) as any; // TODO vitest type fix
 });
 
 
@@ -115,7 +110,7 @@ test('Shows overview page', async () => {
 });
 
 // Test does not seem to make html - but json - and does not find zaaktype. And has duplicate name
-xtest('Shows overview page - disabled', async () => {
+test.skip('Shows overview page - disabled', async () => {
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   const handler = new HomeRequestHandler(dynamoDBClient);
   const result = await handler.handleRequest({ cookies: 'session=12345', responseType: 'json' });

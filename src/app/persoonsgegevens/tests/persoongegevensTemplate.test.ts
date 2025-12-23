@@ -1,19 +1,15 @@
-import * as fs from 'fs';
-import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { mockClient } from 'aws-sdk-client-mock';
+import * as fs from 'fs';
+import path from 'path';
+import { beforeAll, beforeEach, expect, test, vi } from 'vitest';
 import { HaalCentraalApi } from '../../../shared/HaalCentraalApi';
 import { PersoonsgegevensMapper } from '../Persoonsgegevens';
 import { PersoonsgegevensRequestHandler } from '../persoonsgegevensRequestHandler';
 
-
 beforeAll(() => {
-  if (process.env.VERBOSETESTS !== 'True') {
-    global.console.error = jest.fn();
-    global.console.time = jest.fn();
-    // global.console.log = jest.fn();
-  }
+
   // Mock isloggedin session
   process.env.SESSION_TABLE = 'mijnuitkering-sessions';
   process.env.APPLICATION_URL_BASE = 'https://testing.example.com/';
@@ -44,7 +40,7 @@ beforeEach(() => {
     },
   };
   ddbMock.on(GetItemCommand).resolves(getItemOutput);
-  jest.restoreAllMocks();
+  vi.restoreAllMocks();
 });
 
 /**
@@ -55,7 +51,7 @@ beforeEach(() => {
  */
 function createHandler(fakeHaalCentraalData: any): PersoonsgegevensRequestHandler {
   const fakeHaalCentraalApi: Partial<HaalCentraalApi> = {
-    getBrpData: jest.fn().mockResolvedValue(fakeHaalCentraalData),
+    getBrpData: vi.fn().mockResolvedValue(fakeHaalCentraalData),
   };
 
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
@@ -92,8 +88,8 @@ test('Persoonsgegevens volledige HC data', async () => {
   };
 
 
-  const mapperSpy = jest.spyOn(PersoonsgegevensMapper, 'fromHaalCentraal');
-  const logSpy = jest.spyOn(global.console, 'log');
+  const mapperSpy = vi.spyOn(PersoonsgegevensMapper, 'fromHaalCentraal');
+  const logSpy = vi.spyOn(global.console, 'log');
 
   const handler = createHandler(fakeHaalCentraalData);
   const result = await handler.handleRequest('session=12345');
@@ -104,7 +100,7 @@ test('Persoonsgegevens volledige HC data', async () => {
 
   const timestamp = new Date().toISOString().replace(/:/g, '-');
   const outputFilename = path.join(__dirname, 'output', `persoonsgegevens_volledige_hc_data_${timestamp}.html`);
-  fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
+  fs.writeFileSync(outputFilename, result.body ? result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
   // Should not trigger, if it does, it gives an empty page
   const errorFound = logSpy.mock.calls.some(call =>
     call.some(arg => String(arg).includes('TypeError: Cannot read properties of undefined')),
@@ -124,8 +120,8 @@ test('Persoonsgegevens template undefined data', async () => {
     verblijfplaats: undefined,
   };
 
-  const logSpy = jest.spyOn(global.console, 'log');
-  const mapperSpy = jest.spyOn(PersoonsgegevensMapper, 'fromHaalCentraal');
+  const logSpy = vi.spyOn(global.console, 'log');
+  const mapperSpy = vi.spyOn(PersoonsgegevensMapper, 'fromHaalCentraal');
   const handler = createHandler(fakeHaalCentraalData);
   const result = await handler.handleRequest('session=12345');
 
@@ -136,7 +132,7 @@ test('Persoonsgegevens template undefined data', async () => {
 
   const timestamp = new Date().toISOString().replace(/:/g, '-');
   const outputFilename = path.join(__dirname, 'output', `persoonsgegevens_undefined_data_${timestamp}.html`);
-  fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
+  fs.writeFileSync(outputFilename, result.body ? result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
   // Should not trigger, if it does, it gives an empty page
   const errorFound = logSpy.mock.calls.some(call =>
     call.some(arg => String(arg).includes('TypeError: Cannot read properties of undefined')),

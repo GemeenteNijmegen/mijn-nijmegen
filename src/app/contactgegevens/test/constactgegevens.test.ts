@@ -1,23 +1,24 @@
 import { Bsn } from '@gemeentenijmegen/utils';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Person, User } from '../../zaken/User';
 import { ContactgegevensService } from '../ContactgegevensService';
-import { IOpenKlantAPI, SoortDigitaalAdres } from '../OpenKlantApi';
+import { SoortDigitaalAdres } from '../OpenKlantApi';
 
 describe('ContactgegevensService', () => {
-  let mockOpenKlant: jest.Mocked<IOpenKlantAPI>;
+  let mockOpenKlant: any; // TODO vitest Mock type anntionat (dont know how that works so made it into any)
   let service: ContactgegevensService;
 
   const baseUser = new Person(new Bsn('999999333'), undefined, undefined, 'John Doe');
 
   beforeEach(() => {
     mockOpenKlant = {
-      getPartijWithDigitaleAdresen: jest.fn(),
-      createNatuurlijkPersoon: jest.fn(),
-      addPartijIdentificatie: jest.fn(),
-      deleteDigitaalAdress: jest.fn(),
-      updateDigitaalAdress: jest.fn(),
-      createDigitaalAdress: jest.fn(),
-      updatePartij: jest.fn(),
+      getPartijWithDigitaleAdresen: vi.fn(),
+      createNatuurlijkPersoon: vi.fn(),
+      addPartijIdentificatie: vi.fn(),
+      deleteDigitaalAdress: vi.fn(),
+      updateDigitaalAdress: vi.fn(),
+      createDigitaalAdress: vi.fn(),
+      updatePartij: vi.fn(),
     } as any;
 
     service = new ContactgegevensService(mockOpenKlant);

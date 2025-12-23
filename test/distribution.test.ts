@@ -1,8 +1,9 @@
 import { App } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
+import { test } from 'vitest';
 import { CloudfrontStack } from '../src/CloudfrontStack';
 
-test('Distribution cache behavior order', async() => {
+test('Distribution cache behavior order', async () => {
   const app = new App();
   const stack = new CloudfrontStack(app, 'teststack', {
     branch: 'acceptance',

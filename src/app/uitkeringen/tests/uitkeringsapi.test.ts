@@ -1,18 +1,19 @@
-import fs from 'fs';
-import path from 'path';
 import { GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { GetParameterCommandOutput, SSMClient } from '@aws-sdk/client-ssm';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
-import { mockClient } from 'jest-aws-client-mock';
+import { mockClient } from 'aws-sdk-client-mock';
+import { readFileSync } from 'fs';
+import path, { join } from 'path';
+import { beforeAll, beforeEach, expect, test, vi } from 'vitest';
 import { UitkeringsApi } from '../UitkeringsApi';
 
-if (process.env.VERBOSETESTS!='True') {
-  global.console.error = jest.fn();
-  global.console.time = jest.fn();
-  global.console.log = jest.fn();
-}
+vi.mock('@gemeentenijmegen/apiclient', () => ({
+  ApiClient: class {
+    postData = vi.fn();
+    constructor(arg1?: any, arg2?: any, arg3?: any) { }
+  },
+}));
+
 
 
 beforeAll(() => {
@@ -31,7 +32,7 @@ beforeAll(() => {
     $metadata: {},
     SecretString: 'test',
   };
-  secretsMock.mockImplementation(() => secretsOutput);
+  secretsMock.resolves(secretsOutput);
   const ssmOutput: GetParameterCommandOutput = {
     $metadata: {},
     Parameter: {
@@ -39,44 +40,33 @@ beforeAll(() => {
     },
   };
 
-  secretsMock.mockImplementation(() => secretsOutput);
-  parameterStoreMock.mockImplementation(() => ssmOutput);
+  secretsMock.resolves(secretsOutput);
+  parameterStoreMock.resolves(ssmOutput);
 });
 
 
-const axiosMock = new MockAdapter(axios);
 const secretsMock = mockClient(SecretsManagerClient);
 const parameterStoreMock = mockClient(SSMClient);
 
 process.env.MTLS_PRIVATE_KEY_ARN = 'testarn';
 process.env.UITKERING_API_URL = 'http://localhost/mijnNijmegenData';
 
-async function getStringFromFilePath(filePath: string): Promise<string> {
-  return new Promise((res, rej) => {
-    fs.readFile(path.join(__dirname, filePath), (err, data) => {
-      if (err) {return rej(err);}
-      return res(data.toString());
-    });
-  });
-}
 
 beforeEach(() => {
-  axiosMock.reset();
-  secretsMock.mockReset();
+  vi.clearAllMocks();
+  secretsMock.reset();
 });
 
 test('returns one uitkering', async () => {
   const file = 'uitkering-12345678.xml';
-  const filePath = path.join('responses', file);
-  const returnData = await getStringFromFilePath(filePath)
-    .then((data: any) => {
-      return data;
-    });
-  axiosMock.onPost().reply(200, returnData);
+  const filePath = path.join(__dirname, 'responses', file);
+  const returnData = readFileSync(filePath);
+
   const apiClient = new ApiClient('a', 'n', 'c');
+  vi.mocked(apiClient.postData).mockResolvedValue(returnData);
   let api = new UitkeringsApi(apiClient);
   const result = await api.getUitkeringen('00000000');
-  expect(axiosMock.history.post.length).toBe(1);
+  expect(vi.mocked(apiClient.postData)).toHaveBeenCalledTimes(1);
   expect(result.uitkeringen).toHaveLength(1);
   expect(result.uitkeringen[0].fields).toBeInstanceOf(Array);
 });
@@ -85,17 +75,19 @@ test('returns one uitkering', async () => {
 test('Http Api', async () => {
   if (
     !process.env.CERTPATH
-      || !process.env.KEYPATH
-      || !process.env.CAPATH
-      || !process.env.BSN
-      || !process.env.UITKERING_API_URL
-      || !process.env.UITKERING_BSN) {
+    || !process.env.KEYPATH
+    || !process.env.CAPATH
+    || !process.env.BSN
+    || !process.env.UITKERING_API_URL
+    || !process.env.UITKERING_BSN) {
     console.debug('skipping live api test');
     return;
   }
-  const cert = await getStringFromFilePath(process.env.CERTPATH);
-  const key = await getStringFromFilePath(process.env.KEYPATH);
-  const ca = await getStringFromFilePath(process.env.CAPATH);
+
+  const cert = readFileSync(join(__dirname, process.env.CERTPATH)).toString();
+  const key = readFileSync(join(__dirname, process.env.KEYPATH)).toString();
+  const ca = readFileSync(join(__dirname, process.env.CAPATH)).toString();
+
   if (!cert || !key || !ca) {
     expect(false).toBe(true);
   }
@@ -121,17 +113,17 @@ test('Http Api', async () => {
 test('Http Api No result', async () => {
   if (
     !process.env.CERTPATH
-      || !process.env.KEYPATH
-      || !process.env.CAPATH
-      || !process.env.BSN
-      || !process.env.UITKERING_API_URL
-      || !process.env.UITKERING_BSN) {
+    || !process.env.KEYPATH
+    || !process.env.CAPATH
+    || !process.env.BSN
+    || !process.env.UITKERING_API_URL
+    || !process.env.UITKERING_BSN) {
     console.debug('skipping live api test');
     return;
   }
-  const cert = await getStringFromFilePath(process.env.CERTPATH);
-  const key = await getStringFromFilePath(process.env.KEYPATH);
-  const ca = await getStringFromFilePath(process.env.CAPATH);
+  const cert = readFileSync(join(__dirname, process.env.CERTPATH)).toString();
+  const key = readFileSync(join(__dirname, process.env.KEYPATH)).toString();
+  const ca = readFileSync(join(__dirname, process.env.CAPATH)).toString();
   if (!cert || !key || !ca) {
     expect(false).toBe(true);
   }

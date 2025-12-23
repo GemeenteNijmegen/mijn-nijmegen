@@ -1,8 +1,9 @@
+import { describe, expect, test } from 'vitest';
 import { PersoonsgegevensMapper } from '../Persoonsgegevens';
 import { responses } from './users';
 
 describe('Adres mapping', () => {
-  test('Regular address shows correctly', async() => {
+  test('Regular address shows correctly', async () => {
     const response = PersoonsgegevensMapper.fromHaalCentraal(responses.regulier.personen[0]);
     expect(response.adresregels).toStrictEqual([
       'Anna van Saksenlaan 71',
@@ -10,7 +11,7 @@ describe('Adres mapping', () => {
     ]);
   });
 
-  test('Long foreign address shows correctly', async() => {
+  test('Long foreign address shows correctly', async () => {
     const response = PersoonsgegevensMapper.fromHaalCentraal(responses.langestraatnaam.personen[0]);
     expect(response.adresregels).toStrictEqual([
       'Av. Vasco de Quiroga 3000/7',
@@ -19,7 +20,7 @@ describe('Adres mapping', () => {
     ]);
   });
 
-  test('Long foreign address shows correctly', async() => {
+  test('Long foreign address shows correctly', async () => {
     const response = PersoonsgegevensMapper.fromHaalCentraal(responses.langestraatnaam.personen[0]);
     expect(response.adresregels).toStrictEqual([
       'Av. Vasco de Quiroga 3000/7',
@@ -28,7 +29,7 @@ describe('Adres mapping', () => {
     ]);
   });
 
-  test('locatieomschrijving shows correctly', async() => {
+  test('locatieomschrijving shows correctly', async () => {
     const response = PersoonsgegevensMapper.fromHaalCentraal(responses.locatieomschrijving.personen[0]);
     expect(response.adresregels).toStrictEqual([
       'Droompark Havenzicht 12-34',
@@ -37,7 +38,7 @@ describe('Adres mapping', () => {
     expect(response.nederlandseNationaliteit).toBe('Nee');
   });
 
-  test('Behandeld als Nederlander returns correctly', async() => {
+  test('Behandeld als Nederlander returns correctly', async () => {
     const response = PersoonsgegevensMapper.fromHaalCentraal(responses.behandeldAlsNederlander.personen[0]);
     expect(response.nederlandseNationaliteit).toBe('Behandeld als Nederlander');
   });
