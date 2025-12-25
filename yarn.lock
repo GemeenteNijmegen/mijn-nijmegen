@@ -813,18 +813,18 @@
     fast-xml-parser "5.2.5"
     tslib "^2.6.2"
 
-"@aws-solutions-constructs/aws-lambda-dynamodb@^2.96.0":
-  version "2.96.0"
-  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/aws-lambda-dynamodb/-/aws-lambda-dynamodb-2.96.0.tgz#ac75fdc6497d53f51bcc504e3724e1e7b394de58"
-  integrity sha512-9mqrfX4M7Dyd5b/cM58AefxgH3Eciw54XplRAwTCXSYoRzqNyvU7S7Jg7uhAGST8IzAqCPhgQpAW5es6TXfH0g==
+"@aws-solutions-constructs/aws-lambda-dynamodb@^2.97.0":
+  version "2.97.0"
+  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/aws-lambda-dynamodb/-/aws-lambda-dynamodb-2.97.0.tgz#c33f64cfc1a2a9a3898fc86f4a09c90903a7933b"
+  integrity sha512-8a33RXSpdEUu6s+aFMKgevogJXgxiryeywWEXbfB0nG3qRJU4sD8c3j2F8NiQSylPcQHxBnhNitJeZvlF7+Mqw==
   dependencies:
-    "@aws-solutions-constructs/core" "2.96.0"
+    "@aws-solutions-constructs/core" "2.97.0"
     constructs "^10.0.0"
 
-"@aws-solutions-constructs/core@2.96.0":
-  version "2.96.0"
-  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/core/-/core-2.96.0.tgz#1e78b3ef4cef406e34e431dde47df8d7297de744"
-  integrity sha512-jcNjbQuAHLurZRYqtKXsKj88M1NqvspWLbeWepz8Mo5ocb3WHN6oorzCIsxM1uLVUrov1hmjFvKotZ4q/pHw7A==
+"@aws-solutions-constructs/core@2.97.0":
+  version "2.97.0"
+  resolved "https://registry.yarnpkg.com/@aws-solutions-constructs/core/-/core-2.97.0.tgz#82853ed7cec8fe428a4d63337e318867a0b436eb"
+  integrity sha512-FV1MKwuaYNQ1RBPjnP4cLKKguqlUaWXO4J/ipz9/PNIA6VOXw+NYp/EXTQNovJ+Cvv2+L0KR7Lm8fMbaMPznPQ==
   dependencies:
     "@aws-cdk/cloud-assembly-schema" "^48.6.0"
     constructs "^10.0.0"
