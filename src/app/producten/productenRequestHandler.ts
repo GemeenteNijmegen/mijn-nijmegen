@@ -1,7 +1,9 @@
+import { Logger } from '@aws-lambda-powertools/logger';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
+import { productEventParams } from './producten.lambda';
 import * as template from './templates/producten.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
@@ -24,6 +26,7 @@ interface Config {
 
 export class ProductenRequestHandler {
 
+  logger = new Logger();
 
   private connector: ZakenAggregatorConnector;
 
@@ -36,7 +39,7 @@ export class ProductenRequestHandler {
     });
   }
 
-  async handleRequest(cookies: string) {
+  async handleRequest(cookies: string, eventParams: productEventParams) {
 
     console.time('request');
     console.timeLog('request', 'start request');
@@ -49,7 +52,7 @@ export class ProductenRequestHandler {
 
     // Handle request if loggedin
     if (session.isLoggedIn() == true) {
-      const response = await this.handleLoggedinRequest(session);
+      const response = await this.handleLoggedinRequest(session, eventParams);
       console.timeEnd('request');
       return response;
     }
@@ -58,7 +61,7 @@ export class ProductenRequestHandler {
     return Response.redirect('/login');
 
   }
-  async handleLoggedinRequest(session: Session) {
+  async handleLoggedinRequest(session: Session, eventParams: productEventParams) {
 
     // Setup view
     const navigation = new Navigation('person', {
@@ -77,7 +80,7 @@ export class ProductenRequestHandler {
     const user: User = UserFromSession(session);
     // NU alleen de eerste, nog niet paginated
     const results = await this.connector.fetch('/mijn-services-aggregator/PRODUCTEN/producten/api/v1/producten', user, new URLSearchParams({ eigenaren__bsn: user.identifier }));
-
+    this.logger.info('temp producten results', results);
 
     // render page
     const html = await render(data, template.default);

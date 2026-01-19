@@ -90,7 +90,7 @@ test('Producten unique and refresh html', async () => {
 
   const handler = createHandler();
   const logSpy = jest.spyOn(global.console, 'log');
-  const result = await handler.handleRequest('session=12345') as any;
+  const result = await handler.handleRequest('session=12345', { cookies: 'session=12345', responseType: 'html' }) as any;
 
 
   const timestamp = new Date().toISOString().replace(/:/g, '-');
