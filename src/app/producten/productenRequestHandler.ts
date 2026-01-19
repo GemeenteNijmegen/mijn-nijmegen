@@ -1,9 +1,12 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
+import { environmentVariables } from '@gemeentenijmegen/utils';
 import * as template from './templates/producten.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import { User, UserFromSession } from '../zaken/User';
+import { ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
 
 interface RenderData {
   volledigenaam: string;
@@ -22,7 +25,16 @@ interface Config {
 export class ProductenRequestHandler {
 
 
-  constructor(private config: Config) { }
+  private connector: ZakenAggregatorConnector;
+
+  constructor(private config: Config) {
+    const env = environmentVariables(['ZAKEN_APIGATEWAY_BASEURL', 'ZAKEN_APIGATEWAY_APIKEY']);
+    this.connector = new ZakenAggregatorConnector({
+      baseUrl: new URL(env.ZAKEN_APIGATEWAY_BASEURL),
+      apiKeySecretName: env.ZAKEN_APIGATEWAY_APIKEY,
+      timeout: 2000,
+    });
+  }
 
   async handleRequest(cookies: string) {
 
@@ -61,6 +73,12 @@ export class ProductenRequestHandler {
       nav: navigation.items,
       error: undefined,
     };
+
+    const user: User = UserFromSession(session);
+    // NU alleen de eerste, nog niet paginated
+    const results = await this.connector.fetch('/mijn-services-aggregator/PRODUCTEN/producten/api/v1/producten', user, new URLSearchParams({ eigenaren__bsn: user.identifier }));
+
+
     // render page
     const html = await render(data, template.default);
     return Response.html(html, 200, session.getCookie());

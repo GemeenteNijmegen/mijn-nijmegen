@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
+import { SecretsManagerClient, GetSecretValueCommandOutput, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { mockClient } from 'aws-sdk-client-mock';
 import { create } from 'axios';
@@ -16,6 +17,9 @@ beforeAll(() => {
   // Mock isloggedin session
   process.env.SESSION_TABLE = 'mijnproducten-sessions';
   process.env.APPLICATION_URL_BASE = 'https://testing.example.com/';
+  process.env.ZAKEN_APIGATEWAY_BASEURL = 'http://localhost/';
+  process.env.ZAKEN_APIGATEWAY_APIKEY = 'fakekey';
+
 
   // Zorg dat de output-map bestaat (deze is gitignored)
   const outputDir = path.join(__dirname, 'output');
@@ -27,6 +31,24 @@ beforeAll(() => {
 const ddbMock = mockClient(DynamoDBClient);
 
 beforeEach(() => {
+
+  global.fetch = jest.fn((url: string) =>
+    Promise.resolve({
+      json: () => {
+        console.debug('mocked fetch', url);
+        return Promise.resolve([]);
+      },
+      headers: {
+        get: () => jest.fn(),
+      },
+    }),
+  ) as jest.Mock;
+  const secretsMock = mockClient(SecretsManagerClient);
+  const output: GetSecretValueCommandOutput = {
+    $metadata: {},
+    SecretString: 'ditiseennepgeheim',
+  };
+  secretsMock.on(GetSecretValueCommand).resolves(output);
   ddbMock.reset();
   const getItemOutput: Partial<GetItemCommandOutput> = {
     Item: {
