@@ -217,6 +217,7 @@ export class ApiStack extends Stack implements Configurable {
         path: '/producten',
         methods: [apigatewayv2.HttpMethod.GET],
       });
+      this.grantZakenApiAccess(productenFunction);
     }
   }
 
