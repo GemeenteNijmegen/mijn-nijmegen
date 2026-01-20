@@ -18,14 +18,14 @@
                 <h1>Mijn Producten</h1>
                 <p class="lead">Hier vindt u een overzicht van uw producten.</p>
                 <div class="alert alert-info">Op dit moment vindt u in Mijn Nijmegen informatie over uw producten en diensten. Het kan dat uw product of dienst niet in dit overzicht staat, nog niet alles wordt hier getoond. Uiteindelijk vindt u in Mijn Nijmegen al uw online producten met ons terug, hier werken we aan.</div>
-
+                {{#products}} 
                 <div class="card card-services col-lg-3 col-md-12">
                     <div class="card-body">
-                        <h3 class="card-title">Bijstand</h3>
-                        <p class="card-text">Bijstand content product met label mijn-omgeving</p>
+                        <h3 class="card-title">{{naam}}</h3>
+                        <p class="card-text">Geldigheid: {{start_datum}} t/m {{eind_datum}}</p>
                     </div>
                 </div>   
-                {{#products}} {{naam}}  {{/products}}
+                {{/products}}
 
             </div>
         </div>
