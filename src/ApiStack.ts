@@ -219,9 +219,9 @@ export class ApiStack extends Stack implements Configurable {
       });
       this.api.addRoutes({
         integration: new HttpLambdaIntegration('producten-id', productenFunction.lambda),
-        path:'/producten/{productid}',
-        methods: [apigatewayv2.HttpMethod.GET]
-      })
+        path: '/producten/{productid}',
+        methods: [apigatewayv2.HttpMethod.GET],
+      });
       this.grantZakenApiAccess(productenFunction);
     }
   }
