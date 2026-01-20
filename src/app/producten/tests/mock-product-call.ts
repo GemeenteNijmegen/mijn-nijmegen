@@ -1,0 +1,67 @@
+
+
+export const mockProductCall = {
+  uuid: '12126e1e-9bc1-4a30-b73e-5b5aa4ce8bc4',
+  url: 'https://mijn-services-dev.csp-nijmegen.nl/open-product/producten/api/v1/producten/12126e1e-9bc1-4a30-b73e-5b5aa4ce8bc4',
+  naam: 'Test product via API',
+  start_datum: '2026-01-19',
+  eind_datum: '2040-10-21',
+  aanmaak_datum: '2026-01-19T14:51:20.505685+01:00',
+  update_datum: '2026-01-20T10:42:03.882379+01:00',
+  producttype: {
+    uuid: 'e9522583-d61f-4232-8268-d1596a94bf2d',
+    code: 'TEST-4D',
+    keywords: [],
+    uniforme_product_naam: 'standplaatsvergunning',
+    toegestane_statussen: [
+      'actief',
+      'geweigerd',
+      'verlopen',
+    ],
+    gepubliceerd: true,
+    publicatie_start_datum: '2026-01-19',
+    publicatie_eind_datum: '2026-01-27',
+    aanmaak_datum: '2026-01-13T10:59:29.978359+01:00',
+    update_datum: '2026-01-19T13:39:06.065972+01:00',
+    themas: [
+      {
+        uuid: '6ea69372-82cd-4fc4-8925-8fc4c77329d0',
+        naam: 'Vergunningen',
+        beschrijving: '',
+        gepubliceerd: true,
+        aanmaak_datum: '2026-01-13T10:58:46.740115+01:00',
+        update_datum: '2026-01-13T10:58:46.740141+01:00',
+        hoofd_thema: null,
+      },
+    ],
+  },
+  gepubliceerd: false,
+  eigenaren: [
+    {
+      uuid: '2bb19027-25dd-4e00-8767-86b2e82e6881',
+      bsn: '900222670',
+      kvk_nummer: '',
+      vestigingsnummer: '',
+      klantnummer: '',
+    },
+    {
+      uuid: '1dbe98d5-118e-4143-8e24-f5c866efc799',
+      bsn: '999999333',
+      kvk_nummer: '',
+      vestigingsnummer: '',
+      klantnummer: '',
+    },
+  ],
+  documenten: [],
+  zaken: [],
+  taken: [],
+  status: 'actief',
+  prijs: null,
+  frequentie: 'eenmalig',
+  verbruiksobject: null,
+  dataobject: {
+    location: 'Korte Nieuwstraat 6 6511 PP NIJMEGEN',
+  },
+  aanvraag_zaak_urn: null,
+  aanvraag_zaak_url: 'https://openzaak.woweb.app/zaken/api/v1/zaken/2d3ee8de-8eed-4453-a1e5-74472c9526bb',
+};
