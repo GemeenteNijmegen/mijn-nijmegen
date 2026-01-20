@@ -72,4 +72,5 @@ junit.xml
 !/src/app/zaken/zaken-function.ts
 !/.github/workflows/emergency.yml
 !/.github/workflows/auto-merge.yml
+!/.nvmrc
 !/.projenrc.js
