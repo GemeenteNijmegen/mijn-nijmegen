@@ -26,9 +26,9 @@ export class WalletRequestHandler {
     this.arc = new Arc(env.ARC_BASEURL, env.ARC_APIKEY_ARN);
   }
 
-  async handleRequest(cookies: string, eventParams: walletEventRequestParams) {
+  async handleRequest(eventParams: walletEventRequestParams) {
     // Session initalization
-    let session = new Session(cookies, this.config.dynamoDBClient);
+    let session = new Session(eventParams.cookies, this.config.dynamoDBClient);
     await session.init();
 
     // Handle request if loggedin
@@ -57,7 +57,18 @@ export class WalletRequestHandler {
         shownav: true,
         nav: navigation.items,
         error: undefined,
-      };
+      } as any;
+
+      if(eventParams.status == 'failed') {
+        data.error = {
+          text: 'Het inladen van uw product in de wallet is misgegaan. Sorry.'
+        }
+      }
+      if(eventParams.status == 'success') {
+        data.success = {
+          text: 'Uw product is succesvol ingeladen in de wallet.'
+        }
+      }
 
       const html = await render(data, walletTemplate.default);
       return Response.html(html, 200, session.getCookie());

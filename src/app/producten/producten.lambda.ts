@@ -2,6 +2,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { ProductenRequestHandler } from './productenRequestHandler';
+import { WalletRequestHandler } from './WalletRequestHandler';
 
 export interface productEventParams {
   cookies: string;
@@ -23,12 +24,35 @@ function parseEvent(event: APIGatewayProxyEventV2): any {
     responseType: event?.headers?.accept == 'application/json' ? 'json' : 'html',
     inladenWallet: event?.queryStringParameters?.inladen_wallet == 'true' ? true : false,
     isIngeladenWallet: event?.queryStringParameters?.is_wallet_ingeladen == 'true' ? true : false,
+    walletStatus: event?.queryStringParameters?.status == 'true' ? true : false,
   };
 }
 
 export async function handler(event: any, _context: any):Promise<ApiGatewayV2Response> {
   try {
     const params = parseEvent(event);
+
+    if(event.inladenWallet) {
+      const requestHandler = new WalletRequestHandler({
+        dynamoDBClient,
+      });
+      return await requestHandler.handleRequest({
+        cookies: event.cookies,
+        productId: '1234',
+        type: 'request',
+      })
+    } else if(event.isIngeladenWallet) {
+      if(event.inladenWallet) {
+      const requestHandler = new WalletRequestHandler({
+        dynamoDBClient,
+      });
+      return await requestHandler.handleRequest({
+        cookies: event.cookies,
+        productId: '1234',
+        type: 'results',
+        status: event.status,
+      })
+    }
 
     const requestHandler = new ProductenRequestHandler({
       dynamoDBClient,
