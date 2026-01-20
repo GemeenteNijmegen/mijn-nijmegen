@@ -585,6 +585,7 @@ export class ApiStack extends Stack implements Configurable {
       },
       apiFunction: ProductenFunction,
     });
+    arc_key.grantRead(productenFunction.lambda);
     return productenFunction;
   }
 
