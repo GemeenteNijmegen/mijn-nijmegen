@@ -33,26 +33,26 @@ export async function handler(event: any, _context: any):Promise<ApiGatewayV2Res
     const params = parseEvent(event);
     console.debug(event);
 
-    if (event.inladenWallet) {
+    if (params.inladenWallet) {
       console.debug('inladen in wallet');
       const requestHandler = new WalletRequestHandler({
         dynamoDBClient,
       });
       return await requestHandler.handleRequest({
-        cookies: event.cookies,
+        cookies: params.cookies,
         productId: '1234',
         type: 'request',
       });
-    } else if (event.isIngeladenWallet) {
+    } else if (params.isIngeladenWallet) {
       console.debug('ingeladen in wallet');
       const requestHandler = new WalletRequestHandler({
         dynamoDBClient,
       });
       return await requestHandler.handleRequest({
-        cookies: event.cookies,
+        cookies: params.cookies,
         productId: '1234',
         type: 'results',
-        status: event.status,
+        status: params.status,
       });
     }
 
