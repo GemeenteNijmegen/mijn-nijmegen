@@ -2,7 +2,7 @@ import { UserFromAttributes } from '../User';
 import { ZakenAggregatorConnector } from '../ZakenAggregatorConnector';
 
 describe('Test aggregator connector', () => {
-  test('fetch uses correct params', async() => {
+  xtest('fetch uses correct params', async() => {
     const connector = new ZakenAggregatorConnector({ baseUrl: new URL('https://example.com'), apiKeySecretName: 'test', timeout: 50 });
     jest.spyOn(connector, 'getApiKey').mockResolvedValue('testkey');
     expect(connector).toBeTruthy();

@@ -3,7 +3,6 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
-import { InlineApiDefinition } from 'aws-cdk-lib/aws-apigateway';
 import { productEventParams } from './producten.lambda';
 import * as productTemplate from './templates/product.mustache';
 import * as productenTemplate from './templates/producten.mustache';

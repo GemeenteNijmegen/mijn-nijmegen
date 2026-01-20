@@ -1,12 +1,17 @@
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
+import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
 import { Arc } from './Arc';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { Session } from '@gemeentenijmegen/session';
+import * as walletTemplate from './templates/wallet.mustache';
 import { Navigation } from '../../shared/Navigation';
-import { User, UserFromSession } from '../zaken/User';
+import { render } from '../../shared/render';
 
 interface walletEventRequestParams {
   cookies: string;
+  productId: string;
+  type: 'request' | 'results';
+  status?: 'success' | 'failed';
 }
 
 interface Config {
@@ -32,22 +37,30 @@ export class WalletRequestHandler {
       console.timeEnd('request');
       return response;
     }
+    return Response.error(403);
   }
 
-  handleLoggedinRequest(session: Session, eventParams: walletEventRequestParams) {
-    // Setup view
-    const navigation = new Navigation('person', {
-      currentPath: '/producten',
-      showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
-      showProducten: process.env.SHOW_PRODUCTEN== 'True',
-    });
-    const data = {
-      volledigenaam: session.getValue('username'),
-      title: 'Mijn Producten',
-      shownav: true,
-      nav: navigation.items,
-      error: undefined,
-    };
-    const user: User = UserFromSession(session);
+  async handleLoggedinRequest(session: Session, eventParams: walletEventRequestParams) {
+    if (eventParams.type == 'request') {
+      const url = await this.arc.getRedirectUrl(eventParams.productId);
+      return Response.redirect(url, 302);
+    } else {
+      // Setup view
+      const navigation = new Navigation('person', {
+        currentPath: '/producten',
+        showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
+        showProducten: process.env.SHOW_PRODUCTEN== 'True',
+      });
+      const data = {
+        volledigenaam: session.getValue('username'),
+        title: 'Mijn Producten',
+        shownav: true,
+        nav: navigation.items,
+        error: undefined,
+      };
+
+      const html = await render(data, walletTemplate.default);
+      return Response.html(html, 200, session.getCookie());
+    }
   }
 }
