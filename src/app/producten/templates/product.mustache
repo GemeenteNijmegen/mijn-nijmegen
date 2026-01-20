@@ -18,9 +18,7 @@
                 <h1>Product {{product.naam}}</h1>
                 <p class="lead">{{product.producttype.uniforme_product_naam}}</p>
                 <div class="alert alert-info">U kunt uw product in uw ID wallet plaatsen</div>
-<form action="/producten/{{product.uuid}}?inladen_wallet=true" method="GET">
-  <input type="hidden" name="inladen_wallet" value="true">
-  <button class="utrecht-button utrecht-button--primary-action" type="submit">Plaats product in ID Wallet</button>
+<a href="/producten/{{product.uuid}}?inladen_wallet=true" class="utrecht-button utrecht-button--primary-action">Plaats product in ID Wallet</a>
 </form>
         </div>
     </div>
