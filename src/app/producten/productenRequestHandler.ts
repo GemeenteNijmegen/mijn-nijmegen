@@ -17,6 +17,8 @@ interface RenderData {
   shownav: boolean;
   nav: any;
   error?: string;
+  products?: any;
+  product?: any;
 }
 
 interface Config {
@@ -78,12 +80,13 @@ export class ProductenRequestHandler {
       error: undefined,
     };
     const user: User = UserFromSession(session);
-    if (!!eventParams.productId) {
+    if (eventParams.productId) {
       // individual product page
     // NU alleen de eerste, nog niet paginated
       const results = await this.connector.fetch(`/mijn-services-aggregator/PRODUCTEN/producten/api/v1/producten/${eventParams.productId}`, user);
       this.logger.info('temp product results', results);
 
+      data.product = results;
       // render page
       const html = await render(data, productTemplate.default);
       return Response.html(html, 200, session.getCookie());
@@ -91,6 +94,7 @@ export class ProductenRequestHandler {
     // NU alleen de eerste, nog niet paginated
       const results = await this.connector.fetch('/mijn-services-aggregator/PRODUCTEN/producten/api/v1/producten', user, new URLSearchParams({ eigenaren__bsn: user.identifier }));
       this.logger.info('temp producten results', results);
+      data.products = results.results; 
 
       // render page
       const html = await render(data, productenTemplate.default);

@@ -105,9 +105,9 @@ test('Producten unique and refresh html', async () => {
 
 
   const timestamp = new Date().toISOString().replace(/:/g, '-');
-  const outputFilename = path.join(__dirname, 'output', `producten_data_${timestamp}.html`);
+  const outputFilename = path.join(__dirname, 'output', `product_data_${timestamp}.html`);
   fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
-  const outputFilenameRF = path.join(__dirname, 'output', 'producten_data_torefresh.html');
+  const outputFilenameRF = path.join(__dirname, 'output', 'product_data_torefresh.html');
   fs.writeFileSync(outputFilenameRF, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
 
 
