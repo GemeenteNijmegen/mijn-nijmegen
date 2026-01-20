@@ -569,6 +569,7 @@ export class ApiStack extends Stack implements Configurable {
 
   private productenFunction() {
     //TODO open producten secrets
+    const arc_key = aws_secretsmanager.Secret.fromSecretNameV2(this, 'arc-key', Statics.ssmProductenArcApiKey);
     const productenFunction = new ApiFunction(this, 'producten-function', {
       description: 'Producten lambda om producten op te halen en tonen',
       codePath: 'app/producten',
@@ -579,6 +580,8 @@ export class ApiStack extends Stack implements Configurable {
         SHOW_PRODUCTEN: this.configuration.mijnProductenLive ? 'True' : 'False',
         SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+        ARC_BASEURL: StringParameter.valueForStringParameter(this, Statics.ssmProductenArcBaseUrl),
+        ARC_APIKEY_ARN: arc_key.secretArn,
       },
       apiFunction: ProductenFunction,
     });

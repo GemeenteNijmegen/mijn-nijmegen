@@ -59,15 +59,15 @@ export class WalletRequestHandler {
         error: undefined,
       } as any;
 
-      if(eventParams.status == 'failed') {
+      if (eventParams.status == 'failed') {
         data.error = {
-          text: 'Het inladen van uw product in de wallet is misgegaan. Sorry.'
-        }
+          text: 'Het inladen van uw product in de wallet is misgegaan. Sorry.',
+        };
       }
-      if(eventParams.status == 'success') {
+      if (eventParams.status == 'success') {
         data.success = {
-          text: 'Uw product is succesvol ingeladen in de wallet.'
-        }
+          text: 'Uw product is succesvol ingeladen in de wallet.',
+        };
       }
 
       const html = await render(data, walletTemplate.default);
