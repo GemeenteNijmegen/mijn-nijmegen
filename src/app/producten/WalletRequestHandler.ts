@@ -11,7 +11,7 @@ interface walletEventRequestParams {
   cookies: string;
   productId: string;
   type: 'request' | 'results';
-  status?: 'success' | 'failed';
+  status?: boolean;
 }
 
 interface Config {
@@ -59,14 +59,13 @@ export class WalletRequestHandler {
         error: undefined,
       } as any;
 
-      if (eventParams.status == 'failed') {
-        data.error = {
-          text: 'Het inladen van uw product in de wallet is misgegaan. Sorry.',
-        };
-      }
-      if (eventParams.status == 'success') {
+      if (eventParams.status == true) {
         data.success = {
           text: 'Uw product is succesvol ingeladen in de wallet.',
+        };
+      } else {
+        data.error = {
+          text: 'Het inladen van uw product in de wallet is misgegaan. Sorry.',
         };
       }
 

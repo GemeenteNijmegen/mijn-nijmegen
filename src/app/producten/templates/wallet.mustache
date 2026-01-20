@@ -14,13 +14,15 @@
                     {{/nav}}
                     </ul>
             </nav>
+            
             <div class="col-lg-9 col-md-12">
+            <h1>Status inladen wallet</h1>
             {{#success}}
-                div class="alert alert-info">success.text</div>
+                <div class="alert alert-info">{{success.text}}</div>
             </div>
             {{/success}}
             {{#error}}
-                div class="alert alert-error">error.text</div>
+                <div class="alert alert-error">{{error.text}}</div>
             </div>
             {{/error}}
         </div>

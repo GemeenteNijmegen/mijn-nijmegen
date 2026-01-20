@@ -14,7 +14,7 @@ export interface productEventParams {
   isIngeladenWallet?: boolean;
 }
 
-
+//https://mijn.dev.nijmegen.nl/producten?is_wallet_ingeladen=true&status=false
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 function parseEvent(event: APIGatewayProxyEventV2): any {
   return {
@@ -52,7 +52,7 @@ export async function handler(event: any, _context: any):Promise<ApiGatewayV2Res
         cookies: params.cookies,
         productId: '1234',
         type: 'results',
-        status: params.status,
+        status: params.walletStatus,
       });
     }
 
