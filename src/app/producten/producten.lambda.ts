@@ -32,7 +32,7 @@ export async function handler(event: any, _context: any):Promise<ApiGatewayV2Res
   try {
     const params = parseEvent(event);
 
-    if(event.inladenWallet) {
+    if(event.inladenWallet) { 
       const requestHandler = new WalletRequestHandler({
         dynamoDBClient,
       });
@@ -42,7 +42,6 @@ export async function handler(event: any, _context: any):Promise<ApiGatewayV2Res
         type: 'request',
       })
     } else if(event.isIngeladenWallet) {
-      if(event.inladenWallet) {
       const requestHandler = new WalletRequestHandler({
         dynamoDBClient,
       });
@@ -51,7 +50,7 @@ export async function handler(event: any, _context: any):Promise<ApiGatewayV2Res
         productId: '1234',
         type: 'results',
         status: event.status,
-      })
+      });
     }
 
     const requestHandler = new ProductenRequestHandler({
