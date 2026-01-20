@@ -62,6 +62,7 @@ export class ZakenAggregatorConnector {
           'x-api-key': await this.getApiKey(),
           //application/octet-stream required for binary response from gatewayV1
           'Accept': 'application/octet-stream,application/json',
+          'Content-Type': 'application/json',
         },
         signal: (this.timeout) ? AbortSignal.timeout(this.timeout) : undefined,
       });
