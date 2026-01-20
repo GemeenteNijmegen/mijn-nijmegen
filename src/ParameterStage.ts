@@ -34,10 +34,10 @@ export class ParameterStack extends Stack {
     Tags.of(this).add('Project', Statics.projectName);
 
     const params = new ssmParamsConstruct(this, 'plain');
-    if(props.configuration.mijnProductenLive) {
+    if (props.configuration.mijnProductenLive) {
       params.addProductenParameters();
     }
-    
+
   }
 }
 /**
