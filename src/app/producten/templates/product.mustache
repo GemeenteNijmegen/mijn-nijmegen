@@ -15,17 +15,11 @@
                     </ul>
             </nav>
             <div class="col-lg-9 col-md-12">
-                <h1>Mijn Producten</h1>
-                <p class="lead">Hier vindt u een overzicht van uw producten.</p>
-                <div class="alert alert-info">Op dit moment vindt u in Mijn Nijmegen informatie over uw producten en diensten. Het kan dat uw product of dienst niet in dit overzicht staat, nog niet alles wordt hier getoond. Uiteindelijk vindt u in Mijn Nijmegen al uw online producten met ons terug, hier werken we aan.</div>
+                <h1>Product {{product.naam}}</h1>
+                <p class="lead">{{product.producttype.uniforme_product_naam}}</p>
+                <div class="alert alert-info">U kunt uw product in uw ID wallet plaatsen</div>
 
-                <div class="card card-services col-lg-3 col-md-12">
-                    <div class="card-body">
-                        <h3 class="card-title">Bijstand</h3>
-                        <p class="card-text">Bijstand content product met label mijn-omgeving</p>
-                    </div>
-                </div>   
-    {{product.naam}}
+       <button class="utrecht-button utrecht-button--primary-action" type="button" href="/product/{{product.uuid}}?inladen_wallet=true">Plaats product in ID Wallet</button>
             </div>
         </div>
     </div>

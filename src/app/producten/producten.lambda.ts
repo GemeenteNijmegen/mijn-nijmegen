@@ -9,6 +9,8 @@ export interface productEventParams {
   file?: string;
   xsrfToken?: string;
   responseType: 'json' | 'html';
+  inladenWallet?: boolean;
+  isIngeladenWallet?: boolean;
 }
 
 
@@ -19,6 +21,8 @@ function parseEvent(event: APIGatewayProxyEventV2): any {
     productId: event?.pathParameters?.productid,
     xsrfToken: event?.headers?.xsrftoken,
     responseType: event?.headers?.accept == 'application/json' ? 'json' : 'html',
+    inladenWallet: event?.queryStringParameters?.inladen_wallet == 'true' ? true : false,
+    isIngeladenWallet: event?.queryStringParameters?.is_ingeladen_wallet == 'true' ? true : false,
   };
 }
 

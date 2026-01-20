@@ -3,6 +3,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
+import { InlineApiDefinition } from 'aws-cdk-lib/aws-apigateway';
 import { productEventParams } from './producten.lambda';
 import * as productTemplate from './templates/product.mustache';
 import * as productenTemplate from './templates/producten.mustache';
@@ -19,6 +20,7 @@ interface RenderData {
   error?: string;
   products?: any;
   product?: any;
+  walletIsIngeladen?: any;
 }
 
 interface Config {
@@ -82,7 +84,14 @@ export class ProductenRequestHandler {
     const user: User = UserFromSession(session);
     if (eventParams.productId) {
       // individual product page
-    // NU alleen de eerste, nog niet paginated
+
+      if (eventParams.inladenWallet) {
+        // Ga redirecten
+        // Geef url mee /product/${eventParams.productId}?is_ingeladen_wallet=true
+      }
+
+
+      // NU alleen de eerste, nog niet paginated
       const results = await this.connector.fetch(`/mijn-services-aggregator/PRODUCTEN/producten/api/v1/producten/${eventParams.productId}`, user);
       this.logger.info('temp product results', results);
 
@@ -94,7 +103,7 @@ export class ProductenRequestHandler {
     // NU alleen de eerste, nog niet paginated
       const results = await this.connector.fetch('/mijn-services-aggregator/PRODUCTEN/producten/api/v1/producten', user, new URLSearchParams({ eigenaren__bsn: user.identifier }));
       this.logger.info('temp producten results', results);
-      data.products = results.results; 
+      data.products = results.results;
 
       // render page
       const html = await render(data, productenTemplate.default);
