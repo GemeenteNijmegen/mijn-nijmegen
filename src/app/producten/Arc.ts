@@ -1,7 +1,7 @@
 import { AWS } from "@gemeentenijmegen/utils";
 
 /** This class connect to the ARC, which returns a redirect url */
-class Arc {
+export class Arc {
   private apiKey?: string;
   constructor(private endpoint: string, private keyArn: string) {
 
