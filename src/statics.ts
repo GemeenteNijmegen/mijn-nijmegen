@@ -170,6 +170,10 @@ export abstract class Statics {
   static readonly ssmHaalCentraalApiKey = '/cdk/mijn-nijmegen/haal-centraal/api-key';
   static readonly ssmHaalCentraalBaseUrl = '/cdk/mijn-nijmegen/haal-centraal/base-url';
 
+  // MARK: DEMO producten arc params
+  static readonly ssmProductenArcApiKey = '/cdk/mijn-nijmegen/arc/api-key';
+  static readonly ssmProductenArcBaseUrl = '/cdk/mijn-nijmegen/arc/base-url';
+
   /**
    * PoC authentication service
    */

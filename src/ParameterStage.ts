@@ -18,21 +18,26 @@ export class ParameterStage extends Stage {
     Tags.of(this).add('Project', Statics.projectName);
     Aspects.of(this).add(new PermissionsBoundaryAspect());
 
-    new ParameterStack(this, 'params');
+    new ParameterStack(this, 'params', { configuration: props.configuration });
   }
 }
 
+interface ParameterStackProps extends Configurable {};
 /**
  * Stack that creates ssm parameters for the application.
  * These need to be present before stacks that use them.
  */
 export class ParameterStack extends Stack {
-  constructor(scope: Construct, id: string) {
+  constructor(scope: Construct, id: string, props: ParameterStackProps) {
     super(scope, id);
     Tags.of(this).add('cdkManaged', 'yes');
     Tags.of(this).add('Project', Statics.projectName);
 
-    new ssmParamsConstruct(this, 'plain');
+    const params = new ssmParamsConstruct(this, 'plain');
+    if(props.configuration.mijnProductenLive) {
+      params.addProductenParameters();
+    }
+    
   }
 }
 /**
@@ -306,15 +311,15 @@ export class ssmParamsConstruct extends Construct {
   addProductenParameters() {
 
     new StringParameter(this, 'producten-base-url', {
-      parameterName: Statics.ssmHaalCentraalBaseUrl,
-      description: 'Open producten - base url',
+      parameterName: Statics.ssmProductenArcBaseUrl,
+      description: 'Demo ARC producten - base url',
       stringValue: '-',
     });
 
 
     new SecretsManager.Secret(this, 'producten-token', {
-      secretName: Statics.ssmHaalCentraalApiKey,
-      description: 'Open producten token',
+      secretName: Statics.ssmProductenArcApiKey,
+      description: 'Demo ARC producten - token',
     });
   }
 }
