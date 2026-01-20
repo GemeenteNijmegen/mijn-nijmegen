@@ -31,8 +31,10 @@ function parseEvent(event: APIGatewayProxyEventV2): any {
 export async function handler(event: any, _context: any):Promise<ApiGatewayV2Response> {
   try {
     const params = parseEvent(event);
+    console.debug(event);
 
     if (event.inladenWallet) {
+      console.debug('inladen in wallet');
       const requestHandler = new WalletRequestHandler({
         dynamoDBClient,
       });
@@ -42,6 +44,7 @@ export async function handler(event: any, _context: any):Promise<ApiGatewayV2Res
         type: 'request',
       });
     } else if (event.isIngeladenWallet) {
+      console.debug('ingeladen in wallet');
       const requestHandler = new WalletRequestHandler({
         dynamoDBClient,
       });
