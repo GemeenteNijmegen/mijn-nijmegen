@@ -23,7 +23,7 @@ interface RenderData {
   walletIsIngeladen?: any;
 }
 
-interface Config {
+export interface Config {
   //apiClient: ApiClient;
   dynamoDBClient: DynamoDBClient;
 
@@ -113,3 +113,5 @@ export class ProductenRequestHandler {
 
   }
 }
+
+
