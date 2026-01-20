@@ -22,7 +22,7 @@ function parseEvent(event: APIGatewayProxyEventV2): any {
     xsrfToken: event?.headers?.xsrftoken,
     responseType: event?.headers?.accept == 'application/json' ? 'json' : 'html',
     inladenWallet: event?.queryStringParameters?.inladen_wallet == 'true' ? true : false,
-    isIngeladenWallet: event?.queryStringParameters?.is_ingeladen_wallet == 'true' ? true : false,
+    isIngeladenWallet: event?.queryStringParameters?.is_wallet_ingeladen == 'true' ? true : false,
   };
 }
 
