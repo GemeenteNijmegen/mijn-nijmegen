@@ -4,12 +4,12 @@ import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
 import { productEventParams } from './producten.lambda';
-import * as productTemplate from './templates/product.mustache';
-import * as productenTemplate from './templates/producten.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
-import { User, UserFromSession } from '../zaken/User';
+import { User, UserFromSession } from '../../shared/User';
 import { ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
+import * as productTemplate from './templates/product.mustache';
+import * as productenTemplate from './templates/producten.mustache';
 
 interface RenderData {
   volledigenaam: string;
@@ -23,9 +23,7 @@ interface RenderData {
 }
 
 export interface Config {
-  //apiClient: ApiClient;
   dynamoDBClient: DynamoDBClient;
-
 }
 
 export class ProductenRequestHandler {
@@ -71,7 +69,7 @@ export class ProductenRequestHandler {
     const navigation = new Navigation('person', {
       currentPath: '/producten',
       showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
-      showProducten: process.env.SHOW_PRODUCTEN== 'True',
+      showProducten: process.env.SHOW_PRODUCTEN == 'True',
     });
     const data: RenderData = {
       volledigenaam: session.getValue('username'),
@@ -99,7 +97,7 @@ export class ProductenRequestHandler {
       const html = await render(data, productTemplate.default);
       return Response.html(html, 200, session.getCookie());
     } else {
-    // NU alleen de eerste, nog niet paginated
+      // NU alleen de eerste, nog niet paginated
       const results = await this.connector.fetch('/mijn-services-aggregator/PRODUCTEN/producten/api/v1/producten', user, new URLSearchParams({ eigenaren__bsn: user.identifier }));
       this.logger.info('temp producten results', results);
       data.products = results.results;

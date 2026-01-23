@@ -8,7 +8,6 @@ import * as zaakRow from './templates/zaak-row.mustache';
 import * as zaakTemplate from './templates/zaak.mustache';
 import * as zakenListPartial from './templates/zaken-table.mustache';
 import * as zakenTemplate from './templates/zaken.mustache';
-import { User, UserFromSession } from './User';
 import { ZaakFormatter } from './ZaakFormatter';
 import { SingleZaak, singleZaakSchema, ZaakSummariesResponseSchema, ZaakSummariesSchema } from './ZaakInterface';
 import { eventParams } from './zaken.lambda';
@@ -17,6 +16,7 @@ import { Spinner } from '../../shared/Icons';
 import { logger } from '../../shared/Logger';
 import { BreadCrumbs, Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import { User, UserFromSession } from '../../shared/User';
 import { validateToken } from '../../shared/validateToken';
 
 export class ZakenRequestHandler {
@@ -112,7 +112,7 @@ export class ZakenRequestHandler {
     const { openHtml, closedHtml } = await this.zakenListsHtml(zaakSummaries);
 
     let data = {
-      'volledigenaam': user.userName,
+      'volledigenaam': await user.getUserName(),
       'title': 'Mijn zaken',
       'shownav': true,
       'nav': navigation.items,

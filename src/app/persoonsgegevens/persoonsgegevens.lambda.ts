@@ -20,28 +20,26 @@ async function init() {
 
   console.timeLog('init', 'start init HaalCentraal API Client');
   // Construct the haal centraal API client
-  if (process.env.HAAL_CENTRAAL_LIVE === 'true') {
-    const haalCentraalValues = environmentVariables([
-      'HAAL_CENTRAAL_CERT_SSM',
-      'HAAL_CENTRAAL_PRIVATE_KEY_ARN',
-      'HAAL_CENTRAAL_API_KEY_ARN',
-      'HAAL_CENTRAAL_BASE_URL',
-    ]);
-    const haalCentraalApiClient = new ApiClientV2({
-      apikey: {
-        header: 'X-API-KEY',
-        keyArn: haalCentraalValues.HAAL_CENTRAAL_API_KEY_ARN,
-      },
-      mtls: {
-        cert: haalCentraalValues.HAAL_CENTRAAL_CERT_SSM,
-        keyArn: haalCentraalValues.HAAL_CENTRAAL_PRIVATE_KEY_ARN,
-      },
-    });
-    haalCentraalApi = new HaalCentraalApi({
-      apiclient: haalCentraalApiClient,
-      baseUrl: haalCentraalValues.HAAL_CENTRAAL_BASE_URL,
-    });
-  }
+  const haalCentraalValues = environmentVariables([
+    'HAAL_CENTRAAL_CERT_SSM',
+    'HAAL_CENTRAAL_PRIVATE_KEY_ARN',
+    'HAAL_CENTRAAL_API_KEY_ARN',
+    'HAAL_CENTRAAL_BASE_URL',
+  ]);
+  const haalCentraalApiClient = new ApiClientV2({
+    apikey: {
+      header: 'X-API-KEY',
+      keyArn: haalCentraalValues.HAAL_CENTRAAL_API_KEY_ARN,
+    },
+    mtls: {
+      cert: haalCentraalValues.HAAL_CENTRAAL_CERT_SSM,
+      keyArn: haalCentraalValues.HAAL_CENTRAAL_PRIVATE_KEY_ARN,
+    },
+  });
+  haalCentraalApi = new HaalCentraalApi({
+    apiclient: haalCentraalApiClient,
+    baseUrl: haalCentraalValues.HAAL_CENTRAAL_BASE_URL,
+  });
   console.timeLog('init', 'end init HaalCentraal API Client');
   console.timeEnd('init');
   return promise;
@@ -60,11 +58,14 @@ export async function handler(event: any, _context: any): Promise<ApiGatewayV2Re
     const params = parseEvent(event);
     await initPromise;
 
+    if (!haalCentraalApi) {
+      throw new Error('Failed to initalize haal centraal api');
+    }
+
     const requestHandler = new PersoonsgegevensRequestHandler({
       apiClient,
       dynamoDBClient,
       haalCentraalApi,
-      showZaken: process.env.SHOW_ZAKEN == 'True',
     });
 
     return await requestHandler.handleRequest(params.cookies);

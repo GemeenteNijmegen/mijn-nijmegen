@@ -4,13 +4,11 @@ import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
-import { IdTokenClaims, TokenSet } from 'openid-client';
-import { AuthenticationService } from './AuthenticationService';
 
-import { BrpApi } from '../../shared/BrpApi';
+
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
-import { OpenIDConnect } from '../../shared/OpenIDConnect';
-import { OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
+import { OpenIDConnectResult, OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
+import { Organisation, Person, User } from '../../shared/User';
 
 type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
 const eHerkenningKvkNummerClaim = 'urn:etoegang:1.9:EntityConcernedID:KvKnr';
@@ -18,14 +16,12 @@ const eHerkenningCompanyNameClaim = 'urn:etoegang:1.11:attribute-represented:Com
 
 export interface AuthRequestHandlerProps {
   cookies: string;
-  queryStringParamCode: string;
-  queryStringParamState: string;
+  fullUrl: URL;
   queryStringParamError?: string;
 
   dynamoDBClient: DynamoDBClient;
   apiClient: ApiClient;
-  OpenIdConnect: OpenIDConnect;
-  authenticationService?: AuthenticationService;
+  OpenIdConnect: OpenIDConnectV2;
 
   // Scopes
   yiviScope: string;
@@ -39,44 +35,19 @@ export interface AuthRequestHandlerProps {
 
   // Feature toggle
   useYiviKvk?: boolean;
-  useNlWalletVerId?: boolean;
-  useNlWalletSignicat?: boolean;
 
   /**
    * If a haal centraal API is provided prefere this over the
    * old IRMA BRP API.
-   * @default - the IRMA BRP API is used
    */
-  haalCentraalApi?: HaalCentraalApi;
+  haalCentraalApi: HaalCentraalApi;
 }
 
 export class AuthRequestHandler {
   private config: AuthRequestHandlerProps;
 
-  private oidcNlWalletSignicat?: OpenIDConnectV2;
-  private oidcNlWalletVerId?: OpenIDConnectV2;
-
   constructor(props: AuthRequestHandlerProps) {
     this.config = props;
-    if (props.useNlWalletVerId) {
-      this.oidcNlWalletVerId = new OpenIDConnectV2({
-        clientId: process.env.NL_WALLET_VERID_CLIENT_ID!,
-        clientSecretArn: process.env.NL_WALLET_VERID_CLIENT_SECRET_ARN!,
-        wellknown: process.env.NL_WALLET_VERID_WELL_KNOWN!,
-        redirectUrl: process.env.APPLICATION_URL_BASE + 'auth',
-        clientOptions: {
-          id_token_signed_response_alg: 'ES384',
-        },
-      });
-    }
-    if (props.useNlWalletSignicat) {
-      this.oidcNlWalletSignicat = new OpenIDConnectV2({
-        clientId: process.env.NL_WALLET_SIGNICAT_CLIENT_ID!,
-        clientSecretArn: process.env.NL_WALLET_SIGNICAT_CLIENT_SECRET_ARN!,
-        wellknown: process.env.NL_WALLET_SIGNICAT_WELL_KNOWN!,
-        redirectUrl: process.env.APPLICATION_URL_BASE + 'auth',
-      });
-    }
   }
 
   async handleRequest() {
@@ -96,30 +67,14 @@ export class AuthRequestHandler {
 
     // Start validation of the request
     const state = session.getValue('state');
-    const method = session.getValue('method');
     try {
-      let tokens = undefined;
-      let user = undefined;
 
-      // Find the correct openid connect configuration based on the method set in session
-      // Check for valid state for and call token endpoint
-      if (this.config.useNlWalletSignicat && method == 'nl-wallet-signicat') {
-        if (!this.oidcNlWalletSignicat) {
-          throw Error('Expected ODIC configuration for NL Wallet using Signicat.');
-        }
-        tokens = await this.oidcNlWalletSignicat.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
-        user = this.userFromSignicatNlWalletFlow(tokens);
-      } else if (this.config.useNlWalletVerId && method == 'nl-wallet-verid') {
-        if (!this.oidcNlWalletVerId) {
-          throw Error('Expected ODIC configuration for NL Wallet using VerID.');
-        }
-        tokens = await this.oidcNlWalletVerId.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
-        user = this.userFromVerIdNlWalletFlow(tokens);
-      } else {
-        // Original flow
-        tokens = await this.config.OpenIdConnect.authorize(this.config.queryStringParamCode, state, this.config.queryStringParamState);
-        user = this.userFromTokens(tokens);
-      }
+      const result = await this.config.OpenIdConnect.authorize(this.config.fullUrl, state);
+
+      console.log(result);
+      const user = this.userFromAuthResult(result);
+      console.log('user', user);
+
 
       if (!user) {
         return Response.redirect('/login');
@@ -129,12 +84,7 @@ export class AuthRequestHandler {
       try {
         const username = await user.getUserName();
 
-        // Optionally store delegated_token in the session
-        let additional_session_data = {};
-        if (this.config.authenticationService) {
-          const delegated_token = await this.exchangeTokenWithOurOwnVerySpecialIdP(tokens.id_token!);
-          additional_session_data = { delegated_token: { S: delegated_token } };
-        }
+        console.log(username);
 
         await session.createSession({
           loggedin: { BOOL: true },
@@ -142,10 +92,7 @@ export class AuthRequestHandler {
           bsn: { S: user.type == 'person' ? user.identifier : '' }, // TODO: remove when consuming pages (persoonsgegevens, uitkeringen, zaken) have been updated to use identifier
           user_type: { S: user.type },
           username: { S: username },
-          id_token: { S: tokens.id_token },
-          refresh_token: { S: tokens.refresh_token ?? '' }, // TODO do we use this?
           xsrf_token: { S: this.config.OpenIdConnect.generateState() },
-          ...additional_session_data,
         });
       } catch (error: any) {
         console.error('creating session failed', error);
@@ -159,10 +106,10 @@ export class AuthRequestHandler {
     return Response.redirect('/', 302, [session.getCookie()]);
   }
 
-  private logAuthMethod(claims: IdTokenClaims) {
+  private logAuthMethod(authResult: OpenIDConnectResult) {
     const logger = new Logger({ serviceName: 'mijnnijmegen' });
-    if (claims.hasOwnProperty('acr') && claims.hasOwnProperty('amr')) {
-      logger.info('auth succesful', { loa: claims.acr, method: claims.amr });
+    if (authResult.claims.hasOwnProperty('acr') && authResult.claims.hasOwnProperty('amr')) {
+      logger.info('auth succesful', { loa: authResult.claims.acr, method: authResult.claims.amr });
     }
   }
 
@@ -172,10 +119,10 @@ export class AuthRequestHandler {
    * @param claims
    * @returns
    */
-  bsnFromDigidLogin(claims: IdTokenClaims): Bsn {
+  bsnFromDigidLogin(authResult: OpenIDConnectResult): Bsn {
     const subject = 'sub';
-    if (claims[subject]) {
-      return new Bsn(claims[subject] as string);
+    if (authResult.claims[subject]) {
+      return new Bsn(authResult.claims[subject] as string);
     }
     throw Error('Invalid or no bsn in DigiD claims!');
   }
@@ -185,11 +132,11 @@ export class AuthRequestHandler {
    * @param claims
    * @returns
    */
-  bsnFromYiviLogin(claims: IdTokenClaims): Bsn {
+  bsnFromYiviLogin(authResult: OpenIDConnectResult): Bsn {
     const bsnAttribute = this.config.yiviBsnAttribute;
-    console.log(this.config.yiviBsnAttribute, claims[bsnAttribute]);
-    if (claims?.[bsnAttribute]) {
-      return new Bsn(claims[bsnAttribute] as string);
+    console.log(this.config.yiviBsnAttribute, authResult.claims[bsnAttribute]);
+    if (authResult.claims?.[bsnAttribute]) {
+      return new Bsn(authResult.claims[bsnAttribute] as string);
     }
     throw Error('Invalid or no bsn in Yivi claims!');
   }
@@ -199,11 +146,11 @@ export class AuthRequestHandler {
    * @param claims
    * @returns
    */
-  kvkFromYiviLogin(claims: IdTokenClaims): { kvkNumber: string; organisationName: string } {
+  kvkFromYiviLogin(authResult: OpenIDConnectResult): { kvkNumber: string; organisationName: string } {
     let kvkNumberAttribute = this.config.yiviKvkNumberAttribute;
     let kvkNameAttribute = this.config.yiviKvkNameAttribute;
-    const yiviKvkClaim = claims[kvkNumberAttribute] as string;
-    const yiviNameClaim = claims[kvkNameAttribute] as string;
+    const yiviKvkClaim = authResult.claims[kvkNumberAttribute] as string;
+    const yiviNameClaim = authResult.claims[kvkNameAttribute] as string;
     console.log(yiviKvkClaim, yiviNameClaim);
     if (yiviKvkClaim && yiviNameClaim && Number.isInteger(parseInt(yiviKvkClaim))) {
       return { kvkNumber: yiviKvkClaim, organisationName: yiviNameClaim };
@@ -216,9 +163,9 @@ export class AuthRequestHandler {
    * @param claims
    * @returns
    */
-  kvkFromEherkenningLogin(claims: IdTokenClaims): { kvkNumber: string; organisationName: string } {
-    const kvkClaim = claims?.[eHerkenningKvkNummerClaim] as string;
-    const organisationNameClaim = claims?.[eHerkenningCompanyNameClaim] as string;
+  kvkFromEherkenningLogin(authResult: OpenIDConnectResult): { kvkNumber: string; organisationName: string } {
+    const kvkClaim = authResult.claims[eHerkenningKvkNummerClaim] as string;
+    const organisationNameClaim = authResult.claims[eHerkenningCompanyNameClaim] as string;
     if (kvkClaim && Number.isInteger(parseInt(kvkClaim))) {
       return { kvkNumber: kvkClaim, organisationName: organisationNameClaim };
     }
@@ -231,40 +178,35 @@ export class AuthRequestHandler {
    * @param tokens
    * @returns User
    */
-  userFromTokens(tokens: TokenSet): User {
-    if (!tokens.scope || !tokens.claims) {
-      throw Error('scope and claims expected');
-    }
-    const claims = tokens.claims();
-    const scope = tokens.scope;
-    const authMethod = this.authMethodFromScope(scope);
+  userFromAuthResult(authResult: OpenIDConnectResult): User {
+    const authMethod = this.authMethodFromScope(authResult.scopes);
 
     let bsn = undefined;
     let kvk = undefined;
 
     if (authMethod == 'yivi') {
-      const bsnClaim = claims[this.config.yiviBsnAttribute];
-      const kvkClaim = claims[this.config.yiviKvkNumberAttribute];
+      const bsnClaim = authResult.claims[this.config.yiviBsnAttribute];
+      const kvkClaim = authResult.claims[this.config.yiviKvkNumberAttribute];
       if (bsnClaim) {
-        bsn = this.bsnFromYiviLogin(claims);
+        bsn = this.bsnFromYiviLogin(authResult);
       }
       if (kvkClaim) {
         if (!this.config.useYiviKvk) { // Feature flag
           throw Error('Kvk login via Yivi is not enabled yet!');
         }
-        kvk = this.kvkFromYiviLogin(claims);
+        kvk = this.kvkFromYiviLogin(authResult);
       }
     }
 
     if (authMethod == 'digid') {
-      bsn = this.bsnFromDigidLogin(claims);
+      bsn = this.bsnFromDigidLogin(authResult);
     }
 
     if (authMethod == 'eherkenning') {
-      kvk = this.kvkFromEherkenningLogin(claims);
+      kvk = this.kvkFromEherkenningLogin(authResult);
     }
     if (bsn || kvk) {
-      this.logAuthMethod(claims);
+      this.logAuthMethod(authResult);
     }
 
     if (bsn) {
@@ -272,7 +214,7 @@ export class AuthRequestHandler {
     }
 
     if (kvk) {
-      return new Organisation(kvk.kvkNumber, kvk.organisationName, { apiClient: this.config.apiClient, haalCentraal: this.config.haalCentraalApi });
+      return new Organisation(kvk.kvkNumber, kvk.organisationName);
     }
 
     throw Error('User authentication failed: No BSN or KVK found in request');
@@ -285,110 +227,17 @@ export class AuthRequestHandler {
    * @param scope
    * @returns authentication method that is used
    */
-  authMethodFromScope(scope: string): AuthenticationMethod {
-    if (scope.includes(this.config.yiviScope)) {
+  authMethodFromScope(scopes: string[]): AuthenticationMethod {
+    console.log('Scopes', scopes);
+    const fullScope = scopes.join(' ');
+    if (fullScope.includes(this.config.yiviScope)) {
       return 'yivi';
-    } else if (scope.includes(this.config.eherkenningScope)) {
+    } else if (fullScope.includes(this.config.eherkenningScope)) {
       return 'eherkenning';
-    } else if (scope.includes(this.config.digidScope)) {
+    } else if (fullScope.includes(this.config.digidScope)) {
       return 'digid';
     }
     throw Error('Unsupported authentication method');
   }
 
-  async exchangeTokenWithOurOwnVerySpecialIdP(access_token: string) {
-    return this.config.authenticationService?.exchangeToken(access_token);
-  }
-
-  private userFromVerIdNlWalletFlow(tokens: TokenSet) {
-    const bsn = (tokens.claims() as any).nin?.identifier;
-    if (!bsn) {
-      throw Error('Could not find bsn in NL wallet login flow (VerID)');
-    }
-    return new Person(new Bsn(bsn), { apiClient: this.config.apiClient });
-  }
-
-  private userFromSignicatNlWalletFlow(tokens: TokenSet) {
-    const bsn = (tokens.claims() as any).nin;
-    if (!bsn) {
-      throw Error('Could not find bsn in NL wallet login flow (Signicat)');
-    }
-    return new Person(new Bsn(bsn), { apiClient: this.config.apiClient });
-  }
-
-}
-
-
-interface UserConfig {
-  apiClient: ApiClient;
-  haalCentraal?: HaalCentraalApi;
-}
-
-/**
- * Several types of user exist:
- * - 'Natuurlijk persoon' (a human), having a BSN and a name (provided by the BRP)
- * - 'Organisation', having a KVK identification number, and a company name (provided by eherkenning)
- */
-interface User {
-  config: UserConfig;
-  identifier: string;
-  type: string;
-  getUserName(): Promise<string>;
-}
-
-/**
- * Implementation of a 'natuurlijk persoon', a human, having a BSN.
- */
-export class Person implements User {
-  bsn: Bsn;
-  config: UserConfig;
-  identifier: string;
-  userName?: string;
-  type: string = 'person';
-  constructor(bsn: Bsn, config: UserConfig) {
-    this.bsn = bsn;
-    this.identifier = bsn.bsn;
-    this.config = config;
-  }
-
-  async getUserName(): Promise<string> {
-    if (typeof this.userName !== 'string') {
-      try {
-        if (this.config.haalCentraal) {
-          const brpName = await this.config.haalCentraal.getName(this.bsn);
-          this.userName = brpName ?? 'Onbekende gebruiker';
-        } else {
-          const brpApi = new BrpApi(this.config.apiClient);
-          const brpData = await brpApi.getBrpData(this.bsn.bsn);
-          this.userName = brpData?.Persoon?.Persoonsgegevens?.Naam ? brpData.Persoon.Persoonsgegevens.Naam : 'Onbekende gebruiker';
-        }
-      } catch (error) {
-        console.error('Error getting username');
-        this.userName = 'Onbekende gebruiker';
-      }
-    }
-    return this.userName as string;
-  }
-}
-
-/**
- * Implementation of a user of type 'organisation', having a KVK number.
- */
-export class Organisation implements User {
-  kvk: string;
-  config: UserConfig;
-  identifier: string;
-  userName: string;
-  type: string = 'organisation';
-
-  constructor(kvk: string, userName: string, config: UserConfig) {
-    this.kvk = kvk;
-    this.identifier = kvk;
-    this.userName = userName ?? kvk;
-    this.config = config;
-  }
-
-  async getUserName(): Promise<string> {
-    return this.userName;
-  }
 }

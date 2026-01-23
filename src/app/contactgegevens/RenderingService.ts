@@ -1,12 +1,12 @@
 
 import { Session } from '@gemeentenijmegen/session';
 import { Contactgegevens } from './ContactgegevensService';
-import { UserFromSession } from '../zaken/User';
 import * as overviewTemplate from './templates/contactgegevens.mustache';
 import * as editTemplate from './templates/edit-contactgegevens.mustache';
 import * as verifyTemplate from './templates/verify-contactgegevens.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import { UserFromSession } from '../../shared/User';
 
 export interface ErrorFlags {
   invalidTelefoon?: boolean;
@@ -23,7 +23,7 @@ export class RenderingService {
 
   constructor(private session: Session) {
     const user = UserFromSession(session);
-    this.navigation = new Navigation(user.type, {
+    this.navigation = new Navigation(user.type as 'person' | 'organisation', {
       currentPath: '/contactgegevens',
       showContactgegevens: process.env.SHOW_CONTACTGEGEVENS === 'True',
     });

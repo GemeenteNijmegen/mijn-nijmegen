@@ -21,14 +21,6 @@ export abstract class Statics {
   static readonly ssmUseYiviKvk: string = '/cdk/mijn-nijmegen/useYiviKvk';
 
   // MARK: OpenIDConnect
-  /**
-   * Authentication URL base, used in auth and login lambda
-   */
-  static readonly ssmAuthUrlBaseParameter: string = '/cdk/mijn-nijmegen/authUrlBase';
-  /**
-   * OpenID Connect client ID (sent in URL as querystring-param, not secret)
-   */
-  static readonly ssmOIDCClientID: string = '/cdk/mijn-nijmegen/authClientID';
 
   /**
    * OpenID Connect scope
@@ -43,9 +35,13 @@ export abstract class Statics {
   static readonly ssmYiviKvkNumberAttribute: string = '/cdk/mijn-nijmegen/yiviKvkNumberAttribute';
 
   /**
-   * OpenID Connect secret name
+   * OpenID Connect configuration
    */
-  static readonly secretOIDCClientSecret: string = '/cdk/mijn-nijmegen/oidc-clientsecret';
+  static readonly _OIDCClientID: string = '/cdk/mijn-nijmegen/oidc/client-id';
+  static readonly _OIDCClientSecret: string = '/cdk/mijn-nijmegen/oidc/client-secret';
+  static readonly _OIDCClientWellKnown: string = '/cdk/mijn-nijmegen/oidc/well-knonw-url';
+  static readonly _OIDCClientRedirectUrl: string = '/cdk/mijn-nijmegen/oidc/redirect-url';
+
 
   // MARK: API config (mTLS)
   /**
@@ -62,11 +58,6 @@ export abstract class Statics {
     * Root CA for mTLS (PKIO root)
     */
   static readonly ssmMTLSRootCA: string = '/cdk/mijn-nijmegen/mtls-rootca';
-
-  /**
-   * BRP API endpoint
-   */
-  static readonly ssmBrpApiEndpointUrl: string = '/cdk/mijn-nijmegen/brp-api-url';
 
   /**
    * Uitkeringsgegevens API endpoint
@@ -143,17 +134,6 @@ export abstract class Statics {
 
   // MARK: NOTIFY configuration
   static readonly ssmNotifySecret = '/cdk/mijn-nijmegen/open-klant/notify-key';
-  // MARK: NL Wallet configuration
-  // VerID
-  static readonly ssmVerIdWellKnown: string = '/cdk/mijn-nijmegen/verid/well-known';
-  static readonly ssmVerIdScope: string = '/cdk/mijn-nijmegen/verid/scope';
-  static readonly ssmVerIdClientId: string = '/cdk/mijn-nijmegen/verid/clientid';
-  static readonly ssmVerIdClientSecret: string = '/cdk/mijn-nijmegen/verid/clientsecret';
-  // Signicat
-  static readonly ssmSignicatWellKnown: string = '/cdk/mijn-nijmegen/signicat/well-known';
-  static readonly ssmSignicatScope: string = '/cdk/mijn-nijmegen/signicat/scope';
-  static readonly ssmSignicatClientId: string = '/cdk/mijn-nijmegen/signicat/clientid';
-  static readonly ssmSignicatClientSecret: string = '/cdk/mijn-nijmegen/signicat/clientsecret';
 
   static readonly ssmSubmissionstorageBaseUrl: string = '/cdk/mijn-nijmegen/submissionstorage-base-url';
   /**
@@ -173,11 +153,6 @@ export abstract class Statics {
   // MARK: DEMO producten arc params
   static readonly ssmProductenArcApiKey = '/cdk/mijn-nijmegen/arc/api-key';
   static readonly ssmProductenArcBaseUrl = '/cdk/mijn-nijmegen/arc/base-url';
-
-  /**
-   * PoC authentication service
-   */
-  static readonly authServiceClientSecretArn = '/cdk/mijn-nijmegen/auth=service-client-secret-arn';
 
   // MARK: ENVIRONMENTS
   static readonly gnBuildEnvironment = {
