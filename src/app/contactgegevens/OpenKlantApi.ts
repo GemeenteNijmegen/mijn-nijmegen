@@ -1,7 +1,8 @@
 import { Logger } from '@aws-lambda-powertools/logger';
 import { AWS } from '@gemeentenijmegen/utils';
-import { User } from '../zaken/User';
 import { OpenKlantDigitaalAdres, OpenKlantDigitaalAdresWithUuid, OpenKlantPartij, OpenKlantPartijIdentificiatie, OpenKlantPartijIdentificiatieWithUuid, OpenKlantPartijWithUuid, QueryOpenKlantPartijWithUuid } from './model/partij';
+import { User } from '../../shared/User';
+
 
 export enum SoortDigitaalAdres {
   EMAIL = 'email',

@@ -1,18 +1,24 @@
-import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
-import { ClientMetadata, Issuer, TokenSet, generators } from 'openid-client';
+import { randomUUID } from 'crypto';
+import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
+import * as oidc from 'openid-client';
 
 export interface OpenIDConnectConfiguration {
   wellknown: string;
   clientId: string;
   clientSecretArn?: string;
   redirectUrl: string;
-  clientOptions?: Partial<ClientMetadata>;
+  clientOptions?: Partial<oidc.ClientMetadata>;
+}
+
+export interface OpenIDConnectResult {
+  claims: oidc.IDToken;
+  scopes: string[];
 }
 
 export class OpenIDConnectV2 {
 
   private readonly configuration: OpenIDConnectConfiguration;
-  private issuer?: Issuer;
+  private oidcConfiguration?: oidc.Configuration;
   private clientSecret?: string;
 
   /**
@@ -29,90 +35,71 @@ export class OpenIDConnectV2 {
    * @returns {string} the login url
    */
   async getLoginUrl(state: string, scope: string, additionalOptions?: Record<string, string>): Promise<string> {
-    const issuer = await this.getIssuer();
+    const oidcConfiguration = await this.getOidcConfiguration();
     const redirectUrl = this.configuration.redirectUrl;
-    const client = new issuer.Client({
-      client_id: this.configuration.clientId,
-      redirect_uris: [redirectUrl],
-      response_types: ['code'],
-    });
-    if (!this.issuer?.metadata.authorization_endpoint) {
-      throw Error('Authorization endpoint not configured in issuer (used discovery)');
-    }
-    const authUrl = client.authorizationUrl({
+
+    const parameters: Record<string, string> = {
+      redirect_uri: redirectUrl,
+      response_types: 'code',
       scope,
       state: state,
       ...additionalOptions,
-    });
-    return authUrl;
+    };
+    const authUrl = oidc.buildAuthorizationUrl(oidcConfiguration, parameters);
+    return authUrl.toString();
   }
 
   /**
    * Use the returned code from the OIDC-provider and stored state param
    * to complete the login flow.
    *
-   * @param {string} code
-   * @param {string} state
+   * @param {string} url - the url requested for callback (includes code and state)
+   * @param {string} expectedState - The state we have stored in the session
    * @returns {any} returns the parsed claims from either the id_token or the userinfo endpoint
    */
-  async authorize(code: string, state: string, returnedState: string): Promise<TokenSet> {
-    const issuer = await this.getIssuer();
-    const clientSecret = await this.getOidcClientSecret();
-    const redirectUrl = this.configuration.redirectUrl;
-    const client = new issuer.Client({
-      client_id: this.configuration.clientId,
-      redirect_uris: [redirectUrl],
-      client_secret: clientSecret,
-      response_types: ['code'],
-      ...this.configuration.clientOptions,
+  async authorize(url: URL, expectedState: string): Promise<OpenIDConnectResult> {
+
+    const oidcConfiguration = await this.getOidcConfiguration();
+    const redirectUrl = new URL(this.configuration.redirectUrl);
+    const authorized = await oidc.authorizationCodeGrant(oidcConfiguration, redirectUrl, {
+      expectedState: expectedState,
     });
 
-    // Check state
-    if (state !== returnedState) {
-      console.debug(state, returnedState);
-      throw new Error('state does not match session state');
-    }
-    console.debug('State matches session state');
-
-    // Fetch and validate token
-    let tokenSet: any;
-    try {
-      const params = {
-        code: code,
-        state: returnedState,
-        iss: this.issuer?.metadata.issuer,
-      };
-      tokenSet = await client.callback(redirectUrl, params, { state: state });
-    } catch (err: any) {
-      console.error(err);
-      throw new Error(`${err.error} ${err.error_description}`);
+    if (!authorized.access_token) {
+      throw new Error('No access token returned from idp');
     }
 
-    // Validate token audience
-    const claims = tokenSet.claims();
-    if (claims.aud != this.configuration.clientId) {
-      throw new Error('claims aud does not match client id');
+    const claims = authorized.claims();
+    if (!claims || !authorized.scope) {
+      throw Error('No ID token or scope found in idp response');
     }
 
-    return tokenSet;
+    return {
+      scopes: authorized.scope ? authorized.scope.split(' ') : [],
+      claims: authorized.claims()!,
+    };
 
   }
 
   generateState() {
-    return generators.state();
+    return randomUUID();
   }
 
   /**
    * setup the oidc issuer. For now using env. parameters & hardcoded urls
    * Issuer could also be discovered based on file in .well-known, this
    * should be cached somehow.
-   * @returns openid-client Issuer
+   * @returns openid-client Configuration
    */
-  private async getIssuer(): Promise<Issuer> {
-    if (!this.issuer) {
-      this.issuer = await Issuer.discover(this.configuration.wellknown);
+  private async getOidcConfiguration(): Promise<oidc.Configuration> {
+    if (!this.oidcConfiguration) {
+      const url = new URL(this.configuration.wellknown);
+      this.oidcConfiguration = await oidc.discovery(url, this.configuration.clientId, {
+        client_secret: await this.getOidcClientSecret(),
+        client_id: this.configuration.clientId,
+      });
     }
-    return this.issuer;
+    return this.oidcConfiguration;
   }
 
   /**

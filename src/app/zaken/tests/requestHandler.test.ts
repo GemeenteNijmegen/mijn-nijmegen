@@ -95,6 +95,7 @@ const getItemOutput: Partial<GetItemCommandOutput> = {
       M: {
         loggedin: { BOOL: true },
         identifier: { S: '900026236' },
+        username: { S: 'Username' },
         user_type: { S: 'person' },
         xsrf_token: { S: 'testtoken' },
       },
@@ -115,7 +116,7 @@ describe('Request handler class', () => {
     expect(result.statusCode).toBe(200);
     if (result.body) {
       try {
-        fs.writeFile(path.join(__dirname, 'output', 'test-zaken.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
+        fs.writeFile(path.join(__dirname, 'output', 'test-zaken.html'), result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => { });
       } catch (error) {
         console.debug(error);
       }
@@ -146,7 +147,7 @@ describe('Request handler class', () => {
     expect(result.statusCode).toBe(200);
     if (result.body) {
       try {
-        fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => { });
+        fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => { });
       } catch (error) {
         console.debug(error);
       }

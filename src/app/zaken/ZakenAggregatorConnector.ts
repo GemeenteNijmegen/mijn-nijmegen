@@ -1,7 +1,7 @@
 import { AWS } from '@gemeentenijmegen/utils';
 import contentDisposition from 'content-disposition';
-import { User } from './User';
 import { logger } from '../../shared/Logger';
+import { User } from '../../shared/User';
 
 interface ZakenAggregatorConnectorOptions {
   /**
