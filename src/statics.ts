@@ -38,7 +38,7 @@ export abstract class Statics {
    * OpenID Connect configuration
    */
   static readonly _OIDCClientID: string = '/cdk/mijn-nijmegen/oidc/client-id';
-  static readonly _OIDCClientSecret: string = '/cdk/mijn-nijmegen/oidc/client-secret';
+  static readonly _OIDCClientSecret: string = '/cdk/mijn-nijmegen/oidc/clientsecret';
   static readonly _OIDCClientWellKnown: string = '/cdk/mijn-nijmegen/oidc/well-knonw-url';
   static readonly _OIDCClientRedirectUrl: string = '/cdk/mijn-nijmegen/oidc/redirect-url';
 
