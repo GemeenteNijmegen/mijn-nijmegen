@@ -1,12 +1,10 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { ApiClient } from '@gemeentenijmegen/apiclient';
 
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
 import { Persoonsgegevens, PersoonsgegevensMapper } from './Persoonsgegevens';
 import * as template from './templates/persoonsgegevens.mustache';
-import { BrpApi } from '../../shared/BrpApi';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { BreadCrumbs, Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
@@ -22,7 +20,6 @@ interface RenderData {
 }
 
 interface Config {
-  apiClient: ApiClient;
   dynamoDBClient: DynamoDBClient;
   /**
    * Provide a HaalCentraal API client when if
@@ -82,22 +79,14 @@ export class PersoonsgegevensRequestHandler {
       error: undefined,
     };
 
-    // Get BRP data from HaalCentraal BRP API or old IRMA BRP API
+    // Get BRP data from HaalCentraal
     try {
-      if (this.config.haalCentraalApi) {
-        console.timeLog('request', 'starting HAAL CENTRAAL BRP API call');
-        const brpData = await this.config.haalCentraalApi.getBrpData(new Bsn(bsn), [
-          'burgerservicenummer', 'naam', 'adressering', 'geslacht', 'nationaliteiten', 'geboorte', 'verblijfplaatsBinnenland',
-        ]);
-        data.persoonsgegevens = PersoonsgegevensMapper.fromHaalCentraal(brpData);
-        console.timeLog('request', 'finished HAAL CENTRAAL BRP API call');
-      } else {
-        console.timeLog('request', 'starting IRMA BRP API call');
-        const brpApi = new BrpApi(this.config.apiClient);
-        const brpData = await brpApi.getBrpData(bsn);
-        data.persoonsgegevens = PersoonsgegevensMapper.fromBrpApi(brpData.Persoon);
-        console.timeLog('request', 'finished IRMA BRP API call');
-      }
+      console.timeLog('request', 'starting HAAL CENTRAAL BRP API call');
+      const brpData = await this.config.haalCentraalApi.getBrpData(new Bsn(bsn), [
+        'burgerservicenummer', 'naam', 'adressering', 'geslacht', 'nationaliteiten', 'geboorte', 'verblijfplaatsBinnenland',
+      ]);
+      data.persoonsgegevens = PersoonsgegevensMapper.fromHaalCentraal(brpData);
+      console.timeLog('request', 'finished HAAL CENTRAAL BRP API call');
     } catch (error) {
       console.log(error);
       data.error = 'Het ophalen van uw persoonsgegevens is misgegaan.';

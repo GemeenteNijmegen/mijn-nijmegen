@@ -58,8 +58,7 @@ export class OpenIDConnectV2 {
   async authorize(url: URL, expectedState: string): Promise<OpenIDConnectResult> {
 
     const oidcConfiguration = await this.getOidcConfiguration();
-    const redirectUrl = new URL(this.configuration.redirectUrl);
-    const authorized = await oidc.authorizationCodeGrant(oidcConfiguration, redirectUrl, {
+    const authorized = await oidc.authorizationCodeGrant(oidcConfiguration, url, {
       expectedState: expectedState,
     });
 
