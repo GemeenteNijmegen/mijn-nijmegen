@@ -3,10 +3,10 @@ import { Alarm, ComparisonOperator, Metric } from 'aws-cdk-lib/aws-cloudwatch';
 import { CfnHealthCheck, HealthCheckType } from 'aws-cdk-lib/aws-route53';
 import { RemoteParameters } from 'cdk-remote-stack';
 import { Construct } from 'constructs';
+import { Configurable } from './Configuration';
 import { Statics } from './statics';
 
-export interface UsEastStackProps extends StackProps {
-  branch: string;
+export interface UsEastStackProps extends StackProps, Configurable {
 }
 
 /**
@@ -20,9 +20,11 @@ export class UsEastStack extends Stack {
 
   constructor(scope: Construct, id: string, props: UsEastStackProps) {
     super(scope, id, props);
-    this.branch = props.branch;
+    this.branch = props.configuration.branch;
     this.createCertificate();
-    this.monitorLoginPage(props.branch);
+    if (props.configuration.monitorLoginPage != false) {
+      this.monitorLoginPage(this.branch);
+    }
   }
 
   /** Because the hosted zone SSM parameters are stored in eu-west-1,

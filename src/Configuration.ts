@@ -119,6 +119,13 @@ export interface Configuration {
    * @default INFO
    */
   readonly logLevel?: 'DEBUG' | 'INFO' | 'ERROR';
+
+
+  /**
+   * Deploy route53 health checks
+   * @default true
+   */
+  readonly monitorLoginPage?: boolean;
 }
 
 
@@ -144,6 +151,7 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     mijnContactGegevensLive: true,
     mijnProductenLive: true,
     logLevel: 'DEBUG',
+    monitorLoginPage: false,
   },
   acceptance: {
     branch: 'acceptance',
