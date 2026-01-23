@@ -1,11 +1,10 @@
 import { randomUUID } from 'crypto';
-import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import * as oidc from 'openid-client';
 
 export interface OpenIDConnectConfiguration {
   wellknown: string;
   clientId: string;
-  clientSecretArn?: string;
+  clientSecret: string;
   redirectUrl: string;
   clientOptions?: Partial<oidc.ClientMetadata>;
 }
@@ -19,7 +18,6 @@ export class OpenIDConnectV2 {
 
   private readonly configuration: OpenIDConnectConfiguration;
   private oidcConfiguration?: oidc.Configuration;
-  private clientSecret?: string;
 
   /**
    * Helper class for our OIDC auth flow
@@ -95,33 +93,12 @@ export class OpenIDConnectV2 {
     if (!this.oidcConfiguration) {
       const url = new URL(this.configuration.wellknown);
       this.oidcConfiguration = await oidc.discovery(url, this.configuration.clientId, {
-        client_secret: await this.getOidcClientSecret(),
+        client_secret: this.configuration.clientSecret,
         client_id: this.configuration.clientId,
       });
     }
     return this.oidcConfiguration;
   }
 
-  /**
-   * Retrieve client secret from secrets manager
-   * @returns string the client secret
-   */
-  private async getOidcClientSecret() {
-    if (!this.clientSecret) {
-      if (!this.configuration.clientSecretArn) {
-        throw Error('Client secret arn not configured, cannot load client secret.');
-      }
-      const secretsManagerClient = new SecretsManagerClient({});
-      const command = new GetSecretValueCommand({ SecretId: this.configuration.clientSecretArn });
-      const data = await secretsManagerClient.send(command);
-      // Depending on whether the secret is a string or binary, one of these fields will be populated.
-      if (data.SecretString) {
-        this.clientSecret = data.SecretString;
-      } else {
-        console.error('no secret value found');
-      }
-    }
-    return this.clientSecret;
-  }
 
 }
