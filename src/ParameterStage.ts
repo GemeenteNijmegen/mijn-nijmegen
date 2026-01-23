@@ -259,16 +259,16 @@ export class ssmParamsConstruct extends Construct {
       stringValue: '-',
     });
     new Secret(this, 'oidc-client-secret', {
-      secretName: Statics._OIDCClientID,
+      secretName: Statics._OIDCClientSecret,
       description: 'Mijn-Nijmegen OIDC Config - Client ID',
     });
     new StringParameter(this, 'oidc-redirect-url', {
-      parameterName: Statics._OIDCClientID,
+      parameterName: Statics._OIDCClientRedirectUrl,
       description: 'Mijn-Nijmegen OIDC Config - Redirect URL back to mijn.nijmegen.nl',
       stringValue: '-',
     });
     new StringParameter(this, 'oidc-well-known', {
-      parameterName: Statics._OIDCClientID,
+      parameterName: Statics._OIDCClientWellKnown,
       description: 'Mijn-Nijmegen OIDC Config - Well known URL of our IdP',
       stringValue: '-',
     });
