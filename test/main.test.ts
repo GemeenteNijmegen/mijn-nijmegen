@@ -89,17 +89,17 @@ test('StackHasLambdas', () => {
 
 test('StackHasParameters', () => {
   const app = new App();
-  const stack = new ParameterStack(app, 'test', { configuration: config});
+  const stack = new ParameterStack(app, 'test', { configuration: config });
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::SSM::Parameter', 30);
+  template.resourceCountIs('AWS::SSM::Parameter', 24);
 });
 
 
 test('StackHasSecrets', () => {
   const app = new App();
-  const stack = new ParameterStack(app, 'test', { configuration: config});
+  const stack = new ParameterStack(app, 'test', { configuration: config });
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::SecretsManager::Secret', 13);
+  template.resourceCountIs('AWS::SecretsManager::Secret', 10);
 });
 
 

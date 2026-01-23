@@ -1,7 +1,8 @@
+import process from 'process';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
-import { environmentVariables } from '@gemeentenijmegen/utils';
+import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { AuthRequestHandler } from './AuthRequestHandler';
 import { ApiClient as ApiClientV2 } from '../../shared/ApiClient';
@@ -10,13 +11,8 @@ import { OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 const apiClient = new ApiClient();
-const OIDC = new OpenIDConnectV2({
-  clientId: '',
-  redirectUrl: '',
-  wellknown: '',
-  clientSecretArn: '',
-});
 
+let OIDC: OpenIDConnectV2 | undefined = undefined;
 let haalCentraalApi: HaalCentraalApi | undefined = undefined;
 async function init() {
   // Construct the haal centraal API client
@@ -40,21 +36,33 @@ async function init() {
     apiclient: haalCentraalApiClient,
     baseUrl: haalCentraalValues.HAAL_CENTRAAL_BASE_URL,
   });
+
+  // Setup ODIC client
+  OIDC = new OpenIDConnectV2({
+    clientId: process.env.OIDC_CLIENT_ID!, // TODO load env vars and setup client
+    redirectUrl: process.env.OIDC_REDIRECT_URL!,
+    wellknown: process.env.OIDC_WELL_KNOWN!,
+    clientSecretArn: await AWS.getSecret(process.env.OIDC_CLIENT_SECRET_ARN!),
+  });
+
 }
 const initaliation = init();
 
 function parseEvent(event: APIGatewayProxyEventV2) {
+  const url = `${process.env.OIDC_REDIRECT_URL}${event.rawPath}?${event.rawQueryString}`;
   return {
-    fullUrl: new URL('https://localhost' + event.rawPath + '?' + event.rawQueryString), // TODO figure out actual full url form event
+    fullUrl: new URL(url),
     cookies: event?.cookies?.join(';') ?? '',
-    code: event?.queryStringParameters?.code,
-    state: event?.queryStringParameters?.state,
     error: event?.queryStringParameters?.error,
   };
 }
 
 export async function handler(event: APIGatewayProxyEventV2): Promise<ApiGatewayV2Response> {
   await initaliation;
+
+  if (!OIDC) {
+    throw Error('Failed to initalize properly');
+  }
 
   try {
     const params = parseEvent(event);
@@ -64,7 +72,7 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<ApiGateway
       queryStringParamError: params.error,
       dynamoDBClient,
       apiClient,
-      OpenIdConnect: OIDC,
+      OpenIdConnect: OIDC!,
       digidScope: process.env.DIGID_SCOPE ?? '',
       eherkenningScope: process.env.EHERKENNING_SCOPE ?? '',
       yiviScope: process.env.YIVI_SCOPE ?? '',

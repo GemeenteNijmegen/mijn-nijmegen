@@ -136,13 +136,19 @@
           "tsconfig": "tsconfig.dev.json"
         }
       ],
-      "\\.[jt]sx?$": [
+      "^.+\\.mustache$": "@glen/jest-raw-loader",
+      "^.+\\.tsx?$": [
         "ts-jest",
         {
-          "isolatedModules": true
+          "tsconfig": "tsconfig.dev.json"
         }
       ],
-      "^.+\\.mustache$": "@glen/jest-raw-loader"
+      "^.+\\.m?jsx?$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.dev.json"
+        }
+      ]
     },
     "transformIgnorePatterns": [
       "node_modules/(?!(openid-client)/)"

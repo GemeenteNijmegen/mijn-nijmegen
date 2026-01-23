@@ -1,5 +1,6 @@
 import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
 import { Aspects, aws_ssm as SSM, aws_secretsmanager as SecretsManager, Stack, Stage, StageProps, Tags } from 'aws-cdk-lib';
+import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { Configurable } from './Configuration';
@@ -22,7 +23,7 @@ export class ParameterStage extends Stage {
   }
 }
 
-interface ParameterStackProps extends Configurable {};
+interface ParameterStackProps extends Configurable { };
 /**
  * Stack that creates ssm parameters for the application.
  * These need to be present before stacks that use them.
@@ -64,15 +65,7 @@ export class ssmParamsConstruct extends Construct {
     /**
      * authentication parameters
      */
-    new SSM.StringParameter(this, 'ssm_auth_1', {
-      stringValue: 'https://authenticatie-accp.nijmegen.nl',
-      parameterName: Statics.ssmAuthUrlBaseParameter,
-    });
-
-    new SSM.StringParameter(this, 'ssm_auth_2', {
-      stringValue: 'AawootW574MqIMRAfAgzdv8lhQYLuGY3',
-      parameterName: Statics.ssmOIDCClientID,
-    });
+    this.addSignicatOidcParameters();
 
     new SSM.StringParameter(this, 'ssm_auth_3', {
       stringValue: 'openid',
@@ -119,53 +112,6 @@ export class ssmParamsConstruct extends Construct {
       description: 'OIDC scope for eherkenning',
     });
 
-    new SSM.StringParameter(this, 'ssm_auth_20', {
-      stringValue: 'https://',
-      parameterName: Statics.ssmVerIdWellKnown,
-      description: 'OIDC well known url (VerID)',
-    });
-
-    new SSM.StringParameter(this, 'ssm_auth_21', {
-      stringValue: 'openid nin',
-      parameterName: Statics.ssmVerIdScope,
-      description: 'OIDC scope for nl wallet (VerID)',
-    });
-
-    new SSM.StringParameter(this, 'ssm_auth_22', {
-      stringValue: '-',
-      parameterName: Statics.ssmVerIdClientId,
-      description: 'OIDC client id (VerID)',
-    });
-
-    new SecretsManager.Secret(this, 'ssm_auth_23', {
-      secretName: Statics.ssmVerIdClientSecret,
-      description: 'OIDC client secret (VerID)',
-    });
-
-    new SSM.StringParameter(this, 'ssm_auth_24', {
-      stringValue: 'https://',
-      parameterName: Statics.ssmSignicatWellKnown,
-      description: 'OIDC well known url (Signicat)',
-    });
-
-    new SSM.StringParameter(this, 'ssm_auth_25', {
-      stringValue: 'openid nin',
-      parameterName: Statics.ssmSignicatScope,
-      description: 'OIDC scope for nl wallet (Signicat)',
-    });
-
-    new SSM.StringParameter(this, 'ssm_auth_26', {
-      stringValue: '-',
-      parameterName: Statics.ssmSignicatClientId,
-      description: 'OIDC client id (Signicat)',
-    });
-
-    new SecretsManager.Secret(this, 'ssm_auth_27', {
-      secretName: Statics.ssmSignicatClientSecret,
-      description: 'OIDC client secret (Signicat)',
-    });
-
-
     new SSM.StringParameter(this, 'ssm_uitkering_2', {
       stringValue: '-',
       parameterName: Statics.ssmMTLSClientCert,
@@ -181,19 +127,9 @@ export class ssmParamsConstruct extends Construct {
       parameterName: Statics.ssmUitkeringsApiEndpointUrl,
     });
 
-    new SecretsManager.Secret(this, 'secret_1', {
-      secretName: Statics.secretOIDCClientSecret,
-      description: 'OpenIDConnect client secret',
-    });
-
     new SecretsManager.Secret(this, 'secret_2', {
       secretName: Statics.secretMTLSPrivateKey,
       description: 'mTLS certificate private key',
-    });
-
-    new SSM.StringParameter(this, 'ssm_brp_1', {
-      stringValue: 'https://data-test.nijmegen.nl/TenT/Bevraging/Irma',
-      parameterName: Statics.ssmBrpApiEndpointUrl,
     });
 
     this.addZaakParameters();
@@ -246,11 +182,6 @@ export class ssmParamsConstruct extends Construct {
     new SecretsManager.Secret(this, 'zaken_secret_3', {
       secretName: Statics.submissionstorageKey,
       description: 'Submission storage API key',
-    });
-
-    new SecretsManager.Secret(this, 'auth_service_client_secret', {
-      secretName: Statics.authServiceClientSecretArn,
-      description: 'OAuth client secret for mijn-nijmegen to use with authenticaiton service (Poc)',
     });
 
     new SecretsManager.Secret(this, 'zaakaggregator-api-key', {
@@ -309,17 +240,37 @@ export class ssmParamsConstruct extends Construct {
   }
 
   addProductenParameters() {
-
     new StringParameter(this, 'producten-base-url', {
       parameterName: Statics.ssmProductenArcBaseUrl,
       description: 'Demo ARC producten - base url',
       stringValue: '-',
     });
-
-
     new SecretsManager.Secret(this, 'producten-token', {
       secretName: Statics.ssmProductenArcApiKey,
       description: 'Demo ARC producten - token',
+    });
+  }
+
+
+  addSignicatOidcParameters() {
+    new StringParameter(this, 'oidc-client-id', {
+      parameterName: Statics._OIDCClientID,
+      description: 'Mijn-Nijmegen OIDC Config - Client ID',
+      stringValue: '-',
+    });
+    new Secret(this, 'oidc-client-secret', {
+      secretName: Statics._OIDCClientID,
+      description: 'Mijn-Nijmegen OIDC Config - Client ID',
+    });
+    new StringParameter(this, 'oidc-redirect-url', {
+      parameterName: Statics._OIDCClientID,
+      description: 'Mijn-Nijmegen OIDC Config - Redirect URL back to mijn.nijmegen.nl',
+      stringValue: '-',
+    });
+    new StringParameter(this, 'oidc-well-known', {
+      parameterName: Statics._OIDCClientID,
+      description: 'Mijn-Nijmegen OIDC Config - Well known URL of our IdP',
+      stringValue: '-',
     });
   }
 }
