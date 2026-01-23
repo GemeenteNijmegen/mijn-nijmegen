@@ -15,6 +15,7 @@ export class ZaakFormatter {
     try {
       const result = {
         ...zaak,
+        zaak_identifier: zaak.zaak_identifier ?? zaak.zaak_type, //TODO: Remove after zaakaggregator has switched to zaak_identifier
         registratiedatum: this.humanDate(zaak.registratiedatum),
         verwachtte_einddatum: zaak.verwachtte_einddatum ?? this.humanDate(zaak.verwachtte_einddatum),
         uiterlijke_einddatum: this.humanDate(zaak.uiterlijke_einddatum),
@@ -30,6 +31,7 @@ export class ZaakFormatter {
   formatZaak(zaak: SingleZaak) {
     return {
       ...zaak,
+      zaak_identifier: zaak.zaak_identifier ?? zaak.zaak_type, //TODO: Remove after zaakaggregator has switched to zaak_identifier
       registratiedatum: this.humanDate(zaak.registratiedatum),
       verwachtte_einddatum: this.humanDate(zaak.verwachtte_einddatum),
       uiterlijke_einddatum: this.humanDate(zaak.uiterlijke_einddatum),

@@ -10,6 +10,7 @@ export const TaakSummarySchema = z.object({
   is_afgerond: z.boolean(),
   is_verwerkt: z.boolean(),
   is_gesloten: z.boolean(),
+  laatstBewerktOp: z.string(),
   attachments: z.array(z.object({
     title: z.string(),
     url: z.string(),
@@ -40,7 +41,8 @@ export const ZaakSummarySchema = z.object({
   verwachtte_einddatum: z.coerce.date().optional(),
   uiterlijke_einddatum: z.coerce.date().optional(),
   einddatum: z.coerce.date().optional().nullable(),
-  zaak_type: z.string(),
+  zaak_type: z.string().optional(),
+  zaak_identifier: z.string().optional(),
   status: z.string().nullable(),
   resultaat: z.string().optional().nullable(),
 }).passthrough();
@@ -68,7 +70,8 @@ export const singleZaakSchema = z.object({
   verwachtte_einddatum: z.coerce.date().optional(),
   uiterlijke_einddatum: z.coerce.date().optional(),
   einddatum: z.coerce.date().optional(),
-  zaak_type: z.string(),
+  zaak_type: z.string().optional(),
+  zaak_identifier: z.string().optional(),
   status: z.string().optional(),
   status_list: z.array(z.any()).optional(),
   resultaat: z.string().optional().nullable(),

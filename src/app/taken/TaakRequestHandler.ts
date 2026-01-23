@@ -5,10 +5,10 @@ import { environmentVariables } from '@gemeentenijmegen/utils';
 import { eventParams } from './taken.lambda';
 import { ArrowRight, Checkmark, Spinner } from '../../shared/Icons';
 import { logger } from '../../shared/Logger';
-import { Navigation } from '../../shared/Navigation';
+import { BreadCrumbs, Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import * as takenListPartial from '../zaken/templates/taken.mustache';
-import { UserFromSession } from '../zaken/User';
+import { User, UserFromSession } from '../zaken/User';
 import { TaakSummariesResponseSchema, TaakSummary } from '../zaken/ZaakInterface';
 import { ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
 import * as takenTemplate from './templates/taken.mustache';
@@ -43,6 +43,7 @@ export class TaakrequestHandler {
 
   async list(session: Session, params: eventParams) {
     const user = UserFromSession(session);
+    const { navigation, breadcrumbs } = this.setupNavigation(user);
     let timeout = false;
     let taken;
     (params.responseType == 'json') ? this.connector.setTimeout(10000) : this.connector.setTimeout(1000);
@@ -60,20 +61,19 @@ export class TaakrequestHandler {
         return Response.json({ elements: [taken] });
       }
     } else {
-      const navigation = new Navigation(user.type, {
-        currentPath: '/',
-        showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
-      });
+
 
       const data = {
         title: 'overzicht',
         shownav: true,
         nav: navigation.items,
+        breadcrumbs: breadcrumbs.items,
         volledigenaam: user.userName,
         taken,
         has_taken: taken ? true : false,
         xsrf_token: session.getValue('xsrf_token'),
         timeout,
+        header_additions: '<link rel="stylesheet" href="/static/styles/zaak.css">',
       };
       // render page
       const html = await render(data, takenTemplate.default,
@@ -88,6 +88,22 @@ export class TaakrequestHandler {
     }
   }
 
+  private setupNavigation(user: User) {
+    const navigation = new Navigation(user.type, {
+      currentPath: '/taken',
+      showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
+    });
+    const breadcrumbs = new BreadCrumbs([
+      {
+        title: 'Home',
+        url: '/',
+      }, {
+        title: 'Mijn taken',
+        url: '/taken',
+      },
+    ]);
+    return { navigation, breadcrumbs };
+  }
 
   private async takenList(session: Session) {
     const user = UserFromSession(session);

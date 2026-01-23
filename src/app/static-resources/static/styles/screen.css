@@ -73,6 +73,9 @@
 */
 body {
     padding-top: 70px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 @media (min-width: 1000px) {
     body {
@@ -84,12 +87,12 @@ body a {
     text-decoration: underline;
 }
 
-.btn, .navbar a {
+.btn, .navbar a, .utrecht-button {
     text-decoration: none;
 }
 
 main {
-    min-height: 50vh;
+    flex-grow: 1;
 }
 
 /** Fix for issue in safari, not in component library **/
@@ -102,7 +105,7 @@ main {
     background-repeat: no-repeat;
     background-position: left .25em center;
     background-size: 2.5em;
-    text-indent: 1.75em;
+    text-indent: 2.5em;
     width: auto;
 }
 
@@ -111,7 +114,7 @@ main {
     background-repeat: no-repeat;
     background-position: left .25em center;
     background-size: 2.5em;
-    text-indent: 1.75em;
+    text-indent: 2.5em;
     width: auto;
 }
 
@@ -120,7 +123,7 @@ main {
     background-repeat: no-repeat;
     background-position: left .25em center;
     background-size: 2.5em;
-    text-indent: 1.75em;
+    text-indent: 2.5em;
     width: auto;
 }
 
@@ -311,3 +314,11 @@ nav.nijmegen-sidenav li.active svg {
 }
 
 .spinner{transform-origin:center;animation:spinner_spin .75s infinite linear}@keyframes spinner_spin{100%{transform:rotate(360deg)}}
+
+
+/**
+ * Design system compatibility 
+ */
+footer.nijmegen-footer {
+    margin-top: 2rem;
+}

@@ -2,12 +2,12 @@ import { Navigation } from '../Navigation';
 describe('Navigation construction', () => {
   test('Regular navigation retrieves 4 items', async () => {
     const navigation = new Navigation('person');
-    expect(navigation.items).toHaveLength(4);
+    expect(navigation.items).toHaveLength(5);
   });
 
   test('Organisation navigation retrieves 2 items', async () => {
     const navigation = new Navigation('organisation', { currentPath: '/' });
-    expect(navigation.items).toHaveLength(2);
+    expect(navigation.items).toHaveLength(3);
   });
 
   test('Navigation is ordered correctly', async () => {

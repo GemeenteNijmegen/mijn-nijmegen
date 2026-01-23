@@ -15,7 +15,7 @@ import { eventParams } from './zaken.lambda';
 import { ZakenAggregatorConnector } from './ZakenAggregatorConnector';
 import { Spinner } from '../../shared/Icons';
 import { logger } from '../../shared/Logger';
-import { Navigation } from '../../shared/Navigation';
+import { BreadCrumbs, Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import { validateToken } from '../../shared/validateToken';
 
@@ -106,10 +106,8 @@ export class ZakenRequestHandler {
   }
 
   async htmlListResponse(session: Session, user: User, zaakSummaries: any, timeout?: boolean) {
-    const navigation = new Navigation(user.type, {
-      currentPath: '/zaken',
-      showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
-    });
+    const navigation = this.setupNavigation(user);
+    const breadcrumbs = this.setupBreadcrumbs();
 
     const { openHtml, closedHtml } = await this.zakenListsHtml(zaakSummaries);
 
@@ -118,10 +116,12 @@ export class ZakenRequestHandler {
       'title': 'Mijn zaken',
       'shownav': true,
       'nav': navigation.items,
+      'breadcrumbs': breadcrumbs.items,
       'open-zaken': openHtml,
       'closed-zaken': closedHtml,
       timeout,
       'xsrf_token': session.getValue('xsrf_token'),
+      'header_additions': '<link rel="stylesheet" href="/static/styles/zaak.css">',
     };
     // render page
     const html = await render(data, zakenTemplate.default, {
@@ -177,28 +177,32 @@ export class ZakenRequestHandler {
         return this.jsonGetResponse(session, formattedZaak, params.xsrfToken);
       }
     } else {
-      return this.htmlGetResponse(session, formattedZaak, timeout);
+      const path = `/zaken/${params.zaakConnectorId}/${params.zaakId}`;
+      return this.htmlGetResponse(session, formattedZaak, path, timeout);
     }
 
   }
 
-  private async htmlGetResponse(session: Session, formattedZaak: any, timeout: boolean) {
+  private async htmlGetResponse(session: Session, formattedZaak: any, path: string, timeout: boolean) {
     const user = UserFromSession(session);
     //If we get neither a zaak or a timeout flag, the zaak doesn't exist or isn't accessible for the user.
     if (formattedZaak || timeout) {
-      const navigation = new Navigation(user.type, {
-        currentPath: '/zaken',
-        showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
-      });
+      const navigation = this.setupNavigation(user);
+
+      const breadcrumbs = this.setupBreadcrumbs(formattedZaak, path);
+
       let data = {
         volledigenaam: session.getValue('username'),
         title: (formattedZaak) ? `Zaak - ${formattedZaak.zaak_type}` : 'Zaak ophalen niet gelukt',
         shownav: true,
         nav: navigation.items,
+        breadcrumbs: breadcrumbs.items,
         singlezaak: await this.zaakHtml(formattedZaak),
         timeout,
         xsrf_token: session.getValue('xsrf_token'),
+        header_additions: '<link rel="stylesheet" href="/static/styles/zaak.css">',
       };
+      console.debug(data);
       // render page
       const html = await render(data, zaakTemplate.default, {
         taken: takenTemplate.default,
@@ -208,6 +212,33 @@ export class ZakenRequestHandler {
     } else {
       return Response.error(404);
     }
+  }
+
+  private setupBreadcrumbs(formattedZaak?: any, path?: string) {
+    const crumbs = [
+      {
+        title: 'Home',
+        url: '/',
+      }, {
+        title: 'Mijn zaken',
+        url: '/zaken',
+      },
+    ];
+    if (formattedZaak && path) {
+      crumbs.push(
+        {
+          title: formattedZaak?.zaak_type ?? 'Zaak',
+          url: path,
+        });
+    }
+    return new BreadCrumbs(crumbs);
+  }
+
+  private setupNavigation(user: User) {
+    return new Navigation(user.type, {
+      currentPath: '/zaken',
+      showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
+    });
   }
 
   private async jsonGetResponse(session: Session, formattedZaak: any, xsrfToken?: string) {

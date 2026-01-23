@@ -6,3 +6,4 @@ export * as MdiCurrencyEur from './currency-eur.mustache';
 export * as MdiFileMultiple from './file-multiple.mustache';
 export * as MdiOverview from './overview.mustache';
 export * as Spinner from './spinner.mustache';
+export * as Tasks from './tasks.mustache';

@@ -9,6 +9,14 @@
       "type": "build"
     },
     {
+      "name": "@gemeentenijmegen/components-css",
+      "type": "build"
+    },
+    {
+      "name": "@gemeentenijmegen/design-tokens",
+      "type": "build"
+    },
+    {
       "name": "@glen/jest-raw-loader",
       "type": "build"
     },
@@ -49,6 +57,21 @@
     {
       "name": "@typescript-eslint/parser",
       "version": "^8",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/button-css",
+      "version": "2.3.0",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/document-css",
+      "version": "1.5.0",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/paragraph-css",
+      "version": "2.3.1",
       "type": "build"
     },
     {
@@ -105,6 +128,7 @@
     },
     {
       "name": "projen",
+      "version": "0.98.29",
       "type": "build"
     },
     {
@@ -157,10 +181,6 @@
     },
     {
       "name": "@gemeentenijmegen/utils",
-      "type": "runtime"
-    },
-    {
-      "name": "@pepperize/cdk-route53-health-check",
       "type": "runtime"
     },
     {
