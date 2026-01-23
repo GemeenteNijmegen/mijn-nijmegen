@@ -24,14 +24,11 @@ interface RenderData {
 interface Config {
   apiClient: ApiClient;
   dynamoDBClient: DynamoDBClient;
-  showZaken?: boolean; // show the 'Mijn Zaken' menu
-
   /**
    * Provide a HaalCentraal API client when if
    * want to use HaalCentraal.
-   * @default - the IRMA BRP API is used
    */
-  haalCentraalApi?: HaalCentraalApi;
+  haalCentraalApi: HaalCentraalApi;
 }
 
 export class PersoonsgegevensRequestHandler {

@@ -2,8 +2,8 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { AWS } from '@gemeentenijmegen/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
-import { OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
 import { LoginRequestHandler, RequestParams } from './loginRequestHandler';
+import { OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 

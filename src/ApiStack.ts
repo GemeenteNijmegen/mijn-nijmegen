@@ -361,9 +361,6 @@ export class ApiStack extends Stack implements Configurable {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: this.baseUrl,
       environment: {
-        MTLS_PRIVATE_KEY_ARN: mtlsConfig.privateKey.secretArn,
-        MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
-        MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
 
         // Haal Centraal

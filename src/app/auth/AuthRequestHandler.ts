@@ -39,9 +39,8 @@ export interface AuthRequestHandlerProps {
   /**
    * If a haal centraal API is provided prefere this over the
    * old IRMA BRP API.
-   * @default - the IRMA BRP API is used
    */
-  haalCentraalApi?: HaalCentraalApi;
+  haalCentraalApi: HaalCentraalApi;
 }
 
 export class AuthRequestHandler {
