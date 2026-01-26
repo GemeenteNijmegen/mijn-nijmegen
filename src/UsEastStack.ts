@@ -1,7 +1,6 @@
 import { aws_certificatemanager as CertificateManager, aws_ssm as SSM, Stack, StackProps } from 'aws-cdk-lib';
 import { Alarm, ComparisonOperator, Metric } from 'aws-cdk-lib/aws-cloudwatch';
 import { CfnHealthCheck, HealthCheckType } from 'aws-cdk-lib/aws-route53';
-import { RemoteParameters } from 'cdk-remote-stack';
 import { Construct } from 'constructs';
 import { Configurable } from './Configuration';
 import { Statics } from './statics';
@@ -27,18 +26,6 @@ export class UsEastStack extends Stack {
     }
   }
 
-  /** Because the hosted zone SSM parameters are stored in eu-west-1,
-   * we use the 'remoteParameters'-package to retrieve these cross-region.
-   */
-  getZoneAttributesFromEuWest(parameters: RemoteParameters, id: string, name: string): { hostedZoneId: string; zoneName: string } {
-    const zoneId = parameters.get(id);
-    const zoneName = parameters.get(name);
-    return {
-      hostedZoneId: zoneId,
-      zoneName: zoneName,
-    };
-  }
-
   /**
    * The hosted zone is a subdomain of csp-nijmegen.nl. We use a CNAME in nijmegen.nl to reference this subdomain. The certificate
    * must be valid for both domains. Domain validation for csp-nijmegen.nl is automatic, unfortunately, domain validation for nijmegen.nl
@@ -46,7 +33,7 @@ export class UsEastStack extends Stack {
    * note the validation record, add this to Nijmegen DNS, remove your certificate and then deploy this, to not have to wait for validation
    * when deploying.
    */
-  createCertificate() {
+  private createCertificate() {
     const subdomain = Statics.subDomain(this.branch);
     const cspSubdomain = Statics.cspSubDomain(this.branch);
     const appDomain = `${subdomain}.nijmegen.nl`;
@@ -73,7 +60,7 @@ export class UsEastStack extends Stack {
    *
    * @param branch the deployment branch (determines domain to monitor)
    */
-  monitorLoginPage(branch: string) {
+  private monitorLoginPage(branch: string) {
     const domain = `${Statics.subDomain(branch)}.nijmegen.nl`;
 
     // Create health check using native CDK Route53 construct
