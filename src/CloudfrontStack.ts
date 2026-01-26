@@ -1,3 +1,4 @@
+import { RemoteParameters } from '@gemeentenijmegen/cross-region-parameteres';
 import {
   aws_s3_deployment,
   aws_certificatemanager as CertificateManager,
@@ -29,7 +30,6 @@ import {
   ViewerProtocolPolicy,
 } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin, S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
-import { RemoteParameters } from 'cdk-remote-stack';
 import { Construct } from 'constructs';
 import { Statics } from './statics';
 
