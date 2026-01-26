@@ -83,9 +83,6 @@ export class AuthRequestHandler {
       // Startup the session
       try {
         const username = await user.getUserName();
-
-        console.log(username);
-
         await session.createSession({
           loggedin: { BOOL: true },
           identifier: { S: user.identifier },
