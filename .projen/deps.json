@@ -172,6 +172,10 @@
       "type": "runtime"
     },
     {
+      "name": "@gemeentenijmegen/cross-region-parameteres",
+      "type": "runtime"
+    },
+    {
       "name": "@gemeentenijmegen/projen-project-type",
       "type": "runtime"
     },
@@ -194,10 +198,6 @@
     },
     {
       "name": "axios",
-      "type": "runtime"
-    },
-    {
-      "name": "cdk-remote-stack",
       "type": "runtime"
     },
     {
