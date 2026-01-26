@@ -1427,10 +1427,10 @@
   resolved "https://registry.yarnpkg.com/@gemeentenijmegen/components-css/-/components-css-0.0.1-alpha.70.tgz#9dcacc643906d6a78a928dd8d30b89b56fa42412"
   integrity sha512-qiwX8S7IFgk/fVSLTl4HiB30K70/RRpN0NafqzgGJ+wfk8cQGRg5g+T1itF9GPO/iybUdYFPJvTev8z3XaqOEA==
 
-"@gemeentenijmegen/cross-region-parameteres@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/cross-region-parameteres/-/cross-region-parameteres-0.0.1.tgz#7610c6bf8ad28335c6c115618e02eed059d7ce9b"
-  integrity sha512-/EGXl0uYp2AIdTv31RvvSjEbrp/JY88Y/CwpGJAdD1BxAayJ+aLL1/v/twEl7wQzSPWs1PDb9bIgrYJyjq6Lmg==
+"@gemeentenijmegen/cross-region-parameteres@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/cross-region-parameteres/-/cross-region-parameteres-0.0.2.tgz#4a32260057f873884c01fdd73f04615df6e7e6f4"
+  integrity sha512-vYOicPdju5WZFVZJ4uslHlCBxvEAEVLVMLKQ4UjhwVtuq8GNzxbKIGINCGsxqkbdsi0wsf0JJs9/PZ4efIBJ1A==
   dependencies:
     "@aws-sdk/client-ssm" "^3.975.0"
     "@types/aws-lambda" "^8.10.160"
