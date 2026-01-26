@@ -1427,13 +1427,14 @@
   resolved "https://registry.yarnpkg.com/@gemeentenijmegen/components-css/-/components-css-0.0.1-alpha.70.tgz#9dcacc643906d6a78a928dd8d30b89b56fa42412"
   integrity sha512-qiwX8S7IFgk/fVSLTl4HiB30K70/RRpN0NafqzgGJ+wfk8cQGRg5g+T1itF9GPO/iybUdYFPJvTev8z3XaqOEA==
 
-"@gemeentenijmegen/cross-region-parameteres@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/cross-region-parameteres/-/cross-region-parameteres-0.0.2.tgz#4a32260057f873884c01fdd73f04615df6e7e6f4"
-  integrity sha512-vYOicPdju5WZFVZJ4uslHlCBxvEAEVLVMLKQ4UjhwVtuq8GNzxbKIGINCGsxqkbdsi0wsf0JJs9/PZ4efIBJ1A==
+"@gemeentenijmegen/cross-region-parameteres@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/cross-region-parameteres/-/cross-region-parameteres-0.0.3.tgz#0bc7381cae6f9dbdbd13b720f16e4da7a3a7eb4b"
+  integrity sha512-Jq26Uj1k6JXbE8DZOvh/rYZsqU5uxwUvKuUR1pgAJtPOAPXlI7PuwZIm7xGzWx7k9Cp3pP48CuQLr0J9Mni5QQ==
   dependencies:
     "@aws-sdk/client-ssm" "^3.975.0"
     "@types/aws-lambda" "^8.10.160"
+    zod "^4.3.6"
 
 "@gemeentenijmegen/design-tokens@^0.0.2-alpha.95":
   version "0.0.2-alpha.95"
@@ -7522,3 +7523,8 @@ zod@^3.25.76:
   version "3.25.76"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.76.tgz#26841c3f6fd22a6a2760e7ccb719179768471e34"
   integrity sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==
+
+zod@^4.3.6:
+  version "4.3.6"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-4.3.6.tgz#89c56e0aa7d2b05107d894412227087885ab112a"
+  integrity sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==
