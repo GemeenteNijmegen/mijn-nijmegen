@@ -1,5 +1,6 @@
 import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
 import { Aspects, aws_ssm as SSM, aws_secretsmanager as SecretsManager, Stack, Stage, StageProps, Tags } from 'aws-cdk-lib';
+import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { Configurable } from './Configuration';
@@ -195,6 +196,8 @@ export class ssmParamsConstruct extends Construct {
     this.addOpenKlantParameters();
     this.addNotifyParameters();
     this.addHaalCentraalParameters();
+
+    this.addSignicatOidcParameters();
   }
 
   private addZaakParameters() {
@@ -317,4 +320,28 @@ export class ssmParamsConstruct extends Construct {
       description: 'Open producten token',
     });
   }
+
+  addSignicatOidcParameters() {
+    new StringParameter(this, 'oidc-client-id', {
+      parameterName: Statics._OIDCClientID,
+      description: 'Mijn-Nijmegen OIDC Config - Client ID',
+      stringValue: '-',
+    });
+    new Secret(this, 'oidc-client-secret', {
+      secretName: Statics._OIDCClientSecret,
+      description: 'Mijn-Nijmegen OIDC Config - Client Secret',
+    });
+    new StringParameter(this, 'oidc-redirect-url', {
+      parameterName: Statics._OIDCClientRedirectUrl,
+      description: 'Mijn-Nijmegen OIDC Config - Redirect URL back to mijn.nijmegen.nl',
+      stringValue: '-',
+    });
+    new StringParameter(this, 'oidc-well-known', {
+      parameterName: Statics._OIDCClientWellKnown,
+      description: 'Mijn-Nijmegen OIDC Config - Well known URL of our IdP',
+      stringValue: '-',
+    });
+  }
+
+
 }
