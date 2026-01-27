@@ -1,4 +1,4 @@
-import { aws_lambda as Lambda, aws_dynamodb, aws_ssm as SSM, RemovalPolicy, Duration, Stack } from 'aws-cdk-lib';
+import { aws_dynamodb, Duration, aws_lambda as Lambda, RemovalPolicy, aws_ssm as SSM, Stack } from 'aws-cdk-lib';
 import { Alarm } from 'aws-cdk-lib/aws-cloudwatch';
 import { FunctionProps } from 'aws-cdk-lib/aws-lambda';
 import { FilterPattern, IFilterPattern, MetricFilter, RetentionDays } from 'aws-cdk-lib/aws-logs';
@@ -8,7 +8,7 @@ import { Statics } from './statics';
 type T = Lambda.Function;
 
 export interface ApiFunctionProps {
-  apiFunction: { new(scope: Construct, id:string, props?: Lambda.FunctionProps): T };
+  apiFunction: { new(scope: Construct, id: string, props?: Lambda.FunctionProps): T };
   description: string;
   codePath: string;
   table: aws_dynamodb.ITable;
@@ -42,8 +42,6 @@ export class ApiFunction extends Construct {
       timeout: props.timeout,
       environment: {
         APPLICATION_URL_BASE: props.applicationUrlBase || '',
-        AUTH_URL_BASE: SSM.StringParameter.valueForStringParameter(this, Statics.ssmAuthUrlBaseParameter),
-        OIDC_CLIENT_ID: SSM.StringParameter.valueForStringParameter(this, Statics.ssmOIDCClientID),
         OIDC_SCOPE: SSM.StringParameter.valueForStringParameter(this, Statics.ssmOIDCScope),
         SESSION_TABLE: props.table.tableName,
         ...props.environment,

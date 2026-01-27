@@ -1,8 +1,8 @@
 import { Logger } from '@aws-lambda-powertools/logger';
 import z from 'zod';
-import { User } from '../zaken/User';
 import { OpenKlantDigitaalAdresWithUuid, OpenKlantPartijWithUuid } from './model/partij';
 import { IOpenKlantAPI, SoortDigitaalAdres } from './OpenKlantApi';
+import { User } from '../../shared/User';
 
 
 export const VoorkeurSchema = z.enum(['telefoon', 'email']);
@@ -54,7 +54,7 @@ export class ContactgegevensService {
     // Create the partij if it does not exist yet
     if (!openKlantPartij) {
       // TODO just throw an error if we do not have the name
-      openKlantPartij = await this.openklant.createNatuurlijkPersoon(user.userName ?? 'Onbekende gebruiker');
+      openKlantPartij = await this.openklant.createNatuurlijkPersoon(await user.getUserName() ?? 'Onbekende gebruiker');
       await this.openklant.addPartijIdentificatie(user, openKlantPartij.uuid);
     }
 

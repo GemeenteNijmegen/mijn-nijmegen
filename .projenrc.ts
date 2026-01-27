@@ -1,4 +1,6 @@
-const { GemeenteNijmegenCdkApp } = require('@gemeentenijmegen/projen-project-type');
+import { GemeenteNijmegenCdkApp } from '@gemeentenijmegen/projen-project-type';
+import { Transform, TypeScriptModuleResolution } from 'projen/lib/javascript';
+
 const project = new GemeenteNijmegenCdkApp({
   cdkVersion: '2.22.0',
   defaultReleaseBranch: 'production',
@@ -10,6 +12,7 @@ const project = new GemeenteNijmegenCdkApp({
       labels: ['auto-merge'],
     },
   },
+  projenrcTs: true,
   deps: [
     '@aws-lambda-powertools/logger',
     '@aws-sdk/client-dynamodb',
@@ -19,7 +22,7 @@ const project = new GemeenteNijmegenCdkApp({
     '@gemeentenijmegen/apiclient',
     '@gemeentenijmegen/apigateway-http',
     '@gemeentenijmegen/session',
-    '@gemeentenijmegen/cross-region-parameteres',
+    '@gemeentenijmegen/cross-region-parameters',
     '@gemeentenijmegen/utils',
     'dotenv',
     '@aws-sdk/client-secrets-manager',
@@ -29,7 +32,6 @@ const project = new GemeenteNijmegenCdkApp({
     '@types/mustache',
     'axios',
     'cookie',
-    'openid-client',
     'object-mapper',
     'xml2js',
     'jsonwebtoken',
@@ -66,19 +68,49 @@ const project = new GemeenteNijmegenCdkApp({
         'js', 'json', 'jsx', 'ts', 'tsx', 'node', 'mustache',
       ],
       transform: {
-        '\\.[jt]sx?$': 'ts-jest',
-        '^.+\\.mustache$': '@glen/jest-raw-loader',
+        // '\\.[jt]sx?$': new Transform('ts-jest', {
+        //   isolatedModules: true,
+        // }),
+        '^.+\\.mustache$': new Transform('@glen/jest-raw-loader'),
+        '^.+\\.tsx?$': new Transform('ts-jest', {
+          tsconfig: 'tsconfig.dev.json',
+        }),
+        '^.+\\.m?jsx?$': new Transform('ts-jest', {
+          tsconfig: 'tsconfig.dev.json',
+        }),
       },
+      transformIgnorePatterns: [
+        'node_modules/(?!(openid-client)/)',
+      ],
       testPathIgnorePatterns: ['/node_modules/', '/cdk.out', '/test/playwright'],
       roots: ['src', 'test'],
+      moduleNameMapper: {
+        '^(\\.{1,2}/.*)\\.js$': '$1',
+      },
     },
   },
   eslintOptions: {
+    dirs: ['src'],
     devdirs: ['src/**/tests', '/test', '/build-tools'],
   },
   bundlerOptions: {
     loaders: {
       mustache: 'text',
+    },
+  },
+  tsconfig: {
+    compilerOptions: {
+      isolatedModules: true,
+      esModuleInterop: true,
+      allowSyntheticDefaultImports: true,
+    },
+  },
+  tsconfigDev: {
+    compilerOptions: {
+      module: 'CommonJS',
+      moduleResolution: TypeScriptModuleResolution.NODE,
+      esModuleInterop: true,
+      allowSyntheticDefaultImports: true,
     },
   },
   gitignore: [

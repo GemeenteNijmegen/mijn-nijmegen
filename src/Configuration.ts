@@ -64,11 +64,6 @@ export interface Configuration {
   pipelineStackCdkName: string;
   pipelineName: string;
 
-  /**
-   * Feature flag: if this is not true, the lamba will
-   * use the old (layer7) BRP api.
-   */
-  readonly brpHaalCentraalIsLive?: boolean;
 
   /**
    * Feature flag: if this is not true, the lambda will
@@ -89,15 +84,6 @@ export interface Configuration {
    * not be called.
    */
   readonly zakenUseSubmissions?: boolean;
-
-  /**
-   * Feature flag: enables nl wallet login (VerID)
-   */
-  readonly nlWalletVerIdIsLive?: boolean;
-  /**
-   * Feature flag: enables nl wallet login (Signicat)
-   */
-  readonly nlWalletSignicatIsLive?: boolean;
 
   /**
    * Enable PoC authentication service adding a configuration for it
@@ -133,6 +119,13 @@ export interface Configuration {
    * @default INFO
    */
   readonly logLevel?: 'DEBUG' | 'INFO' | 'ERROR';
+
+
+  /**
+   * Deploy route53 health checks
+   * @default true
+   */
+  readonly monitorLoginPage?: boolean;
 }
 
 
@@ -147,7 +140,6 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     dsRecord: '1092 13 2 1F367460EB372760AA306E8BA29C64AD04BCA7AB515E30CA99FE710A1484A0FE',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-development',
     pipelineName: 'mijnnijmegen-development',
-    brpHaalCentraalIsLive: true,
     zakenUseTaken: true,
     zakenIsLive: true,
     zakenUseSubmissions: true,
@@ -157,10 +149,9 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     // },
     useZakenFromAggregatorAPI: true,
     mijnContactGegevensLive: true,
-    nlWalletVerIdIsLive: true,
-    nlWalletSignicatIsLive: true,
     mijnProductenLive: true,
     logLevel: 'DEBUG',
+    monitorLoginPage: false,
   },
   acceptance: {
     branch: 'acceptance',
@@ -172,7 +163,6 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     dsRecord: '3766 13 2 11761745E09473E6CE95DB798CF1ADB69B4433E73EEFC9F7FE341561966EA154',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-acceptance',
     pipelineName: 'mijnnijmegen-acceptance',
-    brpHaalCentraalIsLive: true,
     zakenUseTaken: true,
     zakenIsLive: true,
     zakenUseSubmissions: true,
@@ -181,8 +171,6 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     //   endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
     // },
     useZakenFromAggregatorAPI: true,
-    nlWalletVerIdIsLive: true,
-    nlWalletSignicatIsLive: false,
     logLevel: 'DEBUG',
   },
   production: {
@@ -195,13 +183,10 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     dsRecord: '40951 13 2 1EFF20C0264CD1FDE6C7C858398BC2141768CC014A7BB27997F323076B7C47ED',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-production',
     pipelineName: 'mijnnijmegen-production',
-    brpHaalCentraalIsLive: true,
     zakenUseTaken: false,
     zakenIsLive: true,
     zakenUseSubmissions: true,
     useZakenFromAggregatorAPI: true,
-    nlWalletVerIdIsLive: false,
-    nlWalletSignicatIsLive: false,
   },
 };
 

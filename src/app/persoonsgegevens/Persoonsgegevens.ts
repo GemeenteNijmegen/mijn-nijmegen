@@ -16,25 +16,6 @@ export interface Persoonsgegevens {
 
 export class PersoonsgegevensMapper {
 
-  static fromBrpApi(persoon: any): Persoonsgegevens {
-    return {
-      bsn: persoon.BSN.BSN,
-      voorletters: persoon.Persoonsgegevens.Voorletters,
-      voornamen: persoon.Persoonsgegevens.Voornamen,
-      voorvoegsel: persoon.Persoonsgegevens.Voorvoegsel,
-      geslachtsnaam: persoon.Persoonsgegevens.Geslachtsnaam,
-      achternaam: persoon.Persoonsgegevens.Achternaam,
-      geboortedatum: persoon.Persoonsgegevens.Geboortedatum,
-      nederlandseNationaliteit: persoon.Persoonsgegevens.NederlandseNationaliteit,
-      geslacht: persoon.Persoonsgegevens.Geslacht,
-
-      adresregels: [
-        `${persoon.Adres.Straat} ${persoon.Adres.Huisnummer}`,
-        `${persoon.Adres.Postcode} ${persoon.Adres.Woonplaats}`,
-      ],
-    };
-  }
-
   static fromHaalCentraal(data: any): Persoonsgegevens {
     return {
       bsn: data.burgerservicenummer,

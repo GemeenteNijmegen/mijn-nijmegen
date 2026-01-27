@@ -1,5 +1,5 @@
 import { Bsn } from '@gemeentenijmegen/utils';
-import { Person, User } from '../../zaken/User';
+import { Person, User } from '../../../shared/User';
 import { ContactgegevensService } from '../ContactgegevensService';
 import { IOpenKlantAPI, SoortDigitaalAdres } from '../OpenKlantApi';
 
@@ -7,7 +7,7 @@ describe('ContactgegevensService', () => {
   let mockOpenKlant: jest.Mocked<IOpenKlantAPI>;
   let service: ContactgegevensService;
 
-  const baseUser = new Person(new Bsn('999999333'), undefined, undefined, 'John Doe');
+  const baseUser = new Person(new Bsn('999999333'), undefined, 'John Doe');
 
   beforeEach(() => {
     mockOpenKlant = {

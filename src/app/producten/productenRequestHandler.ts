@@ -1,9 +1,15 @@
+import { Logger } from '@aws-lambda-powertools/logger';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
-import * as template from './templates/producten.mustache';
+import { environmentVariables } from '@gemeentenijmegen/utils';
+import { productEventParams } from './producten.lambda';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import { User, UserFromSession } from '../../shared/User';
+import { ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
+import * as productTemplate from './templates/product.mustache';
+import * as productenTemplate from './templates/producten.mustache';
 
 interface RenderData {
   volledigenaam: string;
@@ -11,20 +17,31 @@ interface RenderData {
   shownav: boolean;
   nav: any;
   error?: string;
+  products?: any;
+  product?: any;
+  walletIsIngeladen?: any;
 }
 
-interface Config {
-  //apiClient: ApiClient;
+export interface Config {
   dynamoDBClient: DynamoDBClient;
-
 }
 
 export class ProductenRequestHandler {
 
+  logger = new Logger();
 
-  constructor(private config: Config) { }
+  private connector: ZakenAggregatorConnector;
 
-  async handleRequest(cookies: string) {
+  constructor(private config: Config) {
+    const env = environmentVariables(['ZAKEN_APIGATEWAY_BASEURL', 'ZAKEN_APIGATEWAY_APIKEY']);
+    this.connector = new ZakenAggregatorConnector({
+      baseUrl: new URL(env.ZAKEN_APIGATEWAY_BASEURL),
+      apiKeySecretName: env.ZAKEN_APIGATEWAY_APIKEY,
+      timeout: 2000,
+    });
+  }
+
+  async handleRequest(cookies: string, eventParams: productEventParams) {
 
     console.time('request');
     console.timeLog('request', 'start request');
@@ -37,7 +54,7 @@ export class ProductenRequestHandler {
 
     // Handle request if loggedin
     if (session.isLoggedIn() == true) {
-      const response = await this.handleLoggedinRequest(session);
+      const response = await this.handleLoggedinRequest(session, eventParams);
       console.timeEnd('request');
       return response;
     }
@@ -46,13 +63,13 @@ export class ProductenRequestHandler {
     return Response.redirect('/login');
 
   }
-  async handleLoggedinRequest(session: Session) {
+  async handleLoggedinRequest(session: Session, eventParams: productEventParams) {
 
     // Setup view
     const navigation = new Navigation('person', {
       currentPath: '/producten',
       showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
-      showProducten: process.env.SHOW_PRODUCTEN== 'True',
+      showProducten: process.env.SHOW_PRODUCTEN == 'True',
     });
     const data: RenderData = {
       volledigenaam: session.getValue('username'),
@@ -61,8 +78,37 @@ export class ProductenRequestHandler {
       nav: navigation.items,
       error: undefined,
     };
-    // render page
-    const html = await render(data, template.default);
-    return Response.html(html, 200, session.getCookie());
+    const user: User = UserFromSession(session);
+    if (eventParams.productId) {
+      // individual product page
+
+      if (eventParams.inladenWallet) {
+        // Ga redirecten
+        // Geef url mee /product/${eventParams.productId}?is_ingeladen_wallet=true
+      }
+
+
+      // NU alleen de eerste, nog niet paginated
+      const results = await this.connector.fetch(`/mijn-services-aggregator/PRODUCTEN/producten/api/v1/producten/${eventParams.productId}`, user);
+      this.logger.info('temp product results', results);
+
+      data.product = results;
+      // render page
+      const html = await render(data, productTemplate.default);
+      return Response.html(html, 200, session.getCookie());
+    } else {
+      // NU alleen de eerste, nog niet paginated
+      const results = await this.connector.fetch('/mijn-services-aggregator/PRODUCTEN/producten/api/v1/producten', user, new URLSearchParams({ eigenaren__bsn: user.identifier }));
+      this.logger.info('temp producten results', results);
+      data.products = results.results;
+
+      // render page
+      const html = await render(data, productenTemplate.default);
+      return Response.html(html, 200, session.getCookie());
+    }
+
+
   }
 }
+
+

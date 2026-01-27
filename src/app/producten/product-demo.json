@@ -1,0 +1,61 @@
+{
+    "uuid": "067a4b3a-fb05-434f-804e-2f1ea9eeae13",
+    "url": "https://mijn-services-dev.csp-nijmegen.nl/open-product/producten/api/v1/producten/067a4b3a-fb05-434f-804e-2f1ea9eeae13",
+    "naam": "Standplaatsvergunning vierdaagse",
+    "start_datum": null,
+    "eind_datum": null,
+    "aanmaak_datum": "2026-01-13T11:11:14.678815+01:00",
+    "update_datum": "2026-01-13T11:11:14.678832+01:00",
+    "producttype": {
+        "uuid": "e9522583-d61f-4232-8268-d1596a94bf2d",
+        "code": "TEST-4D",
+        "keywords": [],
+        "uniforme_product_naam": "standplaatsvergunning",
+        "toegestane_statussen": [
+            "actief",
+            "geweigerd",
+            "verlopen"
+        ],
+        "gepubliceerd": true,
+        "publicatie_start_datum": "2026-01-19",
+        "publicatie_eind_datum": "2026-01-27",
+        "aanmaak_datum": "2026-01-13T10:59:29.978359+01:00",
+        "update_datum": "2026-01-19T13:39:06.065972+01:00",
+        "themas": [
+            {
+                "uuid": "6ea69372-82cd-4fc4-8925-8fc4c77329d0",
+                "naam": "Vergunningen",
+                "beschrijving": "",
+                "gepubliceerd": true,
+                "aanmaak_datum": "2026-01-13T10:58:46.740115+01:00",
+                "update_datum": "2026-01-13T10:58:46.740141+01:00",
+                "hoofd_thema": null
+            }
+        ]
+    },
+    "gepubliceerd": false,
+    "eigenaren": [
+        {
+            "uuid": "1e773e53-f6a5-4ce3-b0b1-9ef163dbb38d",
+            "bsn": "900222670",
+            "kvk_nummer": "",
+            "vestigingsnummer": "",
+            "klantnummer": ""
+        }
+    ],
+    "documenten": [],
+    "zaken": [
+        {
+            "urn": null,
+            "url": "https://mijn-services.accp.nijmegen.nl/open-zaak/api/v1/zaken/1993f19e-5b4b-4f2d-83d3-7e47bc8a09ff"
+        }
+    ],
+    "taken": [],
+    "status": "initieel",
+    "prijs": "125.80",
+    "frequentie": "eenmalig",
+    "verbruiksobject": null,
+    "dataobject": null,
+    "aanvraag_zaak_urn": null,
+    "aanvraag_zaak_url": "https://mijn-services.accp.nijmegen.nl/open-zaak/api/v1/zaken/1993f19e-5b4b-4f2d-83d3-7e47bc8a09ff"
+}
