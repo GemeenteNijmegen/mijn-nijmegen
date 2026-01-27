@@ -3,10 +3,10 @@ import { aws_certificatemanager as CertificateManager, aws_ssm as SSM, Stack, St
 import { Alarm, ComparisonOperator, Metric } from 'aws-cdk-lib/aws-cloudwatch';
 import { CfnHealthCheck, HealthCheckType } from 'aws-cdk-lib/aws-route53';
 import { Construct } from 'constructs';
+import { Configurable } from './Configuration';
 import { Statics } from './statics';
 
-export interface UsEastStackProps extends StackProps {
-  branch: string;
+export interface UsEastStackProps extends StackProps, Configurable {
 }
 
 /**
@@ -20,21 +20,11 @@ export class UsEastStack extends Stack {
 
   constructor(scope: Construct, id: string, props: UsEastStackProps) {
     super(scope, id, props);
-    this.branch = props.branch;
+    this.branch = props.configuration.branch;
     this.createCertificate();
-    this.monitorLoginPage(props.branch);
-  }
-
-  /** Because the hosted zone SSM parameters are stored in eu-west-1,
-   * we use the 'remoteParameters'-package to retrieve these cross-region.
-   */
-  getZoneAttributesFromEuWest(parameters: RemoteParameters, id: string, name: string): { hostedZoneId: string; zoneName: string } {
-    const zoneId = parameters.get(id);
-    const zoneName = parameters.get(name);
-    return {
-      hostedZoneId: zoneId,
-      zoneName: zoneName,
-    };
+    if (props.configuration.monitorLoginPage != false) {
+      this.monitorLoginPage(this.branch);
+    }
   }
 
   /**
@@ -44,7 +34,7 @@ export class UsEastStack extends Stack {
    * note the validation record, add this to Nijmegen DNS, remove your certificate and then deploy this, to not have to wait for validation
    * when deploying.
    */
-  createCertificate() {
+  private createCertificate() {
     const subdomain = Statics.subDomain(this.branch);
     const cspSubdomain = Statics.cspSubDomain(this.branch);
     const appDomain = `${subdomain}.nijmegen.nl`;
@@ -71,7 +61,7 @@ export class UsEastStack extends Stack {
    *
    * @param branch the deployment branch (determines domain to monitor)
    */
-  monitorLoginPage(branch: string) {
+  private monitorLoginPage(branch: string) {
     const domain = `${Statics.subDomain(branch)}.nijmegen.nl`;
 
     // Create health check using native CDK Route53 construct

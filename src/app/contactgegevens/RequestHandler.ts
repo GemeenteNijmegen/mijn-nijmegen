@@ -6,7 +6,7 @@ import { Contactgegevens, ContactgegevensSchema, ContactgegevensService } from '
 import { ErrorFlags, RenderingService } from './RenderingService';
 import { RequestValidator } from './Validator';
 import { VerificationService } from './VerificationService';
-import { UserFromSession } from '../zaken/User';
+import { UserFromSession } from '../../shared/User';
 
 export interface Config {
   readonly dynamoDBClient: DynamoDBClient;

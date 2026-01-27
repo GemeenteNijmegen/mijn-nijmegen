@@ -2,7 +2,6 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import * as loginTemplate from './templates/login.mustache';
-import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
 import { render } from '../../shared/render';
 
@@ -43,19 +42,13 @@ interface LoginRequestHandlerProps {
   useYiviKvk?: boolean;
 
   /**
-   * Feature flag for NL Wallet (VerID)
+   * OpenIDConnect client
    */
-  useNlWalletVerId?: boolean;
-
-  /**
-   * Feature flag for NL Wallet (Signicat)
-   */
-  useNlWalletSignicat?: boolean;
+  oidc: OpenIDConnectV2;
 }
 
 export interface RequestParams {
   cookies?: string;
-  nlwallet: boolean;
   method?: string;
 }
 
@@ -68,34 +61,11 @@ export class LoginRequestHandler {
 
   private config: LoginRequestHandlerProps;
 
-  // OIDC configuration
-  private oidc: OpenIDConnect;
-  private oidcNlWalletSignicat?: OpenIDConnectV2;
-  private oidcNlWalletVerId?: OpenIDConnectV2;
-
   constructor(props: LoginRequestHandlerProps) {
     this.config = props;
-    this.oidc = new OpenIDConnect();
-
-    if (props.useNlWalletVerId) {
-      this.oidcNlWalletVerId = new OpenIDConnectV2({
-        clientId: process.env.NL_WALLET_VERID_CLIENT_ID!,
-        clientSecretArn: process.env.NL_WALLET_VERID_CLIENT_SECRET_ARN!,
-        wellknown: process.env.NL_WALLET_VERID_WELL_KNOWN!,
-        redirectUrl: process.env.APPLICATION_URL_BASE + 'auth',
-      });
-    }
-    if (props.useNlWalletSignicat) {
-      this.oidcNlWalletSignicat = new OpenIDConnectV2({
-        clientId: process.env.NL_WALLET_SIGNICAT_CLIENT_ID!,
-        clientSecretArn: process.env.NL_WALLET_SIGNICAT_CLIENT_SECRET_ARN!,
-        wellknown: process.env.NL_WALLET_SIGNICAT_WELL_KNOWN!,
-        redirectUrl: process.env.APPLICATION_URL_BASE + 'auth',
-      });
-    }
   }
 
-  async handleRequest(params: RequestParams, dynamoDBClient: DynamoDBClient):Promise<ApiGatewayV2Response> {
+  async handleRequest(params: RequestParams, dynamoDBClient: DynamoDBClient): Promise<ApiGatewayV2Response> {
     let session = new Session(params.cookies!, dynamoDBClient);
     await session.init();
     if (session.isLoggedIn() === true) {
@@ -107,7 +77,7 @@ export class LoginRequestHandler {
       return this.setupAuthenticationRedirect(session, params.method);
     }
 
-    const authMethods = this.addAuthMethods(params.nlwallet);
+    const authMethods = this.addAuthMethods();
 
     const data = {
       title: 'Inloggen',
@@ -119,7 +89,7 @@ export class LoginRequestHandler {
     return Response.html(html);
   }
 
-  private addAuthMethods(nlwallet: boolean): AuthMethod[] {
+  private addAuthMethods(): AuthMethod[] {
     const authMethods = [];
     if (this.config?.digidScope) {
       authMethods.push(this.authMethodData('digid', 'DigiD'));
@@ -130,16 +100,10 @@ export class LoginRequestHandler {
     if (this.config?.eHerkenningScope) {
       authMethods.push(this.authMethodData('eherkenning', 'eHerkenning'));
     }
-    if (nlwallet && this.config.useNlWalletSignicat) {
-      authMethods.push(this.authMethodData('nl-wallet-signicat', 'NL Wallet (Signicat)'));
-    }
-    if (nlwallet && this.config.useNlWalletVerId) {
-      authMethods.push(this.authMethodData('nl-wallet-verid', 'NL Wallet (VerID)'));
-    }
     return authMethods;
   }
 
-  private authMethodData(name:string, niceName:string) {
+  private authMethodData(name: string, niceName: string) {
     return {
       methodName: name,
       methodNiceName: niceName,
@@ -147,14 +111,14 @@ export class LoginRequestHandler {
   }
 
   private async setupAuthenticationRedirect(session: Session, method: string) {
-    const supportedMethod = this.addAuthMethods(true).find(known => known.methodName == method);
+    const supportedMethod = this.addAuthMethods().find(known => known.methodName == method);
     if (!supportedMethod) {
       throw Error('Authentication method is not suported!');
     }
 
     const baseOidcScope = this.config.oidcScope;
 
-    const state = this.oidc.generateState();
+    const state = this.config.oidc.generateState();
     await session.createSession({
       loggedin: { BOOL: false },
       state: { S: state },
@@ -170,28 +134,13 @@ export class LoginRequestHandler {
         } else {
           yiviScope.push(this.config.yiviBsnAttribute ?? '');
         }
-        loginUrl = this.oidc.getLoginUrl(state, yiviScope.join(' '));
+        loginUrl = await this.config.oidc.getLoginUrl(state, yiviScope.join(' '));
         break;
       case 'digid':
-        loginUrl = this.oidc.getLoginUrl(state, `${baseOidcScope} ${this.config.digidScope}`);
+        loginUrl = await this.config.oidc.getLoginUrl(state, `${baseOidcScope} ${this.config.digidScope}`);
         break;
       case 'eherkenning':
-        loginUrl = this.oidc.getLoginUrl(state, `${baseOidcScope} ${this.config.eHerkenningScope}`);
-        break;
-      case 'nl-wallet-signicat':
-        if (!this.oidcNlWalletSignicat) {
-          throw Error('Nl Wallet Signicat auth method used but not configured!');
-        }
-        loginUrl = await this.oidcNlWalletSignicat.getLoginUrl(state, `${baseOidcScope} ${process.env.NL_WALLET_SIGNICAT_SCOPE}`, {
-          acr_values: 'theme:nijmegen',
-          prompt: 'login',
-        });
-        break;
-      case 'nl-wallet-verid':
-        if (!this.oidcNlWalletVerId) {
-          throw Error('Nl Wallet VerID auth method used but not configured!');
-        }
-        loginUrl = await this.oidcNlWalletVerId.getLoginUrl(state, process.env.NL_WALLET_VERID_SCOPE!);
+        loginUrl = await this.config.oidc.getLoginUrl(state, `${baseOidcScope} ${this.config.eHerkenningScope}`);
         break;
     }
 
@@ -199,7 +148,7 @@ export class LoginRequestHandler {
       throw Error('Unsupported auth method.');
     }
 
-    return Response.redirect(loginUrl, 302, session.getCookie());
+    return Response.redirect(loginUrl.toString(), 302, session.getCookie());
 
   }
 

@@ -76,7 +76,7 @@ export class ApiStack extends Stack implements Configurable {
    * @param {string} baseUrl the application url
    */
   setFunctions(configuration: Configuration) {
-    const tlsConfig = this.mtlsConfig();
+    const tlsConfig = this.mtlsConfig(); // Note also used for uitkeringen endpoint
     const haalCentraalConfig = this.haalCentraalConfig();
     /**
      * The login function generates a login URL and renders the login page.
@@ -91,7 +91,7 @@ export class ApiStack extends Stack implements Configurable {
     /**
      * The auth function receives the callback from the OIDC-provider, validates the received ID-Token, and sets the session to loggedin.
      */
-    const authFunction = this.authFunction(tlsConfig, haalCentraalConfig);
+    const authFunction = this.authFunction(haalCentraalConfig);
 
     /**
      * The Home function show the homepage.
@@ -217,6 +217,12 @@ export class ApiStack extends Stack implements Configurable {
         path: '/producten',
         methods: [apigatewayv2.HttpMethod.GET],
       });
+      this.api.addRoutes({
+        integration: new HttpLambdaIntegration('producten-id', productenFunction.lambda),
+        path: '/producten/{productid}',
+        methods: [apigatewayv2.HttpMethod.GET],
+      });
+      this.grantZakenApiAccess(productenFunction);
     }
   }
 
@@ -251,7 +257,9 @@ export class ApiStack extends Stack implements Configurable {
   }
 
   private loginFunction() {
-    return new ApiFunction(this, 'login-function', {
+    const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret-login', Statics._OIDCClientSecret);
+
+    const loginFunction = new ApiFunction(this, 'login-function', {
       description: 'Login-pagina voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/login',
       table: this.sessionsTable,
@@ -259,26 +267,22 @@ export class ApiStack extends Stack implements Configurable {
       applicationUrlBase: this.baseUrl,
       apiFunction: LoginFunction,
       environment: {
+        // OIDC connection
+        OIDC_CLIENT_SECRET_ARN: oidcSecret.secretArn,
+        OIDC_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics._OIDCClientID),
+        OIDC_WELL_KNOWN: StringParameter.valueForStringParameter(this, Statics._OIDCClientWellKnown),
+        OIDC_REDIRECT_URL: StringParameter.valueForStringParameter(this, Statics._OIDCClientRedirectUrl),
+
         DIGID_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmDIGIDScope),
         YIVI_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmYiviScope),
         EHERKENNING_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmEherkenningScope),
         YIVI_BSN_ATTRIBUTE: StringParameter.valueForStringParameter(this, Statics.ssmYiviBsnAttribute),
         YIVI_CONDISCON_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmYiviCondisconScope),
         USE_YIVI_KVK: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviKvk), // Feature flag for kvk bsn conditional disclosure
-
-        // VerId configuration (without secret as its not used to create the url)
-        USE_NL_WALLET_VERID: this.configuration.nlWalletVerIdIsLive ? 'true' : 'false',
-        NL_WALLET_VERID_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics.ssmVerIdClientId),
-        NL_WALLET_VERID_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmVerIdScope),
-        NL_WALLET_VERID_WELL_KNOWN: StringParameter.valueForStringParameter(this, Statics.ssmVerIdWellKnown),
-
-        // NL Wallet - Signicat configuration
-        USE_NL_WALLET_SIGNICAT: this.configuration.nlWalletSignicatIsLive ? 'true' : 'false',
-        NL_WALLET_SIGNICAT_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics.ssmSignicatClientId),
-        NL_WALLET_SIGNICAT_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmSignicatScope),
-        NL_WALLET_SIGNICAT_WELL_KNOWN: StringParameter.valueForStringParameter(this, Statics.ssmSignicatWellKnown),
       },
     });
+    oidcSecret.grantRead(loginFunction.lambda);
+    return loginFunction;
   }
 
   private homeFunction() {
@@ -306,11 +310,8 @@ export class ApiStack extends Stack implements Configurable {
     return homeFunction;
   }
 
-  private authFunction(mtlsConfig: TLSConfig, haalCentraalConfig: HaalCentraalConfig) {
-    const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret', Statics.secretOIDCClientSecret);
-    const authServiceClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'auth-serice-client-secret', Statics.authServiceClientSecretArn);
-    const verIdClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'verid-client-secret', Statics.ssmVerIdClientSecret);
-    const signicatClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'signicat-client-secret', Statics.ssmSignicatClientSecret);
+  private authFunction(haalCentraalConfig: HaalCentraalConfig) {
+    const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret-auth', Statics._OIDCClientSecret);
 
     const authFunction = new ApiFunction(this, 'auth-function', {
       description: 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.',
@@ -320,11 +321,12 @@ export class ApiStack extends Stack implements Configurable {
       applicationUrlBase: this.baseUrl,
       timeout: Duration.seconds(6), // Too long but required for poc authentication service
       environment: {
-        CLIENT_SECRET_ARN: oidcSecret.secretArn,
-        MTLS_PRIVATE_KEY_ARN: mtlsConfig.privateKey.secretArn,
-        MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
-        MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
-        BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
+        // OIDC connection
+        OIDC_CLIENT_SECRET_ARN: oidcSecret.secretArn,
+        OIDC_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics._OIDCClientID),
+        OIDC_WELL_KNOWN: StringParameter.valueForStringParameter(this, Statics._OIDCClientWellKnown),
+        OIDC_REDIRECT_URL: StringParameter.valueForStringParameter(this, Statics._OIDCClientRedirectUrl),
+
         DIGID_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmDIGIDScope),
         EHERKENNING_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmEherkenningScope),
         YIVI_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmYiviScope),
@@ -332,27 +334,8 @@ export class ApiStack extends Stack implements Configurable {
         YIVI_KVK_NAME_ATTRIBUTE: StringParameter.valueForStringParameter(this, Statics.ssmYiviKvkNameAttribute),
         YIVI_KVK_NUMBER_ATTRIBUTE: StringParameter.valueForStringParameter(this, Statics.ssmYiviKvkNumberAttribute),
         USE_YIVI_KVK: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviKvk),
-        USE_AUTH_SERVICE: this.configuration.authenticationServiceConfiguration ? 'true' : 'false',
-        AUTH_SERVICE_CLIENT_SECRET_ARN: authServiceClientSecret.secretArn,
-        AUTH_SERVICE_CLIENT_ID: this.configuration.authenticationServiceConfiguration?.clientId ?? '',
-        AUTH_SERVICE_ENDPOINT: this.configuration.authenticationServiceConfiguration?.endpoint ?? '',
-
-        // NL Wallet - VerId configuration
-        USE_NL_WALLET_VERID: this.configuration.nlWalletVerIdIsLive ? 'true' : 'false',
-        NL_WALLET_VERID_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics.ssmVerIdClientId),
-        NL_WALLET_VERID_CLIENT_SECRET_ARN: verIdClientSecret.secretArn,
-        NL_WALLET_VERID_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmVerIdScope),
-        NL_WALLET_VERID_WELL_KNOWN: StringParameter.valueForStringParameter(this, Statics.ssmVerIdWellKnown),
-
-        // NL Wallet - Signicat configuration
-        USE_NL_WALLET_SIGNICAT: this.configuration.nlWalletSignicatIsLive ? 'true' : 'false',
-        NL_WALLET_SIGNICAT_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics.ssmSignicatClientId),
-        NL_WALLET_SIGNICAT_CLIENT_SECRET_ARN: signicatClientSecret.secretArn,
-        NL_WALLET_SIGNICAT_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmSignicatScope),
-        NL_WALLET_SIGNICAT_WELL_KNOWN: StringParameter.valueForStringParameter(this, Statics.ssmSignicatWellKnown),
 
         // Haal Centraal
-        HAAL_CENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
         HAAL_CENTRAAL_CERT_SSM: haalCentraalConfig.clientCert.parameterName,
         HAAL_CENTRAAL_PRIVATE_KEY_ARN: haalCentraalConfig.privateKey.secretArn,
         HAAL_CENTRAAL_API_KEY_ARN: haalCentraalConfig.apiKey.secretArn,
@@ -364,13 +347,7 @@ export class ApiStack extends Stack implements Configurable {
     haalCentraalConfig.apiKey.grantRead(authFunction.lambda);
     haalCentraalConfig.privateKey.grantRead(authFunction.lambda);
     haalCentraalConfig.clientCert.grantRead(authFunction.lambda);
-    authServiceClientSecret.grantRead(authFunction.lambda);
-    verIdClientSecret.grantRead(authFunction.lambda);
-    signicatClientSecret.grantRead(authFunction.lambda);
     oidcSecret.grantRead(authFunction.lambda);
-    mtlsConfig.privateKey.grantRead(authFunction.lambda);
-    mtlsConfig.clientCert.grantRead(authFunction.lambda);
-    mtlsConfig.rootCert.grantRead(authFunction.lambda);
 
     return authFunction;
   }
@@ -384,15 +361,9 @@ export class ApiStack extends Stack implements Configurable {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: this.baseUrl,
       environment: {
-        MTLS_PRIVATE_KEY_ARN: mtlsConfig.privateKey.secretArn,
-        MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
-        MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
-        BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
-        HAALCENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
 
         // Haal Centraal
-        HAAL_CENTRAAL_LIVE: this.configuration.brpHaalCentraalIsLive ? 'true' : 'false',
         HAAL_CENTRAAL_CERT_SSM: haalCentraalConfig.clientCert.parameterName,
         HAAL_CENTRAAL_PRIVATE_KEY_ARN: haalCentraalConfig.privateKey.secretArn,
         HAAL_CENTRAAL_API_KEY_ARN: haalCentraalConfig.apiKey.secretArn,
@@ -422,7 +393,6 @@ export class ApiStack extends Stack implements Configurable {
         MTLS_PRIVATE_KEY_ARN: mtlsConfig.privateKey.secretArn,
         MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
         MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
-        BRP_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmBrpApiEndpointUrl),
         UITKERING_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmUitkeringsApiEndpointUrl),
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
       },
@@ -563,6 +533,7 @@ export class ApiStack extends Stack implements Configurable {
 
   private productenFunction() {
     //TODO open producten secrets
+    const arc_key = aws_secretsmanager.Secret.fromSecretNameV2(this, 'arc-key', Statics.ssmProductenArcApiKey);
     const productenFunction = new ApiFunction(this, 'producten-function', {
       description: 'Producten lambda om producten op te halen en tonen',
       codePath: 'app/producten',
@@ -573,9 +544,12 @@ export class ApiStack extends Stack implements Configurable {
         SHOW_PRODUCTEN: this.configuration.mijnProductenLive ? 'True' : 'False',
         SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+        ARC_BASEURL: StringParameter.valueForStringParameter(this, Statics.ssmProductenArcBaseUrl),
+        ARC_APIKEY_ARN: arc_key.secretArn,
       },
       apiFunction: ProductenFunction,
     });
+    arc_key.grantRead(productenFunction.lambda);
     return productenFunction;
   }
 

@@ -7,6 +7,7 @@ import { mockClient } from 'aws-sdk-client-mock';
 import { create } from 'axios';
 import { ZakenAggregatorConnector } from '../../zaken/ZakenAggregatorConnector';
 import { ProductenRequestHandler } from '../productenRequestHandler';
+import { mockProductCall } from './mock-product-call';
 import { mockProductenCall } from './mock-producten-call';
 
 
@@ -97,16 +98,16 @@ function createHandler(): ProductenRequestHandler {
 }
 
 test('Producten unique and refresh html', async () => {
-  fetchMock.mockResolvedValue(mockProductenCall);
+  fetchMock.mockResolvedValue(mockProductCall);
   const handler = createHandler();
   const logSpy = jest.spyOn(global.console, 'log');
-  const result = await handler.handleRequest('session=12345', { cookies: 'session=12345', responseType: 'html' }) as any;
+  const result = await handler.handleRequest('session=12345', { cookies: 'session=12345', responseType: 'html', productId: '12126e1e-9bc1-4a30-b73e-5b5aa4ce8bc4' }) as any;
 
 
   const timestamp = new Date().toISOString().replace(/:/g, '-');
-  const outputFilename = path.join(__dirname, 'output', `producten_data_${timestamp}.html`);
+  const outputFilename = path.join(__dirname, 'output', `product_data_${timestamp}.html`);
   fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
-  const outputFilenameRF = path.join(__dirname, 'output', 'producten_data_torefresh.html');
+  const outputFilenameRF = path.join(__dirname, 'output', 'product_data_torefresh.html');
   fs.writeFileSync(outputFilenameRF, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
 
 

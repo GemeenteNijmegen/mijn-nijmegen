@@ -7,8 +7,8 @@ import { ArrowRight, Checkmark, Spinner } from '../../shared/Icons';
 import { logger } from '../../shared/Logger';
 import { BreadCrumbs, Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import { User, UserFromSession } from '../../shared/User';
 import * as takenListPartial from '../zaken/templates/taken.mustache';
-import { User, UserFromSession } from '../zaken/User';
 import { TaakSummariesResponseSchema, TaakSummary } from '../zaken/ZaakInterface';
 import { ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
 import * as takenTemplate from './templates/taken.mustache';
@@ -68,7 +68,7 @@ export class TaakrequestHandler {
         shownav: true,
         nav: navigation.items,
         breadcrumbs: breadcrumbs.items,
-        volledigenaam: user.userName,
+        volledigenaam: await user.getUserName(),
         taken,
         has_taken: taken ? true : false,
         xsrf_token: session.getValue('xsrf_token'),

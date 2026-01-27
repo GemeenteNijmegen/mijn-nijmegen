@@ -2,23 +2,65 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { ProductenRequestHandler } from './productenRequestHandler';
+import { WalletRequestHandler } from './WalletRequestHandler';
 
+export interface productEventParams {
+  cookies: string;
+  productId?: string;
+  file?: string;
+  xsrfToken?: string;
+  responseType: 'json' | 'html';
+  inladenWallet?: boolean;
+  isIngeladenWallet?: boolean;
+}
+
+//https://mijn.dev.nijmegen.nl/producten?is_wallet_ingeladen=true&status=false
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 function parseEvent(event: APIGatewayProxyEventV2): any {
   return {
     cookies: event?.cookies?.join(';'),
+    productId: event?.pathParameters?.productid,
+    xsrfToken: event?.headers?.xsrftoken,
+    responseType: event?.headers?.accept == 'application/json' ? 'json' : 'html',
+    inladenWallet: event?.queryStringParameters?.inladen_wallet == 'true' ? true : false,
+    isIngeladenWallet: event?.queryStringParameters?.is_wallet_ingeladen == 'true' ? true : false,
+    walletStatus: event?.queryStringParameters?.status == 'true' ? true : false,
   };
 }
 
 export async function handler(event: any, _context: any):Promise<ApiGatewayV2Response> {
   try {
     const params = parseEvent(event);
+    console.debug(event);
+
+    if (params.inladenWallet) {
+      console.debug('inladen in wallet');
+      const requestHandler = new WalletRequestHandler({
+        dynamoDBClient,
+      });
+      return await requestHandler.handleRequest({
+        cookies: params.cookies,
+        productId: '1234',
+        type: 'request',
+      });
+    } else if (params.isIngeladenWallet) {
+      console.debug('ingeladen in wallet');
+      const requestHandler = new WalletRequestHandler({
+        dynamoDBClient,
+      });
+      return await requestHandler.handleRequest({
+        cookies: params.cookies,
+        productId: '1234',
+        type: 'results',
+        status: params.walletStatus,
+      });
+    }
 
     const requestHandler = new ProductenRequestHandler({
       dynamoDBClient,
     });
 
-    return await requestHandler.handleRequest(params.cookies);
+    return await requestHandler.handleRequest(params.cookies, params);
 
   } catch (err) {
     console.debug(err);
