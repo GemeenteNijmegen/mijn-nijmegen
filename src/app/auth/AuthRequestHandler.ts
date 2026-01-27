@@ -70,12 +70,7 @@ export class AuthRequestHandler {
     try {
 
       const result = await this.config.OpenIdConnect.authorize(this.config.fullUrl, state);
-
-      console.log(result);
       const user = this.userFromAuthResult(result);
-      console.log('user', user);
-
-
       if (!user) {
         return Response.redirect('/login');
       }
