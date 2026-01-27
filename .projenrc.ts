@@ -22,7 +22,7 @@ const project = new GemeenteNijmegenCdkApp({
     '@gemeentenijmegen/apiclient',
     '@gemeentenijmegen/apigateway-http',
     '@gemeentenijmegen/session',
-    '@gemeentenijmegen/cross-region-parameteres',
+    '@gemeentenijmegen/cross-region-parameters',
     '@gemeentenijmegen/utils',
     'dotenv',
     '@aws-sdk/client-secrets-manager',
