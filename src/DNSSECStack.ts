@@ -1,4 +1,4 @@
-import { RemoteParameters } from '@gemeentenijmegen/cross-region-parameteres';
+import { RemoteParameters } from '@gemeentenijmegen/cross-region-parameters';
 import { Duration, aws_route53 as Route53, aws_ssm as SSM, Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Statics } from './statics';

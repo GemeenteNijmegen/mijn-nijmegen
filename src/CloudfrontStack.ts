@@ -1,4 +1,4 @@
-import { RemoteParameters } from '@gemeentenijmegen/cross-region-parameteres';
+import { RemoteParameters } from '@gemeentenijmegen/cross-region-parameters';
 import {
   aws_s3_deployment,
   aws_certificatemanager as CertificateManager,
