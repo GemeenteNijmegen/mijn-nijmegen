@@ -136,6 +136,12 @@
           "tsconfig": "tsconfig.dev.json"
         }
       ],
+      "\\.[jt]sx?$": [
+        "ts-jest",
+        {
+          "isolatedModules": true
+        }
+      ],
       "^.+\\.mustache$": "@glen/jest-raw-loader",
       "^.+\\.tsx?$": [
         "ts-jest",
