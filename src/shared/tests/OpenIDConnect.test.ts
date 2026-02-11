@@ -1,4 +1,4 @@
-import { OpenIDConnectV2 } from '../OpenIDConnectV2';
+import { OpenIDConnect } from '../OpenIDConnect';
 
 const mockDiscovery = jest.fn();
 const mockBuildAuthorizationUrl = jest.fn();
@@ -10,7 +10,7 @@ jest.mock('openid-client', () => ({
   authorizationCodeGrant: (...args: any[]) => mockAuthorizationCodeGrant(...args),
 }));
 
-describe('OpenIDConnectV2', () => {
+describe('OpenIDConnect', () => {
   const mockConfig = {
     wellknown: 'https://example.com/.well-known/openid-configuration',
     clientId: 'test-client-id',
@@ -34,13 +34,13 @@ describe('OpenIDConnectV2', () => {
       mockDiscovery.mockResolvedValue(mockOidcConfig);
       mockBuildAuthorizationUrl.mockReturnValue(mockUrl);
 
-      const client = new OpenIDConnectV2(mockConfig);
+      const client = new OpenIDConnect(mockConfig);
       const result = await client.getLoginUrl('test-state', 'openid profile');
 
       expect(mockDiscovery).toHaveBeenCalledWith(
         new URL(mockConfig.wellknown),
         mockConfig.clientId,
-        { client_secret: mockConfig.clientSecret, client_id: mockConfig.clientId }
+        { client_secret: mockConfig.clientSecret, client_id: mockConfig.clientId },
       );
       expect(mockBuildAuthorizationUrl).toHaveBeenCalledWith(
         mockOidcConfig,
@@ -49,7 +49,7 @@ describe('OpenIDConnectV2', () => {
           response_types: 'code',
           scope: 'openid profile',
           state: 'test-state',
-        })
+        }),
       );
       expect(result).toBe(mockUrl.toString());
     });
@@ -59,14 +59,14 @@ describe('OpenIDConnectV2', () => {
       mockDiscovery.mockResolvedValue(mockOidcConfig);
       mockBuildAuthorizationUrl.mockReturnValue(mockUrl);
 
-      const client = new OpenIDConnectV2(mockConfig);
+      const client = new OpenIDConnect(mockConfig);
       await client.getLoginUrl('test-state', 'openid', { nonce: 'test-nonce' });
 
       expect(mockBuildAuthorizationUrl).toHaveBeenCalledWith(
         mockOidcConfig,
         expect.objectContaining({
           nonce: 'test-nonce',
-        })
+        }),
       );
     });
   });
@@ -82,14 +82,14 @@ describe('OpenIDConnectV2', () => {
       mockDiscovery.mockResolvedValue(mockOidcConfig);
       mockAuthorizationCodeGrant.mockResolvedValue(mockAuthorized);
 
-      const client = new OpenIDConnectV2(mockConfig);
+      const client = new OpenIDConnect(mockConfig);
       const callbackUrl = new URL('https://example.com/callback?code=test-code&state=test-state');
       const result = await client.authorize(callbackUrl, 'test-state');
 
       expect(mockAuthorizationCodeGrant).toHaveBeenCalledWith(
         mockOidcConfig,
         callbackUrl,
-        { expectedState: 'test-state' }
+        { expectedState: 'test-state' },
       );
       expect(result.claims).toEqual(mockClaims);
       expect(result.scopes).toEqual(['openid', 'profile']);
@@ -103,7 +103,7 @@ describe('OpenIDConnectV2', () => {
       mockDiscovery.mockResolvedValue(mockOidcConfig);
       mockAuthorizationCodeGrant.mockResolvedValue(mockAuthorized);
 
-      const client = new OpenIDConnectV2(mockConfig);
+      const client = new OpenIDConnect(mockConfig);
       const callbackUrl = new URL('https://example.com/callback?code=test-code');
 
       await expect(client.authorize(callbackUrl, 'test-state')).rejects.toThrow('No access token returned from idp');
@@ -118,7 +118,7 @@ describe('OpenIDConnectV2', () => {
       mockDiscovery.mockResolvedValue(mockOidcConfig);
       mockAuthorizationCodeGrant.mockResolvedValue(mockAuthorized);
 
-      const client = new OpenIDConnectV2(mockConfig);
+      const client = new OpenIDConnect(mockConfig);
       const callbackUrl = new URL('https://example.com/callback?code=test-code');
 
       await expect(client.authorize(callbackUrl, 'test-state')).rejects.toThrow('No ID token or scope found in idp response');
@@ -127,7 +127,7 @@ describe('OpenIDConnectV2', () => {
 
   describe('generateState', () => {
     it('should generate a UUID', () => {
-      const client = new OpenIDConnectV2(mockConfig);
+      const client = new OpenIDConnect(mockConfig);
       const state = client.generateState();
 
       expect(state).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
@@ -140,7 +140,7 @@ describe('OpenIDConnectV2', () => {
       mockDiscovery.mockResolvedValue(mockOidcConfig);
       mockBuildAuthorizationUrl.mockReturnValue(mockUrl);
 
-      const client = new OpenIDConnectV2(mockConfig);
+      const client = new OpenIDConnect(mockConfig);
       await client.getLoginUrl('state1', 'openid');
       await client.getLoginUrl('state2', 'openid');
 
