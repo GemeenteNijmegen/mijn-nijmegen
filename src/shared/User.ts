@@ -1,12 +1,9 @@
-import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
-import { BrpApi } from './BrpApi';
 import { HaalCentraalApi } from './HaalCentraalApi';
 
 export interface UserConfig {
-  apiClient: ApiClient;
-  haalCentraal?: HaalCentraalApi;
+  haalCentraal: HaalCentraalApi;
 }
 
 /**
@@ -43,14 +40,8 @@ export class Person implements User {
         throw Error('No config provided for user and username is not known');
       }
       try {
-        if (this.config.haalCentraal) {
-          const brpName = await this.config.haalCentraal.getName(this.bsn);
-          this.userName = brpName ?? 'Onbekende gebruiker';
-        } else {
-          const brpApi = new BrpApi(this.config.apiClient);
-          const brpData = await brpApi.getBrpData(this.bsn.bsn);
-          this.userName = brpData?.Persoon?.Persoonsgegevens?.Naam ? brpData.Persoon.Persoonsgegevens.Naam : 'Onbekende gebruiker';
-        }
+        const brpName = await this.config.haalCentraal.getName(this.bsn);
+        this.userName = brpName ?? 'Onbekende gebruiker';
       } catch (error) {
         console.error('Error getting username');
         this.userName = 'Onbekende gebruiker';
@@ -91,7 +82,7 @@ export function UserFromSession(session: Session): User {
 
     user = new Organisation(identifier, username);
   } else {
-    user = new Person(new Bsn(session.getValue('identifier')), undefined, session.getValue('username'));
+    user = new Person(new Bsn(session.getValue('identifier')), undefined, username);
   }
   return user;
 }

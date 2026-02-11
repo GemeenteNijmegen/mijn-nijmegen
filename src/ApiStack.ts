@@ -101,7 +101,7 @@ export class ApiStack extends Stack implements Configurable {
     /**
      * The Persoonsgegevens function show the homepage.
      */
-    const persoonsGegevensFunction = this.persoonsgegevensFunction(tlsConfig, haalCentraalConfig);
+    const persoonsGegevensFunction = this.persoonsgegevensFunction(haalCentraalConfig);
 
     /**
      * The uitkeringenfunction show your current uitkering.
@@ -352,7 +352,7 @@ export class ApiStack extends Stack implements Configurable {
     return authFunction;
   }
 
-  private persoonsgegevensFunction(mtlsConfig: TLSConfig, haalCentraalConfig: HaalCentraalConfig) {
+  private persoonsgegevensFunction(haalCentraalConfig: HaalCentraalConfig) {
 
     const persoonsGegevensFunction = new ApiFunction(this, 'persoonsgegevens-function', {
       description: 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.',
@@ -376,9 +376,6 @@ export class ApiStack extends Stack implements Configurable {
     haalCentraalConfig.apiKey.grantRead(persoonsGegevensFunction.lambda);
     haalCentraalConfig.privateKey.grantRead(persoonsGegevensFunction.lambda);
     haalCentraalConfig.clientCert.grantRead(persoonsGegevensFunction.lambda);
-    mtlsConfig.privateKey.grantRead(persoonsGegevensFunction.lambda);
-    mtlsConfig.clientCert.grantRead(persoonsGegevensFunction.lambda);
-    mtlsConfig.rootCert.grantRead(persoonsGegevensFunction.lambda);
     return persoonsGegevensFunction;
   }
 
