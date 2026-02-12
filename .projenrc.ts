@@ -68,9 +68,9 @@ const project = new GemeenteNijmegenCdkApp({
         'js', 'json', 'jsx', 'ts', 'tsx', 'node', 'mustache',
       ],
       transform: {
-        // '\\.[jt]sx?$': new Transform('ts-jest', {
-        //   isolatedModules: true,
-        // }),
+        '\\.[jt]sx?$': new Transform('ts-jest', {
+          isolatedModules: true,
+        }),
         '^.+\\.mustache$': new Transform('@glen/jest-raw-loader'),
         '^.+\\.tsx?$': new Transform('ts-jest', {
           tsconfig: 'tsconfig.dev.json',

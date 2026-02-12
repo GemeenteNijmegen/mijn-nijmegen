@@ -49,12 +49,12 @@
     "projen": "npx projen"
   },
   "devDependencies": {
-    "@aws-sdk/client-ssm": "^3.975.0",
+    "@aws-sdk/client-ssm": "^3.988.0",
     "@aws-sdk/types": "^3.973.1",
-    "@gemeentenijmegen/components-css": "^0.0.1-alpha.70",
-    "@gemeentenijmegen/design-tokens": "^0.0.2-alpha.95",
+    "@gemeentenijmegen/components-css": "^0.0.1-alpha.82",
+    "@gemeentenijmegen/design-tokens": "^0.0.2-alpha.107",
     "@glen/jest-raw-loader": "^2.0.0",
-    "@playwright/test": "^1.58.0",
+    "@playwright/test": "^1.58.2",
     "@stylistic/eslint-plugin": "^2",
     "@types/aws-lambda": "^8.10.160",
     "@types/content-disposition": "^0.5.9",
@@ -71,7 +71,7 @@
     "axios-mock-adapter": "^1.22.0",
     "commit-and-tag-version": "^12",
     "copyfiles": "^2.4.1",
-    "esbuild": "^0.27.2",
+    "esbuild": "^0.27.3",
     "eslint": "^9",
     "eslint-import-resolver-typescript": "^3.10.1",
     "eslint-plugin-import": "^2.32.0",
@@ -85,19 +85,19 @@
   },
   "dependencies": {
     "@aws-lambda-powertools/logger": "^1.18.1",
-    "@aws-sdk/client-dynamodb": "^3.975.0",
-    "@aws-sdk/client-secrets-manager": "^3.975.0",
-    "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.97.0",
-    "@gemeentenijmegen/apiclient": "^0.0.39",
-    "@gemeentenijmegen/apigateway-http": "^0.0.35",
-    "@gemeentenijmegen/aws-constructs": "^0.0.47",
+    "@aws-sdk/client-dynamodb": "^3.988.0",
+    "@aws-sdk/client-secrets-manager": "^3.988.0",
+    "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.99.0",
+    "@gemeentenijmegen/apiclient": "^0.0.40",
+    "@gemeentenijmegen/apigateway-http": "^0.0.36",
+    "@gemeentenijmegen/aws-constructs": "^0.0.48",
     "@gemeentenijmegen/cross-region-parameters": "^0.0.4",
-    "@gemeentenijmegen/projen-project-type": "^1.12.0",
-    "@gemeentenijmegen/session": "^0.0.33",
+    "@gemeentenijmegen/projen-project-type": "^1.12.1",
+    "@gemeentenijmegen/session": "^0.0.34",
     "@gemeentenijmegen/utils": "^0.0.38",
     "@types/mustache": "^4.2.6",
     "aws-cdk-lib": "^2.22.0",
-    "axios": "^1.13.3",
+    "axios": "^1.13.5",
     "constructs": "^10.0.5",
     "content-disposition": "^0.5.4",
     "cookie": "^0.7.2",
@@ -105,7 +105,7 @@
     "jsonwebtoken": "^9.0.3",
     "mustache": "^4.2.0",
     "object-mapper": "^6.2.0",
-    "openid-client": "^6.8.1",
+    "openid-client": "^6.8.2",
     "validator": "^13.15.26",
     "xml2js": "^0.6.2",
     "zod": "^3.25.76"
@@ -134,6 +134,12 @@
         "ts-jest",
         {
           "tsconfig": "tsconfig.dev.json"
+        }
+      ],
+      "\\.[jt]sx?$": [
+        "ts-jest",
+        {
+          "isolatedModules": true
         }
       ],
       "^.+\\.mustache$": "@glen/jest-raw-loader",

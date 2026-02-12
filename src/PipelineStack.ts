@@ -52,9 +52,6 @@ export class PipelineStack extends Stack {
       env: {
         BRANCH_NAME: this.branchName,
       },
-      installCommands: [
-        `n ${getNodeVersion()}`,
-      ],
       commands: [
         'yarn install --frozen-lockfile',
         'yarn build',

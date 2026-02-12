@@ -1,11 +1,12 @@
 import { randomUUID } from 'crypto';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { GetSecretValueCommand, GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
-import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Bsn } from '@gemeentenijmegen/utils';
 import { mockClient } from 'aws-sdk-client-mock';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import { ApiClient } from '../../../shared/ApiClient';
+import { HaalCentraalApi } from '../../../shared/HaalCentraalApi';
 import { Organisation, Person } from '../../../shared/User';
 import { AuthRequestHandler, AuthRequestHandlerProps } from '../AuthRequestHandler';
 
@@ -71,7 +72,7 @@ beforeAll(() => {
 
 const ddbMock = mockClient(DynamoDBClient);
 const secretsMock = mockClient(SecretsManagerClient);
-const apiClient = new ApiClient('', '', '');
+const apiClient = new ApiClient({});
 const OIDC = mockedOidcClient(true);
 const sessionId = '12345';
 
@@ -119,7 +120,7 @@ describe('Auth handler', () => {
       cookies: `session=${sessionId}`,
       fullUrl: new URL('https://localhost/abc?state=12345&code=abcdef'),
       dynamoDBClient,
-      apiClient,
+      haalCentraalApi: new HaalCentraalApi({ baseUrl: 'https://localhost', apiclient: apiClient }),
       OpenIdConnect: OIDC,
       ...scopesAndAttributes,
     });
@@ -137,7 +138,7 @@ describe('Auth handler', () => {
       cookies: `session=${sessionId}`,
       fullUrl: new URL('https://localhost/abc?state=12345&code=abcdef'),
       dynamoDBClient,
-      apiClient,
+      haalCentraalApi: new HaalCentraalApi({ baseUrl: 'https://localhost', apiclient: apiClient }),
       OpenIdConnect: OIDC,
       ...scopesAndAttributes,
     });
@@ -153,7 +154,7 @@ describe('Auth handler', () => {
       cookies: '',
       fullUrl: new URL('https://localhost/abc?state=12345&code=abcdef'),
       dynamoDBClient,
-      apiClient,
+      haalCentraalApi: new HaalCentraalApi({ baseUrl: 'https://localhost', apiclient: apiClient }),
       OpenIdConnect: OIDC,
       ...scopesAndAttributes,
     });
@@ -170,7 +171,7 @@ describe('DigiD logins', () => {
     cookies: `session=${sessionId}`,
     fullUrl: new URL('https://localhost/abc?state=12345&code=abcdef'),
     dynamoDBClient,
-    apiClient,
+    haalCentraalApi: new HaalCentraalApi({ baseUrl: 'https://localhost', apiclient: apiClient }),
     OpenIdConnect: OIDC,
     ...scopesAndAttributes,
   };
@@ -212,7 +213,7 @@ describe('Yivi logins', () => {
     cookies: `session=${sessionId}`,
     fullUrl: new URL('https://localhost/abc?state=12345&code=abcdef'),
     dynamoDBClient,
-    apiClient,
+    haalCentraalApi: new HaalCentraalApi({ baseUrl: 'https://localhost', apiclient: apiClient }),
     OpenIdConnect: OIDC,
     ...scopesAndAttributes,
   };
@@ -332,7 +333,7 @@ describe('Yivi logins (kvk feature flag off)', () => {
     cookies: `session=${sessionId}`,
     fullUrl: new URL('https://localhost/abc?state=12345&code=abcdef'),
     dynamoDBClient,
-    apiClient,
+    haalCentraalApi: new HaalCentraalApi({ baseUrl: 'https://localhost', apiclient: apiClient }),
     OpenIdConnect: OIDC,
     ...scopesAndAttributes,
     useYiviKvk: false,
@@ -382,7 +383,7 @@ describe('eHerkenning logins', () => {
     cookies: `session=${sessionId}`,
     fullUrl: new URL('https://localhost/abc?state=12345&code=abcdef'),
     dynamoDBClient,
-    apiClient,
+    haalCentraalApi: new HaalCentraalApi({ baseUrl: 'https://localhost', apiclient: apiClient }),
     OpenIdConnect: OIDC,
     ...scopesAndAttributes,
   };

@@ -14,7 +14,7 @@ export interface OpenIDConnectResult {
   scopes: string[];
 }
 
-export class OpenIDConnectV2 {
+export class OpenIDConnect {
 
   private readonly configuration: OpenIDConnectConfiguration;
   private oidcConfiguration?: oidc.Configuration;

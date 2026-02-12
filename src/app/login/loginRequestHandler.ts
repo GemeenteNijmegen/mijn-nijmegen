@@ -2,7 +2,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import * as loginTemplate from './templates/login.mustache';
-import { OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
+import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { render } from '../../shared/render';
 
 interface LoginRequestHandlerProps {
@@ -44,7 +44,7 @@ interface LoginRequestHandlerProps {
   /**
    * OpenIDConnect client
    */
-  oidc: OpenIDConnectV2;
+  oidc: OpenIDConnect;
 }
 
 export interface RequestParams {
