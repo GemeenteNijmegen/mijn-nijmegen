@@ -1,4 +1,3 @@
-import { RemoteParameters } from '@gemeentenijmegen/cross-region-parameters';
 import { aws_certificatemanager as CertificateManager, aws_ssm as SSM, Stack, StackProps } from 'aws-cdk-lib';
 import { Alarm, ComparisonOperator, Metric } from 'aws-cdk-lib/aws-cloudwatch';
 import { CfnHealthCheck, HealthCheckType } from 'aws-cdk-lib/aws-route53';
@@ -22,7 +21,7 @@ export class UsEastStack extends Stack {
     super(scope, id, props);
     this.branch = props.configuration.branch;
     this.createCertificate();
-    if (props.configuration.monitorLoginPage != false) {
+    if (props.configuration.monitorLoginPage === true || !props.configuration.monitorLoginPage) { // Default true
       this.monitorLoginPage(this.branch);
     }
   }

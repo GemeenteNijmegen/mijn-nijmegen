@@ -1,18 +1,16 @@
 import process from 'process';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { AuthRequestHandler } from './AuthRequestHandler';
 import { ApiClient as ApiClientV2 } from '../../shared/ApiClient';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
-import { OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
+import { OpenIDConnect } from '../../shared/OpenIDConnect';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
-const apiClient = new ApiClient();
 
-let OIDC: OpenIDConnectV2 | undefined = undefined;
+let OIDC: OpenIDConnect | undefined = undefined;
 let haalCentraalApi: HaalCentraalApi | undefined = undefined;
 async function init() {
   // Construct the haal centraal API client
@@ -38,7 +36,7 @@ async function init() {
   });
 
   // Setup ODIC client
-  OIDC = new OpenIDConnectV2({
+  OIDC = new OpenIDConnect({
     clientId: process.env.OIDC_CLIENT_ID!,
     redirectUrl: process.env.OIDC_REDIRECT_URL!,
     wellknown: process.env.OIDC_WELL_KNOWN!,
@@ -71,7 +69,6 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<ApiGateway
       fullUrl: params.fullUrl,
       queryStringParamError: params.error,
       dynamoDBClient,
-      apiClient,
       OpenIdConnect: OIDC!,
       digidScope: process.env.DIGID_SCOPE ?? '',
       eherkenningScope: process.env.EHERKENNING_SCOPE ?? '',

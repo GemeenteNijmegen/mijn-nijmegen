@@ -1,13 +1,12 @@
 import { Logger } from '@aws-lambda-powertools/logger';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
 
 
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
-import { OpenIDConnectResult, OpenIDConnectV2 } from '../../shared/OpenIDConnectV2';
+import { OpenIDConnect, OpenIDConnectResult } from '../../shared/OpenIDConnect';
 import { Organisation, Person, User } from '../../shared/User';
 
 type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
@@ -20,8 +19,7 @@ export interface AuthRequestHandlerProps {
   queryStringParamError?: string;
 
   dynamoDBClient: DynamoDBClient;
-  apiClient: ApiClient;
-  OpenIdConnect: OpenIDConnectV2;
+  OpenIdConnect: OpenIDConnect;
 
   // Scopes
   yiviScope: string;
@@ -202,7 +200,7 @@ export class AuthRequestHandler {
     }
 
     if (bsn) {
-      return new Person(bsn, { apiClient: this.config.apiClient, haalCentraal: this.config.haalCentraalApi });
+      return new Person(bsn, { haalCentraal: this.config.haalCentraalApi });
     }
 
     if (kvk) {
