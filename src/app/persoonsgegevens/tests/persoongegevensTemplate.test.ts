@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
-import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { mockClient } from 'aws-sdk-client-mock';
+import { ApiClient } from '../../../shared/ApiClient';
 import { HaalCentraalApi } from '../../../shared/HaalCentraalApi';
 import { PersoonsgegevensMapper } from '../Persoonsgegevens';
 import { PersoonsgegevensRequestHandler } from '../persoonsgegevensRequestHandler';
@@ -61,7 +61,6 @@ function createHandler(fakeHaalCentraalData: any): PersoonsgegevensRequestHandle
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   const dummyApiClient = {} as ApiClient;
   return new PersoonsgegevensRequestHandler({
-    apiClient: dummyApiClient,
     dynamoDBClient,
     haalCentraalApi: fakeHaalCentraalApi as HaalCentraalApi,
   });
