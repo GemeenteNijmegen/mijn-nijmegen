@@ -4,10 +4,11 @@ import * as path from 'path';
 import { DynamoDBClient, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { SecretsManagerClient, GetSecretValueCommandOutput } from '@aws-sdk/client-secrets-manager';
 import { SSMClient, GetParameterCommandOutput } from '@aws-sdk/client-ssm';
-import { ApiClient } from '@gemeentenijmegen/apiclient';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { mockClient } from 'jest-aws-client-mock';
+import { ApiClient } from '../../../shared/ApiClient';
+import { HaalCentraalApi } from '../../../shared/HaalCentraalApi';
 import { PersoonsgegevensRequestHandler } from '../persoonsgegevensRequestHandler';
 
 
@@ -76,10 +77,15 @@ beforeEach(() => {
   ddbMock.mockImplementation(() => getItemOutput);
 });
 
-const apiClient = new ApiClient('abc', 'abc', 'abd');
+const apiClient = new ApiClient({});
+
+const haalCentraalApi = new HaalCentraalApi({
+  apiclient: apiClient,
+  baseUrl: 'https://localhost',
+});
+
 const dynamoDBClient = new DynamoDBClient({});
-const showZaken = true;
-const handler = new PersoonsgegevensRequestHandler({ apiClient, dynamoDBClient, showZaken });
+const handler = new PersoonsgegevensRequestHandler({ haalCentraalApi, dynamoDBClient });
 
 describe('Requests', () => {
   test('Return status 200', async () => {
