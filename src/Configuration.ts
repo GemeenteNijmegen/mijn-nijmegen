@@ -126,6 +126,12 @@ export interface Configuration {
    * @default true
    */
   readonly monitorLoginPage?: boolean;
+
+  /**
+   * Additional node options passed to the app lambdas
+   * @default -
+   */
+  readonly nodeOptions?: string;
 }
 
 
@@ -187,6 +193,7 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     zakenIsLive: true,
     zakenUseSubmissions: true,
     useZakenFromAggregatorAPI: true,
+    nodeOptions: '--no-deprecation', // Too much noise cased by DEP0169 error in node v24.
   },
 };
 

@@ -252,6 +252,9 @@ export class ApiStack extends Stack implements Configurable {
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
       applicationUrlBase: this.baseUrl,
+      environment: {
+        NODE_OPTIONS: this.configuration.nodeOptions ?? '',
+      },
       apiFunction: LogoutFunction,
     });
   }
@@ -279,6 +282,7 @@ export class ApiStack extends Stack implements Configurable {
         YIVI_BSN_ATTRIBUTE: StringParameter.valueForStringParameter(this, Statics.ssmYiviBsnAttribute),
         YIVI_CONDISCON_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmYiviCondisconScope),
         USE_YIVI_KVK: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviKvk), // Feature flag for kvk bsn conditional disclosure
+        NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
     });
     oidcSecret.grantRead(loginFunction.lambda);
@@ -301,6 +305,7 @@ export class ApiStack extends Stack implements Configurable {
         SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
         SHOW_PRODUCTEN: this.configuration.mijnProductenLive ? 'True' : 'False',
+        NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
     });
 
@@ -340,6 +345,7 @@ export class ApiStack extends Stack implements Configurable {
         HAAL_CENTRAAL_PRIVATE_KEY_ARN: haalCentraalConfig.privateKey.secretArn,
         HAAL_CENTRAAL_API_KEY_ARN: haalCentraalConfig.apiKey.secretArn,
         HAAL_CENTRAAL_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmHaalCentraalBaseUrl),
+        NODE_OPTIONS: this.configuration.nodeOptions ?? '',
 
       },
       apiFunction: AuthFunction,
@@ -369,6 +375,7 @@ export class ApiStack extends Stack implements Configurable {
         HAAL_CENTRAAL_API_KEY_ARN: haalCentraalConfig.apiKey.secretArn,
         HAAL_CENTRAAL_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmHaalCentraalBaseUrl),
 
+        NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
       apiFunction: PersoonsgegevensFunction,
     });
@@ -392,6 +399,7 @@ export class ApiStack extends Stack implements Configurable {
         MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         UITKERING_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmUitkeringsApiEndpointUrl),
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+        NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
       apiFunction: UitkeringFunction,
     });
@@ -442,6 +450,7 @@ export class ApiStack extends Stack implements Configurable {
         NOTIFY_ISSUER_UUID: notifyIssuer.secretArn,
         NOTIFY_SECRET: notifySecret.secretArn,
         NOTIFY_BASEURL: notifyBaseurl.stringValue,
+        NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
       apiFunction: ContactgegevensFunction,
     });
@@ -475,6 +484,7 @@ export class ApiStack extends Stack implements Configurable {
         USE_TAKEN: this.configuration.zakenUseTaken ? 'true' : 'false',
         SUBMISSIONS_LIVE: this.configuration.zakenUseSubmissions ? 'true' : 'false',
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+        NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
       apiFunction: ZakenFunction,
       functionProps: {
@@ -518,6 +528,7 @@ export class ApiStack extends Stack implements Configurable {
       environment: {
         SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+        NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
     });
 
@@ -543,6 +554,7 @@ export class ApiStack extends Stack implements Configurable {
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
         ARC_BASEURL: StringParameter.valueForStringParameter(this, Statics.ssmProductenArcBaseUrl),
         ARC_APIKEY_ARN: arc_key.secretArn,
+        NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
       apiFunction: ProductenFunction,
     });
