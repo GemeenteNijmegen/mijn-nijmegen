@@ -368,6 +368,7 @@ export class ApiStack extends Stack implements Configurable {
       applicationUrlBase: this.baseUrl,
       environment: {
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+        CONTACTGEGEVENS_LIVE: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
 
         // Haal Centraal
         HAAL_CENTRAAL_CERT_SSM: haalCentraalConfig.clientCert.parameterName,
