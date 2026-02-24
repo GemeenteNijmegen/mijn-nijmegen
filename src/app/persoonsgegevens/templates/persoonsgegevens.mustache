@@ -1,66 +1,66 @@
 {{^error}}
     <section>
-    <h2>Persoonsgegevens</h2>
-    <p class="lead">Hier vindt u een overzicht van uw persoons- en adresgegevens.</p>
-    <table class="responsive-table">
-        <thead>
-            <tr>
-                <th>Kenmerk</th>
-                <th>Waarde</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>BSN</td>
-                <td>{{persoonsgegevens.bsn}}</td>
-            </tr>
+        <h2>Persoonsgegevens</h2>
+        <table class="responsive-table">
+            <thead>
+                <tr>
+                    <th>Kenmerk</th>
+                    <th>Waarde</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>BSN</td>
+                    <td>{{persoonsgegevens.bsn}}</td>
+                </tr>
 
-            {{#persoonsgegevens.naam}}
-            <tr>
-                <td>Naam (aanschrijfwijze)</td>
-                <td>{{persoonsgegevens.naam}}</td>
-            </tr>
-            {{/persoonsgegevens.naam}}
+                {{#persoonsgegevens.naam}}
+                <tr>
+                    <td>Naam (aanschrijfwijze)</td>
+                    <td>{{persoonsgegevens.naam}}</td>
+                </tr>
+                {{/persoonsgegevens.naam}}
 
-            <tr>
-                <td>Initialen</td>
-                <td>{{persoonsgegevens.voorletters}}</td>
-            </tr>
-            <tr>
-                <td>Voornamen</td>
-                <td>{{persoonsgegevens.voornamen}}</td>
-            </tr>
-            <tr>
-                <td>Voorvoegsel</td>
-                <td>{{persoonsgegevens.voorvoegsel}}</td>
-            </tr>
-            <tr>
-                <td>Geslachtsnaam</td>
-                <td>{{persoonsgegevens.geslachtsnaam}}</td>
-            </tr>
+                <tr>
+                    <td>Initialen</td>
+                    <td>{{persoonsgegevens.voorletters}}</td>
+                </tr>
+                <tr>
+                    <td>Voornamen</td>
+                    <td>{{persoonsgegevens.voornamen}}</td>
+                </tr>
+                <tr>
+                    <td>Voorvoegsel</td>
+                    <td>{{persoonsgegevens.voorvoegsel}}</td>
+                </tr>
+                <tr>
+                    <td>Geslachtsnaam</td>
+                    <td>{{persoonsgegevens.geslachtsnaam}}</td>
+                </tr>
 
-            {{#persoonsgegevens.achternaam}}
-            <tr>
-                <td>Achternaam</td>
-                <td>{{persoonsgegevens.achternaam}}</td>
-            </tr>
-            {{/persoonsgegevens.achternaam}}
+                {{#persoonsgegevens.achternaam}}
+                <tr>
+                    <td>Achternaam</td>
+                    <td>{{persoonsgegevens.achternaam}}</td>
+                </tr>
+                {{/persoonsgegevens.achternaam}}
 
-            <tr>
-                <td>Geboortedatum</td>
-                <td>{{persoonsgegevens.geboortedatum}}</td>
-            </tr>
-            <tr>
-                <td>Nederlandse nationaliteit</td>
-                <td>{{persoonsgegevens.nederlandseNationaliteit}}</td>
-            </tr>
-            <tr>
-                <td>Geslachtsaanduiding</td>
-                <td>{{persoonsgegevens.geslacht}}</td>
-            </tr>
-        </tbody>
-    </table>
+                <tr>
+                    <td>Geboortedatum</td>
+                    <td>{{persoonsgegevens.geboortedatum}}</td>
+                </tr>
+                <tr>
+                    <td>Nederlandse nationaliteit</td>
+                    <td>{{persoonsgegevens.nederlandseNationaliteit}}</td>
+                </tr>
+                <tr>
+                    <td>Geslachtsaanduiding</td>
+                    <td>{{persoonsgegevens.geslacht}}</td>
+                </tr>
+            </tbody>
+        </table>
     </section>
+
     <section>
         <h2>Adresgegevens</h2>
         <p>
@@ -69,7 +69,8 @@
             {{/persoonsgegevens.adresregels}}
         </p>
     </section>
-        <div>
+    
+    <div>
         <h2>Persoonsgegevens aanpassen of opvragen</h2>
         <ul role="list" class="utrecht-link-list utrecht-link-list--html-ul">
             <li class="utrecht-link-list__item">
@@ -131,7 +132,8 @@
                 </a>
             </li>
         </ul>
-    </div>               
+    </div>
+
 {{/error}}
 {{#error}}
     <h2>Er is iets misgegaan</h2>
