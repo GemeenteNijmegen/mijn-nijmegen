@@ -6,8 +6,6 @@
     "bundle": "npx projen bundle",
     "bundle:app/auth/auth.lambda": "npx projen bundle:app/auth/auth.lambda",
     "bundle:app/auth/auth.lambda:watch": "npx projen bundle:app/auth/auth.lambda:watch",
-    "bundle:app/contactgegevens/contactgegevens.lambda": "npx projen bundle:app/contactgegevens/contactgegevens.lambda",
-    "bundle:app/contactgegevens/contactgegevens.lambda:watch": "npx projen bundle:app/contactgegevens/contactgegevens.lambda:watch",
     "bundle:app/home/home.lambda": "npx projen bundle:app/home/home.lambda",
     "bundle:app/home/home.lambda:watch": "npx projen bundle:app/home/home.lambda:watch",
     "bundle:app/login/login.lambda": "npx projen bundle:app/login/login.lambda",
