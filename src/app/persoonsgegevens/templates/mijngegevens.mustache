@@ -15,7 +15,10 @@
             </nav>
             <div class="col-lg-9 col-md-12">
                 <h1>Mijn gegevens</h1>
-                <p class="lead">Hier vindt u een overzicht van uw persoons- en adresgegevens.</p>
+                <p class="lead">
+                {{^showContactgegevens}}Hier vindt u een overzicht van uw persoons- en adresgegevens.{{/showContactgegevens}}
+                {{#showContactgegevens}}Hier vindt u een overzicht van uw persoons-, adres- en contactgegevens.{{/showContactgegevens}}
+                </p>
 
                 {{#showContactgegevens}}
                 {{>contactgegevens}}
