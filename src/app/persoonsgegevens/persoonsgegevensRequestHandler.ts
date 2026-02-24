@@ -76,7 +76,6 @@ export class PersoonsgegevensRequestHandler {
     // Setup view
     const navigation = new Navigation(userType, {
       currentPath: '/persoonsgegevens',
-      showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
     });
 
     const breadcrumbs = this.setupBreadcrumbs();
