@@ -61,7 +61,6 @@ junit.xml
 .cdk.staging/
 .parcel-cache/
 !/src/app/auth/auth-function.ts
-!/src/app/contactgegevens/contactgegevens-function.ts
 !/src/app/home/home-function.ts
 !/src/app/login/login-function.ts
 !/src/app/logout/logout-function.ts

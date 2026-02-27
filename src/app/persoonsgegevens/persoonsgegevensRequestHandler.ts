@@ -4,6 +4,7 @@ import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
 import { Persoonsgegevens, PersoonsgegevensMapper } from './Persoonsgegevens';
+import * as contactgegevensTemplate from './templates/contactgegevens.mustache';
 import * as template from './templates/persoonsgegevens.mustache';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { BreadCrumbs, Navigation } from '../../shared/Navigation';
@@ -17,6 +18,7 @@ interface RenderData {
   breadcrumbs: any;
   persoonsgegevens?: Persoonsgegevens;
   error?: string;
+  showContactgegevens?: boolean;
 }
 
 interface Config {
@@ -77,6 +79,7 @@ export class PersoonsgegevensRequestHandler {
       breadcrumbs: breadcrumbs.items,
       persoonsgegevens: undefined,
       error: undefined,
+      showContactgegevens: process.env.CONTACTGEGEVENS_LIVE == 'True',
     };
 
     // Get BRP data from HaalCentraal
@@ -94,7 +97,9 @@ export class PersoonsgegevensRequestHandler {
     }
 
     // render page
-    const html = await render(data, template.default);
+    const html = await render(data, template.default, {
+      contactgegevens: contactgegevensTemplate.default,
+    });
     return Response.html(html, 200, session.getCookie());
   }
 
