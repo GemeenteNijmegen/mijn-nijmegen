@@ -2,12 +2,6 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
-import { Spinner } from '../../shared/Icons';
-import { logger } from '../../shared/Logger';
-import { BreadCrumbs, Navigation } from '../../shared/Navigation';
-import { render } from '../../shared/render';
-import { User, UserFromSession } from '../../shared/User';
-import { validateToken } from '../../shared/validateToken';
 import * as singleZaakPartial from './templates/singlezaak.mustache';
 import * as takenTemplate from './templates/taken.mustache';
 import * as zaakRow from './templates/zaak-row.mustache';
@@ -18,6 +12,12 @@ import { ZaakFormatter } from './ZaakFormatter';
 import { SingleZaak, singleZaakSchema, ZaakSummariesResponseSchema, ZaakSummariesSchema } from './ZaakInterface';
 import { eventParams } from './zaken.lambda';
 import { ZakenAggregatorConnector } from './ZakenAggregatorConnector';
+import { Spinner } from '../../shared/Icons';
+import { logger } from '../../shared/Logger';
+import { BreadCrumbs, Navigation } from '../../shared/Navigation';
+import { render } from '../../shared/render';
+import { User, UserFromSession } from '../../shared/User';
+import { validateToken } from '../../shared/validateToken';
 
 export class ZakenRequestHandler {
   private dynamoDBClient: DynamoDBClient;
