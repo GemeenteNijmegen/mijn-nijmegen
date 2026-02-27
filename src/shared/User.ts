@@ -14,6 +14,8 @@ export interface UserConfig {
 export interface User {
   identifier: string;
   type: 'person' | 'organisation';
+  email?: string;
+  phonenumber?: string;
   getUserName(): Promise<string>;
 }
 
@@ -25,12 +27,16 @@ export class Person implements User {
   config?: UserConfig;
   identifier: string;
   userName?: string;
+  email?: string;
+  phonenumber?: string;
   type: 'person';
-  constructor(bsn: Bsn, config: UserConfig | undefined, userName?: string) {
+  constructor(bsn: Bsn, config: UserConfig | undefined, userName?: string, email?: string, phonenumber?: string) {
     this.bsn = bsn;
     this.identifier = bsn.bsn;
     this.config = config;
     this.userName = userName;
+    this.email = email;
+    this.phonenumber = phonenumber;
     this.type = 'person';
   }
 
@@ -58,12 +64,16 @@ export class Organisation implements User {
   kvk: string;
   identifier: string;
   userName: string;
+  email?: string;
+  phonenumber?: string;
   type: 'organisation';
 
-  constructor(kvk: string, userName: string) {
+  constructor(kvk: string, userName: string, email?: string, phonenumber?: string) {
     this.kvk = kvk;
     this.identifier = kvk;
     this.userName = userName ?? kvk;
+    this.email = email;
+    this.phonenumber = phonenumber;
     this.type = 'organisation';
   }
 
@@ -77,12 +87,14 @@ export function UserFromSession(session: Session): User {
   const userType = session.getValue('user_type');
   const username = session.getValue('username');
   const identifier = session.getValue('identifier');
+  const email = session.getValue('email');
+  const phonenumber = session.getValue('phonenumber');
   let user: User;
   if (userType == 'organisation') {
 
-    user = new Organisation(identifier, username);
+    user = new Organisation(identifier, username, email, phonenumber);
   } else {
-    user = new Person(new Bsn(session.getValue('identifier')), undefined, username);
+    user = new Person(new Bsn(session.getValue('identifier')), undefined, username, email, phonenumber);
   }
   return user;
 }
