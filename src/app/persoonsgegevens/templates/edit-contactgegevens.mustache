@@ -1,0 +1,52 @@
+{{>header}}
+
+<main>
+    <div class="container">
+        {{>breadcrumbs}}
+        <div class="row">
+            <nav class="nijmegen-sidenav col-lg-3 col-md-12">
+                <ul class="nijmegen-sidenav__list">
+                {{#nav}}
+                    <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
+                        {{{icon}}}
+                        <a href="{{{url}}}">{{title}}</a>
+                    </li>
+                {{/nav}}
+                </ul>
+            </nav>
+            <div class="col-lg-9 col-md-12">
+                <h1>{{title}}</h1>
+                
+                {{#error}}
+                <div class="alert alert-danger">{{error}}</div>
+                {{/error}}
+
+                <form method="POST" action="/persoonsgegevens/edit">
+                    <input type="hidden" name="xsrf_token" value="{{xsrf_token}}">
+                    <input type="hidden" name="type" value="{{type}}">
+                    
+                    {{#isEmail}}
+                    <div class="form-group">
+                        <label for="value">E-mailadres</label>
+                        <input type="email" class="form-control" id="value" name="value" value="{{currentValue}}" required>
+                        <small class="form-text text-muted">We sturen een verificatiecode naar dit e-mailadres.</small>
+                    </div>
+                    {{/isEmail}}
+                    
+                    {{#isPhone}}
+                    <div class="form-group">
+                        <label for="value">Telefoonnummer</label>
+                        <input type="tel" class="form-control" id="value" name="value" value="{{currentValue}}" required pattern="[0-9+\s\-()]{10,}">
+                        <small class="form-text text-muted">We sturen een verificatiecode naar dit telefoonnummer.</small>
+                    </div>
+                    {{/isPhone}}
+                    
+                    <button type="submit" class="btn btn-primary">Volgende</button>
+                    <a href="/persoonsgegevens" class="btn btn-secondary">Annuleren</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+{{>footer}}

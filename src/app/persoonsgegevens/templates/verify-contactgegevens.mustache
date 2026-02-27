@@ -1,0 +1,46 @@
+{{>header}}
+
+<main>
+    <div class="container">
+        {{>breadcrumbs}}
+        <div class="row">
+            <nav class="nijmegen-sidenav col-lg-3 col-md-12">
+                <ul class="nijmegen-sidenav__list">
+                {{#nav}}
+                    <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
+                        {{{icon}}}
+                        <a href="{{{url}}}">{{title}}</a>
+                    </li>
+                {{/nav}}
+                </ul>
+            </nav>
+            <div class="col-lg-9 col-md-12">
+                <h1>{{title}}</h1>
+                
+                <p class="lead">We hebben een verificatiecode gestuurd naar <strong>{{pendingValue}}</strong>.</p>
+                
+                {{#error}}
+                <div class="alert alert-danger">{{error}}</div>
+                {{/error}}
+
+                <form method="POST" action="/persoonsgegevens/verify">
+                    <input type="hidden" name="xsrf_token" value="{{xsrf_token}}">
+                    <input type="hidden" name="type" value="{{type}}">
+                    
+                    <div class="form-group">
+                        <label for="code">Verificatiecode</label>
+                        <input type="text" class="form-control" id="code" name="code" required pattern="[0-9]{6}" maxlength="6" autocomplete="off">
+                        <small class="form-text text-muted">Voer de 6-cijferige code in die u heeft ontvangen.</small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Verifiëren</button>
+                    <a href="/persoonsgegevens" class="btn btn-secondary">Annuleren</a>
+                </form>
+                
+                <p class="mt-3"><small>De code is 15 minuten geldig. U heeft nog {{attemptsLeft}} poging(en) over.</small></p>
+            </div>
+        </div>
+    </div>
+</main>
+
+{{>footer}}

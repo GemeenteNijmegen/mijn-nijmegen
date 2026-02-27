@@ -1,4 +1,3 @@
-import { Bsn } from '@gemeentenijmegen/utils';
 import { ApiClient } from './ApiClient';
 
 interface Config {
@@ -68,6 +67,7 @@ export class OpenKlantApi {
 
     const data: PartijResponse = await this.config.apiclient.getData(url);
 
+    // TODO this does not work when the partij does not yet exist... Then we need to create it first with the correct digital adresses.
     if (!data?.results || data.results.length === 0) {
       throw Error('No partij found for identifier');
     }
@@ -75,13 +75,15 @@ export class OpenKlantApi {
     const partij = data.results[0];
     const digitaleAdressen: DigitaalAdres[] = [];
 
+    // TODO Digital adres are mangaged by a different endpoint
+    // For updating an exisiting one https://mijn-services.accp.nijmegen.nl/open-klant/klantinteracties/api/v1/schema/#tag/digitale-adressen/operation/digitaleadressenPartialUpdate
+    // For creating a new one https://mijn-services.accp.nijmegen.nl/open-klant/klantinteracties/api/v1/schema/#tag/digitale-adressen/operation/digitaleadressenCreate
     if (contactInfo.email) {
       digitaleAdressen.push({ adres: contactInfo.email, soortDigitaalAdres: 'email' });
     }
     if (contactInfo.phonenumber) {
       digitaleAdressen.push({ adres: contactInfo.phonenumber, soortDigitaalAdres: 'telefoonnummer' });
     }
-
     const updateUrl = `${this.config.baseUrl}/klantinteracties/api/v1/partijen/${partij.uuid}`;
     await this.config.apiclient.postData(updateUrl, { digitaleAdressen }, { 'Content-Type': 'application/json' });
   }
