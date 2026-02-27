@@ -89,8 +89,8 @@ export class PersoonsgegevensRequestHandler {
       error: undefined,
       // Contactgegevens
       showContactgegevens: this.config.contactgegevensLive,
-      email: undefined, // TODO integrate with open-klant
-      telefoonnummer: undefined, // TODO integrate with open-klant
+      email: session.getValue('email'),
+      telefoonnummer: session.getValue('phonenumber'),
     };
 
     // Get BRP data from HaalCentraal
