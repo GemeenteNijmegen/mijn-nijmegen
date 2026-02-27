@@ -3,11 +3,11 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
+import { productEventParams } from './producten.lambda';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import { User, UserFromSession } from '../../shared/User';
 import { ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
-import { productEventParams } from './producten.lambda';
 import * as productTemplate from './templates/product.mustache';
 import * as productenTemplate from './templates/producten.mustache';
 
