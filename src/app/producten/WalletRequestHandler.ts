@@ -2,10 +2,10 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
-import { Arc } from './Arc';
-import * as walletTemplate from './templates/wallet.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import { Arc } from './Arc';
+import * as walletTemplate from './templates/wallet.mustache';
 
 interface walletEventRequestParams {
   cookies: string;
@@ -48,8 +48,7 @@ export class WalletRequestHandler {
       // Setup view
       const navigation = new Navigation('person', {
         currentPath: '/producten',
-        showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
-        showProducten: process.env.SHOW_PRODUCTEN== 'True',
+        showProducten: process.env.SHOW_PRODUCTEN == 'True',
       });
       const data = {
         volledigenaam: session.getValue('username'),
