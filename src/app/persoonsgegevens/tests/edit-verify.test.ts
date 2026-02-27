@@ -288,7 +288,15 @@ describe('OpenKlantApi updateContactInfo', () => {
     const mockApiClient = {
       getData: jest.fn().mockResolvedValue({
         count: 1,
-        results: [{ uuid: 'test-uuid' }],
+        results: [{
+          uuid: 'test-uuid',
+          _expand: {
+            digitaleAdressen: [
+              { uuid: 'email-uuid', url: 'https://example.com/email', adres: 'old@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'test-uuid', url: 'https://example.com/partij' } },
+              { uuid: 'phone-uuid', url: 'https://example.com/phone', adres: '0611111111', soortDigitaalAdres: 'telefoonnummer', verstrektDoorPartij: { uuid: 'test-uuid', url: 'https://example.com/partij' } },
+            ],
+          },
+        }],
       }),
       postData: jest.fn().mockResolvedValue({}),
     } as any;
@@ -305,23 +313,24 @@ describe('OpenKlantApi updateContactInfo', () => {
 
     expect(mockApiClient.getData).toHaveBeenCalled();
     expect(mockApiClient.postData).toHaveBeenCalledWith(
-      'https://example.com/klantinteracties/api/v1/partijen/test-uuid',
-      {
-        digitaleAdressen: [
-          { adres: 'test@example.com', soortDigitaalAdres: 'email' },
-          { adres: '0612345678', soortDigitaalAdres: 'telefoonnummer' },
-        ],
-      },
+      'https://example.com/klantinteracties/api/v1/digitaleadressen/email-uuid',
+      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: 'test-uuid' },
+      { 'Content-Type': 'application/json' },
+    );
+    expect(mockApiClient.postData).toHaveBeenCalledWith(
+      'https://example.com/klantinteracties/api/v1/digitaleadressen/phone-uuid',
+      { adres: '0612345678', soortDigitaalAdres: 'telefoonnummer', verstrektDoorPartij: 'test-uuid' },
       { 'Content-Type': 'application/json' },
     );
   });
 
-  test('Throws error when no partij found', async () => {
+  test('Creates partij when not found', async () => {
     const mockApiClient = {
       getData: jest.fn().mockResolvedValue({
         count: 0,
         results: [],
       }),
+      postData: jest.fn().mockResolvedValue({ uuid: 'new-partij-uuid' }),
     } as any;
 
     const openKlantApi = new OpenKlantApi({
@@ -329,8 +338,22 @@ describe('OpenKlantApi updateContactInfo', () => {
       apiclient: mockApiClient,
     });
 
-    await expect(
-      openKlantApi.updateContactInfo('900222670', 'person', { email: 'test@example.com' }),
-    ).rejects.toThrow('No partij found for identifier');
+    await openKlantApi.updateContactInfo('900222670', 'person', { email: 'test@example.com' });
+
+    expect(mockApiClient.postData).toHaveBeenCalledWith(
+      'https://example.com/klantinteracties/api/v1/partijen',
+      {
+        soortPartij: 'persoon',
+        indicatieActief: true,
+        partijIdentificatie: {},
+        partijIdentificatoren: [{ objectId: '900222670', codeSoortObjectId: 'bsn' }],
+      },
+      { 'Content-Type': 'application/json' },
+    );
+    expect(mockApiClient.postData).toHaveBeenCalledWith(
+      'https://example.com/klantinteracties/api/v1/digitaleadressen',
+      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: 'new-partij-uuid' },
+      { 'Content-Type': 'application/json' },
+    );
   });
 });
