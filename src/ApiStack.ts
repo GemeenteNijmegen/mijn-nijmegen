@@ -344,6 +344,7 @@ export class ApiStack extends Stack implements Configurable {
         // OpenKlant
         OPENKLANT_API_KEY_ARN: openKlantConfig.apiKey.secretArn,
         OPENKLANT_API_ENDPOINT: openKlantConfig.endpoint.parameterName,
+        CONTACTGEGEVENS_LIVE: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
 
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
 
