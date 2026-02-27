@@ -311,7 +311,7 @@ export class ApiStack extends Stack implements Configurable {
       },
       environment: {
         SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
-        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+        CONTACTGEGEVENS_LIVE: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
         SHOW_PRODUCTEN: this.configuration.mijnProductenLive ? 'True' : 'False',
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
@@ -383,7 +383,6 @@ export class ApiStack extends Stack implements Configurable {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: this.baseUrl,
       environment: {
-        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
         CONTACTGEGEVENS_LIVE: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
 
         // Haal Centraal
@@ -421,7 +420,7 @@ export class ApiStack extends Stack implements Configurable {
         MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
         MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         UITKERING_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmUitkeringsApiEndpointUrl),
-        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+        CONTACTGEGEVENS_LIVE: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
       apiFunction: UitkeringFunction,
@@ -455,7 +454,7 @@ export class ApiStack extends Stack implements Configurable {
         IS_LIVE: this.configuration.zakenIsLive ? 'true' : 'false',
         USE_TAKEN: this.configuration.zakenUseTaken ? 'true' : 'false',
         SUBMISSIONS_LIVE: this.configuration.zakenUseSubmissions ? 'true' : 'false',
-        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+        CONTACTGEGEVENS_LIVE: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
       apiFunction: ZakenFunction,
@@ -499,7 +498,7 @@ export class ApiStack extends Stack implements Configurable {
       },
       environment: {
         SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
-        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+        CONTACTGEGEVENS_LIVE: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
     });
@@ -523,7 +522,7 @@ export class ApiStack extends Stack implements Configurable {
       environment: {
         SHOW_PRODUCTEN: this.configuration.mijnProductenLive ? 'True' : 'False',
         SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
-        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+        CONTACTGEGEVENS_LIVE: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
         ARC_BASEURL: StringParameter.valueForStringParameter(this, Statics.ssmProductenArcBaseUrl),
         ARC_APIKEY_ARN: arc_key.secretArn,
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
