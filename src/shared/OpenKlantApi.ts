@@ -1,4 +1,3 @@
-import { Bsn } from '@gemeentenijmegen/utils';
 import { ApiClient } from './ApiClient';
 
 interface Config {
@@ -13,7 +12,9 @@ interface DigitaalAdres {
 
 interface Partij {
   uuid: string;
-  digitaleAdressen?: DigitaalAdres[];
+  _expand: {
+    digitaleAdressen?: DigitaalAdres[];
+  }
 }
 
 interface PartijResponse {
@@ -46,8 +47,8 @@ export class OpenKlantApi {
     const partij = data.results[0];
     const contactInfo: ContactInfo = {};
 
-    if (partij.digitaleAdressen) {
-      for (const adres of partij.digitaleAdressen) {
+    if (partij._expand.digitaleAdressen) {
+      for (const adres of partij._expand.digitaleAdressen) {
         if (adres.soortDigitaalAdres === 'email' && !contactInfo.email) {
           contactInfo.email = adres.adres;
         } else if (adres.soortDigitaalAdres === 'telefoonnummer' && !contactInfo.phonenumber) {
