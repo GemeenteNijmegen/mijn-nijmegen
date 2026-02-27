@@ -31,6 +31,11 @@ interface HaalCentraalConfig {
   clientCert: IStringParameter;
 }
 
+interface OpenKlantConfig {
+  apiKey: ISecret;
+  endpoint: IStringParameter;
+}
+
 export interface ApiStackProps extends StackProps, Configurable {
   sessionsTable: SessionsTable;
   branch: string;
@@ -77,6 +82,7 @@ export class ApiStack extends Stack implements Configurable {
   setFunctions(configuration: Configuration) {
     const tlsConfig = this.mtlsConfig(); // Note also used for uitkeringen endpoint
     const haalCentraalConfig = this.haalCentraalConfig();
+    const openKlantConfig = this.openKlantConfig();
     /**
      * The login function generates a login URL and renders the login page.
      */
@@ -90,7 +96,7 @@ export class ApiStack extends Stack implements Configurable {
     /**
      * The auth function receives the callback from the OIDC-provider, validates the received ID-Token, and sets the session to loggedin.
      */
-    const authFunction = this.authFunction(haalCentraalConfig);
+    const authFunction = this.authFunction(haalCentraalConfig, openKlantConfig);
 
     /**
      * The Home function show the homepage.
@@ -100,7 +106,7 @@ export class ApiStack extends Stack implements Configurable {
     /**
      * The Persoonsgegevens function show the homepage.
      */
-    const persoonsGegevensFunction = this.persoonsgegevensFunction(haalCentraalConfig);
+    const persoonsGegevensFunction = this.persoonsgegevensFunction(haalCentraalConfig, openKlantConfig);
 
     /**
      * The uitkeringenfunction show your current uitkering.
@@ -225,6 +231,15 @@ export class ApiStack extends Stack implements Configurable {
     };
   }
 
+  private openKlantConfig(): OpenKlantConfig {
+    const openKlantApiKey = Secret.fromSecretNameV2(this, 'openklant-api-key', Statics.ssmOpenKlantSecret);
+    const openKlantEndpoint = StringParameter.fromStringParameterName(this, 'openklant-endpoint', Statics.ssmOpenKlantEndpoint);
+    return {
+      apiKey: openKlantApiKey,
+      endpoint: openKlantEndpoint,
+    };
+  }
+
   private logoutFunction() {
     return new ApiFunction(this, 'logout-function', {
       description: 'Uitlog-pagina voor de Mijn Nijmegen-applicatie.',
@@ -295,7 +310,7 @@ export class ApiStack extends Stack implements Configurable {
     return homeFunction;
   }
 
-  private authFunction(haalCentraalConfig: HaalCentraalConfig) {
+  private authFunction(haalCentraalConfig: HaalCentraalConfig, openKlantConfig: OpenKlantConfig) {
     const oidcSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'oidc-secret-auth', Statics._OIDCClientSecret);
 
     const authFunction = new ApiFunction(this, 'auth-function', {
@@ -325,6 +340,11 @@ export class ApiStack extends Stack implements Configurable {
         HAAL_CENTRAAL_PRIVATE_KEY_ARN: haalCentraalConfig.privateKey.secretArn,
         HAAL_CENTRAAL_API_KEY_ARN: haalCentraalConfig.apiKey.secretArn,
         HAAL_CENTRAAL_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmHaalCentraalBaseUrl),
+
+        // OpenKlant
+        OPENKLANT_API_KEY_ARN: openKlantConfig.apiKey.secretArn,
+        OPENKLANT_API_ENDPOINT: openKlantConfig.endpoint.parameterName,
+
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
 
       },
@@ -333,12 +353,14 @@ export class ApiStack extends Stack implements Configurable {
     haalCentraalConfig.apiKey.grantRead(authFunction.lambda);
     haalCentraalConfig.privateKey.grantRead(authFunction.lambda);
     haalCentraalConfig.clientCert.grantRead(authFunction.lambda);
+    openKlantConfig.apiKey.grantRead(authFunction.lambda);
+    openKlantConfig.endpoint.grantRead(authFunction.lambda);
     oidcSecret.grantRead(authFunction.lambda);
 
     return authFunction;
   }
 
-  private persoonsgegevensFunction(haalCentraalConfig: HaalCentraalConfig) {
+  private persoonsgegevensFunction(haalCentraalConfig: HaalCentraalConfig, openKlantConfig: OpenKlantConfig) {
 
     const persoonsGegevensFunction = new ApiFunction(this, 'persoonsgegevens-function', {
       description: 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.',
@@ -356,6 +378,10 @@ export class ApiStack extends Stack implements Configurable {
         HAAL_CENTRAAL_API_KEY_ARN: haalCentraalConfig.apiKey.secretArn,
         HAAL_CENTRAAL_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmHaalCentraalBaseUrl),
 
+        // OpenKlant
+        OPENKLANT_API_KEY_ARN: openKlantConfig.apiKey.secretArn,
+        OPENKLANT_API_ENDPOINT: openKlantConfig.endpoint.parameterName,
+
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
       apiFunction: PersoonsgegevensFunction,
@@ -364,6 +390,8 @@ export class ApiStack extends Stack implements Configurable {
     haalCentraalConfig.apiKey.grantRead(persoonsGegevensFunction.lambda);
     haalCentraalConfig.privateKey.grantRead(persoonsGegevensFunction.lambda);
     haalCentraalConfig.clientCert.grantRead(persoonsGegevensFunction.lambda);
+    openKlantConfig.apiKey.grantRead(persoonsGegevensFunction.lambda);
+    openKlantConfig.endpoint.grantRead(persoonsGegevensFunction.lambda);
     return persoonsGegevensFunction;
   }
 
