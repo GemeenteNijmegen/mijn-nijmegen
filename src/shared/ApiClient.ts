@@ -41,7 +41,7 @@ export interface ApiClientOptions {
   apikey?: {
     header: string;
     keyArn: string;
-    prefix: string;
+    prefix?: string;
   };
 }
 
