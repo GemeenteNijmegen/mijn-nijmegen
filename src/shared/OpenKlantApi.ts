@@ -58,4 +58,31 @@ export class OpenKlantApi {
 
     return contactInfo;
   }
+
+  async updateContactInfo(identifier: string, type: 'person' | 'organisation', contactInfo: ContactInfo): Promise<void> {
+    const filterField = type === 'person'
+      ? 'partijIdentificator__codeSoortObjectId=bsn'
+      : 'partijIdentificator__codeSoortObjectId=kvk';
+
+    const url = `${this.config.baseUrl}/klantinteracties/api/v1/partijen?${filterField}&partijIdentificator__objectId=${identifier}`;
+
+    const data: PartijResponse = await this.config.apiclient.getData(url);
+
+    if (!data?.results || data.results.length === 0) {
+      throw Error('No partij found for identifier');
+    }
+
+    const partij = data.results[0];
+    const digitaleAdressen: DigitaalAdres[] = [];
+
+    if (contactInfo.email) {
+      digitaleAdressen.push({ adres: contactInfo.email, soortDigitaalAdres: 'email' });
+    }
+    if (contactInfo.phonenumber) {
+      digitaleAdressen.push({ adres: contactInfo.phonenumber, soortDigitaalAdres: 'telefoonnummer' });
+    }
+
+    const updateUrl = `${this.config.baseUrl}/klantinteracties/api/v1/partijen/${partij.uuid}`;
+    await this.config.apiclient.postData(updateUrl, { digitaleAdressen }, { 'Content-Type': 'application/json' });
+  }
 }

@@ -160,6 +160,19 @@ export class ApiStack extends Stack implements Configurable {
       methods: [apigatewayv2.HttpMethod.GET],
     });
 
+    if (configuration.mijnContactGegevensLive) {
+      this.api.addRoutes({
+        integration: new HttpLambdaIntegration('persoonsgegevens-edit', persoonsGegevensFunction.lambda),
+        path: '/persoonsgegevens/edit',
+        methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.POST],
+      });
+      this.api.addRoutes({
+        integration: new HttpLambdaIntegration('persoonsgegevens-verify', persoonsGegevensFunction.lambda),
+        path: '/persoonsgegevens/verify',
+        methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.POST],
+      });
+    }
+
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('uitkeringen', uitkeringenFunction.lambda),
       path: '/uitkeringen',
