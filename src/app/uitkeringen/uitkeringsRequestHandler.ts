@@ -3,11 +3,11 @@ import { ApiClient } from '@gemeentenijmegen/apiclient';
 
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
+import { BreadCrumbs, Navigation } from '../../shared/Navigation';
+import { render } from '../../shared/render';
 import * as template from './templates/uitkeringen.mustache';
 import * as uitkering from './templates/uitkerings-item.mustache';
 import { UitkeringsApi } from './UitkeringsApi';
-import { BreadCrumbs, Navigation } from '../../shared/Navigation';
-import { render } from '../../shared/render';
 
 interface Config {
   apiClient: ApiClient;
@@ -54,7 +54,6 @@ export class uitkeringsRequestHandler {
 
     const navigation = new Navigation(userType, {
       currentPath: '/uitkeringen',
-      showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
     });
 
     const breadcrumbs = this.setupBreadcrumbs();
