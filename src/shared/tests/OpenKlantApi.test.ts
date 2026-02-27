@@ -8,6 +8,7 @@ describe('OpenKlantApi', () => {
   beforeEach(() => {
     mockApiClient = {
       getData: jest.fn(),
+      postData: jest.fn(),
     } as any;
 
     openKlantApi = new OpenKlantApi({
@@ -21,10 +22,12 @@ describe('OpenKlantApi', () => {
       count: 1,
       results: [{
         uuid: 'test-uuid',
-        digitaleAdressen: [
-          { adres: 'test@example.com', soortDigitaalAdres: 'email' },
-          { adres: '0612345678', soortDigitaalAdres: 'telefoonnummer' },
-        ],
+        _expand: {
+          digitaleAdressen: [
+            { uuid: 'email-uuid', url: 'https://example.com/email', adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'test-uuid', url: 'https://example.com/partij' } },
+            { uuid: 'phone-uuid', url: 'https://example.com/phone', adres: '0612345678', soortDigitaalAdres: 'telefoonnummer', verstrektDoorPartij: { uuid: 'test-uuid', url: 'https://example.com/partij' } },
+          ],
+        },
       }],
     });
 
@@ -42,9 +45,11 @@ describe('OpenKlantApi', () => {
       count: 1,
       results: [{
         uuid: 'test-uuid',
-        digitaleAdressen: [
-          { adres: 'info@company.com', soortDigitaalAdres: 'email' },
-        ],
+        _expand: {
+          digitaleAdressen: [
+            { uuid: 'email-uuid', url: 'https://example.com/email', adres: 'info@company.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'test-uuid', url: 'https://example.com/partij' } },
+          ],
+        },
       }],
     });
 
@@ -83,12 +88,14 @@ describe('OpenKlantApi', () => {
       count: 1,
       results: [{
         uuid: 'test-uuid',
-        digitaleAdressen: [
-          { adres: 'first@example.com', soortDigitaalAdres: 'email' },
-          { adres: 'second@example.com', soortDigitaalAdres: 'email' },
-          { adres: '0611111111', soortDigitaalAdres: 'telefoonnummer' },
-          { adres: '0622222222', soortDigitaalAdres: 'telefoonnummer' },
-        ],
+        _expand: {
+          digitaleAdressen: [
+            { uuid: 'email1-uuid', url: 'https://example.com/email1', adres: 'first@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'test-uuid', url: 'https://example.com/partij' } },
+            { uuid: 'email2-uuid', url: 'https://example.com/email2', adres: 'second@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'test-uuid', url: 'https://example.com/partij' } },
+            { uuid: 'phone1-uuid', url: 'https://example.com/phone1', adres: '0611111111', soortDigitaalAdres: 'telefoonnummer', verstrektDoorPartij: { uuid: 'test-uuid', url: 'https://example.com/partij' } },
+            { uuid: 'phone2-uuid', url: 'https://example.com/phone2', adres: '0622222222', soortDigitaalAdres: 'telefoonnummer', verstrektDoorPartij: { uuid: 'test-uuid', url: 'https://example.com/partij' } },
+          ],
+        },
       }],
     });
 

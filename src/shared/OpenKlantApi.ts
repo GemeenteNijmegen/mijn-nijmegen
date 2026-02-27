@@ -14,7 +14,7 @@ interface Partij {
   uuid: string;
   _expand: {
     digitaleAdressen?: DigitaalAdres[];
-  }
+  };
 }
 
 interface PartijResponse {
@@ -47,7 +47,7 @@ export class OpenKlantApi {
     const partij = data.results[0];
     const contactInfo: ContactInfo = {};
 
-    if (partij._expand.digitaleAdressen) {
+    if (partij._expand?.digitaleAdressen) {
       for (const adres of partij._expand.digitaleAdressen) {
         if (adres.soortDigitaalAdres === 'email' && !contactInfo.email) {
           contactInfo.email = adres.adres;
