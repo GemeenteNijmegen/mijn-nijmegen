@@ -7,6 +7,7 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { ApiClient } from '../../../shared/ApiClient';
 import { HaalCentraalApi } from '../../../shared/HaalCentraalApi';
+import { OpenKlantApi } from '../../../shared/OpenKlantApi';
 import { Organisation, Person } from '../../../shared/User';
 import { AuthRequestHandler, AuthRequestHandlerProps } from '../AuthRequestHandler';
 
@@ -161,6 +162,106 @@ describe('Auth handler', () => {
     const result = await handler.handleRequest();
     expect(result.statusCode).toBe(302);
     expect(result?.headers?.Location).toBe('/login');
+  });
+
+  test('Successful auth with OpenKlant stores contact info in session', async () => {
+    const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
+    setupSessionResponse(false);
+
+    const mockOpenKlantApi = {
+      getContactInfo: jest.fn().mockResolvedValue({
+        email: 'test@example.com',
+        phonenumber: '0612345678',
+      }),
+    } as any;
+
+    const handler = new AuthRequestHandler({
+      cookies: `session=${sessionId}`,
+      fullUrl: new URL('https://localhost/abc?state=12345&code=abcdef'),
+      dynamoDBClient,
+      haalCentraalApi: new HaalCentraalApi({ baseUrl: 'https://localhost', apiclient: apiClient }),
+      OpenIdConnect: OIDC,
+      openKlantApi: mockOpenKlantApi,
+      contactgegevensLive: true,
+      ...scopesAndAttributes,
+    });
+    const result = await handler.handleRequest();
+    expect(result.statusCode).toBe(302);
+    expect(mockOpenKlantApi.getContactInfo).toHaveBeenCalledWith('900222670', 'person');
+  });
+
+  test('Successful auth without OpenKlant feature flag does not call API', async () => {
+    const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
+    setupSessionResponse(false);
+
+    const mockOpenKlantApi = {
+      getContactInfo: jest.fn().mockResolvedValue({
+        email: 'test@example.com',
+        phonenumber: '0612345678',
+      }),
+    } as any;
+
+    const handler = new AuthRequestHandler({
+      cookies: `session=${sessionId}`,
+      fullUrl: new URL('https://localhost/abc?state=12345&code=abcdef'),
+      dynamoDBClient,
+      haalCentraalApi: new HaalCentraalApi({ baseUrl: 'https://localhost', apiclient: apiClient }),
+      OpenIdConnect: OIDC,
+      openKlantApi: mockOpenKlantApi,
+      contactgegevensLive: false,
+      ...scopesAndAttributes,
+    });
+    const result = await handler.handleRequest();
+    expect(result.statusCode).toBe(302);
+    expect(mockOpenKlantApi.getContactInfo).not.toHaveBeenCalled();
+  });
+
+  test('OpenKlant API failure does not break authentication', async () => {
+    const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
+    setupSessionResponse(false);
+
+    const mockOpenKlantApi = {
+      getContactInfo: jest.fn().mockRejectedValue(new Error('API error')),
+    } as any;
+
+    const handler = new AuthRequestHandler({
+      cookies: `session=${sessionId}`,
+      fullUrl: new URL('https://localhost/abc?state=12345&code=abcdef'),
+      dynamoDBClient,
+      haalCentraalApi: new HaalCentraalApi({ baseUrl: 'https://localhost', apiclient: apiClient }),
+      OpenIdConnect: OIDC,
+      openKlantApi: mockOpenKlantApi,
+      contactgegevensLive: true,
+      ...scopesAndAttributes,
+    });
+    const result = await handler.handleRequest();
+    expect(result.statusCode).toBe(302);
+    expect(result?.headers?.Location).toBe('/');
+  });
+
+  test('OpenKlant returns partial contact info', async () => {
+    const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
+    setupSessionResponse(false);
+
+    const mockOpenKlantApi = {
+      getContactInfo: jest.fn().mockResolvedValue({
+        email: 'test@example.com',
+      }),
+    } as any;
+
+    const handler = new AuthRequestHandler({
+      cookies: `session=${sessionId}`,
+      fullUrl: new URL('https://localhost/abc?state=12345&code=abcdef'),
+      dynamoDBClient,
+      haalCentraalApi: new HaalCentraalApi({ baseUrl: 'https://localhost', apiclient: apiClient }),
+      OpenIdConnect: OIDC,
+      openKlantApi: mockOpenKlantApi,
+      contactgegevensLive: true,
+      ...scopesAndAttributes,
+    });
+    const result = await handler.handleRequest();
+    expect(result.statusCode).toBe(302);
+    expect(mockOpenKlantApi.getContactInfo).toHaveBeenCalled();
   });
 });
 
