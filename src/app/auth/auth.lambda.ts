@@ -1,13 +1,13 @@
+import process from 'process';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
-import process from 'process';
+import { AuthRequestHandler } from './AuthRequestHandler';
 import { ApiClient as ApiClientV2 } from '../../shared/ApiClient';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
-import { AuthRequestHandler } from './AuthRequestHandler';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 

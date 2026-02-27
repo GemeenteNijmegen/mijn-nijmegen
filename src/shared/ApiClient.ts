@@ -1,6 +1,6 @@
+import https from 'https';
 import { AWS } from '@gemeentenijmegen/utils';
 import axios, { AxiosError, AxiosInstance } from 'axios';
-import https from 'https';
 
 export interface ApiClientOptions {
   /**
@@ -41,7 +41,7 @@ export interface ApiClientOptions {
   apikey?: {
     header: string;
     keyArn: string;
-    prefix: string;
+    prefix?: string;
   };
 }
 
