@@ -123,7 +123,7 @@ xtest('Shows overview page - disabled', async () => {
   fs.writeFile(path.join(__dirname, 'output', 'test.json'), result.body ? result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '', () => { });
 });
 
-test('Shows contactgegevens notice when email missing and feature flag enabled', async () => {
+test('Does not show contactgegevens notice when email missing and feature flag enabled', async () => {
   process.env.CONTACTGEGEVENS_LIVE = 'True';
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   const getItemOutput: Partial<GetItemCommandOutput> = {
@@ -144,12 +144,12 @@ test('Shows contactgegevens notice when email missing and feature flag enabled',
 
   const handler = new HomeRequestHandler(dynamoDBClient);
   const result = await handler.handleRequest({ cookies: 'session=12345', responseType: 'html' });
-  expect(result.body).toMatch('Contactgegevens ontbreken');
+  expect(result.body).not.toMatch('Contactgegevens ontbreken');
   expect(result.body).toMatch('/persoonsgegevens');
   delete process.env.CONTACTGEGEVENS_LIVE;
 });
 
-test('Shows contactgegevens notice when phonenumber missing and feature flag enabled', async () => {
+test('Does not show contactgegevens notice when phonenumber missing and feature flag enabled', async () => {
   process.env.CONTACTGEGEVENS_LIVE = 'True';
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   const getItemOutput: Partial<GetItemCommandOutput> = {
@@ -170,7 +170,7 @@ test('Shows contactgegevens notice when phonenumber missing and feature flag ena
 
   const handler = new HomeRequestHandler(dynamoDBClient);
   const result = await handler.handleRequest({ cookies: 'session=12345', responseType: 'html' });
-  expect(result.body).toMatch('Contactgegevens ontbreken');
+  expect(result.body).not.toMatch('Contactgegevens ontbreken');
   delete process.env.CONTACTGEGEVENS_LIVE;
 });
 
