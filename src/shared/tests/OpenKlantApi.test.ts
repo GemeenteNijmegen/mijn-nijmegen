@@ -104,4 +104,83 @@ describe('OpenKlantApi', () => {
     expect(result.email).toBe('first@example.com');
     expect(result.phonenumber).toBe('0611111111');
   });
+
+  test('updateContactInfo updates existing email and phone', async () => {
+    mockApiClient.getData.mockResolvedValue({
+      count: 1,
+      results: [{
+        uuid: 'partij-uuid',
+        _expand: {
+          digitaleAdressen: [
+            { uuid: 'email-uuid', url: 'https://example.com/email', adres: 'old@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'partij-uuid', url: 'https://example.com/partij' } },
+            { uuid: 'phone-uuid', url: 'https://example.com/phone', adres: '0611111111', soortDigitaalAdres: 'telefoonnummer', verstrektDoorPartij: { uuid: 'partij-uuid', url: 'https://example.com/partij' } },
+          ],
+        },
+      }],
+    });
+
+    await openKlantApi.updateContactInfo('900222670', 'person', { email: 'new@example.com', phonenumber: '0622222222' });
+
+    expect(mockApiClient.postData).toHaveBeenCalledWith(
+      'https://example.com/klantinteracties/api/v1/digitaleadressen/email-uuid',
+      { adres: 'new@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: 'partij-uuid' },
+      { 'Content-Type': 'application/json' },
+    );
+    expect(mockApiClient.postData).toHaveBeenCalledWith(
+      'https://example.com/klantinteracties/api/v1/digitaleadressen/phone-uuid',
+      { adres: '0622222222', soortDigitaalAdres: 'telefoonnummer', verstrektDoorPartij: 'partij-uuid' },
+      { 'Content-Type': 'application/json' },
+    );
+  });
+
+  test('updateContactInfo creates new email and phone when not existing', async () => {
+    mockApiClient.getData.mockResolvedValue({
+      count: 1,
+      results: [{
+        uuid: 'partij-uuid',
+        _expand: {
+          digitaleAdressen: [],
+        },
+      }],
+    });
+
+    await openKlantApi.updateContactInfo('900222670', 'person', { email: 'new@example.com', phonenumber: '0622222222' });
+
+    expect(mockApiClient.postData).toHaveBeenCalledWith(
+      'https://example.com/klantinteracties/api/v1/digitaleadressen',
+      { adres: 'new@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: 'partij-uuid' },
+      { 'Content-Type': 'application/json' },
+    );
+    expect(mockApiClient.postData).toHaveBeenCalledWith(
+      'https://example.com/klantinteracties/api/v1/digitaleadressen',
+      { adres: '0622222222', soortDigitaalAdres: 'telefoonnummer', verstrektDoorPartij: 'partij-uuid' },
+      { 'Content-Type': 'application/json' },
+    );
+  });
+
+  test('updateContactInfo throws error when no partij found', async () => {
+    mockApiClient.getData.mockResolvedValue({
+      count: 0,
+      results: [],
+    });
+    mockApiClient.postData.mockResolvedValue({ uuid: 'new-partij-uuid' });
+
+    await openKlantApi.updateContactInfo('900222670', 'person', { email: 'test@example.com' });
+
+    expect(mockApiClient.postData).toHaveBeenCalledWith(
+      'https://example.com/klantinteracties/api/v1/partijen',
+      {
+        soortPartij: 'persoon',
+        indicatieActief: true,
+        partijIdentificatie: {},
+        partijIdentificatoren: [{ objectId: '900222670', codeSoortObjectId: 'bsn' }],
+      },
+      { 'Content-Type': 'application/json' },
+    );
+    expect(mockApiClient.postData).toHaveBeenCalledWith(
+      'https://example.com/klantinteracties/api/v1/digitaleadressen',
+      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: 'new-partij-uuid' },
+      { 'Content-Type': 'application/json' },
+    );
+  });
 });
