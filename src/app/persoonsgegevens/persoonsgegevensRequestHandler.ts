@@ -186,7 +186,7 @@ export class PersoonsgegevensRequestHandler {
       // TODO: Send verification code via NotifyNL
       console.log(`Verification code for ${type}: ${code}`);
 
-      return Response.redirect(`/persoonsgegevens/verify?type=${type}`, 302, [session.getCookie()]);
+      return Response.redirect(`/persoonsgegevens/verify?type=${type}`, 302, session.getCookie());
     }
 
     // GET request - show form
@@ -242,7 +242,7 @@ export class PersoonsgegevensRequestHandler {
           [`verification_expiry_${type}`]: { NULL: true },
           [`verification_attempts_${type}`]: { NULL: true },
         });
-        return Response.redirect('/persoonsgegevens/edit?type=' + type, 302, [session.getCookie()]);
+        return Response.redirect('/persoonsgegevens/edit?type=' + type, 302, session.getCookie());
       }
 
       // Check attempts
@@ -253,7 +253,7 @@ export class PersoonsgegevensRequestHandler {
           [`verification_expiry_${type}`]: { NULL: true },
           [`verification_attempts_${type}`]: { NULL: true },
         });
-        return Response.redirect('/persoonsgegevens', 302, [session.getCookie()]);
+        return Response.redirect('/persoonsgegevens', 302, session.getCookie());
       }
 
       // Validate code
@@ -279,7 +279,7 @@ export class PersoonsgegevensRequestHandler {
               [`verification_attempts_${type}`]: { NULL: true },
             });
 
-            return Response.redirect('/persoonsgegevens', 302, [session.getCookie()]);
+            return Response.redirect('/persoonsgegevens', 302, session.getCookie());
           } catch (error) {
             console.error('Failed to update contact info', error);
           }

@@ -1,11 +1,11 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
-import { environmentVariables, AWS } from '@gemeentenijmegen/utils';
+import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
-import { PersoonsgegevensRequestHandler } from './persoonsgegevensRequestHandler';
 import { ApiClient as ApiClientV2 } from '../../shared/ApiClient';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
+import { PersoonsgegevensRequestHandler } from './persoonsgegevensRequestHandler';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
@@ -66,8 +66,12 @@ const initialization = init();
 function parseEvent(event: APIGatewayProxyEventV2): any {
   let body: any = {};
   if (event.body) {
+    let decodedBody = event.body;
+    if (event.isBase64Encoded) {
+      decodedBody = Buffer.from(event.body, 'base64').toString('utf-8');
+    }
     try {
-      const params = new URLSearchParams(event.body);
+      const params = new URLSearchParams(decodedBody);
       body = Object.fromEntries(params.entries());
     } catch (e) {
       body = {};
