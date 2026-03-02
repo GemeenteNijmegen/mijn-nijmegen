@@ -30,15 +30,6 @@ export class Navigation {
     },
   ];
 
-  contactgegevens: MenuBarNavigationItem = {
-    priority: 60,
-    url: '/contactgegevens',
-    title: 'Mijn contactgegevens',
-    description: 'Beheer uw contactgegevens.',
-    label: 'Beheer mijn contactgegevens',
-    icon: MdiAddressBook.default,
-  };
-
   producten: MenuBarNavigationItem = {
     priority: 70,
     url: '/producten',
@@ -77,12 +68,9 @@ export class Navigation {
 
   items: MenuBarNavigationItem[];
 
-  constructor(navigationType: 'person' | 'organisation', config?: { currentPath: string; showContactgegevens?: boolean; showProducten?: boolean }) {
+  constructor(navigationType: 'person' | 'organisation', config?: { currentPath: string; showProducten?: boolean }) {
     if (navigationType == 'person') {
       this.items = [...this.personItems, ...this.sharedItems];
-      if (config?.showContactgegevens) {
-        this.items.push(this.contactgegevens);
-      }
       if (config?.showProducten) {
         this.items.push(this.producten);
       }

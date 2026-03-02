@@ -54,7 +54,6 @@ export class uitkeringsRequestHandler {
 
     const navigation = new Navigation(userType, {
       currentPath: '/uitkeringen',
-      showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
     });
 
     const breadcrumbs = this.setupBreadcrumbs();

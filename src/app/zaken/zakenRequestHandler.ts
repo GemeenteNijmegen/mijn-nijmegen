@@ -237,7 +237,6 @@ export class ZakenRequestHandler {
   private setupNavigation(user: User) {
     return new Navigation(user.type, {
       currentPath: '/zaken',
-      showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
     });
   }
 

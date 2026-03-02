@@ -91,7 +91,6 @@ export class TaakrequestHandler {
   private setupNavigation(user: User) {
     const navigation = new Navigation(user.type, {
       currentPath: '/taken',
-      showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
     });
     const breadcrumbs = new BreadCrumbs([
       {

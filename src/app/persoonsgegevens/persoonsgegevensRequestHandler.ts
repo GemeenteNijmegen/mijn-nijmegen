@@ -5,7 +5,8 @@ import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
 import { Persoonsgegevens, PersoonsgegevensMapper } from './Persoonsgegevens';
 import * as contactgegevensTemplate from './templates/contactgegevens.mustache';
-import * as template from './templates/persoonsgegevens.mustache';
+import * as template from './templates/mijngegevens.mustache';
+import * as persoonsgegevensTemplate from './templates/persoonsgegevens.mustache';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { BreadCrumbs, Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
@@ -18,7 +19,11 @@ interface RenderData {
   breadcrumbs: any;
   persoonsgegevens?: Persoonsgegevens;
   error?: string;
+
+  // Contactgegevens
   showContactgegevens?: boolean;
+  email?: string;
+  telefoonnummer?: string;
 }
 
 interface Config {
@@ -28,6 +33,10 @@ interface Config {
    * want to use HaalCentraal.
    */
   haalCentraalApi: HaalCentraalApi;
+  /**
+   * Contactgegevens live
+   */
+  contactgegevensLive?: boolean;
 }
 
 export class PersoonsgegevensRequestHandler {
@@ -67,7 +76,6 @@ export class PersoonsgegevensRequestHandler {
     // Setup view
     const navigation = new Navigation(userType, {
       currentPath: '/persoonsgegevens',
-      showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
     });
 
     const breadcrumbs = this.setupBreadcrumbs();
@@ -79,7 +87,10 @@ export class PersoonsgegevensRequestHandler {
       breadcrumbs: breadcrumbs.items,
       persoonsgegevens: undefined,
       error: undefined,
-      showContactgegevens: process.env.CONTACTGEGEVENS_LIVE == 'True',
+      // Contactgegevens
+      showContactgegevens: this.config.contactgegevensLive,
+      email: session.getValue('email'),
+      telefoonnummer: session.getValue('phonenumber'),
     };
 
     // Get BRP data from HaalCentraal
@@ -99,6 +110,7 @@ export class PersoonsgegevensRequestHandler {
     // render page
     const html = await render(data, template.default, {
       contactgegevens: contactgegevensTemplate.default,
+      persoonsgegevens: persoonsgegevensTemplate.default,
     });
     return Response.html(html, 200, session.getCookie());
   }

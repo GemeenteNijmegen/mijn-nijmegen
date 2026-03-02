@@ -41,6 +41,7 @@ export interface ApiClientOptions {
   apikey?: {
     header: string;
     keyArn: string;
+    prefix?: string;
   };
 }
 
@@ -152,8 +153,9 @@ export class ApiClient {
     // API key header
     const headers: Record<string, string> = {};
     if (this.options?.apikey) {
+      const prefix = this.options.apikey.prefix;
       const apikey = await this.getApiKey();
-      headers[this.options.apikey.header] = apikey;
+      headers[this.options.apikey.header] = prefix ? `${prefix} ${apikey}` : apikey;
     }
 
     // Mtls configuration

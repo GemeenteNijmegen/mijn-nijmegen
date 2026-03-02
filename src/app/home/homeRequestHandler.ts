@@ -73,9 +73,11 @@ export class HomeRequestHandler {
     } else {
       const navigation = new Navigation(userType, {
         currentPath: '/',
-        showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
         showProducten: process.env.SHOW_PRODUCTEN == 'True',
       });
+
+      const showContactgegevensNotice = process.env.CONTACTGEGEVENS_LIVE == 'True' &&
+        !session.getValue('email') && !session.getValue('phonenumber');
 
       const data = {
         title: 'overzicht',
@@ -89,6 +91,7 @@ export class HomeRequestHandler {
         xsrf_token: session.getValue('xsrf_token'),
         timeout,
         header_additions: '<link rel="stylesheet" href="/static/styles/zaak.css">',
+        showContactgegevensNotice,
       };
       // render page
       const html = await render(data, homeTemplate.default,
