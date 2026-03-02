@@ -206,11 +206,20 @@ export class ssmParamsConstruct extends Construct {
 
 
   addNotifyParameters() {
-    new SecretsManager.Secret(this, 'notify-api-key', {
+    new SecretsManager.Secret(this, 'notify-secret', {
       secretName: Statics.ssmNotifySecret,
-      description: 'NotifyNL API key',
+      description: 'NotifyNL API secret',
     });
-
+    new StringParameter(this, 'notify-service-id', {
+      parameterName: Statics.ssmNotifyServiceId,
+      description: 'NotifyNL service ID',
+      stringValue: '-',
+    });
+    new StringParameter(this, 'notify-base-url', {
+      parameterName: Statics.ssmNotifyBaseUrl,
+      description: 'NotifyNL base URL',
+      stringValue: '-',
+    });
   }
 
   addHaalCentraalParameters() {

@@ -133,7 +133,9 @@ export abstract class Statics {
   static readonly ssmOpenKlantEndpoint = '/cdk/mijn-nijmegen/open-klant/endpoint';
 
   // MARK: NOTIFY configuration
-  static readonly ssmNotifySecret = '/cdk/mijn-nijmegen/open-klant/notify-key';
+  static readonly ssmNotifySecret = '/cdk/mijn-nijmegen/notify/secret';
+  static readonly ssmNotifyServiceId = '/cdk/mijn-nijmegen/notify/service-id';
+  static readonly ssmNotifyBaseUrl = '/cdk/mijn-nijmegen/notify/base-url';
 
   static readonly ssmSubmissionstorageBaseUrl: string = '/cdk/mijn-nijmegen/submissionstorage-base-url';
   /**

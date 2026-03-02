@@ -5,12 +5,14 @@ import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { PersoonsgegevensRequestHandler } from './persoonsgegevensRequestHandler';
 import { ApiClient as ApiClientV2 } from '../../shared/ApiClient';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
+import { NotifyNLApi } from '../../shared/NotifyNLApi';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
 let haalCentraalApi: HaalCentraalApi | undefined = undefined;
 let openKlantApi: OpenKlantApi | undefined = undefined;
+let notifyNLApi: NotifyNLApi | undefined = undefined;
 
 async function init() {
   console.time('init');
@@ -53,6 +55,21 @@ async function init() {
     openKlantApi = new OpenKlantApi({
       apiclient: openKlantApiClient,
       baseUrl: openKlantEndpoint,
+    });
+
+    // Setup NotifyNL API client
+    const notifyValues = environmentVariables([
+      'NOTIFY_SECRET_ARN',
+      'NOTIFY_SERVICE_ID',
+      'NOTIFY_BASE_URL',
+    ]);
+    const notifySecret = await AWS.getSecret(notifyValues.NOTIFY_SECRET_ARN);
+    const notifyServiceId = await AWS.getParameter(notifyValues.NOTIFY_SERVICE_ID);
+    const notifyBaseUrl = await AWS.getParameter(notifyValues.NOTIFY_BASE_URL);
+    notifyNLApi = new NotifyNLApi({
+      secret: notifySecret,
+      issServiceId: notifyServiceId,
+      baseUrl: notifyBaseUrl,
     });
   }
 
@@ -100,6 +117,7 @@ export async function handler(event: any, _context: any): Promise<ApiGatewayV2Re
       dynamoDBClient,
       haalCentraalApi,
       openKlantApi,
+      notifyNLApi,
       contactgegevensLive: process.env.CONTACTGEGEVENS_LIVE == 'True',
     });
 

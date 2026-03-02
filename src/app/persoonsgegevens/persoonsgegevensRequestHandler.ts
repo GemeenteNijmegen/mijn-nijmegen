@@ -11,6 +11,7 @@ import * as persoonsgegevensTemplate from './templates/persoonsgegevens.mustache
 import * as verifyTemplate from './templates/verify-contactgegevens.mustache';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { BreadCrumbs, Navigation } from '../../shared/Navigation';
+import { NotifyNLApi } from '../../shared/NotifyNLApi';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
 import { render } from '../../shared/render';
 
@@ -29,7 +30,7 @@ interface RenderData {
   telefoonnummer?: string;
 }
 
-interface Config {
+export interface Config {
   dynamoDBClient: DynamoDBClient;
   /**
    * Provide a HaalCentraal API client when if
@@ -40,6 +41,10 @@ interface Config {
    * OpenKlant API client
    */
   openKlantApi?: OpenKlantApi;
+  /**
+   * NotifyNL API client
+   */
+  notifyNLApi?: NotifyNLApi;
   /**
    * Contactgegevens live
    */

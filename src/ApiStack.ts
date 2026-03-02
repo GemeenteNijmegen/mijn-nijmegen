@@ -376,6 +376,10 @@ export class ApiStack extends Stack implements Configurable {
 
   private persoonsgegevensFunction(haalCentraalConfig: HaalCentraalConfig, openKlantConfig: OpenKlantConfig) {
 
+    const notifySecret = Secret.fromSecretNameV2(this, 'notify-secret', Statics.ssmNotifySecret);
+    const notifyServiceId = StringParameter.fromStringParameterName(this, 'notify-service-id', Statics.ssmNotifyServiceId);
+    const notifyBaseUrl = StringParameter.fromStringParameterName(this, 'notify-base-url', Statics.ssmNotifyBaseUrl);
+
     const persoonsGegevensFunction = new ApiFunction(this, 'persoonsgegevens-function', {
       description: 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/persoonsgegevens',
@@ -395,6 +399,11 @@ export class ApiStack extends Stack implements Configurable {
         OPENKLANT_API_KEY_ARN: openKlantConfig.apiKey.secretArn,
         OPENKLANT_API_ENDPOINT: openKlantConfig.endpoint.parameterName,
 
+        // NotifyNL
+        NOTIFY_SECRET_ARN: notifySecret.secretArn,
+        NOTIFY_SERVICE_ID: notifyServiceId.parameterName,
+        NOTIFY_BASE_URL: notifyBaseUrl.parameterName,
+
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
       apiFunction: PersoonsgegevensFunction,
@@ -405,6 +414,9 @@ export class ApiStack extends Stack implements Configurable {
     haalCentraalConfig.clientCert.grantRead(persoonsGegevensFunction.lambda);
     openKlantConfig.apiKey.grantRead(persoonsGegevensFunction.lambda);
     openKlantConfig.endpoint.grantRead(persoonsGegevensFunction.lambda);
+    notifySecret.grantRead(persoonsGegevensFunction.lambda);
+    notifyServiceId.grantRead(persoonsGegevensFunction.lambda);
+    notifyBaseUrl.grantRead(persoonsGegevensFunction.lambda);
     return persoonsGegevensFunction;
   }
 
