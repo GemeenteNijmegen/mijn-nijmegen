@@ -50,26 +50,10 @@
                     <button type="submit" class="btn btn-primary">Volgende</button>
                     <a href="/persoonsgegevens" class="btn btn-secondary">Annuleren</a>
                 </form>
-                <script>
-                (function() {
-                    var form = document.querySelector('form');
-                    form.addEventListener('submit', function(e) {
-                        if (!form.checkValidity()) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                        }
-                        var input = form.querySelector('input[name="value"]');
-                        if (!input.checkValidity()) {
-                            input.classList.add('is-invalid');
-                        } else {
-                            input.classList.remove('is-invalid');
-                        }
-                    });
-                })();
-                </script>
             </div>
         </div>
     </div>
 </main>
 
+<script src="/static/js/form-validation.js"></script>
 {{>footer}}
