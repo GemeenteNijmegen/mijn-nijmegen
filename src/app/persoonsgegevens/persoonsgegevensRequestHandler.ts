@@ -182,7 +182,7 @@ export class PersoonsgegevensRequestHandler {
       // Validate format
       const emailRegex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
       const phoneRegex = /^(0[8-9]00[0-9]{4,7})|(0[1-9][0-9]{8})|(\+[0-9]{9,20}|1400|140[0-9]{2,3})$/;
-      
+
       if (type === 'email' && !emailRegex.test(value)) {
         const data = {
           volledigenaam: session.getValue('username'),
@@ -200,7 +200,7 @@ export class PersoonsgegevensRequestHandler {
         const html = await render(data, editTemplate.default);
         return Response.html(html, 200, session.getCookie());
       }
-      
+
       if (type === 'phonenumber' && !phoneRegex.test(value)) {
         const data = {
           volledigenaam: session.getValue('username'),

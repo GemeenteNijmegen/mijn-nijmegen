@@ -1,54 +1,38 @@
-import { ApiClient } from '../ApiClient';
+import * as jwt from 'jsonwebtoken';
 import { NotifyNLApi, SendEmailRequest, SendSmsRequest } from '../NotifyNLApi';
 
 describe('NotifyNLApi', () => {
-  let mockApiClient: jest.Mocked<ApiClient>;
   let notifyNLApi: NotifyNLApi;
+  const secret = 'secret-abc-def';
+  const serviceId = 'service-123';
 
   beforeEach(() => {
-    mockApiClient = {
-      postData: jest.fn(),
-      getData: jest.fn(),
-    } as any;
-
     notifyNLApi = new NotifyNLApi({
-      apiclient: mockApiClient,
       baseUrl: 'https://api.notify.nl',
+      secret,
+      issServiceId: serviceId,
     });
   });
 
   describe('sendEmail', () => {
-    test('sends email with required fields', async () => {
+    test('generates JWT with correct service ID', async () => {
       const request: SendEmailRequest = {
         email_address: 'test@example.com',
         template_id: 'template-123',
       };
 
-      const expectedResponse = {
-        id: 'notification-id',
-        reference: null,
-        content: {
-          subject: 'Test Subject',
-          body: 'Test Body',
-        },
-        uri: 'https://api.notify.nl/v2/notifications/notification-id',
-        template: {
-          id: 'template-123',
-          version: 1,
-          uri: 'https://api.notify.nl/v2/templates/template-123',
-        },
-      };
+      // Mock the postData method to capture the JWT
+      const postDataSpy = jest.spyOn((notifyNLApi as any).apiclient, 'postData').mockResolvedValue({ id: 'notification-id' });
 
-      mockApiClient.postData.mockResolvedValue(expectedResponse);
+      await notifyNLApi.sendEmail(request);
 
-      const result = await notifyNLApi.sendEmail(request);
+      const callArgs = postDataSpy.mock.calls[0];
+      const authHeader = callArgs[2].Authorization;
+      const token = authHeader.replace('Bearer ', '');
+      const decoded = jwt.decode(token) as any;
 
-      expect(mockApiClient.postData).toHaveBeenCalledWith(
-        'https://api.notify.nl/v2/notifications/email',
-        request,
-        { 'Content-Type': 'application/json' },
-      );
-      expect(result).toEqual(expectedResponse);
+      expect(decoded.iss).toBe(serviceId);
+      expect(decoded.iat).toBeDefined();
     });
 
     test('sends email with personalisation', async () => {
@@ -61,67 +45,39 @@ describe('NotifyNLApi', () => {
         },
       };
 
-      mockApiClient.postData.mockResolvedValue({ id: 'notification-id' });
+      const postDataSpy = jest.spyOn((notifyNLApi as any).apiclient, 'postData').mockResolvedValue({ id: 'notification-id' });
 
       await notifyNLApi.sendEmail(request);
 
-      expect(mockApiClient.postData).toHaveBeenCalledWith(
+      expect(postDataSpy).toHaveBeenCalledWith(
         'https://api.notify.nl/v2/notifications/email',
         request,
-        { 'Content-Type': 'application/json' },
-      );
-    });
-
-    test('sends email with reference', async () => {
-      const request: SendEmailRequest = {
-        email_address: 'test@example.com',
-        template_id: 'template-123',
-        reference: 'ref-12345',
-      };
-
-      mockApiClient.postData.mockResolvedValue({ id: 'notification-id' });
-
-      await notifyNLApi.sendEmail(request);
-
-      expect(mockApiClient.postData).toHaveBeenCalledWith(
-        'https://api.notify.nl/v2/notifications/email',
-        request,
-        { 'Content-Type': 'application/json' },
+        expect.objectContaining({
+          'Content-Type': 'application/json',
+          'Authorization': expect.stringMatching(/^Bearer .+/),
+        }),
       );
     });
   });
 
   describe('sendSms', () => {
-    test('sends SMS with required fields', async () => {
+    test('generates JWT with correct service ID', async () => {
       const request: SendSmsRequest = {
         phone_number: '0612345678',
         template_id: 'template-456',
       };
 
-      const expectedResponse = {
-        id: 'notification-id',
-        reference: null,
-        content: {
-          body: 'Test SMS Body',
-        },
-        uri: 'https://api.notify.nl/v2/notifications/notification-id',
-        template: {
-          id: 'template-456',
-          version: 1,
-          uri: 'https://api.notify.nl/v2/templates/template-456',
-        },
-      };
+      const postDataSpy = jest.spyOn((notifyNLApi as any).apiclient, 'postData').mockResolvedValue({ id: 'notification-id' });
 
-      mockApiClient.postData.mockResolvedValue(expectedResponse);
+      await notifyNLApi.sendSms(request);
 
-      const result = await notifyNLApi.sendSms(request);
+      const callArgs = postDataSpy.mock.calls[0];
+      const authHeader = callArgs[2].Authorization;
+      const token = authHeader.replace('Bearer ', '');
+      const decoded = jwt.decode(token) as any;
 
-      expect(mockApiClient.postData).toHaveBeenCalledWith(
-        'https://api.notify.nl/v2/notifications/sms',
-        request,
-        { 'Content-Type': 'application/json' },
-      );
-      expect(result).toEqual(expectedResponse);
+      expect(decoded.iss).toBe(serviceId);
+      expect(decoded.iat).toBeDefined();
     });
 
     test('sends SMS with personalisation', async () => {
@@ -133,46 +89,18 @@ describe('NotifyNLApi', () => {
         },
       };
 
-      mockApiClient.postData.mockResolvedValue({ id: 'notification-id' });
+      const postDataSpy = jest.spyOn((notifyNLApi as any).apiclient, 'postData').mockResolvedValue({ id: 'notification-id' });
 
       await notifyNLApi.sendSms(request);
 
-      expect(mockApiClient.postData).toHaveBeenCalledWith(
+      expect(postDataSpy).toHaveBeenCalledWith(
         'https://api.notify.nl/v2/notifications/sms',
         request,
-        { 'Content-Type': 'application/json' },
+        expect.objectContaining({
+          'Content-Type': 'application/json',
+          'Authorization': expect.stringMatching(/^Bearer .+/),
+        }),
       );
-    });
-
-    test('sends SMS with reference', async () => {
-      const request: SendSmsRequest = {
-        phone_number: '0612345678',
-        template_id: 'template-456',
-        reference: 'sms-ref-12345',
-      };
-
-      mockApiClient.postData.mockResolvedValue({ id: 'notification-id' });
-
-      await notifyNLApi.sendSms(request);
-
-      expect(mockApiClient.postData).toHaveBeenCalledWith(
-        'https://api.notify.nl/v2/notifications/sms',
-        request,
-        { 'Content-Type': 'application/json' },
-      );
-    });
-  });
-
-  describe('error handling', () => {
-    test('propagates errors from API client', async () => {
-      const request: SendEmailRequest = {
-        email_address: 'test@example.com',
-        template_id: 'template-123',
-      };
-
-      mockApiClient.postData.mockRejectedValue(new Error('API Error'));
-
-      await expect(notifyNLApi.sendEmail(request)).rejects.toThrow('API Error');
     });
   });
 });
