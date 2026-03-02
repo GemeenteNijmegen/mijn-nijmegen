@@ -7,7 +7,6 @@ import { IStringParameter, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { ApiFunction } from './ApiFunction';
 import { AuthFunction } from './app/auth/auth-function';
-import { ContactgegevensFunction } from './app/contactgegevens/contactgegevens-function';
 import { HomeFunction } from './app/home/home-function';
 import { LoginFunction } from './app/login/login-function';
 import { LogoutFunction } from './app/logout/logout-function';
@@ -191,25 +190,6 @@ export class ApiStack extends Stack implements Configurable {
       routeKey: apigatewayv2.HttpRouteKey.with('/zaken/{zaaksource}/{zaakid}/taak/{taakid}/download/{file+}', apigatewayv2.HttpMethod.GET),
     });
 
-    if (configuration.mijnContactGegevensLive) {
-      const contactgegevensFunction = this.contactgegevensFunction();
-      this.api.addRoutes({
-        integration: new HttpLambdaIntegration('contactgegevens', contactgegevensFunction.lambda),
-        path: '/contactgegevens',
-        methods: [apigatewayv2.HttpMethod.GET],
-      });
-      this.api.addRoutes({
-        integration: new HttpLambdaIntegration('contactgegevens-edit', contactgegevensFunction.lambda),
-        path: '/contactgegevens/edit',
-        methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.POST],
-      });
-      this.api.addRoutes({
-        integration: new HttpLambdaIntegration('contactgegevens-verify', contactgegevensFunction.lambda),
-        path: '/contactgegevens/verify',
-        methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.POST],
-      });
-    }
-
     if (configuration.mijnProductenLive) {
       const productenFunction = this.productenFunction();
       this.api.addRoutes({
@@ -368,6 +348,7 @@ export class ApiStack extends Stack implements Configurable {
       applicationUrlBase: this.baseUrl,
       environment: {
         SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
+        CONTACTGEGEVENS_LIVE: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
 
         // Haal Centraal
         HAAL_CENTRAAL_CERT_SSM: haalCentraalConfig.clientCert.parameterName,
@@ -407,57 +388,6 @@ export class ApiStack extends Stack implements Configurable {
     mtlsConfig.clientCert.grantRead(uitkeringenFunction.lambda);
     mtlsConfig.rootCert.grantRead(uitkeringenFunction.lambda);
     return uitkeringenFunction;
-  }
-
-  private contactgegevensFunction() {
-    const openklantApiKey = Secret.fromSecretNameV2(this, 'openklant-token', Statics.ssmOpenKlantSecret);
-    // const notifyApiKey = Secret.fromSecretNameV2(this, 'notfiy-apikey', Statics.ssmNotifySecret);
-
-    const notifyIssuer = new Secret(this, 'notify-issuer', {
-      description: 'Issuer part of the Notify API key',
-    });
-    const notifySecret = new Secret(this, 'notify-secret', {
-      description: 'Secret part of the Notify API key',
-    });
-    const verificationEmailParam = new StringParameter(this, 'ssm-verification-email-template', {
-      stringValue: '-',
-      description: 'NotifyNl template ID for verification email',
-    });
-    const verificationSmsParam = new StringParameter(this, 'ssm-verification-sms-template', {
-      stringValue: '-',
-      description: 'NotifyNl template ID for verification SMS',
-    });
-    const notifyBaseurl = new StringParameter(this, 'ssm-notify-base-url', {
-      stringValue: '-',
-      description: 'NotifyNl base url',
-    });
-
-    const contactgegevensFunctie = new ApiFunction(this, 'contactgegevens-function', {
-      description: 'Contactgegevens uit openklant voor de Mijn Nijmegen-applicatie.',
-      codePath: 'app/contactgegevens',
-      table: this.sessionsTable,
-      tablePermissions: 'ReadWrite',
-      applicationUrlBase: this.baseUrl,
-      environment: {
-        OPENKLANT_API_ENDPOINT: StringParameter.valueForStringParameter(this, Statics.ssmOpenKlantEndpoint),
-        OPENKLANT_API_KEY_ARN: openklantApiKey.secretArn,
-        SHOW_CONTACTGEGEVENS: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
-        POWERTOOLS_LOG_LEVEL: this.configuration.logLevel ?? 'INFO',
-
-        // Verification using text/email from notify
-        VERIFICATION_EMAIL_TEMPLATE_UUID: verificationEmailParam.stringValue,
-        VERIFICATION_SMS_TEMPLATE_UUID: verificationSmsParam.stringValue,
-        NOTIFY_ISSUER_UUID: notifyIssuer.secretArn,
-        NOTIFY_SECRET: notifySecret.secretArn,
-        NOTIFY_BASEURL: notifyBaseurl.stringValue,
-        NODE_OPTIONS: this.configuration.nodeOptions ?? '',
-      },
-      apiFunction: ContactgegevensFunction,
-    });
-    openklantApiKey.grantRead(contactgegevensFunctie.lambda);
-    notifyIssuer.grantRead(contactgegevensFunctie.lambda);
-    notifySecret.grantRead(contactgegevensFunctie.lambda);
-    return contactgegevensFunctie;
   }
 
 
