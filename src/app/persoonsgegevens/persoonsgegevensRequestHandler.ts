@@ -3,16 +3,16 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
-import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
-import { BreadCrumbs, Navigation } from '../../shared/Navigation';
-import { OpenKlantApi } from '../../shared/OpenKlantApi';
-import { render } from '../../shared/render';
 import { Persoonsgegevens, PersoonsgegevensMapper } from './Persoonsgegevens';
 import * as contactgegevensTemplate from './templates/contactgegevens.mustache';
 import * as editTemplate from './templates/edit-contactgegevens.mustache';
 import * as template from './templates/mijngegevens.mustache';
 import * as persoonsgegevensTemplate from './templates/persoonsgegevens.mustache';
 import * as verifyTemplate from './templates/verify-contactgegevens.mustache';
+import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
+import { BreadCrumbs, Navigation } from '../../shared/Navigation';
+import { OpenKlantApi } from '../../shared/OpenKlantApi';
+import { render } from '../../shared/render';
 
 interface RenderData {
   volledigenaam: string;
@@ -176,11 +176,11 @@ export class PersoonsgegevensRequestHandler {
       const expiry = Date.now() + 15 * 60 * 1000; // 15 minutes
 
       // Store in session
-      await session.updateSession({
-        [`pending_${type}`]: { S: value },
-        [`verification_code_${type}`]: { S: code },
-        [`verification_expiry_${type}`]: { N: expiry.toString() },
-        [`verification_attempts_${type}`]: { N: '3' },
+      await session.setValues({
+        [`pending_${type}`]: value,
+        [`verification_code_${type}`]: code,
+        [`verification_expiry_${type}`]: expiry.toString(),
+        [`verification_attempts_${type}`]: '3',
       });
 
       // TODO: Send verification code via NotifyNL
@@ -236,22 +236,22 @@ export class PersoonsgegevensRequestHandler {
 
       // Check expiry
       if (Date.now() > expiry) {
-        await session.updateSession({
-          [`pending_${type}`]: { NULL: true },
-          [`verification_code_${type}`]: { NULL: true },
-          [`verification_expiry_${type}`]: { NULL: true },
-          [`verification_attempts_${type}`]: { NULL: true },
+        await session.setValues({
+          [`pending_${type}`]: '',
+          [`verification_code_${type}`]: '',
+          [`verification_expiry_${type}`]: '',
+          [`verification_attempts_${type}`]: '',
         });
         return Response.redirect('/persoonsgegevens/edit?type=' + type, 302, session.getCookie());
       }
 
       // Check attempts
       if (attempts <= 0) {
-        await session.updateSession({
-          [`pending_${type}`]: { NULL: true },
-          [`verification_code_${type}`]: { NULL: true },
-          [`verification_expiry_${type}`]: { NULL: true },
-          [`verification_attempts_${type}`]: { NULL: true },
+        await session.setValues({
+          [`pending_${type}`]: '',
+          [`verification_code_${type}`]: '',
+          [`verification_expiry_${type}`]: '',
+          [`verification_attempts_${type}`]: '',
         });
         return Response.redirect('/persoonsgegevens', 302, session.getCookie());
       }
@@ -271,12 +271,12 @@ export class PersoonsgegevensRequestHandler {
             });
 
             // Update session
-            await session.updateSession({
-              [type]: { S: pendingValue },
-              [`pending_${type}`]: { NULL: true },
-              [`verification_code_${type}`]: { NULL: true },
-              [`verification_expiry_${type}`]: { NULL: true },
-              [`verification_attempts_${type}`]: { NULL: true },
+            await session.setValues({
+              [type]: pendingValue,
+              [`pending_${type}`]: '',
+              [`verification_code_${type}`]: '',
+              [`verification_expiry_${type}`]: '',
+              [`verification_attempts_${type}`]: '',
             });
 
             return Response.redirect('/persoonsgegevens', 302, session.getCookie());
@@ -287,8 +287,8 @@ export class PersoonsgegevensRequestHandler {
       } else {
         // Decrement attempts
         attempts--;
-        await session.updateSession({
-          [`verification_attempts_${type}`]: { N: attempts.toString() },
+        await session.setValues({
+          [`verification_attempts_${type}`]: attempts.toString(),
         });
 
         const data = {

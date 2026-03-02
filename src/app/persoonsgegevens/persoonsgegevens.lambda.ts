@@ -2,10 +2,10 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { PersoonsgegevensRequestHandler } from './persoonsgegevensRequestHandler';
 import { ApiClient as ApiClientV2 } from '../../shared/ApiClient';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
-import { PersoonsgegevensRequestHandler } from './persoonsgegevensRequestHandler';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
