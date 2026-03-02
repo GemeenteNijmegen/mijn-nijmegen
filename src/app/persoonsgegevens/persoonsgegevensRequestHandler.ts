@@ -301,7 +301,7 @@ export class PersoonsgegevensRequestHandler {
       } else {
         // Decrement attempts
         attempts--;
-        
+
         if (attempts <= 0) {
           await session.setValues({
             [`pending_${type}`]: '',
@@ -311,7 +311,7 @@ export class PersoonsgegevensRequestHandler {
           });
           return Response.redirect('/persoonsgegevens', 302, session.getCookie());
         }
-        
+
         await session.setValues({
           [`verification_attempts_${type}`]: attempts.toString(),
         });
