@@ -282,6 +282,20 @@ export class PersoonsgegevensRequestHandler {
             return Response.redirect('/persoonsgegevens', 302, session.getCookie());
           } catch (error) {
             console.error('Failed to update contact info', error);
+            const data = {
+              volledigenaam: session.getValue('username'),
+              title: 'Verificatie',
+              shownav: true,
+              nav: navigation.items,
+              breadcrumbs: breadcrumbs.items,
+              type,
+              pendingValue,
+              xsrf_token: session.getValue('xsrf_token'),
+              attemptsLeft: attempts,
+              error: 'Er is iets fout gegaan. Probeer het later opnieuw.',
+            };
+            const html = await render(data, verifyTemplate.default);
+            return Response.html(html, 200, session.getCookie());
           }
         }
       } else {

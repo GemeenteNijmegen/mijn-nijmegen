@@ -179,6 +179,50 @@ describe('Persoonsgegevens Verify Functionality', () => {
     });
   });
 
+  xtest('POST /persoonsgegevens/verify shows error when OpenKlant API fails', async () => {
+    const futureTime = String(Date.now() + 10000000);
+    ddbMock.on(GetItemCommand).callsFake(() => ({
+      Item: {
+        data: {
+          M: {
+            loggedin: { BOOL: true },
+            identifier: { S: '900222670' },
+            user_type: { S: 'person' },
+            username: { S: 'Test User' },
+            xsrf_token: { S: 'test-token' },
+            pending_email: { S: 'new@example.com' },
+            verification_code_email: { S: '123456' },
+            verification_expiry_email: { N: futureTime },
+            verification_attempts_email: { N: '3' },
+          },
+        },
+      },
+    }));
+
+    const mockOpenKlantApi = {
+      updateContactInfo: jest.fn().mockRejectedValue(new Error('API Error')),
+    } as any;
+
+    const handler = new PersoonsgegevensRequestHandler({
+      dynamoDBClient,
+      haalCentraalApi,
+      openKlantApi: mockOpenKlantApi,
+      contactgegevensLive: true,
+    });
+
+    const result = await handler.handleRequest(
+      `session=${sessionId}`,
+      'POST',
+      { type: 'email', code: '123456', xsrf_token: 'test-token' },
+      '/persoonsgegevens/verify',
+    );
+
+    expect(result.statusCode).toBe(200);
+    expect(result.body).toContain('Er is iets fout gegaan');
+    expect(result.body).toContain('Verificatie');
+    expect(mockOpenKlantApi.updateContactInfo).toHaveBeenCalled();
+  });
+
   xtest('POST /persoonsgegevens/verify with wrong code decrements attempts', async () => {
     const futureTime = String(Date.now() + 10000000);
     let callCount = 0;
