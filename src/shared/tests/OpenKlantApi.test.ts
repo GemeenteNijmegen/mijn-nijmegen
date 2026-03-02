@@ -123,7 +123,7 @@ describe('OpenKlantApi', () => {
 
     expect(mockApiClient.postData).toHaveBeenCalledWith(
       'https://example.com/klantinteracties/api/v1/digitaleadressen/email-uuid',
-      { adres: 'new@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: 'partij-uuid' },
+      { adres: 'new@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'partij-uuid' } },
       { 'Content-Type': 'application/json' },
     );
     expect(mockApiClient.postData).toHaveBeenCalledWith(
@@ -148,7 +148,7 @@ describe('OpenKlantApi', () => {
 
     expect(mockApiClient.postData).toHaveBeenCalledWith(
       'https://example.com/klantinteracties/api/v1/digitaleadressen',
-      { adres: 'new@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: 'partij-uuid' },
+      { adres: 'new@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'partij-uuid' } },
       { 'Content-Type': 'application/json' },
     );
     expect(mockApiClient.postData).toHaveBeenCalledWith(
@@ -158,7 +158,7 @@ describe('OpenKlantApi', () => {
     );
   });
 
-  test('updateContactInfo throws error when no partij found', async () => {
+  test('updateContactInfo creates new partij when not found', async () => {
     mockApiClient.getData.mockResolvedValue({
       count: 0,
       results: [],
@@ -173,13 +173,24 @@ describe('OpenKlantApi', () => {
         soortPartij: 'persoon',
         indicatieActief: true,
         partijIdentificatie: {},
-        partijIdentificatoren: [{ objectId: '900222670', codeSoortObjectId: 'bsn' }],
+        digitaleAdressen: [],
+        voorkeursDigitaalAdres: null,
+        rekeningnummers: [],
+        voorkeursRekeningnummer: null,
+      },
+      { 'Content-Type': 'application/json' },
+    );
+    expect(mockApiClient.postData).toHaveBeenCalledWith(
+      'https://example.com/klantinteracties/api/v1/partij-identificatoren',
+      {
+        identificeerdePartij: { uuid: 'new-partij-uuid' },
+        partijIdentificator: { objectId: '900222670', codeSoortObjectId: 'bsn' },
       },
       { 'Content-Type': 'application/json' },
     );
     expect(mockApiClient.postData).toHaveBeenCalledWith(
       'https://example.com/klantinteracties/api/v1/digitaleadressen',
-      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: 'new-partij-uuid' },
+      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'new-partij-uuid' } },
       { 'Content-Type': 'application/json' },
     );
   });

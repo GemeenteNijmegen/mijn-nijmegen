@@ -78,16 +78,8 @@ export class OpenKlantApi {
     let existingAdressen: DigitaalAdres[] = [];
 
     if (!data?.results || data.results.length === 0) {
-      const newPartij: Partij = await this.config.apiclient.postData(
-        `${this.config.baseUrl}/klantinteracties/api/v1/partijen`,
-        {
-          soortPartij: type === 'person' ? 'persoon' : 'organisatie',
-          indicatieActief: true,
-          partijIdentificatie: {},
-          partijIdentificatoren: [{ objectId: identifier, codeSoortObjectId }],
-        },
-        { 'Content-Type': 'application/json' },
-      );
+      const newPartij = await this.createNewPartij(type);
+      await this.createPartijIdentificatie(identifier, codeSoortObjectId, newPartij.uuid);
       partijUuid = newPartij.uuid;
     } else {
       const partij = data.results[0];
@@ -99,7 +91,13 @@ export class OpenKlantApi {
     const phoneAdres = existingAdressen.find(a => a.soortDigitaalAdres === 'telefoonnummer');
 
     if (contactInfo.email) {
-      const payload = { adres: contactInfo.email, soortDigitaalAdres: 'email', verstrektDoorPartij: partijUuid };
+      const payload = {
+        adres: contactInfo.email,
+        soortDigitaalAdres: 'email',
+        verstrektDoorPartij: { uuid: partijUuid },
+        // isStandaardAdres: true, // TODO enable after open-klant upgrade
+        // verificatieDatum: true, // TODO enable after open-klant upgrade
+      };
       if (emailAdres) {
         await this.config.apiclient.postData(`${this.config.baseUrl}/klantinteracties/api/v1/digitaleadressen/${emailAdres.uuid}`, payload, { 'Content-Type': 'application/json' });
       } else {
@@ -115,5 +113,40 @@ export class OpenKlantApi {
         await this.config.apiclient.postData(`${this.config.baseUrl}/klantinteracties/api/v1/digitaleadressen`, payload, { 'Content-Type': 'application/json' });
       }
     }
+  }
+
+  private async createNewPartij(type: string) {
+    const newPartij: Partij = await this.config.apiclient.postData(
+      `${this.config.baseUrl}/klantinteracties/api/v1/partijen`,
+      {
+        soortPartij: type === 'person' ? 'persoon' : 'organisatie',
+        indicatieActief: true,
+        partijIdentificatie: {},
+        // partijIdentificatoren: [{ objectId: identifier, codeSoortObjectId }],
+        digitaleAdressen: [],
+        voorkeursDigitaalAdres: null,
+        rekeningnummers: [],
+        voorkeursRekeningnummer: null,
+      },
+      { 'Content-Type': 'application/json' },
+    );
+    return newPartij;
+  }
+
+
+  private async createPartijIdentificatie(identifier: string, codeSoortObjectId: string, partijUuid: string) {
+    await this.config.apiclient.postData(
+      `${this.config.baseUrl}/klantinteracties/api/v1/partij-identificatoren`,
+      {
+        identificeerdePartij: {
+          uuid: partijUuid,
+        },
+        partijIdentificator: {
+          objectId: identifier,
+          codeSoortObjectId,
+        },
+      },
+      { 'Content-Type': 'application/json' },
+    );
   }
 }

@@ -377,7 +377,7 @@ describe('OpenKlantApi updateContactInfo', () => {
     expect(mockApiClient.getData).toHaveBeenCalled();
     expect(mockApiClient.postData).toHaveBeenCalledWith(
       'https://example.com/klantinteracties/api/v1/digitaleadressen/email-uuid',
-      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: 'test-uuid' },
+      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'test-uuid' } },
       { 'Content-Type': 'application/json' },
     );
     expect(mockApiClient.postData).toHaveBeenCalledWith(
@@ -409,13 +409,24 @@ describe('OpenKlantApi updateContactInfo', () => {
         soortPartij: 'persoon',
         indicatieActief: true,
         partijIdentificatie: {},
-        partijIdentificatoren: [{ objectId: '900222670', codeSoortObjectId: 'bsn' }],
+        digitaleAdressen: [],
+        voorkeursDigitaalAdres: null,
+        rekeningnummers: [],
+        voorkeursRekeningnummer: null,
+      },
+      { 'Content-Type': 'application/json' },
+    );
+    expect(mockApiClient.postData).toHaveBeenCalledWith(
+      'https://example.com/klantinteracties/api/v1/partij-identificatoren',
+      {
+        identificeerdePartij: { uuid: 'new-partij-uuid' },
+        partijIdentificator: { objectId: '900222670', codeSoortObjectId: 'bsn' },
       },
       { 'Content-Type': 'application/json' },
     );
     expect(mockApiClient.postData).toHaveBeenCalledWith(
       'https://example.com/klantinteracties/api/v1/digitaleadressen',
-      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: 'new-partij-uuid' },
+      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'new-partij-uuid' } },
       { 'Content-Type': 'application/json' },
     );
   });
