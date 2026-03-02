@@ -99,6 +99,32 @@ export class ApiClient {
   }
 
   /**
+   * Do a HTTP PUT request to an endpoint.
+   * @param endpoint The url to request
+   * @param body The body to send to the endpoint
+   * @param headers Headers to include
+   */
+  async putData(endpoint: string, body: any, headers?: any): Promise<any> {
+    const config = await this.getRequestConfiguration();
+    console.time('request to ' + endpoint);
+    try {
+      const response = await this.axios.put(endpoint, body, {
+        httpsAgent: config.httpsAgent,
+        headers: {
+          ...config.headers,
+          ...headers,
+        },
+        timeout: this.options?.timeout,
+      });
+      console.timeEnd('request to ' + endpoint);
+      return response.data;
+    } catch (error: any | AxiosError) {
+      console.timeEnd('request to ' + endpoint);
+      this.handleErrors(error, endpoint);
+    }
+  }
+
+  /**
    * Do a HTTP GET request to an endpoint.
    * @param endpoint The url to request
    * @param headers Headers to include

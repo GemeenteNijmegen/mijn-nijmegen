@@ -362,6 +362,7 @@ describe('OpenKlantApi updateContactInfo', () => {
         }],
       }),
       postData: jest.fn().mockResolvedValue({}),
+      putData: jest.fn().mockResolvedValue({}),
     } as any;
 
     const openKlantApi = new OpenKlantApi({
@@ -375,14 +376,14 @@ describe('OpenKlantApi updateContactInfo', () => {
     });
 
     expect(mockApiClient.getData).toHaveBeenCalled();
-    expect(mockApiClient.postData).toHaveBeenCalledWith(
+    expect(mockApiClient.putData).toHaveBeenCalledWith(
       'https://example.com/klantinteracties/api/v1/digitaleadressen/email-uuid',
-      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'test-uuid' } },
+      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'test-uuid' }, verstrektDoorBetrokkene: null },
       { 'Content-Type': 'application/json' },
     );
-    expect(mockApiClient.postData).toHaveBeenCalledWith(
+    expect(mockApiClient.putData).toHaveBeenCalledWith(
       'https://example.com/klantinteracties/api/v1/digitaleadressen/phone-uuid',
-      { adres: '0612345678', soortDigitaalAdres: 'telefoonnummer', verstrektDoorPartij: 'test-uuid' },
+      { adres: '0612345678', soortDigitaalAdres: 'telefoonnummer', verstrektDoorPartij: { uuid: 'test-uuid' }, verstrektDoorBetrokkene: null },
       { 'Content-Type': 'application/json' },
     );
   });
@@ -408,7 +409,6 @@ describe('OpenKlantApi updateContactInfo', () => {
       {
         soortPartij: 'persoon',
         indicatieActief: true,
-        partijIdentificatie: {},
         digitaleAdressen: [],
         voorkeursDigitaalAdres: null,
         rekeningnummers: [],
@@ -426,7 +426,7 @@ describe('OpenKlantApi updateContactInfo', () => {
     );
     expect(mockApiClient.postData).toHaveBeenCalledWith(
       'https://example.com/klantinteracties/api/v1/digitaleadressen',
-      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'new-partij-uuid' } },
+      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'new-partij-uuid' }, verstrektDoorBetrokkene: null },
       { 'Content-Type': 'application/json' },
     );
   });

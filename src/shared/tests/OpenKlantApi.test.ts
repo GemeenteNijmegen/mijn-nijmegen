@@ -9,6 +9,7 @@ describe('OpenKlantApi', () => {
     mockApiClient = {
       getData: jest.fn(),
       postData: jest.fn(),
+      putData: jest.fn(),
     } as any;
 
     openKlantApi = new OpenKlantApi({
@@ -121,14 +122,14 @@ describe('OpenKlantApi', () => {
 
     await openKlantApi.updateContactInfo('900222670', 'person', { email: 'new@example.com', phonenumber: '0622222222' });
 
-    expect(mockApiClient.postData).toHaveBeenCalledWith(
+    expect(mockApiClient.putData).toHaveBeenCalledWith(
       'https://example.com/klantinteracties/api/v1/digitaleadressen/email-uuid',
-      { adres: 'new@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'partij-uuid' } },
+      { adres: 'new@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'partij-uuid' }, verstrektDoorBetrokkene: null },
       { 'Content-Type': 'application/json' },
     );
-    expect(mockApiClient.postData).toHaveBeenCalledWith(
+    expect(mockApiClient.putData).toHaveBeenCalledWith(
       'https://example.com/klantinteracties/api/v1/digitaleadressen/phone-uuid',
-      { adres: '0622222222', soortDigitaalAdres: 'telefoonnummer', verstrektDoorPartij: 'partij-uuid' },
+      { adres: '0622222222', soortDigitaalAdres: 'telefoonnummer', verstrektDoorPartij: { uuid: 'partij-uuid' }, verstrektDoorBetrokkene: null },
       { 'Content-Type': 'application/json' },
     );
   });
@@ -148,12 +149,12 @@ describe('OpenKlantApi', () => {
 
     expect(mockApiClient.postData).toHaveBeenCalledWith(
       'https://example.com/klantinteracties/api/v1/digitaleadressen',
-      { adres: 'new@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'partij-uuid' } },
+      { adres: 'new@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'partij-uuid' }, verstrektDoorBetrokkene: null },
       { 'Content-Type': 'application/json' },
     );
     expect(mockApiClient.postData).toHaveBeenCalledWith(
       'https://example.com/klantinteracties/api/v1/digitaleadressen',
-      { adres: '0622222222', soortDigitaalAdres: 'telefoonnummer', verstrektDoorPartij: 'partij-uuid' },
+      { adres: '0622222222', soortDigitaalAdres: 'telefoonnummer', verstrektDoorPartij: { uuid: 'partij-uuid' }, verstrektDoorBetrokkene: null },
       { 'Content-Type': 'application/json' },
     );
   });
@@ -172,7 +173,6 @@ describe('OpenKlantApi', () => {
       {
         soortPartij: 'persoon',
         indicatieActief: true,
-        partijIdentificatie: {},
         digitaleAdressen: [],
         voorkeursDigitaalAdres: null,
         rekeningnummers: [],
@@ -190,7 +190,7 @@ describe('OpenKlantApi', () => {
     );
     expect(mockApiClient.postData).toHaveBeenCalledWith(
       'https://example.com/klantinteracties/api/v1/digitaleadressen',
-      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'new-partij-uuid' } },
+      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'new-partij-uuid' }, verstrektDoorBetrokkene: null },
       { 'Content-Type': 'application/json' },
     );
   });

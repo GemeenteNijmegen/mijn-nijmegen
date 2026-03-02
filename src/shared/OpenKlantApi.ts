@@ -95,20 +95,28 @@ export class OpenKlantApi {
         adres: contactInfo.email,
         soortDigitaalAdres: 'email',
         verstrektDoorPartij: { uuid: partijUuid },
+        verstrektDoorBetrokkene: null,
         // isStandaardAdres: true, // TODO enable after open-klant upgrade
         // verificatieDatum: true, // TODO enable after open-klant upgrade
       };
       if (emailAdres) {
-        await this.config.apiclient.postData(`${this.config.baseUrl}/klantinteracties/api/v1/digitaleadressen/${emailAdres.uuid}`, payload, { 'Content-Type': 'application/json' });
+        await this.config.apiclient.putData(`${this.config.baseUrl}/klantinteracties/api/v1/digitaleadressen/${emailAdres.uuid}`, payload, { 'Content-Type': 'application/json' });
       } else {
         await this.config.apiclient.postData(`${this.config.baseUrl}/klantinteracties/api/v1/digitaleadressen`, payload, { 'Content-Type': 'application/json' });
       }
     }
 
     if (contactInfo.phonenumber) {
-      const payload = { adres: contactInfo.phonenumber, soortDigitaalAdres: 'telefoonnummer', verstrektDoorPartij: partijUuid };
+      const payload = {
+        adres: contactInfo.phonenumber,
+        soortDigitaalAdres: 'telefoonnummer',
+        verstrektDoorPartij: { uuid: partijUuid },
+        verstrektDoorBetrokkene: null,
+        // isStandaardAdres: true, // TODO enable after open-klant upgrade
+        // verificatieDatum: true, // TODO enable after open-klant upgrade
+      };
       if (phoneAdres) {
-        await this.config.apiclient.postData(`${this.config.baseUrl}/klantinteracties/api/v1/digitaleadressen/${phoneAdres.uuid}`, payload, { 'Content-Type': 'application/json' });
+        await this.config.apiclient.putData(`${this.config.baseUrl}/klantinteracties/api/v1/digitaleadressen/${phoneAdres.uuid}`, payload, { 'Content-Type': 'application/json' });
       } else {
         await this.config.apiclient.postData(`${this.config.baseUrl}/klantinteracties/api/v1/digitaleadressen`, payload, { 'Content-Type': 'application/json' });
       }
@@ -121,8 +129,6 @@ export class OpenKlantApi {
       {
         soortPartij: type === 'person' ? 'persoon' : 'organisatie',
         indicatieActief: true,
-        partijIdentificatie: {},
-        // partijIdentificatoren: [{ objectId: identifier, codeSoortObjectId }],
         digitaleAdressen: [],
         voorkeursDigitaalAdres: null,
         rekeningnummers: [],
