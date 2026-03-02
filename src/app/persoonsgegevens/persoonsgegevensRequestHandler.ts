@@ -46,30 +46,38 @@ interface Config {
   contactgegevensLive?: boolean;
 }
 
+export interface ParsedEvent {
+  cookies: string;
+  method: string;
+  body: any;
+  path: string;
+  queryStringParameters: any;
+}
+
 export class PersoonsgegevensRequestHandler {
 
   constructor(private config: Config) { }
 
-  async handleRequest(cookies: string, method: string = 'GET', body?: any, path?: string) {
+  async handleRequest(event: ParsedEvent) {
     console.time('request');
     console.timeLog('request', 'start request');
 
     // Session initalization
     console.timeLog('request', 'start init');
-    let session = new Session(cookies, this.config.dynamoDBClient);
+    let session = new Session(event.cookies, this.config.dynamoDBClient);
     await session.init();
     console.timeLog('request', 'init session');
 
     // Handle request if loggedin
     if (session.isLoggedIn() == true) {
-      if (path?.startsWith('/persoonsgegevens/edit')) {
+      if (event.path?.startsWith('/persoonsgegevens/edit')) {
         console.info('Handling EDIT request');
-        const response = await this.handleEditRequest(session, method, body);
+        const response = await this.handleEditRequest(session, event);
         console.timeEnd('request');
         return response;
-      } else if (path?.startsWith('/persoonsgegevens/verify')) {
+      } else if (event.path?.startsWith('/persoonsgegevens/verify')) {
         console.info('Handling VERIFY request');
-        const response = await this.handleVerifyRequest(session, method, body);
+        const response = await this.handleVerifyRequest(session, event);
         console.timeEnd('request');
         return response;
       } else {
@@ -148,24 +156,24 @@ export class PersoonsgegevensRequestHandler {
     return new BreadCrumbs(crumbs);
   }
 
-  private async handleEditRequest(session: Session, method: string, body?: any) {
+  private async handleEditRequest(session: Session, event: ParsedEvent) {
     const userType = session.getValue('user_type');
     if (userType != 'person') {
       return Response.redirect('/');
     }
 
-    const type = body?.type || 'email';
+    const type = event.queryStringParameters?.type || event.body?.type || 'email';
     const navigation = new Navigation(userType, { currentPath: '/persoonsgegevens' });
     const breadcrumbs = this.setupBreadcrumbs();
 
-    if (method === 'POST') {
+    if (event.method === 'POST') {
       // Validate XSRF token
-      if (body?.xsrf_token !== session.getValue('xsrf_token')) {
+      if (event.body?.xsrf_token !== session.getValue('xsrf_token')) {
         console.info('XSRF token mismatch');
         return Response.error(403);
       }
 
-      const value = body?.value;
+      const value = event.body?.value;
       if (!value) {
         console.info('Bad post request for contactgegevens form');
         return Response.error(400);
@@ -208,13 +216,13 @@ export class PersoonsgegevensRequestHandler {
     return Response.html(html, 200, session.getCookie());
   }
 
-  private async handleVerifyRequest(session: Session, method: string, body?: any) {
+  private async handleVerifyRequest(session: Session, event: ParsedEvent) {
     const userType = session.getValue('user_type');
     if (userType != 'person') {
       return Response.redirect('/');
     }
 
-    const type = body?.type || 'email';
+    const type = event.queryStringParameters?.type || event.body?.type || 'email';
     const navigation = new Navigation(userType, { currentPath: '/persoonsgegevens' });
     const breadcrumbs = this.setupBreadcrumbs();
 
@@ -223,13 +231,13 @@ export class PersoonsgegevensRequestHandler {
       return Response.redirect('/persoonsgegevens');
     }
 
-    if (method === 'POST') {
+    if (event.method === 'POST') {
       // Validate XSRF token
-      if (body?.xsrf_token !== session.getValue('xsrf_token')) {
+      if (event.body?.xsrf_token !== session.getValue('xsrf_token')) {
         return Response.error(403);
       }
 
-      const code = body?.code;
+      const code = event.body?.code;
       const storedCode = session.getValue(`verification_code_${type}`);
       const expiry = parseInt(session.getValue(`verification_expiry_${type}`) || '0');
       let attempts = parseInt(session.getValue(`verification_attempts_${type}`) || '0');

@@ -97,7 +97,13 @@ describe('Requests', () => {
       });
     axiosMock.onPost().reply(200, returnData);
 
-    const result = await handler.handleRequest('session=12345');
+    const result = await handler.handleRequest({
+      cookies: 'session=12345',
+      method: 'GET',
+      body: {},
+      path: '/persoonsgegevens',
+      queryStringParameters: {},
+    });
     expect(result.statusCode).toBe(200);
   });
 
@@ -105,35 +111,65 @@ describe('Requests', () => {
     axiosMock.onPost().reply(200, {
     });
 
-    const result = await handler.handleRequest('session=12345');
+    const result = await handler.handleRequest({
+      cookies: 'session=12345',
+      method: 'GET',
+      body: {},
+      path: '/persoonsgegevens',
+      queryStringParameters: {},
+    });
     expect(result.statusCode).toBe(200);
   });
 
   test('Return error page on timeout', async () => {
     axiosMock.onPost().timeout();
 
-    const result = await handler.handleRequest('session=12345');
+    const result = await handler.handleRequest({
+      cookies: 'session=12345',
+      method: 'GET',
+      body: {},
+      path: '/persoonsgegevens',
+      queryStringParameters: {},
+    });
     expect(result.statusCode).toBe(200);
   });
 
   test('Return 200 when HaalCentraal API returns 500', async () => {
     axiosMock.onPost().reply(500);
 
-    const result = await handler.handleRequest('session=12345');
+    const result = await handler.handleRequest({
+      cookies: 'session=12345',
+      method: 'GET',
+      body: {},
+      path: '/persoonsgegevens',
+      queryStringParameters: {},
+    });
     expect(result.statusCode).toBe(200);
   });
 
   test('Return 200 when HaalCentraal API returns 403', async () => {
     axiosMock.onPost().reply(403);
 
-    const result = await handler.handleRequest('session=12345');
+    const result = await handler.handleRequest({
+      cookies: 'session=12345',
+      method: 'GET',
+      body: {},
+      path: '/persoonsgegevens',
+      queryStringParameters: {},
+    });
     expect(result.statusCode).toBe(200);
   });
 
   test('Return 200 when HaalCentraal API returns 404', async () => {
     axiosMock.onPost().reply(404);
 
-    const result = await handler.handleRequest('session=12345');
+    const result = await handler.handleRequest({
+      cookies: 'session=12345',
+      method: 'GET',
+      body: {},
+      path: '/persoonsgegevens',
+      queryStringParameters: {},
+    });
     expect(result.statusCode).toBe(200);
   });
 
@@ -146,7 +182,13 @@ describe('Requests', () => {
         return JSON.parse(data);
       });
     axiosMock.onPost().reply(200, returnData);
-    const result = await handler.handleRequest('session=12345');
+    const result = await handler.handleRequest({
+      cookies: 'session=12345',
+      method: 'GET',
+      body: {},
+      path: '/persoonsgegevens',
+      queryStringParameters: {},
+    });
     expect(result.body).toMatch('Mijn gegevens');
   });
 
@@ -164,7 +206,13 @@ describe('Requests', () => {
     };
     ddbMock.mockImplementation(() => getItemOutput);
 
-    const result = await handler.handleRequest('session=12345');
+    const result = await handler.handleRequest({
+      cookies: 'session=12345',
+      method: 'GET',
+      body: {},
+      path: '/persoonsgegevens',
+      queryStringParameters: {},
+    });
     expect(result.statusCode).toBe(302);
   });
 
@@ -174,7 +222,13 @@ describe('Requests', () => {
 describe('Unexpected requests', () => {
   test('No cookies set should redirect to login page', async() => {
 
-    const result = await handler.handleRequest('');
+    const result = await handler.handleRequest({
+      cookies: '',
+      method: 'GET',
+      body: {},
+      path: '/persoonsgegevens',
+      queryStringParameters: {},
+    });
     expect(result.statusCode).toBe(302);
     expect(result.headers?.Location).toMatch('/login');
   });

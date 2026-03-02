@@ -42,7 +42,13 @@ describe('Persoonsgegevens Edit Functionality', () => {
       contactgegevensLive: true,
     });
 
-    const result = await handler.handleRequest(`session=${sessionId}`, 'GET', { type: 'email' }, '/persoonsgegevens/edit');
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'GET',
+      body: {},
+      path: '/persoonsgegevens/edit',
+      queryStringParameters: { type: 'email' },
+    });
 
     expect(result.statusCode).toBe(200);
     expect(result.body).toContain('E-mailadres aanpassen');
@@ -64,12 +70,13 @@ describe('Persoonsgegevens Edit Functionality', () => {
       contactgegevensLive: true,
     });
 
-    const result = await handler.handleRequest(
-      `session=${sessionId}`,
-      'POST',
-      { type: 'email', value: 'new@example.com', xsrf_token: 'test-token' },
-      '/persoonsgegevens/edit',
-    );
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'email', value: 'new@example.com', xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/edit',
+      queryStringParameters: {},
+    });
 
     expect(result.statusCode).toBe(302);
     expect(result.headers?.Location).toBe('/persoonsgegevens/verify?type=email');
@@ -90,12 +97,13 @@ describe('Persoonsgegevens Edit Functionality', () => {
       contactgegevensLive: true,
     });
 
-    const result = await handler.handleRequest(
-      `session=${sessionId}`,
-      'POST',
-      { type: 'email', value: 'new@example.com', xsrf_token: 'wrong-token' },
-      '/persoonsgegevens/edit',
-    );
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'email', value: 'new@example.com', xsrf_token: 'wrong-token' },
+      path: '/persoonsgegevens/edit',
+      queryStringParameters: {},
+    });
 
     expect(result.statusCode).toBe(403);
   });
@@ -125,7 +133,13 @@ describe('Persoonsgegevens Verify Functionality', () => {
       contactgegevensLive: true,
     });
 
-    const result = await handler.handleRequest(`session=${sessionId}`, 'GET', { type: 'email' }, '/persoonsgegevens/verify');
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'GET',
+      body: {},
+      path: '/persoonsgegevens/verify',
+      queryStringParameters: { type: 'email' },
+    });
 
     expect(result.statusCode).toBe(200);
     expect(result.body).toContain('Verificatie');
@@ -164,12 +178,13 @@ describe('Persoonsgegevens Verify Functionality', () => {
       contactgegevensLive: true,
     });
 
-    const result = await handler.handleRequest(
-      `session=${sessionId}`,
-      'POST',
-      { type: 'email', code: '123456', xsrf_token: 'test-token' },
-      '/persoonsgegevens/verify',
-    );
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'email', code: '123456', xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/verify',
+      queryStringParameters: {},
+    });
 
     expect(result.statusCode).toBe(302);
     expect(result.headers?.Location).toBe('/persoonsgegevens');
@@ -210,12 +225,13 @@ describe('Persoonsgegevens Verify Functionality', () => {
       contactgegevensLive: true,
     });
 
-    const result = await handler.handleRequest(
-      `session=${sessionId}`,
-      'POST',
-      { type: 'email', code: '123456', xsrf_token: 'test-token' },
-      '/persoonsgegevens/verify',
-    );
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'email', code: '123456', xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/verify',
+      queryStringParameters: {},
+    });
 
     expect(result.statusCode).toBe(200);
     expect(result.body).toContain('Er is iets fout gegaan');
@@ -253,12 +269,13 @@ describe('Persoonsgegevens Verify Functionality', () => {
       contactgegevensLive: true,
     });
 
-    const result = await handler.handleRequest(
-      `session=${sessionId}`,
-      'POST',
-      { type: 'email', code: '999999', xsrf_token: 'test-token' },
-      '/persoonsgegevens/verify',
-    );
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'email', code: '999999', xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/verify',
+      queryStringParameters: {},
+    });
 
     expect(result.statusCode).toBe(200);
     expect(result.body).toContain('Ongeldige code');
@@ -284,12 +301,13 @@ describe('Persoonsgegevens Verify Functionality', () => {
       contactgegevensLive: true,
     });
 
-    const result = await handler.handleRequest(
-      `session=${sessionId}`,
-      'POST',
-      { type: 'email', code: '123456', xsrf_token: 'test-token' },
-      '/persoonsgegevens/verify',
-    );
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'email', code: '123456', xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/verify',
+      queryStringParameters: {},
+    });
 
     expect(result.statusCode).toBe(302);
     expect(result.headers?.Location).toBe('/persoonsgegevens/edit?type=email');
@@ -315,12 +333,13 @@ describe('Persoonsgegevens Verify Functionality', () => {
       contactgegevensLive: true,
     });
 
-    const result = await handler.handleRequest(
-      `session=${sessionId}`,
-      'POST',
-      { type: 'email', code: '123456', xsrf_token: 'test-token' },
-      '/persoonsgegevens/verify',
-    );
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'email', code: '123456', xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/verify',
+      queryStringParameters: {},
+    });
 
     expect(result.statusCode).toBe(302);
     expect(result.headers?.Location).toBe('/persoonsgegevens');

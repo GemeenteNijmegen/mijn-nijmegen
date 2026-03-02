@@ -95,7 +95,13 @@ test('Persoonsgegevens volledige HC data', async () => {
   const logSpy = jest.spyOn(global.console, 'log');
 
   const handler = createHandler(fakeHaalCentraalData);
-  const result = await handler.handleRequest('session=12345');
+  const result = await handler.handleRequest({
+    cookies: 'session=12345',
+    method: 'GET',
+    body: {},
+    path: '/persoonsgegevens',
+    queryStringParameters: {},
+  });
 
   expect((handler as any).config.haalCentraalApi.getBrpData).toHaveBeenCalled();
   expect(mapperSpy).toHaveBeenCalledWith(fakeHaalCentraalData);
@@ -126,7 +132,13 @@ test('Persoonsgegevens template undefined data', async () => {
   const logSpy = jest.spyOn(global.console, 'log');
   const mapperSpy = jest.spyOn(PersoonsgegevensMapper, 'fromHaalCentraal');
   const handler = createHandler(fakeHaalCentraalData);
-  const result = await handler.handleRequest('session=12345');
+  const result = await handler.handleRequest({
+    cookies: 'session=12345',
+    method: 'GET',
+    body: {},
+    path: '/persoonsgegevens',
+    queryStringParameters: {},
+  });
 
 
   expect((handler as any).config.haalCentraalApi.getBrpData).toHaveBeenCalled();

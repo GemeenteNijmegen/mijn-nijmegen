@@ -82,6 +82,7 @@ function parseEvent(event: APIGatewayProxyEventV2): any {
     method: event.requestContext.http.method,
     body,
     path: event.rawPath,
+    queryStringParameters: event.queryStringParameters || {},
   };
 }
 
@@ -102,7 +103,7 @@ export async function handler(event: any, _context: any): Promise<ApiGatewayV2Re
       contactgegevensLive: process.env.CONTACTGEGEVENS_LIVE == 'True',
     });
 
-    return await requestHandler.handleRequest(params.cookies, params.method, params.body, params.path);
+    return await requestHandler.handleRequest(params);
 
   } catch (err) {
     console.debug(err);
