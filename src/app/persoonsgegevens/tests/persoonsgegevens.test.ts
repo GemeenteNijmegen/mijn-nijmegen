@@ -116,6 +116,27 @@ describe('Requests', () => {
     expect(result.statusCode).toBe(200);
   });
 
+  test('Return 200 when HaalCentraal API returns 500', async () => {
+    axiosMock.onPost().reply(500);
+
+    const result = await handler.handleRequest('session=12345');
+    expect(result.statusCode).toBe(200);
+  });
+
+  test('Return 200 when HaalCentraal API returns 403', async () => {
+    axiosMock.onPost().reply(403);
+
+    const result = await handler.handleRequest('session=12345');
+    expect(result.statusCode).toBe(200);
+  });
+
+  test('Return 200 when HaalCentraal API returns 404', async () => {
+    axiosMock.onPost().reply(404);
+
+    const result = await handler.handleRequest('session=12345');
+    expect(result.statusCode).toBe(200);
+  });
+
 
   test('Show overview page', async () => {
     const file = 'brp-999993653.json';

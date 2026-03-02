@@ -3,16 +3,16 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
+import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
+import { BreadCrumbs, Navigation } from '../../shared/Navigation';
+import { OpenKlantApi } from '../../shared/OpenKlantApi';
+import { render } from '../../shared/render';
 import { Persoonsgegevens, PersoonsgegevensMapper } from './Persoonsgegevens';
 import * as contactgegevensTemplate from './templates/contactgegevens.mustache';
 import * as editTemplate from './templates/edit-contactgegevens.mustache';
 import * as template from './templates/mijngegevens.mustache';
 import * as persoonsgegevensTemplate from './templates/persoonsgegevens.mustache';
 import * as verifyTemplate from './templates/verify-contactgegevens.mustache';
-import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
-import { BreadCrumbs, Navigation } from '../../shared/Navigation';
-import { OpenKlantApi } from '../../shared/OpenKlantApi';
-import { render } from '../../shared/render';
 
 interface RenderData {
   volledigenaam: string;
@@ -63,14 +63,17 @@ export class PersoonsgegevensRequestHandler {
     // Handle request if loggedin
     if (session.isLoggedIn() == true) {
       if (path?.startsWith('/persoonsgegevens/edit')) {
+        console.info('Handling EDIT request');
         const response = await this.handleEditRequest(session, method, body);
         console.timeEnd('request');
         return response;
       } else if (path?.startsWith('/persoonsgegevens/verify')) {
+        console.info('Handling VERIFY request');
         const response = await this.handleVerifyRequest(session, method, body);
         console.timeEnd('request');
         return response;
       } else {
+        console.info('Handling OVERVIEW request');
         const response = await this.handleLoggedinRequest(session);
         console.timeEnd('request');
         return response;
@@ -158,11 +161,13 @@ export class PersoonsgegevensRequestHandler {
     if (method === 'POST') {
       // Validate XSRF token
       if (body?.xsrf_token !== session.getValue('xsrf_token')) {
+        console.info('XSRF token mismatch');
         return Response.error(403);
       }
 
       const value = body?.value;
       if (!value) {
+        console.info('Bad post request for contactgegevens form');
         return Response.error(400);
       }
 
