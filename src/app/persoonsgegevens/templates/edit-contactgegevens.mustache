@@ -21,22 +21,28 @@
                 <div class="alert alert-danger">{{error}}</div>
                 {{/error}}
 
-                <form method="POST" action="/persoonsgegevens/edit">
+                <form method="POST" action="/persoonsgegevens/edit" novalidate>
                     <input type="hidden" name="xsrf_token" value="{{xsrf_token}}">
                     <input type="hidden" name="type" value="{{type}}">
                     
                     {{#isEmail}}
-                    <div class="form-group">
+                    <div class="md-form">
                         <label for="value">E-mailadres</label>
-                        <input type="email" class="form-control" id="value" name="value" value="{{currentValue}}" required>
+                        <input type="email" id="value" name="value" class="form-control" value="{{currentValue}}" required pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}">
+                        <div class="invalid-feedback">
+                            <span class="sr-only">Invoer onjuist: </span>Vul een geldig e-mailadres in
+                        </div>
                         <small class="form-text text-muted">We sturen een verificatiecode naar dit e-mailadres.</small>
                     </div>
                     {{/isEmail}}
                     
                     {{#isPhone}}
-                    <div class="form-group">
+                    <div class="md-form">
                         <label for="value">Telefoonnummer</label>
-                        <input type="tel" class="form-control" id="value" name="value" value="{{currentValue}}" required pattern="[0-9+\s\-()]{10,}">
+                        <input type="tel" id="value" name="value" class="form-control" value="{{currentValue}}" required pattern="(0[8-9]00[0-9]{4,7})|(0[1-9][0-9]{8})|(\+[0-9]{9,20}|1400|140[0-9]{2,3})">
+                        <div class="invalid-feedback">
+                            <span class="sr-only">Invoer onjuist: </span>Vul een geldig telefoonnummer in
+                        </div>
                         <small class="form-text text-muted">We sturen een verificatiecode naar dit telefoonnummer.</small>
                     </div>
                     {{/isPhone}}
@@ -44,6 +50,23 @@
                     <button type="submit" class="btn btn-primary">Volgende</button>
                     <a href="/persoonsgegevens" class="btn btn-secondary">Annuleren</a>
                 </form>
+                <script>
+                (function() {
+                    var form = document.querySelector('form');
+                    form.addEventListener('submit', function(e) {
+                        if (!form.checkValidity()) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                        var input = form.querySelector('input[name="value"]');
+                        if (!input.checkValidity()) {
+                            input.classList.add('is-invalid');
+                        } else {
+                            input.classList.remove('is-invalid');
+                        }
+                    });
+                })();
+                </script>
             </div>
         </div>
     </div>

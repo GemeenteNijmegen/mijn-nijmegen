@@ -179,6 +179,46 @@ export class PersoonsgegevensRequestHandler {
         return Response.error(400);
       }
 
+      // Validate format
+      const emailRegex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+      const phoneRegex = /^(0[8-9]00[0-9]{4,7})|(0[1-9][0-9]{8})|(\+[0-9]{9,20}|1400|140[0-9]{2,3})$/;
+      
+      if (type === 'email' && !emailRegex.test(value)) {
+        const data = {
+          volledigenaam: session.getValue('username'),
+          title: 'E-mailadres aanpassen',
+          shownav: true,
+          nav: navigation.items,
+          breadcrumbs: breadcrumbs.items,
+          type,
+          isEmail: true,
+          isPhone: false,
+          currentValue: value,
+          xsrf_token: session.getValue('xsrf_token'),
+          error: 'Vul een geldig e-mailadres in',
+        };
+        const html = await render(data, editTemplate.default);
+        return Response.html(html, 200, session.getCookie());
+      }
+      
+      if (type === 'phonenumber' && !phoneRegex.test(value)) {
+        const data = {
+          volledigenaam: session.getValue('username'),
+          title: 'Telefoonnummer aanpassen',
+          shownav: true,
+          nav: navigation.items,
+          breadcrumbs: breadcrumbs.items,
+          type,
+          isEmail: false,
+          isPhone: true,
+          currentValue: value,
+          xsrf_token: session.getValue('xsrf_token'),
+          error: 'Vul een geldig telefoonnummer in',
+        };
+        const html = await render(data, editTemplate.default);
+        return Response.html(html, 200, session.getCookie());
+      }
+
       // Generate verification code
       const code = Math.floor(100000 + Math.random() * 900000).toString();
       const expiry = Date.now() + 15 * 60 * 1000; // 15 minutes
