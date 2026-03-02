@@ -13,6 +13,8 @@ const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 let haalCentraalApi: HaalCentraalApi | undefined = undefined;
 let openKlantApi: OpenKlantApi | undefined = undefined;
 let notifyNLApi: NotifyNLApi | undefined = undefined;
+let notifyEmailTemplateId: string | undefined = undefined;
+let notifySmsTemplateId: string | undefined = undefined;
 
 async function init() {
   console.time('init');
@@ -62,10 +64,14 @@ async function init() {
       'NOTIFY_SECRET_ARN',
       'NOTIFY_SERVICE_ID',
       'NOTIFY_BASE_URL',
+      'NOTIFY_EMAIL_TEMPLATE_ID',
+      'NOTIFY_SMS_TEMPLATE_ID',
     ]);
     const notifySecret = await AWS.getSecret(notifyValues.NOTIFY_SECRET_ARN);
     const notifyServiceId = await AWS.getParameter(notifyValues.NOTIFY_SERVICE_ID);
     const notifyBaseUrl = await AWS.getParameter(notifyValues.NOTIFY_BASE_URL);
+    notifyEmailTemplateId = await AWS.getParameter(notifyValues.NOTIFY_EMAIL_TEMPLATE_ID);
+    notifySmsTemplateId = await AWS.getParameter(notifyValues.NOTIFY_SMS_TEMPLATE_ID);
     notifyNLApi = new NotifyNLApi({
       secret: notifySecret,
       issServiceId: notifyServiceId,
@@ -118,6 +124,8 @@ export async function handler(event: any, _context: any): Promise<ApiGatewayV2Re
       haalCentraalApi,
       openKlantApi,
       notifyNLApi,
+      notifyEmailTemplateId,
+      notifySmsTemplateId,
       contactgegevensLive: process.env.CONTACTGEGEVENS_LIVE == 'True',
     });
 

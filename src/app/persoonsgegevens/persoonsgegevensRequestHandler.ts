@@ -46,6 +46,11 @@ export interface Config {
    */
   notifyNLApi?: NotifyNLApi;
   /**
+   * NotifyNL template IDs
+   */
+  notifyEmailTemplateId?: string;
+  notifySmsTemplateId?: string;
+  /**
    * Contactgegevens live
    */
   contactgegevensLive?: boolean;
@@ -236,8 +241,30 @@ export class PersoonsgegevensRequestHandler {
         [`verification_attempts_${type}`]: '3',
       });
 
-      // TODO: Send verification code via NotifyNL
-      console.log(`Verification code for ${type}: ${code}`);
+      // Send verification code via NotifyNL
+      if (this.config.notifyNLApi) {
+        try {
+          if (type === 'email' && this.config.notifyEmailTemplateId) {
+            await this.config.notifyNLApi.sendEmail({
+              email_address: value,
+              template_id: this.config.notifyEmailTemplateId,
+              personalisation: {
+                verificationCode: code,
+              },
+            });
+          } else if (type === 'phonenumber' && this.config.notifySmsTemplateId) {
+            await this.config.notifyNLApi.sendSms({
+              phone_number: value,
+              template_id: this.config.notifySmsTemplateId,
+              personalisation: {
+                verificationCode: code,
+              },
+            });
+          }
+        } catch (error) {
+          console.error('Failed to send verification code', error);
+        }
+      }
 
       return Response.redirect(`/persoonsgegevens/verify?type=${type}`, 302, session.getCookie());
     }
