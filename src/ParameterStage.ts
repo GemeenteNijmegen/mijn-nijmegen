@@ -220,6 +220,16 @@ export class ssmParamsConstruct extends Construct {
       description: 'NotifyNL base URL',
       stringValue: '-',
     });
+    new StringParameter(this, 'notify-email-template-id', {
+      parameterName: Statics.ssmNotifyEmailTemplateId,
+      description: 'NotifyNL email template ID',
+      stringValue: '-',
+    });
+    new StringParameter(this, 'notify-sms-template-id', {
+      parameterName: Statics.ssmNotifySmsTemplateId,
+      description: 'NotifyNL SMS template ID',
+      stringValue: '-',
+    });
   }
 
   addHaalCentraalParameters() {

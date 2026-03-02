@@ -379,6 +379,8 @@ export class ApiStack extends Stack implements Configurable {
     const notifySecret = Secret.fromSecretNameV2(this, 'notify-secret', Statics.ssmNotifySecret);
     const notifyServiceId = StringParameter.fromStringParameterName(this, 'notify-service-id', Statics.ssmNotifyServiceId);
     const notifyBaseUrl = StringParameter.fromStringParameterName(this, 'notify-base-url', Statics.ssmNotifyBaseUrl);
+    const notifyEmailTemplateId = StringParameter.fromStringParameterName(this, 'notify-email-template-id', Statics.ssmNotifyEmailTemplateId);
+    const notifySmsTemplateId = StringParameter.fromStringParameterName(this, 'notify-sms-template-id', Statics.ssmNotifySmsTemplateId);
 
     const persoonsGegevensFunction = new ApiFunction(this, 'persoonsgegevens-function', {
       description: 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.',
@@ -403,6 +405,8 @@ export class ApiStack extends Stack implements Configurable {
         NOTIFY_SECRET_ARN: notifySecret.secretArn,
         NOTIFY_SERVICE_ID: notifyServiceId.parameterName,
         NOTIFY_BASE_URL: notifyBaseUrl.parameterName,
+        NOTIFY_EMAIL_TEMPLATE_ID: notifyEmailTemplateId.parameterName,
+        NOTIFY_SMS_TEMPLATE_ID: notifySmsTemplateId.parameterName,
 
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
@@ -417,6 +421,8 @@ export class ApiStack extends Stack implements Configurable {
     notifySecret.grantRead(persoonsGegevensFunction.lambda);
     notifyServiceId.grantRead(persoonsGegevensFunction.lambda);
     notifyBaseUrl.grantRead(persoonsGegevensFunction.lambda);
+    notifyEmailTemplateId.grantRead(persoonsGegevensFunction.lambda);
+    notifySmsTemplateId.grantRead(persoonsGegevensFunction.lambda);
     return persoonsGegevensFunction;
   }
 

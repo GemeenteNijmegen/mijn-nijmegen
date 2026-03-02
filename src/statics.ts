@@ -136,6 +136,8 @@ export abstract class Statics {
   static readonly ssmNotifySecret = '/cdk/mijn-nijmegen/notify/secret';
   static readonly ssmNotifyServiceId = '/cdk/mijn-nijmegen/notify/service-id';
   static readonly ssmNotifyBaseUrl = '/cdk/mijn-nijmegen/notify/base-url';
+  static readonly ssmNotifyEmailTemplateId = '/cdk/mijn-nijmegen/notify/email-template-id';
+  static readonly ssmNotifySmsTemplateId = '/cdk/mijn-nijmegen/notify/sms-template-id';
 
   static readonly ssmSubmissionstorageBaseUrl: string = '/cdk/mijn-nijmegen/submissionstorage-base-url';
   /**
