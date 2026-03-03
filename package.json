@@ -49,8 +49,8 @@
   "devDependencies": {
     "@aws-sdk/client-ssm": "^3.1000.0",
     "@aws-sdk/types": "^3.973.4",
-    "@gemeentenijmegen/components-css": "^0.0.1-alpha.87",
-    "@gemeentenijmegen/design-tokens": "^0.0.2-alpha.112",
+    "@gemeentenijmegen/components-css": "^0.0.1-alpha.88",
+    "@gemeentenijmegen/design-tokens": "^0.0.2-alpha.113",
     "@glen/jest-raw-loader": "^2.0.0",
     "@playwright/test": "^1.58.2",
     "@stylistic/eslint-plugin": "^2",
