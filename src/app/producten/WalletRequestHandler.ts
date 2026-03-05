@@ -48,8 +48,7 @@ export class WalletRequestHandler {
       // Setup view
       const navigation = new Navigation('person', {
         currentPath: '/producten',
-        showContactgegevens: process.env.SHOW_CONTACTGEGEVENS == 'True',
-        showProducten: process.env.SHOW_PRODUCTEN== 'True',
+        showProducten: process.env.SHOW_PRODUCTEN == 'True',
       });
       const data = {
         volledigenaam: session.getValue('username'),

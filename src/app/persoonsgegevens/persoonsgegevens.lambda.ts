@@ -53,6 +53,7 @@ export async function handler(event: any, _context: any): Promise<ApiGatewayV2Re
     const requestHandler = new PersoonsgegevensRequestHandler({
       dynamoDBClient,
       haalCentraalApi,
+      contactgegevensLive: process.env.CONTACTGEGEVENS_LIVE == 'True',
     });
 
     return await requestHandler.handleRequest(params.cookies);

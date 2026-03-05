@@ -7,11 +7,13 @@ import { AuthRequestHandler } from './AuthRequestHandler';
 import { ApiClient as ApiClientV2 } from '../../shared/ApiClient';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
+import { OpenKlantApi } from '../../shared/OpenKlantApi';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
 let OIDC: OpenIDConnect | undefined = undefined;
 let haalCentraalApi: HaalCentraalApi | undefined = undefined;
+let openKlantApi: OpenKlantApi | undefined = undefined;
 async function init() {
   // Construct the haal centraal API client
   const haalCentraalValues = environmentVariables([
@@ -34,6 +36,26 @@ async function init() {
     apiclient: haalCentraalApiClient,
     baseUrl: haalCentraalValues.HAAL_CENTRAAL_BASE_URL,
   });
+
+  // Setup OpenKlant API client if feature flag is enabled
+  if (process.env.CONTACTGEGEVENS_LIVE === 'True') {
+    const openKlantValues = environmentVariables([
+      'OPENKLANT_API_KEY_ARN',
+      'OPENKLANT_API_ENDPOINT',
+    ]);
+    const openKlantApiClient = new ApiClientV2({
+      apikey: {
+        header: 'Authorization',
+        prefix: 'Token',
+        keyArn: openKlantValues.OPENKLANT_API_KEY_ARN,
+      },
+    });
+    const openKlantEndpoint = await AWS.getParameter(openKlantValues.OPENKLANT_API_ENDPOINT);
+    openKlantApi = new OpenKlantApi({
+      apiclient: openKlantApiClient,
+      baseUrl: openKlantEndpoint,
+    });
+  }
 
   // Setup ODIC client
   OIDC = new OpenIDConnect({
@@ -78,6 +100,8 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<ApiGateway
       yiviKvkNameAttribute: process.env.YIVI_KVK_NAME_ATTRIBUTE ?? '',
       useYiviKvk: process.env.USE_YIVI_KVK === 'true',
       haalCentraalApi: haalCentraalApi,
+      openKlantApi: openKlantApi,
+      contactgegevensLive: process.env.CONTACTGEGEVENS_LIVE === 'True',
     });
     return await requestHandler.handleRequest();
   } catch (err) {

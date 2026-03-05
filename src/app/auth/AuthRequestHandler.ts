@@ -7,6 +7,7 @@ import { Bsn } from '@gemeentenijmegen/utils';
 
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { OpenIDConnect, OpenIDConnectResult } from '../../shared/OpenIDConnect';
+import { OpenKlantApi } from '../../shared/OpenKlantApi';
 import { Organisation, Person, User } from '../../shared/User';
 
 type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
@@ -39,6 +40,16 @@ export interface AuthRequestHandlerProps {
    * old IRMA BRP API.
    */
   haalCentraalApi: HaalCentraalApi;
+
+  /**
+   * OpenKlant API for fetching contact information
+   */
+  openKlantApi?: OpenKlantApi;
+
+  /**
+   * Feature flag for contact information
+   */
+  contactgegevensLive?: boolean;
 }
 
 export class AuthRequestHandler {
@@ -76,14 +87,31 @@ export class AuthRequestHandler {
       // Startup the session
       try {
         const username = await user.getUserName();
-        await session.createSession({
+        const sessionData: any = {
           loggedin: { BOOL: true },
           identifier: { S: user.identifier },
-          bsn: { S: user.type == 'person' ? user.identifier : '' }, // TODO: remove when consuming pages (persoonsgegevens, uitkeringen, zaken) have been updated to use identifier
+          bsn: { S: user.type == 'person' ? user.identifier : '' },
           user_type: { S: user.type },
           username: { S: username },
           xsrf_token: { S: this.config.OpenIdConnect.generateState() },
-        });
+        };
+
+        // Fetch contact information if feature flag is enabled
+        if (this.config.contactgegevensLive && this.config.openKlantApi) {
+          try {
+            const contactInfo = await this.config.openKlantApi.getContactInfo(user.identifier, user.type);
+            if (contactInfo.email) {
+              sessionData.email = { S: contactInfo.email };
+            }
+            if (contactInfo.phonenumber) {
+              sessionData.phonenumber = { S: contactInfo.phonenumber };
+            }
+          } catch (error) {
+            console.log('Failed to fetch contact info from OpenKlant, continuing without', error);
+          }
+        }
+
+        await session.createSession(sessionData);
       } catch (error: any) {
         console.error('creating session failed', error);
         return Response.error(500);
