@@ -286,6 +286,7 @@ test('DynamoDB error', async () => {
     });
     await loginRequestHandler.handleRequest(requestParams('session=12345'), dynamoDBClient);
   } catch (error) {
+    console.error(error);
     failed = true;
   }
   expect(ddbMock.calls().length).toBe(1);

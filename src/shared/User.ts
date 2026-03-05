@@ -48,7 +48,7 @@ export class Person implements User {
       try {
         const brpName = await this.config.haalCentraal.getName(this.bsn);
         this.userName = brpName ?? 'Onbekende gebruiker';
-      } catch (error) {
+      } catch {
         console.error('Error getting username');
         this.userName = 'Onbekende gebruiker';
       }

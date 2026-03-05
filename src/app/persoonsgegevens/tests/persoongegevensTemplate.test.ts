@@ -2,7 +2,6 @@ import * as fs from 'fs';
 import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
-import { ApiClient } from '../../../shared/ApiClient';
 import { HaalCentraalApi } from '../../../shared/HaalCentraalApi';
 import { PersoonsgegevensMapper } from '../Persoonsgegevens';
 import { PersoonsgegevensRequestHandler } from '../persoonsgegevensRequestHandler';
@@ -59,7 +58,6 @@ function createHandler(fakeHaalCentraalData: any): PersoonsgegevensRequestHandle
   };
 
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
-  const dummyApiClient = {} as ApiClient;
   return new PersoonsgegevensRequestHandler({
     dynamoDBClient,
     haalCentraalApi: fakeHaalCentraalApi as HaalCentraalApi,
@@ -95,7 +93,13 @@ test('Persoonsgegevens volledige HC data', async () => {
   const logSpy = jest.spyOn(global.console, 'log');
 
   const handler = createHandler(fakeHaalCentraalData);
-  const result = await handler.handleRequest('session=12345');
+  const result = await handler.handleRequest({
+    cookies: 'session=12345',
+    method: 'GET',
+    body: {},
+    path: '/persoonsgegevens',
+    queryStringParameters: {},
+  });
 
   expect((handler as any).config.haalCentraalApi.getBrpData).toHaveBeenCalled();
   expect(mapperSpy).toHaveBeenCalledWith(fakeHaalCentraalData);
@@ -103,7 +107,7 @@ test('Persoonsgegevens volledige HC data', async () => {
 
   const timestamp = new Date().toISOString().replace(/:/g, '-');
   const outputFilename = path.join(__dirname, 'output', `persoonsgegevens_volledige_hc_data_${timestamp}.html`);
-  fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
+  fs.writeFileSync(outputFilename, result.body ? result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
   // Should not trigger, if it does, it gives an empty page
   const errorFound = logSpy.mock.calls.some(call =>
     call.some(arg => String(arg).includes('TypeError: Cannot read properties of undefined')),
@@ -126,7 +130,13 @@ test('Persoonsgegevens template undefined data', async () => {
   const logSpy = jest.spyOn(global.console, 'log');
   const mapperSpy = jest.spyOn(PersoonsgegevensMapper, 'fromHaalCentraal');
   const handler = createHandler(fakeHaalCentraalData);
-  const result = await handler.handleRequest('session=12345');
+  const result = await handler.handleRequest({
+    cookies: 'session=12345',
+    method: 'GET',
+    body: {},
+    path: '/persoonsgegevens',
+    queryStringParameters: {},
+  });
 
 
   expect((handler as any).config.haalCentraalApi.getBrpData).toHaveBeenCalled();
@@ -135,7 +145,7 @@ test('Persoonsgegevens template undefined data', async () => {
 
   const timestamp = new Date().toISOString().replace(/:/g, '-');
   const outputFilename = path.join(__dirname, 'output', `persoonsgegevens_undefined_data_${timestamp}.html`);
-  fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
+  fs.writeFileSync(outputFilename, result.body ? result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
   // Should not trigger, if it does, it gives an empty page
   const errorFound = logSpy.mock.calls.some(call =>
     call.some(arg => String(arg).includes('TypeError: Cannot read properties of undefined')),

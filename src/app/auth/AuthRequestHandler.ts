@@ -90,14 +90,14 @@ export class AuthRequestHandler {
         const sessionData: any = {
           loggedin: { BOOL: true },
           identifier: { S: user.identifier },
-          bsn: { S: user.type == 'person' ? user.identifier : '' },
+          bsn: { S: user.type == 'person' ? user.identifier : '' }, // TODO: remove when consuming pages (persoonsgegevens, uitkeringen, zaken) have been updated to use identifier
           user_type: { S: user.type },
           username: { S: username },
           xsrf_token: { S: this.config.OpenIdConnect.generateState() },
         };
 
         // Fetch contact information if feature flag is enabled
-        if (this.config.contactgegevensLive && this.config.openKlantApi) {
+        if (this.config.contactgegevensLive && this.config.openKlantApi) { // TODO brp and contactinfo call should happen in parallel
           try {
             const contactInfo = await this.config.openKlantApi.getContactInfo(user.identifier, user.type);
             if (contactInfo.email) {

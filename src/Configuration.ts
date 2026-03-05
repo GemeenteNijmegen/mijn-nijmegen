@@ -176,6 +176,7 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     //   clientId: '0588239d-3fb8-42af-9f0a-96cbfe199a8e',
     //   endpoint: 'https://auth-service.sandbox-01.csp-nijmegen.nl/oauth/token',
     // },
+    mijnContactGegevensLive: true,
     useZakenFromAggregatorAPI: true,
     logLevel: 'DEBUG',
   },

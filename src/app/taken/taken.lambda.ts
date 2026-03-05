@@ -35,7 +35,7 @@ function parseEvent(event: APIGatewayProxyEventV2): eventParams {
   };
 }
 
-export async function handler(event: any, _context: any): Promise<ApiGatewayV2Response> {
+export async function handler(event: any): Promise<ApiGatewayV2Response> {
   try {
     const params = parseEvent(event);
     const requestHandler = await sharedZakenRequestHandler();
