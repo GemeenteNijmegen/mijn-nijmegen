@@ -2,7 +2,6 @@ import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/c
 import { mockClient } from 'aws-sdk-client-mock';
 import { ApiClient } from '../../../shared/ApiClient';
 import { HaalCentraalApi } from '../../../shared/HaalCentraalApi';
-import { OpenKlantApi } from '../../../shared/OpenKlantApi';
 import { PersoonsgegevensRequestHandler } from '../persoonsgegevensRequestHandler';
 
 const ddbMock = mockClient(DynamoDBClient);

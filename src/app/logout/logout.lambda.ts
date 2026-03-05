@@ -10,7 +10,7 @@ function parseEvent(event: any) {
   };
 }
 
-exports.handler = async (event: any, _context: any) => {
+exports.handler = async (event: any) => {
   try {
     const params = parseEvent(event);
     return await handleLogoutRequest(params.cookies, dynamoDBClient);

@@ -97,7 +97,8 @@ function parseEvent(event: APIGatewayProxyEventV2): any {
     try {
       const params = new URLSearchParams(decodedBody);
       body = Object.fromEntries(params.entries());
-    } catch (e) {
+    } catch (error) {
+      console.log(error);
       body = {};
     }
   }
@@ -110,7 +111,7 @@ function parseEvent(event: APIGatewayProxyEventV2): any {
   };
 }
 
-export async function handler(event: any, _context: any): Promise<ApiGatewayV2Response> {
+export async function handler(event: any): Promise<ApiGatewayV2Response> {
   await initialization;
 
   try {
