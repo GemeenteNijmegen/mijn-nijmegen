@@ -1,6 +1,6 @@
 import https from 'https';
 import { AWS } from '@gemeentenijmegen/utils';
-import axios, { AxiosError, AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
 export interface ApiClientOptions {
   /**
@@ -92,7 +92,33 @@ export class ApiClient {
       });
       console.timeEnd('request to ' + endpoint);
       return response.data;
-    } catch (error: any | AxiosError) {
+    } catch (error) {
+      console.timeEnd('request to ' + endpoint);
+      this.handleErrors(error, endpoint);
+    }
+  }
+
+  /**
+   * Do a HTTP PUT request to an endpoint.
+   * @param endpoint The url to request
+   * @param body The body to send to the endpoint
+   * @param headers Headers to include
+   */
+  async putData(endpoint: string, body: any, headers?: any): Promise<any> {
+    const config = await this.getRequestConfiguration();
+    console.time('request to ' + endpoint);
+    try {
+      const response = await this.axios.put(endpoint, body, {
+        httpsAgent: config.httpsAgent,
+        headers: {
+          ...config.headers,
+          ...headers,
+        },
+        timeout: this.options?.timeout,
+      });
+      console.timeEnd('request to ' + endpoint);
+      return response.data;
+    } catch (error) {
       console.timeEnd('request to ' + endpoint);
       this.handleErrors(error, endpoint);
     }
@@ -117,7 +143,7 @@ export class ApiClient {
       });
       console.timeEnd('GET request to ' + endpoint);
       return response.data;
-    } catch (error: any | AxiosError) {
+    } catch (error) {
       console.timeEnd('GET request to ' + endpoint);
       this.handleErrors(error, endpoint);
     }

@@ -160,6 +160,19 @@ export class ApiStack extends Stack implements Configurable {
       methods: [apigatewayv2.HttpMethod.GET],
     });
 
+    if (configuration.mijnContactGegevensLive) {
+      this.api.addRoutes({
+        integration: new HttpLambdaIntegration('persoonsgegevens-edit', persoonsGegevensFunction.lambda),
+        path: '/persoonsgegevens/edit',
+        methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.POST],
+      });
+      this.api.addRoutes({
+        integration: new HttpLambdaIntegration('persoonsgegevens-verify', persoonsGegevensFunction.lambda),
+        path: '/persoonsgegevens/verify',
+        methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.POST],
+      });
+    }
+
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('uitkeringen', uitkeringenFunction.lambda),
       path: '/uitkeringen',
@@ -363,6 +376,12 @@ export class ApiStack extends Stack implements Configurable {
 
   private persoonsgegevensFunction(haalCentraalConfig: HaalCentraalConfig, openKlantConfig: OpenKlantConfig) {
 
+    const notifySecret = Secret.fromSecretNameV2(this, 'notify-secret', Statics.ssmNotifySecret);
+    const notifyServiceId = StringParameter.fromStringParameterName(this, 'notify-service-id', Statics.ssmNotifyServiceId);
+    const notifyBaseUrl = StringParameter.fromStringParameterName(this, 'notify-base-url', Statics.ssmNotifyBaseUrl);
+    const notifyEmailTemplateId = StringParameter.fromStringParameterName(this, 'notify-email-template-id', Statics.ssmNotifyEmailTemplateId);
+    const notifySmsTemplateId = StringParameter.fromStringParameterName(this, 'notify-sms-template-id', Statics.ssmNotifySmsTemplateId);
+
     const persoonsGegevensFunction = new ApiFunction(this, 'persoonsgegevens-function', {
       description: 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.',
       codePath: 'app/persoonsgegevens',
@@ -382,6 +401,13 @@ export class ApiStack extends Stack implements Configurable {
         OPENKLANT_API_KEY_ARN: openKlantConfig.apiKey.secretArn,
         OPENKLANT_API_ENDPOINT: openKlantConfig.endpoint.parameterName,
 
+        // NotifyNL
+        NOTIFY_SECRET_ARN: notifySecret.secretArn,
+        NOTIFY_SERVICE_ID: notifyServiceId.parameterName,
+        NOTIFY_BASE_URL: notifyBaseUrl.parameterName,
+        NOTIFY_EMAIL_TEMPLATE_ID: notifyEmailTemplateId.parameterName,
+        NOTIFY_SMS_TEMPLATE_ID: notifySmsTemplateId.parameterName,
+
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
       apiFunction: PersoonsgegevensFunction,
@@ -392,6 +418,11 @@ export class ApiStack extends Stack implements Configurable {
     haalCentraalConfig.clientCert.grantRead(persoonsGegevensFunction.lambda);
     openKlantConfig.apiKey.grantRead(persoonsGegevensFunction.lambda);
     openKlantConfig.endpoint.grantRead(persoonsGegevensFunction.lambda);
+    notifySecret.grantRead(persoonsGegevensFunction.lambda);
+    notifyServiceId.grantRead(persoonsGegevensFunction.lambda);
+    notifyBaseUrl.grantRead(persoonsGegevensFunction.lambda);
+    notifyEmailTemplateId.grantRead(persoonsGegevensFunction.lambda);
+    notifySmsTemplateId.grantRead(persoonsGegevensFunction.lambda);
     return persoonsGegevensFunction;
   }
 
@@ -407,7 +438,6 @@ export class ApiStack extends Stack implements Configurable {
         MTLS_CLIENT_CERT_NAME: mtlsConfig.clientCert.parameterName,
         MTLS_ROOT_CA_NAME: mtlsConfig.rootCert.parameterName,
         UITKERING_API_URL: StringParameter.valueForStringParameter(this, Statics.ssmUitkeringsApiEndpointUrl),
-        CONTACTGEGEVENS_LIVE: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
       apiFunction: UitkeringFunction,
@@ -441,7 +471,6 @@ export class ApiStack extends Stack implements Configurable {
         IS_LIVE: this.configuration.zakenIsLive ? 'true' : 'false',
         USE_TAKEN: this.configuration.zakenUseTaken ? 'true' : 'false',
         SUBMISSIONS_LIVE: this.configuration.zakenUseSubmissions ? 'true' : 'false',
-        CONTACTGEGEVENS_LIVE: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
       apiFunction: ZakenFunction,
@@ -485,7 +514,6 @@ export class ApiStack extends Stack implements Configurable {
       },
       environment: {
         SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
-        CONTACTGEGEVENS_LIVE: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
     });
@@ -509,7 +537,6 @@ export class ApiStack extends Stack implements Configurable {
       environment: {
         SHOW_PRODUCTEN: this.configuration.mijnProductenLive ? 'True' : 'False',
         SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
-        CONTACTGEGEVENS_LIVE: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
         ARC_BASEURL: StringParameter.valueForStringParameter(this, Statics.ssmProductenArcBaseUrl),
         ARC_APIKEY_ARN: arc_key.secretArn,
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',

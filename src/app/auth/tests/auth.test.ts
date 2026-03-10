@@ -7,7 +7,6 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { ApiClient } from '../../../shared/ApiClient';
 import { HaalCentraalApi } from '../../../shared/HaalCentraalApi';
-import { OpenKlantApi } from '../../../shared/OpenKlantApi';
 import { Organisation, Person } from '../../../shared/User';
 import { AuthRequestHandler, AuthRequestHandlerProps } from '../AuthRequestHandler';
 
@@ -488,7 +487,6 @@ describe('eHerkenning logins', () => {
     OpenIdConnect: OIDC,
     ...scopesAndAttributes,
   };
-  const scope = 'openid idp_scoping:eherkenning';
   const claims: IDToken = {
     aud: 'test',
     exp: 123,
