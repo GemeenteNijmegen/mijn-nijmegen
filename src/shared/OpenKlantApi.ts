@@ -133,6 +133,9 @@ export class OpenKlantApi {
         voorkeursDigitaalAdres: null,
         rekeningnummers: [],
         voorkeursRekeningnummer: null,
+        partijIdentificatie: {
+          contactnaam: null,
+        },
       },
       { 'Content-Type': 'application/json' },
     );
