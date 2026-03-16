@@ -413,6 +413,9 @@ describe('OpenKlantApi updateContactInfo', () => {
         voorkeursDigitaalAdres: null,
         rekeningnummers: [],
         voorkeursRekeningnummer: null,
+        partijIdentificatie: {
+          contactnaam: null,
+        },
       },
       { 'Content-Type': 'application/json' },
     );
