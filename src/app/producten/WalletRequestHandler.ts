@@ -42,7 +42,10 @@ export class WalletRequestHandler {
 
   async handleLoggedinRequest(session: Session, eventParams: walletEventRequestParams) {
     if (eventParams.type == 'request') {
-      const url = await this.arc.getRedirectUrl(eventParams.productId);
+      // Note that currently the identifier isn't used by ARC.
+      // But it could be useful when we want to verify the ownership of the product.
+      const payload = { userId: session.getValue('identifier') };
+      const url = await this.arc.getRedirectUrl(eventParams.productId, payload);
       return Response.redirect(url, 302);
     } else {
       // Setup view

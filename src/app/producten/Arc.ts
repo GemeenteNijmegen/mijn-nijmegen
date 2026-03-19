@@ -1,15 +1,19 @@
 import { AWS } from '@gemeentenijmegen/utils';
+import * as jwt from 'jsonwebtoken';
 
 /** This class connect to the ARC, which returns a redirect url */
 export class Arc {
   private apiKey?: string;
   constructor(private endpoint: string, private keyArn: string) { }
 
-  public async getRedirectUrl(productId: string) {
+  public async getRedirectUrl(productId: string, payload: any = {}) {
+    const secret = await this.getApiKey();
+    const token = jwt.sign(payload, secret);
+
     const result = await fetch(`${this.endpoint}?type=product&productId=${productId}`, {
       method: 'GET',
       headers: {
-        'x-api-key': await this.getApiKey(),
+        'Authorization': `Bearer ${token}`
       },
     });
     try {
