@@ -40,7 +40,7 @@ export async function handler(event: any): Promise<ApiGatewayV2Response> {
       });
       return await requestHandler.handleRequest({
         cookies: params.cookies,
-        productId: '1234',
+        productId: params.productId,
         type: 'request',
       });
     } else if (params.isIngeladenWallet) {
@@ -50,7 +50,7 @@ export async function handler(event: any): Promise<ApiGatewayV2Response> {
       });
       return await requestHandler.handleRequest({
         cookies: params.cookies,
-        productId: '1234',
+        productId: params.productId,
         type: 'results',
         status: params.walletStatus,
       });
