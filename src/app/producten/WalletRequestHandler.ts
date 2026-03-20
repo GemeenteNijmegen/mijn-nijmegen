@@ -61,9 +61,6 @@ export class WalletRequestHandler {
   private async handleWalletRequest(productId: string, session: Session) {
     try {
       const url = await this.arc.getRedirectUrl(productId);
-      if (!url) {
-        throw new Error('No redirect url returned by ARC');
-      }
       return Response.redirect(url, 302);
     } catch (error) {
       console.error('Failed wallet issue request', error);

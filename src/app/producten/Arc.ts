@@ -14,6 +14,9 @@ export class Arc {
     });
     try {
       const json = await result.json() as any;
+      if (!json.url || typeof json.url !== 'string') {
+        throw new Error(`ARC did not return a valid url.`);
+      }
       return json.url;
     } catch (err: any) {
       console.error('unexpected response,', err);
