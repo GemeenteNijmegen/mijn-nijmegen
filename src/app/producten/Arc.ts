@@ -19,7 +19,8 @@ export class Arc {
       }
       return json.url;
     } catch (err: any) {
-      console.error('unexpected response,', err);
+      console.error('unexpected response from arc,', err);
+      throw Error("Could not get redirect url from ARC");
     }
   }
 
