@@ -2,10 +2,10 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
-import { Arc } from './Arc';
-import * as walletTemplate from './templates/wallet.mustache';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
+import { Arc } from './Arc';
+import * as walletTemplate from './templates/wallet.mustache';
 
 interface walletEventRequestParams {
   cookies: string;
@@ -61,6 +61,9 @@ export class WalletRequestHandler {
   private async handleWalletRequest(productId: string, session: Session) {
     try {
       const url = await this.arc.getRedirectUrl(productId);
+      if (!url) {
+        throw new Error('No redirect url returned by ARC');
+      }
       return Response.redirect(url, 302);
     } catch (error) {
       console.error('Failed wallet issue request', error);
