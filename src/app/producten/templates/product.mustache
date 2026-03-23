@@ -14,25 +14,22 @@
                 </ul>
             </nav>
             <div class="col-lg-9 col-md-12">
-                <h1>Product {{product.naam}}</h1>
-                <p class="lead">{{product.producttype.uniforme_product_naam}}</p>
-
-                <div class="alert alert-info">U kunt uw product in uw ID wallet plaatsen</div>
+                <h1>{{product.naam}}</h1>
+                <p class="lead>Hier vindt u de informatie van uw {{product.producttype.uniforme_product_naam}}. U kunt deze ook inladen in uw Wallet:<br />
+                
                 <a href="/producten/{{product.uuid}}?inladen_wallet=true"
                    class="utrecht-button utrecht-button--primary-action">
                     Plaats product in ID Wallet
                 </a>
-
-                <h2>Productdetails</h2>
+                </p>
+                
+                <h2>Informatie over uw product</h2>
                 <dl>
                     <dt>Status</dt>
                     <dd>{{product.status}}</dd>
 
                     <dt>Prijs</dt>
                     <dd>€ {{product.prijs}}</dd>
-
-                    <dt>Frequentie</dt>
-                    <dd>{{product.frequentie}}</dd>
 
                     <dt>Aanmaakdatum</dt>
                     <dd>{{product.aanmaak_datum}}</dd>
@@ -47,27 +44,10 @@
                 </dl>
 
                 <h2>Producttype</h2>
+                <p class="lead">{{product.producttype.uniforme_product_naam}}</p>
                 <dl>
                     <dt>Code</dt>
                     <dd>{{product.producttype.code}}</dd>
-
-                    <dt>Uniforme productnaam</dt>
-                    <dd>{{product.producttype.uniforme_product_naam}}</dd>
-
-                    <dt>Gepubliceerd</dt>
-                    <dd>{{product.producttype.gepubliceerd}}</dd>
-
-                    <dt>Publicatie startdatum</dt>
-                    <dd>{{product.producttype.publicatie_start_datum}}</dd>
-
-                    <dt>Publicatie einddatum</dt>
-                    <dd>{{product.producttype.publicatie_eind_datum}}</dd>
-
-                    {{#product.producttype.toegestane_statussen}}
-                    <dt>Toegestane statussen</dt>
-                    <dd>{{.}}</dd>
-                    {{/product.producttype.toegestane_statussen}}
-
                     {{#product.producttype.themas}}
                     <dt>Thema</dt>
                     <dd>{{naam}}</dd>
@@ -77,31 +57,6 @@
                     {{/beschrijving}}
                     {{/product.producttype.themas}}
                 </dl>
-
-                {{#product.eigenaren}}
-                <h2>Eigenaren</h2>
-                <dl>
-                    {{#bsn}}
-                    <dt>BSN</dt>
-                    <dd>{{bsn}}</dd>
-                    {{/bsn}}
-
-                    {{#kvk_nummer}}
-                    <dt>KVK-nummer</dt>
-                    <dd>{{kvk_nummer}}</dd>
-                    {{/kvk_nummer}}
-
-                    {{#vestigingsnummer}}
-                    <dt>Vestigingsnummer</dt>
-                    <dd>{{vestigingsnummer}}</dd>
-                    {{/vestigingsnummer}}
-
-                    {{#klantnummer}}
-                    <dt>Klantnummer</dt>
-                    <dd>{{klantnummer}}</dd>
-                    {{/klantnummer}}
-                </dl>
-                {{/product.eigenaren}}
 
                 {{#product.documenten}}
                 <h2>Documenten</h2>
@@ -131,7 +86,7 @@
                     <dd><a href="{{product.aanvraag_zaak_url}}">{{product.aanvraag_zaak_url}}</a></dd>
                 </dl>
                 {{/product.aanvraag_zaak_url}}
-
+            </div>
             </div>
         </div>
     </div>

@@ -67,3 +67,9 @@ export async function handler(event: any): Promise<ApiGatewayV2Response> {
     return Response.error(500);
   }
 }
+
+class ProductFormatter {
+  // zaak omkatten naar mIJn nijmegen
+  // datums formatteren
+  
+}
