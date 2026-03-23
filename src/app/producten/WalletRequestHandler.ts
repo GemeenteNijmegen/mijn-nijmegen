@@ -2,10 +2,10 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
-import { Navigation } from '../../shared/Navigation';
-import { render } from '../../shared/render';
 import { Arc } from './Arc';
 import * as walletTemplate from './templates/wallet.mustache';
+import { Navigation } from '../../shared/Navigation';
+import { render } from '../../shared/render';
 
 interface walletEventRequestParams {
   cookies: string;
