@@ -9,13 +9,29 @@ import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
 
+// --- Dev-only import ---
+import { NoAuthRequestHandler } from './NoAuthRequestHandler';
+
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
+
+/**
+ * True only when explicitly enabled AND not running in production.
+ * Prevents accidental exposure if the env var leaks into a production deploy.
+ */
+const NO_AUTH_ENABLED =
+  process.env.NO_AUTH === 'true' && process.env.NODE_ENV !== 'production';
 
 let OIDC: OpenIDConnect | undefined = undefined;
 let haalCentraalApi: HaalCentraalApi | undefined = undefined;
 let openKlantApi: OpenKlantApi | undefined = undefined;
+
 async function init() {
-  // Construct the haal centraal API client
+  // Skip external dependencies entirely in no-auth mode
+  if (NO_AUTH_ENABLED) {
+    console.warn('[DEV] NO_AUTH mode enabled — skipping OIDC and API initialization');
+    return;
+  }
+
   const haalCentraalValues = environmentVariables([
     'HAAL_CENTRAAL_CERT_SSM',
     'HAAL_CENTRAAL_PRIVATE_KEY_ARN',
@@ -37,7 +53,6 @@ async function init() {
     baseUrl: haalCentraalValues.HAAL_CENTRAAL_BASE_URL,
   });
 
-  // Setup OpenKlant API client if feature flag is enabled
   if (process.env.CONTACTGEGEVENS_LIVE === 'True') {
     const openKlantValues = environmentVariables([
       'OPENKLANT_API_KEY_ARN',
@@ -57,15 +72,14 @@ async function init() {
     });
   }
 
-  // Setup ODIC client
   OIDC = new OpenIDConnect({
     clientId: process.env.OIDC_CLIENT_ID!,
     redirectUrl: process.env.OIDC_REDIRECT_URL!,
     wellknown: process.env.OIDC_WELL_KNOWN!,
     clientSecret: await AWS.getSecret(process.env.OIDC_CLIENT_SECRET_ARN!),
   });
-
 }
+
 const initaliation = init();
 
 function parseEvent(event: APIGatewayProxyEventV2) {
@@ -74,11 +88,27 @@ function parseEvent(event: APIGatewayProxyEventV2) {
     fullUrl: new URL(url),
     cookies: event?.cookies?.join(';') ?? '',
     error: event?.queryStringParameters?.error,
+    devBsn: (NO_AUTH_ENABLED) ? event?.queryStringParameters?.bsn : undefined,
   };
 }
 
 export async function handler(event: APIGatewayProxyEventV2): Promise<ApiGatewayV2Response> {
   await initaliation;
+
+  // --- No-auth development bypass ---
+  if (NO_AUTH_ENABLED) {
+    console.warn('[DEV] Handling request without authentication');
+    try {
+      const noAuthHandler = new NoAuthRequestHandler({
+        dynamoDBClient,
+        params: parseEvent(event),
+      });
+      return await noAuthHandler.handleRequest();
+    } catch (err) {
+      console.error(err);
+      return Response.error(500);
+    }
+  }
 
   if (!OIDC || !haalCentraalApi) {
     throw Error('Failed to initalize properly');
