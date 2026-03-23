@@ -4,6 +4,7 @@ import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
 import { productEventParams } from './producten.lambda';
+import { ProductFormatter } from './ProductFormatter';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import { User, UserFromSession } from '../../shared/User';
@@ -91,7 +92,7 @@ export class ProductenRequestHandler {
       const results = await this.connector.fetch(`/mijn-services-aggregator/PRODUCTEN/producten/api/v1/producten/${eventParams.productId}`, user);
       this.logger.info('temp product results', results);
 
-      data.product = results;
+      data.product = ProductFormatter.format(results);
       // render page
       const html = await render(data, productTemplate.default);
       return Response.html(html, 200, session.getCookie());
@@ -105,9 +106,5 @@ export class ProductenRequestHandler {
       const html = await render(data, productenTemplate.default);
       return Response.html(html, 200, session.getCookie());
     }
-
-
   }
 }
-
-
