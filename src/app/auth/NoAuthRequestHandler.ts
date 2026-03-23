@@ -5,7 +5,7 @@ import { Session } from '@gemeentenijmegen/session';
 
 export interface NoAuthRequestHandlerProps {
   dynamoDBClient: DynamoDBClient;
-  params: { bsn?: string, cookies: string };
+  params: { bsn?: string; cookies: string };
 }
 
 /**
@@ -36,7 +36,7 @@ export class NoAuthRequestHandler {
       const sessionData = {
         loggedin: { BOOL: true },
         identifier: { S: fakeBsn },
-        bsn: { S: fakeBsn },           // legacy field, mirrors AuthRequestHandler
+        bsn: { S: fakeBsn }, // legacy field, mirrors AuthRequestHandler
         user_type: { S: 'person' },
         username: { S: `Dev User (${fakeBsn})` },
         xsrf_token: { S: this.generateFakeState() },
