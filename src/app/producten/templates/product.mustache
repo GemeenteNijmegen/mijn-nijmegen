@@ -1,29 +1,140 @@
 {{>header}}
-
 <main id="denhaag-theme">
     <!-- START: template component(s) -->
     <div class="container">
         <div class="row">
             <nav class="nijmegen-sidenav col-lg-3 col-md-12">
-                    <ul class="nijmegen-sidenav__list">
-                    {{#nav}}
-                        <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
-                            {{{icon}}}
-                            <a href="{{{url}}}">{{title}}</a>
-                        </li>
-                    {{/nav}}
-                    </ul>
+                <ul class="nijmegen-sidenav__list">
+                {{#nav}}
+                    <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
+                        {{{icon}}}
+                        <a href="{{{url}}}">{{title}}</a>
+                    </li>
+                {{/nav}}
+                </ul>
             </nav>
             <div class="col-lg-9 col-md-12">
                 <h1>Product {{product.naam}}</h1>
                 <p class="lead">{{product.producttype.uniforme_product_naam}}</p>
+
                 <div class="alert alert-info">U kunt uw product in uw ID wallet plaatsen</div>
-<a href="/producten/{{product.uuid}}?inladen_wallet=true" class="utrecht-button utrecht-button--primary-action">Plaats product in ID Wallet</a>
-</form>
+                <a href="/producten/{{product.uuid}}?inladen_wallet=true"
+                   class="utrecht-button utrecht-button--primary-action">
+                    Plaats product in ID Wallet
+                </a>
+
+                <h2>Productdetails</h2>
+                <dl>
+                    <dt>Status</dt>
+                    <dd>{{product.status}}</dd>
+
+                    <dt>Prijs</dt>
+                    <dd>€ {{product.prijs}}</dd>
+
+                    <dt>Frequentie</dt>
+                    <dd>{{product.frequentie}}</dd>
+
+                    <dt>Aanmaakdatum</dt>
+                    <dd>{{product.aanmaak_datum}}</dd>
+
+                    <dt>Laatste update</dt>
+                    <dd>{{product.update_datum}}</dd>
+
+                    {{#product.dataobject.location}}
+                    <dt>Locatie</dt>
+                    <dd>{{product.dataobject.location}}</dd>
+                    {{/product.dataobject.location}}
+                </dl>
+
+                <h2>Producttype</h2>
+                <dl>
+                    <dt>Code</dt>
+                    <dd>{{product.producttype.code}}</dd>
+
+                    <dt>Uniforme productnaam</dt>
+                    <dd>{{product.producttype.uniforme_product_naam}}</dd>
+
+                    <dt>Gepubliceerd</dt>
+                    <dd>{{product.producttype.gepubliceerd}}</dd>
+
+                    <dt>Publicatie startdatum</dt>
+                    <dd>{{product.producttype.publicatie_start_datum}}</dd>
+
+                    <dt>Publicatie einddatum</dt>
+                    <dd>{{product.producttype.publicatie_eind_datum}}</dd>
+
+                    {{#product.producttype.toegestane_statussen}}
+                    <dt>Toegestane statussen</dt>
+                    <dd>{{.}}</dd>
+                    {{/product.producttype.toegestane_statussen}}
+
+                    {{#product.producttype.themas}}
+                    <dt>Thema</dt>
+                    <dd>{{naam}}</dd>
+                    {{#beschrijving}}
+                    <dt>Thema omschrijving</dt>
+                    <dd>{{beschrijving}}</dd>
+                    {{/beschrijving}}
+                    {{/product.producttype.themas}}
+                </dl>
+
+                {{#product.eigenaren}}
+                <h2>Eigenaren</h2>
+                <dl>
+                    {{#bsn}}
+                    <dt>BSN</dt>
+                    <dd>{{bsn}}</dd>
+                    {{/bsn}}
+
+                    {{#kvk_nummer}}
+                    <dt>KVK-nummer</dt>
+                    <dd>{{kvk_nummer}}</dd>
+                    {{/kvk_nummer}}
+
+                    {{#vestigingsnummer}}
+                    <dt>Vestigingsnummer</dt>
+                    <dd>{{vestigingsnummer}}</dd>
+                    {{/vestigingsnummer}}
+
+                    {{#klantnummer}}
+                    <dt>Klantnummer</dt>
+                    <dd>{{klantnummer}}</dd>
+                    {{/klantnummer}}
+                </dl>
+                {{/product.eigenaren}}
+
+                {{#product.documenten}}
+                <h2>Documenten</h2>
+                <ul>
+                    <li>{{.}}</li>
+                </ul>
+                {{/product.documenten}}
+
+                {{#product.zaken}}
+                <h2>Zaken</h2>
+                <ul>
+                    <li>{{.}}</li>
+                </ul>
+                {{/product.zaken}}
+
+                {{#product.taken}}
+                <h2>Taken</h2>
+                <ul>
+                    <li>{{.}}</li>
+                </ul>
+                {{/product.taken}}
+
+                {{#product.aanvraag_zaak_url}}
+                <h2>Aanvraag</h2>
+                <dl>
+                    <dt>Zaak URL</dt>
+                    <dd><a href="{{product.aanvraag_zaak_url}}">{{product.aanvraag_zaak_url}}</a></dd>
+                </dl>
+                {{/product.aanvraag_zaak_url}}
+
+            </div>
         </div>
     </div>
-
     <!-- END: template component(s) -->
 </main>
-
 {{>footer}}
