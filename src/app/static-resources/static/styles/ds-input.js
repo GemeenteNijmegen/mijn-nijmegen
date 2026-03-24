@@ -1,5 +1,6 @@
 import '@utrecht/document-css/dist/index.css';
 import '@gemeentenijmegen/design-tokens/dist/index.css';
+import '@gemeentenijmegen/layout-css/dist/index.css';
 import '@utrecht/button-css/dist/index.css';
 import '@utrecht/button-group-css/dist/index.css';
 import '@utrecht/paragraph-css/dist/index.css';

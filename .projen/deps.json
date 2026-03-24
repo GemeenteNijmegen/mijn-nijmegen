@@ -17,6 +17,10 @@
       "type": "build"
     },
     {
+      "name": "@gemeentenijmegen/layout-css",
+      "type": "build"
+    },
+    {
       "name": "@glen/jest-raw-loader",
       "type": "build"
     },

@@ -1352,6 +1352,11 @@
   resolved "https://registry.yarnpkg.com/@gemeentenijmegen/design-tokens/-/design-tokens-0.0.2-alpha.133.tgz#75c4f7c81b1edff3faeda2f7833bd8b496c30da6"
   integrity sha512-L8eLHSHlsYbA2TT+XqmpSDVbSHIWei9dwpDIGlitEeAeLu1w5wG8iwaC1yXHeyYPLlWUFsPEegZsi13iy3ILDA==
 
+"@gemeentenijmegen/layout-css@^0.0.1-alpha.122":
+  version "0.0.1-alpha.122"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/layout-css/-/layout-css-0.0.1-alpha.122.tgz#c90cd4b9e1bb95249af2556c161c6af0ac7c3c74"
+  integrity sha512-19p2jcQeLqqtQhdL85YDYY3OJK6AcjKo/z6cAZwH+wUB7miGFDQ7+nqdwRWGQi9GFzYWcexu9pmv6CV/1B3xdg==
+
 "@gemeentenijmegen/projen-project-type@^1.12.2":
   version "1.12.2"
   resolved "https://registry.yarnpkg.com/@gemeentenijmegen/projen-project-type/-/projen-project-type-1.12.2.tgz#2caed7fe6aea335ded4c4ffcfd02b9b4bdc177b5"
