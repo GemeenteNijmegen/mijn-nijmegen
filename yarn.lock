@@ -2708,6 +2708,36 @@
   resolved "https://registry.yarnpkg.com/@utrecht/document-css/-/document-css-1.5.0.tgz#71d2f76f36c8141d14770da220c7c573ecfc0949"
   integrity sha512-BULQJRt7KUjsOuh6uol89AN3LjghH4U1m7C4OWTcqyGIXCltCPRKjzhuiUc/qe6twIPNhl72BDZaFV3I8Bbwng==
 
+"@utrecht/heading-1-css@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@utrecht/heading-1-css/-/heading-1-css-1.5.0.tgz#af9932b5deac307c562610785b9b073ccb730d52"
+  integrity sha512-gDdpZvtTQzY2h4iFOFxOM5Te94/R/uAHTqZbt7Vk34nKhxSe379sKAP5RbScNeWVtR1WfOnLwHPhYfd8t4LLbg==
+
+"@utrecht/heading-2-css@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@utrecht/heading-2-css/-/heading-2-css-1.5.0.tgz#2b0e578a176565a4d7a6c515e1a6e1fd17ec037e"
+  integrity sha512-CQNljKKmmyywLoZWoX5zUWqTGDJjdJTFwRdGjigU1PZ6MjjKHOpLHt42hBChV3codGxjkrAUoFh3KKNfK7LLqQ==
+
+"@utrecht/heading-3-css@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@utrecht/heading-3-css/-/heading-3-css-1.5.0.tgz#0519a2f9560583fa29c97ad0d7beb6742224bc08"
+  integrity sha512-opXNdnUpqUbBSoE49aMgck4uzVU2eO5H3NZnX9FdUmzSIMjmXjXTazyc+aedJWvfchZtcRyMJaiJkGoSoqm96Q==
+
+"@utrecht/heading-4-css@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@utrecht/heading-4-css/-/heading-4-css-1.5.0.tgz#167a6e40cae89e0b53f2064f89c2f991f20ba577"
+  integrity sha512-m6PinCZK9Zhsx3LKWWCY7MIMCJl6IGFY0vyAwyNIhadnqg+FqxLKVbIZRjzjYyojdTxhuDYl16pxWzYUJQ8mKg==
+
+"@utrecht/heading-5-css@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@utrecht/heading-5-css/-/heading-5-css-1.5.0.tgz#4986b8ea52ac434d77c3ce0bff3ea84b53d78920"
+  integrity sha512-AB6WtvpuAjx14d7hQxhrzUT+gE2Ftwz5kxZr1wGTNyHYr9a8D7b1+WI3GJn8EMnGuTR6+gMMNrZI/llhwXUA7w==
+
+"@utrecht/heading-6-css@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@utrecht/heading-6-css/-/heading-6-css-1.5.0.tgz#2b30181cdca641b1137d10f81bac07057b74cfdf"
+  integrity sha512-TtLDie62GuS3KzwNurt/zd9hsS/N5/ubwDWqpQa5t7io6YR1esujelm49m8d+Jfjhnva3Hw9TPbtDQrv6gTw9A==
+
 "@utrecht/paragraph-css@2.3.1":
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/@utrecht/paragraph-css/-/paragraph-css-2.3.1.tgz#42270e9fb0dbade406087d68c87268d5560ab690"

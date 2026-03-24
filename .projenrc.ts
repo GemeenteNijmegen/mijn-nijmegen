@@ -61,6 +61,12 @@ const project = new GemeenteNijmegenCdkApp({
     '@utrecht/button-css@2.3.0',
     '@utrecht/button-group-css@1.4.0',
     '@utrecht/paragraph-css@2.3.1',
+    '@utrecht/heading-1-css@1.5.0',
+    '@utrecht/heading-2-css@1.5.0',
+    '@utrecht/heading-3-css@1.5.0',
+    '@utrecht/heading-4-css@1.5.0',
+    '@utrecht/heading-5-css@1.5.0',
+    '@utrecht/heading-6-css@1.5.0',
   ], /* Build dependencies for this module. */
   mutableBuild: true,
   jestOptions: {

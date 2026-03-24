@@ -79,6 +79,36 @@
       "type": "build"
     },
     {
+      "name": "@utrecht/heading-1-css",
+      "version": "1.5.0",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/heading-2-css",
+      "version": "1.5.0",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/heading-3-css",
+      "version": "1.5.0",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/heading-4-css",
+      "version": "1.5.0",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/heading-5-css",
+      "version": "1.5.0",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/heading-6-css",
+      "version": "1.5.0",
+      "type": "build"
+    },
+    {
       "name": "@utrecht/paragraph-css",
       "version": "2.3.1",
       "type": "build"

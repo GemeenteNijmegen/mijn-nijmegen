@@ -1,7 +1,13 @@
 import '@utrecht/document-css/dist/index.css';
 import '@gemeentenijmegen/design-tokens/dist/index.css';
-import '@gemeentenijmegen/layout-css/dist/index.css';
+import '@gemeentenijmegen/layout-css/dist/grid.css';
 import '@utrecht/button-css/dist/index.css';
 import '@utrecht/button-group-css/dist/index.css';
 import '@utrecht/paragraph-css/dist/index.css';
 import '@gemeentenijmegen/components-css/dist/index.min.css';
+import '@utrecht/heading-1-css/dist/index.css';
+import '@utrecht/heading-2-css/dist/index.css';
+import '@utrecht/heading-3-css/dist/index.css';
+import '@utrecht/heading-4-css/dist/index.css';
+import '@utrecht/heading-5-css/dist/index.css';
+import '@utrecht/heading-6-css/dist/index.css';
