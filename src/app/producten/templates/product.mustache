@@ -1,5 +1,5 @@
 {{>header}}
-<main id="denhaag-theme">
+<main>
     <!-- START: template component(s) -->
     <div class="container">
         <div class="row">
@@ -13,15 +13,28 @@
                 {{/nav}}
                 </ul>
             </nav>
-            <div class="col-lg-9 col-md-12">
+            <div class="col-lg-9 col-md-12 nijmegen-theme">
                 <h1>{{product.naam}}</h1>
-                <p class="lead">Hier vindt u de informatie van uw {{product.producttype.uniforme_product_naam}}. U kunt deze ook inladen in uw Wallet:<br />
+                <p class="lead">Hier vindt u de informatie van uw {{product.producttype.uniforme_product_naam}}. U kunt deze ook inladen in uw Wallet.
+
                 
-                <a href="/producten/{{product.uuid}}?inladen_wallet=true"
-                   class="utrecht-button utrecht-button--primary-action">
-                    Plaats product in ID Wallet
-                </a>
-                </p>
+                <div class="nijmegen-action-card">
+                    <div class="nijmegen-action-card__content">
+                        <h2 class="utrecht-heading-5">ID Wallet</h5>
+                        <p class="utrecht-paragraph">Plaats deze {{product.producttype.uniforme_product_naam}} in uw ID Wallet</p>
+                    </div>
+                    {{#wallet_result}}
+                    {{#wallet_result.success}}
+
+                    {{/wallet_result.success}}
+                    {{/wallet_result}}
+                    {{^wallet_result}}
+                    <p role="group" class="utrecht-button-group">
+                        <a href="/producten/{{product.uuid}}?inladen_wallet=true" class="utrecht-button utrecht-button--primary-action" type="button">Plaats product in wallet</a>
+                    </p>
+                    {{/wallet_result}}
+                </div>
+                
                 
                 <h2>Informatie over uw product</h2>
                 <dl>
@@ -31,8 +44,8 @@
                     <dt>Prijs</dt>
                     <dd>€ {{product.prijs}}</dd>
 
-                    <dt>Aanmaakdatum</dt>
-                    <dd>{{product.aanmaak_datum}}</dd>
+                    <dt>Geldigheid</dt>
+                    <dd>{{#product.start_datum}}van {{product.start_datum}}{{/product.start_datum}}{{#product.eind_datum}} t/m {{product.eind_datum}}{{/product.eind_datum}}</dd>
 
                     <dt>Laatste update</dt>
                     <dd>{{product.update_datum}}</dd>

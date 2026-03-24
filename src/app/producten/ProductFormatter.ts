@@ -2,6 +2,8 @@ export class ProductFormatter {
   static format(productResult: any): any {
 
     const dates = [
+      'start_datum',
+      'eind_datum',
       'aanmaak_datum',
       'update_datum',
       'product_type.publicatie_start_datum',

@@ -1311,6 +1311,11 @@
     "@eslint/core" "^0.17.0"
     levn "^0.4.1"
 
+"@fontsource/source-sans-pro@5.0.8":
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/@fontsource/source-sans-pro/-/source-sans-pro-5.0.8.tgz#e246405a3bcdcf2ae6f9d7019c0d78ead71a492a"
+  integrity sha512-5U2UvIYRkCMozZ388gCE73PEpa2MFgN/0t9O4a1FF7bGT/MIneQWSL1XpWZ8iMVYdh6ntxRf3iFA6slCIuFgkg==
+
 "@gemeentenijmegen/apiclient@^0.0.41":
   version "0.0.41"
   resolved "https://registry.yarnpkg.com/@gemeentenijmegen/apiclient/-/apiclient-0.0.41.tgz#b62fd465e72dfe8c76f09a38dc73f8e31ac7fba0"
@@ -1351,6 +1356,13 @@
   version "0.0.2-alpha.133"
   resolved "https://registry.yarnpkg.com/@gemeentenijmegen/design-tokens/-/design-tokens-0.0.2-alpha.133.tgz#75c4f7c81b1edff3faeda2f7833bd8b496c30da6"
   integrity sha512-L8eLHSHlsYbA2TT+XqmpSDVbSHIWei9dwpDIGlitEeAeLu1w5wG8iwaC1yXHeyYPLlWUFsPEegZsi13iy3ILDA==
+
+"@gemeentenijmegen/font@^0.0.2-alpha.112":
+  version "0.0.2-alpha.112"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/font/-/font-0.0.2-alpha.112.tgz#cde66030505756ec17290baf7cb3b1d541dd0f57"
+  integrity sha512-9umuzBCvDt/A4tBhHuaFArKTvByfNVxW15vMaFkksj0OLyDvLDkSz/UeA4ZKBbIbzP0Qe25O3Jd90xVsR+tyRg==
+  dependencies:
+    "@fontsource/source-sans-pro" "5.0.8"
 
 "@gemeentenijmegen/projen-project-type@^1.12.2":
   version "1.12.2"

@@ -25,7 +25,7 @@
                 <div class="card card-services">
                     <div class="card-body" href="/producten/{{uuid}}">
                         <h3 class="card-title">{{naam}}</h3>
-                        <p class="card-text">Geldigheid: {{start_datum}} t/m {{eind_datum}}</p>
+                        <p class="card-text">Geldig {{#start_datum}}van {{start_datum}}{{/start_datum}}{{#eind_datum}} t/m {{eind_datum}}{{/eind_datum}}</p>
                         <p class="card-read-more text-right mb-0 text-uppercase"><a href="/producten/{{uuid}}">Bekijk meer</a></p>
                         
                     </div>
