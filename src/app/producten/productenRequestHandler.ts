@@ -20,7 +20,7 @@ interface RenderData {
   error?: string;
   products?: any;
   product?: any;
-  walletIsIngeladen?: any;
+  wallet_result?: any;
 }
 
 export interface Config {
@@ -76,8 +76,15 @@ export class ProductenRequestHandler {
       title: 'Mijn Producten',
       shownav: true,
       nav: navigation.items,
-      error: undefined,
     };
+
+    if (eventParams.isIngeladenWallet) {
+      data.wallet_result = {
+        success: eventParams.walletStatus,
+        failed: !eventParams.walletStatus,
+      };
+    }
+
     const user: User = UserFromSession(session);
     if (eventParams.productId) {
       // individual product page

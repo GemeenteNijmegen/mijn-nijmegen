@@ -20,23 +20,56 @@
                 
                 <div class="nijmegen-action-card">
                     <div class="nijmegen-action-card__content">
-                        <h2 class="utrecht-heading-5">ID Wallet</h5>
-                        <p class="utrecht-paragraph">Plaats deze {{product.producttype.uniforme_product_naam}} in uw ID Wallet</p>
-                    </div>
-                    {{#wallet_result}}
-                    {{#wallet_result.success}}
+                        <h4 class="utrecht-heading-5">ID Wallet</h4>
+                        {{#wallet_result.success}}
+                            <p>Het inladen in de wallet is geslaagd.</p>
+                        {{/wallet_result.success}}
 
-                    {{/wallet_result.success}}
-                    {{/wallet_result}}
-                    {{^wallet_result}}
-                    <p role="group" class="utrecht-button-group">
-                        <a href="/producten/{{product.uuid}}?inladen_wallet=true" class="utrecht-button utrecht-button--primary-action" type="button">Plaats product in wallet</a>
-                    </p>
-                    {{/wallet_result}}
+                        {{#wallet_result.failed}}
+                        <p>Het inladen in de wallet is niet gelukt. Probeer het opnieuw.</p>
+                        {{/wallet_result.failed}}
+                        {{^wallet_result.success}}
+                        <p class="utrecht-paragraph">Plaats deze {{product.producttype.uniforme_product_naam}} in uw ID Wallet</p>
+                        <p role="group" class="utrecht-button-group">
+                            <a href="/producten/{{product.uuid}}?inladen_wallet=true" class="utrecht-button utrecht-button--primary-action spin" type="button">Plaats product in wallet</a>
+                        </p>
+                        {{/wallet_result.success}}
+                    </div>
                 </div>
                 
                 
                 <h2>Informatie over uw product</h2>
+                <table class="nijmegen-table nijmegen-table-full-width">
+                    <thead class="nijmegen-table__header">
+                        <tr class="nijmegen-table__row">
+                        <th scope="col" class="nijmegen-table__header-cell">Wijk</th>
+                        <th scope="col" class="nijmegen-table__header-cell">Afvalsoort</th>
+                        <th scope="col" class="nijmegen-table__header-cell">Ophaaldag</th>
+                        </tr>
+                    </thead>
+                    <tbody class="nijmegen-table__body">
+                        <tr class="nijmegen-table__row">
+                        <td class="nijmegen-table__data-cell" data-label="Wijk">Nijmegen-Oost</td>
+                        <td class="nijmegen-table__data-cell" data-label="Afvalsoort">Restafval</td>
+                        <td class="nijmegen-table__data-cell" data-label="Ophaaldag">Maandag</td>
+                        </tr>
+                        <tr class="nijmegen-table__row">
+                        <td class="nijmegen-table__data-cell" data-label="Wijk">Dukenburg</td>
+                        <td class="nijmegen-table__data-cell" data-label="Afvalsoort">Papier & karton</td>
+                        <td class="nijmegen-table__data-cell" data-label="Ophaaldag">Woensdag</td>
+                        </tr>
+                        <tr class="nijmegen-table__row">
+                        <td class="nijmegen-table__data-cell" data-label="Wijk">Lindenholt</td>
+                        <td class="nijmegen-table__data-cell" data-label="Afvalsoort">GFT</td>
+                        <td class="nijmegen-table__data-cell" data-label="Ophaaldag">Donderdag</td>
+                        </tr>
+                        <tr class="nijmegen-table__row">
+                        <td class="nijmegen-table__data-cell" data-label="Wijk">Nijmegen-Noord</td>
+                        <td class="nijmegen-table__data-cell" data-label="Afvalsoort">Grofvuil</td>
+                        <td class="nijmegen-table__data-cell" data-label="Ophaaldag">Maandag</td>
+                        </tr>
+                    </tbody>
+                    </table>
                 <dl>
                     <dt>Status</dt>
                     <dd>{{product.status}}</dd>
@@ -105,4 +138,5 @@
     </div>
     <!-- END: template component(s) -->
 </main>
+<script src="/static/js/spinner.js"></script>
 {{>footer}}

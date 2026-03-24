@@ -1311,11 +1311,6 @@
     "@eslint/core" "^0.17.0"
     levn "^0.4.1"
 
-"@fontsource/source-sans-pro@5.0.8":
-  version "5.0.8"
-  resolved "https://registry.yarnpkg.com/@fontsource/source-sans-pro/-/source-sans-pro-5.0.8.tgz#e246405a3bcdcf2ae6f9d7019c0d78ead71a492a"
-  integrity sha512-5U2UvIYRkCMozZ388gCE73PEpa2MFgN/0t9O4a1FF7bGT/MIneQWSL1XpWZ8iMVYdh6ntxRf3iFA6slCIuFgkg==
-
 "@gemeentenijmegen/apiclient@^0.0.41":
   version "0.0.41"
   resolved "https://registry.yarnpkg.com/@gemeentenijmegen/apiclient/-/apiclient-0.0.41.tgz#b62fd465e72dfe8c76f09a38dc73f8e31ac7fba0"
@@ -1356,13 +1351,6 @@
   version "0.0.2-alpha.133"
   resolved "https://registry.yarnpkg.com/@gemeentenijmegen/design-tokens/-/design-tokens-0.0.2-alpha.133.tgz#75c4f7c81b1edff3faeda2f7833bd8b496c30da6"
   integrity sha512-L8eLHSHlsYbA2TT+XqmpSDVbSHIWei9dwpDIGlitEeAeLu1w5wG8iwaC1yXHeyYPLlWUFsPEegZsi13iy3ILDA==
-
-"@gemeentenijmegen/font@^0.0.2-alpha.112":
-  version "0.0.2-alpha.112"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/font/-/font-0.0.2-alpha.112.tgz#cde66030505756ec17290baf7cb3b1d541dd0f57"
-  integrity sha512-9umuzBCvDt/A4tBhHuaFArKTvByfNVxW15vMaFkksj0OLyDvLDkSz/UeA4ZKBbIbzP0Qe25O3Jd90xVsR+tyRg==
-  dependencies:
-    "@fontsource/source-sans-pro" "5.0.8"
 
 "@gemeentenijmegen/projen-project-type@^1.12.2":
   version "1.12.2"
@@ -2704,6 +2692,11 @@
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@utrecht/button-css/-/button-css-2.3.0.tgz#c59d2ced916316f37b0647b0973ae9331f5c71bc"
   integrity sha512-3RYtaqzG3ZvOH5RcGXbKLv3HizTacYXd4BPolzDKYMbw/1J/x6/A6wRovzsUoOIhoIIZp0S25/OpxdPnwt3QQw==
+
+"@utrecht/button-group-css@1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@utrecht/button-group-css/-/button-group-css-1.4.0.tgz#2151425290d4cc453f9b865c8856ea4c5694a5c3"
+  integrity sha512-NV12LA6wh0IaBuqjVVD+dZUzl4Sk0aKKiO3qL0BT7XQJvygDRjJq3M5d2pI9BDMMOb9jgT6VuIARST0Qk6JuxQ==
 
 "@utrecht/document-css@1.5.0":
   version "1.5.0"

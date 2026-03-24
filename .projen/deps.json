@@ -17,10 +17,6 @@
       "type": "build"
     },
     {
-      "name": "@gemeentenijmegen/font",
-      "type": "build"
-    },
-    {
       "name": "@glen/jest-raw-loader",
       "type": "build"
     },
@@ -69,7 +65,7 @@
       "type": "build"
     },
     {
-      "name": "@utrecht/button-groupcss",
+      "name": "@utrecht/button-group-css",
       "version": "1.4.0",
       "type": "build"
     },

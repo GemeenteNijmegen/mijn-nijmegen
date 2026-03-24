@@ -9,7 +9,7 @@ import { render } from '../../shared/render';
 
 interface walletEventRequestParams {
   cookies: string;
-  productId: string;
+  productId?: string;
   type: 'request' | 'results';
   status?: boolean;
 }
@@ -42,7 +42,7 @@ export class WalletRequestHandler {
   }
 
   async handleLoggedinRequest(session: Session, eventParams: walletEventRequestParams) {
-    if (eventParams.type == 'request') {
+    if (eventParams.type == 'request' && eventParams.productId) {
       return this.handleWalletRequest(eventParams.productId, session);
     } else {
       return this.handleWalletResult(eventParams, session);
