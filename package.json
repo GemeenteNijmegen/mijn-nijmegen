@@ -47,11 +47,11 @@
     "projen": "npx projen"
   },
   "devDependencies": {
-    "@aws-sdk/client-ssm": "^3.1017.0",
+    "@aws-sdk/client-ssm": "^3.1018.0",
     "@aws-sdk/types": "^3.973.6",
-    "@gemeentenijmegen/components-css": "^0.0.1-alpha.109",
-    "@gemeentenijmegen/design-tokens": "^0.0.2-alpha.134",
-    "@gemeentenijmegen/layout-css": "^0.0.1-alpha.122",
+    "@gemeentenijmegen/components-css": "^0.0.1-alpha.111",
+    "@gemeentenijmegen/design-tokens": "^0.0.2-alpha.136",
+    "@gemeentenijmegen/layout-css": "^0.0.1-alpha.124",
     "@glen/jest-raw-loader": "^2.0.0",
     "@playwright/test": "^1.58.2",
     "@stylistic/eslint-plugin": "^2",
@@ -91,8 +91,8 @@
   },
   "dependencies": {
     "@aws-lambda-powertools/logger": "^1.18.1",
-    "@aws-sdk/client-dynamodb": "^3.1017.0",
-    "@aws-sdk/client-secrets-manager": "^3.1017.0",
+    "@aws-sdk/client-dynamodb": "^3.1018.0",
+    "@aws-sdk/client-secrets-manager": "^3.1018.0",
     "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.100.1",
     "@gemeentenijmegen/apiclient": "^0.0.41",
     "@gemeentenijmegen/apigateway-http": "^0.0.37",
