@@ -94,21 +94,6 @@ function parseEvent(event: APIGatewayProxyEventV2) {
 export async function handler(event: APIGatewayProxyEventV2): Promise<ApiGatewayV2Response> {
   await initaliation;
 
-  // --- No-auth development bypass ---
-  if (NO_AUTH_ENABLED) {
-    console.warn('[DEV] Handling request without authentication');
-    try {
-      const noAuthHandler = new NoAuthRequestHandler({
-        dynamoDBClient,
-        params: parseEvent(event),
-      });
-      return await noAuthHandler.handleRequest();
-    } catch (err) {
-      console.error(err);
-      return Response.error(500);
-    }
-  }
-
   if (!OIDC || !haalCentraalApi) {
     throw Error('Failed to initalize properly');
   }
