@@ -15,7 +15,7 @@
             </nav>
             <div class="col-lg-9 col-md-12 nijmegen-theme">
                 <h1>{{product.naam}}</h1>
-                <p class="lead">Hier vindt u de informatie van uw {{product.producttype.uniforme_product_naam}}. U kunt deze ook inladen in uw Wallet.
+                <p class="lead">U kunt dit product in uw ID-wallet plaatsen.</p>
 
                 
                 <div class="nijmegen-action-card">
@@ -31,47 +31,26 @@
                         {{^wallet_result.success}}
                         <p class="utrecht-paragraph">Plaats deze {{product.producttype.uniforme_product_naam}} in uw ID Wallet</p>
                         <p role="group" class="utrecht-button-group">
-                            <a href="/producten/{{product.uuid}}?inladen_wallet=true" class="utrecht-button utrecht-button--primary-action spin" type="button">Plaats product in wallet</a>
+                            <a href="/producten/{{product.uuid}}?inladen_wallet=true" class="utrecht-button utrecht-button--primary-action spin" type="button">Plaats product in ID-wallet</a>
                         </p>
                         {{/wallet_result.success}}
                     </div>
                 </div>
                 
                 
-                <h2>Informatie over uw product</h2>
+                <h2>Samenvatting product</h2>
                 
                 <dl>
                     <dt>Status</dt>
                     <dd>{{product.status}}</dd>
 
-                    <dt>Prijs</dt>
-                    <dd>€ {{product.prijs}}</dd>
-
                     <dt>Geldigheid</dt>
                     <dd>{{#product.start_datum}}van {{product.start_datum}}{{/product.start_datum}}{{#product.eind_datum}} t/m {{product.eind_datum}}{{/product.eind_datum}}</dd>
-
-                    <dt>Laatste update</dt>
-                    <dd>{{product.update_datum}}</dd>
 
                     {{#product.dataobject.location}}
                     <dt>Locatie</dt>
                     <dd>{{product.dataobject.location}}</dd>
                     {{/product.dataobject.location}}
-                </dl>
-
-                <h2>Producttype</h2>
-                <p class="lead">{{product.producttype.uniforme_product_naam}}</p>
-                <dl>
-                    <dt>Code</dt>
-                    <dd>{{product.producttype.code}}</dd>
-                    {{#product.producttype.themas}}
-                    <dt>Thema</dt>
-                    <dd>{{naam}}</dd>
-                    {{#beschrijving}}
-                    <dt>Thema omschrijving</dt>
-                    <dd>{{beschrijving}}</dd>
-                    {{/beschrijving}}
-                    {{/product.producttype.themas}}
                 </dl>
 
                 {{#product.documenten}}
