@@ -13,24 +13,11 @@ import { OpenKlantApi } from '../../shared/OpenKlantApi';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
-/**
- * True only when explicitly enabled AND not running in production.
- * Prevents accidental exposure if the env var leaks into a production deploy.
- */
-const NO_AUTH_ENABLED =
-  process.env.NO_AUTH === 'true' && process.env.NODE_ENV !== 'production';
-
 let OIDC: OpenIDConnect | undefined = undefined;
 let haalCentraalApi: HaalCentraalApi | undefined = undefined;
 let openKlantApi: OpenKlantApi | undefined = undefined;
 
 async function init() {
-  // Skip external dependencies entirely in no-auth mode
-  if (NO_AUTH_ENABLED) {
-    console.warn('[DEV] NO_AUTH mode enabled — skipping OIDC and API initialization');
-    return;
-  }
-
   const haalCentraalValues = environmentVariables([
     'HAAL_CENTRAAL_CERT_SSM',
     'HAAL_CENTRAAL_PRIVATE_KEY_ARN',
@@ -87,7 +74,6 @@ function parseEvent(event: APIGatewayProxyEventV2) {
     fullUrl: new URL(url),
     cookies: event?.cookies?.join(';') ?? '',
     error: event?.queryStringParameters?.error,
-    devBsn: (NO_AUTH_ENABLED) ? event?.queryStringParameters?.bsn : undefined,
   };
 }
 
