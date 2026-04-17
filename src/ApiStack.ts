@@ -335,7 +335,6 @@ export class ApiStack extends Stack implements Configurable {
       timeout: Duration.seconds(6), // Too long but required for poc authentication service
       environment: {
         // OIDC connection
-        NODE_ENV: this.configuration.branch,
         OIDC_CLIENT_SECRET_ARN: oidcSecret.secretArn,
         OIDC_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics._OIDCClientID),
         OIDC_WELL_KNOWN: StringParameter.valueForStringParameter(this, Statics._OIDCClientWellKnown),
