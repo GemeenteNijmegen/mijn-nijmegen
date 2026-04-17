@@ -84,28 +84,28 @@ export class WafStack extends Stack {
                                 type: 'NONE',
                               },
                             ],
-                          }
+                          },
                         }, {
-                            byteMatchStatement: {
-                              fieldToMatch: {
-                                singleHeader: {
-                                  Name: 'user-agent',
+                          byteMatchStatement: {
+                            fieldToMatch: {
+                              singleHeader: {
+                                Name: 'user-agent',
                               },
+                            },
+                            positionalConstraint: 'CONTAINS',
+                            searchString: 'SiteimproveBot-Crawler',
+                            textTransformations: [
+                              {
+                                priority: 0,
+                                type: 'NONE',
                               },
-                              positionalConstraint: 'CONTAINS',
-                              searchString: 'SiteimproveBot-Crawler',
-                              textTransformations: [
-                                {
-                                  priority: 0,
-                                  type: 'NONE',
-                                },
-                              ],
-                            }
-                          }]
-                        },
+                            ],
+                          },
+                        }],
                       },
                     },
                   },
+                },
               ],
             },
           },
