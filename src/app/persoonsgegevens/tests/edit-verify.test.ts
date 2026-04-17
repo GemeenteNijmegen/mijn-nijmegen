@@ -347,6 +347,17 @@ describe('Persoonsgegevens Verify Functionality', () => {
 });
 
 describe('OpenKlantApi updateContactInfo', () => {
+  const fixedDate = '2024-01-15';
+
+  beforeAll(() => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date('2024-01-15'));
+  });
+
+  afterAll(() => {
+    jest.useRealTimers();
+  });
+
   test('Updates contact info successfully', async () => {
     const mockApiClient = {
       getData: jest.fn().mockResolvedValue({
@@ -378,12 +389,12 @@ describe('OpenKlantApi updateContactInfo', () => {
     expect(mockApiClient.getData).toHaveBeenCalled();
     expect(mockApiClient.putData).toHaveBeenCalledWith(
       'https://example.com/klantinteracties/api/v1/digitaleadressen/email-uuid',
-      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'test-uuid' }, verstrektDoorBetrokkene: null },
+      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'test-uuid' }, verstrektDoorBetrokkene: null, isStandaardAdres: true, verificatieDatum: fixedDate },
       { 'Content-Type': 'application/json' },
     );
     expect(mockApiClient.putData).toHaveBeenCalledWith(
       'https://example.com/klantinteracties/api/v1/digitaleadressen/phone-uuid',
-      { adres: '0612345678', soortDigitaalAdres: 'telefoonnummer', verstrektDoorPartij: { uuid: 'test-uuid' }, verstrektDoorBetrokkene: null },
+      { adres: '0612345678', soortDigitaalAdres: 'telefoonnummer', verstrektDoorPartij: { uuid: 'test-uuid' }, verstrektDoorBetrokkene: null, isStandaardAdres: true, verificatieDatum: fixedDate },
       { 'Content-Type': 'application/json' },
     );
   });
@@ -429,7 +440,7 @@ describe('OpenKlantApi updateContactInfo', () => {
     );
     expect(mockApiClient.postData).toHaveBeenCalledWith(
       'https://example.com/klantinteracties/api/v1/digitaleadressen',
-      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'new-partij-uuid' }, verstrektDoorBetrokkene: null },
+      { adres: 'test@example.com', soortDigitaalAdres: 'email', verstrektDoorPartij: { uuid: 'new-partij-uuid' }, verstrektDoorBetrokkene: null, isStandaardAdres: true, verificatieDatum: fixedDate },
       { 'Content-Type': 'application/json' },
     );
   });

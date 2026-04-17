@@ -90,14 +90,19 @@ export class OpenKlantApi {
     const emailAdres = existingAdressen.find(a => a.soortDigitaalAdres === 'email');
     const phoneAdres = existingAdressen.find(a => a.soortDigitaalAdres === 'telefoonnummer');
 
+    // Get date stemp for current date
+    const today = new Date();
+    const dateStamp = today.toISOString().split('T')[0];
+
+
     if (contactInfo.email) {
       const payload = {
         adres: contactInfo.email,
         soortDigitaalAdres: 'email',
         verstrektDoorPartij: { uuid: partijUuid },
         verstrektDoorBetrokkene: null,
-        // isStandaardAdres: true, // TODO enable after open-klant upgrade
-        // verificatieDatum: true, // TODO enable after open-klant upgrade
+        isStandaardAdres: true,
+        verificatieDatum: dateStamp,
       };
       if (emailAdres) {
         await this.config.apiclient.putData(`${this.config.baseUrl}/klantinteracties/api/v1/digitaleadressen/${emailAdres.uuid}`, payload, { 'Content-Type': 'application/json' });
@@ -112,8 +117,8 @@ export class OpenKlantApi {
         soortDigitaalAdres: 'telefoonnummer',
         verstrektDoorPartij: { uuid: partijUuid },
         verstrektDoorBetrokkene: null,
-        // isStandaardAdres: true, // TODO enable after open-klant upgrade
-        // verificatieDatum: true, // TODO enable after open-klant upgrade
+        isStandaardAdres: true,
+        verificatieDatum: dateStamp,
       };
       if (phoneAdres) {
         await this.config.apiclient.putData(`${this.config.baseUrl}/klantinteracties/api/v1/digitaleadressen/${phoneAdres.uuid}`, payload, { 'Content-Type': 'application/json' });

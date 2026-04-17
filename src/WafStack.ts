@@ -68,20 +68,40 @@ export class WafStack extends Stack {
                 {
                   notStatement: {
                     statement: {
-                      byteMatchStatement: {
-                        fieldToMatch: {
-                          singleHeader: {
-                            Name: 'user-agent',
+                      orStatement: {
+                        statements: [{
+                          byteMatchStatement: {
+                            fieldToMatch: {
+                              singleHeader: {
+                                Name: 'user-agent',
+                              },
+                            },
+                            positionalConstraint: 'EXACTLY',
+                            searchString: 'internetnl/1.0',
+                            textTransformations: [
+                              {
+                                priority: 0,
+                                type: 'NONE',
+                              },
+                            ],
                           },
-                        },
-                        positionalConstraint: 'EXACTLY',
-                        searchString: 'internetnl/1.0',
-                        textTransformations: [
-                          {
-                            priority: 0,
-                            type: 'NONE',
+                        }, {
+                          byteMatchStatement: {
+                            fieldToMatch: {
+                              singleHeader: {
+                                Name: 'user-agent',
+                              },
+                            },
+                            positionalConstraint: 'CONTAINS',
+                            searchString: 'SiteimproveBot-Crawler',
+                            textTransformations: [
+                              {
+                                priority: 0,
+                                type: 'NONE',
+                              },
+                            ],
                           },
-                        ],
+                        }],
                       },
                     },
                   },

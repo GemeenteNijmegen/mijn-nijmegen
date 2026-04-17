@@ -152,7 +152,6 @@ export class AuthRequestHandler {
    */
   bsnFromYiviLogin(authResult: OpenIDConnectResult): Bsn {
     const bsnAttribute = this.config.yiviBsnAttribute;
-    console.log(this.config.yiviBsnAttribute, authResult.claims[bsnAttribute]);
     if (authResult.claims?.[bsnAttribute]) {
       return new Bsn(authResult.claims[bsnAttribute] as string);
     }

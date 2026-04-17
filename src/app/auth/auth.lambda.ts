@@ -9,13 +9,15 @@ import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
 
+// --- Dev-only import ---
+
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
 let OIDC: OpenIDConnect | undefined = undefined;
 let haalCentraalApi: HaalCentraalApi | undefined = undefined;
 let openKlantApi: OpenKlantApi | undefined = undefined;
+
 async function init() {
-  // Construct the haal centraal API client
   const haalCentraalValues = environmentVariables([
     'HAAL_CENTRAAL_CERT_SSM',
     'HAAL_CENTRAAL_PRIVATE_KEY_ARN',
@@ -37,7 +39,6 @@ async function init() {
     baseUrl: haalCentraalValues.HAAL_CENTRAAL_BASE_URL,
   });
 
-  // Setup OpenKlant API client if feature flag is enabled
   if (process.env.CONTACTGEGEVENS_LIVE === 'True') {
     const openKlantValues = environmentVariables([
       'OPENKLANT_API_KEY_ARN',
@@ -57,15 +58,14 @@ async function init() {
     });
   }
 
-  // Setup ODIC client
   OIDC = new OpenIDConnect({
     clientId: process.env.OIDC_CLIENT_ID!,
     redirectUrl: process.env.OIDC_REDIRECT_URL!,
     wellknown: process.env.OIDC_WELL_KNOWN!,
     clientSecret: await AWS.getSecret(process.env.OIDC_CLIENT_SECRET_ARN!),
   });
-
 }
+
 const initaliation = init();
 
 function parseEvent(event: APIGatewayProxyEventV2) {
