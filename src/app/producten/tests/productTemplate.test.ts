@@ -115,3 +115,26 @@ test('Producten unique and refresh html', async () => {
   expect(errorFound).toBe(false);
   expect(result.body).not.toMatch('<h2>Er is iets misgegaan</h2>');
 });
+
+
+test('Producten with wallet status', async () => {
+  fetchMock.mockResolvedValue(mockProductCall);
+  const handler = createHandler();
+  const logSpy = jest.spyOn(global.console, 'log');
+  const result = await handler.handleRequest('session=12345', { cookies: 'session=12345', responseType: 'html', productId: '12126e1e-9bc1-4a30-b73e-5b5aa4ce8bc4', isIngeladenWallet: true, walletStatus: true }) as any;
+
+
+  const timestamp = new Date().toISOString().replace(/:/g, '-');
+  const outputFilename = path.join(__dirname, 'output', `product_data_${timestamp}.html`);
+  fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
+  const outputFilenameRF = path.join(__dirname, 'output', 'product_data_wallet_success_torefresh.html');
+  fs.writeFileSync(outputFilenameRF, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
+
+
+  // Should not trigger, if it does, it gives an empty page
+  const errorFound = logSpy.mock.calls.some(call =>
+    call.some(arg => String(arg).includes('TypeError: Cannot read properties of undefined')),
+  );
+  expect(errorFound).toBe(false);
+  expect(result.body).not.toMatch('<h2>Er is iets misgegaan</h2>');
+});

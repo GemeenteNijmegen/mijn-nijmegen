@@ -342,12 +342,10 @@ export class PersoonsgegevensRequestHandler {
         if (this.config.openKlantApi) {
           try {
             const identifier = session.getValue('identifier');
-            const currentEmail = session.getValue('email');
-            const currentPhone = session.getValue('phonenumber');
 
             await this.config.openKlantApi.updateContactInfo(identifier, userType, {
-              email: type === 'email' ? pendingValue : currentEmail,
-              phonenumber: type === 'phonenumber' ? pendingValue : currentPhone,
+              email: type == 'email' ? pendingValue : undefined,
+              phonenumber: type == 'phonenumber' ? pendingValue : undefined,
             });
 
             // Update session

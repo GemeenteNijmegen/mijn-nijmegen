@@ -20,18 +20,51 @@
                 <p class="lead">Hier vindt u een overzicht van uw producten.</p>
                 <div class="alert alert-info">Op dit moment vindt u in Mijn Nijmegen informatie over uw producten en diensten. Het kan dat uw product of dienst niet in dit overzicht staat, nog niet alles wordt hier getoond. Uiteindelijk vindt u in Mijn Nijmegen al uw online producten met ons terug, hier werken we aan.</div>
                 <div class="row">
+                <div class="nijmegen-grid">
                 {{#products}} 
-                <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                <div class="card card-services">
-                    <div class="card-body" href="/producten/{{uuid}}">
-                        <h3 class="card-title">{{naam}}</h3>
-                        <p class="card-text">Geldigheid: {{start_datum}} t/m {{eind_datum}}</p>
-                        <p class="card-read-more text-right mb-0 text-uppercase"><a href="/producten/{{uuid}}">Bekijk meer</a></p>
-                        
+                <div class="nijmegen-g-col-lg-6 nijmegen-g-col-sm-6 nijmegen-g-col-12">
+                <div class="nijmegen-card">
+                    <div class="nijmegen-card__inner">
+                        <div class="nijmegen-card__content">
+                        <h4 class="utrecht-heading-4">
+                            <a class="nijmegen-card__link" href="/producten/{{uuid}}">{{naam}}</a>
+                        </h4>
+                        </div>
+                        <ul class="nijmegen-card__meta">
+                        {{#start_datum}}
+                        <li class="nijmegen-card__meta-item">
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="tabler-icon tabler-icon-calendar-event"
+                            aria-label="Datum: "
+                            >
+                            <path d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path>
+                            <path d="M16 3l0 4"></path>
+                            <path d="M8 3l0 4"></path>
+                            <path d="M4 11l16 0"></path>
+                            <path d="M8 15h2v2h-2z"></path>
+                            </svg>
+                            {{#start_datum}}van {{start_datum}}{{/start_datum}}{{#eind_datum}} t/m {{eind_datum}}{{/eind_datum}}
+                        </li>
+                        {{/start_datum}}
+                        </ul>
+                        <p class="utrecht-paragraph"></p>
                     </div>
-                </div>  
-                                </div>   
+                    <div class="nijmegen-card__footer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-arrow-right "><path d="M5 12l14 0"></path><path d="M13 18l6 -6"></path><path d="M13 6l6 6"></path></svg>
+                        </div>
+                    </div>
+                    </div>
                 {{/products}}
+            </div>
             </div>
 
             </div>

@@ -9,7 +9,7 @@ import { render } from '../../shared/render';
 
 interface walletEventRequestParams {
   cookies: string;
-  productId: string;
+  productId?: string;
   type: 'request' | 'results';
   status?: boolean;
 }
@@ -18,6 +18,7 @@ interface Config {
   //apiClient: ApiClient;
   dynamoDBClient: DynamoDBClient;
 }
+
 
 export class WalletRequestHandler {
   private arc;
@@ -37,39 +38,81 @@ export class WalletRequestHandler {
       console.timeEnd('request');
       return response;
     }
-    return Response.error(403);
+    return Response.redirect('/login');
   }
 
   async handleLoggedinRequest(session: Session, eventParams: walletEventRequestParams) {
-    if (eventParams.type == 'request') {
-      const url = await this.arc.getRedirectUrl(eventParams.productId);
-      return Response.redirect(url, 302);
+    if (eventParams.type == 'request' && eventParams.productId) {
+      return this.handleWalletRequest(eventParams.productId, session);
     } else {
-      // Setup view
-      const navigation = new Navigation('person', {
-        currentPath: '/producten',
-        showProducten: process.env.SHOW_PRODUCTEN == 'True',
-      });
-      const data = {
-        volledigenaam: session.getValue('username'),
-        title: 'Mijn Producten',
-        shownav: true,
-        nav: navigation.items,
-        error: undefined,
-      } as any;
+      return this.handleWalletResult(eventParams, session);
+    }
+  }
 
-      if (eventParams.status == true) {
-        data.success = {
-          text: 'Uw product is succesvol ingeladen in de wallet.',
-        };
-      } else {
-        data.error = {
-          text: 'Het inladen van uw product in de wallet is misgegaan. Sorry.',
-        };
-      }
-
+  /**
+   * Call ARC and return the redirect
+   * If an error occurs render the page
+   *
+   * TODO verify ownership of prodcut and give the user a state parameter for the round trip (CSRF protection)
+   * @param productId
+   * @param session
+   * @returns
+   */
+  private async handleWalletRequest(productId: string, session: Session) {
+    try {
+      const url = await this.arc.getRedirectUrl(productId);
+      return Response.redirect(url, 302);
+    } catch (error) {
+      console.error('Failed wallet issue request', error);
+      // Render page
+      const data = this.renderData(session);
+      data.error = {
+        text: 'Het inladen van uw product in de wallet is misgegaan. Sorry.',
+      };
       const html = await render(data, walletTemplate.default);
       return Response.html(html, 200, session.getCookie());
     }
+  }
+
+  /**
+   * Render the page with a success or error message when the user returns from the ARC
+   * @param eventParams
+   * @param session
+   * @returns
+   */
+  private async handleWalletResult(eventParams: walletEventRequestParams, session: Session) {
+    // Render page
+    const data = this.renderData(session);
+    if (eventParams.status == true) {
+      data.success = {
+        text: 'Uw product is succesvol ingeladen in de wallet.',
+      };
+    } else {
+      data.error = {
+        text: 'Het inladen van uw product in de wallet is misgegaan. Sorry.',
+      };
+    }
+    const html = await render(data, walletTemplate.default);
+    return Response.html(html, 200, session.getCookie());
+  }
+
+  /**
+   * Base render data for page
+   * @param session
+   * @returns
+   */
+  private renderData(session: Session): any {
+    const navigation = new Navigation('person', {
+      currentPath: '/producten',
+      showProducten: process.env.SHOW_PRODUCTEN == 'True',
+    });
+
+    return {
+      volledigenaam: session.getValue('username'),
+      title: 'Mijn Producten',
+      shownav: true,
+      nav: navigation.items,
+      error: undefined,
+    };
   }
 }

@@ -6,7 +6,7 @@ export class Arc {
   constructor(private endpoint: string, private keyArn: string) { }
 
   public async getRedirectUrl(productId: string) {
-    const result = await fetch(`${this.endpoint}?type=product&productId=${productId}`, {
+    const result = await fetch(`${this.endpoint}?type=producten&productId=${productId}`, {
       method: 'GET',
       headers: {
         'x-api-key': await this.getApiKey(),
@@ -14,9 +14,13 @@ export class Arc {
     });
     try {
       const json = await result.json() as any;
+      if (!json.url || typeof json.url !== 'string') {
+        throw new Error('ARC did not return a valid url.');
+      }
       return json.url;
     } catch (err: any) {
-      console.error('unexpected response,', err);
+      console.error('unexpected response from arc,', err);
+      throw Error('Could not get redirect url from ARC');
     }
   }
 

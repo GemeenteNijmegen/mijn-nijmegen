@@ -4,6 +4,7 @@ import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
 import { productEventParams } from './producten.lambda';
+import { ProductFormatter } from './ProductFormatter';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import { User, UserFromSession } from '../../shared/User';
@@ -19,7 +20,7 @@ interface RenderData {
   error?: string;
   products?: any;
   product?: any;
-  walletIsIngeladen?: any;
+  wallet_result?: any;
 }
 
 export interface Config {
@@ -75,8 +76,15 @@ export class ProductenRequestHandler {
       title: 'Mijn Producten',
       shownav: true,
       nav: navigation.items,
-      error: undefined,
     };
+
+    if (eventParams.isIngeladenWallet) {
+      data.wallet_result = {
+        success: eventParams.walletStatus,
+        failed: !eventParams.walletStatus,
+      };
+    }
+
     const user: User = UserFromSession(session);
     if (eventParams.productId) {
       // individual product page
@@ -91,7 +99,7 @@ export class ProductenRequestHandler {
       const results = await this.connector.fetch(`/mijn-services-aggregator/PRODUCTEN/producten/api/v1/producten/${eventParams.productId}`, user);
       this.logger.info('temp product results', results);
 
-      data.product = results;
+      data.product = ProductFormatter.format(results);
       // render page
       const html = await render(data, productTemplate.default);
       return Response.html(html, 200, session.getCookie());
@@ -99,15 +107,11 @@ export class ProductenRequestHandler {
       // NU alleen de eerste, nog niet paginated
       const results = await this.connector.fetch('/mijn-services-aggregator/PRODUCTEN/producten/api/v1/producten', user, new URLSearchParams({ eigenaren__bsn: user.identifier }));
       this.logger.info('temp producten results', results);
-      data.products = results.results;
+      data.products = results.results.map((product: any) => ProductFormatter.format(product));
 
       // render page
       const html = await render(data, productenTemplate.default);
       return Response.html(html, 200, session.getCookie());
     }
-
-
   }
 }
-
-

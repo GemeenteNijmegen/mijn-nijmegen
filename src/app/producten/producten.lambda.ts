@@ -5,18 +5,19 @@ import { ProductenRequestHandler } from './productenRequestHandler';
 import { WalletRequestHandler } from './WalletRequestHandler';
 
 export interface productEventParams {
-  cookies: string;
+  cookies?: string;
   productId?: string;
   file?: string;
   xsrfToken?: string;
   responseType: 'json' | 'html';
   inladenWallet?: boolean;
   isIngeladenWallet?: boolean;
+  walletStatus: boolean;
 }
 
 //https://mijn.dev.nijmegen.nl/producten?is_wallet_ingeladen=true&status=false
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
-function parseEvent(event: APIGatewayProxyEventV2): any {
+function parseEvent(event: APIGatewayProxyEventV2) {
   return {
     cookies: event?.cookies?.join(';'),
     productId: event?.pathParameters?.productid,
@@ -39,28 +40,29 @@ export async function handler(event: any): Promise<ApiGatewayV2Response> {
         dynamoDBClient,
       });
       return await requestHandler.handleRequest({
-        cookies: params.cookies,
-        productId: '1234',
+        cookies: params.cookies!,
+        productId: params.productId,
         type: 'request',
       });
     } else if (params.isIngeladenWallet) {
       console.debug('ingeladen in wallet');
-      const requestHandler = new WalletRequestHandler({
-        dynamoDBClient,
-      });
-      return await requestHandler.handleRequest({
-        cookies: params.cookies,
-        productId: '1234',
-        type: 'results',
-        status: params.walletStatus,
-      });
+      // const requestHandler = new WalletRequestHandler({
+      //   dynamoDBClient,
+      // });
+      // return await requestHandler.handleRequest({
+      //   cookies: params.cookies,
+      //   productId: params.productId,
+      //   type: 'results',
+      //   status: params.walletStatus,
+      // });
     }
 
     const requestHandler = new ProductenRequestHandler({
       dynamoDBClient,
     });
 
-    return await requestHandler.handleRequest(params.cookies, params);
+
+    return await requestHandler.handleRequest(params.cookies!, params as productEventParams);
 
   } catch (err) {
     console.debug(err);
