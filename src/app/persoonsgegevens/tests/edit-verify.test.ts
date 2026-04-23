@@ -434,7 +434,7 @@ describe('OpenKlantApi updateContactInfo', () => {
       'https://example.com/klantinteracties/api/v1/partij-identificatoren',
       {
         identificeerdePartij: { uuid: 'new-partij-uuid' },
-        partijIdentificator: { objectId: '900222670', codeSoortObjectId: 'bsn' },
+        partijIdentificator: { objectId: '900222670', codeSoortObjectId: 'bsn', codeRegister: 'brp', codeObjecttype: 'natuurlijk_persoon' },
       },
       { 'Content-Type': 'application/json' },
     );

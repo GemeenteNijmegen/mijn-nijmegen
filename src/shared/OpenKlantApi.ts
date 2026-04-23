@@ -68,7 +68,6 @@ export class OpenKlantApi {
     const filterField = type === 'person'
       ? 'partijIdentificator__codeSoortObjectId=bsn'
       : 'partijIdentificator__codeSoortObjectId=kvk';
-    const codeSoortObjectId = type === 'person' ? 'bsn' : 'kvk';
 
     const url = `${this.config.baseUrl}/klantinteracties/api/v1/partijen?${filterField}&partijIdentificator__objectId=${identifier}&expand=digitaleAdressen`;
 
@@ -79,7 +78,7 @@ export class OpenKlantApi {
 
     if (!data?.results || data.results.length === 0) {
       const newPartij = await this.createNewPartij(type);
-      await this.createPartijIdentificatie(identifier, codeSoortObjectId, newPartij.uuid);
+      await this.createPartijIdentificatie(identifier, type, newPartij.uuid);
       partijUuid = newPartij.uuid;
     } else {
       const partij = data.results[0];
@@ -148,7 +147,14 @@ export class OpenKlantApi {
   }
 
 
-  private async createPartijIdentificatie(identifier: string, codeSoortObjectId: string, partijUuid: string) {
+  private async createPartijIdentificatie(identifier: string, type: 'person' | 'organisation', partijUuid: string) {
+
+
+    const codeSoortObjectId = type === 'person' ? 'bsn' : 'kvk';
+    const codeObjecttype = type === 'person' ? 'natuurlijk_persoon' : 'niet_natuurlijk_persoon'; // TODO vestiging is also an option.
+    const codeRegister = type === 'person' ? 'brp' : 'hr'; // BRP of HandelsRegister
+    const objectId = identifier;
+
     await this.config.apiclient.postData(
       `${this.config.baseUrl}/klantinteracties/api/v1/partij-identificatoren`,
       {
@@ -156,8 +162,10 @@ export class OpenKlantApi {
           uuid: partijUuid,
         },
         partijIdentificator: {
-          objectId: identifier,
           codeSoortObjectId,
+          codeObjecttype,
+          codeRegister,
+          objectId,
         },
       },
       { 'Content-Type': 'application/json' },
