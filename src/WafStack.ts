@@ -93,7 +93,7 @@ export class WafStack extends Stack {
                               },
                             },
                             positionalConstraint: 'CONTAINS',
-                            searchString: 'SiteimproveBot-Crawler',
+                            searchString: 'Siteimprove.com',
                             textTransformations: [
                               {
                                 priority: 0,
