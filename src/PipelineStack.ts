@@ -64,7 +64,6 @@ export class PipelineStack extends Stack {
       synth: synthStep,
       pipelineType: PipelineType.V1,
       synthCodeBuildDefaults: {
-        cache: Cache.local(LocalCacheMode.CUSTOM),
         partialBuildSpec: BuildSpec.fromObject({
           phases: {
             install: {
@@ -72,9 +71,6 @@ export class PipelineStack extends Stack {
                 nodejs: getNodeVersion(),
               },
             },
-          },
-          cache: {
-            paths: ['node_modules'],
           },
         }),
       },
