@@ -20,6 +20,7 @@
 /.projen/tasks.json linguist-generated
 /cdk.json linguist-generated
 /LICENSE linguist-generated
+/package-lock.json linguist-generated
 /package.json linguist-generated
 /src/app/auth/auth-function.ts linguist-generated
 /src/app/home/home-function.ts linguist-generated
@@ -32,4 +33,3 @@
 /src/app/zaken/zaken-function.ts linguist-generated
 /tsconfig.dev.json linguist-generated
 /tsconfig.json linguist-generated
-/yarn.lock linguist-generated
