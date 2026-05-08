@@ -1,7 +1,7 @@
 import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
 import { getNodeVersion } from '@gemeentenijmegen/projen-project-type';
 import { Aspects, CfnParameter, Stack, StackProps, Tags, pipelines } from 'aws-cdk-lib';
-import { BuildSpec } from 'aws-cdk-lib/aws-codebuild';
+import { BuildSpec, Cache, LocalCacheMode } from 'aws-cdk-lib/aws-codebuild';
 import { PipelineType } from 'aws-cdk-lib/aws-codepipeline';
 import { Construct } from 'constructs';
 import { ApiStage } from './ApiStage';
@@ -64,6 +64,7 @@ export class PipelineStack extends Stack {
       synth: synthStep,
       pipelineType: PipelineType.V1,
       synthCodeBuildDefaults: {
+        cache: Cache.local(LocalCacheMode.CUSTOM),
         partialBuildSpec: BuildSpec.fromObject({
           phases: {
             install: {
@@ -71,6 +72,9 @@ export class PipelineStack extends Stack {
                 nodejs: getNodeVersion(),
               },
             },
+          },
+          cache: {
+            paths: ['node_modules'],
           },
         }),
       },
