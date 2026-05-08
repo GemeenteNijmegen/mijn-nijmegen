@@ -54,7 +54,7 @@ export class PipelineStack extends Stack {
       },
       commands: [
         'npm ci',
-        'npm run synth',
+        'npm run build',
       ],
     });
 
