@@ -24,6 +24,14 @@
     "strictPropertyInitialization": false,
     "stripInternal": true,
     "target": "ES2022",
+    "types": [
+      "aws-lambda",
+      "content-disposition",
+      "jest",
+      "node",
+      "validator",
+      "mustache"
+    ],
     "moduleResolution": "node",
     "typeRoots": [
       "./node_modules/@types"

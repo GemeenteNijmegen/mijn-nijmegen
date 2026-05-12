@@ -5,7 +5,12 @@ on:
   push:
     branches:
       - production
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Dry run (skip actual publishing)
+        required: false
+        type: boolean
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
@@ -21,7 +26,7 @@ jobs:
       CI: "true"
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Set git identity
@@ -31,7 +36,7 @@ jobs:
       - name: Setup cfn-lint
         uses: scottbrenner/cfn-lint-action@v2
       - name: Install dependencies
-        run: yarn install --check-files --frozen-lockfile
+        run: npm ci
       - name: release:production
         run: npx projen release:production
       - name: CloudFormation lint
@@ -54,7 +59,7 @@ jobs:
         continue-on-error: true
       - name: Upload artifact
         if: ${{ steps.git_remote.outputs.latest_commit == github.sha }}
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v7
         with:
           name: build-artifact
           path: dist
@@ -67,11 +72,12 @@ jobs:
       contents: write
     if: needs.release.outputs.tag_exists != 'true' && needs.release.outputs.latest_commit == github.sha
     steps:
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: lts/*
+          package-manager-cache: "false"
       - name: Download build artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: build-artifact
           path: dist
@@ -79,6 +85,7 @@ jobs:
         run: cd dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
       - name: Release
+        if: ${{ !inputs.dry_run }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_SHA 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi
