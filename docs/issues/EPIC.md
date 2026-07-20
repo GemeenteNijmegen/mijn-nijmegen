@@ -58,11 +58,11 @@ single, coherent Nijmegen NL Design System. See the decisions before writing any
 | 0 — Tooling | [00 — Local preview harness](./00-preview-harness.md) | — | ✅ Done |
 | 1 — Foundation | [01 — NLDS dependencies & CSS bundle](./01-dependencies-and-css-bundle.md) | 00 | ✅ Done |
 | 1 — Foundation | [02 — Web-component JS delivery](./02-web-component-js-delivery.md) | 01 | ✅ Done |
-| 1 — Foundation | [03 — Vendor side-navigation](./03-vendor-side-navigation.md) | 01 | |
+| 1 — Foundation | [03 — Vendor side-navigation](./03-vendor-side-navigation.md) | 01 | ✅ Done |
 | 2 — Chrome | [04 — Header, footer, breadcrumbs + app.css](./04-chrome-header-footer-breadcrumbs.md) | 01, 02 | ✅ Done |
 | 2 — Chrome | [04b — Remove legacy CDN/Bootstrap/JS](./04b-remove-legacy-cdn.md) | 04 | ✅ Done |
 | 3 — Page bodies | [05 — Login & logout](./05-page-login-logout.md) | 04b | |
-| 3 — Page bodies | [06 — Home](./06-page-home.md) | 04b, 03 | |
+| 3 — Page bodies | [06 — Home](./06-page-home.md) | 04b, 03 | ✅ Done |
 | 3 — Page bodies | [07 — Persoonsgegevens](./07-page-persoonsgegevens.md) | 04b | |
 | 3 — Page bodies | [08 — Taken](./08-page-taken.md) | 04b | |
 | 3 — Page bodies | [09 — Uitkeringen](./09-page-uitkeringen.md) | 04b | |

@@ -74,7 +74,7 @@ const project = new GemeenteNijmegenCdkApp({
     '@utrecht/page-body-css',
     '@utrecht/rich-text-css',
     '@utrecht/pre-heading-css',
-    '@utrecht/link-css',
+    '@utrecht/link-css@1.6.0',
   ], /* Build dependencies for this module. */
   jestOptions: {
     jestConfig: {

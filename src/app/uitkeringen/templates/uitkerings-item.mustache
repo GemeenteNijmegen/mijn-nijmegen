@@ -1,38 +1,54 @@
 <h2>{{type}}</h2>
-                        <div class="card card-number">
-                            <div class="card-body">
-                                <p class="card-title">€ {{#fieldsByName}} {{betaald-totaal}} {{/fieldsByName}}</p>
-                                <p class="card-text">Totaal betaald</p>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-title">€	{{#fieldsByName}} {{betaald-aan-u}} {{/fieldsByName}}</p>
-                                <p class="card-text">Betaald aan u</p>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-title">€	{{#fieldsByName}} {{betaald-aan-derde}} {{/fieldsByName}}</p>
-                                <p class="card-text">Betaald aan derde</p>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-title">{{#fieldsByName}} {{laatste-betaling}} {{/fieldsByName}}</p>
-                                <p class="card-text">Betalingsdatum</p>
-                            </div>
-                        </div>
-                        
-                        <h3>Uitkeringsgegevens</h3>
-                        
-                        <table class="responsive-table">
-                            <thead>
-                                <tr>
-                                    <th>Kenmerk</th>
-                                    <th>Waarde</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{#fields}}
-                                <tr>
-                                    <td>{{label}}</td>
-                                    <td>{{value}}</td>
-                                </tr>
-                                {{/fields}}
-                            </tbody>
-                        </table>
+<div class="nijmegen-grid">
+    <div class="nijmegen-g-col-6 nijmegen-g-col-lg-3">
+        <div class="nijmegen-action-card">
+            <div class="nijmegen-action-card__content">
+                <p class="utrecht-paragraph"><strong>€ {{#fieldsByName}} {{betaald-totaal}} {{/fieldsByName}}</strong></p>
+                <p class="utrecht-paragraph utrecht-paragraph--small">Totaal betaald</p>
+            </div>
+        </div>
+    </div>
+    <div class="nijmegen-g-col-6 nijmegen-g-col-lg-3">
+        <div class="nijmegen-action-card">
+            <div class="nijmegen-action-card__content">
+                <p class="utrecht-paragraph"><strong>€ {{#fieldsByName}} {{betaald-aan-u}} {{/fieldsByName}}</strong></p>
+                <p class="utrecht-paragraph utrecht-paragraph--small">Betaald aan u</p>
+            </div>
+        </div>
+    </div>
+    <div class="nijmegen-g-col-6 nijmegen-g-col-lg-3">
+        <div class="nijmegen-action-card">
+            <div class="nijmegen-action-card__content">
+                <p class="utrecht-paragraph"><strong>€ {{#fieldsByName}} {{betaald-aan-derde}} {{/fieldsByName}}</strong></p>
+                <p class="utrecht-paragraph utrecht-paragraph--small">Betaald aan derde</p>
+            </div>
+        </div>
+    </div>
+    <div class="nijmegen-g-col-6 nijmegen-g-col-lg-3">
+        <div class="nijmegen-action-card">
+            <div class="nijmegen-action-card__content">
+                <p class="utrecht-paragraph"><strong>{{#fieldsByName}} {{laatste-betaling}} {{/fieldsByName}}</strong></p>
+                <p class="utrecht-paragraph utrecht-paragraph--small">Betalingsdatum</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3>Uitkeringsgegevens</h3>
+
+<table class="nijmegen-table nijmegen-table-full-width">
+    <thead class="nijmegen-table__header">
+        <tr class="nijmegen-table__row">
+            <th scope="col" class="nijmegen-table__header-cell">Kenmerk</th>
+            <th scope="col" class="nijmegen-table__header-cell">Waarde</th>
+        </tr>
+    </thead>
+    <tbody class="nijmegen-table__body">
+        {{#fields}}
+        <tr class="nijmegen-table__row">
+            <td class="nijmegen-table__data-cell" data-label="Kenmerk">{{label}}</td>
+            <td class="nijmegen-table__data-cell" data-label="Waarde">{{value}}</td>
+        </tr>
+        {{/fields}}
+    </tbody>
+</table>

@@ -20,7 +20,7 @@ interface RenderData {
   title: string;
   shownav: boolean;
   nav: any;
-  has_sidenav: boolean,
+  has_sidenav: boolean;
   breadcrumbs: any;
   persoonsgegevens?: Persoonsgegevens;
   error?: string;

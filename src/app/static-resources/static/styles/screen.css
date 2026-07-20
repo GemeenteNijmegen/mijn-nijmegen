@@ -252,11 +252,6 @@ nav.navbar.navbar-light .navbar-nav .nav-item .nav-link {
   flex-shrink: 0;
 }
 
-.header-readmore {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
 /* Spinner styles */
 @keyframes spin {
   to {
