@@ -32,6 +32,7 @@ jspm_packages/
 .cache
 src/app/**/tests/output
 src/app/static-resources/static/styles/ds.*
+preview/
 test-reports/junit.xml
 test/__snapshots__/*
 .env

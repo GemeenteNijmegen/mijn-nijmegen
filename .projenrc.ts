@@ -47,6 +47,7 @@ const project = new GemeenteNijmegenCdkApp({
     '@aws-sdk/client-ssm',
     'aws-sdk-client-mock',
     'axios-mock-adapter',
+    'chokidar',
     'copyfiles',
     '@playwright/test',
     '@playwright/test',
@@ -126,7 +127,20 @@ const project = new GemeenteNijmegenCdkApp({
     'test/playwright/report',
     'test/playwright/screenshots',
     'src/app/static-resources/static/styles/ds.*',
+    'preview/',
   ],
+});
+
+const previewCmd = 'ts-node -P tsconfig.dev.json --transpile-only -r ./src/preview/mustache-register.js';
+
+project.addTask('preview', {
+  exec: `${previewCmd} ./src/preview/render-previews.ts`,
+  description: 'Render preview HTML for all pages once',
+});
+
+project.addTask('preview:watch', {
+  exec: `${previewCmd} ./src/preview/watch.ts`,
+  description: 'Watch templates and re-render preview HTML on changes',
 });
 
 const cssBundleTask = project.addTask('bundle:css-bundle', {
