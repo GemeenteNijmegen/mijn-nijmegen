@@ -63,7 +63,7 @@ single, coherent Nijmegen NL Design System. See the decisions before writing any
 | 2 — Chrome | [04b — Remove legacy CDN/Bootstrap/JS](./04b-remove-legacy-cdn.md) | 04 | ✅ Done |
 | 3 — Page bodies | [05 — Login & logout](./05-page-login-logout.md) | 04b | ✅ Done |
 | 3 — Page bodies | [06 — Home](./06-page-home.md) | 04b, 03 | ✅ Done |
-| 3 — Page bodies | [07 — Persoonsgegevens](./07-page-persoonsgegevens.md) | 04b | |
+| 3 — Page bodies | [07 — Persoonsgegevens](./07-page-persoonsgegevens.md) | 04b | ✅ Done |
 | 3 — Page bodies | [08 — Taken](./08-page-taken.md) | 04b | |
 | 3 — Page bodies | [09 — Uitkeringen](./09-page-uitkeringen.md) | 04b | |
 | 3 — Page bodies | [10 — Producten](./10-page-producten.md) | 04b | |

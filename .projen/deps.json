@@ -91,6 +91,26 @@
       "type": "build"
     },
     {
+      "name": "@utrecht/form-field-css",
+      "version": "3.0.1",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/form-field-description-css",
+      "version": "3.0.1",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/form-field-error-message-css",
+      "version": "3.0.1",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/form-label-css",
+      "version": "3.0.1",
+      "type": "build"
+    },
+    {
       "name": "@utrecht/heading-1-css",
       "version": "1.5.0",
       "type": "build"
@@ -140,6 +160,11 @@
     },
     {
       "name": "@utrecht/rich-text-css",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/textbox-css",
+      "version": "4.0.1",
       "type": "build"
     },
     {

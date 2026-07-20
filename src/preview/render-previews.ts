@@ -4,7 +4,7 @@ import * as path from 'path';
 import { homeSession, homeZaken, homeTaken } from './fixtures/home';
 import { loginData } from './fixtures/login';
 import { logoutData } from './fixtures/logout';
-import { persoonsgegevensData, contactgegevensData, editContactgegevensData } from './fixtures/persoonsgegevens';
+import { persoonsgegevensData, contactgegevensData, editContactgegevensData, verifyContactgegevensData } from './fixtures/persoonsgegevens';
 import { productenApiResponse } from './fixtures/producten';
 import { takenData } from './fixtures/taken';
 import { uitkeringenData } from './fixtures/uitkeringen';
@@ -16,6 +16,7 @@ import * as contactgegevensPartial from '../app/persoonsgegevens/templates/conta
 import * as editContactgegevensTemplate from '../app/persoonsgegevens/templates/edit-contactgegevens.mustache';
 import * as mijngegevensTemplate from '../app/persoonsgegevens/templates/mijngegevens.mustache';
 import * as persoonsgegevensPartial from '../app/persoonsgegevens/templates/persoonsgegevens.mustache';
+import * as verifyContactgegevensTemplate from '../app/persoonsgegevens/templates/verify-contactgegevens.mustache';
 import { ProductFormatter } from '../app/producten/ProductFormatter';
 import * as productenTemplate from '../app/producten/templates/producten.mustache';
 import * as takenPageTemplate from '../app/taken/templates/taken.mustache';
@@ -159,6 +160,25 @@ async function renderContactgegevens(): Promise<void> {
   };
   const html = await render(data, editContactgegevensTemplate.default);
   await writePreview('contactgegevens', html);
+}
+
+async function renderVerifyContactgegevens(): Promise<void> {
+  const navigation = new Navigation('person', { currentPath: '/persoonsgegevens' });
+  const breadcrumbs = new BreadCrumbs([
+    { title: 'Home', url: '/' },
+    { title: 'Mijn gegevens', url: '/persoonsgegevens' },
+  ]);
+  const data = {
+    title: 'Verificatie',
+    shownav: true,
+    nav: navigation.items,
+    has_sidenav: true,
+    breadcrumbs: breadcrumbs.items,
+    volledigenaam: 'Jan de Tester',
+    ...verifyContactgegevensData,
+  };
+  const html = await render(data, verifyContactgegevensTemplate.default);
+  await writePreview('verify-contactgegevens', html);
 }
 
 async function renderTaken(): Promise<void> {
@@ -305,6 +325,7 @@ export async function renderAll(): Promise<void> {
     renderPersoonsgegevens(),
     renderMijngegevens(),
     renderContactgegevens(),
+    renderVerifyContactgegevens(),
     renderTaken(),
     renderUitkeringen(),
     renderProducten(),

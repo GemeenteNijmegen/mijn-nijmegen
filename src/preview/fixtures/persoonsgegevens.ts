@@ -25,3 +25,10 @@ export const editContactgegevensData = {
   currentValue: 's.holmes@example.com',
   xsrf_token: 'preview-token',
 };
+
+export const verifyContactgegevensData = {
+  type: 'email',
+  pendingValue: 's.holmes@example.com',
+  attemptsLeft: 3,
+  xsrf_token: 'preview-token',
+};
