@@ -178,6 +178,7 @@ const copyWcTask = project.addTask('bundle:copy-web-components', {
     { exec: 'cp node_modules/@gemeentenijmegen/web-components/dist/nijmegen-header.js src/app/static-resources/static/js/web-components/' },
     { exec: 'cp node_modules/@gemeentenijmegen/web-components/dist/nijmegen-mobile-menu.js src/app/static-resources/static/js/web-components/' },
     { exec: 'cp node_modules/@gemeentenijmegen/web-components/dist/nijmegen-toolbar-button.js src/app/static-resources/static/js/web-components/' },
+    { exec: 'cp node_modules/@gemeentenijmegen/web-components/dist/nijmegen-accordion.js src/app/static-resources/static/js/web-components/' },
   ],
 });
 project.compileTask.spawn(copyWcTask);

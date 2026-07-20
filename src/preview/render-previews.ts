@@ -217,10 +217,14 @@ async function renderUitkeringen(): Promise<void> {
     { title: 'Home', url: '/' },
     { title: 'Mijn uitkeringen', url: '/uitkeringen' },
   ]);
+  const multipleUitkeringen = uitkeringenData.uitkeringen.length > 1;
+  if (multipleUitkeringen) {
+    uitkeringenData.uitkeringen.forEach((uitkering: any) => { uitkering.hideTypeHeading = true; });
+  }
   const data = {
     ...uitkeringenData,
     volledigenaam: 'Jan de Tester',
-    multipleUitkeringen: uitkeringenData.uitkeringen.length > 1,
+    multipleUitkeringen,
     title: 'Mijn uitkeringen',
     shownav: true,
     nav: navigation.items,

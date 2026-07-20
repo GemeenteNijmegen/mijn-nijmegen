@@ -20,5 +20,22 @@ export const uitkeringenData = {
         { 'laatste-betaling': '21-7-2021' },
       ],
     },
+    {
+      type: 'IOAW',
+      typetolower: 'ioaw',
+      fields: [
+        { label: 'BSN van klant', value: '900222670' },
+        { label: 'Soort uitkering', value: 'IOAW' },
+        { label: 'Klantmanager', value: 'Mieke Jacobs' },
+        { label: 'Laatste betaling', value: '21-7-2021' },
+        { label: 'Betaald totaal', value: '512,38' },
+      ],
+      fieldsByName: [
+        { 'betaald-totaal': '512,38' },
+        { 'betaald-aan-u': '512,38' },
+        { 'betaald-aan-derde': '0,00' },
+        { 'laatste-betaling': '21-7-2021' },
+      ],
+    },
   ],
 };
