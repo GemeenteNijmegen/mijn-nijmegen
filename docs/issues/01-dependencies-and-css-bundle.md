@@ -1,6 +1,6 @@
-# Issue 01 — NLDS dependencies & CSS bundle
+# Issue 01 — NLDS dependencies & CSS bundle ✅
 
-**Phase:** 1 (foundation) · **Depends on:** 00 · **Read first:** [EPIC.md](./EPIC.md), [ADR-0001](../adr/0001-adopt-nlds-as-sole-frontend-styling.md)
+**Status: Done** · **Phase:** 1 (foundation) · **Depends on:** 00 · **Read first:** [EPIC.md](./EPIC.md), [ADR-0001](../adr/0001-adopt-nlds-as-sole-frontend-styling.md)
 
 ## Why
 

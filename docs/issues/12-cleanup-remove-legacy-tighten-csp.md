@@ -1,29 +1,25 @@
-# Issue 12 — Cleanup: remove legacy CSS/CDN, tighten CSP
+# Issue 12 — Cleanup: tighten CSP, remove dead CSS, finalise side-nav
 
-**Phase:** 4 (cleanup) · **Depends on:** all page issues (05–11) merged · **Read first:** [EPIC.md](./EPIC.md), [ADR-0001](../adr/0001-adopt-nlds-as-sole-frontend-styling.md)
+**Phase:** 4 (cleanup) · **Depends on:** 04b + all page issues (05–11) merged · **Read first:** [EPIC.md](./EPIC.md), [ADR-0001](../adr/0001-adopt-nlds-as-sole-frontend-styling.md)
 
 ## Why
 
-This is the single commit where "pure NLDS" actually becomes true. **Do not start until every page
-body (05–11) is converted** — removing Bootstrap earlier breaks unconverted pages.
+Legacy CDN links and Bootstrap/MDB JS were already removed from the templates in issue 04b.
+This issue closes out the migration by tightening the CSP (which requires a `development` deploy
+to verify) and removing the now-dead CSS that accumulated in `screen.css`.
 
 ## Scope
 
-1. **Remove the legacy CDN** from `src/shared/header.mustache` and `src/shared/footer.mustache`:
-   - All `https://componenten.nijmegen.nl/v6.5.0/...` `<link>`s (bootstrap, nijmegen.css,
-     nijmegen-nlds.min.css) and `<script>`s (jquery, popper, bootstrap, mdb, nijmegen.js).
-   - The Google Fonts `<link rel="preload"/preconnect">` to `fonts.googleapis.com`/`fonts.gstatic.com`
-     and the manual `@font-face`/font preloads (now provided by `@gemeentenijmegen/font`).
-2. **Delete dead CSS**: prune `src/app/static-resources/static/styles/screen.css` — remove all
+1. **Delete dead CSS**: prune `src/app/static-resources/static/styles/screen.css` — remove all
    Bootstrap/MDB overrides and any surviving `nijmegen-*`/`utrecht-*` reach-ins. Keep only rules
    that legitimately belong in `app.css` (bespoke app components), and fold/remove `screen.css`
    accordingly. Remove `*.orig` files (`zaak.css.orig`, etc.) if unused.
-3. **Tighten the CSP** in `src/CloudfrontStack.ts` (`cspHeaderValue()`): remove
+2. **Tighten the CSP** in `src/CloudfrontStack.ts` (`cspHeaderValue()`): remove
    `https://componenten.nijmegen.nl` from `connect-src`, `style-src`, `script-src`, `font-src`,
    `img-src`; remove `fonts.googleapis.com`/`fonts.gstatic.com`; drop the inline-style `sha256-...`
    hashes if the inline styles they covered are gone. Keep `'self'`, `data:` (data-URI logo), and
    siteimprove entries. Result should be `default-src 'self'` + `data:`/siteimprove only.
-4. **Remove vendored side-navigation** (issue 03) *only if* `@gemeentenijmegen/components-css` has
+3. **Remove vendored side-navigation** (issue 03) *only if* `@gemeentenijmegen/components-css` has
    published the component by now: swap the vendored import for the package. If not yet published,
    leave the vendored file + `VENDORED` marker in place and note it in the PR.
 
@@ -38,8 +34,9 @@ body (05–11) is converted** — removing Bootstrap earlier breaks unconverted 
 
 ## Acceptance criteria
 
-- No `componenten.nijmegen.nl` or Google-Fonts references anywhere in `src/`.
+- No `componenten.nijmegen.nl` or Google-Fonts references anywhere in `src/` (templates already
+  clean from 04b; this confirms no drift crept in during 05–11).
 - CSP is tightened and shows no console violations on `development`.
 - All pages render fully styled from `/static` assets only.
 - Jest suite and Playwright E2E pass.
-- Bootstrap/MDB fully gone; `screen.css` removed or reduced to legitimate `app.css` content.
+- `screen.css` removed or reduced to legitimate `app.css` content only.

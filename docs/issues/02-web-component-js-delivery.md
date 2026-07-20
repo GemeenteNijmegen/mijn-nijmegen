@@ -1,6 +1,6 @@
-# Issue 02 — Web-component JS delivery
+# Issue 02 — Web-component JS delivery ✅
 
-**Phase:** 1 (foundation) · **Depends on:** 01 · **Read first:** [EPIC.md](./EPIC.md)
+**Status: Done** · **Phase:** 1 (foundation) · **Depends on:** 01 · **Read first:** [EPIC.md](./EPIC.md)
 
 ## Why
 

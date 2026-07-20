@@ -1,6 +1,6 @@
-# Issue 04 — Chrome: Header, Footer, Breadcrumbs (+ app.css)
+# Issue 04 — Chrome: Header, Footer, Breadcrumbs (+ app.css) ✅
 
-**Phase:** 2 (chrome) · **Depends on:** 01, 02 · **Read first:** [EPIC.md](./EPIC.md), [ADR-0002](../adr/0002-reskin-to-nlds-defaults-no-override-css.md), [CONTEXT.md](../../CONTEXT.md)
+**Status: Done** · **Phase:** 2 (chrome) · **Depends on:** 01, 02 · **Read first:** [EPIC.md](./EPIC.md), [ADR-0002](../adr/0002-reskin-to-nlds-defaults-no-override-css.md), [CONTEXT.md](../../CONTEXT.md)
 
 ## Why
 
@@ -73,7 +73,7 @@ this is coordinated per-page issue; ensure the skip-link target exists on at lea
 - The beeldmerk is the inline data-URI SVG; no `componenten.nijmegen.nl` image is used for the brand.
 - Web-component JS loads from `/static/js/web-components/...`.
 - Page **bodies** are visually unchanged (still Bootstrap) — only chrome changed.
-- Legacy CDN `<link>`s are still present (removed in issue 12).
+- Legacy CDN `<link>`s are still present (removed in issue 04b).
 - Update any Jest assertions on header/footer content; add `data-test` on the logout control.
 
 ## Guardrails
