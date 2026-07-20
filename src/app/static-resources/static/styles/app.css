@@ -5,3 +5,35 @@
   justify-content: space-between;
   align-items: baseline;
 }
+
+.mijn-login-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.mijn-login-selector > * {
+  flex-grow: 1;
+  flex-basis: calc((33rem - 100%) * 999);
+}
+
+.mijn-login-button {
+  background-repeat: no-repeat;
+  background-position: left 0.25em center;
+  background-size: 2.5em;
+  text-indent: 2.5em;
+  width: auto;
+}
+
+.mijn-login-button--digid {
+  background-image: url(../images/digid.svg);
+}
+
+.mijn-login-button--yivi {
+  background-image: url(../images/yivi.svg);
+}
+
+.mijn-login-button--eherkenning {
+  background-image: url(../images/eherkenning.svg);
+}
