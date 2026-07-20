@@ -3,16 +3,7 @@
     <!-- START: template component(s) -->
     <div class="container">
         <div class="row">
-            <nav class="nijmegen-sidenav col-lg-3 col-md-12">
-                <ul class="nijmegen-sidenav__list">
-                {{#nav}}
-                    <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
-                        {{{icon}}}
-                        <a href="{{{url}}}">{{title}}</a>
-                    </li>
-                {{/nav}}
-                </ul>
-            </nav>
+            {{>sidenav}}
             <div class="col-lg-9 col-md-12 nijmegen-theme">
                 <h1>{{product.naam}}</h1>
                 <p class="lead">U kunt dit product in uw ID-wallet plaatsen.</p>

@@ -76,7 +76,6 @@ const project = new GemeenteNijmegenCdkApp({
     '@utrecht/pre-heading-css',
     '@utrecht/link-css',
   ], /* Build dependencies for this module. */
-  mutableBuild: true,
   jestOptions: {
     jestConfig: {
       setupFiles: ['dotenv/config'],
@@ -88,12 +87,6 @@ const project = new GemeenteNijmegenCdkApp({
           isolatedModules: true,
         }),
         '^.+\\.mustache$': new Transform('@glen/jest-raw-loader'),
-        '^.+\\.tsx?$': new Transform('ts-jest', {
-          tsconfig: 'tsconfig.dev.json',
-        }),
-        '^.+\\.m?jsx?$': new Transform('ts-jest', {
-          tsconfig: 'tsconfig.dev.json',
-        }),
       },
       transformIgnorePatterns: [
         'node_modules/(?!(openid-client)/)',
@@ -142,7 +135,7 @@ const project = new GemeenteNijmegenCdkApp({
   ],
 });
 
-const previewCmd = 'ts-node -P tsconfig.dev.json --transpile-only -r ./src/preview/mustache-register.js';
+const previewCmd = 'ts-node -P tsconfig.json --transpile-only -r ./src/preview/mustache-register.js';
 
 project.addTask('preview', {
   exec: `${previewCmd} ./src/preview/render-previews.ts`,
@@ -183,5 +176,6 @@ const copyWcTask = project.addTask('bundle:copy-web-components', {
   ],
 });
 project.compileTask.spawn(copyWcTask);
+
 
 project.synth();

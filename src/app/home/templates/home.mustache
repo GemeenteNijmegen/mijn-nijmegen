@@ -6,16 +6,7 @@
         {{>breadcrumbs}}
 
         <div class="row">
-            <nav class="nijmegen-sidenav col-lg-3 col-md-12">
-                <ul class="nijmegen-sidenav__list">
-                    {{#nav}}
-                    <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
-                        {{{icon}}}
-                        <a href="{{{url}}}">{{title}}</a>
-                    </li>
-                    {{/nav}}
-                </ul>
-            </nav>
+            {{>sidenav}}
             <div class="col-lg-9 col-md-12">
                 <h1>Mijn Nijmegen</h1>
                 <p class="lead">Bekijk uw persoonsgegevens, uitkeringsgegevens of lopende zaken.</p>

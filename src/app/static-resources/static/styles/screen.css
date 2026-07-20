@@ -72,269 +72,229 @@
 }
 */
 body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 body a {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
-.btn, .navbar a, .utrecht-button {
-    text-decoration: none;
+.btn,
+.navbar a,
+.utrecht-button {
+  text-decoration: none;
 }
 
 main {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 /** Fix for issue in safari, not in component library **/
 .navbar-brand .logo {
-    top: 0;
+  top: 0;
 }
 
 .btn-digid {
-    background-image: url(../images/digid.svg);
-    background-repeat: no-repeat;
-    background-position: left .25em center;
-    background-size: 2.5em;
-    text-indent: 2.5em;
-    width: auto;
+  background-image: url(../images/digid.svg);
+  background-repeat: no-repeat;
+  background-position: left 0.25em center;
+  background-size: 2.5em;
+  text-indent: 2.5em;
+  width: auto;
 }
 
 .btn-yivi {
-    background-image: url(../images/yivi.svg);
-    background-repeat: no-repeat;
-    background-position: left .25em center;
-    background-size: 2.5em;
-    text-indent: 2.5em;
-    width: auto;
+  background-image: url(../images/yivi.svg);
+  background-repeat: no-repeat;
+  background-position: left 0.25em center;
+  background-size: 2.5em;
+  text-indent: 2.5em;
+  width: auto;
 }
 
 .btn-eherkenning {
-    background-image: url(../images/eherkenning.svg);
-    background-repeat: no-repeat;
-    background-position: left .25em center;
-    background-size: 2.5em;
-    text-indent: 2.5em;
-    width: auto;
+  background-image: url(../images/eherkenning.svg);
+  background-repeat: no-repeat;
+  background-position: left 0.25em center;
+  background-size: 2.5em;
+  text-indent: 2.5em;
+  width: auto;
 }
 
 .card-number {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: .5rem;
-    margin-bottom: 2rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
 }
 
-.card-number>* {
-    flex-grow: 1;
-    flex-basis: calc((30rem - 100%) * 999);
+.card-number > * {
+  flex-grow: 1;
+  flex-basis: calc((30rem - 100%) * 999);
 }
 
 .card-number .card-body h3,
 .card-number .card-body h5,
 .card-number .card-title {
-    font-family: Source Sans Pro;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 28px;
-    line-height: 35px;
-    margin-bottom: 0;
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 35px;
+  margin-bottom: 0;
 }
 
 .card-number .card-body p {
-    margin-top: 8px;
+  margin-top: 8px;
 }
 
 .contact .items {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .contact i.mdi,
 .contact span.mdi {
-    width: 2rem;
-    color: #a80a2d;
+  width: 2rem;
+  color: #a80a2d;
 }
 
 .contact .items p {
-    width: 100%;
-    margin-left: 2rem;
+  width: 100%;
+  margin-left: 2rem;
 }
 
 .login-selector {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .5rem;
-    margin-bottom: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .login-selector > * {
   flex-grow: 1;
-  flex-basis: calc(( 33rem - 100%) * 999);
+  flex-basis: calc((33rem - 100%) * 999);
 }
 
 .login-selector a {
-    display: block;
+  display: block;
 }
 
 .login-selector .info {
-    background: #40c4ff;
-    color: black;
-    padding: .5em 1em;
-    margin: 1em .5em .5em .5em;
-    border-radius: 2px;
+  background: #40c4ff;
+  color: black;
+  padding: 0.5em 1em;
+  margin: 1em 0.5em 0.5em 0.5em;
+  border-radius: 2px;
 }
 
 table {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 table tr th {
-    width: 35%;
+  width: 35%;
 }
 
 .verwerkingen table tr th {
-    width: auto;
+  width: auto;
 }
 
 footer.page-footer {
-    margin-top: 4rem;
+  margin-top: 4rem;
 }
 
 /* svg icons for mdi: not part of component library (yet) */
 .card-body svg {
-    fill: #a80a2d;
+  fill: #a80a2d;
 }
 
 .footer-content .link-list li svg {
-    font-size: 1.1875rem;
-    padding: .625rem .5rem;
-    width: 35px;
-    height: 40px;
-    fill: white;
+  font-size: 1.1875rem;
+  padding: 0.625rem 0.5rem;
+  width: 35px;
+  height: 40px;
+  fill: white;
 }
 
 nav.navbar.navbar-light .navbar-nav .nav-item .nav-link {
-    color: #4B4B4B;
+  color: #4b4b4b;
 }
 
 .navbar-nav svg {
-    fill: none;
+  fill: none;
 }
 
 .md-form label {
-    left: initial;
-}
-
-nav.nijmegen-sidenav ul {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: .5rem;
-    margin-bottom: 2rem;
-}
-
-nav.nijmegen-sidenav ul>* {
-    flex-grow: 1;
-    flex-basis: calc((30rem - 100%) * 999);
-}
-
-nav.nijmegen-sidenav li {
-    display: flex;
-    align-items: center;
-    padding: .75em 0;
-}
-
-nav.nijmegen-sidenav li svg {
-    margin-inline-end: 0.5em;
-    outline: #323232;
-    fill: none;
-}
- 
-nav.nijmegen-sidenav a, 
-nav.nijmegen-sidenav a:visited {
-    text-decoration: none;
-    color: #323232;
-    flex-shrink: 0;
-    flex-grow: 1;
-}
-
-nav.nijmegen-sidenav a:hover, 
-.navbar-nav .nav-item a:hover {
-    text-decoration: underline;
-}
-
-nav.nijmegen-sidenav a:focus {
-    outline: 2px solid #00a889;
-    transition: none;
-}
-
-nav.nijmegen-sidenav li.active a {
-    color: #157C68;
-}
-nav.nijmegen-sidenav li.active svg {
-    outline: #157C68;
-    stroke: #157C68;
+  left: initial;
 }
 
 .cta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-around;
-    gap: .5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  gap: 0.5rem;
 }
 
 .cta p {
-    flex-basis: 60%;
-    flex-grow: 1;
+  flex-basis: 60%;
+  flex-grow: 1;
 }
 
 .cta a.btn {
-    width: auto;
-    flex-shrink: 0;
+  width: auto;
+  flex-shrink: 0;
 }
 
 .header-readmore {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
 }
 /* Spinner styles */
 @keyframes spin {
-    to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .btn-spinner {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border: 2px solid currentColor;
-    border-top-color: transparent;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    margin-left: 8px;
-    opacity: 0.8;
-    flex-shrink: 0;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin-left: 8px;
+  opacity: 0.8;
+  flex-shrink: 0;
 }
 
 a[aria-disabled="true"] {
-    opacity: 0.7;
-    pointer-events: none;
-    cursor: not-allowed;
+  opacity: 0.7;
+  pointer-events: none;
+  cursor: not-allowed;
 }
-.spinner{transform-origin:center;animation:spinner_spin .75s infinite linear}@keyframes spinner_spin{100%{transform:rotate(360deg)}}
-
+.spinner {
+  transform-origin: center;
+  animation: spinner_spin 0.75s infinite linear;
+}
+@keyframes spinner_spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
 /**
  * Design system compatibility 
  */
 footer.nijmegen-footer {
-    margin-top: 2rem;
+  margin-top: 2rem;
 }
