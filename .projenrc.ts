@@ -58,6 +58,8 @@ const project = new GemeenteNijmegenCdkApp({
     '@gemeentenijmegen/design-tokens',
     '@gemeentenijmegen/layout-css',
     '@gemeentenijmegen/components-css',
+    '@gemeentenijmegen/semantic-html',
+    '@gemeentenijmegen/font',
     '@utrecht/document-css@1.5.0',
     '@utrecht/button-css@2.3.0',
     '@utrecht/button-group-css@1.4.0',
@@ -68,6 +70,10 @@ const project = new GemeenteNijmegenCdkApp({
     '@utrecht/heading-4-css@1.5.0',
     '@utrecht/heading-5-css@1.5.0',
     '@utrecht/heading-6-css@1.5.0',
+    '@utrecht/page-body-css',
+    '@utrecht/rich-text-css',
+    '@utrecht/pre-heading-css',
+    '@utrecht/link-css',
   ], /* Build dependencies for this module. */
   mutableBuild: true,
   jestOptions: {
@@ -127,7 +133,10 @@ const project = new GemeenteNijmegenCdkApp({
     'test/playwright/report',
     'test/playwright/screenshots',
     'src/app/static-resources/static/styles/ds.*',
-    'preview/',
+    'src/app/static-resources/static/styles/*.woff2',
+    'src/app/static-resources/static/styles/*.woff',
+    'src/app/static-resources/static/styles/*.ttf',
+    '/preview/',
   ],
 });
 
@@ -152,6 +161,10 @@ const cssBundleTask = project.addTask('bundle:css-bundle', {
     '--outfile=./src/app/static-resources/static/styles/ds.js',
     '--loader:.css=css',
     '--loader:.mustache=text',
+    '--loader:.woff2=file',
+    '--loader:.woff=file',
+    '--loader:.ttf=file',
+    '--asset-names=[name]',
     '--sourcemap',
   ].join(' '),
   description: 'Bundle css from DS',

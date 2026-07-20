@@ -32,7 +32,10 @@ jspm_packages/
 .cache
 src/app/**/tests/output
 src/app/static-resources/static/styles/ds.*
-preview/
+src/app/static-resources/static/styles/*.woff2
+src/app/static-resources/static/styles/*.woff
+src/app/static-resources/static/styles/*.ttf
+/preview/
 test-reports/junit.xml
 test/__snapshots__/*
 .env

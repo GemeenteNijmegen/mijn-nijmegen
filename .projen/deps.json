@@ -17,7 +17,15 @@
       "type": "build"
     },
     {
+      "name": "@gemeentenijmegen/font",
+      "type": "build"
+    },
+    {
       "name": "@gemeentenijmegen/layout-css",
+      "type": "build"
+    },
+    {
+      "name": "@gemeentenijmegen/semantic-html",
       "type": "build"
     },
     {
@@ -109,8 +117,24 @@
       "type": "build"
     },
     {
+      "name": "@utrecht/link-css",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/page-body-css",
+      "type": "build"
+    },
+    {
       "name": "@utrecht/paragraph-css",
       "version": "2.3.1",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/pre-heading-css",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/rich-text-css",
       "type": "build"
     },
     {
@@ -124,10 +148,6 @@
     },
     {
       "name": "axios-mock-adapter",
-      "type": "build"
-    },
-    {
-      "name": "chokidar",
       "type": "build"
     },
     {
@@ -240,6 +260,10 @@
     },
     {
       "name": "axios",
+      "type": "runtime"
+    },
+    {
+      "name": "chokidar",
       "type": "runtime"
     },
     {

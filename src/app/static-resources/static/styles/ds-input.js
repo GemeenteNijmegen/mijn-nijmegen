@@ -1,13 +1,19 @@
+import '@utrecht/page-body-css/dist/index.css';
 import '@utrecht/document-css/dist/index.css';
 import '@gemeentenijmegen/design-tokens/dist/index.css';
-import '@gemeentenijmegen/layout-css/dist/grid.css';
+import './font-bundle.css'; /* workaround: @gemeentenijmegen/font@0.1.4 missing cyrillic-ext-400 files */
+import '@gemeentenijmegen/layout-css/dist/layout.min.css';
+import '@gemeentenijmegen/components-css/dist/index.min.css';
+import '@gemeentenijmegen/semantic-html/dist/index.css';
 import '@utrecht/button-css/dist/index.css';
 import '@utrecht/button-group-css/dist/index.css';
-import '@utrecht/paragraph-css/dist/index.css';
-import '@gemeentenijmegen/components-css/dist/index.min.css';
 import '@utrecht/heading-1-css/dist/index.css';
 import '@utrecht/heading-2-css/dist/index.css';
 import '@utrecht/heading-3-css/dist/index.css';
 import '@utrecht/heading-4-css/dist/index.css';
 import '@utrecht/heading-5-css/dist/index.css';
 import '@utrecht/heading-6-css/dist/index.css';
+import '@utrecht/pre-heading-css/dist/index.css';
+import '@utrecht/paragraph-css/dist/index.css';
+import '@utrecht/rich-text-css/dist/index.css';
+import '@utrecht/link-css/dist/index.css';
