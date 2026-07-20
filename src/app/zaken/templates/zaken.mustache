@@ -1,52 +1,47 @@
 {{>header}}
 
-<main id="denhaag-theme nijmegen-theme">
-    <!-- START: template component(s) -->
-    <div class="container">
-        
-        <div class="row">
-        
-        <div class="col-lg-9 col-md-12">
-            <h1>Mijn zaken</h1>
-            <p class="lead">Hier vindt u een overzicht van uw zaken.</p>
-            <div class="alert alert-info">Op dit moment vindt u in Mijn Nijmegen informatie over uw aanvragen/meldingen. Het kan dat uw aanvraag of zaak niet in dit overzicht staat, nog niet alles wordt hier getoond. Uiteindelijk vindt u in Mijn Nijmegen al uw online zaken met ons terug, hier werken we aan.</div>
-            <div id="zaken-container" class="tabs-wrapper">
-                <!-- Tab List -->
-                <div class="nav classic-tabs-no-line" role="tablist">
-                    <div class="nav-item">
-                        <button class="nav-link active" role="tab" aria-selected="true" aria-controls="open-zaken-tab" id="example-1">
-                            Lopende zaken
-                        </button>
-                    </div>
-                    <div class="nav-item">
-                        <button class="nav-link" role="tab" aria-selected="false" aria-controls="gesloten-zaken-tab" id="example-2" tabindex="-1">
-                            Afgeronde zaken
-                        </button>
-                    </div>
-                </div>
-                <!-- Tab Content -->
-                    <div class="tab-content" tabindex="0" role="tabpanel" id="open-zaken-tab" aria-labelledby="example-1">
-                        {{#timeout}}
-                            <p id="open-zaken-list">Bezig met ophalen van uw open zaken… {{>spinner}}</p>
-                        {{/timeout}}
-                        {{^timeout}}
-                            {{{open-zaken}}}
-                        {{/timeout}}
-                    </div>
-                    <div class="tab-content" tabindex="0" role="tabpanel" id="gesloten-zaken-tab" aria-labelledby="example-2" hidden="">
-                        {{#timeout}}
-                            <p id="closed-zaken-list">Bezig met ophalen van uw afgeronde zaken… {{>spinner}}</p>
-                        {{/timeout}}
-                        {{^timeout}}
-                            {{{closed-zaken}}}
-                        {{/timeout}}
+<main id="main">
+    <h1>Mijn zaken</h1>
+    <p class="utrecht-paragraph utrecht-paragraph--lead">Hier vindt u een overzicht van uw zaken.</p>
 
-                    </div>
-                </div>
+    <div class="nijmegen-action-card">
+        <div class="nijmegen-action-card__content">
+            <p class="utrecht-paragraph">Op dit moment vindt u in Mijn Nijmegen informatie over uw aanvragen/meldingen. Het kan dat uw aanvraag of zaak niet in dit overzicht staat, nog niet alles wordt hier getoond. Uiteindelijk vindt u in Mijn Nijmegen al uw online zaken met ons terug, hier werken we aan.</p>
         </div>
     </div>
 
-    <!-- END: template component(s) -->
+    <nijmegen-accordion>
+        <div class="utrecht-accordion__section">
+            <h2 class="utrecht-accordion__header">
+                <button class="utrecht-button utrecht-button--subtle utrecht-accordion__button" type="button" aria-expanded="true" aria-controls="open-zaken-panel" id="open-zaken-button">
+                    <span class="utrecht-accordion__button-label">Lopende zaken</span>
+                </button>
+            </h2>
+            <div id="open-zaken-panel" class="utrecht-accordion__panel" aria-hidden="false">
+                {{#timeout}}
+                    <p id="open-zaken-list">Bezig met ophalen van uw open zaken… {{>spinner}}</p>
+                {{/timeout}}
+                {{^timeout}}
+                    {{{open-zaken}}}
+                {{/timeout}}
+            </div>
+        </div>
+        <div class="utrecht-accordion__section">
+            <h2 class="utrecht-accordion__header">
+                <button class="utrecht-button utrecht-button--subtle utrecht-accordion__button" type="button" aria-expanded="true" aria-controls="closed-zaken-panel" id="closed-zaken-button">
+                    <span class="utrecht-accordion__button-label">Afgeronde zaken</span>
+                </button>
+            </h2>
+            <div id="closed-zaken-panel" class="utrecht-accordion__panel" aria-hidden="false">
+                {{#timeout}}
+                    <p id="closed-zaken-list">Bezig met ophalen van uw afgeronde zaken… {{>spinner}}</p>
+                {{/timeout}}
+                {{^timeout}}
+                    {{{closed-zaken}}}
+                {{/timeout}}
+            </div>
+        </div>
+    </nijmegen-accordion>
 </main>
 
 {{>footer}}

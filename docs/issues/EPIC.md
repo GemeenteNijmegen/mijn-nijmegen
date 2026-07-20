@@ -67,7 +67,7 @@ single, coherent Nijmegen NL Design System. See the decisions before writing any
 | 3 — Page bodies | [08 — Taken](./08-page-taken.md) | 04b | ✅ Done |
 | 3 — Page bodies | [09 — Uitkeringen](./09-page-uitkeringen.md) | 04b | ✅ Done |
 | 3 — Page bodies | [10 — Producten](./10-page-producten.md) | 04b | |
-| 3 — Page bodies | [11 — Zaken](./11-page-zaken.md) | 04b | |
+| 3 — Page bodies | [11 — Zaken](./11-page-zaken.md) | 04b | ✅ Done |
 | 4 — Cleanup | [12 — Tighten CSP + dead CSS + side-nav](./12-cleanup-remove-legacy-tighten-csp.md) | 05–11 all done |  |
 
 Phase 3 page issues are independent of each other and may be done in any order/parallel PRs,

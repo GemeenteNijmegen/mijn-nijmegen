@@ -278,6 +278,9 @@
         },
         {
           "exec": "cp node_modules/@gemeentenijmegen/web-components/dist/nijmegen-toolbar-button.js src/app/static-resources/static/js/web-components/"
+        },
+        {
+          "exec": "cp node_modules/@gemeentenijmegen/web-components/dist/nijmegen-accordion.js src/app/static-resources/static/js/web-components/"
         }
       ]
     },

@@ -37,3 +37,32 @@
 .mijn-login-button--eherkenning {
   background-image: url(../images/eherkenning.svg);
 }
+
+/* File download: bespoke app component, no NLDS equivalent. */
+.mijn-file-download {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #7a7a7a;
+  color: inherit;
+  text-decoration: none;
+}
+
+.mijn-file-download__icon {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.mijn-file-download__label {
+  flex-grow: 1;
+}
+
+.mijn-file-download__action {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.25rem;
+  text-decoration: underline;
+}

@@ -116,6 +116,7 @@ export class ZakenRequestHandler {
       'title': 'Mijn zaken',
       'shownav': true,
       'nav': navigation.items,
+      'has_sidenav': navigation.items ? true : false,
       'breadcrumbs': breadcrumbs.items,
       'open-zaken': openHtml,
       'closed-zaken': closedHtml,

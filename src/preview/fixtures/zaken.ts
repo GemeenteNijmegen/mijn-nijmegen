@@ -45,6 +45,8 @@ export const singleZaak: SingleZaak = {
   ],
   behandelaars: ['Jan Jansen'],
   type: 'case',
-  documenten: [],
+  documenten: [
+    { titel: 'Aanvraagformulier.pdf', url: 'aanvraagformulier.pdf' },
+  ],
   taken: [],
 };
