@@ -35,6 +35,7 @@ src/app/static-resources/static/styles/ds.*
 src/app/static-resources/static/styles/*.woff2
 src/app/static-resources/static/styles/*.woff
 src/app/static-resources/static/styles/*.ttf
+src/app/static-resources/static/js/web-components/
 /preview/
 test-reports/junit.xml
 test/__snapshots__/*

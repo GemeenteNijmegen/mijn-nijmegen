@@ -29,6 +29,10 @@
       "type": "build"
     },
     {
+      "name": "@gemeentenijmegen/web-components",
+      "type": "build"
+    },
+    {
       "name": "@glen/jest-raw-loader",
       "type": "build"
     },

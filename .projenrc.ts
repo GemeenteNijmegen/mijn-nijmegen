@@ -60,6 +60,7 @@ const project = new GemeenteNijmegenCdkApp({
     '@gemeentenijmegen/components-css',
     '@gemeentenijmegen/semantic-html',
     '@gemeentenijmegen/font',
+    '@gemeentenijmegen/web-components',
     '@utrecht/document-css@1.5.0',
     '@utrecht/button-css@2.3.0',
     '@utrecht/button-group-css@1.4.0',
@@ -136,6 +137,7 @@ const project = new GemeenteNijmegenCdkApp({
     'src/app/static-resources/static/styles/*.woff2',
     'src/app/static-resources/static/styles/*.woff',
     'src/app/static-resources/static/styles/*.ttf',
+    'src/app/static-resources/static/js/web-components/',
     '/preview/',
   ],
 });
@@ -170,5 +172,16 @@ const cssBundleTask = project.addTask('bundle:css-bundle', {
   description: 'Bundle css from DS',
 });
 project.compileTask.spawn(cssBundleTask);
+
+const copyWcTask = project.addTask('bundle:copy-web-components', {
+  description: 'Copy prebuilt NLDS web component IIFE bundles to static/js/web-components/',
+  steps: [
+    { exec: 'mkdir -p src/app/static-resources/static/js/web-components' },
+    { exec: 'cp node_modules/@gemeentenijmegen/web-components/dist/nijmegen-header.js src/app/static-resources/static/js/web-components/' },
+    { exec: 'cp node_modules/@gemeentenijmegen/web-components/dist/nijmegen-mobile-menu.js src/app/static-resources/static/js/web-components/' },
+    { exec: 'cp node_modules/@gemeentenijmegen/web-components/dist/nijmegen-toolbar-button.js src/app/static-resources/static/js/web-components/' },
+  ],
+});
+project.compileTask.spawn(copyWcTask);
 
 project.synth();
