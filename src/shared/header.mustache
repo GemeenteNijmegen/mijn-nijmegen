@@ -91,3 +91,16 @@
   </div>
   <div class="nijmegen-header__backdrop"></div>
 </nijmegen-header>
+{{>breadcrumbs}}
+<div class="utrecht-page-body nijmegen-padding-block-start-200 nijmegen-padding-block-end-400">
+    <div class="utrecht-page-body__content nijmegen-container-xxl">
+      <div class="nijmegen-grid">
+      {{#has_sidenav}}
+          <div class="nijmegen-g-col-lg-2 nijmegen-g-start-lg-0 nijmegen-g-col-2">
+          {{>sidenav}}
+          </div>
+          <div class="nijmegen-g-col-lg-8 nijmegen-g-start-lg-4 nijmegen-g-col-12">
+      {{/has_sidenav}}
+      {{^has_sidenav}}
+          <div class="nijmegen-g-col-lg-8 nijmegen-g-start-lg-3 nijmegen-g-col-12">
+      {{/has_sidenav}}

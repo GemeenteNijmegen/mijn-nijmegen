@@ -196,6 +196,7 @@ export class ZakenRequestHandler {
         title: (formattedZaak) ? `Zaak - ${formattedZaak.zaak_type}` : 'Zaak ophalen niet gelukt',
         shownav: true,
         nav: navigation.items,
+        has_sidenav: navigation.items ? true : false,
         breadcrumbs: breadcrumbs.items,
         singlezaak: await this.zaakHtml(formattedZaak),
         timeout,

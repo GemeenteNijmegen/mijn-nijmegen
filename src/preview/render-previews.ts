@@ -75,6 +75,7 @@ async function renderHome(): Promise<void> {
     title: 'overzicht',
     shownav: true,
     nav: navigation.items,
+    has_sidenav: true,
     volledigenaam: homeSession.username,
     zaken: zakenHtml,
     has_zaken: true,
@@ -103,6 +104,7 @@ async function renderPersoonsgegevens(): Promise<void> {
     title: 'Mijn gegevens',
     shownav: true,
     nav: navigation.items,
+    has_sidenav: true,
     breadcrumbs: breadcrumbs.items,
     volledigenaam: 'Jan de Tester',
     persoonsgegevens: persoonsgegevensData,
@@ -127,6 +129,7 @@ async function renderMijngegevens(): Promise<void> {
     title: 'Mijn gegevens',
     shownav: true,
     nav: navigation.items,
+    has_sidenav: true,
     breadcrumbs: breadcrumbs.items,
     volledigenaam: 'Jan de Tester',
     persoonsgegevens: persoonsgegevensData,
@@ -149,6 +152,7 @@ async function renderContactgegevens(): Promise<void> {
     title: 'E-mailadres aanpassen',
     shownav: true,
     nav: navigation.items,
+    has_sidenav: true,
     breadcrumbs: breadcrumbs.items,
     volledigenaam: 'Jan de Tester',
     ...editContactgegevensData,
@@ -172,6 +176,7 @@ async function renderTaken(): Promise<void> {
     title: 'overzicht',
     shownav: true,
     nav: navigation.items,
+    has_sidenav: true,
     breadcrumbs: breadcrumbs.items,
     volledigenaam: 'Jan de Tester',
     taken: takenHtml,
@@ -199,6 +204,7 @@ async function renderUitkeringen(): Promise<void> {
     title: 'Mijn uitkeringen',
     shownav: true,
     nav: navigation.items,
+    has_sidenav: true,
     breadcrumbs: breadcrumbs.items,
   };
   const html = await render(data, uitkeringenTemplate.default, {
@@ -215,6 +221,7 @@ async function renderProducten(): Promise<void> {
     title: 'Mijn Producten',
     shownav: true,
     nav: navigation.items,
+    has_sidenav: true,
     products,
   };
   const html = await render(data, productenTemplate.default);
@@ -275,6 +282,7 @@ async function renderSingleZaak(): Promise<void> {
     title: `Zaak - ${formattedZaak.zaak_type}`,
     shownav: true,
     nav: navigation.items,
+    has_sidenav: true,
     breadcrumbs: breadcrumbs.items,
     singlezaak: singleZaakHtml,
     timeout: false,
