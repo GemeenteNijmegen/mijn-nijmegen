@@ -38,6 +38,7 @@ const project = new GemeenteNijmegenCdkApp({
     'zod',
     'validator',
     'content-disposition',
+    'chokidar',
   ], /* Runtime dependencies of this module. */
   devDeps: [
     '@types/validator',
@@ -47,7 +48,6 @@ const project = new GemeenteNijmegenCdkApp({
     '@aws-sdk/client-ssm',
     'aws-sdk-client-mock',
     'axios-mock-adapter',
-    'chokidar',
     'copyfiles',
     '@playwright/test',
     '@playwright/test',
