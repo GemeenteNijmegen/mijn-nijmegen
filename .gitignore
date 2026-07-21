@@ -32,6 +32,11 @@ jspm_packages/
 .cache
 src/app/**/tests/output
 src/app/static-resources/static/styles/ds.*
+src/app/static-resources/static/styles/*.woff2
+src/app/static-resources/static/styles/*.woff
+src/app/static-resources/static/styles/*.ttf
+src/app/static-resources/static/js/web-components/
+/preview/
 test-reports/junit.xml
 test/__snapshots__/*
 .env
@@ -50,11 +55,12 @@ junit.xml
 !/.github/pull_request_template.md
 !/test/
 !/tsconfig.json
-!/tsconfig.dev.json
+!/test/tsconfig.json
 !/src/
 /lib
 /dist/
 !/.eslintrc.json
+!/projenrc/tsconfig.json
 /assets/
 !/cdk.json
 /cdk.out/

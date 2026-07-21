@@ -32,7 +32,7 @@ test('Visiting main page with valid BSN shows menu', async ({ page }) => {
   await expect(page).toHaveURL('https://mijn.accp.nijmegen.nl/');
 
   // Click text=Hier vindt u een overzicht van uw uitkeringen.
-  const menu = page.locator('.nijmegen-sidenav');
+  const menu = page.locator('.nijmegen-side-navigation');
   await expect(menu.getByText('Mijn gegevens')).toHaveAttribute('href');
   await expect(menu.getByText('Mijn uitkering')).toHaveAttribute('href');
   await page.screenshot({ path: 'test/playwright/screenshots/home.png', fullPage: true });
@@ -41,7 +41,7 @@ test('Visiting main page with valid BSN shows menu', async ({ page }) => {
 
 test('Visiting uitkeringen-page with valid BSN shows info', async ({ page }) => {
 
-  const menu = page.locator('.nijmegen-sidenav');
+  const menu = page.locator('.nijmegen-side-navigation');
   // Click #navbar-collapse >> text=Uitkeringen
   await menu.getByText('Mijn uitkering').click();
   await expect(page).toHaveURL('https://mijn.accp.nijmegen.nl/uitkeringen');
@@ -56,7 +56,7 @@ test('Visiting uitkeringen-page with valid BSN shows info', async ({ page }) => 
 test('Visiting persoonsgegevens-page with valid BSN shows info', async ({ page }) => {
 
   // Click #navbar-collapse >> text=Uitkeringen
-  const menu = page.locator('.nijmegen-sidenav');
+  const menu = page.locator('.nijmegen-side-navigation');
   await menu.getByText('Mijn gegevens').click();
   await expect(page).toHaveURL('https://mijn.accp.nijmegen.nl/persoonsgegevens');
 

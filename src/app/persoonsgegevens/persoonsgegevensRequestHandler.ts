@@ -20,6 +20,7 @@ interface RenderData {
   title: string;
   shownav: boolean;
   nav: any;
+  has_sidenav: boolean;
   breadcrumbs: any;
   persoonsgegevens?: Persoonsgegevens;
   error?: string;
@@ -122,6 +123,7 @@ export class PersoonsgegevensRequestHandler {
       title: 'Mijn gegevens',
       shownav: true,
       nav: navigation.items,
+      has_sidenav: true,
       breadcrumbs: breadcrumbs.items,
       persoonsgegevens: undefined,
       error: undefined,
@@ -199,6 +201,7 @@ export class PersoonsgegevensRequestHandler {
           title: 'E-mailadres aanpassen',
           shownav: true,
           nav: navigation.items,
+          has_sidenav: navigation.items ? true : false,
           breadcrumbs: breadcrumbs.items,
           type,
           isEmail: true,
@@ -217,6 +220,7 @@ export class PersoonsgegevensRequestHandler {
           title: 'Telefoonnummer aanpassen',
           shownav: true,
           nav: navigation.items,
+          has_sidenav: navigation.items ? true : false,
           breadcrumbs: breadcrumbs.items,
           type,
           isEmail: false,
@@ -276,6 +280,7 @@ export class PersoonsgegevensRequestHandler {
       title: type === 'email' ? 'E-mailadres aanpassen' : 'Telefoonnummer aanpassen',
       shownav: true,
       nav: navigation.items,
+      has_sidenav: navigation.items ? true : false,
       breadcrumbs: breadcrumbs.items,
       type,
       isEmail: type === 'email',
@@ -365,6 +370,7 @@ export class PersoonsgegevensRequestHandler {
               title: 'Verificatie',
               shownav: true,
               nav: navigation.items,
+              has_sidenav: navigation.items ? true : false,
               breadcrumbs: breadcrumbs.items,
               type,
               pendingValue,
@@ -399,6 +405,7 @@ export class PersoonsgegevensRequestHandler {
           title: 'Verificatie',
           shownav: true,
           nav: navigation.items,
+          has_sidenav: navigation.items ? true : false,
           breadcrumbs: breadcrumbs.items,
           type,
           pendingValue,
@@ -419,6 +426,7 @@ export class PersoonsgegevensRequestHandler {
       title: 'Verificatie',
       shownav: true,
       nav: navigation.items,
+      has_sidenav: navigation.items ? true : false,
       breadcrumbs: breadcrumbs.items,
       type,
       pendingValue,

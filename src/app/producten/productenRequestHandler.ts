@@ -17,6 +17,7 @@ interface RenderData {
   title: string;
   shownav: boolean;
   nav: any;
+  has_sidenav: boolean;
   error?: string;
   products?: any;
   product?: any;
@@ -76,6 +77,7 @@ export class ProductenRequestHandler {
       title: 'Mijn Producten',
       shownav: true,
       nav: navigation.items,
+      has_sidenav: navigation.items ? true : false,
     };
 
     if (eventParams.isIngeladenWallet) {

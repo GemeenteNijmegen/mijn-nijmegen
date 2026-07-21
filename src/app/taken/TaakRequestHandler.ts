@@ -67,6 +67,7 @@ export class TaakrequestHandler {
         title: 'overzicht',
         shownav: true,
         nav: navigation.items,
+        has_sidenav: navigation.items ? true : false,
         breadcrumbs: breadcrumbs.items,
         volledigenaam: await user.getUserName(),
         taken,

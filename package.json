@@ -3,6 +3,7 @@
   "scripts": {
     "build": "projen build",
     "bump": "projen bump",
+    "bump:releasable-commits": "projen bump:releasable-commits",
     "bundle": "projen bundle",
     "bundle:app/auth/auth.lambda": "projen bundle:app/auth/auth.lambda",
     "bundle:app/auth/auth.lambda:watch": "projen bundle:app/auth/auth.lambda:watch",
@@ -22,7 +23,9 @@
     "bundle:app/uitkeringen/uitkering.lambda:watch": "projen bundle:app/uitkeringen/uitkering.lambda:watch",
     "bundle:app/zaken/zaken.lambda": "projen bundle:app/zaken/zaken.lambda",
     "bundle:app/zaken/zaken.lambda:watch": "projen bundle:app/zaken/zaken.lambda:watch",
+    "bundle:copy-web-components": "projen bundle:copy-web-components",
     "bundle:css-bundle": "projen bundle:css-bundle",
+    "cfn-lint": "projen cfn-lint",
     "clobber": "projen clobber",
     "compile": "projen compile",
     "default": "projen default",
@@ -31,11 +34,12 @@
     "diff": "projen diff",
     "eject": "projen eject",
     "eslint": "projen eslint",
-    "lint": "projen lint",
     "package": "projen package",
     "post-compile": "projen post-compile",
     "post-upgrade": "projen post-upgrade",
     "pre-compile": "projen pre-compile",
+    "preview": "projen preview",
+    "preview:watch": "projen preview:watch",
     "release:production": "projen release:production",
     "synth": "projen synth",
     "synth:silent": "projen synth:silent",
@@ -47,63 +51,77 @@
     "projen": "projen"
   },
   "devDependencies": {
-    "@aws-sdk/client-ssm": "^3.1045.0",
-    "@aws-sdk/types": "^3.973.8",
-    "@gemeentenijmegen/components-css": "^0.1.4",
-    "@gemeentenijmegen/design-tokens": "^0.1.4",
-    "@gemeentenijmegen/layout-css": "^0.1.4",
+    "@aws-sdk/client-ssm": "^3.1090.0",
+    "@aws-sdk/types": "^3.974.2",
+    "@gemeentenijmegen/components-css": "^0.1.8",
+    "@gemeentenijmegen/design-tokens": "^0.1.8",
+    "@gemeentenijmegen/font": "^0.1.8",
+    "@gemeentenijmegen/layout-css": "^0.1.8",
+    "@gemeentenijmegen/semantic-html": "^0.1.8",
+    "@gemeentenijmegen/web-components": "^0.1.8",
     "@glen/jest-raw-loader": "^2.0.0",
-    "@playwright/test": "^1.59.1",
+    "@playwright/test": "^1.61.1",
     "@stylistic/eslint-plugin": "^2",
-    "@types/aws-lambda": "^8.10.161",
+    "@types/aws-lambda": "^8.10.162",
     "@types/content-disposition": "^0.5.9",
     "@types/jest": "^29.5.14",
     "@types/node": "^18",
     "@types/validator": "^13.15.10",
     "@typescript-eslint/eslint-plugin": "^8",
     "@typescript-eslint/parser": "^8",
+    "@utrecht/alert-css": "4.0.2",
     "@utrecht/button-css": "2.3.0",
     "@utrecht/button-group-css": "1.4.0",
     "@utrecht/document-css": "1.5.0",
+    "@utrecht/form-field-css": "3.0.1",
+    "@utrecht/form-field-description-css": "3.0.1",
+    "@utrecht/form-field-error-message-css": "3.0.1",
+    "@utrecht/form-label-css": "3.0.1",
     "@utrecht/heading-1-css": "1.5.0",
     "@utrecht/heading-2-css": "1.5.0",
     "@utrecht/heading-3-css": "1.5.0",
     "@utrecht/heading-4-css": "1.5.0",
     "@utrecht/heading-5-css": "1.5.0",
     "@utrecht/heading-6-css": "1.5.0",
+    "@utrecht/link-css": "1.6.0",
+    "@utrecht/page-body-css": "^2.1.1",
     "@utrecht/paragraph-css": "2.3.1",
+    "@utrecht/pre-heading-css": "^3.0.1",
+    "@utrecht/rich-text-css": "^3.0.1",
+    "@utrecht/textbox-css": "4.0.1",
     "aws-cdk": "^2",
     "aws-sdk-client-mock": "^2.2.0",
     "axios-mock-adapter": "^1.22.0",
     "commit-and-tag-version": "^12",
     "copyfiles": "^2.4.1",
-    "esbuild": "^0.28.0",
+    "esbuild": "^0.28.1",
     "eslint": "^9",
     "eslint-import-resolver-typescript": "^3.10.1",
     "eslint-plugin-import": "^2.32.0",
     "jest": "^29.7.0",
     "jest-aws-client-mock": "^0.0.26",
     "jest-junit": "^17",
-    "projen": "^0.99.57",
-    "ts-jest": "^29.4.9",
+    "projen": "^0.101.17",
+    "ts-jest": "^29.4.11",
     "ts-node": "^10.9.2",
     "typescript": "^4.9.5"
   },
   "dependencies": {
     "@aws-lambda-powertools/logger": "^1.18.1",
-    "@aws-sdk/client-dynamodb": "^3.1045.0",
-    "@aws-sdk/client-secrets-manager": "^3.1045.0",
-    "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.101.0",
-    "@gemeentenijmegen/apiclient": "^0.0.42",
-    "@gemeentenijmegen/apigateway-http": "^0.0.38",
-    "@gemeentenijmegen/aws-constructs": "^0.0.51",
-    "@gemeentenijmegen/cross-region-parameters": "^0.0.7",
-    "@gemeentenijmegen/projen-project-type": "^1.13.0",
+    "@aws-sdk/client-dynamodb": "^3.1090.0",
+    "@aws-sdk/client-secrets-manager": "^3.1090.0",
+    "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.103.0",
+    "@gemeentenijmegen/apiclient": "^0.0.43",
+    "@gemeentenijmegen/apigateway-http": "^0.0.39",
+    "@gemeentenijmegen/aws-constructs": "^0.0.53",
+    "@gemeentenijmegen/cross-region-parameters": "^0.0.8",
+    "@gemeentenijmegen/projen-project-type": "^1.14.0",
     "@gemeentenijmegen/session": "^0.0.36",
     "@gemeentenijmegen/utils": "^0.0.38",
     "@types/mustache": "^4.2.6",
     "aws-cdk-lib": "^2.22.0",
-    "axios": "^1.16.0",
+    "axios": "^1.18.1",
+    "chokidar": "^5.0.0",
     "constructs": "^10.5.1",
     "content-disposition": "^0.5.4",
     "cookie": "^0.7.2",
@@ -145,7 +163,7 @@
       "^.+\\.[t]sx?$": [
         "ts-jest",
         {
-          "tsconfig": "tsconfig.dev.json"
+          "tsconfig": "test/tsconfig.json"
         }
       ],
       "\\.[jt]sx?$": [
@@ -154,19 +172,7 @@
           "isolatedModules": true
         }
       ],
-      "^.+\\.mustache$": "@glen/jest-raw-loader",
-      "^.+\\.tsx?$": [
-        "ts-jest",
-        {
-          "tsconfig": "tsconfig.dev.json"
-        }
-      ],
-      "^.+\\.m?jsx?$": [
-        "ts-jest",
-        {
-          "tsconfig": "tsconfig.dev.json"
-        }
-      ]
+      "^.+\\.mustache$": "@glen/jest-raw-loader"
     },
     "transformIgnorePatterns": [
       "node_modules/(?!(openid-client)/)"

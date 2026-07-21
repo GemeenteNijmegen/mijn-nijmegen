@@ -75,7 +75,7 @@ export class HomeRequestHandler {
         currentPath: '/',
         showProducten: process.env.SHOW_PRODUCTEN == 'True',
       });
-
+      console.debug('nav', navigation.items);
       const showContactgegevensNotice = process.env.CONTACTGEGEVENS_LIVE == 'True' &&
         !session.getValue('email') && !session.getValue('phonenumber');
 
@@ -83,6 +83,7 @@ export class HomeRequestHandler {
         title: 'overzicht',
         shownav: true,
         nav: navigation.items,
+        has_sidenav: true,
         volledigenaam: naam,
         zaken: zaken,
         has_zaken: zaken ? true : false,

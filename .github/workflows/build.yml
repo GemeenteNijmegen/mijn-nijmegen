@@ -26,7 +26,7 @@ jobs:
       - name: build
         run: npx projen build
       - name: CloudFormation lint
-        run: npx projen lint
+        run: npx projen cfn-lint
       - name: Find mutations
         id: self_mutation
         run: |-
