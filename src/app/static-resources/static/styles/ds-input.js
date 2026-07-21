@@ -1,5 +1,6 @@
 import '@utrecht/page-body-css/dist/index.css';
 import '@utrecht/document-css/dist/index.css';
+import '@utrecht/alert-css/dist/index.css';
 import '@gemeentenijmegen/design-tokens/dist/index.css';
 import './font-bundle.css'; /* workaround: @gemeentenijmegen/font@0.1.4 missing cyrillic-ext-400 files */
 import '@gemeentenijmegen/layout-css/dist/layout.min.css';

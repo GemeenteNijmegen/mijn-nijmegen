@@ -1,5 +1,71 @@
 /* App-specific styles with no NLDS equivalent (ADR-0002). Do not add rules targeting nijmegen-* or utrecht-* classes here. */
 
+/* Sticky footer: push footer to the bottom on short pages. */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex-grow: 1;
+}
+
+body a {
+  text-decoration: underline;
+}
+
+/* Compensates the underline default above for button-styled links. */
+.utrecht-button {
+  text-decoration: none;
+}
+
+table {
+  margin-bottom: 2rem;
+}
+
+table tr th {
+  width: 35%;
+}
+
+/* Loading spinner: appended to a link by spinner.js while a request is in flight. */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin-left: 8px;
+  opacity: 0.8;
+  flex-shrink: 0;
+}
+
+a[aria-disabled="true"] {
+  opacity: 0.7;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* Spin animation for the spinner.mustache SVG icon. */
+.spinner {
+  transform-origin: center;
+  animation: spinner_spin 0.75s infinite linear;
+}
+
+@keyframes spinner_spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .header-readmore {
   display: flex;
   justify-content: space-between;

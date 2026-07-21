@@ -1,28 +1,48 @@
 {{>header}}
 
-<main id="denhaag-theme">
-    <!-- START: template component(s) -->
-    <div class="container">
-        <div class="row">
-            
+<main id="main">
+    <h1>Mijn Producten</h1>
+    <p class="utrecht-paragraph utrecht-paragraph--lead">Hier vindt u een overzicht van uw producten.</p>
+    <div class="utrecht-alert utrecht-alert--info">
+        <div class="utrecht-alert__icon">
+            <span class="utrecht-icon" role="img" aria-label="Alert type Informatie">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="tabler-icon tabler-icon-info-circle "
+            >
+                <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
+                <path d="M12 9h.01"></path>
+                <path d="M11 12h1v4h1"></path>
+            </svg>
+            </span>
+        </div>
+        <div class="utrecht-alert__content">
+            <div class="utrecht-alert__message" role="status">
+            <p class="utrecht-paragraph">Op dit moment vindt u in Mijn Nijmegen informatie over uw producten en diensten. Het kan dat uw product of dienst niet in dit overzicht staat, nog niet alles wordt hier getoond. Uiteindelijk vindt u in Mijn Nijmegen al uw online producten met ons terug, hier werken we aan.</p>
+            </div>
+        </div>
+    </div>
 
-            <div class="col-lg-9 col-md-12">
-                <h1>Mijn Producten</h1>
-                <p class="lead">Hier vindt u een overzicht van uw producten.</p>
-                <div class="alert alert-info">Op dit moment vindt u in Mijn Nijmegen informatie over uw producten en diensten. Het kan dat uw product of dienst niet in dit overzicht staat, nog niet alles wordt hier getoond. Uiteindelijk vindt u in Mijn Nijmegen al uw online producten met ons terug, hier werken we aan.</div>
-                <div class="row">
-                <div class="nijmegen-grid">
-                {{#products}} 
-                <div class="nijmegen-g-col-lg-6 nijmegen-g-col-sm-6 nijmegen-g-col-12">
-                <div class="nijmegen-card">
-                    <div class="nijmegen-card__inner">
-                        <div class="nijmegen-card__content">
+    <div class="nijmegen-grid">
+    {{#products}}
+        <div class="nijmegen-g-col-lg-6 nijmegen-g-col-sm-6 nijmegen-g-col-12">
+            <div class="nijmegen-card">
+                <div class="nijmegen-card__inner">
+                    <div class="nijmegen-card__content">
                         <h4 class="utrecht-heading-4">
                             <a class="nijmegen-card__link" href="/producten/{{uuid}}">{{naam}}</a>
                         </h4>
-                        </div>
-                        <ul class="nijmegen-card__meta">
-                        {{#start_datum}}
+                    </div>
+                    <ul class="nijmegen-card__meta">
+                    {{#start_datum}}
                         <li class="nijmegen-card__meta-item">
                             <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -45,24 +65,19 @@
                             </svg>
                             {{#start_datum}}van {{start_datum}}{{/start_datum}}{{#eind_datum}} t/m {{eind_datum}}{{/eind_datum}}
                         </li>
-                        {{/start_datum}}
-                        </ul>
-                        <p class="utrecht-paragraph"></p>
-                    </div>
-                    <div class="nijmegen-card__footer">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-arrow-right "><path d="M5 12l14 0"></path><path d="M13 18l6 -6"></path><path d="M13 6l6 6"></path></svg>
-                        </div>
-                    </div>
-                    </div>
-                {{/products}}
-            </div>
-            </div>
-
+                    {{/start_datum}}
+                    </ul>
+                </div>
+                <div class="nijmegen-card__footer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-arrow-right "><path d="M5 12l14 0"></path><path d="M13 18l6 -6"></path><path d="M13 6l6 6"></path></svg>
+                </div>
             </div>
         </div>
+    {{/products}}
     </div>
-
-    <!-- END: template component(s) -->
+    {{^products}}
+    <p class="utrecht-paragraph">U heeft geen producten.</p>
+    {{/products}}
 </main>
 
 {{>footer}}

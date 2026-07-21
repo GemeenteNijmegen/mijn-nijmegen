@@ -62,6 +62,7 @@ const project = new GemeenteNijmegenCdkApp({
     '@gemeentenijmegen/font',
     '@gemeentenijmegen/web-components',
     '@utrecht/document-css@1.5.0',
+    '@utrecht/alert-css@4.0.2',
     '@utrecht/button-css@2.3.0',
     '@utrecht/button-group-css@1.4.0',
     '@utrecht/paragraph-css@2.3.1',

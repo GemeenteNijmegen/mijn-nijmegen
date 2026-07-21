@@ -1,25 +1,21 @@
 {{>header}}
 
-<main>
-    <!-- START: template component(s) -->
-    <div class="container">
-        <div class="row">
-           
-            
-            <div class="col-lg-9 col-md-12">
-            <h1>Status inladen wallet</h1>
-            {{#success}}
-                <div class="alert alert-info">{{success.text}}</div>
-            </div>
-            {{/success}}
-            {{#error}}
-                <div class="alert alert-error">{{error.text}}</div>
-            </div>
-            {{/error}}
+<main id="main">
+    <h1>Status inladen wallet</h1>
+    {{#success}}
+    <div class="nijmegen-action-card">
+        <div class="nijmegen-action-card__content">
+            <p class="utrecht-paragraph">{{success.text}}</p>
         </div>
     </div>
-
-    <!-- END: template component(s) -->
+    {{/success}}
+    {{#error}}
+    <div class="nijmegen-action-card">
+        <div class="nijmegen-action-card__content">
+            <p class="utrecht-paragraph">{{error.text}}</p>
+        </div>
+    </div>
+    {{/error}}
 </main>
 
 {{>footer}}
