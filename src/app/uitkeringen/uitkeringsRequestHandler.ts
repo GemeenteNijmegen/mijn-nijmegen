@@ -52,7 +52,7 @@ export class uitkeringsRequestHandler {
     data.volledigenaam = session.getValue('username');
     data.multipleUitkeringen = (data?.uitkeringen?.length > 1);
     if (data.multipleUitkeringen) {
-      data.uitkeringen.forEach((uitkering: any) => { uitkering.hideTypeHeading = true; });
+      data.uitkeringen.forEach((item: any) => { item.hideTypeHeading = true; });
     }
 
     const navigation = new Navigation(userType, {

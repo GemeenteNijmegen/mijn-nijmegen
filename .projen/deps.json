@@ -76,6 +76,11 @@
       "type": "build"
     },
     {
+      "name": "@utrecht/alert-css",
+      "version": "4.0.2",
+      "type": "build"
+    },
+    {
       "name": "@utrecht/button-css",
       "version": "2.3.0",
       "type": "build"

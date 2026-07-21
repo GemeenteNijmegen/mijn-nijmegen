@@ -631,6 +631,7 @@
             "@types/validator",
             "@typescript-eslint/eslint-plugin",
             "@typescript-eslint/parser",
+            "@utrecht/alert-css",
             "@utrecht/button-css",
             "@utrecht/button-group-css",
             "@utrecht/document-css",
