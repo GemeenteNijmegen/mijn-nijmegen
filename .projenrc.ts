@@ -173,14 +173,8 @@ const cssBundleTask = project.addTask('bundle:css-bundle', {
 project.compileTask.spawn(cssBundleTask);
 
 const copyWcTask = project.addTask('bundle:copy-web-components', {
-  description: 'Copy prebuilt NLDS web component IIFE bundles to static/js/web-components/',
-  steps: [
-    { exec: 'mkdir -p src/app/static-resources/static/js/web-components' },
-    { exec: 'cp node_modules/@gemeentenijmegen/web-components/dist/nijmegen-header.js src/app/static-resources/static/js/web-components/' },
-    { exec: 'cp node_modules/@gemeentenijmegen/web-components/dist/nijmegen-mobile-menu.js src/app/static-resources/static/js/web-components/' },
-    { exec: 'cp node_modules/@gemeentenijmegen/web-components/dist/nijmegen-toolbar-button.js src/app/static-resources/static/js/web-components/' },
-    { exec: 'cp node_modules/@gemeentenijmegen/web-components/dist/nijmegen-accordion.js src/app/static-resources/static/js/web-components/' },
-  ],
+  description: 'Copy NLDS web component IIFE bundles to static/js/web-components/, stripping CSS injection for CSP compliance',
+  exec: 'node scripts/strip-web-component-css.mjs',
 });
 project.compileTask.spawn(copyWcTask);
 
