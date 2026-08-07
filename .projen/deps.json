@@ -241,6 +241,11 @@
       "type": "build"
     },
     {
+      "name": "axios",
+      "version": "^1.19.0",
+      "type": "override"
+    },
+    {
       "name": "@aws-lambda-powertools/logger",
       "type": "runtime"
     },

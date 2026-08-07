@@ -276,7 +276,7 @@ async function renderZaken(): Promise<void> {
     'volledigenaam': 'Jan de Tester',
     'title': 'Mijn zaken',
     'shownav': true,
-    has_sidenav: true,
+    'has_sidenav': true,
     'nav': navigation.items,
     'breadcrumbs': breadcrumbs.items,
     'open-zaken': openHtml,
