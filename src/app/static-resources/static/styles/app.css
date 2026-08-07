@@ -1,5 +1,16 @@
 /* App-specific styles with no NLDS equivalent (ADR-0002). Do not add rules targeting nijmegen-* or utrecht-* classes here. */
 
+/*
+ * Exception: @gemeentenijmegen/components-css's .utrecht-link .utrecht-icon rule sets
+ * inset-block-start to nudge the icon into baseline alignment, but never sets `position`
+ * on the element, so the offset is dropped by the browser and the icon renders too high.
+ * This restores the missing prerequisite so the vendor's own token-driven value takes effect;
+ * it does not introduce new positioning/sizing. Remove once fixed upstream.
+ */
+.utrecht-link .utrecht-icon {
+  position: relative;
+}
+
 /* Sticky footer: push footer to the bottom on short pages. */
 body {
   display: flex;

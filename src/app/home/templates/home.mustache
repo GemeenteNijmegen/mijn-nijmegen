@@ -12,7 +12,9 @@
             <p class="utrecht-paragraph">We hebben nog geen e-mailadres of telefoonnummer van u. Vul uw contactgegevens aan zodat we deze alvast hebben.</p>
         </div>
         <p role="group" class="utrecht-button-group">
-            <a href="/persoonsgegevens" class="utrecht-button utrecht-button--primary-action">Contactgegevens doorgeven</a>
+            <a href="/persoonsgegevens" class="utrecht-link utrecht-link--html-a">
+                Contactgegevens doorgeven <span class="utrecht-icon">{{>arrow-right}}</span>
+            </a>
         </p>
     </div>
     {{/showContactgegevensNotice}}
@@ -28,7 +30,10 @@
         {{#has_taken}}
         <div class="header-readmore">
             <h2>Belangrijke taken om te regelen</h2>
-            <a href="/taken" class="utrecht-link utrecht-link--html-a" ><span>Bekijk alle taken</span><span class="utrecht-icon">{{>arrow-right}}</span></a>
+            <a href="/taken" class="utrecht-link utrecht-link--html-a" >
+                <span>Bekijk alle taken</span>
+                <span class="utrecht-icon">{{>arrow-right}}</span>
+            </a>
         </div>
         {{{taken}}}
         {{/has_taken}}
