@@ -33,18 +33,32 @@
     </ol>
     {{/has_statuses}}
     <h2>Details</h2>
-    <dl>
-        <dt>Datum aanvraag</dt>
-        <dd>{{registratiedatum}}</dd>
-        <dt>Zaaknummer</dt>
-        <dd>{{identifier}}</dd>
-        {{#has_behandelaars}}
-        <dt>Behandelaars</dt>
-        {{#behandelaars}}
-        <dd>{{.}}</dd>
-        {{/behandelaars}}
-        {{/has_behandelaars}}
-    </dl>
+    <table class="nijmegen-table nijmegen-table-full-width">
+        <thead class="nijmegen-table__header">
+            <tr class="nijmegen-table__row">
+                <th scope="col" class="nijmegen-table__header-cell">Kenmerk</th>
+                <th scope="col" class="nijmegen-table__header-cell">Waarde</th>
+            </tr>
+        </thead>
+        <tbody class="nijmegen-table__body">
+            <tr class="nijmegen-table__row">
+                <td class="nijmegen-table__data-cell" data-label="Kenmerk">Datum aanvraag</td>
+                <td class="nijmegen-table__data-cell" data-label="Waarde">{{registratiedatum}}</td>
+            </tr>
+            <tr class="nijmegen-table__row">
+                <td class="nijmegen-table__data-cell" data-label="Kenmerk">Zaaknummer</td>
+                <td class="nijmegen-table__data-cell" data-label="Waarde">{{identifier}}</td>
+            </tr>
+            {{#has_behandelaars}}
+            {{#behandelaars}}
+            <tr class="nijmegen-table__row">
+                <td class="nijmegen-table__data-cell" data-label="Kenmerk">Behandelaars</td>
+                <td class="nijmegen-table__data-cell" data-label="Waarde">{{.}}</td>
+            </tr>
+            {{/behandelaars}}
+            {{/has_behandelaars}}
+        </tbody>
+    </table>
     {{#has_documenten}}
     <h2>Documenten</h2>
     {{#documenten}}
