@@ -1,91 +1,84 @@
 {{>header}}
 
-<main class="denhaag-theme nijmegen-theme">
+<main id="main">
     <!-- START: template component(s) -->
-    <div class="container">
-        {{>breadcrumbs}}
-
-        <div class="row">
-            <nav class="nijmegen-sidenav col-lg-3 col-md-12">
-                <ul class="nijmegen-sidenav__list">
-                    {{#nav}}
-                    <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
-                        {{{icon}}}
-                        <a href="{{{url}}}">{{title}}</a>
-                    </li>
-                    {{/nav}}
-                </ul>
-            </nav>
-            <div class="col-lg-9 col-md-12">
-                <h1>Mijn Nijmegen</h1>
-                <p class="lead">Bekijk uw persoonsgegevens, uitkeringsgegevens of lopende zaken.</p>
-                {{#showContactgegevensNotice}}
-                <div class="alert alert-info">
-                    <strong>Contactgegevens ontbreken</strong>
-                    <p>We hebben nog geen e-mailadres of telefoonnummer van u. Vul uw contactgegevens aan zodat we deze alvast hebben.</p>
-                    <a href="/persoonsgegevens">Contactgegevens doorgeven {{>arrow-right}}</a>
-                </div>
-                {{/showContactgegevensNotice}}
-                <div>
-                    {{#timeout}}
-                    <div class="header-readmore">
-                        <h2>Belangrijke taken om te regelen</h2>
-                        <a href="/taken">Bekijk alle taken {{>arrow-right}}</a>
-                    </div>
-                    <p id="taken-list">Bezig met ophalen van uw open taken… {{>spinner}}</p>
-                    {{/timeout}}
-                    {{#has_taken}}
-                    <div class="header-readmore">
-                        <h2>Belangrijke taken om te regelen</h2>
-                        <a href="/taken">Bekijk alle taken {{>arrow-right}}</a>
-                    </div>
-                    {{{taken}}}
-                    {{/has_taken}}
-                </div>
-                <div>
-                    {{#has_zaken}}
-                    <div class="header-readmore">
-                        <h2>Mijn zaken</h2>
-                        <a href="/zaken">Bekijk alle zaken {{>arrow-right}}</a>
-                    </div>
-                    {{{zaken}}}
-                    {{/has_zaken}}
-                    {{#timeout}}
-                    <div class="header-readmore">
-                        <h2>Mijn zaken</h2>
-                        <a href="/zaken">Bekijk alle zaken {{>arrow-right}}</a>
-                    </div>
-                    <p id="open-zaken-list">Bezig met ophalen van uw open zaken… {{>spinner}}</p>
-                    {{/timeout}}
-                </div>
-                <div>
-                    <h2>Andere portalen</h2>
-                    <ul class="nijmegen-link-list">
-                        <li class="nijmegen-link-list__item">
-                            <a href="https://parkeerproducten.nijmegen.nl/loginSelection"
-                                class="nijmegen-link-list__link">
-                                Parkeren
-                            </a>
-                        </li>
-                        <li class="nijmegen-link-list__item">
-                            <a href="https://belastingen.nijmegen.nl/view/LOGIN" class="nijmegen-link-list__link">
-                                Belastingen
-                            </a>
-                        </li>
-                        <li class="nijmegen-link-list__item">
-                            <a href="https://subsidies.nijmegen.nl/inloggen" class="nijmegen-link-list__link">
-                                Subsidie
-                            </a>
-                        <li class="nijmegen-link-list__item">
-                            <a href="https://nijmegen.mijnwijkplan.nl"
-                                class="nijmegen-link-list__link">
-                                MijnWijkplan
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+    <h1>Mijn Nijmegen</h1>
+    <p class="lead">Bekijk uw persoonsgegevens, uitkeringsgegevens of lopende zaken.</p>
+    
+    {{#showContactgegevensNotice}}
+    <div class="nijmegen-action-card">
+        <div class="nijmegen-action-card__content">
+            <h5 class="utrecht-heading-5">Contactgegevens doorgeven</h5>
+            <p class="utrecht-paragraph">We hebben nog geen e-mailadres of telefoonnummer van u. Vul uw contactgegevens aan zodat we deze alvast hebben.</p>
         </div>
+        <p role="group" class="utrecht-button-group">
+            <a href="/persoonsgegevens" class="utrecht-link utrecht-link--html-a">
+                Contactgegevens doorgeven <span class="utrecht-icon">{{>arrow-right}}</span>
+            </a>
+        </p>
+    </div>
+    {{/showContactgegevensNotice}}
+    
+    <div>
+        {{#timeout}}
+        <div class="header-readmore">
+            <h2>Belangrijke taken om te regelen</h2>
+            <a href="/taken" class="utrecht-link utrecht-link--html-a" ><span>Bekijk alle taken</span><span class="utrecht-icon">{{>arrow-right}}</span></a>
+        </div>
+        <p id="taken-list">Bezig met ophalen van uw open taken… {{>spinner}}</p>
+        {{/timeout}}
+        {{#has_taken}}
+        <div class="header-readmore">
+            <h2>Belangrijke taken om te regelen</h2>
+            <a href="/taken" class="utrecht-link utrecht-link--html-a" >
+                <span>Bekijk alle taken</span>
+                <span class="utrecht-icon">{{>arrow-right}}</span>
+            </a>
+        </div>
+        {{{taken}}}
+        {{/has_taken}}
+    </div>
+    <div>
+        {{#has_zaken}}
+        <div class="header-readmore">
+            <h2>Mijn zaken</h2>
+            <a href="/zaken" class="utrecht-link utrecht-link--html-a" >Bekijk alle zaken <span class="utrecht-icon">{{>arrow-right}}</span></a>
+        </div>
+        {{{zaken}}}
+        {{/has_zaken}}
+        {{#timeout}}
+        <div class="header-readmore">
+            <h2>Mijn zaken</h2>
+            <a href="/zaken" class="utrecht-link utrecht-link--html-a" >Bekijk alle zaken <span class="utrecht-icon">{{>arrow-right}}</span></a>
+        </div>
+        <p id="open-zaken-list">Bezig met ophalen van uw open zaken… {{>spinner}}</p>
+        {{/timeout}}
+    </div>
+    <div>
+        <h2>Andere portalen</h2>
+        <ul class="nijmegen-link-list">
+            <li class="nijmegen-link-list__item">
+                <a href="https://parkeerproducten.nijmegen.nl/loginSelection"
+                    class="nijmegen-link-list__link">
+                    Parkeren
+                </a>
+            </li>
+            <li class="nijmegen-link-list__item">
+                <a href="https://belastingen.nijmegen.nl/view/LOGIN" class="nijmegen-link-list__link">
+                    Belastingen
+                </a>
+            </li>
+            <li class="nijmegen-link-list__item">
+                <a href="https://subsidies.nijmegen.nl/inloggen" class="nijmegen-link-list__link">
+                    Subsidie
+                </a>
+            <li class="nijmegen-link-list__item">
+                <a href="https://nijmegen.mijnwijkplan.nl"
+                    class="nijmegen-link-list__link">
+                    MijnWijkplan
+                </a>
+            </li>
+        </ul>
     </div>
 
     <!-- END: template component(s) -->

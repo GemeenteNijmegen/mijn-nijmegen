@@ -1,34 +1,15 @@
 {{>header}}
-<main>
-    <div class="container">
-        {{>breadcrumbs}}
-        <div class="row">
-            <nav class="nijmegen-sidenav col-lg-3 col-md-12">
-                    <ul class="nijmegen-sidenav__list">
-                    {{#nav}}
-                        <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
-                            {{{icon}}}
-                            <a href="{{{url}}}">{{title}}</a>
-                        </li>
-                    {{/nav}}
-                    </ul>
-            </nav>
-            <div class="col-lg-9 col-md-12">
-                <h1>Mijn gegevens</h1>
-                <p class="lead">
-                {{^showContactgegevens}}Hier vindt u een overzicht van uw persoons- en adresgegevens.{{/showContactgegevens}}
-                {{#showContactgegevens}}Hier vindt u een overzicht van uw persoons-, adres- en contactgegevens.{{/showContactgegevens}}
-                </p>
+<main id="main">
+    <h1>Mijn gegevens</h1>
+    <p class="utrecht-paragraph utrecht-paragraph--lead">
+    {{^showContactgegevens}}Hier vindt u een overzicht van uw persoons- en adresgegevens.{{/showContactgegevens}}
+    {{#showContactgegevens}}Hier vindt u een overzicht van uw persoons-, adres- en contactgegevens.{{/showContactgegevens}}
+    </p>
 
-                {{#showContactgegevens}}
-                {{>contactgegevens}}
-                {{/showContactgegevens}}
+    {{#showContactgegevens}}
+    {{>contactgegevens}}
+    {{/showContactgegevens}}
 
-                
-                {{>persoonsgegevens}}
-                
-            </div>
-        </div>
-    </div>
+    {{>persoonsgegevens}}
 </main>
 {{>footer}}

@@ -1,24 +1,28 @@
 
 {{#incompleteResults}}
-    <div class="alert alert-info">Het is ons niet gelukt al uw zaken op te halen. Hieronder vindt u een overzicht van de gevonden zaken. <a href="">Klik hier om het nog eens te proberen</a>.</div>
+    <div class="nijmegen-action-card">
+        <div class="nijmegen-action-card__content">
+            <p class="utrecht-paragraph">Het is ons niet gelukt al uw zaken op te halen. Hieronder vindt u een overzicht van de gevonden zaken. <a class="utrecht-link utrecht-link--html-a" href="">Klik hier om het nog eens te proberen</a>.</p>
+        </div>
+    </div>
 {{/incompleteResults}}
 
-<table class="responsive-table" id="{{id}}" data-loaded="{{#timeout}}false{{/timeout}}">
-    <thead>
-    <tr>
-        <th>Omschrijving</th>
-        <th>Zaaknummer</th>
-        <th>Datum</th>
-        <th>Fase</th>
-        <th>Actie</th>
+<table class="nijmegen-table nijmegen-table-full-width" id="{{id}}" data-loaded="{{#timeout}}false{{/timeout}}">
+    <thead class="nijmegen-table__header">
+    <tr class="nijmegen-table__row">
+        <th scope="col" class="nijmegen-table__header-cell">Omschrijving</th>
+        <th scope="col" class="nijmegen-table__header-cell">Zaaknummer</th>
+        <th scope="col" class="nijmegen-table__header-cell">Datum</th>
+        <th scope="col" class="nijmegen-table__header-cell">Fase</th>
+        <th scope="col" class="nijmegen-table__header-cell">Actie</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody class="nijmegen-table__body">
 {{#zaken}}
     {{>zaak-row}}
 {{/zaken}}
 {{^zaken}}
-    <tr><td colspan="5">Er zijn geen zaken gevonden.</td></tr>
+    <tr class="nijmegen-table__row"><td class="nijmegen-table__data-cell" colspan="5">Er zijn geen zaken gevonden.</td></tr>
 {{/zaken}}
     </tbody>
 </table>

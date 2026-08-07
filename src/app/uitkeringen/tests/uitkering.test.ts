@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { DynamoDBClient, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
-import { SecretsManagerClient, GetSecretValueCommandOutput } from '@aws-sdk/client-secrets-manager';
-import { SSMClient, GetParameterCommandOutput } from '@aws-sdk/client-ssm';
+import { GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
+import { GetParameterCommandOutput, SSMClient } from '@aws-sdk/client-ssm';
 import { ApiClient } from '@gemeentenijmegen/apiclient';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
@@ -10,7 +10,7 @@ import { mockClient } from 'jest-aws-client-mock';
 import { uitkeringsRequestHandler } from '../uitkeringsRequestHandler';
 
 beforeAll(() => {
-  if (process.env.VERBOSETESTS!='True') {
+  if (process.env.VERBOSETESTS != 'True') {
     global.console.error = jest.fn();
     global.console.time = jest.fn();
     global.console.log = jest.fn();
@@ -114,7 +114,7 @@ describe('Loading the uitkeringspagina', () => {
     if (!result.body) {
       return;
     }
-    fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
+    fs.writeFile(path.join(__dirname, 'output', 'test.html'), result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => { });
   });
 
   test('Companies are redirected', async () => {
@@ -162,7 +162,7 @@ describe('Loading the uitkeringspagina', () => {
     if (!result.body) {
       return;
     }
-    fs.writeFile(path.join(__dirname, 'output', 'test-twee.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
+    fs.writeFile(path.join(__dirname, 'output', 'test-twee.html'), result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => { });
   });
 
 
@@ -186,7 +186,7 @@ describe('Loading the uitkeringspagina', () => {
     if (!result.body) {
       return;
     }
-    fs.writeFile(path.join(__dirname, 'output', 'test-empty.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
+    fs.writeFile(path.join(__dirname, 'output', 'test-empty.html'), result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => { });
   });
 
 
@@ -204,13 +204,13 @@ describe('Loading the uitkeringspagina', () => {
     if (!result.body) {
       return;
     }
-    fs.writeFile(path.join(__dirname, 'output', 'test-error.html'), result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => {});
+    fs.writeFile(path.join(__dirname, 'output', 'test-error.html'), result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static'), () => { });
   });
 
   async function getStringFromFilePath(filePath: string): Promise<string> {
     return new Promise((res, rej) => {
       fs.readFile(path.join(__dirname, filePath), (err, data) => {
-        if (err) {return rej(err);}
+        if (err) { return rej(err); }
         return res(data.toString());
       });
     });
@@ -218,7 +218,7 @@ describe('Loading the uitkeringspagina', () => {
 });
 
 describe('Unexpected requests', () => {
-  test('No cookies set should redirect to login page', async() => {
+  test('No cookies set should redirect to login page', async () => {
 
     const result = await requestHandler.handleRequest('');
     expect(result.statusCode).toBe(302);

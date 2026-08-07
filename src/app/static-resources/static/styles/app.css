@@ -1,0 +1,180 @@
+/* App-specific styles with no NLDS equivalent (ADR-0002). Do not add rules targeting nijmegen-* or utrecht-* classes here. */
+
+/*
+ * Exception: @gemeentenijmegen/components-css's .utrecht-link .utrecht-icon rule sets
+ * inset-block-start to nudge the icon into baseline alignment, but never sets `position`
+ * on the element, so the offset is dropped by the browser and the icon renders too high.
+ * This restores the missing prerequisite so the vendor's own token-driven value takes effect;
+ * it does not introduce new positioning/sizing. Remove once fixed upstream.
+ */
+.utrecht-link .utrecht-icon {
+  position: relative;
+}
+
+/* Sticky footer: push footer to the bottom on short pages. */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex-grow: 1;
+}
+
+body a {
+  text-decoration: underline;
+}
+
+/* Compensates the underline default above for button-styled links. */
+.utrecht-button {
+  text-decoration: none;
+}
+
+table {
+  margin-bottom: 2rem;
+}
+
+table tr th {
+  width: 35%;
+}
+
+/* Loading spinner: appended to a link by spinner.js while a request is in flight. */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin-left: 8px;
+  opacity: 0.8;
+  flex-shrink: 0;
+}
+
+a[aria-disabled="true"] {
+  opacity: 0.7;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* Spin animation for the spinner.mustache SVG icon. */
+.spinner {
+  transform-origin: center;
+  animation: spinner_spin 0.75s infinite linear;
+}
+
+@keyframes spinner_spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.header-readmore {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.mijn-login-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.mijn-login-selector>* {
+  flex-grow: 1;
+  flex-basis: calc((33rem - 100%) * 999);
+}
+
+.mijn-login-button {
+  background-repeat: no-repeat;
+  background-position: left 0.25em center;
+  background-size: 2.5em;
+  text-indent: 2.5em;
+  width: auto;
+}
+
+.mijn-login-button--digid {
+  background-image: url(../images/digid.svg);
+}
+
+.mijn-login-button--yivi {
+  background-image: url(../images/yivi.svg);
+}
+
+.mijn-login-button--eherkenning {
+  background-image: url(../images/eherkenning.svg);
+}
+
+/*
+ * Tabs: bespoke app component, no NLDS equivalent (ADR-0002). Implements the WAI-ARIA APG
+ * tabs pattern (see tabs.js). Colors reuse existing design tokens for visual consistency.
+ */
+.mijn-tabs__list {
+  display: flex;
+  overflow-x: auto;
+  border-bottom: 1px solid #D4D4D4;
+  margin-bottom: 1rem;
+}
+
+.mijn-tabs__tab {
+  all: unset;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid transparent;
+  color: var(--utrecht-accordion-button-color, #157C68);
+  font-weight: 700;
+}
+
+.mijn-tabs__tab:hover {
+  background-color: var(--utrecht-accordion-button-hover-background-color, #F3F3F3);
+}
+
+.mijn-tabs__tab:focus-visible {
+  outline: 2px solid var(--utrecht-accordion-button-focus-visible-color, #000000);
+  outline-offset: -2px;
+}
+
+.mijn-tabs__tab[aria-selected="true"] {
+  color: var(--utrecht-accordion-button-active-color, #0C483D);
+  border-bottom-color: currentColor;
+}
+
+/* File download: bespoke app component, no NLDS equivalent. */
+.mijn-file-download {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #7a7a7a;
+  color: inherit;
+  text-decoration: none;
+}
+
+.mijn-file-download__icon {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.mijn-file-download__label {
+  flex-grow: 1;
+}
+
+.mijn-file-download__action {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.25rem;
+  text-decoration: underline;
+}

@@ -1,61 +1,61 @@
 {{^error}}
     <section>
         <h2>Persoonsgegevens</h2>
-        <table class="responsive-table">
-            <thead>
-                <tr>
-                    <th>Kenmerk</th>
-                    <th>Waarde</th>
+        <table class="nijmegen-table nijmegen-table-full-width">
+            <thead class="nijmegen-table__header">
+                <tr class="nijmegen-table__row">
+                    <th scope="col" class="nijmegen-table__header-cell">Kenmerk</th>
+                    <th scope="col" class="nijmegen-table__header-cell">Waarde</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>BSN</td>
-                    <td>{{persoonsgegevens.bsn}}</td>
+             <tbody class="nijmegen-table__body">
+                <tr class="nijmegen-table__row">
+                    <td class="nijmegen-table__data-cell" data-label="Kenmerk">BSN</td>
+                    <td class="nijmegen-table__data-cell" data-label="Waarde">{{persoonsgegevens.bsn}}</td>
                 </tr>
 
                 {{#persoonsgegevens.naam}}
-                <tr>
-                    <td>Naam (aanschrijfwijze)</td>
-                    <td>{{persoonsgegevens.naam}}</td>
+                <tr class="nijmegen-table__row">
+                    <td class="nijmegen-table__data-cell" data-label="Kenmerk">Naam (aanschrijfwijze)</td>
+                    <td class="nijmegen-table__data-cell" data-label="Waarde">{{persoonsgegevens.naam}}</td>
                 </tr>
                 {{/persoonsgegevens.naam}}
 
-                <tr>
-                    <td>Initialen</td>
-                    <td>{{persoonsgegevens.voorletters}}</td>
+                <tr class="nijmegen-table__row">
+                    <td class="nijmegen-table__data-cell" data-label="Kenmerk">Initialen</td>
+                    <td class="nijmegen-table__data-cell" data-label="Waarde">{{persoonsgegevens.voorletters}}</td>
                 </tr>
-                <tr>
-                    <td>Voornamen</td>
-                    <td>{{persoonsgegevens.voornamen}}</td>
+                <tr class="nijmegen-table__row">
+                    <td class="nijmegen-table__data-cell" data-label="Kenmerk">Voornamen</td>
+                    <td class="nijmegen-table__data-cell" data-label="Waarde">{{persoonsgegevens.voornamen}}</td>
                 </tr>
-                <tr>
-                    <td>Voorvoegsel</td>
-                    <td>{{persoonsgegevens.voorvoegsel}}</td>
+                <tr class="nijmegen-table__row">
+                    <td class="nijmegen-table__data-cell" data-label="Kenmerk">Voorvoegsel</td>
+                    <td class="nijmegen-table__data-cell" data-label="Waarde">{{persoonsgegevens.voorvoegsel}}</td>
                 </tr>
-                <tr>
-                    <td>Geslachtsnaam</td>
-                    <td>{{persoonsgegevens.geslachtsnaam}}</td>
+                <tr class="nijmegen-table__row">
+                    <td class="nijmegen-table__data-cell" data-label="Kenmerk">Geslachtsnaam</td>
+                    <td class="nijmegen-table__data-cell" data-label="Waarde">{{persoonsgegevens.geslachtsnaam}}</td>
                 </tr>
 
                 {{#persoonsgegevens.achternaam}}
-                <tr>
-                    <td>Achternaam</td>
-                    <td>{{persoonsgegevens.achternaam}}</td>
+                <tr class="nijmegen-table__row">
+                    <td class="nijmegen-table__data-cell" data-label="Kenmerk">Achternaam</td>
+                    <td class="nijmegen-table__data-cell" data-label="Waarde">{{persoonsgegevens.achternaam}}</td>
                 </tr>
                 {{/persoonsgegevens.achternaam}}
 
-                <tr>
-                    <td>Geboortedatum</td>
-                    <td>{{persoonsgegevens.geboortedatum}}</td>
+                <tr class="nijmegen-table__row">
+                    <td class="nijmegen-table__data-cell" data-label="Kenmerk">Geboortedatum</td>
+                    <td class="nijmegen-table__data-cell" data-label="Waarde">{{persoonsgegevens.geboortedatum}}</td>
                 </tr>
-                <tr>
-                    <td>Nederlandse nationaliteit</td>
-                    <td>{{persoonsgegevens.nederlandseNationaliteit}}</td>
+                <tr class="nijmegen-table__row">
+                    <td class="nijmegen-table__data-cell" data-label="Kenmerk">Nederlandse nationaliteit</td>
+                    <td class="nijmegen-table__data-cell" data-label="Waarde">{{persoonsgegevens.nederlandseNationaliteit}}</td>
                 </tr>
-                <tr>
-                    <td>Geslachtsaanduiding</td>
-                    <td>{{persoonsgegevens.geslacht}}</td>
+                <tr class="nijmegen-table__row">
+                    <td class="nijmegen-table__data-cell" data-label="Kenmerk">Geslachtsaanduiding</td>
+                    <td class="nijmegen-table__data-cell" data-label="Waarde">{{persoonsgegevens.geslacht}}</td>
                 </tr>
             </tbody>
         </table>
@@ -72,63 +72,35 @@
     
     <div>
         <h2>Persoonsgegevens aanpassen of opvragen</h2>
-        <ul role="list" class="utrecht-link-list utrecht-link-list--html-ul">
-            <li class="utrecht-link-list__item">
-                <a href="https://www.nijmegen.nl/diensten/verhuizen/verhuizing-doorgeven/" class="utrecht-link utrecht-link--html-a utrecht-link-list__link">
-                    <span class="utrecht-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-chevron-right">
-                            <path d="M9 6l6 6l-6 6"></path>
-                        </svg>
-                    </span>
-                    <span class="utrecht-link-list__link-text">Verhuizing doorgeven</span>
+        <ul class="nijmegen-link-list">
+            <li class="nijmegen-link-list__item">
+                <a href="https://www.nijmegen.nl/diensten/verhuizen/verhuizing-doorgeven/" class="nijmegen-link-list__link">
+                    Verhuizing doorgeven
                 </a>
             </li>
-            <li class="utrecht-link-list__item">
-                <a href="https://www.nijmegen.nl/diensten/uittreksels-en-verklaringen/uittreksel-basisregistratie-personen-brp/" class="utrecht-link utrecht-link--html-a utrecht-link-list__link">
-                    <span class="utrecht-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-chevron-right">
-                            <path d="M9 6l6 6l-6 6"></path>
-                        </svg>
-                    </span>
-                    <span class="utrecht-link-list__link-text">Uittreksel BRP aanvragen</span>
-            <li class="utrecht-link-list__item">
-                <a href="https://www.nijmegen.nl/diensten/uittreksels-en-verklaringen/uittreksel-burgerlijke-stand/" class="utrecht-link utrecht-link--html-a utrecht-link-list__link">
-                    <span class="utrecht-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-chevron-right">
-                            <path d="M9 6l6 6l-6 6"></path>
-                        </svg>
-                    </span>
-                    <span class="utrecht-link-list__link-text">Geboorteakte of huwelijksakte aanvragen</span>
+            <li class="nijmegen-link-list__item">
+                <a href="https://www.nijmegen.nl/diensten/uittreksels-en-verklaringen/uittreksel-basisregistratie-personen-brp/" class="nijmegen-link-list__link">
+                    Uittreksel BRP aanvragen
                 </a>
             </li>
-            <li class="utrecht-link-list__item">
-                <a href="https://www.nijmegen.nl/diensten/uittreksels-en-verklaringen/uittreksel-rni-en-bewijs-van-uitschrijving/" class="utrecht-link utrecht-link--html-a utrecht-link-list__link">
-                    <span class="utrecht-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-chevron-right">
-                            <path d="M9 6l6 6l-6 6"></path>
-                        </svg>
-                    </span>
-                    <span class="utrecht-link-list__link-text">Uittreksel RNI aanvragen</span>
+            <li class="nijmegen-link-list__item">
+                <a href="https://www.nijmegen.nl/diensten/uittreksels-en-verklaringen/uittreksel-burgerlijke-stand/" class="nijmegen-link-list__link">
+                    Geboorteakte of huwelijksakte aanvragen
                 </a>
             </li>
-            <li class="utrecht-link-list__item">
-                <a href="https://www.nijmegen.nl/diensten/uittreksels-en-verklaringen/gegevens-aanpassen-in-de-basisregistratie-personen/" class="utrecht-link utrecht-link--html-a utrecht-link-list__link">
-                    <span class="utrecht-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-chevron-right">
-                            <path d="M9 6l6 6l-6 6"></path>
-                        </svg>
-                    </span>
-                    <span class="utrecht-link-list__link-text">Foute persoonsgegevens aanpassen</span>
+            <li class="nijmegen-link-list__item">
+                <a href="https://www.nijmegen.nl/diensten/uittreksels-en-verklaringen/uittreksel-rni-en-bewijs-van-uitschrijving/" class="nijmegen-link-list__link">
+                    Uittreksel RNI aanvragen
                 </a>
             </li>
-            <li class="utrecht-link-list__item">
-                <a href="https://www.nijmegen.nl/diensten/uittreksels-en-verklaringen/achternaam-gebruiken/" class="utrecht-link utrecht-link--html-a utrecht-link-list__link">
-                    <span class="utrecht-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-chevron-right">
-                            <path d="M9 6l6 6l-6 6"></path>
-                        </svg>
-                    </span>
-                    <span class="utrecht-link-list__link-text">Gebruik achternaam aanpassen</span>
+            <li class="nijmegen-link-list__item">
+                <a href="https://www.nijmegen.nl/diensten/uittreksels-en-verklaringen/gegevens-aanpassen-in-de-basisregistratie-personen/" class="nijmegen-link-list__link">
+                    Foute persoonsgegevens aanpassen
+                </a>
+            </li>
+            <li class="nijmegen-link-list__item">
+                <a href="https://www.nijmegen.nl/diensten/uittreksels-en-verklaringen/achternaam-gebruiken/" class="nijmegen-link-list__link">
+                    Gebruik achternaam aanpassen
                 </a>
             </li>
         </ul>

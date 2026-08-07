@@ -1,60 +1,50 @@
 {{>header}}
-<main>
-    <!-- START: template component(s) -->
-    <div class="container">
-        {{>breadcrumbs}}
-        <div class="row">
-        <nav class="nijmegen-sidenav col-lg-3 col-md-12">
-                <ul class="nijmegen-sidenav__list">
-                {{#nav}}
-                    <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
-                        {{{icon}}}
-                        <a href="{{{url}}}">{{title}}</a>
-                    </li>
-                {{/nav}}
-                </ul>
-        </nav>
-        <div class="col-lg-9 col-md-12">
-                <h1>Mijn Uitkering</h1>
-                {{^error}}
-                <p class="lead">Hier vindt u een overzicht van uw uitkeringen.</p>
-                {{#multipleUitkeringen}}
-                    <div class="tabs-wrapper">
-                        <!-- Tab List -->
-                        <div class="nav classic-tabs-no-line" role="tablist" aria-label="Uitkeringen">
-                        {{#uitkeringen}}
-                            <div class="nav-item">
-                                <button class="nav-link {{#selected}}active{{/selected}}" role="tab" {{#selected}}aria-selected="true" {{/selected}} aria-controls="{{typetolower}}-tab" id="{{typetolower}}-tabcontrol">
-                                    {{type}}
-                                </button>
-                            </div>
-                        {{/uitkeringen}}
-                        </div>
-                        {{#uitkeringen}}
-                        <!-- Tab Content -->
-                        <div class="tab-content" tabindex="0" role="tabpanel" id="{{typetolower}}-tab" aria-labelledby="{{typetolower}}-tabcontrol">
-                            {{> uitkering }}
-                        </div>
-                        {{/uitkeringen}}
-                    </div>
-                {{/multipleUitkeringen}}
-                {{^multipleUitkeringen}}
-                    {{#uitkeringen}}
-                        {{> uitkering }}
-                    {{/uitkeringen}}
-                {{/multipleUitkeringen}}
-                {{^uitkeringen}}
-                <p>U heeft geen lopende uitkeringen.</p>
-                {{/uitkeringen}}
-                {{/error}}
-                {{#error}}
-                    <h2>Er is iets misgegaan</h2>
-                    <p>{{error}}</p>
-                {{/error}}
-            </div>
+<main id="main">
+    <h1>Mijn Uitkering</h1>
+    {{^error}}
+    <p class="utrecht-paragraph utrecht-paragraph--lead">Hier vindt u een overzicht van uw uitkeringen.</p>
+    {{#multipleUitkeringen}}
+    <div class="mijn-tabs">
+        <div class="mijn-tabs__list" role="tablist" aria-label="Uitkeringen">
+            {{#uitkeringen}}
+            <button
+                type="button"
+                id="uitkering-{{typetolower}}-tab"
+                class="mijn-tabs__tab"
+                role="tab"
+                aria-selected="{{#active}}true{{/active}}{{^active}}false{{/active}}"
+                {{^active}}tabindex="-1"{{/active}}
+                aria-controls="uitkering-{{typetolower}}-panel"
+            >{{type}}</button>
+            {{/uitkeringen}}
         </div>
+        {{#uitkeringen}}
+        <div
+            id="uitkering-{{typetolower}}-panel"
+            class="mijn-tabs__panel"
+            role="tabpanel"
+            aria-labelledby="uitkering-{{typetolower}}-tab"
+            tabindex="0"
+            {{^active}}hidden{{/active}}
+        >
+            {{> uitkering }}
+        </div>
+        {{/uitkeringen}}
     </div>
-
-    <!-- END: template component(s) -->
+    {{/multipleUitkeringen}}
+    {{^multipleUitkeringen}}
+        {{#uitkeringen}}
+            {{> uitkering }}
+        {{/uitkeringen}}
+    {{/multipleUitkeringen}}
+    {{^uitkeringen}}
+    <p>U heeft geen lopende uitkeringen.</p>
+    {{/uitkeringen}}
+    {{/error}}
+    {{#error}}
+        <h2>Er is iets misgegaan</h2>
+        <p>{{error}}</p>
+    {{/error}}
 </main>
+
 {{>footer}}

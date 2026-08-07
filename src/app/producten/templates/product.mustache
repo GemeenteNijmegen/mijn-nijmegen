@@ -1,91 +1,70 @@
 {{>header}}
-<main>
-    <!-- START: template component(s) -->
-    <div class="container">
-        <div class="row">
-            <nav class="nijmegen-sidenav col-lg-3 col-md-12">
-                <ul class="nijmegen-sidenav__list">
-                {{#nav}}
-                    <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
-                        {{{icon}}}
-                        <a href="{{{url}}}">{{title}}</a>
-                    </li>
-                {{/nav}}
-                </ul>
-            </nav>
-            <div class="col-lg-9 col-md-12 nijmegen-theme">
-                <h1>{{product.naam}}</h1>
-                <p class="lead">U kunt dit product in uw ID-wallet plaatsen.</p>
+<main id="main">
+    <h1>{{product.naam}}</h1>
+    <p class="utrecht-paragraph utrecht-paragraph--lead">U kunt dit product in uw ID-wallet plaatsen.</p>
 
-                
-                <div class="nijmegen-action-card">
-                    <div class="nijmegen-action-card__content">
-                        <h4 class="utrecht-heading-5">ID Wallet</h4>
-                        {{#wallet_result.success}}
-                            <p>Het inladen in de wallet is geslaagd.</p>
-                        {{/wallet_result.success}}
+    <div class="nijmegen-action-card">
+        <div class="nijmegen-action-card__content">
+            <h4 class="utrecht-heading-5">ID Wallet</h4>
+            {{#wallet_result.success}}
+                <p class="utrecht-paragraph">Het inladen in de wallet is geslaagd.</p>
+            {{/wallet_result.success}}
 
-                        {{#wallet_result.failed}}
-                        <p>Het inladen in de wallet is niet gelukt. Probeer het opnieuw.</p>
-                        {{/wallet_result.failed}}
-                        {{^wallet_result.success}}
-                        <p class="utrecht-paragraph">Plaats deze {{product.producttype.uniforme_product_naam}} in uw ID Wallet</p>
-                        <p role="group" class="utrecht-button-group">
-                            <a href="/producten/{{product.uuid}}?inladen_wallet=true" class="utrecht-button utrecht-button--primary-action spin" type="button">Plaats product in ID-wallet</a>
-                        </p>
-                        {{/wallet_result.success}}
-                    </div>
-                </div>
-                
-                
-                <h2>Samenvatting product</h2>
-                
-                <dl>
-                    <dt>Status</dt>
-                    <dd>{{product.status}}</dd>
-
-                    <dt>Geldigheid</dt>
-                    <dd>{{#product.start_datum}}van {{product.start_datum}}{{/product.start_datum}}{{#product.eind_datum}} t/m {{product.eind_datum}}{{/product.eind_datum}}</dd>
-
-                    {{#product.dataobject.location}}
-                    <dt>Locatie</dt>
-                    <dd>{{product.dataobject.location}}</dd>
-                    {{/product.dataobject.location}}
-                </dl>
-
-                {{#product.documenten}}
-                <h2>Documenten</h2>
-                <ul>
-                    <li>{{.}}</li>
-                </ul>
-                {{/product.documenten}}
-
-                {{#product.zaken}}
-                <h2>Zaken</h2>
-                <ul>
-                    <li>{{.}}</li>
-                </ul>
-                {{/product.zaken}}
-
-                {{#product.taken}}
-                <h2>Taken</h2>
-                <ul>
-                    <li>{{.}}</li>
-                </ul>
-                {{/product.taken}}
-
-                {{#product.aanvraag_zaak_url}}
-                <h2>Aanvraag</h2>
-                <dl>
-                    <dt>Zaak URL</dt>
-                    <dd><a href="{{product.aanvraag_zaak_url}}">{{product.aanvraag_zaak_url}}</a></dd>
-                </dl>
-                {{/product.aanvraag_zaak_url}}
-            </div>
-            </div>
+            {{#wallet_result.failed}}
+            <p class="utrecht-paragraph">Het inladen in de wallet is niet gelukt. Probeer het opnieuw.</p>
+            {{/wallet_result.failed}}
+            {{^wallet_result.success}}
+            <p class="utrecht-paragraph">Plaats deze {{product.producttype.uniforme_product_naam}} in uw ID Wallet</p>
+            <p role="group" class="utrecht-button-group">
+                <a href="/producten/{{product.uuid}}?inladen_wallet=true" class="utrecht-button utrecht-button--primary-action spin" type="button">Plaats product in ID-wallet</a>
+            </p>
+            {{/wallet_result.success}}
         </div>
     </div>
-    <!-- END: template component(s) -->
+
+    <h2>Samenvatting product</h2>
+
+    <dl>
+        <dt>Status</dt>
+        <dd>{{product.status}}</dd>
+
+        <dt>Geldigheid</dt>
+        <dd>{{#product.start_datum}}van {{product.start_datum}}{{/product.start_datum}}{{#product.eind_datum}} t/m {{product.eind_datum}}{{/product.eind_datum}}</dd>
+
+        {{#product.dataobject.location}}
+        <dt>Locatie</dt>
+        <dd>{{product.dataobject.location}}</dd>
+        {{/product.dataobject.location}}
+    </dl>
+
+    {{#product.documenten}}
+    <h2>Documenten</h2>
+    <ul>
+        <li>{{.}}</li>
+    </ul>
+    {{/product.documenten}}
+
+    {{#product.zaken}}
+    <h2>Zaken</h2>
+    <ul>
+        <li>{{.}}</li>
+    </ul>
+    {{/product.zaken}}
+
+    {{#product.taken}}
+    <h2>Taken</h2>
+    <ul>
+        <li>{{.}}</li>
+    </ul>
+    {{/product.taken}}
+
+    {{#product.aanvraag_zaak_url}}
+    <h2>Aanvraag</h2>
+    <dl>
+        <dt>Zaak URL</dt>
+        <dd><a class="utrecht-link" href="{{product.aanvraag_zaak_url}}">{{product.aanvraag_zaak_url}}</a></dd>
+    </dl>
+    {{/product.aanvraag_zaak_url}}
 </main>
 <script src="/static/js/spinner.js"></script>
 {{>footer}}

@@ -83,6 +83,7 @@ export class HomeRequestHandler {
         title: 'overzicht',
         shownav: true,
         nav: navigation.items,
+        has_sidenav: true,
         volledigenaam: naam,
         zaken: zaken,
         has_zaken: zaken ? true : false,

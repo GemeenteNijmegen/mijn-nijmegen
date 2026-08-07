@@ -10,10 +10,11 @@
       
       var inputs = form.querySelectorAll('input[required], input[pattern]');
       inputs.forEach(function(input) {
-        if (!input.checkValidity()) {
-          input.classList.add('is-invalid');
-        } else {
-          input.classList.remove('is-invalid');
+        var valid = input.checkValidity();
+        input.setAttribute('aria-invalid', valid ? 'false' : 'true');
+        var errorMessage = document.getElementById(input.id + '-error');
+        if (errorMessage) {
+          errorMessage.hidden = valid;
         }
       });
     });

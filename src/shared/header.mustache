@@ -1,100 +1,105 @@
 <!doctype html>
-<html lang="nl">
+<html lang="nl" dir="ltr" class="nijmegen-spacing">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    {{#xsrf_token}}<meta name="xsrf-token" content="{{ xsrf_token }}">{{/xsrf_token}} 
+    {{#xsrf_token}}<meta name="xsrf-token" content="{{ xsrf_token }}">{{/xsrf_token}}
     <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
-    
-    <!-- Preload fonts and external styles -->
-    <link rel="preload" 
-          as="style"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,700&display=swap">
-    <link rel="preconnect" 
-          href="https://fonts.gstatic.com/" 
-          crossorigin="anonymous">
-    
-    <link rel="preload" 
-          as="font" 
-          href="/static/fonts/oranda_bold_bt.04c85cb2.woff2" 
-          type="font/woff2"
-          crossorigin="anonymous">
-    <link rel="preload" 
-          as="font" 
-          href="/static/fonts/oranda_bold_bt.8e266873.woff" 
-          type="font/woff"
-          crossorigin="anonymous">
-    <link rel="preload" 
-          as="font" 
-          href="/static/fonts/oranda_bt.bde3d05f.woff2" 
-          type="font/woff2"
-          crossorigin="anonymous">
-    <link rel="preload" 
-          as="font" 
-          href="/static/fonts/oranda_bt.05235f9a.woff" 
-          type="font/woff"
-          crossorigin="anonymous">
 
-    <!-- Start: Core styling -->
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" 
-          href="https://componenten.nijmegen.nl/v6.5.0/css/bootstrap.min.css"
-          integrity="sha512-bnCn1haQjQGPoq90nqpOWUiu9i60sex8WQI639yU2yElzx0pfG0hpaJrKuJTJD3bZ3lEUw+HRGEHrWm6TGsKSg=="
-          crossorigin="anonymous">
-    <!-- Material Design Bootstrap combined with custom Nijmegen styles -->
-    <link rel="stylesheet" 
-          href="https://componenten.nijmegen.nl/v6.5.0/nijmegen.css"
-          integrity="sha512-MlaVRxDvt3gglAMLJBg/5/o10tIMrMu+BOBFmbsAoQCTPwBRqk1HVxD35WafnV4iXi+MaRY99p010KKAgVwkEw=="
-          crossorigin="anonymous">
-    
-    <!-- Start: NLDS styling -->
-    <link rel="stylesheet" 
-        href="https://componenten.nijmegen.nl/v6.5.0/nijmegen-nlds.min.css"
-        integrity="sha512-bukuFZnnBpfSFVc4s/iGMds/Mvr1qBHkHen9/o/aTbqwp3f/SgHiyF9799FaaMFYwo78ZZ3xg/eYzgdJ0NnOLQ=="
-        crossorigin="anonymous">
-    <!-- End: NLDS styling -->
-    <!-- End: Core styling -->
-    <link rel="stylesheet" href="/static/styles/screen.css">
     <link rel="stylesheet" href="/static/styles/ds.css">
+    <link rel="stylesheet" href="/static/styles/app.css">
     {{{header_additions}}}
     <title>Mijn Nijmegen{{#title}} - {{.}} {{/title}}</title>
-    </head>
-<body data-loaded="{{#timeout}}false{{/timeout}}" class="utrecht-document nijmegen-theme">
-<nav class="navbar fixed-top navbar-expand-lg scrolling-navbar navbar-light">
-    <ul class="navbar-skiplinks">
-        <li>
-            <a href="#section-1 ">Direct naar inhoud</a>
-        </li>
-    </ul>
-    <div class="container">
-        {{#shownav}}<button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false">
-            <span class="sr-only">Menu</span>
-            <span class="navbar-toggler-icon" aria-hidden="true"></span>
-        </button>{{/shownav}}
-        <a class="navbar-brand" href="/">
-            <span class="sr-only">Homepage Mijn Nijmegen</span>
-            <div class="navbar-brand-container">
-                <img src="https://componenten.nijmegen.nl/v6.5.0/img/beeldmerklabel.svg" class="logo-labeled" alt="Logo Nijmegen">
-                <img src="https://componenten.nijmegen.nl/v6.5.0/img/beeldmerk.svg" class="logo" aria-hidden="true" alt="Logo Nijmegen">
-            </div>
-        </a>
-        
-        <div class="collapse navbar-collapse" id="navbar-collapse">
-            <ul class="navbar-nav ml-auto">
-            {{#shownav}}
-                <li class="nav-item">
-                    <a class="nav-link nav-no-link" href="/logout" title="Uitloggen">{{volledigenaam}}
-                        <svg title="Uitloggen" xmlns="http://www.w3.org/2000/svg"  width="16"  height="16"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon aria-hidden"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M9 12h12l-3 -3" /><path d="M18 15l3 -3" /></svg>
-                    </a>
-                </li>
-            {{/shownav}}
-                <li class="nav-item">
-                    <a class="nav-link nav-no-link" href="https://nijmegen.nl">Nijmegen.nl
-                        <svg  xmlns="http://www.w3.org/2000/svg"  width="16"  height="16"  viewBox="0 0 24 24"  fill="none" stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-link aria-hidden"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" /><path d="M11 13l9 -9" /><path d="M15 4h5v5" /></svg>
-                    </a>
-                </li>
-            </ul>
-        </div>
+</head>
+<body data-loaded="{{#timeout}}false{{/timeout}}" class="nijmegen-margin-block-0 nijmegen-margin-inline-0 utrecht-document nijmegen-theme">
+<a href="#main" class="nijmegen-skip-link">Ga naar hoofdinhoud</a>
+<nijmegen-header>
+  <div class="nijmegen-header__content--small">
+    <div class="nijmegen-header__content--small--inner">
+      {{#shownav}}
+      <button
+        class="nijmegen-toolbar-button nijmegen-toolbar-button--icon-menu"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Menu openen"
+      >Menu</button>
+      {{/shownav}}
+      <div>
+        {{>beeldmerk}}
+      </div>
+      {{#shownav}}
+      <button
+        class="nijmegen-toolbar-button"
+        type="button"
+        aria-expanded="false"
+        aria-controls="account-panel"
+        aria-label="Account"
+        data-test="account-menu-mobile"
+      >{{volledigenaam}}</button>
+      {{/shownav}}
     </div>
-</nav>
+    {{#shownav}}
+    <div id="mobile-menu" class="nijmegen-header__mobile-menu">
+      <nijmegen-mobile-menu>
+        <ul class="nijmegen-mobile-menu__list">
+          <li>
+            <a href="/logout" class="nijmegen-mobile-menu__link nijmegen-mobile-menu__link--strong" data-test="logout-button-mobile">Uitloggen</a>
+          </li>
+          <li>
+            <a href="https://nijmegen.nl" target="_blank" class="nijmegen-mobile-menu__link nijmegen-mobile-menu__link--strong">Nijmegen.nl</a>
+          </li>
+        </ul>
+      </nijmegen-mobile-menu>
+    </div>
+    {{/shownav}}
+  </div>
+  <div class="nijmegen-header__content">
+    <div class="nijmegen-header__content--inner">
+      <div>
+        {{>logo}}
+      </div>
+      <nav></nav>
+      <ul class="nijmegen-header__actions">
+        {{#shownav}}
+        <li class="nijmegen-header-action nijmegen-header-action--relative">
+          <button
+            class="nijmegen-header-item"
+            aria-expanded="false"
+            aria-controls="account-panel"
+            aria-label="Account"
+            data-test="account-menu"
+          >{{volledigenaam}}</button>
+          <div id="account-panel" class="nijmegen-header__panel nijmegen-header__panel--small">
+            <div class="nijmegen-dropdown-menu">
+              <ul class="nijmegen-dropdown-menu__list" role="list">
+                <li>
+                  <a href="/logout" class="nijmegen-dropdown-menu__item" data-test="logout-button">Uitloggen</a>
+                </li>
+                <li>
+                  <a href="https://nijmegen.nl" class="nijmegen-dropdown-menu__item">Nijmegen.nl</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        {{/shownav}}
+      </ul>
+    </div>
+  </div>
+  <div class="nijmegen-header__backdrop"></div>
+</nijmegen-header>
+{{>breadcrumbs}}
+<div class="utrecht-page-body nijmegen-padding-block-start-200 nijmegen-padding-block-end-400">
+    <div class="utrecht-page-body__content nijmegen-container-xxl">
+      <div class="nijmegen-grid">
+      {{#has_sidenav}}
+          <div class="nijmegen-g-col-lg-2 nijmegen-g-start-lg-0 nijmegen-g-col-2">
+          {{>sidenav}}
+          </div>
+          <div class="nijmegen-g-col-lg-9 nijmegen-g-start-lg-4 nijmegen-g-col-12">
+      {{/has_sidenav}}
+      {{^has_sidenav}}
+          <div class="nijmegen-g-col-lg-8 nijmegen-g-start-lg-3 nijmegen-g-col-12">
+      {{/has_sidenav}}
