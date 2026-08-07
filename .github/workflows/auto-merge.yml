@@ -17,7 +17,8 @@ jobs:
       contents: write
     if: contains(github.event.pull_request.labels.*.name, 'auto-merge') && (github.base_ref == 'development')
     steps:
-      - env:
+      - id: auto_16f3b80d
+        env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: gh pr merge --auto --merge "$PR_URL"
