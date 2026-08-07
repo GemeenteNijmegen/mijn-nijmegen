@@ -1,14 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { homeSession, homeZaken, homeTaken } from './fixtures/home';
-import { loginData } from './fixtures/login';
-import { logoutData } from './fixtures/logout';
-import { persoonsgegevensData, contactgegevensData, editContactgegevensData, verifyContactgegevensData } from './fixtures/persoonsgegevens';
-import { productenApiResponse } from './fixtures/producten';
-import { takenData } from './fixtures/taken';
-import { uitkeringenData } from './fixtures/uitkeringen';
-import { zakenList, singleZaak } from './fixtures/zaken';
 import * as homeTemplate from '../app/home/templates/home.mustache';
 import * as loginTemplate from '../app/login/templates/login.mustache';
 import * as logoutTemplate from '../app/logout/templates/logout.mustache';
@@ -30,8 +22,16 @@ import * as zakenListPartial from '../app/zaken/templates/zaken-table.mustache';
 import * as zakenTemplate from '../app/zaken/templates/zaken.mustache';
 import { ZaakFormatter } from '../app/zaken/ZaakFormatter';
 import { ArrowRight, Checkmark, Spinner } from '../shared/Icons';
-import { Navigation, BreadCrumbs } from '../shared/Navigation';
+import { BreadCrumbs, Navigation } from '../shared/Navigation';
 import { render } from '../shared/render';
+import { homeSession, homeTaken, homeZaken } from './fixtures/home';
+import { loginData } from './fixtures/login';
+import { logoutData } from './fixtures/logout';
+import { contactgegevensData, editContactgegevensData, persoonsgegevensData, verifyContactgegevensData } from './fixtures/persoonsgegevens';
+import { productenApiResponse } from './fixtures/producten';
+import { takenData } from './fixtures/taken';
+import { uitkeringenData } from './fixtures/uitkeringen';
+import { singleZaak, zakenList } from './fixtures/zaken';
 
 // Path from preview/<page>.html back to src/app/static-resources/static
 const STATIC_REL = '../src/app/static-resources/static';
@@ -85,7 +85,7 @@ async function renderHome(): Promise<void> {
     xsrf_token: 'preview-token',
     timeout: false,
     header_additions: '<link rel="stylesheet" href="/static/styles/zaak.css">',
-    showContactgegevensNotice: false,
+    showContactgegevensNotice: true,
   };
   const html = await render(data, homeTemplate.default, {
     'spinner': Spinner.default,

@@ -4,15 +4,19 @@
     <!-- START: template component(s) -->
     <h1>Mijn Nijmegen</h1>
     <p class="lead">Bekijk uw persoonsgegevens, uitkeringsgegevens of lopende zaken.</p>
+    
     {{#showContactgegevensNotice}}
     <div class="nijmegen-action-card">
         <div class="nijmegen-action-card__content">
-            <h2>Contactgegevens ontbreken</h2>
+            <h5 class="utrecht-heading-5">Contactgegevens doorgeven</h5>
             <p class="utrecht-paragraph">We hebben nog geen e-mailadres of telefoonnummer van u. Vul uw contactgegevens aan zodat we deze alvast hebben.</p>
         </div>
-        <a href="/persoonsgegevens" class="utrecht-link utrecht-link--html-a">Contactgegevens doorgeven {{>arrow-right}}</a>
+        <p role="group" class="utrecht-button-group">
+            <a href="/persoonsgegevens" class="utrecht-button utrecht-button--primary-action">Contactgegevens doorgeven</a>
+        </p>
     </div>
     {{/showContactgegevensNotice}}
+    
     <div>
         {{#timeout}}
         <div class="header-readmore">
