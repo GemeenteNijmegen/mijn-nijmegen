@@ -32,38 +32,29 @@
     </div>
 
 
-    <nijmegen-accordion>
-        <div class="utrecht-accordion__section">
-            <h2 class="utrecht-accordion__header">
-                <button class="utrecht-button utrecht-button--subtle utrecht-accordion__button" type="button" aria-expanded="true" aria-controls="open-zaken-panel" id="open-zaken-button">
-                    <span class="utrecht-accordion__button-label">Lopende zaken</span>
-                </button>
-            </h2>
-            <div id="open-zaken-panel" class="utrecht-accordion__panel" aria-hidden="false">
-                {{#timeout}}
-                    <p id="open-zaken-list">Bezig met ophalen van uw open zaken… {{>spinner}}</p>
-                {{/timeout}}
-                {{^timeout}}
-                    {{{open-zaken}}}
-                {{/timeout}}
-            </div>
+    <div class="mijn-tabs">
+        <div class="mijn-tabs__list" role="tablist" aria-label="Zaken">
+            <button type="button" id="open-zaken-tab" class="mijn-tabs__tab" role="tab" aria-selected="true" aria-controls="open-zaken-panel">Lopende zaken</button>
+            <button type="button" id="closed-zaken-tab" class="mijn-tabs__tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="closed-zaken-panel">Afgeronde zaken</button>
         </div>
-        <div class="utrecht-accordion__section">
-            <h2 class="utrecht-accordion__header">
-                <button class="utrecht-button utrecht-button--subtle utrecht-accordion__button" type="button" aria-expanded="true" aria-controls="closed-zaken-panel" id="closed-zaken-button">
-                    <span class="utrecht-accordion__button-label">Afgeronde zaken</span>
-                </button>
-            </h2>
-            <div id="closed-zaken-panel" class="utrecht-accordion__panel" aria-hidden="false">
-                {{#timeout}}
-                    <p id="closed-zaken-list">Bezig met ophalen van uw afgeronde zaken… {{>spinner}}</p>
-                {{/timeout}}
-                {{^timeout}}
-                    {{{closed-zaken}}}
-                {{/timeout}}
-            </div>
+        <div id="open-zaken-panel" class="mijn-tabs__panel" role="tabpanel" aria-labelledby="open-zaken-tab" tabindex="0">
+            {{#timeout}}
+                <p id="open-zaken-list">Bezig met ophalen van uw open zaken… {{>spinner}}</p>
+            {{/timeout}}
+            {{^timeout}}
+                {{{open-zaken}}}
+            {{/timeout}}
         </div>
-    </nijmegen-accordion>
+        <div id="closed-zaken-panel" class="mijn-tabs__panel" role="tabpanel" aria-labelledby="closed-zaken-tab" tabindex="0" hidden>
+            {{#timeout}}
+                <p id="closed-zaken-list">Bezig met ophalen van uw afgeronde zaken… {{>spinner}}</p>
+            {{/timeout}}
+            {{^timeout}}
+                {{{closed-zaken}}}
+            {{/timeout}}
+        </div>
+    </div>
+
 </main>
 
 {{>footer}}

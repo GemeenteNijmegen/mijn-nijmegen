@@ -4,26 +4,33 @@
     {{^error}}
     <p class="utrecht-paragraph utrecht-paragraph--lead">Hier vindt u een overzicht van uw uitkeringen.</p>
     {{#multipleUitkeringen}}
-    <nijmegen-accordion>
+    <div class="mijn-tabs">
+        <div class="mijn-tabs__list" role="tablist" aria-label="Uitkeringen">
+            {{#uitkeringen}}
+            <button
+                type="button"
+                id="uitkering-{{typetolower}}-tab"
+                class="mijn-tabs__tab"
+                role="tab"
+                aria-selected="{{#active}}true{{/active}}{{^active}}false{{/active}}"
+                {{^active}}tabindex="-1"{{/active}}
+                aria-controls="uitkering-{{typetolower}}-panel"
+            >{{type}}</button>
+            {{/uitkeringen}}
+        </div>
         {{#uitkeringen}}
-        <div class="utrecht-accordion__section">
-            <h2 class="utrecht-accordion__header">
-                <button
-                    class="utrecht-button utrecht-button--subtle utrecht-accordion__button"
-                    type="button"
-                    aria-expanded="true"
-                    aria-controls="uitkering-{{typetolower}}-panel"
-                    id="uitkering-{{typetolower}}-button"
-                >
-                    <span class="utrecht-accordion__button-label">{{type}}</span>
-                </button>
-            </h2>
-            <div id="uitkering-{{typetolower}}-panel" class="utrecht-accordion__panel" aria-hidden="false">
-                {{> uitkering }}
-            </div>
+        <div
+            id="uitkering-{{typetolower}}-panel"
+            class="mijn-tabs__panel"
+            role="tabpanel"
+            aria-labelledby="uitkering-{{typetolower}}-tab"
+            tabindex="0"
+            {{^active}}hidden{{/active}}
+        >
+            {{> uitkering }}
         </div>
         {{/uitkeringen}}
-    </nijmegen-accordion>
+    </div>
     {{/multipleUitkeringen}}
     {{^multipleUitkeringen}}
         {{#uitkeringen}}

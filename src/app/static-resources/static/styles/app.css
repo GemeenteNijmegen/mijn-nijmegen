@@ -90,7 +90,7 @@ a[aria-disabled="true"] {
   margin-bottom: 1rem;
 }
 
-.mijn-login-selector > * {
+.mijn-login-selector>* {
   flex-grow: 1;
   flex-basis: calc((33rem - 100%) * 999);
 }
@@ -113,6 +113,41 @@ a[aria-disabled="true"] {
 
 .mijn-login-button--eherkenning {
   background-image: url(../images/eherkenning.svg);
+}
+
+/*
+ * Tabs: bespoke app component, no NLDS equivalent (ADR-0002). Implements the WAI-ARIA APG
+ * tabs pattern (see tabs.js). Colors reuse existing design tokens for visual consistency.
+ */
+.mijn-tabs__list {
+  display: flex;
+  overflow-x: auto;
+  border-bottom: 1px solid #D4D4D4;
+  margin-bottom: 1rem;
+}
+
+.mijn-tabs__tab {
+  all: unset;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid transparent;
+  color: var(--utrecht-accordion-button-color, #157C68);
+  font-weight: 700;
+}
+
+.mijn-tabs__tab:hover {
+  background-color: var(--utrecht-accordion-button-hover-background-color, #F3F3F3);
+}
+
+.mijn-tabs__tab:focus-visible {
+  outline: 2px solid var(--utrecht-accordion-button-focus-visible-color, #000000);
+  outline-offset: -2px;
+}
+
+.mijn-tabs__tab[aria-selected="true"] {
+  color: var(--utrecht-accordion-button-active-color, #0C483D);
+  border-bottom-color: currentColor;
 }
 
 /* File download: bespoke app component, no NLDS equivalent. */

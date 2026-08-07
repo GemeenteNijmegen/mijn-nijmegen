@@ -219,7 +219,10 @@ async function renderUitkeringen(): Promise<void> {
   ]);
   const multipleUitkeringen = uitkeringenData.uitkeringen.length > 1;
   if (multipleUitkeringen) {
-    uitkeringenData.uitkeringen.forEach((uitkering: any) => { uitkering.hideTypeHeading = true; });
+    uitkeringenData.uitkeringen.forEach((uitkering: any, index: number) => {
+      uitkering.hideTypeHeading = true;
+      uitkering.active = index === 0;
+    });
   }
   const data = {
     ...uitkeringenData,
@@ -273,6 +276,7 @@ async function renderZaken(): Promise<void> {
     'volledigenaam': 'Jan de Tester',
     'title': 'Mijn zaken',
     'shownav': true,
+    has_sidenav: true,
     'nav': navigation.items,
     'breadcrumbs': breadcrumbs.items,
     'open-zaken': openHtml,
