@@ -1,8 +1,8 @@
-import * as fs from 'fs';
-import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { GetSecretValueCommand, GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'aws-sdk-client-mock';
+import * as fs from 'fs';
+import path from 'path';
 import { ZaakSummary } from '../../zaken/ZaakInterface';
 import { HomeRequestHandler } from '../homeRequestHandler';
 
@@ -144,7 +144,7 @@ test('Does not show contactgegevens notice when email missing and feature flag e
 
   const handler = new HomeRequestHandler(dynamoDBClient);
   const result = await handler.handleRequest({ cookies: 'session=12345', responseType: 'html' });
-  expect(result.body).not.toMatch('Contactgegevens ontbreken');
+  expect(result.body).not.toMatch('Contactgegevens doorgeven');
   expect(result.body).toMatch('/persoonsgegevens');
   delete process.env.CONTACTGEGEVENS_LIVE;
 });
@@ -170,7 +170,7 @@ test('Does not show contactgegevens notice when phonenumber missing and feature 
 
   const handler = new HomeRequestHandler(dynamoDBClient);
   const result = await handler.handleRequest({ cookies: 'session=12345', responseType: 'html' });
-  expect(result.body).not.toMatch('Contactgegevens ontbreken');
+  expect(result.body).not.toMatch('Contactgegevens doorgeven');
   delete process.env.CONTACTGEGEVENS_LIVE;
 });
 
@@ -196,7 +196,7 @@ test('Does not show contactgegevens notice when both email and phonenumber prese
 
   const handler = new HomeRequestHandler(dynamoDBClient);
   const result = await handler.handleRequest({ cookies: 'session=12345', responseType: 'html' });
-  expect(result.body).not.toMatch('Contactgegevens ontbreken');
+  expect(result.body).not.toMatch('Contactgegevens doorgeven');
   delete process.env.CONTACTGEGEVENS_LIVE;
 });
 
@@ -204,7 +204,7 @@ test('Does not show contactgegevens notice when feature flag disabled', async ()
   const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
   const handler = new HomeRequestHandler(dynamoDBClient);
   const result = await handler.handleRequest({ cookies: 'session=12345', responseType: 'html' });
-  expect(result.body).not.toMatch('Contactgegevens ontbreken');
+  expect(result.body).not.toMatch('Contactgegevens doorgeven');
 });
 
 
@@ -230,7 +230,7 @@ test('Does show contactgegevens notice when feature flag enabled and no contactg
 
   const handler = new HomeRequestHandler(dynamoDBClient);
   const result = await handler.handleRequest({ cookies: 'session=12345', responseType: 'html' });
-  expect(result.body).toMatch('Contactgegevens ontbreken');
+  expect(result.body).toMatch('Contactgegevens doorgeven');
   delete process.env.CONTACTGEGEVENS_LIVE;
 });
 
