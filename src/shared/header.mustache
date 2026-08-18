@@ -75,18 +75,6 @@
         </ul>
       </nijmegen-mobile-menu>
     </div>
-    <div id="mobile-menu2" class="nijmegen-header__mobile-menu">
-      <nijmegen-mobile-menu>
-        <ul class="nijmegen-mobile-menu__list">
-          <li>
-            <a href="/logout" class="nijmegen-mobile-menu__link nijmegen-mobile-menu__link--strong" data-test="logout-button-mobile">Uitloggen</a>
-          </li>
-          <li>
-            <a href="https://nijmegen.nl" target="_blank" class="nijmegen-mobile-menu__link nijmegen-mobile-menu__link--strong">Nijmegen.nl</a>
-          </li>
-        </ul>
-      </nijmegen-mobile-menu>
-    </div>
     {{/shownav}}
   </div>
   <div class="nijmegen-header__content">
@@ -112,7 +100,16 @@
                   <a href="/logout" class="nijmegen-dropdown-menu__item" data-test="logout-button">Uitloggen</a>
                 </li>
                 <li>
-                  <a href="https://nijmegen.nl" class="nijmegen-dropdown-menu__item">Nijmegen.nl</a>
+                  <a href="https://nijmegen.nl" class="nijmegen-dropdown-menu__item">
+                    <span>Nijmegen.nl</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="24" viewBox="0 0 24 24"
+                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="tabler-icon tabler-icon-external-link ">
+                      <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6"></path>
+                      <path d="M11 13l9 -9"></path>
+                      <path d="M15 4h5v5"></path>
+                    </svg>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -129,7 +126,7 @@
     <div class="utrecht-page-body__content nijmegen-container-xxl">
       <div class="nijmegen-grid">
       {{#has_sidenav}}
-          <div class="nijmegen-g-col-lg-2 nijmegen-g-start-lg-0 nijmegen-g-col-2">
+          <div class="mijn-sidenav-wrapper nijmegen-g-col-lg-2 nijmegen-g-start-lg-0 nijmegen-g-col-2">
           {{>sidenav}}
           </div>
           <div class="nijmegen-g-col-lg-9 nijmegen-g-start-lg-4 nijmegen-g-col-12">

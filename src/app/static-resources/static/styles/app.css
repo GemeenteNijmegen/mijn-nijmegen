@@ -14,6 +14,30 @@
 }
 
 /*
+ * Side navigation: hidden below the same breakpoint at which the header itself switches
+ * from the desktop nav to the mobile hamburger menu (nijmegen-mobile-menu), which already
+ * contains the same navigation links. Without this, the side nav still rendered on mobile
+ * as a cramped 2-column grid item, duplicating the hamburger menu's links.
+ *
+ * The breakpoint below is intentionally NOT one of the NDS grid breakpoints
+ * (--nijmegen-breakpoint-sm/md/lg/xl/xxl: 576/768/992/1200/1400px). The header component's
+ * own mobile/desktop switch is hardcoded in ds.css to `@media (width < 1024px)`
+ * (see `.nijmegen-header__content` / `.nijmegen-header__content--small`), independently of
+ * those grid tokens. 1024px does not correspond to any named breakpoint the design system
+ * exposes, and the design system ships no responsive show/hide utility class we could apply
+ * instead (only grid column-span classes, which don't collapse an item to nothing).
+ * Matching the grid's nearest breakpoint (lg, 992px) instead of 1024px would leave a 32px
+ * range (992-1023px) where neither the side nav nor the hamburger menu's nav links are
+ * shown, so this bespoke rule targets the header's actual, hardcoded threshold instead.
+ * Revisit if/when the design system exposes this breakpoint as a token or ships a hide utility.
+ */
+@media (width < 1024px) {
+  .mijn-sidenav-wrapper {
+    display: none;
+  }
+}
+
+/*
  * Exception: @gemeentenijmegen/components-css's .utrecht-link .utrecht-icon rule sets
  * inset-block-start to nudge the icon into baseline alignment, but never sets `position`
  * on the element, so the offset is dropped by the browser and the icon renders too high.
