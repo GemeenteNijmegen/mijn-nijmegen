@@ -30,18 +30,52 @@
         {{>beeldmerk}}
       </div>
       {{#shownav}}
-      <button
-        class="nijmegen-toolbar-button"
-        type="button"
-        aria-expanded="false"
-        aria-controls="account-panel"
-        aria-label="{{volledigenaam}}, accountmenu"
-        data-test="account-menu-mobile"
-      >{{volledigenaam}}</button>
+      <span>{{volledigenaam}}</span>
       {{/shownav}}
     </div>
     {{#shownav}}
     <div id="mobile-menu" class="nijmegen-header__mobile-menu">
+      <nijmegen-mobile-menu>
+        {{#has_sidenav}}
+        <ul class="nijmegen-mobile-menu__list">
+          {{#nav}}
+            <li>
+              <a 
+                href="{{{url}}}" 
+                target="_blank" 
+                {{#current}}aria-current="page"{{/current}}
+                class="nijmegen-mobile-menu__link nijmegen-mobile-menu__link--strong {{#current}}nijmegen-mobile-menu__link--current{{/current}}"
+              >
+                <span>
+                  {{{icon}}}
+                  {{title}}
+                </span>
+              </a>
+            </li>
+          {{/nav}}
+        </ul>
+        <div class="nijmegen-mobile-menu__separator">
+          <hr class="utrecht-separator">
+        </div>
+        {{/has_sidenav}}
+        <ul class="nijmegen-mobile-menu__list">
+          <li><a href="/uitloggen" class="nijmegen-mobile-menu__link nijmegen-mobile-menu__link--strong">Uitloggen</a></li>
+          
+          
+          <li><a href="https://nijmegen.nl" target="_blank"
+              class="nijmegen-mobile-menu__link nijmegen-mobile-menu__link--strong">
+              <span>Nijmegen.nl</span> 
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="tabler-icon tabler-icon-external-link ">
+                <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6"></path>
+                <path d="M11 13l9 -9"></path>
+                <path d="M15 4h5v5"></path>
+              </svg></a></li>
+        </ul>
+      </nijmegen-mobile-menu>
+    </div>
+    <div id="mobile-menu2" class="nijmegen-header__mobile-menu">
       <nijmegen-mobile-menu>
         <ul class="nijmegen-mobile-menu__list">
           <li>
