@@ -3,7 +3,7 @@
     {{#nav}}
         <li class="nijmegen-side-navigation__item ">
         <a
-            aria-current="page"
+            {{#current}}aria-current="page"{{/current}}
             class="nijmegen-side-navigation__link {{#current}}nijmegen-side-navigation__link--current{{/current}}"
             href="{{{url}}}"
         >

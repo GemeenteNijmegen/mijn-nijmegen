@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/static/styles/ds.css">
     <link rel="stylesheet" href="/static/styles/app.css">
     {{{header_additions}}}
-    <title>Mijn Nijmegen{{#title}} - {{.}} {{/title}}</title>
+    <title>{{#title}}{{.}} - {{/title}}Mijn Nijmegen</title>
 </head>
 <body data-loaded="{{#timeout}}false{{/timeout}}" class="nijmegen-margin-block-0 nijmegen-margin-inline-0 utrecht-document nijmegen-theme">
 <a href="#main" class="nijmegen-skip-link">Ga naar hoofdinhoud</a>
@@ -30,26 +30,48 @@
         {{>beeldmerk}}
       </div>
       {{#shownav}}
-      <button
-        class="nijmegen-toolbar-button"
-        type="button"
-        aria-expanded="false"
-        aria-controls="account-panel"
-        aria-label="Account"
-        data-test="account-menu-mobile"
-      >{{volledigenaam}}</button>
+      <span>{{volledigenaam}}</span>
       {{/shownav}}
     </div>
     {{#shownav}}
     <div id="mobile-menu" class="nijmegen-header__mobile-menu">
       <nijmegen-mobile-menu>
+        {{#has_sidenav}}
         <ul class="nijmegen-mobile-menu__list">
-          <li>
-            <a href="/logout" class="nijmegen-mobile-menu__link nijmegen-mobile-menu__link--strong" data-test="logout-button-mobile">Uitloggen</a>
-          </li>
-          <li>
-            <a href="https://nijmegen.nl" target="_blank" class="nijmegen-mobile-menu__link nijmegen-mobile-menu__link--strong">Nijmegen.nl</a>
-          </li>
+          {{#nav}}
+            <li>
+              <a 
+                href="{{{url}}}" 
+                target="_self" 
+                {{#current}}aria-current="page"{{/current}}
+                class="nijmegen-mobile-menu__link nijmegen-mobile-menu__link--strong {{#current}}nijmegen-mobile-menu__link--current{{/current}}"
+              >
+                <span>
+                  {{{icon}}}
+                  {{title}}
+                </span>
+              </a>
+            </li>
+          {{/nav}}
+        </ul>
+        <div class="nijmegen-mobile-menu__separator">
+          <hr class="utrecht-separator">
+        </div>
+        {{/has_sidenav}}
+        <ul class="nijmegen-mobile-menu__list">
+          <li><a href="/logout" class="nijmegen-mobile-menu__link nijmegen-mobile-menu__link--strong">Uitloggen</a></li>
+          
+          
+          <li><a href="https://nijmegen.nl" target="_blank"
+              class="nijmegen-mobile-menu__link nijmegen-mobile-menu__link--strong">
+              <span>Nijmegen.nl</span> 
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="tabler-icon tabler-icon-external-link ">
+                <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6"></path>
+                <path d="M11 13l9 -9"></path>
+                <path d="M15 4h5v5"></path>
+              </svg></a></li>
         </ul>
       </nijmegen-mobile-menu>
     </div>
@@ -61,14 +83,14 @@
         {{>logo}}
       </div>
       <nav></nav>
+      {{#shownav}}
       <ul class="nijmegen-header__actions">
-        {{#shownav}}
         <li class="nijmegen-header-action nijmegen-header-action--relative">
           <button
             class="nijmegen-header-item"
             aria-expanded="false"
             aria-controls="account-panel"
-            aria-label="Account"
+            aria-label="{{volledigenaam}}, accountmenu"
             data-test="account-menu"
           >{{volledigenaam}}</button>
           <div id="account-panel" class="nijmegen-header__panel nijmegen-header__panel--small">
@@ -78,14 +100,23 @@
                   <a href="/logout" class="nijmegen-dropdown-menu__item" data-test="logout-button">Uitloggen</a>
                 </li>
                 <li>
-                  <a href="https://nijmegen.nl" class="nijmegen-dropdown-menu__item">Nijmegen.nl</a>
+                  <a href="https://nijmegen.nl" class="nijmegen-dropdown-menu__item">
+                    <span>Nijmegen.nl</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="24" viewBox="0 0 24 24"
+                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="tabler-icon tabler-icon-external-link ">
+                      <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6"></path>
+                      <path d="M11 13l9 -9"></path>
+                      <path d="M15 4h5v5"></path>
+                    </svg>
+                  </a>
                 </li>
               </ul>
             </div>
           </div>
         </li>
-        {{/shownav}}
       </ul>
+      {{/shownav}}
     </div>
   </div>
   <div class="nijmegen-header__backdrop"></div>
@@ -95,7 +126,7 @@
     <div class="utrecht-page-body__content nijmegen-container-xxl">
       <div class="nijmegen-grid">
       {{#has_sidenav}}
-          <div class="nijmegen-g-col-lg-2 nijmegen-g-start-lg-0 nijmegen-g-col-2">
+          <div class="mijn-sidenav-wrapper nijmegen-g-col-lg-2 nijmegen-g-start-lg-0 nijmegen-g-col-2">
           {{>sidenav}}
           </div>
           <div class="nijmegen-g-col-lg-9 nijmegen-g-start-lg-4 nijmegen-g-col-12">

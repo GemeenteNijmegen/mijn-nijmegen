@@ -80,7 +80,7 @@ export class HomeRequestHandler {
         !session.getValue('email') && !session.getValue('phonenumber');
 
       const data = {
-        title: 'overzicht',
+        title: 'Overzicht',
         shownav: true,
         nav: navigation.items,
         has_sidenav: true,
