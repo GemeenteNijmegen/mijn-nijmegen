@@ -30,6 +30,9 @@
  * range (992-1023px) where neither the side nav nor the hamburger menu's nav links are
  * shown, so this bespoke rule targets the header's actual, hardcoded threshold instead.
  * Revisit if/when the design system exposes this breakpoint as a token or ships a hide utility.
+ *
+ * Zie ook: https: //github.com/GemeenteNijmegen/design-system/issues/295
+ *
  */
 @media (width < 1024px) {
   .mijn-sidenav-wrapper {
