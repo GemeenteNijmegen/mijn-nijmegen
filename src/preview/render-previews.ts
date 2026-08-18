@@ -73,7 +73,7 @@ async function renderHome(): Promise<void> {
   );
   const navigation = new Navigation('person', { currentPath: '/' });
   const data = {
-    title: 'overzicht',
+    title: 'Overzicht',
     shownav: true,
     nav: navigation.items,
     has_sidenav: true,
@@ -193,7 +193,7 @@ async function renderTaken(): Promise<void> {
     { checkmark: Checkmark.default },
   );
   const data = {
-    title: 'overzicht',
+    title: 'Overzicht',
     shownav: true,
     nav: navigation.items,
     has_sidenav: true,

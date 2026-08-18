@@ -132,6 +132,10 @@ a[aria-disabled="true"] {
  * Tabs: bespoke app component, no NLDS equivalent (ADR-0002). Implements the WAI-ARIA APG
  * tabs pattern (see tabs.js). Colors reuse existing design tokens for visual consistency.
  */
+.mijn-tabs {
+  margin-top: 1rem;
+}
+
 .mijn-tabs__list {
   display: flex;
   overflow-x: auto;
@@ -145,16 +149,18 @@ a[aria-disabled="true"] {
   flex-shrink: 0;
   padding: 0.75rem 1rem;
   border: 1px solid transparent;
-  border-bottom: 2px solid transparent;
-  border-radius: 4px 4px 0 0;
-  color: var(--utrecht-accordion-button-color, #157C68);
+  border-bottom: .3125rem solid transparent;
+  color: var(--nijmegen-color-primary-rood, #A80A2D);
   font-weight: 700;
-  /* Sit on top of the list's bottom border so the selected tab visually merges with its panel. */
-  margin-bottom: -1px;
+}
+
+.mijn-tabs__tab:not(:last-child) {
+  border-right-color: #D4D4D4;
 }
 
 .mijn-tabs__tab:hover {
   background-color: var(--utrecht-accordion-button-hover-background-color, #F3F3F3);
+  border-bottom-color: currentColor;
 }
 
 .mijn-tabs__tab:focus-visible {
@@ -163,10 +169,14 @@ a[aria-disabled="true"] {
 }
 
 .mijn-tabs__tab[aria-selected="true"] {
-  color: var(--utrecht-accordion-button-active-color, #0C483D);
+  color: #000000;
   background-color: #FFFFFF;
-  border-color: #D4D4D4;
-  border-bottom-color: currentColor;
+  border-color: #000000;
+}
+
+.mijn-tabs__tab[aria-selected="true"]:hover {
+  color: var(--nijmegen-color-primary-rood, #A80A2D);
+  border-color: var(--nijmegen-color-primary-rood, #A80A2D);
 }
 
 /* File download: bespoke app component, no NLDS equivalent. */

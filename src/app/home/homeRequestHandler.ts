@@ -2,7 +2,6 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
-import { eventParams } from './home.lambda';
 import { ArrowRight, Checkmark, Spinner } from '../../shared/Icons';
 import { logger } from '../../shared/Logger';
 import { Navigation } from '../../shared/Navigation';
@@ -14,6 +13,7 @@ import * as zakenListPartial from '../zaken/templates/zaken-table.mustache';
 import { ZaakFormatter } from '../zaken/ZaakFormatter';
 import { TaakSummariesResponseSchema, TaakSummariesSchema, TaakSummary, ZaakSummariesResponseSchema } from '../zaken/ZaakInterface';
 import { ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
+import { eventParams } from './home.lambda';
 import * as homeTemplate from './templates/home.mustache';
 import { Util } from './Util';
 
@@ -80,7 +80,7 @@ export class HomeRequestHandler {
         !session.getValue('email') && !session.getValue('phonenumber');
 
       const data = {
-        title: 'overzicht',
+        title: 'Overzicht',
         shownav: true,
         nav: navigation.items,
         has_sidenav: true,
