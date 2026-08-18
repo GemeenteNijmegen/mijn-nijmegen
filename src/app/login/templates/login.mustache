@@ -7,6 +7,7 @@
     <div class="mijn-login-selector">
         {{#authMethods}}
         <a href="/login?method={{methodName}}" class="utrecht-button utrecht-button--primary-action mijn-login-button mijn-login-button--{{methodName}}">
+            <span class="sr-only">Inloggen met {{methodNiceName}}</span>
             Inloggen met {{methodNiceName}}
         </a>
         {{/authMethods}}

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/static/styles/ds.css">
     <link rel="stylesheet" href="/static/styles/app.css">
     {{{header_additions}}}
-    <title>Mijn Nijmegen{{#title}} - {{.}} {{/title}}</title>
+    <title>{{#title}}{{.}} - {{/title}}Mijn Nijmegen</title>
 </head>
 <body data-loaded="{{#timeout}}false{{/timeout}}" class="nijmegen-margin-block-0 nijmegen-margin-inline-0 utrecht-document nijmegen-theme">
 <a href="#main" class="nijmegen-skip-link">Ga naar hoofdinhoud</a>
@@ -35,7 +35,7 @@
         type="button"
         aria-expanded="false"
         aria-controls="account-panel"
-        aria-label="Account"
+        aria-label="{{volledigenaam}}, accountmenu"
         data-test="account-menu-mobile"
       >{{volledigenaam}}</button>
       {{/shownav}}
@@ -61,14 +61,14 @@
         {{>logo}}
       </div>
       <nav></nav>
+      {{#shownav}}
       <ul class="nijmegen-header__actions">
-        {{#shownav}}
         <li class="nijmegen-header-action nijmegen-header-action--relative">
           <button
             class="nijmegen-header-item"
             aria-expanded="false"
             aria-controls="account-panel"
-            aria-label="Account"
+            aria-label="{{volledigenaam}}, accountmenu"
             data-test="account-menu"
           >{{volledigenaam}}</button>
           <div id="account-panel" class="nijmegen-header__panel nijmegen-header__panel--small">
@@ -84,8 +84,8 @@
             </div>
           </div>
         </li>
-        {{/shownav}}
       </ul>
+      {{/shownav}}
     </div>
   </div>
   <div class="nijmegen-header__backdrop"></div>
