@@ -177,17 +177,19 @@ a[aria-disabled="true"] {
   padding: 0.75rem 1rem;
   border: 1px solid transparent;
   border-bottom: .3125rem solid transparent;
-  color: var(--nijmegen-color-primary-rood, #A80A2D);
-  font-weight: 700;
+  color: var(--nijmegen-color-primary-zeegroen, #157C68);
+  font-weight: 400;
 }
 
 .mijn-tabs__tab:not(:last-child) {
   border-right-color: #D4D4D4;
 }
 
+/* Inactive tab on hover: stays green but turns bold. */
 .mijn-tabs__tab:hover {
   background-color: var(--utrecht-accordion-button-hover-background-color, #F3F3F3);
   border-bottom-color: currentColor;
+  font-weight: 700;
 }
 
 .mijn-tabs__tab:focus-visible {
@@ -195,15 +197,12 @@ a[aria-disabled="true"] {
   outline-offset: -2px;
 }
 
+/* Current tab: bold and black (stays black on hover, unlike the inactive tabs). */
 .mijn-tabs__tab[aria-selected="true"] {
   color: #000000;
   background-color: #FFFFFF;
   border-color: #000000;
-}
-
-.mijn-tabs__tab[aria-selected="true"]:hover {
-  color: var(--nijmegen-color-primary-rood, #A80A2D);
-  border-color: var(--nijmegen-color-primary-rood, #A80A2D);
+  font-weight: 700;
 }
 
 /* File download: bespoke app component, no NLDS equivalent. */
