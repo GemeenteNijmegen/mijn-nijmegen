@@ -48,5 +48,42 @@ export const singleZaak: SingleZaak = {
   documenten: [
     { titel: 'Aanvraagformulier.pdf', url: 'aanvraagformulier.pdf' },
   ],
-  taken: [],
+  taken: [
+    {
+      title: 'Aanvullende documenten aanleveren',
+      url: 'https://example.com/taken/zaak-open-1',
+      uuid: 'zaak-taak-1',
+      einddatum: '1 mei 2024',
+      is_open: true,
+      is_afgerond: false,
+      is_verwerkt: false,
+      is_gesloten: false,
+      laatstBewerktOp: new Date('2024-03-20').toISOString(),
+    },
+    {
+      title: 'Machtiging ondertekenen',
+      url: 'https://example.com/taken/zaak-open-2',
+      uuid: 'zaak-taak-2',
+      einddatum: '3 mei 2024',
+      is_open: true,
+      is_afgerond: false,
+      is_verwerkt: false,
+      is_gesloten: false,
+      laatstBewerktOp: new Date('2024-03-21').toISOString(),
+      attachments: [
+        { title: 'machtiging.pdf', url: 'machtiging.pdf' },
+      ],
+    },
+    {
+      title: 'Aanvraag indienen',
+      url: 'https://example.com/taken/zaak-done-1',
+      uuid: 'zaak-taak-3',
+      einddatum: '10 april 2024',
+      is_open: false,
+      is_afgerond: true,
+      is_verwerkt: false,
+      is_gesloten: false,
+      laatstBewerktOp: new Date('2024-04-10').toISOString(),
+    },
+  ],
 };

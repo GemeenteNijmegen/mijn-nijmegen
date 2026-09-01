@@ -172,22 +172,38 @@ a[aria-disabled="true"] {
 
 .mijn-tabs__tab {
   all: unset;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
   cursor: pointer;
   flex-shrink: 0;
   padding: 0.75rem 1rem;
-  border: 1px solid transparent;
+  white-space: nowrap;
   border-bottom: .3125rem solid transparent;
-  color: var(--nijmegen-color-primary-rood, #A80A2D);
+  color: var(--nijmegen-color-primary-zeegroen, #157C68);
+  font-weight: 400;
+}
+
+/*
+ * Reserve the bold width up front: a hidden copy of the label at font-weight 700
+ * fixes each tab's size, so tabs no longer resize (and shove their neighbours)
+ * when they turn bold on hover or when selected.
+ */
+.mijn-tabs__tab::after {
+  content: attr(data-label);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
   font-weight: 700;
+  pointer-events: none;
+  user-select: none;
 }
 
-.mijn-tabs__tab:not(:last-child) {
-  border-right-color: #D4D4D4;
-}
-
+/* Inactive tab on hover: stays green but turns bold. */
 .mijn-tabs__tab:hover {
   background-color: var(--utrecht-accordion-button-hover-background-color, #F3F3F3);
   border-bottom-color: currentColor;
+  font-weight: 700;
 }
 
 .mijn-tabs__tab:focus-visible {
@@ -195,15 +211,117 @@ a[aria-disabled="true"] {
   outline-offset: -2px;
 }
 
+/* Current tab: bold and black (stays black on hover, unlike the inactive tabs). */
 .mijn-tabs__tab[aria-selected="true"] {
   color: #000000;
   background-color: #FFFFFF;
-  border-color: #000000;
+  border-bottom-color: #000000;
+  font-weight: 700;
 }
 
-.mijn-tabs__tab[aria-selected="true"]:hover {
-  color: var(--nijmegen-color-primary-rood, #A80A2D);
-  border-color: var(--nijmegen-color-primary-rood, #A80A2D);
+/*
+ * Task navigation: the Den Haag "Action" component (denhaag-action), single/multi
+ * variant, used as a divided navigation list. No NLDS/Nijmegen equivalent (ADR-0002).
+ * Self-contained — no --denhaag-action-* token dependency — so it renders the same on
+ * pages that don't load zaak.css. Structure follows @gemeente-denhaag/components-css@4.x.
+ */
+.denhaag-action-list {
+  margin-block: 1rem 1.5rem;
+}
+
+/* Only frame the list when it actually holds actions (not the empty state). */
+.denhaag-action-list:has(.denhaag-action) {
+  border: 1px solid #D4D4D4;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.denhaag-action {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: #FFFFFF;
+  color: inherit;
+  text-decoration: none;
+}
+
+.denhaag-action + .denhaag-action {
+  border-top: 1px solid #D4D4D4;
+}
+
+.denhaag-action__row {
+  display: flex;
+  flex-grow: 1;
+  gap: 0.5rem;
+}
+
+.denhaag-action__content {
+  flex-grow: 1;
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.denhaag-action__context {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.denhaag-action__details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.denhaag-action__date {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #4F4F4F;
+}
+
+.denhaag-action__actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.denhaag-action__link-icon {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--nijmegen-color-primary-zeegroen, #157C68);
+}
+
+.denhaag-action__link-icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Open tasks: the whole row is the link. */
+a.denhaag-action:hover {
+  background-color: var(--utrecht-accordion-button-hover-background-color, #F3F3F3);
+}
+
+a.denhaag-action:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: -2px;
+}
+
+@media (min-width: 768px) {
+  .denhaag-action {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .denhaag-action__details {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
 }
 
 /* File download: bespoke app component, no NLDS equivalent. */

@@ -1,7 +1,7 @@
 {{>header}}
 
 <main id="main">
-    <h1>Mijn zaken</h1>
+    <h1 class="utrecht-heading-1">Mijn zaken</h1>
     <p class="utrecht-paragraph utrecht-paragraph--lead">Hier vindt u een overzicht van uw zaken.</p>
     <div class="utrecht-alert utrecht-alert--info">
         <div class="utrecht-alert__icon">
@@ -34,8 +34,8 @@
 
     <div class="mijn-tabs">
         <div class="mijn-tabs__list" role="tablist" aria-label="Zaken">
-            <button type="button" id="open-zaken-tab" class="mijn-tabs__tab" role="tab" aria-selected="true" aria-controls="open-zaken-panel">Lopende zaken</button>
-            <button type="button" id="closed-zaken-tab" class="mijn-tabs__tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="closed-zaken-panel">Afgeronde zaken</button>
+            <button type="button" id="open-zaken-tab" class="mijn-tabs__tab" role="tab" aria-selected="true" aria-controls="open-zaken-panel" data-label="Lopende zaken">Lopende zaken</button>
+            <button type="button" id="closed-zaken-tab" class="mijn-tabs__tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="closed-zaken-panel" data-label="Afgeronde zaken">Afgeronde zaken</button>
         </div>
         <div id="open-zaken-panel" class="mijn-tabs__panel" role="tabpanel" aria-labelledby="open-zaken-tab" tabindex="0">
             {{#timeout}}
