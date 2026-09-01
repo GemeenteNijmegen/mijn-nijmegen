@@ -308,7 +308,7 @@ base-uri 'self';
 form-action 'self';
 connect-src 'self';
 style-src 'self';
-script-src 'self' https://siteimproveanalytics.com;
+script-src 'self' https://siteimproveanalytics.com 'sha256-ieoeWczDHkReVBsRBqaal5AFMlBtNjMzgwKvLqi/tSU=';
 font-src 'self';
 img-src 'self' data: https://*.siteimproveanalytics.io;
 object-src 'none';
