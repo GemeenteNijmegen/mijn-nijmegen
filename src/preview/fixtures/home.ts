@@ -39,4 +39,15 @@ export const homeTaken: TaakSummary[] = [
     is_gesloten: false,
     laatstBewerktOp: new Date('2024-03-10').toISOString(),
   },
+  {
+    title: 'Aanvraag indienen',
+    url: 'https://example.com/taken/preview-2',
+    uuid: 'task-preview-2',
+    einddatum: '10 maart 2024',
+    is_open: false,
+    is_afgerond: true,
+    is_verwerkt: false,
+    is_gesloten: false,
+    laatstBewerktOp: new Date('2024-03-08').toISOString(),
+  },
 ];
