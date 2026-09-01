@@ -38,6 +38,7 @@ const project = new GemeenteNijmegenCdkApp({
     'zod',
     'validator',
     'content-disposition',
+    'chokidar',
   ], /* Runtime dependencies of this module. */
   devDeps: [
     '@types/validator',
@@ -57,7 +58,11 @@ const project = new GemeenteNijmegenCdkApp({
     '@gemeentenijmegen/design-tokens',
     '@gemeentenijmegen/layout-css',
     '@gemeentenijmegen/components-css',
+    '@gemeentenijmegen/semantic-html',
+    '@gemeentenijmegen/font',
+    '@gemeentenijmegen/web-components',
     '@utrecht/document-css@1.5.0',
+    '@utrecht/alert-css@4.0.2',
     '@utrecht/button-css@2.3.0',
     '@utrecht/button-group-css@1.4.0',
     '@utrecht/paragraph-css@2.3.1',
@@ -67,8 +72,16 @@ const project = new GemeenteNijmegenCdkApp({
     '@utrecht/heading-4-css@1.5.0',
     '@utrecht/heading-5-css@1.5.0',
     '@utrecht/heading-6-css@1.5.0',
+    '@utrecht/page-body-css',
+    '@utrecht/rich-text-css',
+    '@utrecht/pre-heading-css',
+    '@utrecht/link-css@1.6.0',
+    '@utrecht/form-field-css@3.0.1',
+    '@utrecht/form-label-css@3.0.1',
+    '@utrecht/textbox-css@4.0.1',
+    '@utrecht/form-field-description-css@3.0.1',
+    '@utrecht/form-field-error-message-css@3.0.1',
   ], /* Build dependencies for this module. */
-  mutableBuild: true,
   jestOptions: {
     jestConfig: {
       setupFiles: ['dotenv/config'],
@@ -80,12 +93,6 @@ const project = new GemeenteNijmegenCdkApp({
           isolatedModules: true,
         }),
         '^.+\\.mustache$': new Transform('@glen/jest-raw-loader'),
-        '^.+\\.tsx?$': new Transform('ts-jest', {
-          tsconfig: 'tsconfig.dev.json',
-        }),
-        '^.+\\.m?jsx?$': new Transform('ts-jest', {
-          tsconfig: 'tsconfig.dev.json',
-        }),
       },
       transformIgnorePatterns: [
         'node_modules/(?!(openid-client)/)',
@@ -126,7 +133,28 @@ const project = new GemeenteNijmegenCdkApp({
     'test/playwright/report',
     'test/playwright/screenshots',
     'src/app/static-resources/static/styles/ds.*',
+    'src/app/static-resources/static/styles/*.woff2',
+    'src/app/static-resources/static/styles/*.woff',
+    'src/app/static-resources/static/styles/*.ttf',
+    'src/app/static-resources/static/js/web-components/',
+    '/preview/',
   ],
+});
+
+// @gemeentenijmegen/apiclient pins an exact axios version, which stops npm from
+// deduping it with our own axios dependency and breaks axios-mock-adapter in tests.
+project.package.addPackageResolutions('axios@^1.19.0');
+
+const previewCmd = 'ts-node -P tsconfig.json --transpile-only -r ./src/preview/mustache-register.js';
+
+project.addTask('preview', {
+  exec: `${previewCmd} ./src/preview/render-previews.ts`,
+  description: 'Render preview HTML for all pages once',
+});
+
+project.addTask('preview:watch', {
+  exec: `${previewCmd} ./src/preview/watch.ts`,
+  description: 'Watch templates and re-render preview HTML on changes',
 });
 
 const cssBundleTask = project.addTask('bundle:css-bundle', {
@@ -138,10 +166,21 @@ const cssBundleTask = project.addTask('bundle:css-bundle', {
     '--outfile=./src/app/static-resources/static/styles/ds.js',
     '--loader:.css=css',
     '--loader:.mustache=text',
+    '--loader:.woff2=file',
+    '--loader:.woff=file',
+    '--loader:.ttf=file',
+    '--asset-names=[name]',
     '--sourcemap',
   ].join(' '),
   description: 'Bundle css from DS',
 });
 project.compileTask.spawn(cssBundleTask);
+
+const copyWcTask = project.addTask('bundle:copy-web-components', {
+  description: 'Copy NLDS web component IIFE bundles to static/js/web-components/, stripping CSS injection for CSP compliance',
+  exec: 'node scripts/strip-web-component-css.mjs',
+});
+project.compileTask.spawn(copyWcTask);
+
 
 project.synth();

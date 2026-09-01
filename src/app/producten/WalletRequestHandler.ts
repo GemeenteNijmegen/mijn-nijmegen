@@ -112,6 +112,7 @@ export class WalletRequestHandler {
       title: 'Mijn Producten',
       shownav: true,
       nav: navigation.items,
+      has_sidenav: navigation.items ? true : false,
       error: undefined,
     };
   }

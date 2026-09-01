@@ -1,61 +1,60 @@
 {{>header}}
 
-<main id="denhaag-theme nijmegen-theme">
-    <!-- START: template component(s) -->
-    <div class="container">
-        {{>breadcrumbs}}
-        <div class="row">
-        <nav class="nijmegen-sidenav col-lg-3 col-md-12">
-                <ul class="nijmegen-sidenav__list">
-                {{#nav}}
-                    <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
-                        {{{icon}}}
-                        <a href="{{{url}}}">{{title}}</a>
-                    </li>
-                {{/nav}}
-                </ul>
-        </nav>
-        <div class="col-lg-9 col-md-12">
-            <h1>Mijn zaken</h1>
-            <p class="lead">Hier vindt u een overzicht van uw zaken.</p>
-            <div class="alert alert-info">Op dit moment vindt u in Mijn Nijmegen informatie over uw aanvragen/meldingen. Het kan dat uw aanvraag of zaak niet in dit overzicht staat, nog niet alles wordt hier getoond. Uiteindelijk vindt u in Mijn Nijmegen al uw online zaken met ons terug, hier werken we aan.</div>
-            <div id="zaken-container" class="tabs-wrapper">
-                <!-- Tab List -->
-                <div class="nav classic-tabs-no-line" role="tablist">
-                    <div class="nav-item">
-                        <button class="nav-link active" role="tab" aria-selected="true" aria-controls="open-zaken-tab" id="example-1">
-                            Lopende zaken
-                        </button>
-                    </div>
-                    <div class="nav-item">
-                        <button class="nav-link" role="tab" aria-selected="false" aria-controls="gesloten-zaken-tab" id="example-2" tabindex="-1">
-                            Afgeronde zaken
-                        </button>
-                    </div>
-                </div>
-                <!-- Tab Content -->
-                    <div class="tab-content" tabindex="0" role="tabpanel" id="open-zaken-tab" aria-labelledby="example-1">
-                        {{#timeout}}
-                            <p id="open-zaken-list">Bezig met ophalen van uw open zaken… {{>spinner}}</p>
-                        {{/timeout}}
-                        {{^timeout}}
-                            {{{open-zaken}}}
-                        {{/timeout}}
-                    </div>
-                    <div class="tab-content" tabindex="0" role="tabpanel" id="gesloten-zaken-tab" aria-labelledby="example-2" hidden="">
-                        {{#timeout}}
-                            <p id="closed-zaken-list">Bezig met ophalen van uw afgeronde zaken… {{>spinner}}</p>
-                        {{/timeout}}
-                        {{^timeout}}
-                            {{{closed-zaken}}}
-                        {{/timeout}}
-
-                    </div>
-                </div>
+<main id="main">
+    <h1 class="utrecht-heading-1">Mijn zaken</h1>
+    <p class="utrecht-paragraph utrecht-paragraph--lead">Hier vindt u een overzicht van uw zaken.</p>
+    <div class="utrecht-alert utrecht-alert--info">
+        <div class="utrecht-alert__icon">
+            <span class="utrecht-icon" role="img" aria-label="Alert type Informatie">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="tabler-icon tabler-icon-info-circle "
+            >
+                <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
+                <path d="M12 9h.01"></path>
+                <path d="M11 12h1v4h1"></path>
+            </svg>
+            </span>
+        </div>
+        <div class="utrecht-alert__content">
+            <div class="utrecht-alert__message" role="status">
+            <p class="utrecht-paragraph">Op dit moment vindt u in Mijn Nijmegen informatie over uw aanvragen/meldingen. Het kan dat uw aanvraag of zaak niet in dit overzicht staat, nog niet alles wordt hier getoond. Uiteindelijk vindt u in Mijn Nijmegen al uw online zaken met ons terug, hier werken we aan.</p>
+            </div>
         </div>
     </div>
 
-    <!-- END: template component(s) -->
+
+    <div class="mijn-tabs">
+        <div class="mijn-tabs__list" role="tablist" aria-label="Zaken">
+            <button type="button" id="open-zaken-tab" class="mijn-tabs__tab" role="tab" aria-selected="true" aria-controls="open-zaken-panel" data-label="Lopende zaken">Lopende zaken</button>
+            <button type="button" id="closed-zaken-tab" class="mijn-tabs__tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="closed-zaken-panel" data-label="Afgeronde zaken">Afgeronde zaken</button>
+        </div>
+        <div id="open-zaken-panel" class="mijn-tabs__panel" role="tabpanel" aria-labelledby="open-zaken-tab" tabindex="0">
+            {{#timeout}}
+                <p id="open-zaken-list">Bezig met ophalen van uw open zaken… {{>spinner}}</p>
+            {{/timeout}}
+            {{^timeout}}
+                {{{open-zaken}}}
+            {{/timeout}}
+        </div>
+        <div id="closed-zaken-panel" class="mijn-tabs__panel" role="tabpanel" aria-labelledby="closed-zaken-tab" tabindex="0" hidden>
+            {{#timeout}}
+                <p id="closed-zaken-list">Bezig met ophalen van uw afgeronde zaken… {{>spinner}}</p>
+            {{/timeout}}
+            {{^timeout}}
+                {{{closed-zaken}}}
+            {{/timeout}}
+        </div>
+    </div>
+
 </main>
 
 {{>footer}}

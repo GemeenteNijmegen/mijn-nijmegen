@@ -17,7 +17,19 @@
       "type": "build"
     },
     {
+      "name": "@gemeentenijmegen/font",
+      "type": "build"
+    },
+    {
       "name": "@gemeentenijmegen/layout-css",
+      "type": "build"
+    },
+    {
+      "name": "@gemeentenijmegen/semantic-html",
+      "type": "build"
+    },
+    {
+      "name": "@gemeentenijmegen/web-components",
       "type": "build"
     },
     {
@@ -64,6 +76,11 @@
       "type": "build"
     },
     {
+      "name": "@utrecht/alert-css",
+      "version": "4.0.2",
+      "type": "build"
+    },
+    {
       "name": "@utrecht/button-css",
       "version": "2.3.0",
       "type": "build"
@@ -76,6 +93,26 @@
     {
       "name": "@utrecht/document-css",
       "version": "1.5.0",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/form-field-css",
+      "version": "3.0.1",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/form-field-description-css",
+      "version": "3.0.1",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/form-field-error-message-css",
+      "version": "3.0.1",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/form-label-css",
+      "version": "3.0.1",
       "type": "build"
     },
     {
@@ -109,8 +146,30 @@
       "type": "build"
     },
     {
+      "name": "@utrecht/link-css",
+      "version": "1.6.0",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/page-body-css",
+      "type": "build"
+    },
+    {
       "name": "@utrecht/paragraph-css",
       "version": "2.3.1",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/pre-heading-css",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/rich-text-css",
+      "type": "build"
+    },
+    {
+      "name": "@utrecht/textbox-css",
+      "version": "4.0.1",
       "type": "build"
     },
     {
@@ -162,12 +221,11 @@
     },
     {
       "name": "jest-junit",
-      "version": "^16",
+      "version": "^17",
       "type": "build"
     },
     {
       "name": "projen",
-      "version": "0.98.29",
       "type": "build"
     },
     {
@@ -181,6 +239,11 @@
     {
       "name": "typescript",
       "type": "build"
+    },
+    {
+      "name": "axios",
+      "version": "^1.19.0",
+      "type": "override"
     },
     {
       "name": "@aws-lambda-powertools/logger",
@@ -240,8 +303,12 @@
       "type": "runtime"
     },
     {
+      "name": "chokidar",
+      "type": "runtime"
+    },
+    {
       "name": "constructs",
-      "version": "^10.0.5",
+      "version": "^10.5.1",
       "type": "runtime"
     },
     {

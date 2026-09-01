@@ -1,59 +1,74 @@
+{{! Task navigation list — Den Haag "Action" component (single/multi variant).      }}
+{{! Icons are inline SVG on purpose: this partial renders in three code paths       }}
+{{! (/taken, home, single zaak) and not all of them register mustache partials.     }}
 
 {{#incompleteResults}}
-    <div class="alert alert-info">Het is ons niet gelukt al uw taken op te halen. Hieronder vindt u een overzicht van de gevonden taken. <a href="">Klik hier om het nog eens te proberen</a>.</div>
+    <div class="utrecht-alert utrecht-alert--warning" role="alert">
+        <p class="utrecht-paragraph">Het is ons niet gelukt al uw taken op te halen. Hieronder ziet u de taken die we wél konden ophalen. <a class="utrecht-link utrecht-link--html-a" href="">Probeer het opnieuw</a>.</p>
+    </div>
 {{/incompleteResults}}
 
-<div id="{{takenid}}">
+<div id="{{takenid}}" class="denhaag-action-list">
 {{#taken}}
-    <div class="denhaag-action">
-        <div class="denhaag-action__content">
-            {{title}} {{#has_attachments}} {{#attachments}}Bijgevoegd: <a href="{{url}}">{{title}}</a> {{/attachments}} {{/has_attachments}}
-        </div>
-        <div class="denhaag-action__details">
-
-        {{#is_open}}
-            <div class="denhaag-action__date">
-            <span>
-                voor {{einddatum}}
+    {{#is_open}}
+    {{^has_attachments}}
+    <a class="denhaag-action denhaag-action--single" href="{{url}}">
+        <span class="denhaag-action__row">
+            <span class="denhaag-action__content">{{title}}</span>
+        </span>
+        <span class="denhaag-action__context">
+            <span class="denhaag-action__details">
+                <span class="denhaag-action__date">voor {{einddatum}}</span>
             </span>
-            </div>
-            <div class="denhaag-action__actions">
-            <a
-                class="utrecht-button utrecht-button--subtle" type="button"
-                href="{{url}}"
-                title="Taak uitvoeren"
-            >
-                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M13 18l6 -6" /><path d="M13 6l6 6" /></svg>
-            </a>
-            </div>
-        {{/is_open}}
-        {{#is_afgerond}}
-        <div class="denhaag-action__date">
-            </div>
-            <div class="denhaag-action__actions">
-            Ingediend {{>checkmark}}
-            </div>
-        {{/is_afgerond}}
-        {{#is_verwerkt}}
-        <div class="denhaag-action__date">
-            </div>
-            <div class="denhaag-action__actions">
-            Verwerkt {{>checkmark}}
-            </div>
-        {{/is_verwerkt}}
-        {{#is_gesloten}}
-        <div class="denhaag-action__date">
-            </div>
-            <div class="denhaag-action__actions">
-            Gesloten {{>checkmark}}
-            </div>
-        {{/is_gesloten}}
-        </div>
+            <span class="denhaag-action__link-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-arrow-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0"/><path d="M13 18l6 -6"/><path d="M13 6l6 6"/></svg>
+            </span>
+        </span>
+    </a>
+    {{/has_attachments}}
+    {{#has_attachments}}
+    <div class="denhaag-action">
+        <span class="denhaag-action__row">
+            <span class="denhaag-action__content">{{title}}</span>
+        </span>
+        <span class="denhaag-action__context">
+            <span class="denhaag-action__details">
+                <span class="denhaag-action__date">voor {{einddatum}}</span>
+                {{#attachments}}<a class="utrecht-link utrecht-link--html-a" href="{{url}}">{{title}}</a>{{/attachments}}
+            </span>
+            <span class="denhaag-action__actions">
+                <a class="utrecht-button utrecht-button--subtle" href="{{url}}">
+                    <span class="sr-only">Taak uitvoeren: {{title}}</span>
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-arrow-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0"/><path d="M13 18l6 -6"/><path d="M13 6l6 6"/></svg>
+                </a>
+            </span>
+        </span>
     </div>
+    {{/has_attachments}}
+    {{/is_open}}
+
+    {{^is_open}}
+    <div class="denhaag-action">
+        <span class="denhaag-action__row">
+            <span class="denhaag-action__content">{{title}}</span>
+        </span>
+        <span class="denhaag-action__context">
+            <span class="denhaag-action__details">
+                {{#has_attachments}}{{#attachments}}<a class="utrecht-link utrecht-link--html-a" href="{{url}}">{{title}}</a>{{/attachments}}{{/has_attachments}}
+            </span>
+            <span class="denhaag-action__date">
+                {{#is_afgerond}}Ingediend{{/is_afgerond}}{{#is_verwerkt}}Verwerkt{{/is_verwerkt}}{{#is_gesloten}}Gesloten{{/is_gesloten}}
+                <span class="denhaag-action__link-icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-square-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 3m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"/><path d="M9 12l2 2l4 -4"/></svg>
+                </span>
+            </span>
+        </span>
+    </div>
+    {{/is_open}}
 {{/taken}}
 {{^taken}}
     {{^incompleteResults}}
-        <p>U heeft geen openstaande taken.</p>
+    <p class="utrecht-paragraph">U heeft geen openstaande taken.</p>
     {{/incompleteResults}}
 {{/taken}}
 </div>

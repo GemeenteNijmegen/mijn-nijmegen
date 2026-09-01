@@ -64,9 +64,10 @@ export class TaakrequestHandler {
 
 
       const data = {
-        title: 'overzicht',
+        title: 'Mijn taken',
         shownav: true,
         nav: navigation.items,
+        has_sidenav: navigation.items ? true : false,
         breadcrumbs: breadcrumbs.items,
         volledigenaam: await user.getUserName(),
         taken,

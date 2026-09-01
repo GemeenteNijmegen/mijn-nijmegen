@@ -51,6 +51,12 @@ export class uitkeringsRequestHandler {
     const data = await uitkeringsApi.getUitkeringen(bsn);
     data.volledigenaam = session.getValue('username');
     data.multipleUitkeringen = (data?.uitkeringen?.length > 1);
+    if (data.multipleUitkeringen) {
+      data.uitkeringen.forEach((item: any, index: number) => {
+        item.hideTypeHeading = true;
+        item.active = index === 0;
+      });
+    }
 
     const navigation = new Navigation(userType, {
       currentPath: '/uitkeringen',
@@ -58,6 +64,7 @@ export class uitkeringsRequestHandler {
 
     const breadcrumbs = this.setupBreadcrumbs();
     data.nav = navigation.items;
+    data.has_sidenav = navigation.items ? true : false;
     data.breadcrumbs = breadcrumbs.items;
     const html = await this.renderHtml(data);
 

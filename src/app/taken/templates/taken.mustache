@@ -1,35 +1,16 @@
 {{>header}}
 
-<main class="denhaag-theme nijmegen-theme">
-    <!-- START: template component(s) -->
-    <div class="container">
-        {{>breadcrumbs}}
-        <div class="row">
-        <nav class="nijmegen-sidenav col-lg-3 col-md-12">
-                <ul class="nijmegen-sidenav__list">
-                {{#nav}}
-                    <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
-                        {{{icon}}}
-                        <a href="{{{url}}}">{{title}}</a>
-                    </li>
-                {{/nav}}
-                </ul>
-        </nav>
-        <div class="col-lg-9 col-md-12">
-            <h1>Mijn taken</h1>
-            <p class="lead">Bekijk de taken die u nog uit moet voeren.</p>
-            <div>
-            {{#timeout}}
-            <p id="taken-list">Bezig met ophalen van uw open taken… {{>spinner}}</p>
-            {{/timeout}}
-            {{#has_taken}}
-            {{{taken}}}
-            {{/has_taken}}
-            </div>
-        </div>
+<main id="main">
+    <h1 class="utrecht-heading-1">Mijn taken</h1>
+    <p class="utrecht-paragraph utrecht-paragraph--lead">Bekijk de taken die u nog uit moet voeren.</p>
+    <div>
+    {{#timeout}}
+    <p id="taken-list">Bezig met ophalen van uw open taken… {{>spinner}}</p>
+    {{/timeout}}
+    {{#has_taken}}
+    {{{taken}}}
+    {{/has_taken}}
     </div>
-
-    <!-- END: template component(s) -->
 </main>
 
 {{>footer}}

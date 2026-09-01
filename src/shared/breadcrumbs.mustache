@@ -1,31 +1,27 @@
 {{#breadcrumbs}}
-<div class="row">
-  <div class="col-lg-12 col-md-12">
-    <nav aria-label="Broodkruimelnavigatie" class="nijmegen-breadcrumb">
-      <a class="nijmegen-breadcrumb__link nijmegen-breadcrumb__link--mobile" href="{{previous.url}}">
-        <span itemProp="name" class="nijmegen-breadcrumb__text">{{previous.title}}</span>
+<nav aria-label="Broodkruimelnavigatie" class="nijmegen-breadcrumb">
+  <a class="nijmegen-breadcrumb__link nijmegen-breadcrumb__link--mobile" href="{{previous.url}}">
+    <span class="nijmegen-breadcrumb__text">{{previous.title}}</span>
+  </a>
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList" class="nijmegen-breadcrumb__list">
+    {{#items}}
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"
+        class="nijmegen-breadcrumb__item">
+      <a class="nijmegen-breadcrumb__link" href="{{url}}">
+        <span itemprop="name" class="nijmegen-breadcrumb__text">{{title}}</span>
       </a>
-      <ol itemscope="" itemtype="https://schema.org/BreadcrumbList" class="nijmegen-breadcrumb__list">
-       {{#items}}
-        <li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem"
-          class="nijmegen-breadcrumb__item">
-          <a class="nijmegen-breadcrumb__link" href="{{url}}">
-            <span itemProp="name" class="nijmegen-breadcrumb__text">{{title}}</span>
-          </a>
-          <meta content="{{index}}" itemprop="position" />
-        </li>
-        {{/items}}
-        {{#current}}
-        <li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem"
-          class="nijmegen-breadcrumb__item">
-          <a aria-current="page" class="nijmegen-breadcrumb__link nijmegen-breadcrumb__link--disabled" href="{{url}}">
-            <span itemProp="name" class="nijmegen-breadcrumb__text">{{title}}</span>
-          </a>
-          <meta content="{{index}}" itemprop="position" />
-        </li>
-        {{/current}}
-      </ol>
-    </nav>
-  </div>
-</div>
+      <meta itemprop="position" content="{{index}}" />
+    </li>
+    {{/items}}
+    {{#current}}
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"
+        class="nijmegen-breadcrumb__item">
+      <a aria-current="page" class="nijmegen-breadcrumb__link nijmegen-breadcrumb__link--disabled" href="{{url}}">
+        <span itemprop="name" class="nijmegen-breadcrumb__text">{{title}}</span>
+      </a>
+      <meta itemprop="position" content="{{index}}" />
+    </li>
+    {{/current}}
+  </ol>
+</nav>
 {{/breadcrumbs}}

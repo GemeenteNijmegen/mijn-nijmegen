@@ -3,12 +3,19 @@
 
     {{^errorContactgegevens}}
 
-        <table class="responsive-table">
-            <tbody>
-                <tr>
-                    <td>E-mailadres</td>
-                    <td>{{email}}{{^email}}-{{/email}}</td>
-                    <td>
+        <table class="nijmegen-table nijmegen-table-full-width">
+            <thead class="nijmegen-table__header">
+                <tr class="nijmegen-table__row">
+                    <th scope="col" class="nijmegen-table__header-cell">Kenmerk</th>
+                    <th scope="col" class="nijmegen-table__header-cell">Waarde</th>
+                    <th scope="col" class="nijmegen-table__header-cell"><span class="sr-only">Acties</span></th>
+                </tr>
+            </thead>
+            <tbody class="nijmegen-table__body">
+                <tr class="nijmegen-table__row">
+                    <td class="nijmegen-table__data-cell" data-label="Kenmerk">E-mailadres</td>
+                    <td class="nijmegen-table__data-cell" data-label="Waarde">{{email}}{{^email}}-{{/email}}</td>
+                    <td class="nijmegen-table__data-cell" data-label="Acties">
                         <ul role="list" class="utrecht-link-list utrecht-link-list--html-ul">
                             <li class="utrecht-link-list__item">
                                 <a href="/persoonsgegevens/edit?type=email" class="utrecht-link utrecht-link--html-a utrecht-link-list__link">
@@ -17,16 +24,16 @@
                                             <path d="M9 6l6 6l-6 6"></path>
                                         </svg>
                                     </span>
-                                    <span class="utrecht-link-list__link-text">{{#email}}Aanpassen{{/email}}{{^email}}Toevoegen{{/email}}</span>
+                                    <span class="utrecht-link-list__link-text">{{#email}}Aanpassen{{/email}}{{^email}}Toevoegen{{/email}}<span class="sr-only"> e-mailadres</span></span>
                                 </a>
                             </li>
                         </ul>
                     </td>
                 </tr>
-                <tr>
-                    <td>Telefoonnummer</td>
-                    <td>{{telefoonnummer}}{{^telefoonnummer}}-{{/telefoonnummer}}</td>
-                    <td>
+                <tr class="nijmegen-table__row">
+                    <td class="nijmegen-table__data-cell" data-label="Kenmerk">Telefoonnummer</td>
+                    <td class="nijmegen-table__data-cell" data-label="Waarde">{{telefoonnummer}}{{^telefoonnummer}}-{{/telefoonnummer}}</td>
+                    <td class="nijmegen-table__data-cell" data-label="Acties">
                         <ul role="list" class="utrecht-link-list utrecht-link-list--html-ul">
                             <li class="utrecht-link-list__item">
                                 <a href="/persoonsgegevens/edit?type=phonenumber" class="utrecht-link utrecht-link--html-a utrecht-link-list__link">
@@ -35,7 +42,7 @@
                                             <path d="M9 6l6 6l-6 6"></path>
                                         </svg>
                                     </span>
-                                    <span class="utrecht-link-list__link-text">{{#telefoonnummer}}Aanpassen{{/telefoonnummer}}{{^telefoonnummer}}Toevoegen{{/telefoonnummer}}</span>
+                                    <span class="utrecht-link-list__link-text">{{#telefoonnummer}}Aanpassen{{/telefoonnummer}}{{^telefoonnummer}}Toevoegen{{/telefoonnummer}}<span class="sr-only"> telefoonnummer</span></span>
                                 </a>
                             </li>
                         </ul>
@@ -43,7 +50,6 @@
                 </tr>
             </tbody>
         </table>
-
 
     {{/errorContactgegevens}}
     {{#errorContactgegevens}}

@@ -1,0 +1,354 @@
+/* App-specific styles with no NLDS equivalent (ADR-0002). Do not add rules targeting nijmegen-* or utrecht-* classes here. */
+
+/* Visually hidden but available to assistive technology. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+ * Side navigation: hidden below the same breakpoint at which the header itself switches
+ * from the desktop nav to the mobile hamburger menu (nijmegen-mobile-menu), which already
+ * contains the same navigation links. Without this, the side nav still rendered on mobile
+ * as a cramped 2-column grid item, duplicating the hamburger menu's links.
+ *
+ * The breakpoint below is intentionally NOT one of the NDS grid breakpoints
+ * (--nijmegen-breakpoint-sm/md/lg/xl/xxl: 576/768/992/1200/1400px). The header component's
+ * own mobile/desktop switch is hardcoded in ds.css to `@media (width < 1024px)`
+ * (see `.nijmegen-header__content` / `.nijmegen-header__content--small`), independently of
+ * those grid tokens. 1024px does not correspond to any named breakpoint the design system
+ * exposes, and the design system ships no responsive show/hide utility class we could apply
+ * instead (only grid column-span classes, which don't collapse an item to nothing).
+ * Matching the grid's nearest breakpoint (lg, 992px) instead of 1024px would leave a 32px
+ * range (992-1023px) where neither the side nav nor the hamburger menu's nav links are
+ * shown, so this bespoke rule targets the header's actual, hardcoded threshold instead.
+ * Revisit if/when the design system exposes this breakpoint as a token or ships a hide utility.
+ *
+ * Zie ook: https: //github.com/GemeenteNijmegen/design-system/issues/295
+ *
+ */
+@media (width < 1024px) {
+  .mijn-sidenav-wrapper {
+    display: none;
+  }
+}
+
+/*
+ * Exception: @gemeentenijmegen/components-css's .utrecht-link .utrecht-icon rule sets
+ * inset-block-start to nudge the icon into baseline alignment, but never sets `position`
+ * on the element, so the offset is dropped by the browser and the icon renders too high.
+ * This restores the missing prerequisite so the vendor's own token-driven value takes effect;
+ * it does not introduce new positioning/sizing. Remove once fixed upstream.
+ */
+.utrecht-link .utrecht-icon {
+  position: relative;
+}
+
+/* Sticky footer: push footer to the bottom on short pages. */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex-grow: 1;
+}
+
+body a {
+  text-decoration: underline;
+}
+
+/* Compensates the underline default above for button-styled links. */
+.utrecht-button {
+  text-decoration: none;
+}
+
+table {
+  margin-bottom: 2rem;
+}
+
+table tr th {
+  width: 35%;
+}
+
+/* Loading spinner: appended to a link by spinner.js while a request is in flight. */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin-left: 8px;
+  opacity: 0.8;
+  flex-shrink: 0;
+}
+
+a[aria-disabled="true"] {
+  opacity: 0.7;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* Spin animation for the spinner.mustache SVG icon. */
+.spinner {
+  transform-origin: center;
+  animation: spinner_spin 0.75s infinite linear;
+}
+
+@keyframes spinner_spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.header-readmore {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.mijn-login-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.mijn-login-selector>* {
+  flex-grow: 1;
+  flex-basis: calc((33rem - 100%) * 999);
+}
+
+.mijn-login-button {
+  background-repeat: no-repeat;
+  background-position: left 0.25em center;
+  background-size: 2.5em;
+  text-indent: 2.5em;
+  width: auto;
+}
+
+.mijn-login-button--digid {
+  background-image: url(../images/digid.svg);
+}
+
+.mijn-login-button--yivi {
+  background-image: url(../images/yivi.svg);
+}
+
+.mijn-login-button--eherkenning {
+  background-image: url(../images/eherkenning.svg);
+}
+
+/*
+ * Tabs: bespoke app component, no NLDS equivalent (ADR-0002). Implements the WAI-ARIA APG
+ * tabs pattern (see tabs.js). Colors reuse existing design tokens for visual consistency.
+ */
+.mijn-tabs {
+  margin-top: 1rem;
+}
+
+.mijn-tabs__list {
+  display: flex;
+  overflow-x: auto;
+  border-bottom: 1px solid #D4D4D4;
+  margin-bottom: 1rem;
+}
+
+.mijn-tabs__tab {
+  all: unset;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0.75rem 1rem;
+  white-space: nowrap;
+  border-bottom: .3125rem solid transparent;
+  color: var(--nijmegen-color-primary-zeegroen, #157C68);
+  font-weight: 400;
+}
+
+/*
+ * Reserve the bold width up front: a hidden copy of the label at font-weight 700
+ * fixes each tab's size, so tabs no longer resize (and shove their neighbours)
+ * when they turn bold on hover or when selected.
+ */
+.mijn-tabs__tab::after {
+  content: attr(data-label);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: 700;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Inactive tab on hover: stays green but turns bold. */
+.mijn-tabs__tab:hover {
+  background-color: var(--utrecht-accordion-button-hover-background-color, #F3F3F3);
+  border-bottom-color: currentColor;
+  font-weight: 700;
+}
+
+.mijn-tabs__tab:focus-visible {
+  outline: 2px solid var(--utrecht-accordion-button-focus-visible-color, #000000);
+  outline-offset: -2px;
+}
+
+/* Current tab: bold and black (stays black on hover, unlike the inactive tabs). */
+.mijn-tabs__tab[aria-selected="true"] {
+  color: #000000;
+  background-color: #FFFFFF;
+  border-bottom-color: #000000;
+  font-weight: 700;
+}
+
+/*
+ * Task navigation: the Den Haag "Action" component (denhaag-action), single/multi
+ * variant, used as a divided navigation list. No NLDS/Nijmegen equivalent (ADR-0002).
+ * Self-contained — no --denhaag-action-* token dependency — so it renders the same on
+ * pages that don't load zaak.css. Structure follows @gemeente-denhaag/components-css@4.x.
+ */
+.denhaag-action-list {
+  margin-block: 1rem 1.5rem;
+}
+
+/* Only frame the list when it actually holds actions (not the empty state). */
+.denhaag-action-list:has(.denhaag-action) {
+  border: 1px solid #D4D4D4;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.denhaag-action {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: #FFFFFF;
+  color: inherit;
+  text-decoration: none;
+}
+
+.denhaag-action + .denhaag-action {
+  border-top: 1px solid #D4D4D4;
+}
+
+.denhaag-action__row {
+  display: flex;
+  flex-grow: 1;
+  gap: 0.5rem;
+}
+
+.denhaag-action__content {
+  flex-grow: 1;
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.denhaag-action__context {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.denhaag-action__details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.denhaag-action__date {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #4F4F4F;
+}
+
+.denhaag-action__actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.denhaag-action__link-icon {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--nijmegen-color-primary-zeegroen, #157C68);
+}
+
+.denhaag-action__link-icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Open tasks: the whole row is the link. */
+a.denhaag-action:hover {
+  background-color: var(--utrecht-accordion-button-hover-background-color, #F3F3F3);
+}
+
+a.denhaag-action:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: -2px;
+}
+
+@media (min-width: 768px) {
+  .denhaag-action {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .denhaag-action__details {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+/* File download: bespoke app component, no NLDS equivalent. */
+.mijn-file-download {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #7a7a7a;
+  color: inherit;
+  text-decoration: none;
+}
+
+.mijn-file-download__icon {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.mijn-file-download__label {
+  flex-grow: 1;
+}
+
+.mijn-file-download__action {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.25rem;
+  text-decoration: underline;
+}

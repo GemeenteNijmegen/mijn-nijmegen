@@ -1,58 +1,43 @@
 {{>header}}
 
-<main>
-    <div class="container">
-        {{>breadcrumbs}}
-        <div class="row">
-            <nav class="nijmegen-sidenav col-lg-3 col-md-12">
-                <ul class="nijmegen-sidenav__list">
-                {{#nav}}
-                    <li class="nijmegen-sidenav__item {{#current}}active{{/current}}">
-                        {{{icon}}}
-                        <a href="{{{url}}}">{{title}}</a>
-                    </li>
-                {{/nav}}
-                </ul>
-            </nav>
-            <div class="col-lg-9 col-md-12">
-                <h1>{{title}}</h1>
-                
-                {{#error}}
-                <div class="alert alert-danger">{{error}}</div>
-                {{/error}}
+<main id="main">
+    <h1 class="utrecht-heading-1">{{title}}</h1>
 
-                <form method="POST" action="/persoonsgegevens/edit" novalidate>
-                    <input type="hidden" name="xsrf_token" value="{{xsrf_token}}">
-                    <input type="hidden" name="type" value="{{type}}">
-                    
-                    {{#isEmail}}
-                    <div class="md-form">
-                        <label for="value">E-mailadres</label>
-                        <input type="email" id="value" name="value" class="form-control" value="{{currentValue}}" required pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}">
-                        <div class="invalid-feedback">
-                            <span class="sr-only">Invoer onjuist: </span>Vul een geldig e-mailadres in
-                        </div>
-                        <small class="form-text text-muted">We sturen een verificatiecode naar dit e-mailadres.</small>
-                    </div>
-                    {{/isEmail}}
-                    
-                    {{#isPhone}}
-                    <div class="md-form">
-                        <label for="value">Telefoonnummer</label>
-                        <input type="tel" id="value" name="value" class="form-control" value="{{currentValue}}" required pattern="(0[8-9]00[0-9]{4,7})|(0[1-9][0-9]{8})|(\+[0-9]{9,20}|1400|140[0-9]{2,3})">
-                        <div class="invalid-feedback">
-                            <span class="sr-only">Invoer onjuist: </span>Vul een geldig telefoonnummer in
-                        </div>
-                        <small class="form-text text-muted">We sturen een verificatiecode naar dit telefoonnummer.</small>
-                    </div>
-                    {{/isPhone}}
-                    
-                    <button type="submit" class="btn btn-primary">Volgende</button>
-                    <a href="/persoonsgegevens" class="btn btn-secondary">Annuleren</a>
-                </form>
-            </div>
+    {{#error}}
+    <p class="utrecht-form-field-error-message" role="alert">{{error}}</p>
+    {{/error}}
+
+    <form method="POST" action="/persoonsgegevens/edit" novalidate>
+        <input type="hidden" name="xsrf_token" value="{{xsrf_token}}">
+        <input type="hidden" name="type" value="{{type}}">
+
+        {{#isEmail}}
+        <div class="utrecht-form-field utrecht-form-field--text">
+            <label class="utrecht-form-label utrecht-form-field__label" for="value">E-mailadres</label>
+            <input type="email" id="value" name="value" class="utrecht-textbox utrecht-textbox--html-input utrecht-form-field__input" value="{{currentValue}}" required pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}" aria-describedby="value-description value-error">
+            <p id="value-error" class="utrecht-form-field-error-message utrecht-form-field__error-message" role="alert" hidden>
+                <span class="sr-only">Invoer onjuist: </span>Vul een geldig e-mailadres in
+            </p>
+            <p id="value-description" class="utrecht-form-field-description utrecht-form-field__description">We sturen een verificatiecode naar dit e-mailadres.</p>
         </div>
-    </div>
+        {{/isEmail}}
+
+        {{#isPhone}}
+        <div class="utrecht-form-field utrecht-form-field--text">
+            <label class="utrecht-form-label utrecht-form-field__label" for="value">Telefoonnummer</label>
+            <input type="tel" id="value" name="value" class="utrecht-textbox utrecht-textbox--html-input utrecht-form-field__input" value="{{currentValue}}" required pattern="(0[8-9]00[0-9]{4,7})|(0[1-9][0-9]{8})|(\+[0-9]{9,20}|1400|140[0-9]{2,3})" aria-describedby="value-description value-error">
+            <p id="value-error" class="utrecht-form-field-error-message utrecht-form-field__error-message" role="alert" hidden>
+                <span class="sr-only">Invoer onjuist: </span>Vul een geldig telefoonnummer in
+            </p>
+            <p id="value-description" class="utrecht-form-field-description utrecht-form-field__description">We sturen een verificatiecode naar dit telefoonnummer.</p>
+        </div>
+        {{/isPhone}}
+
+        <div class="utrecht-button-group">
+            <button type="submit" class="utrecht-button utrecht-button--primary-action">Volgende</button>
+            <a href="/persoonsgegevens" class="utrecht-button utrecht-button--secondary-action">Annuleren</a>
+        </div>
+    </form>
 </main>
 
 <script src="/static/js/form-validation.js"></script>
