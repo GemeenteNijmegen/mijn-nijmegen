@@ -1,18 +1,18 @@
 export const loginData = {
-  title: "Inloggen",
+  title: 'Inloggen',
   authMethodGroups: [
     {
-      groupName: "Inloggen voor mijzelf",
+      groupName: 'Inloggen voor mijzelf',
       authMethods: [
-        { methodName: "digid", methodNiceName: "DigiD" },
-        { methodName: "yivi", methodNiceName: "Yivi" },
-        { methodName: "eherkenning", methodNiceName: "eHerkenning" },
+        { methodName: 'digid', methodNiceName: 'DigiD' },
+        { methodName: 'yivi', methodNiceName: 'Yivi' },
+        { methodName: 'eherkenning', methodNiceName: 'eHerkenning' },
       ],
     },
     {
-      groupName: "Inloggen namens iemand anders",
+      groupName: 'Inloggen namens iemand anders',
       authMethods: [
-        { methodName: "eherkenning", methodNiceName: "eHerkenning" },
+        { methodName: 'eherkenning', methodNiceName: 'eHerkenning' },
       ],
     },
   ],
