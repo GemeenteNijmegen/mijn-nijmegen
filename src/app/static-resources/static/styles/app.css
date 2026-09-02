@@ -123,36 +123,39 @@ a[aria-disabled="true"] {
   align-items: baseline;
 }
 
-.mijn-login-selector {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.mijn-login-selector>* {
-  flex-grow: 1;
-  flex-basis: calc((33rem - 100%) * 999);
-}
-
+/*
+ * Login-method selector: app component, no NLDS equivalent (ADR-0002).
+ * Layout comes entirely from the design system: the vertical stack + gap from
+ * the Action group (utrecht-button-group--column), the half-width-on-desktop /
+ * full-width-on-mobile sizing from the grid (nijmegen-g-col-12 / -lg-6), and
+ * the block spacing from a margin utility on the grid wrapper. The rules
+ * below only lay out the contents of each button — provider logo, label,
+ * trailing chevron — and make every button fill its column at the same size.
+ * This replaces the old background-image + text-indent approach, whose centred
+ * label overlapped the logo at some viewport widths.
+ */
 .mijn-login-button {
-  background-repeat: no-repeat;
-  background-position: left 0.25em center;
-  background-size: 2.5em;
-  text-indent: 2.5em;
-  width: auto;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  text-align: start;
 }
 
-.mijn-login-button--digid {
-  background-image: url(../images/digid.svg);
+.mijn-login-button__logo {
+  flex-shrink: 0;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  border-radius: 0.25rem;
 }
 
-.mijn-login-button--yivi {
-  background-image: url(../images/yivi.svg);
+.mijn-login-button__label {
+  flex-grow: 1;
 }
 
-.mijn-login-button--eherkenning {
-  background-image: url(../images/eherkenning.svg);
+.mijn-login-button__chevron {
+  display: inline-flex;
+  flex-shrink: 0;
 }
 
 /*
