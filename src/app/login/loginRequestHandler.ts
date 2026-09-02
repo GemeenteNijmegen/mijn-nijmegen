@@ -1,12 +1,12 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
   ApiGatewayV2Response,
   Response,
-} from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
-import { Session } from '@gemeentenijmegen/session';
-import * as loginTemplate from './templates/login.mustache';
-import { OpenIDConnect } from '../../shared/OpenIDConnect';
-import { render } from '../../shared/render';
+} from "@gemeentenijmegen/apigateway-http/lib/V2/Response";
+import { Session } from "@gemeentenijmegen/session";
+import { OpenIDConnect } from "../../shared/OpenIDConnect";
+import { render } from "../../shared/render";
+import * as loginTemplate from "./templates/login.mustache";
 
 interface LoginRequestHandlerProps {
   /**
@@ -79,8 +79,8 @@ export class LoginRequestHandler {
     let session = new Session(params.cookies!, dynamoDBClient);
     await session.init();
     if (session.isLoggedIn() === true) {
-      console.debug('redirect to home');
-      return Response.redirect('/');
+      console.debug("redirect to home");
+      return Response.redirect("/");
     }
 
     if (params.method) {
@@ -88,7 +88,7 @@ export class LoginRequestHandler {
     }
 
     const data = {
-      title: 'Inloggen',
+      title: "Inloggen",
       authMethodGroups: this.authMethodGroups(),
     };
 
@@ -100,13 +100,13 @@ export class LoginRequestHandler {
   private addAuthMethods(): AuthMethod[] {
     const authMethods = [];
     if (this.config?.digidScope) {
-      authMethods.push(this.authMethodData('digid', 'DigiD'));
+      authMethods.push(this.authMethodData("digid", "DigiD"));
     }
     if (this.config?.yiviScope) {
-      authMethods.push(this.authMethodData('yivi', 'Yivi'));
+      authMethods.push(this.authMethodData("yivi", "Yivi"));
     }
     if (this.config?.eHerkenningScope) {
-      authMethods.push(this.authMethodData('eherkenning', 'eHerkenning'));
+      authMethods.push(this.authMethodData("eherkenning", "eHerkenning"));
     }
     return authMethods;
   }
@@ -124,8 +124,8 @@ export class LoginRequestHandler {
       methods.filter((method) => names.includes(method.methodName));
     const groups: AuthMethodGroup[] = [
       {
-        groupName: '', // No name for now
-        authMethods: methodsNamed(['digid', 'yivi', 'eherkenning']),
+        groupName: "", // No name for now
+        authMethods: methodsNamed(["digid", "yivi", "eherkenning"]),
       },
       // { groupName: 'Inloggen namens iemand anders', authMethods: methodsNamed([]) },
     ];
@@ -144,7 +144,7 @@ export class LoginRequestHandler {
       (known) => known.methodName == method,
     );
     if (!supportedMethod) {
-      throw Error('Authentication method is not suported!');
+      throw Error("Authentication method is not suported!");
     }
 
     const baseOidcScope = this.config.oidcScope;
@@ -158,26 +158,26 @@ export class LoginRequestHandler {
 
     let loginUrl = undefined;
     switch (method) {
-      case 'yivi':
+      case "yivi":
         const yiviScope = [baseOidcScope, this.config.yiviScope];
         if (this.config?.useYiviKvk) {
           // Feature flag
-          yiviScope.push(this.config.yiviCondisconScope ?? '');
+          yiviScope.push(this.config.yiviCondisconScope ?? "");
         } else {
-          yiviScope.push(this.config.yiviBsnAttribute ?? '');
+          yiviScope.push(this.config.yiviBsnAttribute ?? "");
         }
         loginUrl = await this.config.oidc.getLoginUrl(
           state,
-          yiviScope.join(' '),
+          yiviScope.join(" "),
         );
         break;
-      case 'digid':
+      case "digid":
         loginUrl = await this.config.oidc.getLoginUrl(
           state,
           `${baseOidcScope} ${this.config.digidScope}`,
         );
         break;
-      case 'eherkenning':
+      case "eherkenning":
         loginUrl = await this.config.oidc.getLoginUrl(
           state,
           `${baseOidcScope} ${this.config.eHerkenningScope}`,
@@ -186,7 +186,7 @@ export class LoginRequestHandler {
     }
 
     if (!loginUrl) {
-      throw Error('Unsupported auth method.');
+      throw Error("Unsupported auth method.");
     }
 
     return Response.redirect(loginUrl.toString(), 302, session.getCookie());
