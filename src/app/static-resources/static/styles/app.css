@@ -125,15 +125,29 @@ a[aria-disabled="true"] {
 
 /*
  * Login-method selector: app component, no NLDS equivalent (ADR-0002).
- * Layout comes entirely from the design system: the vertical stack + gap from
- * the Action group (utrecht-button-group--column), the half-width-on-desktop /
- * full-width-on-mobile sizing from the grid (nijmegen-g-col-12 / -lg-6), and
- * the block spacing from a margin utility on the grid wrapper. The rules
- * below only lay out the contents of each button — provider logo, label,
- * trailing chevron — and make every button fill its column at the same size.
- * This replaces the old background-image + text-indent approach, whose centred
- * label overlapped the logo at some viewport widths.
+ * The auth methods are split into audience columns (logging in as yourself /
+ * on behalf of someone else). The two columns sit side by side on desktop and
+ * stack on mobile via the grid (nijmegen-g-col-12 / -lg-6); each is a light-grey
+ * rounded panel. Within a column the buttons come from the design system's
+ * Action group (utrecht-button-group--column); the .mijn-login-button* rules
+ * only lay out each button's contents (provider logo, label, trailing chevron)
+ * and size every button identically. This replaces the old background-image +
+ * text-indent approach, whose centred label overlapped the logo at some widths.
  */
+.mijn-login-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nijmegen-space-100, 1rem);
+  padding: var(--nijmegen-space-150, 1.5rem);
+  background-color: var(--nijmegen-color-grijs-100, #f3f3f3);
+  border-radius: var(--nijmegen-border-radius-md, 12px);
+}
+
+/* Spacing between the heading and the button group is the column's gap. */
+.mijn-login-column > * {
+  margin-block: 0;
+}
+
 .mijn-login-button {
   inline-size: 100%;
   max-inline-size: 100%;
