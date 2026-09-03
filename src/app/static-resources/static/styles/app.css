@@ -123,36 +123,53 @@ a[aria-disabled="true"] {
   align-items: baseline;
 }
 
-.mijn-login-selector {
+/*
+ * Login-method selector: app component, no NLDS equivalent (ADR-0002).
+ * The auth methods are split into audience columns (logging in as yourself /
+ * on behalf of someone else). The two columns sit side by side on desktop and
+ * stack on mobile via the grid (nijmegen-g-col-12 / -lg-6); each is a light-grey
+ * rounded panel. Within a column the buttons come from the design system's
+ * Action group (utrecht-button-group--column); the .mijn-login-button* rules
+ * only lay out each button's contents (provider logo, label, trailing chevron)
+ * and size every button identically. This replaces the old background-image +
+ * text-indent approach, whose centred label overlapped the logo at some widths.
+ */
+.mijn-login-column {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  flex-direction: column;
+  gap: var(--nijmegen-space-100, 1rem);
+  padding: var(--nijmegen-space-150, 1.5rem);
+  background-color: var(--nijmegen-color-grijs-100, #f3f3f3);
+  border-radius: var(--nijmegen-border-radius-md, 12px);
 }
 
-.mijn-login-selector>* {
-  flex-grow: 1;
-  flex-basis: calc((33rem - 100%) * 999);
+/* Spacing between the heading and the button group is the column's gap. */
+.mijn-login-column > * {
+  margin-block: 0;
 }
 
 .mijn-login-button {
-  background-repeat: no-repeat;
-  background-position: left 0.25em center;
-  background-size: 2.5em;
-  text-indent: 2.5em;
-  width: auto;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  text-align: start;
 }
 
-.mijn-login-button--digid {
-  background-image: url(../images/digid.svg);
+.mijn-login-button__logo {
+  flex-shrink: 0;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  border-radius: 0.25rem;
 }
 
-.mijn-login-button--yivi {
-  background-image: url(../images/yivi.svg);
+.mijn-login-button__label {
+  flex-grow: 1;
 }
 
-.mijn-login-button--eherkenning {
-  background-image: url(../images/eherkenning.svg);
+.mijn-login-button__chevron {
+  display: inline-flex;
+  flex-shrink: 0;
 }
 
 /*
