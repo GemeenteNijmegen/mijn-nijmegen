@@ -4,13 +4,25 @@
     <h1 class="utrecht-heading-1">Inloggen Mijn Nijmegen</h1>
     <p class="utrecht-paragraph utrecht-paragraph--lead">U kunt kiezen om met DigiD in te loggen of met Yivi. Organisaties kunnen ook met eherkenning inloggen.</p>
 
-    <div class="mijn-login-selector">
-        {{#authMethods}}
-        <a href="/login?method={{methodName}}" class="utrecht-button utrecht-button--primary-action mijn-login-button mijn-login-button--{{methodName}}">
-            <span class="sr-only">Inloggen met {{methodNiceName}}</span>
-            Inloggen met {{methodNiceName}}
-        </a>
-        {{/authMethods}}
+    <div class="nijmegen-grid nijmegen-margin-block-200">
+        {{#authMethodGroups}}
+        <section class="mijn-login-column nijmegen-g-col-12 nijmegen-g-col-lg-6">
+            <h2 class="utrecht-heading-2">{{groupName}}</h2>
+            <div role="group" class="utrecht-button-group utrecht-button-group--column mijn-login-selector">
+                {{#authMethods}}
+                <a href="/login?method={{methodName}}" class="utrecht-button utrecht-button--primary-action mijn-login-button">
+                    <img src="/static/images/{{methodName}}.svg" alt="" class="mijn-login-button__logo">
+                    <span class="mijn-login-button__label">Inloggen met {{methodNiceName}}</span>
+                    <span class="utrecht-icon mijn-login-button__chevron">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-chevron-right" aria-hidden="true">
+                            <path d="M9 6l6 6l-6 6"></path>
+                        </svg>
+                    </span>
+                </a>
+                {{/authMethods}}
+            </div>
+        </section>
+        {{/authMethodGroups}}
     </div>
 
     <p class="utrecht-paragraph">Door in te loggen geeft u uw BSN (BurgerServiceNummer) door. Dit is een uniek nummer waaraan uw persoonlijke gegevens zijn gekoppeld. Wij vragen uw BSN zodat u alleen uw gegevens ziet. Met Yivi ziet u welke gegevens van u gevraagd worden als u inlogt. <a href="https://www.nijmegen.nl/diensten/privacy/yivi-nieuwe-manier-van-inloggen/" class="utrecht-link utrecht-link--html-a">Lees meer over Yivi</a>.</p>
