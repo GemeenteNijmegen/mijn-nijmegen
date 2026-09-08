@@ -115,6 +115,12 @@ export interface Configuration {
   readonly mijnProductenLive?: boolean;
 
   /**
+   * Feature flag for the gemachtigde functionality
+   * @default false
+   */
+  readonly useGemachtigd?: boolean;
+
+  /**
    * Sets the log level for parts of this application
    * @default INFO
    */
@@ -158,6 +164,7 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     mijnProductenLive: true,
     logLevel: 'DEBUG',
     monitorLoginPage: false,
+    useGemachtigd: true,
   },
   acceptance: {
     branch: 'acceptance',
