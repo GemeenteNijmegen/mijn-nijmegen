@@ -31,9 +31,10 @@ import {
 } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin, S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Construct } from 'constructs';
+import { Configurable } from './Configuration';
 import { Statics } from './statics';
 
-export interface CloudFrontStackProps extends StackProps {
+export interface CloudFrontStackProps extends StackProps, Configurable {
   /**
      * Domain for the default origin (HTTPorigin)
      */
@@ -53,7 +54,7 @@ export interface CloudFrontStackProps extends StackProps {
  * used and must be linked to the [web application firewall](https://aws.amazon.com/waf/).
  */
 export class CloudfrontStack extends Stack {
-  constructor(scope: Construct, id: string, props: CloudFrontStackProps) {
+  constructor(scope: Construct, id: string, private props: CloudFrontStackProps) {
     super(scope, id);
 
     const subdomain = Statics.subDomain(props.branch);
@@ -66,10 +67,14 @@ export class CloudfrontStack extends Stack {
 
     const cloudfrontDistribution = this.setCloudfrontStack(props.hostDomain, domains, certificateArn);
 
-    /** The order of adding behaviors to a distribution impacts behavior. For now the security redirect should be added before the
+    /**
+     * The order of adding behaviors to a distribution impacts behavior. For now the security redirect should be added before the
      * static resources.
      */
     this.addSecurityRedirect(cloudfrontDistribution);
+    if (props.configuration?.gemachtigdePortaalGatewayHost) {
+      this.addGemachtigdPortaal(cloudfrontDistribution);
+    }
     this.addStaticResources(cloudfrontDistribution);
     this.addDnsRecords(cloudfrontDistribution);
   }
@@ -78,6 +83,13 @@ export class CloudfrontStack extends Stack {
     cloudfrontDistribution.addBehavior(
       '/.well-known/security.txt',
       new HttpOrigin('nijmegen.nl'),
+    );
+  }
+
+  addGemachtigdPortaal(cloudfrontDistribution: Distribution) {
+    cloudfrontDistribution.addBehavior(
+      '/gemachtigd/*',
+      new HttpOrigin(this.props.configuration.gemachtigdePortaalGatewayHost!),
     );
   }
 
