@@ -291,6 +291,7 @@ export class ApiStack extends Stack implements Configurable {
         YIVI_CONDISCON_SCOPE: StringParameter.valueForStringParameter(this, Statics.ssmYiviCondisconScope),
         USE_YIVI_KVK: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviKvk), // Feature flag for kvk bsn conditional disclosure
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
+        USE_GEMACHTIGD: this.configuration.useGemachtigd ? 'true' : 'false',
       },
     });
     oidcSecret.grantRead(loginFunction.lambda);
