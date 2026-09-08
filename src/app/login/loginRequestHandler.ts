@@ -135,8 +135,8 @@ export class LoginRequestHandler {
 
     if (this.config?.useGemachtigd) {
       groups.push(
-        { groupName: 'voor mezelf', authMethods: methodsNamed(selfMethodNames) },
-        { groupName: 'namens iemand anders', authMethods: methodsNamed(['walletGemachtigd']) },
+        { groupName: 'Voor mezelf', authMethods: methodsNamed(selfMethodNames) },
+        { groupName: 'Namens iemand anders', authMethods: methodsNamed(['walletGemachtigd']) },
       );
     } else {
       groups.push({
