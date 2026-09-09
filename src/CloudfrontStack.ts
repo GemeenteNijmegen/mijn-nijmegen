@@ -66,6 +66,7 @@ export class CloudfrontStack extends Stack {
     const certificateArn = this.certificateArn();
 
     const cloudfrontDistribution = this.setCloudfrontStack(props.hostDomain, domains, certificateArn);
+    this.publishCloudFrontParameters(cloudfrontDistribution);
 
     /**
      * The order of adding behaviors to a distribution impacts behavior. For now the security redirect should be added before the
@@ -383,6 +384,26 @@ object-src 'none';
       destinationBucket: bucket,
       distribution: distribution,
       distributionPaths: ['/static/*', '/.well-known/'],
+    });
+  }
+
+  private publishCloudFrontParameters(distribution: Distribution) {
+    new SSM.StringParameter(this, 'cloudfront-distribution-arn', {
+      parameterName: Statics.ssmCloudFrontDistributionArn,
+      stringValue: distribution.distributionArn,
+      description: 'Mijn Nijmegen CloudFront distribution ARN - for gemachtigd static bucket connection',
+    });
+
+    new SSM.StringParameter(this, 'cloudfront-distribution-id', {
+      parameterName: Statics.ssmCloudFrontDistributionId,
+      stringValue: distribution.distributionId,
+      description: 'Mijn Nijmegen CloudFront distribution ID - for gemachtigd static bucket connection',
+    });
+
+    new SSM.StringParameter(this, 'cloudfront-domain-name', {
+      parameterName: Statics.ssmCloudFrontDomainName,
+      stringValue: distribution.distributionDomainName,
+      description: 'Mijn Nijmegen CloudFront distribution domain name - for gemachtigd static bucket connection',
     });
   }
 }

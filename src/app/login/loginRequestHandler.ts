@@ -4,9 +4,9 @@ import {
   Response,
 } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
+import * as loginTemplate from './templates/login.mustache';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { render } from '../../shared/render';
-import * as loginTemplate from './templates/login.mustache';
 
 interface LoginRequestHandlerProps {
   /**

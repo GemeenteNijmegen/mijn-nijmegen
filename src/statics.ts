@@ -158,6 +158,16 @@ export abstract class Statics {
   static readonly ssmProductenArcApiKey = '/cdk/mijn-nijmegen/arc/api-key';
   static readonly ssmProductenArcBaseUrl = '/cdk/mijn-nijmegen/arc/base-url';
 
+  // MARK: CloudFront - gemachtigd
+  /**
+   * CloudFront distribution used as the public front door for Mijn Nijmegen.
+   * These parameters are also consumed by mijn-nijmegen-gemachtigd
+   * for static resource integration.
+   */
+  static readonly ssmCloudFrontDistributionArn = '/cdk/mijn-nijmegen/cloudfront/distribution-arn';
+  static readonly ssmCloudFrontDistributionId = '/cdk/mijn-nijmegen/cloudfront/distribution-id';
+  static readonly ssmCloudFrontDomainName = '/cdk/mijn-nijmegen/cloudfront/domain-name';
+
   // MARK: ENVIRONMENTS
   static readonly gnBuildEnvironment = {
     account: '836443378780',
