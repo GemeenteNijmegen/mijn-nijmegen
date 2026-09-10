@@ -92,6 +92,12 @@ export class CloudfrontStack extends Stack {
     cloudfrontDistribution.addBehavior(
       '/gemachtigd/*',
       new HttpOrigin(this.props.configuration.gemachtigdePortaalGatewayHost!),
+      {
+        cachePolicy: CachePolicy.CACHING_DISABLED,
+        originRequestPolicy: OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+        viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        allowedMethods: AllowedMethods.ALLOW_ALL,
+      },
     );
   }
 
