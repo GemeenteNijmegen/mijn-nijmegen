@@ -115,6 +115,18 @@ export interface Configuration {
   readonly mijnProductenLive?: boolean;
 
   /**
+   * Feature flag for the gemachtigde functionality
+   * @default false
+   */
+  readonly useGemachtigd?: boolean;
+
+  /**
+   * Optional host for the gemachtigd portaal gateway. If set, the login page will show a button to login via the gemachtigd portaal.
+   * @default undefined
+   */
+  readonly gemachtigdePortaalGatewayHost?: string;
+
+  /**
    * Sets the log level for parts of this application
    * @default INFO
    */
@@ -158,6 +170,8 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     mijnProductenLive: true,
     logLevel: 'DEBUG',
     monitorLoginPage: false,
+    useGemachtigd: true,
+    gemachtigdePortaalGatewayHost: 'gemachtigd-api.mijn.mijn-dev.csp-nijmegen.nl',
   },
   acceptance: {
     branch: 'acceptance',

@@ -45,6 +45,11 @@ interface LoginRequestHandlerProps {
   useYiviKvk?: boolean;
 
   /**
+   * Feature flag to indicate if we need to enable the gemachtigde functionality
+   */
+  useGemachtigd?: boolean;
+
+  /**
    * OpenIDConnect client
    */
   oidc: OpenIDConnect;
@@ -108,6 +113,9 @@ export class LoginRequestHandler {
     if (this.config?.eHerkenningScope) {
       authMethods.push(this.authMethodData('eherkenning', 'eHerkenning'));
     }
+    if (this.config?.useGemachtigd) {
+      authMethods.push(this.authMethodData('walletGemachtigd', 'ID Wallet'));
+    }
     return authMethods;
   }
 
@@ -122,13 +130,21 @@ export class LoginRequestHandler {
     const methods = this.addAuthMethods();
     const methodsNamed = (names: string[]) =>
       methods.filter((method) => names.includes(method.methodName));
-    const groups: AuthMethodGroup[] = [
-      {
+    const groups: AuthMethodGroup[] = [];
+    const selfMethodNames = ['digid', 'yivi', 'eherkenning'];
+
+    if (this.config?.useGemachtigd) {
+      groups.push(
+        { groupName: 'Voor mezelf', authMethods: methodsNamed(selfMethodNames) },
+        { groupName: 'Namens iemand anders', authMethods: methodsNamed(['walletGemachtigd']) },
+      );
+    } else {
+      groups.push({
         groupName: '', // No name for now
-        authMethods: methodsNamed(['digid', 'yivi', 'eherkenning']),
-      },
-      // { groupName: 'Inloggen namens iemand anders', authMethods: methodsNamed([]) },
-    ];
+        authMethods: methodsNamed(selfMethodNames),
+      });
+    }
+
     return groups.filter((group) => group.authMethods.length > 0);
   }
 
@@ -182,6 +198,9 @@ export class LoginRequestHandler {
           state,
           `${baseOidcScope} ${this.config.eHerkenningScope}`,
         );
+        break;
+      case 'walletGemachtigd':
+        loginUrl = '/gemachtigd/login?method=IDWallet';
         break;
     }
 

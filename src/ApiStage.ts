@@ -53,6 +53,7 @@ export class ApiStage extends Stage {
     const cloudfrontStack = new CloudfrontStack(this, 'cloudfront-stack', {
       branch: branchName,
       hostDomain: apistack.domain(),
+      configuration: props.configuration,
     });
     cloudfrontStack.addDependency(usEastStack);
 
