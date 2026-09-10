@@ -115,6 +115,7 @@ export class LoginRequestHandler {
     }
     if (this.config?.useGemachtigd) {
       authMethods.push(this.authMethodData('walletGemachtigd', 'ID Wallet'));
+      authMethods.push(this.authMethodData('digidMachtigen', 'DigiD machtigen' ));
     }
     return authMethods;
   }
@@ -136,7 +137,7 @@ export class LoginRequestHandler {
     if (this.config?.useGemachtigd) {
       groups.push(
         { groupName: 'Voor mezelf', authMethods: methodsNamed(selfMethodNames) },
-        { groupName: 'Namens iemand anders', authMethods: methodsNamed(['walletGemachtigd']) },
+        { groupName: 'Namens iemand anders', authMethods: methodsNamed(['walletGemachtigd', 'digidMachtigen']) },
       );
     } else {
       groups.push({

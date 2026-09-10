@@ -12,7 +12,8 @@ export const loginData = {
     {
       groupName: 'Inloggen namens iemand anders',
       authMethods: [
-        { methodName: 'eherkenning', methodNiceName: 'eHerkenning' },
+        { methodName: 'walletGemachtigd', methodNiceName: 'ID Wallet' },
+        { methodName: 'digidMachtigen', methodNiceName: 'DigiD machtigen' },
       ],
     },
   ],
