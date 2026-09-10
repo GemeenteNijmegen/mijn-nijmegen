@@ -29,7 +29,7 @@ import {
   SecurityPolicyProtocol,
   ViewerProtocolPolicy,
 } from 'aws-cdk-lib/aws-cloudfront';
-import { HttpOrigin, S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
+import { HttpOrigin, S3BucketOrigin, S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Construct } from 'constructs';
 import { Configurable } from './Configuration';
 import { Statics } from './statics';
@@ -74,6 +74,7 @@ export class CloudfrontStack extends Stack {
      */
     this.addSecurityRedirect(cloudfrontDistribution);
     if (props.configuration?.gemachtigdePortaalGatewayHost) {
+      this.addGemachtigdStaticResources(cloudfrontDistribution);
       this.addGemachtigdPortaal(cloudfrontDistribution);
     }
     this.addStaticResources(cloudfrontDistribution);
@@ -91,6 +92,12 @@ export class CloudfrontStack extends Stack {
     cloudfrontDistribution.addBehavior(
       '/gemachtigd/*',
       new HttpOrigin(this.props.configuration.gemachtigdePortaalGatewayHost!),
+      {
+        cachePolicy: CachePolicy.CACHING_DISABLED,
+        originRequestPolicy: OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+        viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        allowedMethods: AllowedMethods.ALLOW_ALL,
+      },
     );
   }
 
@@ -387,6 +394,18 @@ object-src 'none';
     });
   }
 
+  private addGemachtigdStaticResources(distribution: Distribution) {
+    const bucketArn = SSM.StringParameter.valueForStringParameter(this, Statics.ssmGemachtigdStaticResourcesBucketArn);
+    const bucket = S3.Bucket.fromBucketArn(this, 'gemachtigd-static-resources-bucket', bucketArn);
+    const origin = S3BucketOrigin.withOriginAccessControl(bucket);
+
+    distribution.addBehavior('/gemachtigd/static/*', origin, {
+      viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+      allowedMethods: AllowedMethods.ALLOW_GET_HEAD,
+      cachePolicy: CachePolicy.CACHING_OPTIMIZED,
+      compress: true,
+    });
+  }
   private publishCloudFrontParameters(distribution: Distribution) {
     new SSM.StringParameter(this, 'cloudfront-distribution-arn', {
       parameterName: Statics.ssmCloudFrontDistributionArn,

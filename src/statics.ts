@@ -168,6 +168,9 @@ export abstract class Statics {
   static readonly ssmCloudFrontDistributionId = '/cdk/mijn-nijmegen/cloudfront/distribution-id';
   static readonly ssmCloudFrontDomainName = '/cdk/mijn-nijmegen/cloudfront/domain-name';
 
+  // MARK: Gemachtigd statics bucket arn
+  static readonly ssmGemachtigdStaticResourcesBucketArn ='/cdk/mijn-nijmegen-gemachtigd/statics/bucket-arn';
+
   // MARK: ENVIRONMENTS
   static readonly gnBuildEnvironment = {
     account: '836443378780',
