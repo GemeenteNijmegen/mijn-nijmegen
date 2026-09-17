@@ -152,7 +152,7 @@ export class PersoonsgegevensRequestHandler {
       contactgegevens: contactgegevensTemplate.default,
       persoonsgegevens: persoonsgegevensTemplate.default,
     });
-    return Response.html(html, 200, session.getCookie());
+    return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
   }
 
   private setupBreadcrumbs() {
@@ -211,7 +211,7 @@ export class PersoonsgegevensRequestHandler {
           error: 'Vul een geldig e-mailadres in',
         };
         const html = await render(data, editTemplate.default);
-        return Response.html(html, 200, session.getCookie());
+        return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
       }
 
       if (type === 'phonenumber' && !phoneRegex.test(value)) {
@@ -230,7 +230,7 @@ export class PersoonsgegevensRequestHandler {
           error: 'Vul een geldig telefoonnummer in',
         };
         const html = await render(data, editTemplate.default);
-        return Response.html(html, 200, session.getCookie());
+        return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
       }
 
       // Generate verification code
@@ -270,7 +270,7 @@ export class PersoonsgegevensRequestHandler {
         }
       }
 
-      return Response.redirect(`/persoonsgegevens/verify?type=${type}`, 302, session.getCookie());
+      return Response.redirect(`/persoonsgegevens/verify?type=${type}`, 302, session.getCookie({ sameSite: 'lax' }));
     }
 
     // GET request - show form
@@ -290,7 +290,7 @@ export class PersoonsgegevensRequestHandler {
     };
 
     const html = await render(data, editTemplate.default);
-    return Response.html(html, 200, session.getCookie());
+    return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
   }
 
   private async handleVerifyRequest(session: Session, event: ParsedEvent) {
@@ -327,7 +327,7 @@ export class PersoonsgegevensRequestHandler {
           [`verification_expiry_${type}`]: '',
           [`verification_attempts_${type}`]: '',
         });
-        return Response.redirect('/persoonsgegevens/edit?type=' + type, 302, session.getCookie());
+        return Response.redirect('/persoonsgegevens/edit?type=' + type, 302, session.getCookie({ sameSite: 'lax' }));
       }
 
       // Check attempts
@@ -338,7 +338,7 @@ export class PersoonsgegevensRequestHandler {
           [`verification_expiry_${type}`]: '',
           [`verification_attempts_${type}`]: '',
         });
-        return Response.redirect('/persoonsgegevens', 302, session.getCookie());
+        return Response.redirect('/persoonsgegevens', 302, session.getCookie({ sameSite: 'lax' }));
       }
 
       // Validate code
@@ -362,7 +362,7 @@ export class PersoonsgegevensRequestHandler {
               [`verification_attempts_${type}`]: '',
             });
 
-            return Response.redirect('/persoonsgegevens', 302, session.getCookie());
+            return Response.redirect('/persoonsgegevens', 302, session.getCookie({ sameSite: 'lax' }));
           } catch (error) {
             console.error('Failed to update contact info', error);
             const data = {
@@ -379,7 +379,7 @@ export class PersoonsgegevensRequestHandler {
               error: 'Er is iets fout gegaan. Probeer het later opnieuw.',
             };
             const html = await render(data, verifyTemplate.default);
-            return Response.html(html, 200, session.getCookie());
+            return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
           }
         }
       } else {
@@ -393,7 +393,7 @@ export class PersoonsgegevensRequestHandler {
             [`verification_expiry_${type}`]: '',
             [`verification_attempts_${type}`]: '',
           });
-          return Response.redirect('/persoonsgegevens', 302, session.getCookie());
+          return Response.redirect('/persoonsgegevens', 302, session.getCookie({ sameSite: 'lax' }));
         }
 
         await session.setValues({
@@ -415,7 +415,7 @@ export class PersoonsgegevensRequestHandler {
         };
 
         const html = await render(data, verifyTemplate.default);
-        return Response.html(html, 200, session.getCookie());
+        return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
       }
     }
 
@@ -435,6 +435,6 @@ export class PersoonsgegevensRequestHandler {
     };
 
     const html = await render(data, verifyTemplate.default);
-    return Response.html(html, 200, session.getCookie());
+    return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
   }
 }

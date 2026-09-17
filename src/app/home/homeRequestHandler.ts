@@ -103,7 +103,7 @@ export class HomeRequestHandler {
         },
       );
 
-      return Response.html(html, 200, session.getCookie());
+      return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
     }
   }
 

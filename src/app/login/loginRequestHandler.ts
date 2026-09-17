@@ -209,6 +209,6 @@ export class LoginRequestHandler {
       throw Error('Unsupported auth method.');
     }
 
-    return Response.redirect(loginUrl.toString(), 302, session.getCookie());
+    return Response.redirect(loginUrl.toString(), 302, session.getCookie({ sameSite: 'lax' }));
   }
 }
