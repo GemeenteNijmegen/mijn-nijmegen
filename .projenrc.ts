@@ -143,7 +143,7 @@ const project = new GemeenteNijmegenCdkApp({
 
 // @gemeentenijmegen/apiclient pins an exact axios version, which stops npm from
 // deduping it with our own axios dependency and breaks axios-mock-adapter in tests.
-project.package.addPackageResolutions('axios@^1.19.0');
+project.package.addPackageResolutions('axios@^1.20.0');
 
 const previewCmd = 'ts-node -P tsconfig.json --transpile-only -r ./src/preview/mustache-register.js';
 

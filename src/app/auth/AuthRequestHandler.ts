@@ -121,7 +121,7 @@ export class AuthRequestHandler {
       console.error(error.message);
       return Response.redirect('/login');
     }
-    return Response.redirect('/', 302, [session.getCookie()]);
+    return Response.redirect('/', 302, [session.getCookie({ sameSite: 'lax' })]);
   }
 
   private logAuthMethod(authResult: OpenIDConnectResult) {

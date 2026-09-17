@@ -104,7 +104,7 @@ export class ProductenRequestHandler {
       data.product = ProductFormatter.format(results);
       // render page
       const html = await render(data, productTemplate.default);
-      return Response.html(html, 200, session.getCookie());
+      return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
     } else {
       // NU alleen de eerste, nog niet paginated
       const results = await this.connector.fetch('/mijn-services-aggregator/PRODUCTEN/producten/api/v1/producten', user, new URLSearchParams({ eigenaren__bsn: user.identifier }));
@@ -113,7 +113,7 @@ export class ProductenRequestHandler {
 
       // render page
       const html = await render(data, productenTemplate.default);
-      return Response.html(html, 200, session.getCookie());
+      return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
     }
   }
 }

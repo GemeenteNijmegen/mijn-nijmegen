@@ -129,7 +129,7 @@ export class ZakenRequestHandler {
       zaak: zaakRow.default,
       spinner: Spinner.default,
     });
-    return Response.html(html, 200, session.getCookie());
+    return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
   }
 
   private async zakenListsHtml(zaakSummaries: any) {
@@ -210,7 +210,7 @@ export class ZakenRequestHandler {
         taken: takenTemplate.default,
         spinner: Spinner.default,
       });
-      return Response.html(html, 200, session.getCookie());
+      return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
     } else {
       return Response.error(404);
     }

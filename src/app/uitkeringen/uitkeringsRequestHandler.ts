@@ -68,7 +68,7 @@ export class uitkeringsRequestHandler {
     data.breadcrumbs = breadcrumbs.items;
     const html = await this.renderHtml(data);
 
-    return Response.html(html, 200, session.getCookie());
+    return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
   }
 
   async renderHtml(data: any) {
