@@ -300,6 +300,11 @@ export class CloudfrontStack extends Stack {
             override: true,
           },
           {
+            header: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin',
+            override: true,
+          },
+          {
             header: 'Cache-Control',
             value: 'no-cache, no-store, must-revalidate',
             override: false,
