@@ -70,7 +70,7 @@ export class WalletRequestHandler {
         text: 'Het inladen van uw product in de wallet is misgegaan. Sorry.',
       };
       const html = await render(data, walletTemplate.default);
-      return Response.html(html, 200, session.getCookie());
+      return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
     }
   }
 
@@ -93,7 +93,7 @@ export class WalletRequestHandler {
       };
     }
     const html = await render(data, walletTemplate.default);
-    return Response.html(html, 200, session.getCookie());
+    return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
   }
 
   /**

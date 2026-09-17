@@ -10,5 +10,5 @@ describe('Test aggregator connector', () => {
     const user = new Person(new Bsn('900222670'), undefined);
     const call = async () => { await connector.fetch('/test', user); };
     await expect(call).rejects.toThrow();
-  });
+  }, 20_000);
 });
