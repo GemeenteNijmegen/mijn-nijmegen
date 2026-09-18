@@ -295,6 +295,16 @@ export class CloudfrontStack extends Stack {
       customHeadersBehavior: {
         customHeaders: [
           {
+            header: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
+            override: true,
+          },
+          {
+            header: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin',
+            override: true,
+          },
+          {
             header: 'Cache-Control',
             value: 'no-cache, no-store, must-revalidate',
             override: false,
