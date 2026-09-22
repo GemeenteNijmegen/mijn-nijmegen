@@ -1,19 +1,20 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import * as crypto from 'crypto';
 
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
+import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
+import { BreadCrumbs, Navigation } from '../../shared/Navigation';
+import { NotifyNLApi } from '../../shared/NotifyNLApi';
+import { OpenKlantApi } from '../../shared/OpenKlantApi';
+import { render } from '../../shared/render';
 import { Persoonsgegevens, PersoonsgegevensMapper } from './Persoonsgegevens';
 import * as contactgegevensTemplate from './templates/contactgegevens.mustache';
 import * as editTemplate from './templates/edit-contactgegevens.mustache';
 import * as template from './templates/mijngegevens.mustache';
 import * as persoonsgegevensTemplate from './templates/persoonsgegevens.mustache';
 import * as verifyTemplate from './templates/verify-contactgegevens.mustache';
-import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
-import { BreadCrumbs, Navigation } from '../../shared/Navigation';
-import { NotifyNLApi } from '../../shared/NotifyNLApi';
-import { OpenKlantApi } from '../../shared/OpenKlantApi';
-import { render } from '../../shared/render';
 
 interface RenderData {
   volledigenaam: string;
@@ -234,7 +235,7 @@ export class PersoonsgegevensRequestHandler {
       }
 
       // Generate verification code
-      const code = Math.floor(100000 + Math.random() * 900000).toString();
+      const code = crypto.randomInt(100000, 1000000).toString();
       const expiry = Date.now() + 15 * 60 * 1000; // 15 minutes
 
       // Store in session
