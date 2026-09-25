@@ -159,7 +159,7 @@ async function renderContactgegevens(): Promise<void> {
     ...editContactgegevensData,
   };
   const html = await render(data, editContactgegevensTemplate.default);
-  await writePreview('contactgegevens', html);
+  await writePreview('edit-contactgegevens', html);
 }
 
 async function renderVerifyContactgegevens(): Promise<void> {

@@ -3,6 +3,15 @@ export abstract class Statics {
   static readonly sessionTableName: string = 'mijn-nijmegen-sessions';
 
   /**
+   * Verification (persoonsgegevens contact info edit) rate limiting.
+   * Session-scoped for now; see VerificationRateLimiter for the extension
+   * point to make these account-wide (cross-session) later.
+   */
+  static readonly verificationMaxIssuancePerHour: number = 5;
+  static readonly verificationMaxAttemptsPerHour: number = 5;
+  static readonly verificationRateLimitWindowMs: number = 60 * 60 * 1000;
+
+  /**
    * Repo information
    */
 
