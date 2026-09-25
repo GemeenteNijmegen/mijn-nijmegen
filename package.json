@@ -51,8 +51,8 @@
     "projen": "projen"
   },
   "devDependencies": {
-    "@aws-sdk/client-ssm": "^3.1137.0",
-    "@aws-sdk/types": "^3.974.5",
+    "@aws-sdk/client-ssm": "^3.1140.0",
+    "@aws-sdk/types": "^3.974.6",
     "@gemeentenijmegen/components-css": "^0.1.12",
     "@gemeentenijmegen/design-tokens": "^0.1.12",
     "@gemeentenijmegen/font": "^0.1.12",
@@ -101,15 +101,15 @@
     "jest": "^29.7.0",
     "jest-aws-client-mock": "^0.0.26",
     "jest-junit": "^17",
-    "projen": "^0.103.26",
-    "ts-jest": "^29.4.12",
+    "projen": "^0.103.27",
+    "ts-jest": "^29.4.13",
     "ts-node": "^10.9.2",
     "typescript": "^4.9.5"
   },
   "dependencies": {
     "@aws-lambda-powertools/logger": "^1.18.1",
-    "@aws-sdk/client-dynamodb": "^3.1137.0",
-    "@aws-sdk/client-secrets-manager": "^3.1137.0",
+    "@aws-sdk/client-dynamodb": "^3.1140.0",
+    "@aws-sdk/client-secrets-manager": "^3.1140.0",
     "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.104.0",
     "@gemeentenijmegen/apiclient": "^0.0.44",
     "@gemeentenijmegen/apigateway-http": "^0.0.40",
