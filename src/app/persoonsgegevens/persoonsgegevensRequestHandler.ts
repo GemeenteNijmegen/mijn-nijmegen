@@ -1,7 +1,7 @@
 import * as crypto from 'crypto';
 
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
+import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
 import { Persoonsgegevens, PersoonsgegevensMapper } from './Persoonsgegevens';
@@ -171,6 +171,16 @@ export class PersoonsgegevensRequestHandler {
     return new BreadCrumbs(crumbs);
   }
 
+  private retryAfterMessage(retryAfterSeconds: number): string {
+    const minutes = Math.max(1, Math.ceil(retryAfterSeconds / 60));
+    return `Probeer het over ${minutes} ${minutes === 1 ? 'minuut' : 'minuten'} opnieuw.`;
+  }
+
+  private withRetryAfter(response: ApiGatewayV2Response, retryAfterSeconds: number): ApiGatewayV2Response {
+    response.headers = { ...response.headers, 'Retry-After': String(retryAfterSeconds) };
+    return response;
+  }
+
   private async handleEditRequest(session: Session, event: ParsedEvent) {
     const userType = session.getValue('user_type');
     if (userType != 'person') {
@@ -179,6 +189,10 @@ export class PersoonsgegevensRequestHandler {
     const navigation = new Navigation(userType, { currentPath: '/persoonsgegevens' });
 
     const type = event.queryStringParameters?.type || event.body?.type || 'email';
+    if (type !== 'email' && type !== 'phonenumber') {
+      console.info('Rejected unknown contactgegevens type', type);
+      return Response.error(400);
+    }
     const isEmailType = type === 'email';
     const isPhoneType = type === 'phonenumber';
 
@@ -258,10 +272,13 @@ export class PersoonsgegevensRequestHandler {
           isPhone: isPhoneType,
           currentValue: value,
           xsrf_token: xsrfToken,
-          error: 'U heeft te veel verificatiecodes aangevraagd. Probeer het over een uur opnieuw.',
+          error: `U heeft te veel verificatiecodes aangevraagd. ${this.retryAfterMessage(issueOutcome.retryAfterSeconds)}`,
         };
         const html = await render(data, editTemplate.default);
-        return Response.html(html, 429, session.getCookie({ sameSite: 'lax' }));
+        return this.withRetryAfter(
+          Response.html(html, 429, session.getCookie({ sameSite: 'lax' })),
+          issueOutcome.retryAfterSeconds,
+        );
       }
 
       // Generate verification code
@@ -341,6 +358,10 @@ export class PersoonsgegevensRequestHandler {
     }
 
     const type = event.queryStringParameters?.type || event.body?.type || 'email';
+    if (type !== 'email' && type !== 'phonenumber') {
+      console.info('Rejected unknown contactgegevens type', type);
+      return Response.error(400);
+    }
     const navigation = new Navigation(userType, { currentPath: '/persoonsgegevens' });
     const breadcrumbs = this.setupBreadcrumbs();
     const xsrfToken = session.getValue('xsrf_token');
@@ -357,8 +378,23 @@ export class PersoonsgegevensRequestHandler {
         return Response.error(403);
       }
 
+      const code = event.body?.code;
+      const storedCode = session.getValue(`verification_code_${type}`);
+      const expiryOfCode = parseInt(session.getValue(`verification_expiry_${type}`) || '0');
+
+      // Check expiry first: an already-expired code isn't a real "attempt"
+      // at guessing, so it shouldn't spend any of the verify rate limit.
+      if (Date.now() > expiryOfCode) {
+        await session.setValues({
+          [`pending_${type}`]: '',
+          [`verification_code_${type}`]: '',
+          [`verification_expiry_${type}`]: '',
+        });
+        return Response.redirect('/persoonsgegevens/edit?type=' + type, 302, session.getCookie({ sameSite: 'lax' }));
+      }
+
       // Enforce verification attempt rate limit (atomic, session-scoped).
-      // Runs before anything else so it can't be bypassed by requesting a
+      // Runs before comparing the code so it can't be bypassed by requesting a
       // fresh code. It persists across newly-issued codes within this session.
       const verifyRateLimiter = new VerificationRateLimiter({
         dynamoDBClient: this.config.dynamoDBClient,
@@ -377,65 +413,70 @@ export class PersoonsgegevensRequestHandler {
           pendingValue,
           xsrf_token: xsrfToken,
           attemptsLeft: 0,
-          error: 'U heeft te veel pogingen gedaan. Probeer het over een uur opnieuw.',
+          error: `U heeft te veel pogingen gedaan. ${this.retryAfterMessage(verifyOutcome.retryAfterSeconds)}`,
         };
         const html = await render(data, verifyTemplate.default);
-        return Response.html(html, 429, session.getCookie({ sameSite: 'lax' }));
-      }
-
-      const code = event.body?.code;
-      const storedCode = session.getValue(`verification_code_${type}`);
-      const expiryOfCode = parseInt(session.getValue(`verification_expiry_${type}`) || '0');
-
-      // Check expiry
-      if (Date.now() > expiryOfCode) {
-        await session.setValues({
-          [`pending_${type}`]: '',
-          [`verification_code_${type}`]: '',
-          [`verification_expiry_${type}`]: '',
-        });
-        return Response.redirect('/persoonsgegevens/edit?type=' + type, 302, session.getCookie({ sameSite: 'lax' }));
+        return this.withRetryAfter(
+          Response.html(html, 429, session.getCookie({ sameSite: 'lax' })),
+          verifyOutcome.retryAfterSeconds,
+        );
       }
 
       // Validate code
       if (code === storedCode) {
-        // Update OpenKlant
-        if (this.config.openKlantApi) {
-          try {
-            const identifier = session.getValue('identifier');
+        if (!this.config.openKlantApi) {
+          console.error('Cannot confirm verification: OpenKlant API is not configured');
+          const data = {
+            volledigenaam: session.getValue('username'),
+            title: 'Verificatie',
+            shownav: true,
+            nav: navigation.items,
+            has_sidenav: navigation.items ? true : false,
+            breadcrumbs: breadcrumbs.items,
+            type,
+            pendingValue,
+            xsrf_token: xsrfToken,
+            attemptsLeft: verifyOutcome.remaining,
+            error: 'Er is iets fout gegaan. Probeer het later opnieuw.',
+          };
+          const html = await render(data, verifyTemplate.default);
+          return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
+        }
 
-            await this.config.openKlantApi.updateContactInfo(identifier, userType, {
-              email: type == 'email' ? pendingValue : undefined,
-              phonenumber: type == 'phonenumber' ? pendingValue : undefined,
-            });
+        try {
+          const identifier = session.getValue('identifier');
 
-            // Update session
-            await session.setValues({
-              [type]: pendingValue,
-              [`pending_${type}`]: '',
-              [`verification_code_${type}`]: '',
-              [`verification_expiry_${type}`]: '',
-            });
+          await this.config.openKlantApi.updateContactInfo(identifier, userType, {
+            email: type == 'email' ? pendingValue : undefined,
+            phonenumber: type == 'phonenumber' ? pendingValue : undefined,
+          });
 
-            return Response.redirect('/persoonsgegevens', 302, session.getCookie({ sameSite: 'lax' }));
-          } catch (error) {
-            console.error('Failed to update contact info', error);
-            const data = {
-              volledigenaam: session.getValue('username'),
-              title: 'Verificatie',
-              shownav: true,
-              nav: navigation.items,
-              has_sidenav: navigation.items ? true : false,
-              breadcrumbs: breadcrumbs.items,
-              type,
-              pendingValue,
-              xsrf_token: xsrfToken,
-              attemptsLeft: verifyOutcome.remaining,
-              error: 'Er is iets fout gegaan. Probeer het later opnieuw.',
-            };
-            const html = await render(data, verifyTemplate.default);
-            return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
-          }
+          // Update session
+          await session.setValues({
+            [type]: pendingValue,
+            [`pending_${type}`]: '',
+            [`verification_code_${type}`]: '',
+            [`verification_expiry_${type}`]: '',
+          });
+
+          return Response.redirect('/persoonsgegevens', 302, session.getCookie({ sameSite: 'lax' }));
+        } catch (error) {
+          console.error('Failed to update contact info', error);
+          const data = {
+            volledigenaam: session.getValue('username'),
+            title: 'Verificatie',
+            shownav: true,
+            nav: navigation.items,
+            has_sidenav: navigation.items ? true : false,
+            breadcrumbs: breadcrumbs.items,
+            type,
+            pendingValue,
+            xsrf_token: xsrfToken,
+            attemptsLeft: verifyOutcome.remaining,
+            error: 'Er is iets fout gegaan. Probeer het later opnieuw.',
+          };
+          const html = await render(data, verifyTemplate.default);
+          return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
         }
       } else {
         if (verifyOutcome.remaining <= 0) {

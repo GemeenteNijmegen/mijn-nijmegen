@@ -152,6 +152,61 @@ describe('Persoonsgegevens Edit Functionality', () => {
     expect(mockNotifyNLApi.sendEmail).not.toHaveBeenCalled();
   });
 
+  test('POST /persoonsgegevens/edit rejects an unknown type', async () => {
+    setupSession({
+      loggedin: { BOOL: true },
+      identifier: { S: '900222670' },
+      user_type: { S: 'person' },
+      username: { S: 'Test User' },
+      xsrf_token: { S: 'test-token' },
+    });
+
+    const handler = new PersoonsgegevensRequestHandler({
+      dynamoDBClient,
+      haalCentraalApi,
+      contactgegevensLive: true,
+    });
+
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'not-a-real-type', value: 'a@b.com', xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/edit',
+      queryStringParameters: {},
+    });
+
+    expect(result.statusCode).toBe(400);
+  });
+
+  test('POST /persoonsgegevens/edit rate limit response includes a Retry-After header and minute-based message', async () => {
+    setupSession({
+      loggedin: { BOOL: true },
+      identifier: { S: '900222670' },
+      user_type: { S: 'person' },
+      username: { S: 'Test User' },
+      xsrf_token: { S: 'test-token' },
+    });
+    mockRateLimitExceeded('issue');
+
+    const handler = new PersoonsgegevensRequestHandler({
+      dynamoDBClient,
+      haalCentraalApi,
+      contactgegevensLive: true,
+    });
+
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'email', value: 'new@example.com', xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/edit',
+      queryStringParameters: {},
+    });
+
+    expect(result.statusCode).toBe(429);
+    expect(result.headers?.['Retry-After']).toMatch(/^\d+$/);
+    expect(result.body).toMatch(/Probeer het over \d+ minu(ut|ten) opnieuw\./);
+  });
+
   test('POST /persoonsgegevens/edit rejects invalid XSRF token', async () => {
     setupSession({
       loggedin: { BOOL: true },
@@ -368,6 +423,131 @@ describe('Persoonsgegevens Verify Functionality', () => {
 
     expect(result.statusCode).toBe(302);
     expect(result.headers?.Location).toBe('/persoonsgegevens/edit?type=email');
+  });
+
+  test('POST /persoonsgegevens/verify with expired code does not consume a verify rate-limit slot', async () => {
+    setupSession({
+      loggedin: { BOOL: true },
+      identifier: { S: '900222670' },
+      user_type: { S: 'person' },
+      username: { S: 'Test User' },
+      xsrf_token: { S: 'test-token' },
+      pending_email: { S: 'new@example.com' },
+      verification_code_email: { S: '123456' },
+      verification_expiry_email: { S: (Date.now() - 1000).toString() },
+    });
+
+    const handler = new PersoonsgegevensRequestHandler({
+      dynamoDBClient,
+      haalCentraalApi,
+      contactgegevensLive: true,
+    });
+
+    await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'email', code: '123456', xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/verify',
+      queryStringParameters: {},
+    });
+
+    const verifyRateLimitCalls = ddbMock.commandCalls(UpdateItemCommand).filter(
+      (call) => (call.args[0].input.Key?.sessionid?.S ?? '').startsWith('ratelimit#verify#'),
+    );
+    expect(verifyRateLimitCalls).toHaveLength(0);
+  });
+
+  test('POST /persoonsgegevens/verify rejects an unknown type', async () => {
+    setupSession({
+      loggedin: { BOOL: true },
+      identifier: { S: '900222670' },
+      user_type: { S: 'person' },
+      username: { S: 'Test User' },
+      xsrf_token: { S: 'test-token' },
+      pending_not_a_real_type: { S: 'new@example.com' },
+    });
+
+    const handler = new PersoonsgegevensRequestHandler({
+      dynamoDBClient,
+      haalCentraalApi,
+      contactgegevensLive: true,
+    });
+
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'not-a-real-type', code: '123456', xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/verify',
+      queryStringParameters: {},
+    });
+
+    expect(result.statusCode).toBe(400);
+  });
+
+  test('POST /persoonsgegevens/verify with correct code shows an error instead of silently succeeding when OpenKlant is not configured', async () => {
+    const futureTime = String(Date.now() + 10000000);
+    setupSession({
+      loggedin: { BOOL: true },
+      identifier: { S: '900222670' },
+      user_type: { S: 'person' },
+      username: { S: 'Test User' },
+      xsrf_token: { S: 'test-token' },
+      pending_email: { S: 'new@example.com' },
+      verification_code_email: { S: '123456' },
+      verification_expiry_email: { S: futureTime },
+    });
+
+    const handler = new PersoonsgegevensRequestHandler({
+      dynamoDBClient,
+      haalCentraalApi,
+      // openKlantApi intentionally omitted
+      contactgegevensLive: true,
+    });
+
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'email', code: '123456', xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/verify',
+      queryStringParameters: {},
+    });
+
+    expect(result.statusCode).toBe(200);
+    expect(result.body).toContain('Er is iets fout gegaan');
+    expect(result.body).toContain('Verificatie');
+  });
+
+  test('POST /persoonsgegevens/verify rate limit response includes a Retry-After header and minute-based message', async () => {
+    const futureTime = String(Date.now() + 10000000);
+    setupSession({
+      loggedin: { BOOL: true },
+      identifier: { S: '900222670' },
+      user_type: { S: 'person' },
+      username: { S: 'Test User' },
+      xsrf_token: { S: 'test-token' },
+      pending_email: { S: 'new@example.com' },
+      verification_code_email: { S: '123456' },
+      verification_expiry_email: { S: futureTime },
+    });
+    mockRateLimitExceeded('verify');
+
+    const handler = new PersoonsgegevensRequestHandler({
+      dynamoDBClient,
+      haalCentraalApi,
+      contactgegevensLive: true,
+    });
+
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'email', code: '123456', xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/verify',
+      queryStringParameters: {},
+    });
+
+    expect(result.statusCode).toBe(429);
+    expect(result.headers?.['Retry-After']).toMatch(/^\d+$/);
+    expect(result.body).toMatch(/Probeer het over \d+ minu(ut|ten) opnieuw\./);
   });
 
   test('POST /persoonsgegevens/verify is rate limited even with a correct code', async () => {
