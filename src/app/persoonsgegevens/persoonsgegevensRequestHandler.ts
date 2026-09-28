@@ -340,7 +340,8 @@ export class PersoonsgegevensRequestHandler {
         type,
         pendingValue,
         xsrf_token: xsrfToken,
-        attemptsLeft,
+        // Only show attempts when there are attempts left and the user has not exceeded the max attempts per hour.
+        attemptsLeft: attemptsLeft > 0 && attemptsLeft < Statics.verificationMaxAttemptsPerHour ? attemptsLeft : false,
         error,
       };
       const html = await render(data, verifyTemplate.default);
@@ -417,12 +418,14 @@ export class PersoonsgegevensRequestHandler {
         }
       } else {
         if (verifyOutcome.remaining <= 0) {
-          await session.setValues({
-            [`pending_${type}`]: '',
-            [`verification_code_${type}`]: '',
-            [`verification_expiry_${type}`]: '',
-          });
-          return Response.redirect('/persoonsgegevens', 302, session.getCookie({ sameSite: 'lax' }));
+          return this.withRetryAfter(
+            await renderVerifyPage(
+              0,
+              `U heeft te veel pogingen gedaan. ${this.retryAfterMessage(verifyOutcome.retryAfterSeconds)}`,
+              429,
+            ),
+            verifyOutcome.retryAfterSeconds,
+          );
         }
 
         return renderVerifyPage(verifyOutcome.remaining, 'Ongeldige code. Probeer het opnieuw.');

@@ -268,8 +268,8 @@ describe('Persoonsgegevens Verify Functionality', () => {
     expect(result.statusCode).toBe(200);
     expect(result.body).toContain('Verificatie');
     expect(result.body).toContain('new@example.com');
-    // No verify attempts consumed yet this window, so the full budget shows.
-    expect(result.body).toContain('5 poging(en)');
+    // No verify attempts consumed yet this window, so no budget shows.
+    expect(result.body).not.toContain('5 poging(en)');
   });
 
   test('POST /persoonsgegevens/verify with correct code updates contact info', async () => {
@@ -392,6 +392,7 @@ describe('Persoonsgegevens Verify Functionality', () => {
 
     expect(result.statusCode).toBe(200);
     expect(result.body).toContain('Ongeldige code');
+    // 4 attempts left after this wrong guess, so the page should show that.
     expect(result.body).toContain('4 poging(en)');
   });
 
@@ -651,7 +652,7 @@ describe('Persoonsgegevens Verify Functionality', () => {
     expect(verifyResult.body).toContain('te veel pogingen');
   });
 
-  test('POST /persoonsgegevens/verify with wrong code that exhausts the last attempt redirects to persoonsgegevens', async () => {
+  test('POST /persoonsgegevens/verify with wrong code that exhausts the last attempt keeps showing too many attempts message', async () => {
     const futureTime = String(Date.now() + 10000000);
     setupSession({
       loggedin: { BOOL: true },
@@ -664,8 +665,7 @@ describe('Persoonsgegevens Verify Functionality', () => {
       verification_expiry_email: { S: futureTime },
     });
     // This attempt is allowed (it's the 5th of 5 in the window), but uses up
-    // the last slot, so a wrong guess here should clear state immediately
-    // instead of showing the verify form again.
+    // the last slot, so a wrong guess here should give an indicator to cancel and retry later.
     mockVerifyCountAfterConsume(5);
 
     const handler = new PersoonsgegevensRequestHandler({
@@ -682,8 +682,8 @@ describe('Persoonsgegevens Verify Functionality', () => {
       queryStringParameters: {},
     });
 
-    expect(result.statusCode).toBe(302);
-    expect(result.headers?.Location).toBe('/persoonsgegevens');
+    expect(result.statusCode).toBe(429);
+    expect(result.body).toContain('te veel pogingen');
   });
 });
 

@@ -3,10 +3,11 @@
 <main id="main">
     <h1 class="utrecht-heading-1">{{title}}</h1>
 
+    <p class="utrecht-paragraph utrecht-paragraph--lead">Vul een e-mailadres waarop u notificaties wilt ontvangen en waar u toegang tot heeft.</p>
+
     {{#error}}
     <p class="utrecht-form-field-error-message" role="alert">{{error}}</p>
     {{/error}}
-
     <form method="POST" action="/persoonsgegevens/edit" novalidate>
         <input type="hidden" name="xsrf_token" value="{{xsrf_token}}">
         <input type="hidden" name="type" value="{{type}}">
