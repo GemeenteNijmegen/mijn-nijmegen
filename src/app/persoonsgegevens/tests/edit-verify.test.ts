@@ -485,6 +485,98 @@ describe('Persoonsgegevens Verify Functionality', () => {
     expect(result.statusCode).toBe(400);
   });
 
+  test('POST /persoonsgegevens/edit with type=identifier cannot stage a BSN', async () => {
+    setupSession({
+      loggedin: { BOOL: true },
+      identifier: { S: '900222670' },
+      user_type: { S: 'person' },
+      username: { S: 'Test User' },
+      xsrf_token: { S: 'test-token' },
+    });
+
+    const handler = new PersoonsgegevensRequestHandler({
+      dynamoDBClient,
+      haalCentraalApi,
+      contactgegevensLive: true,
+    });
+
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'identifier', value: '999999999', xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/edit',
+      queryStringParameters: {},
+    });
+
+    expect(result.statusCode).toBe(400);
+    expect(ddbMock.commandCalls(UpdateItemCommand)).toHaveLength(0);
+  });
+
+  test('POST /persoonsgegevens/verify with type=identifier cannot overwrite the session BSN', async () => {
+    const futureTime = String(Date.now() + 10000000);
+    setupSession({
+      loggedin: { BOOL: true },
+      identifier: { S: '900222670' },
+      user_type: { S: 'person' },
+      username: { S: 'Test User' },
+      xsrf_token: { S: 'test-token' },
+      pending_identifier: { S: '999999999' },
+      verification_code_identifier: { S: '123456' },
+      verification_expiry_identifier: { S: futureTime },
+    });
+
+    const mockOpenKlantApi = {
+      updateContactInfo: jest.fn().mockResolvedValue(undefined),
+    } as any;
+
+    const handler = new PersoonsgegevensRequestHandler({
+      dynamoDBClient,
+      haalCentraalApi,
+      openKlantApi: mockOpenKlantApi,
+      contactgegevensLive: true,
+    });
+
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'identifier', code: '123456', xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/verify',
+      queryStringParameters: {},
+    });
+
+    expect(result.statusCode).toBe(400);
+    expect(mockOpenKlantApi.updateContactInfo).not.toHaveBeenCalled();
+    // No session write at all, so `identifier` keeps the DigiD-authenticated BSN.
+    expect(ddbMock.commandCalls(UpdateItemCommand)).toHaveLength(0);
+  });
+
+  test('POST /persoonsgegevens/verify rejects inherited object keys as type', async () => {
+    setupSession({
+      loggedin: { BOOL: true },
+      identifier: { S: '900222670' },
+      user_type: { S: 'person' },
+      username: { S: 'Test User' },
+      xsrf_token: { S: 'test-token' },
+      pending___proto__: { S: 'x' },
+    });
+
+    const handler = new PersoonsgegevensRequestHandler({
+      dynamoDBClient,
+      haalCentraalApi,
+      contactgegevensLive: true,
+    });
+
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: '__proto__', code: '123456', xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/verify',
+      queryStringParameters: {},
+    });
+
+    expect(result.statusCode).toBe(400);
+  });
+
   test('POST /persoonsgegevens/verify with correct code shows an error instead of silently succeeding when OpenKlant is not configured', async () => {
     const futureTime = String(Date.now() + 10000000);
     setupSession({
