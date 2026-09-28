@@ -304,8 +304,8 @@ export class PersoonsgegevensRequestHandler {
       return Response.redirect(`/persoonsgegevens/verify?type=${type}`, 302, session.getCookie({ sameSite: 'lax' }));
     }
 
-    // GET request - show form
-    const currentValue = isEmailType ? session.getValue('email') : session.getValue('phonenumber');
+    // GET request - show form, prefilled with a pending (unverified) value when returning from the verify page
+    const currentValue = session.getValue(`pending_${CONTACT_TYPES[type]}`) || session.getValue(CONTACT_TYPES[type]);
     return renderEditPage(currentValue);
   }
 
