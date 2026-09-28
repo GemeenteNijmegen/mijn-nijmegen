@@ -3,7 +3,7 @@
 <main id="main">
     <h1 class="utrecht-heading-1">{{title}}</h1>
 
-    <p class="utrecht-paragraph utrecht-paragraph--lead">We hebben een verificatiecode gestuurd naar <strong>{{pendingValue}}</strong>.</p>
+    <p class="utrecht-paragraph utrecht-paragraph--lead">We hebben een verificatiecode gestuurd naar <strong>{{pendingValue}}</strong></p>
 
     {{#error}}
     <p class="utrecht-form-field-error-message" role="alert">{{error}}</p>
@@ -19,16 +19,17 @@
             <p id="code-error" class="utrecht-form-field-error-message utrecht-form-field__error-message" role="alert" hidden>
                 <span class="sr-only">Invoer onjuist: </span>Vul een geldige 6-cijferige code in
             </p>
-            <p id="code-description" class="utrecht-form-field-description utrecht-form-field__description">Voer de 6-cijferige code in die u heeft ontvangen.</p>
+            <p id="code-description" class="utrecht-form-field-description utrecht-form-field__description">Voer de 6-cijferige code in die u heeft ontvangen deze is 15 minuten geldig.</p>
         </div>
 
         <div class="utrecht-button-group">
             <button type="submit" class="utrecht-button utrecht-button--primary-action">Verifiëren</button>
-            <a href="/persoonsgegevens" class="utrecht-button utrecht-button--secondary-action">Annuleren</a>
+            <a href="/persoonsgegevens/edit?type={{type}}" class="utrecht-button utrecht-button--secondary-action">Terug naar aanpassen</a>
         </div>
     </form>
-
-    <p class="utrecht-paragraph utrecht-paragraph--small">De code is 15 minuten geldig. U heeft nog {{attemptsLeft}} poging(en) over.</p>
+    {{#attemptsLeft}}
+    <p class="utrecht-paragraph utrecht-paragraph--small">U heeft nog {{attemptsLeft}} poging(en) over.</p>
+    {{/attemptsLeft}}
 </main>
 
 <script src="/static/js/form-validation.js"></script>

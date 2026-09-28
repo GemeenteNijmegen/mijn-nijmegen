@@ -1,27 +1,48 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import * as crypto from 'crypto';
 
-import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
 import { Persoonsgegevens, PersoonsgegevensMapper } from './Persoonsgegevens';
+import { Statics } from '../../statics';
 import * as contactgegevensTemplate from './templates/contactgegevens.mustache';
 import * as editTemplate from './templates/edit-contactgegevens.mustache';
 import * as template from './templates/mijngegevens.mustache';
 import * as persoonsgegevensTemplate from './templates/persoonsgegevens.mustache';
 import * as verifyTemplate from './templates/verify-contactgegevens.mustache';
+import { VerificationRateLimiter } from './VerificationRateLimiter';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
-import { BreadCrumbs, Navigation } from '../../shared/Navigation';
+import { BreadCrumbs, Navigation, NavigationItem } from '../../shared/Navigation';
 import { NotifyNLApi } from '../../shared/NotifyNLApi';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
 import { render } from '../../shared/render';
 
-interface RenderData {
+/**
+ * Contact types a citizen may edit. The value is the session key the verified
+ * value is written to; it must never be derived from user input, because the
+ * session also holds security-critical keys such as `identifier`.
+ */
+const CONTACT_TYPES = {
+  email: 'email',
+  phonenumber: 'phonenumber',
+} as const;
+type ContactType = keyof typeof CONTACT_TYPES;
+
+function parseContactType(raw: unknown): ContactType | undefined {
+  return typeof raw === 'string' && Object.hasOwn(CONTACT_TYPES, raw) ? raw as ContactType : undefined;
+}
+
+interface BaseRenderData {
   volledigenaam: string;
   title: string;
   shownav: boolean;
   nav: any;
   has_sidenav: boolean;
   breadcrumbs: any;
+}
+
+interface RenderData extends BaseRenderData {
   persoonsgegevens?: Persoonsgegevens;
   error?: string;
 
@@ -113,18 +134,8 @@ export class PersoonsgegevensRequestHandler {
     const bsn = session.getValue('identifier');
 
     // Setup view
-    const navigation = new Navigation(userType, {
-      currentPath: '/persoonsgegevens',
-    });
-
-    const breadcrumbs = this.setupBreadcrumbs();
     const data: RenderData = {
-      volledigenaam: session.getValue('username'),
-      title: 'Mijn gegevens',
-      shownav: true,
-      nav: navigation.items,
-      has_sidenav: true,
-      breadcrumbs: breadcrumbs.items,
+      ...this.baseRenderData(session, 'Mijn gegevens'),
       persoonsgegevens: undefined,
       error: undefined,
       // Contactgegevens
@@ -155,7 +166,11 @@ export class PersoonsgegevensRequestHandler {
     return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
   }
 
-  private setupBreadcrumbs() {
+  /**
+   * Breadcrumbs start at Home > Mijn gegevens, subpages append their own crumbs.
+   * The last crumb is rendered as the current page.
+   */
+  private setupBreadcrumbs(subpageCrumbs: NavigationItem[] = []) {
     const crumbs = [
       {
         title: 'Home',
@@ -164,8 +179,41 @@ export class PersoonsgegevensRequestHandler {
         title: 'Mijn gegevens',
         url: '/persoonsgegevens',
       },
+      ...subpageCrumbs,
     ];
     return new BreadCrumbs(crumbs);
+  }
+
+  private editCrumb(type: ContactType): NavigationItem {
+    return {
+      title: type === 'email' ? 'E-mailadres aanpassen' : 'Telefoonnummer aanpassen',
+      url: `/persoonsgegevens/edit?type=${type}`,
+    };
+  }
+
+  /**
+   * Render data shared by all persoonsgegevens pages
+   */
+  private baseRenderData(session: Session, title: string, subpageCrumbs: NavigationItem[] = []): BaseRenderData {
+    const navigation = new Navigation(session.getValue('user_type'), { currentPath: '/persoonsgegevens' });
+    return {
+      volledigenaam: session.getValue('username'),
+      title,
+      shownav: true,
+      nav: navigation.items,
+      has_sidenav: true,
+      breadcrumbs: this.setupBreadcrumbs(subpageCrumbs).items,
+    };
+  }
+
+  private retryAfterMessage(retryAfterSeconds: number): string {
+    const minutes = Math.max(1, Math.ceil(retryAfterSeconds / 60));
+    return `Probeer het over ${minutes} ${minutes === 1 ? 'minuut' : 'minuten'} opnieuw.`;
+  }
+
+  private withRetryAfter(response: ApiGatewayV2Response, retryAfterSeconds: number): ApiGatewayV2Response {
+    response.headers = { ...response.headers, 'Retry-After': String(retryAfterSeconds) };
+    return response;
   }
 
   private async handleEditRequest(session: Session, event: ParsedEvent) {
@@ -174,13 +222,32 @@ export class PersoonsgegevensRequestHandler {
       return Response.redirect('/');
     }
 
-    const type = event.queryStringParameters?.type || event.body?.type || 'email';
-    const navigation = new Navigation(userType, { currentPath: '/persoonsgegevens' });
-    const breadcrumbs = this.setupBreadcrumbs();
+    const type = parseContactType(event.queryStringParameters?.type || event.body?.type || 'email');
+    if (!type) {
+      console.info('Rejected unknown contactgegevens type');
+      return Response.error(400);
+    }
+    const isEmailType = type === 'email';
+    const isPhoneType = type === 'phonenumber';
+
+    const xsrfToken = session.getValue('xsrf_token');
+    const editCrumb = this.editCrumb(type);
+    const renderEditPage = async (currentValue: string, error?: string, statusCode = 200) => {
+      const data = {
+        ...this.baseRenderData(session, editCrumb.title, [editCrumb]),
+        type,
+        isEmail: isEmailType,
+        isPhone: isPhoneType,
+        currentValue,
+        xsrf_token: xsrfToken,
+        error,
+      };
+      const html = await render(data, editTemplate.default);
+      return Response.html(html, statusCode, session.getCookie({ sameSite: 'lax' }));
+    };
 
     if (event.method === 'POST') {
-      // Validate XSRF token
-      if (event.body?.xsrf_token !== session.getValue('xsrf_token')) {
+      if (event.body?.xsrf_token !== xsrfToken) {
         console.info('XSRF token mismatch');
         return Response.error(403);
       }
@@ -195,102 +262,84 @@ export class PersoonsgegevensRequestHandler {
       const emailRegex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
       const phoneRegex = /^(0[8-9]00[0-9]{4,7})|(0[1-9][0-9]{8})|(\+[0-9]{9,20}|1400|140[0-9]{2,3})$/;
 
-      if (type === 'email' && !emailRegex.test(value)) {
-        const data = {
-          volledigenaam: session.getValue('username'),
-          title: 'E-mailadres aanpassen',
-          shownav: true,
-          nav: navigation.items,
-          has_sidenav: navigation.items ? true : false,
-          breadcrumbs: breadcrumbs.items,
-          type,
-          isEmail: true,
-          isPhone: false,
-          currentValue: value,
-          xsrf_token: session.getValue('xsrf_token'),
-          error: 'Vul een geldig e-mailadres in',
-        };
-        const html = await render(data, editTemplate.default);
-        return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
+      if (isEmailType && !emailRegex.test(value)) {
+        return renderEditPage(value, 'Vul een geldig e-mailadres in');
       }
 
-      if (type === 'phonenumber' && !phoneRegex.test(value)) {
-        const data = {
-          volledigenaam: session.getValue('username'),
-          title: 'Telefoonnummer aanpassen',
-          shownav: true,
-          nav: navigation.items,
-          has_sidenav: navigation.items ? true : false,
-          breadcrumbs: breadcrumbs.items,
-          type,
-          isEmail: false,
-          isPhone: true,
-          currentValue: value,
-          xsrf_token: session.getValue('xsrf_token'),
-          error: 'Vul een geldig telefoonnummer in',
-        };
-        const html = await render(data, editTemplate.default);
-        return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
+      if (isPhoneType && !phoneRegex.test(value)) {
+        return renderEditPage(value, 'Vul een geldig telefoonnummer in');
+      }
+
+      // Enforce issuance rate limit (atomic, session-scoped)
+      const issueRateLimiter = new VerificationRateLimiter({
+        dynamoDBClient: this.config.dynamoDBClient,
+        windowMs: Statics.verificationRateLimitWindowMs,
+      });
+      const issueOutcome = await issueRateLimiter.consume(session.sessionHash as string, type, 'issue', Statics.verificationMaxIssuancePerHour);
+      if (!issueOutcome.allowed) {
+        return this.withRetryAfter(
+          await renderEditPage(
+            value,
+            `U heeft te veel verificatiecodes aangevraagd. ${this.retryAfterMessage(issueOutcome.retryAfterSeconds)}`,
+            429,
+          ),
+          issueOutcome.retryAfterSeconds,
+        );
       }
 
       // Generate verification code
-      const code = Math.floor(100000 + Math.random() * 900000).toString();
-      const expiry = Date.now() + 15 * 60 * 1000; // 15 minutes
+      const code = crypto.randomInt(100000, 1000000).toString();
+      const expiryOfCode = Date.now() + 15 * 60 * 1000; // 15 minutes
 
       // Store in session
       await session.setValues({
         [`pending_${type}`]: value,
         [`verification_code_${type}`]: code,
-        [`verification_expiry_${type}`]: expiry.toString(),
-        [`verification_attempts_${type}`]: '3',
+        [`verification_expiry_${type}`]: expiryOfCode.toString(),
       });
 
-      // Send verification code via NotifyNL
-      if (this.config.notifyNLApi) {
-        try {
-          if (type === 'email' && this.config.notifyEmailTemplateId) {
-            await this.config.notifyNLApi.sendEmail({
-              email_address: value,
-              template_id: this.config.notifyEmailTemplateId,
-              personalisation: {
-                verificationCode: code,
-              },
-            });
-          } else if (type === 'phonenumber' && this.config.notifySmsTemplateId) {
-            await this.config.notifyNLApi.sendSms({
-              phone_number: value,
-              template_id: this.config.notifySmsTemplateId,
-              personalisation: {
-                verificationCode: code,
-              },
-            });
-          }
-        } catch (error) {
-          console.error('Failed to send verification code', error);
-        }
-      }
+      await this.sendVerificationCode(isEmailType, value, code, isPhoneType);
+
 
       return Response.redirect(`/persoonsgegevens/verify?type=${type}`, 302, session.getCookie({ sameSite: 'lax' }));
     }
 
-    // GET request - show form
-    const currentValue = type === 'email' ? session.getValue('email') : session.getValue('phonenumber');
-    const data = {
-      volledigenaam: session.getValue('username'),
-      title: type === 'email' ? 'E-mailadres aanpassen' : 'Telefoonnummer aanpassen',
-      shownav: true,
-      nav: navigation.items,
-      has_sidenav: navigation.items ? true : false,
-      breadcrumbs: breadcrumbs.items,
-      type,
-      isEmail: type === 'email',
-      isPhone: type !== 'email',
-      currentValue,
-      xsrf_token: session.getValue('xsrf_token'),
-    };
+    // GET request - show form, prefilled with a pending (unverified) value when returning from the verify page
+    const currentValue = session.getValue(`pending_${CONTACT_TYPES[type]}`) || session.getValue(CONTACT_TYPES[type]);
+    return renderEditPage(currentValue);
+  }
 
-    const html = await render(data, editTemplate.default);
-    return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
+  /**
+   * Send verification code via NotifyNL
+   */
+  private async sendVerificationCode(isEmailType: boolean, value: any, code: string, isPhoneType: boolean) {
+    if (!this.config.notifyNLApi) return;
+
+    try {
+      if (isEmailType && this.config.notifyEmailTemplateId) {
+        return await this.config.notifyNLApi.sendEmail({
+          email_address: value,
+          template_id: this.config.notifyEmailTemplateId,
+          personalisation: {
+            verificationCode: code,
+          },
+        });
+      }
+      if (isPhoneType && this.config.notifySmsTemplateId) {
+        return await this.config.notifyNLApi.sendSms({
+          phone_number: value,
+          template_id: this.config.notifySmsTemplateId,
+          personalisation: {
+            verificationCode: code,
+          },
+        });
+      }
+
+      console.error(`No NotifyNL template ID provided for ${isEmailType ? 'email' : 'SMS'}`);
+
+    } catch (error) {
+      console.error('Failed to send verification code', error);
+    }
   }
 
   private async handleVerifyRequest(session: Session, event: ParsedEvent) {
@@ -299,142 +348,129 @@ export class PersoonsgegevensRequestHandler {
       return Response.redirect('/');
     }
 
-    const type = event.queryStringParameters?.type || event.body?.type || 'email';
-    const navigation = new Navigation(userType, { currentPath: '/persoonsgegevens' });
-    const breadcrumbs = this.setupBreadcrumbs();
+    const type = parseContactType(event.queryStringParameters?.type || event.body?.type || 'email');
+    if (!type) {
+      console.info('Rejected unknown contactgegevens type');
+      return Response.error(400);
+    }
+    const isEmailType = type === 'email';
+    const isPhoneType = type === 'phonenumber';
+    const xsrfToken = session.getValue('xsrf_token');
 
     const pendingValue = session.getValue(`pending_${type}`);
     if (!pendingValue) {
       return Response.redirect('/persoonsgegevens');
     }
 
+    const renderVerifyPage = async (attemptsLeft: number, error?: string, statusCode = 200) => {
+      const data = {
+        ...this.baseRenderData(session, 'Verificatie', [
+          this.editCrumb(type),
+          { title: 'Verificatie', url: `/persoonsgegevens/verify?type=${type}` },
+        ]),
+        type,
+        pendingValue,
+        xsrf_token: xsrfToken,
+        // Only show attempts when there are attempts left and the user has not exceeded the max attempts per hour.
+        attemptsLeft: attemptsLeft > 0 && attemptsLeft < Statics.verificationMaxAttemptsPerHour ? attemptsLeft : false,
+        error,
+      };
+      const html = await render(data, verifyTemplate.default);
+      return Response.html(html, statusCode, session.getCookie({ sameSite: 'lax' }));
+    };
+
     if (event.method === 'POST') {
       // Validate XSRF token
-      if (event.body?.xsrf_token !== session.getValue('xsrf_token')) {
+      if (event.body?.xsrf_token !== xsrfToken) {
         return Response.error(403);
       }
 
       const code = event.body?.code;
       const storedCode = session.getValue(`verification_code_${type}`);
-      const expiry = parseInt(session.getValue(`verification_expiry_${type}`) || '0');
-      let attempts = parseInt(session.getValue(`verification_attempts_${type}`) || '0');
+      const expiryOfCode = parseInt(session.getValue(`verification_expiry_${type}`) || '0');
 
-      // Check expiry
-      if (Date.now() > expiry) {
+      // Check expiry first: an already-expired code isn't a real "attempt"
+      // at guessing, so it shouldn't spend any of the verify rate limit.
+      if (Date.now() > expiryOfCode) {
         await session.setValues({
           [`pending_${type}`]: '',
           [`verification_code_${type}`]: '',
           [`verification_expiry_${type}`]: '',
-          [`verification_attempts_${type}`]: '',
         });
         return Response.redirect('/persoonsgegevens/edit?type=' + type, 302, session.getCookie({ sameSite: 'lax' }));
       }
 
-      // Check attempts
-      if (attempts <= 0) {
-        await session.setValues({
-          [`pending_${type}`]: '',
-          [`verification_code_${type}`]: '',
-          [`verification_expiry_${type}`]: '',
-          [`verification_attempts_${type}`]: '',
-        });
-        return Response.redirect('/persoonsgegevens', 302, session.getCookie({ sameSite: 'lax' }));
+      // Enforce verification attempt rate limit (atomic, session-scoped).
+      // Runs before comparing the code so it can't be bypassed by requesting a
+      // fresh code. It persists across newly-issued codes within this session.
+      const verifyRateLimiter = new VerificationRateLimiter({
+        dynamoDBClient: this.config.dynamoDBClient,
+        windowMs: Statics.verificationRateLimitWindowMs,
+      });
+      const verifyOutcome = await verifyRateLimiter.consume(session.sessionHash as string, type, 'verify', Statics.verificationMaxAttemptsPerHour);
+      if (!verifyOutcome.allowed) {
+        return this.withRetryAfter(
+          await renderVerifyPage(
+            0,
+            `U heeft te veel pogingen gedaan. ${this.retryAfterMessage(verifyOutcome.retryAfterSeconds)}`,
+            429,
+          ),
+          verifyOutcome.retryAfterSeconds,
+        );
       }
 
       // Validate code
       if (code === storedCode) {
-        // Update OpenKlant
-        if (this.config.openKlantApi) {
-          try {
-            const identifier = session.getValue('identifier');
-
-            await this.config.openKlantApi.updateContactInfo(identifier, userType, {
-              email: type == 'email' ? pendingValue : undefined,
-              phonenumber: type == 'phonenumber' ? pendingValue : undefined,
-            });
-
-            // Update session
-            await session.setValues({
-              [type]: pendingValue,
-              [`pending_${type}`]: '',
-              [`verification_code_${type}`]: '',
-              [`verification_expiry_${type}`]: '',
-              [`verification_attempts_${type}`]: '',
-            });
-
-            return Response.redirect('/persoonsgegevens', 302, session.getCookie({ sameSite: 'lax' }));
-          } catch (error) {
-            console.error('Failed to update contact info', error);
-            const data = {
-              volledigenaam: session.getValue('username'),
-              title: 'Verificatie',
-              shownav: true,
-              nav: navigation.items,
-              has_sidenav: navigation.items ? true : false,
-              breadcrumbs: breadcrumbs.items,
-              type,
-              pendingValue,
-              xsrf_token: session.getValue('xsrf_token'),
-              attemptsLeft: attempts,
-              error: 'Er is iets fout gegaan. Probeer het later opnieuw.',
-            };
-            const html = await render(data, verifyTemplate.default);
-            return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
-          }
+        if (!this.config.openKlantApi) {
+          console.error('Cannot update contact info: OpenKlant API is not configured');
+          return renderVerifyPage(verifyOutcome.remaining, 'Er is iets fout gegaan. Probeer het later opnieuw.');
         }
-      } else {
-        // Decrement attempts
-        attempts--;
 
-        if (attempts <= 0) {
+        try {
+          const identifier = session.getValue('identifier');
+
+          await this.config.openKlantApi.updateContactInfo(identifier, userType, {
+            email: isEmailType ? pendingValue : undefined,
+            phonenumber: isPhoneType ? pendingValue : undefined,
+          });
+
+          // Update session
           await session.setValues({
+            [CONTACT_TYPES[type]]: pendingValue,
             [`pending_${type}`]: '',
             [`verification_code_${type}`]: '',
             [`verification_expiry_${type}`]: '',
-            [`verification_attempts_${type}`]: '',
           });
+
           return Response.redirect('/persoonsgegevens', 302, session.getCookie({ sameSite: 'lax' }));
+        } catch (error) {
+          console.error('Failed to update contact info', error);
+          return renderVerifyPage(verifyOutcome.remaining, 'Er is iets fout gegaan. Probeer het later opnieuw.');
+        }
+      } else {
+        if (verifyOutcome.remaining <= 0) {
+          return this.withRetryAfter(
+            await renderVerifyPage(
+              0,
+              `U heeft te veel pogingen gedaan. ${this.retryAfterMessage(verifyOutcome.retryAfterSeconds)}`,
+              429,
+            ),
+            verifyOutcome.retryAfterSeconds,
+          );
         }
 
-        await session.setValues({
-          [`verification_attempts_${type}`]: attempts.toString(),
-        });
-
-        const data = {
-          volledigenaam: session.getValue('username'),
-          title: 'Verificatie',
-          shownav: true,
-          nav: navigation.items,
-          has_sidenav: navigation.items ? true : false,
-          breadcrumbs: breadcrumbs.items,
-          type,
-          pendingValue,
-          xsrf_token: session.getValue('xsrf_token'),
-          attemptsLeft: attempts,
-          error: 'Ongeldige code. Probeer het opnieuw.',
-        };
-
-        const html = await render(data, verifyTemplate.default);
-        return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
+        return renderVerifyPage(verifyOutcome.remaining, 'Ongeldige code. Probeer het opnieuw.');
       }
     }
 
     // GET request - show form
-    const attempts = parseInt(session.getValue(`verification_attempts_${type}`) || '3');
-    const data = {
-      volledigenaam: session.getValue('username'),
-      title: 'Verificatie',
-      shownav: true,
-      nav: navigation.items,
-      has_sidenav: navigation.items ? true : false,
-      breadcrumbs: breadcrumbs.items,
-      type,
-      pendingValue,
-      xsrf_token: session.getValue('xsrf_token'),
-      attemptsLeft: attempts,
-    };
-
-    const html = await render(data, verifyTemplate.default);
-    return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
+    const verifyRateLimiter = new VerificationRateLimiter({
+      dynamoDBClient: this.config.dynamoDBClient,
+      windowMs: Statics.verificationRateLimitWindowMs,
+    });
+    const attemptsLeft = await verifyRateLimiter.remaining(
+      session.sessionHash as string, type, 'verify', Statics.verificationMaxAttemptsPerHour,
+    );
+    return renderVerifyPage(attemptsLeft);
   }
 }
