@@ -3,7 +3,7 @@
 <main id="main">
     <h1 class="utrecht-heading-1">{{title}}</h1>
 
-    <p class="utrecht-paragraph utrecht-paragraph--lead">Vul een e-mailadres waarop u notificaties wilt ontvangen en waar u toegang tot heeft.</p>
+    <p class="utrecht-paragraph utrecht-paragraph--lead">Vul een {{#isEmail}}e-mailadres{{/isEmail}}{{#isPhone}}telefoonnummer{{/isPhone}} in waarop u notificaties wilt ontvangen en waar u toegang tot heeft.</p>
 
     {{#error}}
     <p class="utrecht-form-field-error-message" role="alert">{{error}}</p>
@@ -19,7 +19,7 @@
             <p id="value-error" class="utrecht-form-field-error-message utrecht-form-field__error-message" role="alert" hidden>
                 <span class="sr-only">Invoer onjuist: </span>Vul een geldig e-mailadres in
             </p>
-            <p id="value-description" class="utrecht-form-field-description utrecht-form-field__description">We sturen een verificatiecode naar dit e-mailadres.</p>
+            <p id="value-description" class="utrecht-form-field-description utrecht-form-field__description">We sturen een (nieuwe) verificatiecode naar dit e-mailadres.</p>
         </div>
         {{/isEmail}}
 
@@ -30,7 +30,7 @@
             <p id="value-error" class="utrecht-form-field-error-message utrecht-form-field__error-message" role="alert" hidden>
                 <span class="sr-only">Invoer onjuist: </span>Vul een geldig telefoonnummer in
             </p>
-            <p id="value-description" class="utrecht-form-field-description utrecht-form-field__description">We sturen een verificatiecode naar dit telefoonnummer.</p>
+            <p id="value-description" class="utrecht-form-field-description utrecht-form-field__description">We sturen een (nieuwe) verificatiecode naar dit telefoonnummer.</p>
         </div>
         {{/isPhone}}
 

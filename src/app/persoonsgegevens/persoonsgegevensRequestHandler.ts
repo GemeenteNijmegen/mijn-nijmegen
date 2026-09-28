@@ -13,7 +13,7 @@ import * as persoonsgegevensTemplate from './templates/persoonsgegevens.mustache
 import * as verifyTemplate from './templates/verify-contactgegevens.mustache';
 import { VerificationRateLimiter } from './VerificationRateLimiter';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
-import { BreadCrumbs, Navigation } from '../../shared/Navigation';
+import { BreadCrumbs, Navigation, NavigationItem } from '../../shared/Navigation';
 import { NotifyNLApi } from '../../shared/NotifyNLApi';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
 import { render } from '../../shared/render';
@@ -151,7 +151,11 @@ export class PersoonsgegevensRequestHandler {
     return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
   }
 
-  private setupBreadcrumbs() {
+  /**
+   * Breadcrumbs start at Home > Mijn gegevens, subpages append their own crumbs.
+   * The last crumb is rendered as the current page.
+   */
+  private setupBreadcrumbs(subpageCrumbs: NavigationItem[] = []) {
     const crumbs = [
       {
         title: 'Home',
@@ -160,14 +164,22 @@ export class PersoonsgegevensRequestHandler {
         title: 'Mijn gegevens',
         url: '/persoonsgegevens',
       },
+      ...subpageCrumbs,
     ];
     return new BreadCrumbs(crumbs);
+  }
+
+  private editCrumb(type: string): NavigationItem {
+    return {
+      title: type === 'email' ? 'E-mailadres aanpassen' : 'Telefoonnummer aanpassen',
+      url: `/persoonsgegevens/edit?type=${type}`,
+    };
   }
 
   /**
    * Render data shared by all persoonsgegevens pages
    */
-  private baseRenderData(session: Session, title: string): BaseRenderData {
+  private baseRenderData(session: Session, title: string, subpageCrumbs: NavigationItem[] = []): BaseRenderData {
     const navigation = new Navigation(session.getValue('user_type'), { currentPath: '/persoonsgegevens' });
     return {
       volledigenaam: session.getValue('username'),
@@ -175,7 +187,7 @@ export class PersoonsgegevensRequestHandler {
       shownav: true,
       nav: navigation.items,
       has_sidenav: true,
-      breadcrumbs: this.setupBreadcrumbs().items,
+      breadcrumbs: this.setupBreadcrumbs(subpageCrumbs).items,
     };
   }
 
@@ -204,9 +216,10 @@ export class PersoonsgegevensRequestHandler {
     }
 
     const xsrfToken = session.getValue('xsrf_token');
+    const editCrumb = this.editCrumb(type);
     const renderEditPage = async (currentValue: string, error?: string, statusCode = 200) => {
       const data = {
-        ...this.baseRenderData(session, isEmailType ? 'E-mailadres aanpassen' : 'Telefoonnummer aanpassen'),
+        ...this.baseRenderData(session, editCrumb.title, [editCrumb]),
         type,
         isEmail: isEmailType,
         isPhone: isPhoneType,
@@ -336,7 +349,10 @@ export class PersoonsgegevensRequestHandler {
 
     const renderVerifyPage = async (attemptsLeft: number, error?: string, statusCode = 200) => {
       const data = {
-        ...this.baseRenderData(session, 'Verificatie'),
+        ...this.baseRenderData(session, 'Verificatie', [
+          this.editCrumb(type),
+          { title: 'Verificatie', url: `/persoonsgegevens/verify?type=${type}` },
+        ]),
         type,
         pendingValue,
         xsrf_token: xsrfToken,
