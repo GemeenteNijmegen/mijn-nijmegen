@@ -18,6 +18,21 @@ import { NotifyNLApi } from '../../shared/NotifyNLApi';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
 import { render } from '../../shared/render';
 
+/**
+ * Contact types a citizen may edit. The value is the session key the verified
+ * value is written to; it must never be derived from user input, because the
+ * session also holds security-critical keys such as `identifier`.
+ */
+const CONTACT_TYPES = {
+  email: 'email',
+  phonenumber: 'phonenumber',
+} as const;
+type ContactType = keyof typeof CONTACT_TYPES;
+
+function parseContactType(raw: unknown): ContactType | undefined {
+  return typeof raw === 'string' && Object.hasOwn(CONTACT_TYPES, raw) ? raw as ContactType : undefined;
+}
+
 interface BaseRenderData {
   volledigenaam: string;
   title: string;
@@ -169,7 +184,7 @@ export class PersoonsgegevensRequestHandler {
     return new BreadCrumbs(crumbs);
   }
 
-  private editCrumb(type: string): NavigationItem {
+  private editCrumb(type: ContactType): NavigationItem {
     return {
       title: type === 'email' ? 'E-mailadres aanpassen' : 'Telefoonnummer aanpassen',
       url: `/persoonsgegevens/edit?type=${type}`,
@@ -207,13 +222,13 @@ export class PersoonsgegevensRequestHandler {
       return Response.redirect('/');
     }
 
-    const type = event.queryStringParameters?.type || event.body?.type || 'email';
-    const isEmailType = type === 'email';
-    const isPhoneType = type === 'phonenumber';
-    if (!isEmailType && !isPhoneType) {
-      console.info('Rejected unknown contactgegevens type', type);
+    const type = parseContactType(event.queryStringParameters?.type || event.body?.type || 'email');
+    if (!type) {
+      console.info('Rejected unknown contactgegevens type');
       return Response.error(400);
     }
+    const isEmailType = type === 'email';
+    const isPhoneType = type === 'phonenumber';
 
     const xsrfToken = session.getValue('xsrf_token');
     const editCrumb = this.editCrumb(type);
@@ -333,13 +348,13 @@ export class PersoonsgegevensRequestHandler {
       return Response.redirect('/');
     }
 
-    const type = event.queryStringParameters?.type || event.body?.type || 'email';
-    const isEmailType = type === 'email';
-    const isPhoneType = type === 'phonenumber';
-    if (!isEmailType && !isPhoneType) {
-      console.info('Rejected unknown contactgegevens type', type);
+    const type = parseContactType(event.queryStringParameters?.type || event.body?.type || 'email');
+    if (!type) {
+      console.info('Rejected unknown contactgegevens type');
       return Response.error(400);
     }
+    const isEmailType = type === 'email';
+    const isPhoneType = type === 'phonenumber';
     const xsrfToken = session.getValue('xsrf_token');
 
     const pendingValue = session.getValue(`pending_${type}`);
@@ -421,7 +436,7 @@ export class PersoonsgegevensRequestHandler {
 
           // Update session
           await session.setValues({
-            [type]: pendingValue,
+            [CONTACT_TYPES[type]]: pendingValue,
             [`pending_${type}`]: '',
             [`verification_code_${type}`]: '',
             [`verification_expiry_${type}`]: '',
