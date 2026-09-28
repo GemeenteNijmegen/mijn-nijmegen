@@ -1,6 +1,6 @@
 import { MdiAccount, MdiAddressBook, MdiCurrencyEur, MdiFileMultiple, MdiOverview, Tasks } from './Icons';
 
-interface NavigationItem {
+export interface NavigationItem {
   url: string;
   title: string;
 }
