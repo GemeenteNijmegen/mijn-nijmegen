@@ -14,6 +14,17 @@
 }
 
 /*
+ * Restore the native `hidden` attribute's behavior. Several NLDS component
+ * classes (e.g. .utrecht-form-field-error-message) set `display` unconditionally,
+ * which otherwise wins the cascade over the browser's default `[hidden]` rule
+ * and makes elements toggled via `.hidden = true` (form-validation.js, tabs.js,
+ * nijmegen-accordion.js) stay visible.
+ */
+[hidden] {
+  display: none !important;
+}
+
+/*
  * Side navigation: hidden below the same breakpoint at which the header itself switches
  * from the desktop nav to the mobile hamburger menu (nijmegen-mobile-menu), which already
  * contains the same navigation links. Without this, the side nav still rendered on mobile
