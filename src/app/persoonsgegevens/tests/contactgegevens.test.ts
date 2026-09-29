@@ -6,6 +6,10 @@ import { PersoonsgegevensRequestHandler } from '../persoonsgegevensRequestHandle
 
 const ddbMock = mockClient(DynamoDBClient);
 
+beforeAll(() => {
+  process.env.SESSION_TABLE = 'mijnnijmegen-sessions';
+});
+
 beforeEach(() => {
   ddbMock.reset();
 });
@@ -146,8 +150,7 @@ describe('Persoonsgegevens Verify Contactgegevens', () => {
       xsrf_token: { S: 'test-token' },
       pending_email: { S: 'new@example.com' },
       verification_code_email: { S: '123456' },
-      verification_expiry_email: { N: (Date.now() + 900000).toString() },
-      verification_attempts_email: { N: '3' },
+      verification_expiry_email: { S: (Date.now() + 900000).toString() },
     });
 
     const handler = new PersoonsgegevensRequestHandler({
@@ -231,8 +234,7 @@ describe('Persoonsgegevens Verify Contactgegevens', () => {
       xsrf_token: { S: 'test-token' },
       pending_email: { S: 'new@example.com' },
       verification_code_email: { S: '123456' },
-      verification_expiry_email: { N: (Date.now() - 1000).toString() },
-      verification_attempts_email: { N: '3' },
+      verification_expiry_email: { S: (Date.now() - 1000).toString() },
     });
 
     const handler = new PersoonsgegevensRequestHandler({
