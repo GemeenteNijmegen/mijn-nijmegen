@@ -1013,3 +1013,151 @@ describe('OpenKlantApi updateContactInfo', () => {
     );
   });
 });
+
+describe('Persoonsgegevens form body validation', () => {
+  const dynamoDBClient = new DynamoDBClient({ region: 'eu-west-1' });
+  const apiClient = new ApiClient({});
+  const haalCentraalApi = new HaalCentraalApi({ baseUrl: 'https://localhost', apiclient: apiClient });
+
+  function verifySession() {
+    setupSession({
+      loggedin: { BOOL: true },
+      identifier: { S: '900222670' },
+      user_type: { S: 'person' },
+      username: { S: 'Test User' },
+      xsrf_token: { S: 'test-token' },
+      pending_email: { S: 'new@example.com' },
+      verification_code_email: { S: '123456' },
+      verification_expiry_email: { S: String(Date.now() + 900000) },
+    });
+  }
+
+  function editSession() {
+    setupSession({
+      loggedin: { BOOL: true },
+      identifier: { S: '900222670' },
+      user_type: { S: 'person' },
+      username: { S: 'Test User' },
+      xsrf_token: { S: 'test-token' },
+    });
+  }
+
+  function rateLimitCalls(scope: 'issue' | 'verify') {
+    return ddbMock.commandCalls(UpdateItemCommand).filter(call =>
+      call.args[0].input.Key?.sessionid?.S?.startsWith(`ratelimit#${scope}#`),
+    );
+  }
+
+  test.each([
+    ['too short', '12345'],
+    ['non-digit', '12a456'],
+    ['missing', undefined],
+  ])('POST /persoonsgegevens/verify with %s code returns 400 without spending an attempt', async (_, code) => {
+    verifySession();
+    const handler = new PersoonsgegevensRequestHandler({ dynamoDBClient, haalCentraalApi, contactgegevensLive: true });
+
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'email', code, xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/verify',
+      queryStringParameters: {},
+    });
+
+    expect(result.statusCode).toBe(400);
+    expect(rateLimitCalls('verify')).toHaveLength(0);
+  });
+
+  test('POST /persoonsgegevens/verify with missing xsrf_token returns 400', async () => {
+    verifySession();
+    const handler = new PersoonsgegevensRequestHandler({ dynamoDBClient, haalCentraalApi, contactgegevensLive: true });
+
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'email', code: '123456' },
+      path: '/persoonsgegevens/verify',
+      queryStringParameters: {},
+    });
+
+    expect(result.statusCode).toBe(400);
+  });
+
+  test('POST /persoonsgegevens/verify accepts a code surrounded by whitespace', async () => {
+    verifySession();
+    const mockOpenKlantApi = { updateContactInfo: jest.fn().mockResolvedValue(undefined) } as any;
+    const handler = new PersoonsgegevensRequestHandler({
+      dynamoDBClient,
+      haalCentraalApi,
+      openKlantApi: mockOpenKlantApi,
+      contactgegevensLive: true,
+    });
+
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'email', code: ' 123456 ', xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/verify',
+      queryStringParameters: {},
+    });
+
+    expect(result.statusCode).toBe(302);
+    expect(result.headers?.Location).toBe('/persoonsgegevens');
+    expect(mockOpenKlantApi.updateContactInfo).toHaveBeenCalled();
+  });
+
+  test.each([
+    ['missing', undefined],
+    ['empty', ''],
+    ['whitespace-only', '   '],
+  ])('POST /persoonsgegevens/edit with %s value returns 400 without issuing a code', async (_, value) => {
+    editSession();
+    const handler = new PersoonsgegevensRequestHandler({ dynamoDBClient, haalCentraalApi, contactgegevensLive: true });
+
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'email', value, xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/edit',
+      queryStringParameters: {},
+    });
+
+    expect(result.statusCode).toBe(400);
+    expect(rateLimitCalls('issue')).toHaveLength(0);
+  });
+
+  test('POST /persoonsgegevens/edit with missing xsrf_token returns 400', async () => {
+    editSession();
+    const handler = new PersoonsgegevensRequestHandler({ dynamoDBClient, haalCentraalApi, contactgegevensLive: true });
+
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'email', value: 'new@example.com' },
+      path: '/persoonsgegevens/edit',
+      queryStringParameters: {},
+    });
+
+    expect(result.statusCode).toBe(400);
+  });
+
+  test('POST /persoonsgegevens/edit stores the trimmed value as pending', async () => {
+    editSession();
+    const handler = new PersoonsgegevensRequestHandler({ dynamoDBClient, haalCentraalApi, contactgegevensLive: true });
+
+    const result = await handler.handleRequest({
+      cookies: `session=${sessionId}`,
+      method: 'POST',
+      body: { type: 'email', value: '  new@example.com  ', xsrf_token: 'test-token' },
+      path: '/persoonsgegevens/edit',
+      queryStringParameters: {},
+    });
+
+    expect(result.statusCode).toBe(302);
+    const sessionWrites = ddbMock.commandCalls(UpdateItemCommand)
+      .map(call => JSON.stringify(call.args[0].input))
+      .filter(input => input.includes('pending_email'));
+    expect(sessionWrites.length).toBeGreaterThan(0);
+    expect(sessionWrites.join()).toContain('"S":"new@example.com"');
+  });
+});
