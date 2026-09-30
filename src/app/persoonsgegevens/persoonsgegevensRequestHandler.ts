@@ -4,6 +4,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { Bsn } from '@gemeentenijmegen/utils';
+import { EditFormSchema } from './EditForm';
 import { Persoonsgegevens, PersoonsgegevensMapper } from './Persoonsgegevens';
 import { Statics } from '../../statics';
 import * as contactgegevensTemplate from './templates/contactgegevens.mustache';
@@ -12,6 +13,7 @@ import * as template from './templates/mijngegevens.mustache';
 import * as persoonsgegevensTemplate from './templates/persoonsgegevens.mustache';
 import * as verifyTemplate from './templates/verify-contactgegevens.mustache';
 import { VerificationRateLimiter } from './VerificationRateLimiter';
+import { VerifyFormSchema } from './VerifyForm';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { BreadCrumbs, Navigation, NavigationItem } from '../../shared/Navigation';
 import { NotifyNLApi } from '../../shared/NotifyNLApi';
@@ -81,9 +83,12 @@ export interface Config {
 export interface ParsedEvent {
   cookies: string;
   method: string;
-  body: any;
+  /**
+   * Raw url-encoded form fields, unvalidated. Parse with a schema before use.
+   */
+  body: Record<string, string | undefined>;
   path: string;
-  queryStringParameters: any;
+  queryStringParameters: Record<string, string | undefined>;
 }
 
 export class PersoonsgegevensRequestHandler {
@@ -247,16 +252,18 @@ export class PersoonsgegevensRequestHandler {
     };
 
     if (event.method === 'POST') {
-      if (event.body?.xsrf_token !== xsrfToken) {
+      const form = EditFormSchema.safeParse(event.body);
+      if (!form.success) {
+        console.info('Bad post request for contactgegevens form');
+        return Response.error(400);
+      }
+
+      if (form.data.xsrf_token !== xsrfToken) {
         console.info('XSRF token mismatch');
         return Response.error(403);
       }
 
-      const value = event.body?.value;
-      if (!value) {
-        console.info('Bad post request for contactgegevens form');
-        return Response.error(400);
-      }
+      const value = form.data.value;
 
       // Validate format
       const emailRegex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
@@ -380,13 +387,19 @@ export class PersoonsgegevensRequestHandler {
     };
 
     if (event.method === 'POST') {
-      // Validate XSRF token
-      if (event.body?.xsrf_token !== xsrfToken) {
+      const form = VerifyFormSchema.safeParse(event.body);
+      if (!form.success) {
+        console.error('Bad post request for verify form');
+        return Response.error(400);
+      }
+
+      if (form.data.xsrf_token !== xsrfToken) {
+        console.error('XSRF token mismatch');
         return Response.error(403);
       }
 
-      const code = event.body?.code;
-      const storedCode = session.getValue(`verification_code_${type}`);
+      const code = form.data.code;
+      const storedCode: string | undefined = session.getValue(`verification_code_${type}`);
       const expiryOfCode = parseInt(session.getValue(`verification_expiry_${type}`) || '0');
 
       // Check expiry first: an already-expired code isn't a real "attempt"
