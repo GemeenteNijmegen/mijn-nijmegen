@@ -51,7 +51,7 @@
     "projen": "projen"
   },
   "devDependencies": {
-    "@aws-sdk/client-ssm": "^3.1144.0",
+    "@aws-sdk/client-ssm": "^3.1145.0",
     "@aws-sdk/types": "^3.974.6",
     "@gemeentenijmegen/components-css": "^0.1.12",
     "@gemeentenijmegen/design-tokens": "^0.1.12",
@@ -108,13 +108,13 @@
   },
   "dependencies": {
     "@aws-lambda-powertools/logger": "^1.18.1",
-    "@aws-sdk/client-dynamodb": "^3.1144.0",
-    "@aws-sdk/client-secrets-manager": "^3.1144.0",
+    "@aws-sdk/client-dynamodb": "^3.1145.0",
+    "@aws-sdk/client-secrets-manager": "^3.1145.0",
     "@aws-solutions-constructs/aws-lambda-dynamodb": "^2.104.0",
-    "@gemeentenijmegen/apiclient": "^0.0.44",
+    "@gemeentenijmegen/apiclient": "^0.0.45",
     "@gemeentenijmegen/apigateway-http": "^0.0.41",
-    "@gemeentenijmegen/aws-constructs": "^0.0.54",
-    "@gemeentenijmegen/cross-region-parameters": "^0.0.9",
+    "@gemeentenijmegen/aws-constructs": "^0.0.55",
+    "@gemeentenijmegen/cross-region-parameters": "^0.0.10",
     "@gemeentenijmegen/projen-project-type": "^1.16.2",
     "@gemeentenijmegen/session": "^0.0.39",
     "@gemeentenijmegen/utils": "^0.0.38",
