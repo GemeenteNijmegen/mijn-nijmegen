@@ -163,7 +163,8 @@ export abstract class Statics {
   static readonly ssmHaalCentraalApiKey = '/cdk/mijn-nijmegen/haal-centraal/api-key';
   static readonly ssmHaalCentraalBaseUrl = '/cdk/mijn-nijmegen/haal-centraal/base-url';
 
-  // MARK: DEMO producten arc params
+  // MARK: DEMO producten & arc params
+  static readonly ssmMsaCredentials = '/cdk/mijn-nijmegen/msa/credentials';
   static readonly ssmProductenArcApiKey = '/cdk/mijn-nijmegen/arc/api-key';
   static readonly ssmProductenArcBaseUrl = '/cdk/mijn-nijmegen/arc/base-url';
 
@@ -178,7 +179,7 @@ export abstract class Statics {
   static readonly ssmCloudFrontDomainName = '/cdk/mijn-nijmegen/cloudfront/domain-name';
 
   // MARK: Gemachtigd statics bucket arn
-  static readonly ssmGemachtigdStaticResourcesBucketArn ='/cdk/mijn-nijmegen-gemachtigd/statics/bucket-arn';
+  static readonly ssmGemachtigdStaticResourcesBucketArn = '/cdk/mijn-nijmegen-gemachtigd/statics/bucket-arn';
 
   // MARK: ENVIRONMENTS
   static readonly gnBuildEnvironment = {

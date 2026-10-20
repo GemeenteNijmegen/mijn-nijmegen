@@ -3,12 +3,12 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
-import { productEventParams } from './producten.lambda';
-import { ProductFormatter } from './ProductFormatter';
 import { Navigation } from '../../shared/Navigation';
 import { render } from '../../shared/render';
 import { User, UserFromSession } from '../../shared/User';
-import { ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
+import { MijnServicesAggregatorConnector } from './MijnServicesAggregatorConnector';
+import { productEventParams } from './producten.lambda';
+import { ProductFormatter } from './ProductFormatter';
 import * as productTemplate from './templates/product.mustache';
 import * as productenTemplate from './templates/producten.mustache';
 
@@ -32,13 +32,13 @@ export class ProductenRequestHandler {
 
   logger = new Logger();
 
-  private connector: ZakenAggregatorConnector;
+  private connector: MijnServicesAggregatorConnector;
 
   constructor(private config: Config) {
-    const env = environmentVariables(['ZAKEN_APIGATEWAY_BASEURL', 'ZAKEN_APIGATEWAY_APIKEY']);
-    this.connector = new ZakenAggregatorConnector({
+    const env = environmentVariables(['ZAKEN_APIGATEWAY_BASEURL', 'MSA_CREDENTIALS']);
+    this.connector = new MijnServicesAggregatorConnector({
       baseUrl: new URL(env.ZAKEN_APIGATEWAY_BASEURL),
-      apiKeySecretName: env.ZAKEN_APIGATEWAY_APIKEY,
+      apiKeySecretName: env.MSA_CREDENTIALS,
       timeout: 2000,
     });
   }
