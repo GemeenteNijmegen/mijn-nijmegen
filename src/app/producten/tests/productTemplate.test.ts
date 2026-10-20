@@ -1,9 +1,9 @@
 import * as fs from 'fs';
 import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
-import { SecretsManagerClient, GetSecretValueCommandOutput, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
+import { GetSecretValueCommand, GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'aws-sdk-client-mock';
-import { ZakenAggregatorConnector } from '../../zaken/ZakenAggregatorConnector';
+import { MijnServicesAggregatorConnector } from '../MijnServicesAggregatorConnector';
 import { ProductenRequestHandler } from '../productenRequestHandler';
 import { mockProductCall } from './mock-product-call';
 
@@ -19,6 +19,7 @@ beforeAll(() => {
   process.env.APPLICATION_URL_BASE = 'https://testing.example.com/';
   process.env.ZAKEN_APIGATEWAY_BASEURL = 'http://localhost/';
   process.env.ZAKEN_APIGATEWAY_APIKEY = 'fakekey';
+  process.env.MSA_CREDENTIALS = 'fakekey';
 
 
   // Zorg dat de output-map bestaat (deze is gitignored)
@@ -30,8 +31,8 @@ beforeAll(() => {
 
 const ddbMock = mockClient(DynamoDBClient);
 const fetchMock = jest.fn();
-jest.mock('../../zaken/ZakenAggregatorConnector');
-(ZakenAggregatorConnector as jest.Mock).mockImplementation(() => {
+jest.mock('../MijnServicesAggregatorConnector');
+(MijnServicesAggregatorConnector as jest.Mock).mockImplementation(() => {
   return {
     fetch: fetchMock,
   };
@@ -39,22 +40,11 @@ jest.mock('../../zaken/ZakenAggregatorConnector');
 
 
 beforeEach(() => {
-
-  // global.fetch = jest.fn((url: string) =>
-  //   Promise.resolve({
-  //     json: () => {
-  //       console.debug('mocked fetch', url);
-  //       return Promise.resolve([]);
-  //     },
-  //     headers: {
-  //       get: () => jest.fn(),
-  //     },
-  //   }),
-  // ) as jest.Mock;
+  // mocks MSA_CREDENTIALS secret
   const secretsMock = mockClient(SecretsManagerClient);
   const output: GetSecretValueCommandOutput = {
     $metadata: {},
-    SecretString: 'ditiseennepgeheim',
+    SecretString: JSON.stringify({ clientId: 'test', clientSecret: 'test' }),
   };
   secretsMock.on(GetSecretValueCommand).resolves(output);
   ddbMock.reset();
@@ -103,9 +93,9 @@ test('Producten unique and refresh html', async () => {
 
   const timestamp = new Date().toISOString().replace(/:/g, '-');
   const outputFilename = path.join(__dirname, 'output', `product_data_${timestamp}.html`);
-  fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
+  fs.writeFileSync(outputFilename, result.body ? result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
   const outputFilenameRF = path.join(__dirname, 'output', 'product_data_torefresh.html');
-  fs.writeFileSync(outputFilenameRF, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
+  fs.writeFileSync(outputFilenameRF, result.body ? result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
 
 
   // Should not trigger, if it does, it gives an empty page
@@ -126,9 +116,9 @@ test('Producten with wallet status', async () => {
 
   const timestamp = new Date().toISOString().replace(/:/g, '-');
   const outputFilename = path.join(__dirname, 'output', `product_data_${timestamp}.html`);
-  fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
+  fs.writeFileSync(outputFilename, result.body ? result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
   const outputFilenameRF = path.join(__dirname, 'output', 'product_data_wallet_success_torefresh.html');
-  fs.writeFileSync(outputFilenameRF, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
+  fs.writeFileSync(outputFilenameRF, result.body ? result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
 
 
   // Should not trigger, if it does, it gives an empty page

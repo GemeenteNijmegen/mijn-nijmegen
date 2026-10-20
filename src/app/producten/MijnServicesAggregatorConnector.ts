@@ -1,7 +1,5 @@
 import { AWS } from '@gemeentenijmegen/utils';
-import contentDisposition from 'content-disposition';
-import * as jwt from "jsonwebtoken";
-import { logger } from '../../shared/Logger';
+import * as jwt from 'jsonwebtoken';
 import { User } from '../../shared/User';
 
 interface MijnServicesAggregatorConnectorOptions {
@@ -49,9 +47,11 @@ export class MijnServicesAggregatorConnector {
     if (!this.clientId || this.clientSecret) {
       const secret = await AWS.getSecret(this.keyName);
       const parsed = JSON.parse(secret);
-      if (!parsed.clientId || parsed.clientSecret) {
+      if (!parsed.clientId || !parsed.clientSecret) {
         throw Error('No MijnServicesAggregator credentials found (should be json object with clientId and clientSecret)');
       }
+      this.clientId = parsed.clientId;
+      this.clientSecret = parsed.clientSecret;
     }
     return jwt.sign(
       {
@@ -68,35 +68,17 @@ export class MijnServicesAggregatorConnector {
 
   async fetch(endpoint: string, user: User, params?: URLSearchParams) {
     const url = this.createUrlForRequest(endpoint, user, params);
+    const token = await this.getJwtToken();
     try {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${await this.getJwtToken()}`,
+          'Authorization': `Bearer ${token}`,
           'Accept': 'application/octet-stream,application/json',
           'Content-Type': 'application/json',
         },
         signal: (this.timeout) ? AbortSignal.timeout(this.timeout) : undefined,
       });
-      if (response.headers.get('content-type') == 'application/octet-stream') {
-        logger.debug('fetch content-type octet-stream');
-        const contentDispositionHeaderString = response.headers.get('Content-disposition');
-        let filename = 'file.pdf';
-        if (contentDispositionHeaderString != null) {
-          const cdHeader = contentDisposition.parse(contentDispositionHeaderString);
-          filename = cdHeader.parameters.filename;
-        }
-        logger.debug('fetch return response and filename',
-          {
-            response,
-            filename,
-          },
-        );
-        return {
-          response,
-          filename,
-        };
-      }
       const json = await response.json() as any;
       if (process.env.DEBUG == 'True') {
         console.debug(`response for ${endpoint}`, JSON.stringify(json));
