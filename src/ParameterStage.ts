@@ -268,6 +268,10 @@ export class ssmParamsConstruct extends Construct {
       secretName: Statics.ssmProductenArcApiKey,
       description: 'Demo ARC producten - token',
     });
+    new SecretsManager.Secret(this, 'msa-credentials', {
+      secretName: Statics.ssmMsaCredentials,
+      description: 'Credentials for MSA (json object with clientId and clientSecret)',
+    });
   }
 
 
