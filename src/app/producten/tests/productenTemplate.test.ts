@@ -1,9 +1,9 @@
 import * as fs from 'fs';
 import path from 'path';
 import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
-import { SecretsManagerClient, GetSecretValueCommandOutput, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
+import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'aws-sdk-client-mock';
-import { ZakenAggregatorConnector } from '../../zaken/ZakenAggregatorConnector';
+import { MijnServicesAggregatorConnector } from '../MijnServicesAggregatorConnector';
 import { ProductenRequestHandler } from '../productenRequestHandler';
 import { mockProductenCall } from './mock-producten-call';
 
@@ -19,6 +19,7 @@ beforeAll(() => {
   process.env.APPLICATION_URL_BASE = 'https://testing.example.com/';
   process.env.ZAKEN_APIGATEWAY_BASEURL = 'http://localhost/';
   process.env.ZAKEN_APIGATEWAY_APIKEY = 'fakekey';
+  process.env.MSA_CREDENTIALS = 'msa_credentials';
 
 
   // Zorg dat de output-map bestaat (deze is gitignored)
@@ -30,8 +31,8 @@ beforeAll(() => {
 
 const ddbMock = mockClient(DynamoDBClient);
 const fetchMock = jest.fn();
-jest.mock('../../zaken/ZakenAggregatorConnector');
-(ZakenAggregatorConnector as jest.Mock).mockImplementation(() => {
+jest.mock('../MijnServicesAggregatorConnector');
+(MijnServicesAggregatorConnector as jest.Mock).mockImplementation(() => {
   return {
     fetch: fetchMock,
   };
@@ -39,25 +40,16 @@ jest.mock('../../zaken/ZakenAggregatorConnector');
 
 
 beforeEach(() => {
-
-  // global.fetch = jest.fn((url: string) =>
-  //   Promise.resolve({
-  //     json: () => {
-  //       console.debug('mocked fetch', url);
-  //       return Promise.resolve([]);
-  //     },
-  //     headers: {
-  //       get: () => jest.fn(),
-  //     },
-  //   }),
-  // ) as jest.Mock;
+  // Mocks MSA_CREDETNAILS secret
   const secretsMock = mockClient(SecretsManagerClient);
-  const output: GetSecretValueCommandOutput = {
-    $metadata: {},
-    SecretString: 'ditiseennepgeheim',
-  };
-  secretsMock.on(GetSecretValueCommand).resolves(output);
+  secretsMock.on(GetSecretValueCommand, {
+    SecretId: 'msa_credentials',
+  }).resolves({
+    SecretString: JSON.stringify({ clientId: 'test', clientSecret: 'test' }),
+  });
+
   ddbMock.reset();
+
   const getItemOutput: Partial<GetItemCommandOutput> = {
     Item: {
       data: {
@@ -103,9 +95,9 @@ test('Producten unique and refresh html', async () => {
 
   const timestamp = new Date().toISOString().replace(/:/g, '-');
   const outputFilename = path.join(__dirname, 'output', `producten_data_${timestamp}.html`);
-  fs.writeFileSync(outputFilename, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
+  fs.writeFileSync(outputFilename, result.body ? result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
   const outputFilenameRF = path.join(__dirname, 'output', 'producten_data_torefresh.html');
-  fs.writeFileSync(outputFilenameRF, result.body ? result.body.replace( new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
+  fs.writeFileSync(outputFilenameRF, result.body ? result.body.replace(new RegExp('href="/static', 'g'), 'href="../../../static-resources/static') : '');
 
 
   // Should not trigger, if it does, it gives an empty page
