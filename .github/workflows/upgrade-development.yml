@@ -99,7 +99,6 @@ jobs:
             *Automatically created by projen via the "upgrade-development" workflow*
           branch: github-actions/upgrade-development
           title: "chore(deps): upgrade dependencies"
-          labels: auto-merge
           body: |-
             Upgrades project dependencies. See details in [workflow run].
 

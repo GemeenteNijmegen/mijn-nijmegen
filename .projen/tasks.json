@@ -113,6 +113,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/auth/auth.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text"
@@ -132,6 +133,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/auth/auth.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text",
@@ -152,6 +154,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/home/home.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text"
@@ -171,6 +174,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/home/home.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text",
@@ -191,6 +195,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/login/login.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text"
@@ -210,6 +215,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/login/login.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text",
@@ -230,6 +236,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/logout/logout.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text"
@@ -249,6 +256,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/logout/logout.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text",
@@ -269,6 +277,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/persoonsgegevens/persoonsgegevens.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text"
@@ -288,6 +297,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/persoonsgegevens/persoonsgegevens.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text",
@@ -308,6 +318,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/producten/producten.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text"
@@ -327,6 +338,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/producten/producten.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text",
@@ -347,6 +359,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/taken/taken.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text"
@@ -366,6 +379,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/taken/taken.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text",
@@ -386,6 +400,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/uitkeringen/uitkering.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text"
@@ -405,6 +420,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/uitkeringen/uitkering.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text",
@@ -425,6 +441,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/zaken/zaken.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text"
@@ -444,6 +461,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/app/zaken/zaken.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--loader:.mustache=text",
@@ -728,7 +746,8 @@
         {
           "exec": "git diff --ignore-space-at-eol --exit-code"
         }
-      ]
+      ],
+      "condition": "git log --oneline -1 | grep -v \"chore(release):\" > /dev/null"
     },
     "synth": {
       "name": "synth",
