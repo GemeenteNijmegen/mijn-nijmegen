@@ -25,6 +25,24 @@ interface ZakenAggregatorConnectorOptions {
 }
 
 /**
+ * Thrown when the zaakaggregator responds with a non-2xx status
+ */
+export class ZakenAggregatorError extends Error {
+  constructor(readonly status: number, endpoint: string) {
+    super(`zaakaggregator responded with status ${status} for ${endpoint}`);
+    this.name = 'ZakenAggregatorError';
+  }
+}
+
+/**
+ * Check if an error thrown by `ZakenAggregatorConnector.fetch` was caused by the request timing out
+ */
+export function isTimeoutError(err: unknown) {
+  // Not using instanceof: the DOMException thrown by AbortSignal.timeout can come from another realm
+  return (err as { name?: unknown } | undefined)?.name === 'TimeoutError';
+}
+
+/**
  * Manages connections to the zaakaggregator service
  */
 export class ZakenAggregatorConnector {
@@ -66,6 +84,9 @@ export class ZakenAggregatorConnector {
         },
         signal: (this.timeout) ? AbortSignal.timeout(this.timeout) : undefined,
       });
+      if (!response.ok) {
+        throw new ZakenAggregatorError(response.status, endpoint);
+      }
       if (response.headers.get('content-type') == 'application/octet-stream') {
         logger.debug('fetch content-type octet-stream');
         const contentDispositionHeaderString = response.headers.get('Content-disposition');

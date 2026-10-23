@@ -20,13 +20,13 @@
     {{/showContactgegevensNotice}}
     
     <div>
-        {{#timeout}}
+        {{#taken_failed}}
         <div class="header-readmore">
             <h2>Belangrijke taken om te regelen</h2>
             <a href="/taken" class="utrecht-link utrecht-link--html-a" ><span>Bekijk alle taken</span><span class="utrecht-icon">{{>arrow-right}}</span></a>
         </div>
         <p id="taken-list">Bezig met ophalen van uw open taken… {{>spinner}}</p>
-        {{/timeout}}
+        {{/taken_failed}}
         {{#has_taken}}
         <div class="header-readmore">
             <h2>Belangrijke taken om te regelen</h2>
@@ -46,13 +46,13 @@
         </div>
         {{{zaken}}}
         {{/has_zaken}}
-        {{#timeout}}
+        {{#zaken_failed}}
         <div class="header-readmore">
             <h2>Mijn zaken</h2>
             <a href="/zaken" class="utrecht-link utrecht-link--html-a" >Bekijk alle zaken <span class="utrecht-icon">{{>arrow-right}}</span></a>
         </div>
         <p id="open-zaken-list">Bezig met ophalen van uw open zaken… {{>spinner}}</p>
-        {{/timeout}}
+        {{/zaken_failed}}
     </div>
     <div>
         <h2>Andere portalen</h2>

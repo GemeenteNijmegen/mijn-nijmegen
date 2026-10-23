@@ -13,7 +13,7 @@ import * as zaakRow from '../zaken/templates/zaak-row.mustache';
 import * as zakenListPartial from '../zaken/templates/zaken-table.mustache';
 import { ZaakFormatter } from '../zaken/ZaakFormatter';
 import { TaakSummariesResponseSchema, TaakSummariesSchema, TaakSummary, ZaakSummariesResponseSchema } from '../zaken/ZaakInterface';
-import { ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
+import { isTimeoutError, ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
 import * as homeTemplate from './templates/home.mustache';
 import { Util } from './Util';
 
@@ -23,6 +23,11 @@ interface HomeRequestHandlerProps {
    * Show zaken in navigation
    */
   showTaken?: boolean;
+}
+
+interface SectionResult {
+  html?: string | false;
+  error?: unknown;
 }
 
 export class HomeRequestHandler {
@@ -54,22 +59,23 @@ export class HomeRequestHandler {
   private async handleLoggedinRequest(session: Session, params: eventParams) {
     const naam = session.getValue('username') ?? 'Onbekende gebruiker';
     const userType = session.getValue('user_type');
-    let zaken, taken;
-    let timeout = false;
     (params.responseType == 'json') ? this.zakenConnector.setTimeout(10000) : this.zakenConnector.setTimeout(1000);
-    try {
-      [zaken, taken] = await Promise.all([this.zakenList(session), this.takenList(session)]);
-    } catch (err: unknown) {
-      if (err instanceof Error && err.name === 'TimeoutError') {
-        timeout = true;
-      }
-    }
+    // Load independently, so a failure in one section does not hide the other
+    const [zaken, taken] = await Promise.all([
+      this.loadSection('zaken', () => this.zakenList(session)),
+      this.loadSection('taken', () => this.takenList(session)),
+    ]);
+    const errors = [zaken.error, taken.error].filter(error => error !== undefined);
     if (params.responseType == 'json') {
-      if (timeout) {
-        return Response.json({ error: 'Het ophalen van gegevens duurde te lang…' }, 408);
-      } else {
-        return Response.json({ elements: [zaken, taken] });
+      // Always return the sections that did load, the frontend retries on an error status
+      const elements = [zaken.html, taken.html].filter(html => html);
+      if (errors.length > 0) {
+        if (errors.every(isTimeoutError)) {
+          return Response.json({ error: 'Het ophalen van gegevens duurde te lang…', elements }, 408);
+        }
+        return Response.json({ error: 'Het ophalen van gegevens is niet gelukt', elements }, 503);
       }
+      return Response.json({ elements });
     } else {
       const navigation = new Navigation(userType, {
         currentPath: '/',
@@ -85,12 +91,14 @@ export class HomeRequestHandler {
         nav: navigation.items,
         has_sidenav: true,
         volledigenaam: naam,
-        zaken: zaken,
-        has_zaken: zaken ? true : false,
-        taken: taken,
-        has_taken: taken ? true : false,
+        zaken: zaken.html,
+        has_zaken: zaken.html ? true : false,
+        zaken_failed: zaken.error !== undefined,
+        taken: taken.html,
+        has_taken: taken.html ? true : false,
+        taken_failed: taken.error !== undefined,
         xsrf_token: session.getValue('xsrf_token'),
-        timeout,
+        timeout: errors.length > 0, // Triggers async loading in the frontend
         header_additions: '<link rel="stylesheet" href="/static/styles/zaak.css">',
         showContactgegevensNotice,
       };
@@ -104,6 +112,21 @@ export class HomeRequestHandler {
       );
 
       return Response.html(html, 200, session.getCookie({ sameSite: 'lax' }));
+    }
+  }
+
+  /**
+   * Catch any error while loading a section, so the page still renders
+   * and the frontend can retry loading the failed section async
+   */
+  private async loadSection(name: string, load: () => Promise<string | false>): Promise<SectionResult> {
+    try {
+      return { html: await load() };
+    } catch (error: unknown) {
+      if (!isTimeoutError(error)) {
+        logger.error(`Failed loading ${name}`, { error });
+      }
+      return { error };
     }
   }
 
