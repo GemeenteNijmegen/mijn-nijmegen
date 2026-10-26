@@ -10,7 +10,7 @@ import { render } from '../../shared/render';
 import { User, UserFromSession } from '../../shared/User';
 import * as takenListPartial from '../zaken/templates/taken.mustache';
 import { TaakSummariesResponseSchema, TaakSummary } from '../zaken/ZaakInterface';
-import { ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
+import { isTimeoutError, ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
 import * as takenTemplate from './templates/taken.mustache';
 
 export class TaakrequestHandler {
@@ -44,19 +44,23 @@ export class TaakrequestHandler {
   async list(session: Session, params: eventParams) {
     const user = UserFromSession(session);
     const { navigation, breadcrumbs } = this.setupNavigation(user);
-    let timeout = false;
+    let error: unknown;
     let taken;
     (params.responseType == 'json') ? this.connector.setTimeout(10000) : this.connector.setTimeout(1000);
     try {
       taken = await this.takenList(session);
     } catch (err: unknown) {
-      if (err instanceof Error && err.name === 'TimeoutError') {
-        timeout = true;
+      error = err;
+      if (!isTimeoutError(err)) {
+        logger.error('Failed loading taken', { error: err });
       }
     }
+    const failed = error !== undefined;
     if (params.responseType == 'json') {
-      if (timeout) {
-        return Response.json({ error: 'Het ophalen van gegevens duurde te lang…' }, 408);
+      if (failed) {
+        return isTimeoutError(error)
+          ? Response.json({ error: 'Het ophalen van gegevens duurde te lang…' }, 408)
+          : Response.json({ error: 'Het ophalen van gegevens is niet gelukt' }, 503);
       } else {
         return Response.json({ elements: [taken] });
       }
@@ -73,7 +77,7 @@ export class TaakrequestHandler {
         taken,
         has_taken: taken ? true : false,
         xsrf_token: session.getValue('xsrf_token'),
-        timeout,
+        timeout: failed, // Triggers async loading in the frontend
         header_additions: '<link rel="stylesheet" href="/static/styles/zaak.css">',
       };
       // render page
