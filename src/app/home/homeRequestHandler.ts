@@ -18,13 +18,6 @@ import * as homeTemplate from './templates/home.mustache';
 import { Util } from './Util';
 
 
-interface HomeRequestHandlerProps {
-  /**
-   * Show zaken in navigation
-   */
-  showTaken?: boolean;
-}
-
 interface SectionResult {
   html?: string | false;
   error?: unknown;
@@ -32,12 +25,10 @@ interface SectionResult {
 
 export class HomeRequestHandler {
   private dynamoDBClient: DynamoDBClient;
-  private props?: HomeRequestHandlerProps;
   private zakenConnector: ZakenAggregatorConnector;
 
-  constructor(dynamoDBClient: DynamoDBClient, props?: HomeRequestHandlerProps) {
+  constructor(dynamoDBClient: DynamoDBClient) {
     this.dynamoDBClient = dynamoDBClient;
-    this.props = props;
 
     const env = environmentVariables(['ZAKEN_APIGATEWAY_BASEURL', 'ZAKEN_APIGATEWAY_APIKEY']);
     this.zakenConnector = new ZakenAggregatorConnector({
@@ -131,9 +122,6 @@ export class HomeRequestHandler {
   }
 
   private async takenList(session: Session) {
-    if (!this.props?.showTaken) {
-      return '';
-    }
     const user = UserFromSession(session);
 
     const endpoint = 'taken';
