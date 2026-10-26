@@ -2,7 +2,6 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import { environmentVariables } from '@gemeentenijmegen/utils';
-import { eventParams } from './home.lambda';
 import { ArrowRight, Checkmark, Spinner } from '../../shared/Icons';
 import { logger } from '../../shared/Logger';
 import { Navigation } from '../../shared/Navigation';
@@ -14,16 +13,10 @@ import * as zakenListPartial from '../zaken/templates/zaken-table.mustache';
 import { ZaakFormatter } from '../zaken/ZaakFormatter';
 import { TaakSummariesResponseSchema, TaakSummariesSchema, TaakSummary, ZaakSummariesResponseSchema } from '../zaken/ZaakInterface';
 import { isTimeoutError, ZakenAggregatorConnector } from '../zaken/ZakenAggregatorConnector';
+import { eventParams } from './home.lambda';
 import * as homeTemplate from './templates/home.mustache';
 import { Util } from './Util';
 
-
-interface HomeRequestHandlerProps {
-  /**
-   * Show zaken in navigation
-   */
-  showTaken?: boolean;
-}
 
 interface SectionResult {
   html?: string | false;
@@ -32,12 +25,10 @@ interface SectionResult {
 
 export class HomeRequestHandler {
   private dynamoDBClient: DynamoDBClient;
-  private props?: HomeRequestHandlerProps;
   private zakenConnector: ZakenAggregatorConnector;
 
-  constructor(dynamoDBClient: DynamoDBClient, props?: HomeRequestHandlerProps) {
+  constructor(dynamoDBClient: DynamoDBClient) {
     this.dynamoDBClient = dynamoDBClient;
-    this.props = props;
 
     const env = environmentVariables(['ZAKEN_APIGATEWAY_BASEURL', 'ZAKEN_APIGATEWAY_APIKEY']);
     this.zakenConnector = new ZakenAggregatorConnector({
@@ -131,9 +122,6 @@ export class HomeRequestHandler {
   }
 
   private async takenList(session: Session) {
-    if (!this.props?.showTaken) {
-      return '';
-    }
     const user = UserFromSession(session);
 
     const endpoint = 'taken';

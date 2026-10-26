@@ -66,19 +66,6 @@ export interface Configuration {
 
 
   /**
-   * Feature flag: if this is not true, the lambda will
-   * return 404.
-   */
-  readonly zakenIsLive?: boolean;
-
-  /**
-   * Feature flag: The taken functionality is experimental
-   * If this flag is not true, the taken-functionality will
-   * always exit immediately.
-   */
-  readonly zakenUseTaken?: boolean;
-
-  /**
    * Feature flag: The submissions functionality is experimental
    * If this flag is not true, the submissions-functionality will
    * not be called.
@@ -158,8 +145,6 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     dsRecord: '1092 13 2 1F367460EB372760AA306E8BA29C64AD04BCA7AB515E30CA99FE710A1484A0FE',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-development',
     pipelineName: 'mijnnijmegen-development',
-    zakenUseTaken: true,
-    zakenIsLive: true,
     zakenUseSubmissions: true,
     useZakenFromAggregatorAPI: true,
     mijnContactGegevensLive: true,
@@ -179,8 +164,6 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     dsRecord: '3766 13 2 11761745E09473E6CE95DB798CF1ADB69B4433E73EEFC9F7FE341561966EA154',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-acceptance',
     pipelineName: 'mijnnijmegen-acceptance',
-    zakenUseTaken: true,
-    zakenIsLive: true,
     zakenUseSubmissions: true,
     mijnContactGegevensLive: true,
     useZakenFromAggregatorAPI: true,
@@ -197,8 +180,6 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     dsRecord: '40951 13 2 1EFF20C0264CD1FDE6C7C858398BC2141768CC014A7BB27997F323076B7C47ED',
     pipelineStackCdkName: 'mijnnijmegen-pipeline-production',
     pipelineName: 'mijnnijmegen-production',
-    zakenUseTaken: false,
-    zakenIsLive: true,
     zakenUseSubmissions: true,
     useZakenFromAggregatorAPI: true,
     nodeOptions: '--no-deprecation', // Too much noise cased by DEP0169 error in node v24.
