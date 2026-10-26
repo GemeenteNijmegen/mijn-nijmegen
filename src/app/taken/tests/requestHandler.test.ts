@@ -15,6 +15,7 @@ process.env.ZAKEN_APIGATEWAY_APIKEY = 'fakekey';
 beforeAll(() => {
   global.fetch = jest.fn((url: string) =>
     Promise.resolve({
+      ok: true,
       json: () => {
         console.debug('mocked fetch', url);
         return Promise.resolve([]);
