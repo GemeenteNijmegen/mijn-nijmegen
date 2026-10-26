@@ -311,7 +311,6 @@ export class ApiStack extends Stack implements Configurable {
         memorySize: 1024,
       },
       environment: {
-        SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
         CONTACTGEGEVENS_LIVE: this.configuration.mijnContactGegevensLive ? 'True' : 'False',
         SHOW_PRODUCTEN: this.configuration.mijnProductenLive ? 'True' : 'False',
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
@@ -469,8 +468,6 @@ export class ApiStack extends Stack implements Configurable {
         VIP_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmOpenZaakBaseUrl),
         VIP_TOKEN_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmOpenZaakTakenBaseUrl),
         SUBMISSIONSTORAGE_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmSubmissionstorageBaseUrl),
-        IS_LIVE: this.configuration.zakenIsLive ? 'true' : 'false',
-        USE_TAKEN: this.configuration.zakenUseTaken ? 'true' : 'false',
         SUBMISSIONS_LIVE: this.configuration.zakenUseSubmissions ? 'true' : 'false',
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
@@ -514,7 +511,6 @@ export class ApiStack extends Stack implements Configurable {
         memorySize: 1024,
       },
       environment: {
-        SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
       },
     });
@@ -538,7 +534,6 @@ export class ApiStack extends Stack implements Configurable {
       applicationUrlBase: this.baseUrl,
       environment: {
         SHOW_PRODUCTEN: this.configuration.mijnProductenLive ? 'True' : 'False',
-        SHOW_TAKEN: this.configuration.zakenUseTaken ? 'True' : 'False',
         ARC_BASEURL: StringParameter.valueForStringParameter(this, Statics.ssmProductenArcBaseUrl),
         ARC_APIKEY_ARN: arc_key.secretArn,
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
