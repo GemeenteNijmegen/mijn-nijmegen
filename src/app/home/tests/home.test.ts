@@ -55,6 +55,7 @@ beforeAll(() => {
 
   global.fetch = jest.fn((url: string) =>
     Promise.resolve({
+      ok: true,
       json: () => {
         console.debug('mocked fetch', url);
         return Promise.resolve(mockedZakenList);
@@ -234,3 +235,82 @@ test('Does show contactgegevens notice when feature flag enabled and no contactg
   delete process.env.CONTACTGEGEVENS_LIVE;
 });
 
+
+describe('Loading zaken and taken fails', () => {
+  const originalFetch = global.fetch;
+  afterEach(() => { global.fetch = originalFetch; });
+
+  const zakenResponse = { incompleteResults: false, results: [] };
+  const takenResponse = { incompleteResults: false, results: [] };
+  const timeoutError = () => new DOMException('The operation was aborted due to timeout', 'TimeoutError');
+
+  /**
+   * Mock the zaakaggregator, by default the taken and zaken calls succeed
+   */
+  function mockAggregator(responses: { zaken?: () => Promise<any>; taken?: () => Promise<any> }) {
+    const ok = (json: any) => async () => ({ ok: true, status: 200, headers: { get: () => null }, json: async () => json });
+    const handlers: Record<string, () => Promise<any>> = {
+      '/zaken': responses.zaken ?? ok(zakenResponse),
+      '/taken': responses.taken ?? ok(takenResponse),
+    };
+    global.fetch = jest.fn((url: URL) => handlers[url.pathname]()) as jest.Mock;
+  }
+  const errorStatus = (status: number) => async () => ({ ok: false, status, headers: { get: () => null }, json: async () => { throw new SyntaxError('Unexpected end of JSON input'); } });
+
+  async function request(responseType: 'html' | 'json') {
+    const handler = new HomeRequestHandler(new DynamoDBClient({ region: 'eu-west-1' }), { showTaken: true });
+    return handler.handleRequest({ cookies: 'session=12345', responseType });
+  }
+
+  test.each([
+    ['an error status', errorStatus(500)],
+    ['an unexpected response body', async () => ({ ok: true, status: 200, headers: { get: () => null }, json: async () => ({ message: 'Endpoint request timed out' }) })],
+    ['a network error', async () => { throw new TypeError('fetch failed'); }],
+    ['a timeout', async () => { throw timeoutError(); }],
+  ])('Taken failing with %s shows zaken and a placeholder for taken', async (_, taken) => {
+    mockAggregator({ taken });
+    const result = await request('html');
+    expect(result.statusCode).toBe(200);
+    expect(result.body).toMatch('data-loaded="false"');
+    expect(result.body).toMatch('<p id="taken-list">Bezig met ophalen van uw open taken');
+    expect(result.body).toMatch('id="open-zaken-list"');
+    expect(result.body).not.toMatch('Bezig met ophalen van uw open zaken');
+  });
+
+  test('Zaken failing shows taken and a placeholder for zaken', async () => {
+    mockAggregator({ zaken: errorStatus(502) });
+    const result = await request('html');
+    expect(result.body).toMatch('data-loaded="false"');
+    expect(result.body).toMatch('<p id="open-zaken-list">Bezig met ophalen van uw open zaken');
+    expect(result.body).toMatch('U heeft geen openstaande taken');
+  });
+
+  test('Does not load async when everything loaded', async () => {
+    mockAggregator({});
+    const result = await request('html');
+    expect(result.body).not.toMatch('data-loaded="false"');
+    expect(result.body).not.toMatch('Bezig met ophalen');
+  });
+
+  test('JSON returns the loaded sections with a retryable error status', async () => {
+    mockAggregator({ taken: errorStatus(500) });
+    const result = await request('json');
+    expect(result.statusCode).toBe(503);
+    const body = JSON.parse(result.body ?? '');
+    expect(body.elements).toHaveLength(1);
+    expect(body.elements[0]).toMatch('id="open-zaken-list"');
+  });
+
+  test('JSON returns 408 when only timeouts occurred', async () => {
+    mockAggregator({ taken: async () => { throw timeoutError(); } });
+    const result = await request('json');
+    expect(result.statusCode).toBe(408);
+  });
+
+  test('JSON returns all sections when everything loaded', async () => {
+    mockAggregator({});
+    const result = await request('json');
+    expect(result.statusCode).toBe(200);
+    expect(JSON.parse(result.body ?? '').elements).toHaveLength(2);
+  });
+});

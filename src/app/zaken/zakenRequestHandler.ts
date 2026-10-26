@@ -11,7 +11,7 @@ import * as zakenTemplate from './templates/zaken.mustache';
 import { ZaakFormatter } from './ZaakFormatter';
 import { SingleZaak, singleZaakSchema, ZaakSummariesResponseSchema, ZaakSummariesSchema } from './ZaakInterface';
 import { eventParams } from './zaken.lambda';
-import { ZakenAggregatorConnector } from './ZakenAggregatorConnector';
+import { isTimeoutError, ZakenAggregatorConnector } from './ZakenAggregatorConnector';
 import { Spinner } from '../../shared/Icons';
 import { logger } from '../../shared/Logger';
 import { BreadCrumbs, Navigation } from '../../shared/Navigation';
@@ -58,7 +58,7 @@ export class ZakenRequestHandler {
 
     const endpoint = 'zaken';
     let zakenList;
-    let timeout = false;
+    let error: unknown;
     try {
       if (params.responseType == 'json') {
         this.connector.setTimeout(10000); // allow for more time from frontend
@@ -77,21 +77,24 @@ export class ZakenRequestHandler {
       }
 
     } catch (err: unknown) {
-      if (err instanceof Error && err.name === 'TimeoutError') {
-        timeout = true;
-      } else {
+      error = err;
+      if (!isTimeoutError(err)) {
         logger.error('Failed to get zaken from zaakaggregator', { err });
       }
     }
 
+    const failed = error !== undefined;
     if (params.responseType == 'json') {
-      if (timeout) {
-        return Response.json({ error: 'Het ophalen van gegevens duurde te lang…' }, 408);
+      if (failed) {
+        return isTimeoutError(error)
+          ? Response.json({ error: 'Het ophalen van gegevens duurde te lang…' }, 408)
+          : Response.json({ error: 'Het ophalen van gegevens is niet gelukt' }, 503);
       } else {
         return this.jsonListResponse(session, zakenList, params.xsrfToken);
       }
     } else {
-      return this.htmlListResponse(session, user, zakenList, timeout);
+      // On failure the page renders placeholders and the frontend retries async
+      return this.htmlListResponse(session, user, zakenList, failed);
     }
   }
 
