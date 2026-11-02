@@ -30,6 +30,7 @@ jspm_packages/
 *.tgz
 .yarn-integrity
 .cache
+.ai
 src/app/**/tests/output
 test/local/cdk.out
 src/app/static-resources/static/styles/ds.*

@@ -128,6 +128,7 @@ const project = new GemeenteNijmegenCdkApp({
     },
   },
   gitignore: [
+    '.ai',
     'src/app/**/tests/output',
     'test/playwright/report',
     'test/playwright/screenshots',
