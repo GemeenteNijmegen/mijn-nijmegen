@@ -1,12 +1,13 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { handleLogoutRequest } from './handleLogoutRequest';
+import { cookiesFromEvent } from '../../shared/cookiesFromEvent';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
 function parseEvent(event: any) {
   return {
-    cookies: event?.cookies?.join(';'),
+    cookies: cookiesFromEvent(event) ?? '',
   };
 }
 

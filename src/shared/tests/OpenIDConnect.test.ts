@@ -8,6 +8,7 @@ jest.mock('openid-client', () => ({
   discovery: (...args: any[]) => mockDiscovery(...args),
   buildAuthorizationUrl: (...args: any[]) => mockBuildAuthorizationUrl(...args),
   authorizationCodeGrant: (...args: any[]) => mockAuthorizationCodeGrant(...args),
+  allowInsecureRequests: 'allowInsecureRequests',
 }));
 
 describe('OpenIDConnect', () => {
@@ -52,6 +53,22 @@ describe('OpenIDConnect', () => {
         }),
       );
       expect(result).toBe(mockUrl.toString());
+    });
+
+    it('should allow insecure requests only when configured', async () => {
+      mockDiscovery.mockResolvedValue(mockOidcConfig);
+      mockBuildAuthorizationUrl.mockReturnValue(new URL('http://localhost/authorize'));
+
+      const client = new OpenIDConnect({ ...mockConfig, allowInsecureRequests: true });
+      await client.getLoginUrl('test-state', 'openid');
+
+      expect(mockDiscovery).toHaveBeenCalledWith(
+        new URL(mockConfig.wellknown),
+        mockConfig.clientId,
+        { client_secret: mockConfig.clientSecret, client_id: mockConfig.clientId },
+        undefined,
+        { execute: ['allowInsecureRequests'] },
+      );
     });
 
     it('should include additional options', async () => {

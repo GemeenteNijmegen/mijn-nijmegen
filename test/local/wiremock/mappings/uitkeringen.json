@@ -1,0 +1,39 @@
+{
+  "mappings": [
+    {
+      "name": "uitkeringen-999999333",
+      "priority": 1,
+      "request": {
+        "method": "POST",
+        "urlPath": "/uitkeringen/mijnNijmegenData",
+        "bodyPatterns": [
+          {
+            "contains": "<identifier>999999333</identifier>"
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "text/xml; charset=utf-8"
+        },
+        "bodyFileName": "uitkeringen/999999333.xml"
+      }
+    },
+    {
+      "name": "uitkeringen-none",
+      "priority": 10,
+      "request": {
+        "method": "POST",
+        "urlPath": "/uitkeringen/mijnNijmegenData"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "text/xml; charset=utf-8"
+        },
+        "bodyFileName": "uitkeringen/empty.xml"
+      }
+    }
+  ]
+}

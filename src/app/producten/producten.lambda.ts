@@ -3,6 +3,7 @@ import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-htt
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { ProductenRequestHandler } from './productenRequestHandler';
 import { WalletRequestHandler } from './WalletRequestHandler';
+import { cookiesFromEvent } from '../../shared/cookiesFromEvent';
 
 export interface productEventParams {
   cookies?: string;
@@ -19,7 +20,7 @@ export interface productEventParams {
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 function parseEvent(event: APIGatewayProxyEventV2) {
   return {
-    cookies: event?.cookies?.join(';'),
+    cookies: cookiesFromEvent(event),
     productId: event?.pathParameters?.productid,
     xsrfToken: event?.headers?.xsrftoken,
     responseType: event?.headers?.accept == 'application/json' ? 'json' : 'html',

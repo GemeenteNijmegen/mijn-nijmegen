@@ -2,6 +2,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { HomeRequestHandler } from './homeRequestHandler';
+import { cookiesFromEvent } from '../../shared/cookiesFromEvent';
 
 const dynamoDBClient = new DynamoDBClient({});
 const requestHandler = new HomeRequestHandler(dynamoDBClient);
@@ -14,7 +15,7 @@ export interface eventParams {
 
 function parseEvent(event: APIGatewayProxyEventV2): eventParams {
   return {
-    cookies: event?.cookies?.join(';') ?? '',
+    cookies: cookiesFromEvent(event) ?? '',
     responseType: event?.headers?.accept == 'application/json' ? 'json' : 'html',
   };
 }

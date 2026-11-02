@@ -1,0 +1,36 @@
+{
+  "incompleteResults": false,
+  "results": [
+    {
+      "identifier": "Z25.000123",
+      "internal_id": "zaak/5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886",
+      "registratiedatum": "2025-09-15T00:00:00.000Z",
+      "verwachtte_einddatum": "2025-12-01T00:00:00.000Z",
+      "uiterlijke_einddatum": "2026-01-12T00:00:00.000Z",
+      "einddatum": null,
+      "zaak_type": "Bezwaar",
+      "zaak_identifier": "Bezwaar",
+      "status": "In behandeling",
+      "resultaat": null
+    },
+    {
+      "identifier": "APV32.015",
+      "internal_id": "inzendingen/APV32.015",
+      "registratiedatum": "2025-10-20T10:12:00.000Z",
+      "zaak_type": "Aanvraag evenementenvergunning",
+      "zaak_identifier": "Aanvraag evenementenvergunning",
+      "status": "Ontvangen"
+    },
+    {
+      "identifier": "Z24.000456",
+      "internal_id": "zaak/3720dbc1-6a94-411e-b651-0aeb67330064",
+      "registratiedatum": "2024-03-04T00:00:00.000Z",
+      "uiterlijke_einddatum": "2024-05-15T00:00:00.000Z",
+      "einddatum": "2024-05-01T00:00:00.000Z",
+      "zaak_type": "Klacht",
+      "zaak_identifier": "Klacht",
+      "status": "Afgerond",
+      "resultaat": "Gegrond"
+    }
+  ]
+}

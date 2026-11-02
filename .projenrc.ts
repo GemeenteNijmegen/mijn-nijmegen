@@ -128,9 +128,11 @@ const project = new GemeenteNijmegenCdkApp({
     },
   },
   gitignore: [
+    '.ai',
     'src/app/**/tests/output',
     'test/playwright/report',
     'test/playwright/screenshots',
+    'test/local/cdk.out',
     'src/app/static-resources/static/styles/ds.*',
     'src/app/static-resources/static/styles/*.woff2',
     'src/app/static-resources/static/styles/*.woff',

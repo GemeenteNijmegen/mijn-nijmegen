@@ -1,0 +1,79 @@
+{
+  "identifier": "Z25.000123",
+  "internal_id": "zaak/5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886",
+  "registratiedatum": "2025-09-15T00:00:00.000Z",
+  "verwachtte_einddatum": "2025-12-01T00:00:00.000Z",
+  "uiterlijke_einddatum": "2026-01-12T00:00:00.000Z",
+  "zaak_type": "Bezwaar",
+  "zaak_identifier": "Bezwaar",
+  "status": "In behandeling",
+  "resultaat": null,
+  "status_list": [
+    {
+      "name": "Ontvangen",
+      "is_eind": false,
+      "completed": true,
+      "volgnummer": 1,
+      "current": false
+    },
+    {
+      "name": "In behandeling",
+      "is_eind": false,
+      "completed": false,
+      "volgnummer": 2,
+      "current": true
+    },
+    {
+      "name": "Afgerond",
+      "is_eind": true,
+      "completed": false,
+      "volgnummer": 3,
+      "current": false
+    }
+  ],
+  "documenten": [
+    {
+      "url": "a4e3c2b1-9f8e-4d7c-b6a5-0e1f2d3c4b03",
+      "titel": "Ontvangstbevestiging.pdf",
+      "beschrijving": "Ontvangstbevestiging bezwaar",
+      "registratieDatum": "2025-09-15",
+      "status": "definitief"
+    }
+  ],
+  "taken": [
+    {
+      "title": "Aanvullende gegevens aanleveren",
+      "url": "http://localhost:8080/formulieren/aanvullende-gegevens",
+      "zaak_uuid": "5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886",
+      "uuid": "c2d0f5a4-3e57-4c3b-9a43-1f2d8e6b7a01",
+      "einddatum": "1 december 2025",
+      "is_open": true,
+      "is_afgerond": false,
+      "is_verwerkt": false,
+      "is_gesloten": false,
+      "laatstBewerktOp": "2025-10-01",
+      "attachments": [
+        {
+          "title": "Toelichting.pdf",
+          "url": "toelichting.pdf"
+        }
+      ]
+    },
+    {
+      "title": "Machtiging ondertekenen",
+      "url": "http://localhost:8080/formulieren/machtiging",
+      "zaak_uuid": "5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886",
+      "uuid": "8f6b1e2c-5d4a-4b7e-a1c9-2e3f4a5b6c02",
+      "einddatum": "1 oktober 2025",
+      "is_open": false,
+      "is_afgerond": true,
+      "is_verwerkt": false,
+      "is_gesloten": false,
+      "laatstBewerktOp": "2025-09-20"
+    }
+  ],
+  "behandelaars": [
+    "Jansen"
+  ],
+  "type": "case"
+}

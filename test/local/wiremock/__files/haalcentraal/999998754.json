@@ -1,0 +1,76 @@
+{
+  "type": "RaadpleegMetBurgerservicenummer",
+  "personen": [
+    {
+      "burgerservicenummer": "999998754",
+      "geslacht": {
+        "code": "M",
+        "omschrijving": "man"
+      },
+      "naam": {
+        "aanduidingNaamgebruik": {
+          "code": "E",
+          "omschrijving": "eigen geslachtsnaam"
+        },
+        "voornamen": "Hendrik",
+        "voorvoegsel": "van",
+        "geslachtsnaam": "Hapert",
+        "voorletters": "H.",
+        "volledigeNaam": "Hendrik van Hapert"
+      },
+      "nationaliteiten": [
+        {
+          "type": "Nationaliteit",
+          "datumIngangGeldigheid": {
+            "type": "DatumOnbekend",
+            "onbekend": true,
+            "langFormaat": "onbekend"
+          },
+          "nationaliteit": {
+            "code": "0001",
+            "omschrijving": "Nederlandse"
+          }
+        }
+      ],
+      "geboorte": {
+        "land": {
+          "code": "6030",
+          "omschrijving": "Nederland"
+        },
+        "plaats": {
+          "code": "0518",
+          "omschrijving": "'s-Gravenhage"
+        },
+        "datum": {
+          "type": "Datum",
+          "datum": "1962-07-02",
+          "langFormaat": "2 juli 1962"
+        }
+      },
+      "opschortingBijhouding": {
+        "datum": {
+          "type": "Datum",
+          "datum": "2018-12-01",
+          "langFormaat": "1 december 2018"
+        },
+        "reden": {
+          "code": "E",
+          "omschrijving": "emigratie"
+        }
+      },
+      "adressering": {
+        "aanhef": "Geachte heer Van Hapert",
+        "aanschrijfwijze": {
+          "naam": "H. van Hapert"
+        },
+        "gebruikInLopendeTekst": "de heer Van Hapert",
+        "adresregel1": "51 Little Bourke Straat",
+        "adresregel2": "3000 Melbourne",
+        "land": {
+          "code": "6016",
+          "omschrijving": "Australië"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "mappings": [
+    {
+      "name": "haalcentraal-999999333",
+      "priority": 1,
+      "request": {
+        "method": "POST",
+        "urlPath": "/haalcentraal/api/brp/personen",
+        "bodyPatterns": [{ "matchesJsonPath": "$.burgerservicenummer[?(@ == '999999333')]" }]
+      },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json" },
+        "bodyFileName": "haalcentraal/999999333.json"
+      }
+    },
+    {
+      "name": "haalcentraal-999998754",
+      "priority": 1,
+      "request": {
+        "method": "POST",
+        "urlPath": "/haalcentraal/api/brp/personen",
+        "bodyPatterns": [{ "matchesJsonPath": "$.burgerservicenummer[?(@ == '999998754')]" }]
+      },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json" },
+        "bodyFileName": "haalcentraal/999998754.json"
+      }
+    },
+    {
+      "name": "haalcentraal-unknown-bsn",
+      "priority": 10,
+      "request": {
+        "method": "POST",
+        "urlPath": "/haalcentraal/api/brp/personen"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": { "type": "RaadpleegMetBurgerservicenummer", "personen": [] }
+      }
+    }
+  ]
+}

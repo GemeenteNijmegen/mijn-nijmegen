@@ -4,6 +4,7 @@ import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { PersoonsgegevensRequestHandler } from './persoonsgegevensRequestHandler';
 import { ApiClient as ApiClientV2 } from '../../shared/ApiClient';
+import { cookiesFromEvent } from '../../shared/cookiesFromEvent';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { NotifyNLApi } from '../../shared/NotifyNLApi';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
@@ -103,7 +104,7 @@ function parseEvent(event: APIGatewayProxyEventV2): any {
     }
   }
   return {
-    cookies: event?.cookies?.join(';'),
+    cookies: cookiesFromEvent(event),
     method: event.requestContext.http.method,
     body,
     path: event.rawPath,
