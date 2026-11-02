@@ -1,0 +1,206 @@
+{
+  "realm": "mijn-nijmegen",
+  "displayName": "Mijn Nijmegen - lokale DigiD/eHerkenning mock",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "resetPasswordAllowed": false,
+  "rememberMe": false,
+  "loginWithEmailAllowed": false,
+  "defaultDefaultClientScopes": [
+    "basic"
+  ],
+  "defaultOptionalClientScopes": [],
+  "clientScopes": [
+    {
+      "name": "basic",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "false",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "sub",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-sub-mapper",
+          "consentRequired": false,
+          "config": {
+            "access.token.claim": "true",
+            "introspection.token.claim": "true"
+          }
+        },
+        {
+          "name": "auth_time",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "AUTH_TIME",
+            "claim.name": "auth_time",
+            "jsonType.label": "long",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "introspection.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "name": "digid",
+      "protocol": "openid-connect",
+      "description": "DigiD mock. The BSN is the sub claim, which is the Keycloak user id.",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      }
+    },
+    {
+      "name": "eherkenning",
+      "protocol": "openid-connect",
+      "description": "eHerkenning mock. KvK number and company name from user attributes.",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "kvk",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "kvk",
+            "claim.name": "urn:etoegang:1\\.9:EntityConcernedID:KvKnr",
+            "jsonType.label": "String",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "introspection.token.claim": "true"
+          }
+        },
+        {
+          "name": "company name",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "companyName",
+            "claim.name": "urn:etoegang:1\\.11:attribute-represented:CompanyName",
+            "jsonType.label": "String",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "introspection.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "mijn-nijmegen",
+      "name": "Mijn Nijmegen (lokaal)",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "local-dev-oidc-client-secret",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "redirectUris": [
+        "http://localhost:3000/auth"
+      ],
+      "webOrigins": [],
+      "attributes": {
+        "post.logout.redirect.uris": "http://localhost:3000/*"
+      },
+      "fullScopeAllowed": false,
+      "defaultClientScopes": [
+        "basic"
+      ],
+      "optionalClientScopes": [
+        "digid",
+        "eherkenning"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": "999999333",
+      "username": "digid-999999333",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Nasier",
+      "lastName": "Boeddhoe",
+      "email": "digid-999999333@example.com",
+      "attributes": {},
+      "credentials": [
+        {
+          "type": "password",
+          "value": "digid-999999333",
+          "temporary": false
+        }
+      ],
+      "requiredActions": []
+    },
+    {
+      "id": "999998754",
+      "username": "digid-999998754",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "H.",
+      "lastName": "van Hapert",
+      "email": "digid-999998754@example.com",
+      "attributes": {},
+      "credentials": [
+        {
+          "type": "password",
+          "value": "digid-999998754",
+          "temporary": false
+        }
+      ],
+      "requiredActions": []
+    },
+    {
+      "id": "eherkenning-69599084",
+      "username": "eherkenning-69599084",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Test",
+      "lastName": "Bedrijf",
+      "email": "eherkenning-69599084@example.com",
+      "attributes": {
+        "kvk": [
+          "69599084"
+        ],
+        "companyName": [
+          "Mock Bedrijf B.V."
+        ]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "eherkenning-69599084",
+          "temporary": false
+        }
+      ],
+      "requiredActions": []
+    }
+  ],
+  "components": {
+    "org.keycloak.userprofile.UserProfileProvider": [
+      {
+        "providerId": "declarative-user-profile",
+        "subComponents": {},
+        "config": {
+          "kc.user.profile.config": [
+            "{\"attributes\": [{\"name\": \"username\", \"displayName\": \"${username}\", \"validations\": {\"length\": {\"min\": 3, \"max\": 255}, \"username-prohibited-characters\": {}, \"up-username-not-idn-homograph\": {}}, \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\"]}, \"multivalued\": false}, {\"name\": \"email\", \"displayName\": \"${email}\", \"validations\": {\"email\": {}, \"length\": {\"max\": 255}}, \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\"]}, \"multivalued\": false}, {\"name\": \"firstName\", \"displayName\": \"${firstName}\", \"validations\": {\"length\": {\"max\": 255}}, \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\"]}, \"multivalued\": false}, {\"name\": \"lastName\", \"displayName\": \"${lastName}\", \"validations\": {\"length\": {\"max\": 255}}, \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\"]}, \"multivalued\": false}], \"groups\": [{\"name\": \"user-metadata\", \"displayHeader\": \"User metadata\", \"displayDescription\": \"Attributes, which refer to user metadata\"}], \"unmanagedAttributePolicy\": \"ENABLED\"}"
+          ]
+        }
+      }
+    ]
+  }
+}

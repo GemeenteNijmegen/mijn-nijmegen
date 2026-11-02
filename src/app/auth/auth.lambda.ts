@@ -5,6 +5,7 @@ import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { AuthRequestHandler } from './AuthRequestHandler';
 import { ApiClient as ApiClientV2 } from '../../shared/ApiClient';
+import { cookiesFromEvent } from '../../shared/cookiesFromEvent';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
@@ -63,6 +64,7 @@ async function init() {
     redirectUrl: process.env.OIDC_REDIRECT_URL!,
     wellknown: process.env.OIDC_WELL_KNOWN!,
     clientSecret: await AWS.getSecret(process.env.OIDC_CLIENT_SECRET_ARN!),
+    allowInsecureRequests: process.env.OIDC_ALLOW_INSECURE_REQUESTS === 'true',
   });
 }
 
@@ -72,7 +74,7 @@ function parseEvent(event: APIGatewayProxyEventV2) {
   const url = `${process.env.OIDC_REDIRECT_URL}${event.rawPath}?${event.rawQueryString}`;
   return {
     fullUrl: new URL(url),
-    cookies: event?.cookies?.join(';') ?? '',
+    cookies: cookiesFromEvent(event) ?? '',
     error: event?.queryStringParameters?.error,
   };
 }
