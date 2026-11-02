@@ -7,6 +7,25 @@
   "resetPasswordAllowed": false,
   "rememberMe": false,
   "loginWithEmailAllowed": false,
+  "browserFlow": "browser-without-sso",
+  "authenticationFlows": [
+    {
+      "alias": "browser-without-sso",
+      "description": "Browser flow without the SSO cookie check: always ask for username and password, like DigiD and eHerkenning",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "auth-username-password-form",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "userSetupAllowed": false
+        }
+      ]
+    }
+  ],
   "defaultDefaultClientScopes": [
     "basic"
   ],

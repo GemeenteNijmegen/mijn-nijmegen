@@ -80,6 +80,11 @@ the token response.
   `urn:etoegang:1.9:EntityConcernedID:KvKnr` and
   `urn:etoegang:1.11:attribute-represented:CompanyName` claims.
 
+Like DigiD and eHerkenning, Keycloak asks for a username and password on every
+login. The realm's browser flow (`browser-without-sso`) leaves out Keycloak's
+SSO cookie check, which would otherwise log you straight back in after `/logout`
+(the app's logout only ends the app session, not the one at the IdP).
+
 The browser talks to Keycloak on `localhost:8081`, the lambdas on
 `keycloak:8080`. `KC_HOSTNAME` and `KC_HOSTNAME_BACKCHANNEL_DYNAMIC` in
 `docker-compose.yml` make both work with the same issuer.
