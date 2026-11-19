@@ -55,7 +55,6 @@ export async function handler(
     useYiviKvk: process.env.USE_YIVI_KVK == 'true',
     useGemachtigd: process.env.USE_GEMACHTIGD == 'true',
     useYiviSignicatEnabled: process.env.USE_YIVI_SIGNICAT !== 'false',
-    useYiviVerId: process.env.USE_YIVI_VERID === 'true',
     verIdAuthenticator: verIdAuthenticator,
     oidc: OIDC!,
   });

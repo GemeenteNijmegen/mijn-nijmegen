@@ -57,13 +57,7 @@ interface LoginRequestHandlerProps {
   useYiviSignicatEnabled?: boolean;
 
   /**
-   * Feature flag for the VerID (multi wallet) login. Requires `verIdAuthenticator`.
-   * Undefined means disabled.
-   */
-  useYiviVerId?: boolean;
-
-  /**
-   * Authenticator for logging in via VerID
+   * When set (the VerID feature flag is on), the Yivi button logs in via VerID instead of Signicat
    */
   verIdAuthenticator?: VerIdAuthenticator;
 
@@ -120,16 +114,17 @@ export class LoginRequestHandler {
     return Response.html(html);
   }
 
+  private yiviEnabled() {
+    return !!this.config.verIdAuthenticator || (!!this.config.yiviScope && this.config.useYiviSignicatEnabled !== false);
+  }
+
   private addAuthMethods(): AuthMethod[] {
     const authMethods = [];
     if (this.config?.digidScope) {
       authMethods.push(this.authMethodData('digid', 'DigiD'));
     }
-    if (this.config?.yiviScope && this.config.useYiviSignicatEnabled !== false) {
+    if (this.yiviEnabled()) {
       authMethods.push(this.authMethodData('yivi', 'Yivi'));
-    }
-    if (this.config.useYiviVerId && this.config.verIdAuthenticator) {
-      authMethods.push(this.authMethodData('verid', 'een identiteitsapp'));
     }
     if (this.config?.eHerkenningScope) {
       authMethods.push(this.authMethodData('eherkenning', 'eHerkenning'));
@@ -153,7 +148,7 @@ export class LoginRequestHandler {
     const methodsNamed = (names: string[]) =>
       methods.filter((method) => names.includes(method.methodName));
     const groups: AuthMethodGroup[] = [];
-    const selfMethodNames = ['digid', 'yivi', 'verid', 'eherkenning'];
+    const selfMethodNames = ['digid', 'yivi', 'eherkenning'];
 
     if (this.config?.useGemachtigd) {
       groups.push(
@@ -178,12 +173,8 @@ export class LoginRequestHandler {
   }
 
   private async setupAuthenticationRedirect(session: Session, method: string) {
-    if (method === 'yivi' && this.config.yiviScope && this.config.useYiviSignicatEnabled === false) {
-      // Flag was switched off while the user had the login page open: show the page again without Yivi
-      return Response.redirect('/login');
-    }
-    if (method === 'verid' && !this.config.useYiviVerId) {
-      // Flag was switched off while the user had the login page open: show the page again without VerID
+    if (method === 'yivi' && !this.yiviEnabled()) {
+      // Yivi was switched off while the user had the login page open: show the page again without it
       return Response.redirect('/login');
     }
 
@@ -197,12 +188,11 @@ export class LoginRequestHandler {
     const baseOidcScope = this.config.oidcScope;
 
     let loginUrl = undefined;
-    let state = this.config.oidc.generateState();
-    if (method === 'verid') {
+    let state: string = this.config.oidc.generateState();
+    const verId = method === 'yivi' ? this.config.verIdAuthenticator : undefined;
+    if (verId) {
       // VerID generates its own state (the PKCE verifier is stored under it)
-      const verIdLogin = await this.config.verIdAuthenticator!.start();
-      state = verIdLogin.state;
-      loginUrl = verIdLogin.url;
+      ({ url: loginUrl, state } = await verId.start());
     }
 
     await session.createSession({
@@ -213,6 +203,9 @@ export class LoginRequestHandler {
 
     switch (method) {
       case 'yivi':
+        if (verId) {
+          break;
+        }
         const yiviScope = [baseOidcScope, this.config.yiviScope];
         if (this.config?.useYiviKvk) {
           // Feature flag

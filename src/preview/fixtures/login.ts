@@ -6,7 +6,6 @@ export const loginData = {
       authMethods: [
         { methodName: 'digid', methodNiceName: 'DigiD' },
         { methodName: 'yivi', methodNiceName: 'Yivi' },
-        { methodName: 'verid', methodNiceName: 'een identiteitsapp' },
         { methodName: 'eherkenning', methodNiceName: 'eHerkenning' },
       ],
     },

@@ -11,7 +11,7 @@ import { OpenKlantApi } from '../../shared/OpenKlantApi';
 import { Organisation, Person, User } from '../../shared/User';
 import { VerIdAuthenticator } from '../../shared/VerIdAuthenticator';
 
-type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning' | 'verid';
+type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
 const eHerkenningKvkNummerClaim = 'urn:etoegang:1.9:EntityConcernedID:KvKnr';
 const eHerkenningCompanyNameClaim = 'urn:etoegang:1.11:attribute-represented:CompanyName';
 
@@ -43,7 +43,7 @@ export interface AuthRequestHandlerProps {
   haalCentraalApi: HaalCentraalApi;
 
   /**
-   * Authenticator for logins that were started with VerID (session method `verid`).
+   * When set (the VerID feature flag is on), Yivi logins are finished by VerID instead of Signicat.
    */
   verIdAuthenticator?: VerIdAuthenticator;
 
@@ -85,8 +85,8 @@ export class AuthRequestHandler {
     const method = session.getValue('method');
     try {
 
-      const user = method === 'verid'
-        ? await this.userFromVerIdLogin(state)
+      const user = method === 'yivi' && this.config.verIdAuthenticator
+        ? await this.userFromVerIdLogin(this.config.verIdAuthenticator, state)
         : this.userFromAuthResult(await this.config.OpenIdConnect.authorize(this.config.fullUrl, state));
       if (!user) {
         return Response.redirect('/login');
@@ -135,11 +135,8 @@ export class AuthRequestHandler {
   /**
    * Finish a login that was started with VerID (BSN only, persons)
    */
-  private async userFromVerIdLogin(state: string | undefined): Promise<User> {
-    if (!this.config.verIdAuthenticator) {
-      throw Error('VerID login requested but VerID is not configured');
-    }
-    const bsn = await this.config.verIdAuthenticator.finish(this.config.fullUrl, state);
+  private async userFromVerIdLogin(verId: VerIdAuthenticator, state: string | undefined): Promise<User> {
+    const bsn = await verId.finish(this.config.fullUrl, state);
     new Logger({ serviceName: 'mijnnijmegen' }).info('auth succesful', { method: 'verid' });
     return new Person(bsn, { haalCentraal: this.config.haalCentraalApi });
   }

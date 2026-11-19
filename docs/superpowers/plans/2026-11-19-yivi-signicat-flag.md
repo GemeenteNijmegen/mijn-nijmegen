@@ -101,14 +101,19 @@ Mijn Nijmegen authenticates via Signicat only (Yivi, DigiD, eHerkenning chosen b
 
 ## Phase 2 as built
 
-Implemented test-first. Where the build differs from the design above:
+VerID is the other provider behind the **one existing Yivi button** (same `yivi` method, same icon). Which provider handles it is decided by the flags:
+- `useYiviVerId` on: the Yivi button logs in via VerID (takes precedence).
+- else `useYiviSignicat` on (default): Yivi via Signicat as before.
+- both off: no Yivi button.
+
+Code:
 - `src/shared/VerIdAuthenticator.ts`: `start()` (scope `openid nin`) and `finish(callbackUrl, expectedState)`; checks the callback `state` against the session state, format `openid`, `nin.identifier_type === 'NL_BSN'` and a valid `Bsn`.
-- `src/shared/VerIdAuthenticatorFactory.ts` builds the real `VeridAuthenticationClient` with the SDK's `DynamoDBCacheManager` (TTL 600s); `src/shared/VerIdFromEnv.ts` reads the lambda environment and **fails safe**: when the flag is off or VerID cannot be set up (placeholder parameters, unreadable secret) it returns nothing, so the VerID button is not shown and DigiD/eHerkenning/Yivi keep working.
-- Login: `verid` method, button label "Inloggen met een identiteitsapp", listed with the "for myself" methods. Flag off: `/login?method=verid` redirects to `/login`. The `state` stored in the session is the one VerID generated.
-- Callback: `AuthRequestHandler` reads the session `method`; `verid` is finished by the authenticator (not the Signicat OIDC client). Any failure redirects to `/login` without creating a session. Other methods are untouched.
-- Infra: parameters `/cdk/mijn-nijmegen/useYiviVerId` (default `false`), `/cdk/mijn-nijmegen/verid/{issuer-uri,client-id,redirect-url}` (placeholder `-`), secret `/cdk/mijn-nijmegen/verid/clientsecret`, DynamoDB table (pk, TTL `ttl`, on-demand, destroy on removal) in `ApiStack`, env vars on login and auth Lambdas, secret read + table read/write grants.
+- `src/shared/VerIdFromEnv.ts`: builds the real client with the SDK's `DynamoDBCacheManager` (PKCE verifiers, TTL 600s) from the lambda environment. Returns nothing when `USE_YIVI_VERID` is not `true` or VerID cannot be set up, so a broken VerID setup never affects DigiD, eHerkenning or Yivi via Signicat. No separate flag props: "authenticator present" means "VerID on".
+- Login: `LoginRequestHandler` gets an optional `verIdAuthenticator`; for `method=yivi` it uses VerID's url and state instead of Signicat's, otherwise unchanged. The session keeps method `yivi`.
+- Callback: `AuthRequestHandler` finishes a `yivi` session with VerID when an authenticator is configured, otherwise via Signicat as before. Any VerID failure redirects to `/login` without a session. (Shortcut: dispatch is on the flag, not on a stored provider, so a Yivi login in flight during a redeploy that flips the flag fails and the user logs in again.)
+- Infra: parameters `/cdk/mijn-nijmegen/useYiviVerId` (default `false`), `/cdk/mijn-nijmegen/verid/{issuer-uri,client-id,redirect-url}` (placeholder `-`), secret `/cdk/mijn-nijmegen/verid/clientsecret`, DynamoDB table (pk, TTL `ttl`, on-demand) in `ApiStack`, env vars and grants on the login and auth Lambdas.
 - Dependencies: `@ver-id/node-client` pinned at `0.16.0`, `@aws-sdk/lib-dynamodb`.
-- Jest cannot load the SDK's ES-module dependency (`jose`), same as `openid-client`, so the SDK is mocked in `VerIdAuthenticatorFactory.test.ts`; the real SDK was verified by bundling with esbuild and constructing the authenticator in node.
+- Jest cannot load the SDK's ES-module dependency (`jose`), same as `openid-client`, so the SDK is mocked in `VerIdFromEnv.test.ts`; the real SDK was verified by bundling with esbuild and constructing the client in node.
 
 ### Before switching `useYiviVerId` on (per environment)
 1. In VerID Studio: create the authentication flow, enable the wallets and the `nin` scope on it, register our `/auth` URL as redirect URI, create an OAUTH secret and attach it.
@@ -116,7 +121,5 @@ Implemented test-first. Where the build differs from the design above:
 3. Set `useYiviVerId` to `true` (optionally `useYiviSignicat` to `false`) and redeploy.
 4. Verify with a real login: the BSN arrives as `nin.identifier` of type `NL_BSN` (use the `testNin` scope on a test flow first).
 
-### Not done / open
-- Official VerID logo: `static/images/verid.svg` is a neutral placeholder.
-- Login page copy (intro and footer) still only mention Yivi.
+### Not done
 - Organisations (`company` scope) are out of scope for this version.
