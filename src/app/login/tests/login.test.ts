@@ -89,6 +89,46 @@ describe('Test login page and urls', () => {
     }
   });
 
+  describe('yiviSignicat feature flag', () => {
+    const yiviProps = {
+      digidScope: 'idp_scoping:digid',
+      oidcScope: 'openid',
+      yiviScope: 'idp_scoping:yivi',
+      yiviBsnAttribute: 'bsn',
+    };
+
+    test('hides the yivi button when yiviSignicatEnabled is false', async () => {
+      const handler = new LoginRequestHandler({ ...yiviProps, yiviSignicatEnabled: false, oidc: mockedOidcClient() });
+      const result = await handler.handleRequest(requestParams(''), dynamoDBClient);
+      expect(result.body).not.toMatch('method=yivi');
+      expect(result.body).toMatch('method=digid');
+    });
+
+    test('rejects method=yivi when yiviSignicatEnabled is false', async () => {
+      const handler = new LoginRequestHandler({ ...yiviProps, yiviSignicatEnabled: false, oidc: mockedOidcClient() });
+      await expect(handler.handleRequest(requestParams('', 'yivi'), dynamoDBClient))
+        .rejects.toThrow('Authentication method is not suported!');
+    });
+
+    test.each([true, undefined])('shows yivi when yiviSignicatEnabled is %s', async (enabled) => {
+      const handler = new LoginRequestHandler({ ...yiviProps, yiviSignicatEnabled: enabled, oidc: mockedOidcClient() });
+      const result = await handler.handleRequest(requestParams(''), dynamoDBClient);
+      expect(result.body).toMatch('method=yivi');
+    });
+
+    test('hides yivi when disabled even with useYiviKvk', async () => {
+      const handler = new LoginRequestHandler({
+        ...yiviProps,
+        yiviCondisconScope: 'condiscon',
+        useYiviKvk: true,
+        yiviSignicatEnabled: false,
+        oidc: mockedOidcClient(),
+      });
+      const result = await handler.handleRequest(requestParams(''), dynamoDBClient);
+      expect(result.body).not.toMatch('method=yivi');
+    });
+  });
+
   test('Return login page without yivi link', async () => {
     const loginRequestHandler = new LoginRequestHandler({
       digidScope: 'idp_scoping:digid',

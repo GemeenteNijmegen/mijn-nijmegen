@@ -6,9 +6,11 @@ import {
 import { AWS } from '@gemeentenijmegen/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { LoginRequestHandler, RequestParams } from './loginRequestHandler';
+import { FeatureFlags } from '../../shared/FeatureFlags';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
+const featureFlags = new FeatureFlags();
 
 let OIDC: OpenIDConnect | undefined = undefined;
 async function initialize() {
@@ -48,6 +50,7 @@ export async function handler(
     eHerkenningScope: process.env.EHERKENNING_SCOPE ?? '',
     useYiviKvk: process.env.USE_YIVI_KVK == 'true',
     useGemachtigd: process.env.USE_GEMACHTIGD == 'true',
+    yiviSignicatEnabled: await featureFlags.isEnabled(process.env.FLAG_YIVI_SIGNICAT_PARAMETER ?? '', true),
     oidc: OIDC!,
   });
 
