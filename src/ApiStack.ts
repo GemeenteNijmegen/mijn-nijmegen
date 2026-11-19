@@ -293,6 +293,7 @@ export class ApiStack extends Stack implements Configurable {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: this.baseUrl,
       apiFunction: LoginFunction,
+      timeout: Duration.seconds(10), // Cold start (secrets) plus the VerID calls do not fit the 3 second default
       environment: {
         // OIDC connection
         OIDC_CLIENT_SECRET_ARN: oidcSecret.secretArn,
@@ -351,7 +352,7 @@ export class ApiStack extends Stack implements Configurable {
       table: this.sessionsTable,
       tablePermissions: 'ReadWrite',
       applicationUrlBase: this.baseUrl,
-      timeout: Duration.seconds(6), // Too long but required for poc authentication service
+      timeout: Duration.seconds(10), // VerID: discovery, token exchange and signature check, then the Haal Centraal lookup
       environment: {
         // OIDC connection
         OIDC_CLIENT_SECRET_ARN: oidcSecret.secretArn,

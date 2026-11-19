@@ -135,6 +135,8 @@ test('VerIdWiredIntoLoginAndAuthLambdas', () => {
   for (const description of ['Login-pagina voor de Mijn Nijmegen-applicatie.', 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.']) {
     template.hasResourceProperties('AWS::Lambda::Function', {
       Description: description,
+      // Cold start (secrets) plus the VerID calls (discovery, intent, token exchange) do not fit the 3 second default
+      Timeout: 10,
       Environment: { Variables: Match.objectLike(Object.fromEntries(verIdEnv.map(name => [name, Match.anyValue()]))) },
     });
   }

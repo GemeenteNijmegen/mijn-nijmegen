@@ -164,6 +164,14 @@ describe('Test login page and urls', () => {
       expect(JSON.stringify(ddbMock.commandCalls(PutItemCommand)[0].args[0].input)).not.toContain('provider');
     });
 
+    test('shows the service unavailable error page (503) and creates no session when VerID cannot start a login', async () => {
+      verId.start.mockRejectedValue(new Error('VerID is down'));
+      const handler = new LoginRequestHandler({ ...props, verIdAuthenticator: verId, oidc: mockedOidcClient() });
+      const result = await handler.handleRequest(requestParams('', 'yivi'), dynamoDBClient);
+      expect(result.statusCode).toBe(503);
+      expect(ddbMock.commandCalls(PutItemCommand)).toHaveLength(0);
+    });
+
     test('other methods are not affected by VerID', async () => {
       const handler = new LoginRequestHandler({ ...props, verIdAuthenticator: verId, oidc: mockedOidcClient() });
       const result = await handler.handleRequest(requestParams('', 'digid'), dynamoDBClient);

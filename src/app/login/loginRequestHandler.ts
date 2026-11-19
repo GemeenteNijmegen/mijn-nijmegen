@@ -185,29 +185,22 @@ export class LoginRequestHandler {
       throw Error('Authentication method is not suported!');
     }
 
-    const baseOidcScope = this.config.oidcScope;
-
-    let loginUrl = undefined;
-    let state: string = this.config.oidc.generateState();
-    const verId = method === 'yivi' ? this.config.verIdAuthenticator : undefined;
-    if (verId) {
-      // VerID generates its own state (the PKCE verifier is stored under it)
-      ({ url: loginUrl, state } = await verId.start());
+    if (method === 'yivi' && this.config.verIdAuthenticator) {
+      return this.setupVerIdRedirect(session, this.config.verIdAuthenticator);
     }
 
+    const baseOidcScope = this.config.oidcScope;
+
+    const state = this.config.oidc.generateState();
     await session.createSession({
       loggedin: { BOOL: false },
       state: { S: state },
       method: { S: method },
-      // The callback follows the provider that started the login, not its own configuration
-      ...(verId && { provider: { S: 'verid' } }),
     });
 
+    let loginUrl = undefined;
     switch (method) {
       case 'yivi':
-        if (verId) {
-          break;
-        }
         const yiviScope = [baseOidcScope, this.config.yiviScope];
         if (this.config?.useYiviKvk) {
           // Feature flag
@@ -242,5 +235,27 @@ export class LoginRequestHandler {
     }
 
     return Response.redirect(loginUrl.toString(), 302, session.getCookie({ sameSite: 'lax' }));
+  }
+
+  /**
+   * Yivi via VerID: VerID generates the state itself (the PKCE verifier is stored under it).
+   * If VerID cannot start a login, show the service unavailable error page: the other methods are not affected.
+   */
+  private async setupVerIdRedirect(session: Session, verId: VerIdAuthenticator) {
+    let login;
+    try {
+      login = await verId.start();
+    } catch (error) {
+      console.error('Starting a VerID login failed', error);
+      return Response.error(503);
+    }
+    await session.createSession({
+      loggedin: { BOOL: false },
+      state: { S: login.state },
+      method: { S: 'yivi' },
+      // The callback follows the provider that started the login, not its own configuration
+      provider: { S: 'verid' },
+    });
+    return Response.redirect(login.url, 302, session.getCookie({ sameSite: 'lax' }));
   }
 }
