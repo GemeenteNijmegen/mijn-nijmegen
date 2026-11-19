@@ -2,6 +2,7 @@ import { aws_secretsmanager, Duration, Stack, StackProps } from 'aws-cdk-lib';
 import * as apigatewayv2 from 'aws-cdk-lib/aws-apigatewayv2';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { ISecret, Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { IStringParameter, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
@@ -292,9 +293,18 @@ export class ApiStack extends Stack implements Configurable {
         USE_YIVI_KVK: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviKvk), // Feature flag for kvk bsn conditional disclosure
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
         USE_GEMACHTIGD: this.configuration.useGemachtigd ? 'true' : 'false',
+        FLAG_YIVI_SIGNICAT_PARAMETER: Statics.ssmFlagYiviSignicat, // Runtime feature flag, read by the lambda (not at deploy time)
       },
     });
     oidcSecret.grantRead(loginFunction.lambda);
+    loginFunction.lambda.addToRolePolicy(new PolicyStatement({
+      actions: ['ssm:GetParameter'],
+      resources: [Stack.of(this).formatArn({
+        service: 'ssm',
+        resource: 'parameter',
+        resourceName: Statics.ssmFlagYiviSignicat.replace(/^\//, ''),
+      })],
+    }));
     return loginFunction;
   }
 

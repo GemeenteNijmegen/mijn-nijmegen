@@ -29,6 +29,12 @@ export abstract class Statics {
    */
   static readonly ssmUseYiviKvk: string = '/cdk/mijn-nijmegen/useYiviKvk';
 
+  /**
+   * Runtime feature flag (read by the login lambda at runtime, no redeploy needed to change it):
+   * 'true' shows Yivi via Signicat on the login page, 'false' hides it.
+   */
+  static readonly ssmFlagYiviSignicat: string = '/cdk/mijn-nijmegen/flags/yiviSignicat';
+
   // MARK: OpenIDConnect
 
   /**
