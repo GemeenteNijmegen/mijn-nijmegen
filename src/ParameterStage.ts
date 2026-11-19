@@ -62,6 +62,12 @@ export class ssmParamsConstruct extends Construct {
       description: 'Feature flag Yivi using KVK',
     });
 
+    new SSM.StringParameter(this, 'ssm_use_yivi_signicat', {
+      stringValue: 'true',
+      parameterName: Statics.ssmUseYiviSignicat,
+      description: 'Feature flag: show Yivi via Signicat on the login page (true/false)',
+    });
+
     /**
      * authentication parameters
      */

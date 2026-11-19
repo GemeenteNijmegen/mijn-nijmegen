@@ -1,5 +1,5 @@
 import { App } from 'aws-cdk-lib';
-import { Template } from 'aws-cdk-lib/assertions';
+import { Match, Template } from 'aws-cdk-lib/assertions';
 import * as Dotenv from 'dotenv';
 import { ApiStack } from '../src/ApiStack';
 import { Configuration } from '../src/Configuration';
@@ -84,12 +84,41 @@ test('StackHasLambdas', () => {
   template.resourceCountIs('AWS::Lambda::Function', 9);
 });
 
+test('LoginLambdaGetsuseYiviSignicatFlagFromSsmAtDeployTime', () => {
+  const app = new App();
+  const keyStack = new KeyStack(app, 'keystack');
+  const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key });
+  new DNSStack(app, 'dns', { env: mockEnv, configuration: config });
+  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'test', configuration: config });
+  const template = Template.fromStack(stack);
+  template.hasParameter('*', {
+    Type: 'AWS::SSM::Parameter::Value<String>',
+    Default: '/cdk/mijn-nijmegen/useYiviSignicat',
+  });
+  template.hasResourceProperties('AWS::Lambda::Function', {
+    Environment: {
+      Variables: Match.objectLike({
+        USE_YIVI_SIGNICAT: Match.anyValue(),
+      }),
+    },
+  });
+  // Resolved at deploy time, so the login lambda needs no runtime SSM access
+  const loginPolicies = Object.entries(template.findResources('AWS::IAM::Policy'))
+    .filter(([id]) => id.startsWith('loginfunction'));
+  expect(loginPolicies).toHaveLength(1);
+  expect(JSON.stringify(loginPolicies)).not.toContain('ssm:GetParameter');
+});
+
 
 test('StackHasParameters', () => {
   const app = new App();
   const stack = new ParameterStack(app, 'test', { configuration: config });
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::SSM::Parameter', 28);
+  template.resourceCountIs('AWS::SSM::Parameter', 29);
+  template.hasResourceProperties('AWS::SSM::Parameter', {
+    Name: '/cdk/mijn-nijmegen/useYiviSignicat',
+    Value: 'true',
+  });
 });
 
 
