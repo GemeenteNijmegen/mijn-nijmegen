@@ -1,0 +1,110 @@
+name: mijn-nijmegen-local
+
+networks:
+  default:
+    name: mijn-nijmegen-local
+
+services:
+  # Local AWS emulator (github.com/ministackorg/ministack) - CDK deploys
+  # LocalMijnNijmegenStack (DynamoDB + Lambda + HTTP API) into this, no AWS
+  # account needed. See test/local/README.md.
+  ministack:
+    image: ministackorg/ministack:1.5.35
+    ports:
+      - "4566:4566"
+    environment:
+      # The page lambdas run nodejs24.x, which MiniStack only supports via the
+      # Docker executor.
+      - LAMBDA_EXECUTOR=docker
+      # Lets the Lambda containers MiniStack starts reach the other services
+      # in this file by name.
+      - DOCKER_NETWORK=mijn-nijmegen-local
+      # Same region as production and cdk/localConfig.ts.
+      - MINISTACK_REGION=eu-central-1
+      # MiniStack points AWS_ENDPOINT_URL in Lambda containers at
+      # host.docker.internal, which Docker Engine on Linux doesn't resolve by
+      # itself. Harmless on Docker Desktop.
+      - LAMBDA_DOCKER_FLAGS=--add-host=host.docker.internal:host-gateway
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:4566/_ministack/health')",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+
+  # Stands in for DigiD and eHerkenning. The realm (client, the digid and
+  # eherkenning scopes, test users) is imported from keycloak/ on start.
+  # Admin console: http://localhost:8081/admin (admin/admin).
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.8.1
+    command: ["start-dev", "--import-realm"]
+    ports:
+      - "8081:8080"
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+      - KC_HEALTH_ENABLED=true
+      # The browser reaches Keycloak on localhost:8081, the lambdas on
+      # keycloak:8080. The issuer and the browser-facing endpoints always use
+      # KC_HOSTNAME; the token and jwks endpoints follow the host the request
+      # came in on. So the issuer in the ID token matches the issuer the
+      # lambdas discovered.
+      - KC_HOSTNAME=http://localhost:8081
+      - KC_HOSTNAME_BACKCHANNEL_DYNAMIC=true
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import:ro
+    healthcheck:
+      # The image has no curl; ask the management port for readiness.
+      test:
+        [
+          "CMD-SHELL",
+          "exec 3<>/dev/tcp/localhost/9000 && printf 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && grep -q UP <&3",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 10s
+
+  # Stands in for every backend the lambdas call (Haal Centraal BRP,
+  # zaakaggregator, uitkeringen). Stubs are loaded from wiremock/mappings on
+  # start, response bodies from wiremock/__files. Each backend gets its own
+  # hostname alias so the lambda configuration reads like the real thing.
+  # The browser also uses it directly on localhost:8080, for document
+  # downloads (instead of presigned S3 urls) and taak forms.
+  # Admin API: http://localhost:8080/__admin/mappings
+  backend-mock:
+    image: wiremock/wiremock:3.9.2
+    command: ["--verbose"]
+    ports:
+      - "8080:8080"
+    networks:
+      default:
+        aliases:
+          - haalcentraal.backend-mock
+          - zaakaggregator.backend-mock
+          - uitkeringen.backend-mock
+    volumes:
+      - ./wiremock/mappings:/home/wiremock/mappings:ro
+      - ./wiremock/__files:/home/wiremock/__files:ro
+
+  # Takes CloudFront's role: serves /static/* from the repo and forwards
+  # everything else to the HTTP API in MiniStack, so the app's root-relative
+  # redirects and links work. See proxy/Caddyfile.
+  proxy:
+    image: caddy:2.10.2-alpine
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./proxy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../../src/app/static-resources/static:/srv/static:ro
+    depends_on:
+      ministack:
+        condition: service_healthy

@@ -1,0 +1,193 @@
+{
+  "mappings": [
+    {
+      "name": "zaakaggregator-zaken-999999333",
+      "priority": 1,
+      "request": {
+        "method": "GET",
+        "urlPath": "/zaken",
+        "queryParameters": {
+          "userIdentifier": {
+            "equalTo": "999999333"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "bodyFileName": "zaakaggregator/zaken-999999333.json"
+      }
+    },
+    {
+      "name": "zaakaggregator-taken-999999333",
+      "priority": 1,
+      "request": {
+        "method": "GET",
+        "urlPath": "/taken",
+        "queryParameters": {
+          "userIdentifier": {
+            "equalTo": "999999333"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "bodyFileName": "zaakaggregator/taken-999999333.json"
+      }
+    },
+    {
+      "name": "zaakaggregator-zaak-bezwaar",
+      "priority": 1,
+      "request": {
+        "method": "GET",
+        "urlPath": "/zaken/zaak/5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886",
+        "queryParameters": {
+          "userIdentifier": {
+            "equalTo": "999999333"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "bodyFileName": "zaakaggregator/zaak-5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886.json"
+      }
+    },
+    {
+      "name": "zaakaggregator-zaak-klacht",
+      "priority": 1,
+      "request": {
+        "method": "GET",
+        "urlPath": "/zaken/zaak/3720dbc1-6a94-411e-b651-0aeb67330064",
+        "queryParameters": {
+          "userIdentifier": {
+            "equalTo": "999999333"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "bodyFileName": "zaakaggregator/zaak-3720dbc1-6a94-411e-b651-0aeb67330064.json"
+      }
+    },
+    {
+      "name": "zaakaggregator-inzending",
+      "priority": 1,
+      "request": {
+        "method": "GET",
+        "urlPath": "/zaken/inzendingen/APV32.015",
+        "queryParameters": {
+          "userIdentifier": {
+            "equalTo": "999999333"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "bodyFileName": "zaakaggregator/inzending-APV32.015.json"
+      }
+    },
+    {
+      "name": "zaakaggregator-zaak-document-download",
+      "priority": 1,
+      "request": {
+        "method": "GET",
+        "urlPath": "/zaken/zaak/5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886/download/a4e3c2b1-9f8e-4d7c-b6a5-0e1f2d3c4b03",
+        "queryParameters": {
+          "userIdentifier": {
+            "equalTo": "999999333"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/octet-stream",
+          "Content-Disposition": "attachment; filename=\"Ontvangstbevestiging.pdf\""
+        },
+        "bodyFileName": "documenten/voorbeeld.pdf"
+      }
+    },
+    {
+      "name": "zaakaggregator-inzending-document-download",
+      "priority": 1,
+      "request": {
+        "method": "GET",
+        "urlPath": "/zaken/inzendingen/APV32.015/download/APV32.015.pdf",
+        "queryParameters": {
+          "userIdentifier": {
+            "equalTo": "999999333"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "downloadUrl": "http://localhost:8080/documenten/APV32.015.pdf"
+        }
+      }
+    },
+    {
+      "name": "zaakaggregator-taak-attachment-download",
+      "priority": 1,
+      "request": {
+        "method": "GET",
+        "urlPath": "/taken/zaak/download/c2d0f5a4-3e57-4c3b-9a43-1f2d8e6b7a01/toelichting.pdf",
+        "queryParameters": {
+          "userIdentifier": {
+            "equalTo": "999999333"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "downloadUrl": "http://localhost:8080/documenten/toelichting.pdf"
+        }
+      }
+    },
+    {
+      "name": "zaakaggregator-zaken-empty",
+      "priority": 10,
+      "request": {
+        "method": "GET",
+        "urlPath": "/zaken"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "incompleteResults": false,
+          "results": []
+        }
+      }
+    },
+    {
+      "name": "zaakaggregator-taken-empty",
+      "priority": 10,
+      "request": {
+        "method": "GET",
+        "urlPath": "/taken"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "incompleteResults": false,
+          "results": []
+        }
+      }
+    }
+  ]
+}

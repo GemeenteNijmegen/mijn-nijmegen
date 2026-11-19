@@ -1,0 +1,31 @@
+{
+  "identifier": "Z24.000456",
+  "internal_id": "zaak/3720dbc1-6a94-411e-b651-0aeb67330064",
+  "registratiedatum": "2024-03-04T00:00:00.000Z",
+  "uiterlijke_einddatum": "2024-05-15T00:00:00.000Z",
+  "einddatum": "2024-05-01T00:00:00.000Z",
+  "zaak_type": "Klacht",
+  "zaak_identifier": "Klacht",
+  "status": "Afgerond",
+  "resultaat": "Gegrond",
+  "status_list": [
+    {
+      "name": "Ontvangen",
+      "is_eind": false,
+      "completed": true,
+      "volgnummer": 1,
+      "current": false
+    },
+    {
+      "name": "Afgerond",
+      "is_eind": true,
+      "completed": false,
+      "volgnummer": 2,
+      "current": true
+    }
+  ],
+  "documenten": [],
+  "taken": [],
+  "behandelaars": [],
+  "type": "case"
+}

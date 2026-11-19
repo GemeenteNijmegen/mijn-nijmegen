@@ -1,0 +1,32 @@
+{
+  "mappings": [
+    {
+      "name": "documenten-download",
+      "request": {
+        "method": "GET",
+        "urlPathPattern": "/documenten/[^/]+\\.pdf"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/pdf"
+        },
+        "bodyFileName": "documenten/voorbeeld.pdf"
+      }
+    },
+    {
+      "name": "formulieren",
+      "request": {
+        "method": "GET",
+        "urlPathPattern": "/formulieren/.+"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "text/html; charset=utf-8"
+        },
+        "bodyFileName": "formulieren/formulier.html"
+      }
+    }
+  ]
+}

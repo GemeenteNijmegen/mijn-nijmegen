@@ -1,0 +1,89 @@
+{
+  "type": "RaadpleegMetBurgerservicenummer",
+  "personen": [
+    {
+      "burgerservicenummer": "999999333",
+      "geslacht": {
+        "code": "M",
+        "omschrijving": "man"
+      },
+      "naam": {
+        "aanduidingNaamgebruik": {
+          "code": "E",
+          "omschrijving": "eigen geslachtsnaam"
+        },
+        "voornamen": "Nasier",
+        "geslachtsnaam": "Boeddhoe",
+        "voorletters": "N.",
+        "volledigeNaam": "Nasier Boeddhoe"
+      },
+      "nationaliteiten": [
+        {
+          "type": "Nationaliteit",
+          "datumIngangGeldigheid": {
+            "type": "Datum",
+            "datum": "1950-09-19",
+            "langFormaat": "19 september 1950"
+          },
+          "nationaliteit": {
+            "code": "0312",
+            "omschrijving": "Indiase"
+          },
+          "redenOpname": {
+            "code": "301",
+            "omschrijving": "Vaststelling bezit vreemde nationaliteit"
+          }
+        }
+      ],
+      "geboorte": {
+        "land": {
+          "code": "7046",
+          "omschrijving": "India"
+        },
+        "plaats": {
+          "omschrijving": "Amritsar"
+        },
+        "datum": {
+          "type": "Datum",
+          "datum": "1950-09-19",
+          "langFormaat": "19 september 1950"
+        }
+      },
+      "verblijfplaats": {
+        "type": "Adres",
+        "verblijfadres": {
+          "officieleStraatnaam": "Anna van Saksenlaan",
+          "korteStraatnaam": "Anna van Saksenlaan",
+          "huisnummer": 71,
+          "postcode": "2593HW",
+          "woonplaats": "'s-Gravenhage"
+        },
+        "functieAdres": {
+          "code": "W",
+          "omschrijving": "woonadres"
+        },
+        "adresseerbaarObjectIdentificatie": "0518010000784987",
+        "nummeraanduidingIdentificatie": "0518200000784986",
+        "datumVan": {
+          "type": "Datum",
+          "datum": "2000-02-28",
+          "langFormaat": "28 februari 2000"
+        },
+        "datumIngangGeldigheid": {
+          "type": "Datum",
+          "datum": "2011-11-01",
+          "langFormaat": "1 november 2011"
+        }
+      },
+      "adressering": {
+        "aanhef": "Geachte heer Boeddhoe",
+        "aanschrijfwijze": {
+          "naam": "N. Boeddhoe"
+        },
+        "gebruikInLopendeTekst": "de heer Boeddhoe",
+        "adresregel1": "Anna van Saksenlaan 71",
+        "adresregel2": "2593 HW  'S-GRAVENHAGE"
+      }
+    }
+  ]
+}

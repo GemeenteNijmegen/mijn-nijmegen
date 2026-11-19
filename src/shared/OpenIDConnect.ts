@@ -7,6 +7,12 @@ export interface OpenIDConnectConfiguration {
   clientSecret: string;
   redirectUrl: string;
   clientOptions?: Partial<oidc.ClientMetadata>;
+  /**
+   * Allow plain http requests to the OIDC-provider. Only meant for the local
+   * setup in test/local, where Keycloak runs without TLS.
+   * @default false
+   */
+  allowInsecureRequests?: boolean;
 }
 
 export interface OpenIDConnectResult {
@@ -91,10 +97,17 @@ export class OpenIDConnect {
   private async getOidcConfiguration(): Promise<oidc.Configuration> {
     if (!this.oidcConfiguration) {
       const url = new URL(this.configuration.wellknown);
-      this.oidcConfiguration = await oidc.discovery(url, this.configuration.clientId, {
+      const metadata = {
         client_secret: this.configuration.clientSecret,
         client_id: this.configuration.clientId,
-      });
+      };
+      if (this.configuration.allowInsecureRequests) {
+        this.oidcConfiguration = await oidc.discovery(url, this.configuration.clientId, metadata, undefined, {
+          execute: [oidc.allowInsecureRequests],
+        });
+      } else {
+        this.oidcConfiguration = await oidc.discovery(url, this.configuration.clientId, metadata);
+      }
     }
     return this.oidcConfiguration;
   }

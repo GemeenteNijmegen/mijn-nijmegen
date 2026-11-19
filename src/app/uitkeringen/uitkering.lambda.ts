@@ -3,6 +3,7 @@ import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { uitkeringsRequestHandler } from './uitkeringsRequestHandler';
+import { cookiesFromEvent } from '../../shared/cookiesFromEvent';
 
 const dynamoDBClient = new DynamoDBClient();
 const apiClient = new ApiClient();
@@ -20,7 +21,7 @@ const requestHandler = new uitkeringsRequestHandler({ apiClient, dynamoDBClient 
 
 function parseEvent(event: APIGatewayProxyEventV2) {
   return {
-    cookies: event?.cookies?.join(';') ?? '',
+    cookies: cookiesFromEvent(event) ?? '',
   };
 }
 

@@ -1,0 +1,17 @@
+{
+  "identifier": "APV32.015",
+  "internal_id": "inzendingen/APV32.015",
+  "registratiedatum": "2025-10-20T10:12:00.000Z",
+  "zaak_type": "Aanvraag evenementenvergunning",
+  "zaak_identifier": "Aanvraag evenementenvergunning",
+  "status": "Ontvangen",
+  "documenten": [
+    {
+      "url": "APV32.015.pdf",
+      "titel": "APV32.015.pdf",
+      "registratieDatum": "2025-10-20T10:12:00.000Z",
+      "sort_order": 0
+    }
+  ],
+  "type": "submission"
+}

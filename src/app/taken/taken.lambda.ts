@@ -2,6 +2,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { TaakrequestHandler } from './TaakRequestHandler';
+import { cookiesFromEvent } from '../../shared/cookiesFromEvent';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
@@ -23,13 +24,14 @@ export interface eventParams {
 }
 
 function parseEvent(event: APIGatewayProxyEventV2): eventParams {
-  if (!event.cookies) {
+  const cookies = cookiesFromEvent(event);
+  if (!cookies) {
     throw Error('no cookies in event');
   }
   return {
     zaakConnectorId: event?.pathParameters?.zaaksource,
     taakId: event?.pathParameters?.taakid,
-    cookies: event.cookies.join(';'),
+    cookies,
     xsrfToken: event?.headers?.xsrftoken,
     responseType: event?.headers?.accept == 'application/json' ? 'json' : 'html',
   };

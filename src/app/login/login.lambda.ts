@@ -6,6 +6,7 @@ import {
 import { AWS } from '@gemeentenijmegen/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { LoginRequestHandler, RequestParams } from './loginRequestHandler';
+import { cookiesFromEvent } from '../../shared/cookiesFromEvent';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
@@ -18,6 +19,7 @@ async function initialize() {
     redirectUrl: process.env.OIDC_REDIRECT_URL!,
     wellknown: process.env.OIDC_WELL_KNOWN!,
     clientSecret: await AWS.getSecret(process.env.OIDC_CLIENT_SECRET_ARN!),
+    allowInsecureRequests: process.env.OIDC_ALLOW_INSECURE_REQUESTS === 'true',
   });
 
   if (!process.env.OIDC_SCOPE || !process.env.DIGID_SCOPE) {
@@ -29,7 +31,7 @@ const init = initialize();
 
 function parseEvent(event: APIGatewayProxyEventV2): RequestParams {
   return {
-    cookies: event?.cookies?.join(';'),
+    cookies: cookiesFromEvent(event),
     method: event?.queryStringParameters?.method,
   };
 }

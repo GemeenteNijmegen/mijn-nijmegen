@@ -1,0 +1,29 @@
+{
+  "incompleteResults": false,
+  "results": [
+    {
+      "title": "Aanvullende gegevens aanleveren",
+      "url": "http://localhost:8080/formulieren/aanvullende-gegevens",
+      "zaak_uuid": "5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886",
+      "uuid": "c2d0f5a4-3e57-4c3b-9a43-1f2d8e6b7a01",
+      "einddatum": "1 december 2025",
+      "is_open": true,
+      "is_afgerond": false,
+      "is_verwerkt": false,
+      "is_gesloten": false,
+      "laatstBewerktOp": "2025-10-01"
+    },
+    {
+      "title": "Machtiging ondertekenen",
+      "url": "http://localhost:8080/formulieren/machtiging",
+      "zaak_uuid": "5b1c4f8f-8c62-41ac-a3a0-e2ac08b6e886",
+      "uuid": "8f6b1e2c-5d4a-4b7e-a1c9-2e3f4a5b6c02",
+      "einddatum": "1 oktober 2025",
+      "is_open": false,
+      "is_afgerond": true,
+      "is_verwerkt": false,
+      "is_gesloten": false,
+      "laatstBewerktOp": "2025-09-20"
+    }
+  ]
+}

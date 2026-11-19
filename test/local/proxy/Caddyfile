@@ -1,0 +1,30 @@
+# Local stand-in for the CloudFront distribution (src/CloudfrontStack.ts).
+#
+# MiniStack serves the HTTP API under a path prefix
+# (/_aws/execute-api/<api id>/...), but the app redirects to root-relative
+# paths ('/login', '/') and links to /static/... - so the browser talks to
+# this proxy on http://localhost:3000 instead.
+{
+	auto_https off
+}
+
+:3000 {
+	# CloudFront's defaultRootObject: / is the home page.
+	rewrite / /home
+
+	# The static resources bucket.
+	handle /static/* {
+		root * /srv
+		file_server
+	}
+
+	# The API Gateway origin. 'mijn-nijmegen' is the pinned API id
+	# (localConfig.apiId, applied as the ms-custom-id tag). The $default
+	# stage is served without a stage segment in the path.
+	handle {
+		rewrite * /_aws/execute-api/mijn-nijmegen{uri}
+		reverse_proxy ministack:4566 {
+			header_up Host {upstream_hostport}
+		}
+	}
+}
