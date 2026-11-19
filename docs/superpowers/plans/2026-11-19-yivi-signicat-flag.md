@@ -47,7 +47,7 @@ Set the parameter (console or `aws ssm put-parameter --name /cdk/mijn-nijmegen/u
 
 ## Phasing (user decision)
 - **Phase 1 (done): only the `useYiviSignicat` flag**, deploy-time SSM like `useYiviKvk`. See the plan above.
-- **Phase 2 (later):** the `useYiviVerId` flag and the full VerID flow described below.
+- **Phase 2 (implemented, see "Phase 2 as built" below):** the `useYiviVerId` flag and the full VerID flow described in the design.
 
 ## Context
 Mijn Nijmegen authenticates via Signicat only (Yivi, DigiD, eHerkenning chosen by OIDC scope). VerID is the new multi-wallet platform and is expected to replace Yivi-via-Signicat. We add a VerID login path (OAuth code + PKCE via `@ver-id/node-client`) and two flags so the rollout can be switched per environment through SSM.
@@ -98,3 +98,25 @@ Mijn Nijmegen authenticates via Signicat only (Yivi, DigiD, eHerkenning chosen b
 
 ## Verification
 `npx jest` for the touched suites and `test/main.test.ts`, then the project build/lint. End-to-end in development: set `useYiviVerId=true` and `useYiviSignicat=false` in SSM and redeploy, check the login page, complete a login with a VerID test flow, confirm the session/home page, redeploy, then flip back and redeploy to confirm the buttons change.
+
+## Phase 2 as built
+
+Implemented test-first. Where the build differs from the design above:
+- `src/shared/VerIdAuthenticator.ts`: `start()` (scope `openid nin`) and `finish(callbackUrl, expectedState)`; checks the callback `state` against the session state, format `openid`, `nin.identifier_type === 'NL_BSN'` and a valid `Bsn`.
+- `src/shared/VerIdAuthenticatorFactory.ts` builds the real `VeridAuthenticationClient` with the SDK's `DynamoDBCacheManager` (TTL 600s); `src/shared/VerIdFromEnv.ts` reads the lambda environment and **fails safe**: when the flag is off or VerID cannot be set up (placeholder parameters, unreadable secret) it returns nothing, so the VerID button is not shown and DigiD/eHerkenning/Yivi keep working.
+- Login: `verid` method, button label "Inloggen met een identiteitsapp", listed with the "for myself" methods. Flag off: `/login?method=verid` redirects to `/login`. The `state` stored in the session is the one VerID generated.
+- Callback: `AuthRequestHandler` reads the session `method`; `verid` is finished by the authenticator (not the Signicat OIDC client). Any failure redirects to `/login` without creating a session. Other methods are untouched.
+- Infra: parameters `/cdk/mijn-nijmegen/useYiviVerId` (default `false`), `/cdk/mijn-nijmegen/verid/{issuer-uri,client-id,redirect-url}` (placeholder `-`), secret `/cdk/mijn-nijmegen/verid/clientsecret`, DynamoDB table (pk, TTL `ttl`, on-demand, destroy on removal) in `ApiStack`, env vars on login and auth Lambdas, secret read + table read/write grants.
+- Dependencies: `@ver-id/node-client` pinned at `0.16.0`, `@aws-sdk/lib-dynamodb`.
+- Jest cannot load the SDK's ES-module dependency (`jose`), same as `openid-client`, so the SDK is mocked in `VerIdAuthenticatorFactory.test.ts`; the real SDK was verified by bundling with esbuild and constructing the authenticator in node.
+
+### Before switching `useYiviVerId` on (per environment)
+1. In VerID Studio: create the authentication flow, enable the wallets and the `nin` scope on it, register our `/auth` URL as redirect URI, create an OAUTH secret and attach it.
+2. Fill the parameters `verid/issuer-uri`, `verid/client-id` (the flow id, must be a UUID), `verid/redirect-url` and the secret `verid/clientsecret`.
+3. Set `useYiviVerId` to `true` (optionally `useYiviSignicat` to `false`) and redeploy.
+4. Verify with a real login: the BSN arrives as `nin.identifier` of type `NL_BSN` (use the `testNin` scope on a test flow first).
+
+### Not done / open
+- Official VerID logo: `static/images/verid.svg` is a neutral placeholder.
+- Login page copy (intro and footer) still only mention Yivi.
+- Organisations (`company` scope) are out of scope for this version.
