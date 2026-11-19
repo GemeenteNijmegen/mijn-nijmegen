@@ -53,7 +53,7 @@ interface LoginRequestHandlerProps {
    * Runtime feature flag (SSM) for Yivi via Signicat. When false the Yivi login option is hidden
    * and `method=yivi` is rejected. Undefined means enabled.
    */
-  yiviSignicatEnabled?: boolean;
+  useYiviSignicatEnabled?: boolean;
 
   /**
    * OpenIDConnect client
@@ -113,7 +113,7 @@ export class LoginRequestHandler {
     if (this.config?.digidScope) {
       authMethods.push(this.authMethodData('digid', 'DigiD'));
     }
-    if (this.config?.yiviScope && this.config.yiviSignicatEnabled !== false) {
+    if (this.config?.yiviScope && this.config.useYiviSignicatEnabled !== false) {
       authMethods.push(this.authMethodData('yivi', 'Yivi'));
     }
     if (this.config?.eHerkenningScope) {
@@ -163,7 +163,7 @@ export class LoginRequestHandler {
   }
 
   private async setupAuthenticationRedirect(session: Session, method: string) {
-    if (method === 'yivi' && this.config.yiviScope && this.config.yiviSignicatEnabled === false) {
+    if (method === 'yivi' && this.config.yiviScope && this.config.useYiviSignicatEnabled === false) {
       // Flag was switched off while the user had the login page open: show the page again without Yivi
       return Response.redirect('/login');
     }

@@ -48,7 +48,7 @@ export async function handler(
     eHerkenningScope: process.env.EHERKENNING_SCOPE ?? '',
     useYiviKvk: process.env.USE_YIVI_KVK == 'true',
     useGemachtigd: process.env.USE_GEMACHTIGD == 'true',
-    yiviSignicatEnabled: process.env.USE_YIVI_SIGNICAT !== 'false',
+    useYiviSignicatEnabled: process.env.USE_YIVI_SIGNICAT !== 'false',
     oidc: OIDC!,
   });
 

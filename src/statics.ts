@@ -33,7 +33,7 @@ export abstract class Statics {
    * Feature flag (resolved at deploy time like ssmUseYiviKvk, so changing it needs a redeploy):
    * 'true' shows Yivi via Signicat on the login page, 'false' hides it.
    */
-  static readonly ssmFlagYiviSignicat: string = '/cdk/mijn-nijmegen/flags/yiviSignicat';
+  static readonly ssmUseYiviSignicat: string = '/cdk/mijn-nijmegen/useYiviSignicat';
 
   // MARK: OpenIDConnect
 

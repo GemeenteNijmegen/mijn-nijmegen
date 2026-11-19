@@ -89,7 +89,7 @@ describe('Test login page and urls', () => {
     }
   });
 
-  describe('yiviSignicat feature flag', () => {
+  describe('useYiviSignicat feature flag', () => {
     const yiviProps = {
       digidScope: 'idp_scoping:digid',
       oidcScope: 'openid',
@@ -97,22 +97,22 @@ describe('Test login page and urls', () => {
       yiviBsnAttribute: 'bsn',
     };
 
-    test('hides the yivi button when yiviSignicatEnabled is false', async () => {
-      const handler = new LoginRequestHandler({ ...yiviProps, yiviSignicatEnabled: false, oidc: mockedOidcClient() });
+    test('hides the yivi button when useYiviSignicatEnabled is false', async () => {
+      const handler = new LoginRequestHandler({ ...yiviProps, useYiviSignicatEnabled: false, oidc: mockedOidcClient() });
       const result = await handler.handleRequest(requestParams(''), dynamoDBClient);
       expect(result.body).not.toMatch('method=yivi');
       expect(result.body).toMatch('method=digid');
     });
 
-    test('redirects method=yivi back to the login page when yiviSignicatEnabled is false', async () => {
-      const handler = new LoginRequestHandler({ ...yiviProps, yiviSignicatEnabled: false, oidc: mockedOidcClient() });
+    test('redirects method=yivi back to the login page when useYiviSignicatEnabled is false', async () => {
+      const handler = new LoginRequestHandler({ ...yiviProps, useYiviSignicatEnabled: false, oidc: mockedOidcClient() });
       const result = await handler.handleRequest(requestParams('', 'yivi'), dynamoDBClient);
       expect(result.statusCode).toBe(302);
       expect(result.headers?.Location).toBe('/login');
     });
 
-    test.each([true, undefined])('shows yivi when yiviSignicatEnabled is %s', async (enabled) => {
-      const handler = new LoginRequestHandler({ ...yiviProps, yiviSignicatEnabled: enabled, oidc: mockedOidcClient() });
+    test.each([true, undefined])('shows yivi when useYiviSignicatEnabled is %s', async (enabled) => {
+      const handler = new LoginRequestHandler({ ...yiviProps, useYiviSignicatEnabled: enabled, oidc: mockedOidcClient() });
       const result = await handler.handleRequest(requestParams(''), dynamoDBClient);
       expect(result.body).toMatch('method=yivi');
     });
@@ -122,7 +122,7 @@ describe('Test login page and urls', () => {
         ...yiviProps,
         yiviCondisconScope: 'condiscon',
         useYiviKvk: true,
-        yiviSignicatEnabled: false,
+        useYiviSignicatEnabled: false,
         oidc: mockedOidcClient(),
       });
       const result = await handler.handleRequest(requestParams(''), dynamoDBClient);

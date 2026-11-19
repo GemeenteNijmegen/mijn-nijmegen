@@ -84,7 +84,7 @@ test('StackHasLambdas', () => {
   template.resourceCountIs('AWS::Lambda::Function', 9);
 });
 
-test('LoginLambdaGetsYiviSignicatFlagFromSsmAtDeployTime', () => {
+test('LoginLambdaGetsuseYiviSignicatFlagFromSsmAtDeployTime', () => {
   const app = new App();
   const keyStack = new KeyStack(app, 'keystack');
   const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key });
@@ -93,7 +93,7 @@ test('LoginLambdaGetsYiviSignicatFlagFromSsmAtDeployTime', () => {
   const template = Template.fromStack(stack);
   template.hasParameter('*', {
     Type: 'AWS::SSM::Parameter::Value<String>',
-    Default: '/cdk/mijn-nijmegen/flags/yiviSignicat',
+    Default: '/cdk/mijn-nijmegen/useYiviSignicat',
   });
   template.hasResourceProperties('AWS::Lambda::Function', {
     Environment: {
@@ -116,7 +116,7 @@ test('StackHasParameters', () => {
   const template = Template.fromStack(stack);
   template.resourceCountIs('AWS::SSM::Parameter', 29);
   template.hasResourceProperties('AWS::SSM::Parameter', {
-    Name: '/cdk/mijn-nijmegen/flags/yiviSignicat',
+    Name: '/cdk/mijn-nijmegen/useYiviSignicat',
     Value: 'true',
   });
 });

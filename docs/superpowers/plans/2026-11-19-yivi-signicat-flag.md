@@ -1,4 +1,4 @@
-# Phase 1: `yiviSignicat` flag. Implementation Plan
+# Phase 1: `useYiviSignicat` flag. Implementation Plan
 
 > **Revision (2026-11-19):** the first version of this plan made the flag changeable at runtime (SSM read by the Lambda, cache, timeout, IAM grant). That was dropped as too complex. The flag now works like the existing `useYiviKvk` flag: an SSM parameter resolved at deploy time into a Lambda env var, so changing it needs a redeploy. History: commits `ebf1b34`..`cb5792c` contain the runtime version.
 
@@ -6,14 +6,14 @@
 
 **Goal:** Let operators hide the Signicat Yivi login option by changing an SSM parameter and redeploying, the same way `useYiviKvk` works.
 
-**Architecture:** CDK creates the SSM parameter `/cdk/mijn-nijmegen/flags/yiviSignicat` (default `'true'`). `ApiStack` resolves it with `StringParameter.valueForStringParameter` into the login Lambda env var `USE_YIVI_SIGNICAT`. `login.lambda.ts` passes `yiviSignicatEnabled: process.env.USE_YIVI_SIGNICAT !== 'false'` to `LoginRequestHandler`, which hides Yivi when it is `false`.
+**Architecture:** CDK creates the SSM parameter `/cdk/mijn-nijmegen/useYiviSignicat` (default `'true'`). `ApiStack` resolves it with `StringParameter.valueForStringParameter` into the login Lambda env var `USE_YIVI_SIGNICAT`. `login.lambda.ts` passes `useYiviSignicatEnabled: process.env.USE_YIVI_SIGNICAT !== 'false'` to `LoginRequestHandler`, which hides Yivi when it is `false`.
 
 **Tech Stack:** TypeScript, AWS CDK, jest.
 
 **Spec:** this file, section "Full design (phase 2 context)" below.
 
 ## Global Constraints
-- Parameter name: `/cdk/mijn-nijmegen/flags/yiviSignicat`, String, default `'true'` (`Statics.ssmFlagYiviSignicat`). Resolved at deploy time; changing it needs a redeploy (same as `useYiviKvk`).
+- Parameter name: `/cdk/mijn-nijmegen/useYiviSignicat`, String, default `'true'` (`Statics.ssmFlaguseYiviSignicat`). Resolved at deploy time; changing it needs a redeploy (same as `useYiviKvk`).
 - Env var `USE_YIVI_SIGNICAT`; only the exact string `'false'` disables Yivi (missing or any other value keeps it enabled).
 - No runtime SSM access, no new dependencies, no IAM changes.
 - Only the login Lambda reads the flag. The auth Lambda is unchanged, so in-flight Yivi logins still complete (my call).
@@ -26,17 +26,17 @@
 
 ### Task 1: Login handler honours the flag
 **Files:** `src/app/login/loginRequestHandler.ts`, `src/app/login/login.lambda.ts`, test `src/app/login/tests/login.test.ts`.
-**Interfaces:** new optional prop `yiviSignicatEnabled?: boolean` on `LoginRequestHandlerProps` (undefined means enabled).
-- [x] Tests: hides the yivi button when `yiviSignicatEnabled` is false; redirects `method=yivi` to `/login` when false; shows yivi when true or undefined; hides yivi when disabled even with `useYiviKvk`.
-- [x] `addAuthMethods` requires `yiviSignicatEnabled !== false`; `setupAuthenticationRedirect` redirects a disabled `yivi` to `/login` before creating a session; `login.lambda.ts` maps `USE_YIVI_SIGNICAT`.
+**Interfaces:** new optional prop `useYiviSignicatEnabled?: boolean` on `LoginRequestHandlerProps` (undefined means enabled).
+- [x] Tests: hides the yivi button when `useYiviSignicatEnabled` is false; redirects `method=yivi` to `/login` when false; shows yivi when true or undefined; hides yivi when disabled even with `useYiviKvk`.
+- [x] `addAuthMethods` requires `useYiviSignicatEnabled !== false`; `setupAuthenticationRedirect` redirects a disabled `yivi` to `/login` before creating a session; `login.lambda.ts` maps `USE_YIVI_SIGNICAT`.
 
 ### Task 2: Infrastructure (parameter and env var)
-**Files:** `src/statics.ts` (`ssmFlagYiviSignicat`), `src/ParameterStage.ts` (parameter `ssm_flag_yivi_signicat`, value `'true'`), `src/ApiStack.ts` (`USE_YIVI_SIGNICAT` env on `loginFunction()`), test `test/main.test.ts`.
+**Files:** `src/statics.ts` (`ssmFlaguseYiviSignicat`), `src/ParameterStage.ts` (parameter `ssm_flag_yivi_signicat`, value `'true'`), `src/ApiStack.ts` (`USE_YIVI_SIGNICAT` env on `loginFunction()`), test `test/main.test.ts`.
 - [x] Tests: `StackHasParameters` counts 29 and contains the parameter with value `true`; the ApiStack has an `AWS::SSM::Parameter::Value<String>` template parameter defaulting to the flag name, the login Lambda has `USE_YIVI_SIGNICAT`, and the login Lambda's policy has no `ssm:GetParameter`.
 - [x] Implement the three file changes.
 
 ### How to change the flag
-Set the parameter (console or `aws ssm put-parameter --name /cdk/mijn-nijmegen/flags/yiviSignicat --type String --value false --overwrite`), then redeploy (re-run the pipeline) so the Lambda env var picks it up. A manual value survives normal deploys as long as the parameter resource's properties in CDK do not change.
+Set the parameter (console or `aws ssm put-parameter --name /cdk/mijn-nijmegen/useYiviSignicat --type String --value false --overwrite`), then redeploy (re-run the pipeline) so the Lambda env var picks it up. A manual value survives normal deploys as long as the parameter resource's properties in CDK do not change.
 
 ### Verification
 `npx projen bundle`, then `npx jest` and `npx projen eslint`. Note: the pipeline `Snapshot` test in `test/main.test.ts` contains asset hashes that depend on the local build output and also fails on the untouched base commit in this sandbox; regenerate it in CI (self mutation) rather than from the sandbox.
@@ -46,16 +46,16 @@ Set the parameter (console or `aws ssm put-parameter --name /cdk/mijn-nijmegen/f
 # Full design (phase 2 context): VerID Yivi login next to Signicat, behind SSM flags
 
 ## Phasing (user decision)
-- **Phase 1 (done): only the `yiviSignicat` flag**, deploy-time SSM like `useYiviKvk`. See the plan above.
-- **Phase 2 (later):** the `yiviVerId` flag and the full VerID flow described below.
+- **Phase 1 (done): only the `useYiviSignicat` flag**, deploy-time SSM like `useYiviKvk`. See the plan above.
+- **Phase 2 (later):** the `useYiviVerId` flag and the full VerID flow described below.
 
 ## Context
 Mijn Nijmegen authenticates via Signicat only (Yivi, DigiD, eHerkenning chosen by OIDC scope). VerID is the new multi-wallet platform and is expected to replace Yivi-via-Signicat. We add a VerID login path (OAuth code + PKCE via `@ver-id/node-client`) and two flags so the rollout can be switched per environment through SSM.
 
 ## Goals
 - Users can log in with a wallet via VerID and end up with the same session as today (Person from BSN).
-- Flag `yiviSignicat`: turns the existing Signicat Yivi button/path off.
-- Flag `yiviVerId`: turns the VerID button/path on.
+- Flag `useYiviSignicat`: turns the existing Signicat Yivi button/path off.
+- Flag `useYiviVerId`: turns the VerID button/path on.
 - Flags are SSM parameters resolved at deploy time (same mechanism as `useYiviKvk`); changing one needs a redeploy.
 
 ## Non-goals
@@ -72,11 +72,11 @@ Mijn Nijmegen authenticates via Signicat only (Yivi, DigiD, eHerkenning chosen b
 
 ## Design
 **Flags** (SSM String params, created in `src/ParameterStage.ts`, names in `src/statics.ts`):
-- `/cdk/mijn-nijmegen/flags/yiviSignicat` default `'true'` (phase 1, done), `/cdk/mijn-nijmegen/flags/yiviVerId` default `'false'`. (Defaults are my call: nothing changes until VerID is switched on.)
+- `/cdk/mijn-nijmegen/useYiviSignicat` default `'true'` (phase 1, done), `/cdk/mijn-nijmegen/useYiviVerId` default `'false'`. (Defaults are my call: nothing changes until VerID is switched on.)
 - Both flags follow the `useYiviKvk` pattern: `Statics` name, `ParameterStage` parameter, `StringParameter.valueForStringParameter` into Lambda env vars in `ApiStack`. Both the login and auth Lambdas get the VerID flag so page and callback agree.
 
 **Login** (`src/app/login/loginRequestHandler.ts`):
-- `addAuthMethods`: show `yivi` only if `yiviScope` set AND `yiviSignicat` on; show new `verid` if `yiviVerId` on.
+- `addAuthMethods`: show `yivi` only if `yiviScope` set AND `useYiviSignicat` on; show new `verid` if `useYiviVerId` on.
 - `setupAuthenticationRedirect`: new `verid` case: `createSession({scope: 'openid nin'})` (scope exact names to verify in Studio; `profile` optional), store returned `state` and `method: 'verid'` in the session, 302 to the VerID url. Reject a method whose flag is off.
 - Template: new `verid` button + `static/images/verid.svg`; label is wallet-neutral (my call, e.g. "Inloggen met identiteitsapp"), since the user picks the wallet on VerID's screen. Update intro/footer text mentioning Yivi; update `src/preview/fixtures/login.ts`.
 
@@ -97,4 +97,4 @@ Mijn Nijmegen authenticates via Signicat only (Yivi, DigiD, eHerkenning chosen b
 - Existing Signicat Yivi/DigiD tests must stay green.
 
 ## Verification
-`npx jest` for the touched suites and `test/main.test.ts`, then the project build/lint. End-to-end in development: set `yiviVerId=true` and `yiviSignicat=false` in SSM and redeploy, check the login page, complete a login with a VerID test flow, confirm the session/home page, redeploy, then flip back and redeploy to confirm the buttons change.
+`npx jest` for the touched suites and `test/main.test.ts`, then the project build/lint. End-to-end in development: set `useYiviVerId=true` and `useYiviSignicat=false` in SSM and redeploy, check the login page, complete a login with a VerID test flow, confirm the session/home page, redeploy, then flip back and redeploy to confirm the buttons change.
