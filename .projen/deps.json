@@ -258,6 +258,10 @@
       "type": "runtime"
     },
     {
+      "name": "@aws-sdk/lib-dynamodb",
+      "type": "runtime"
+    },
+    {
       "name": "@aws-solutions-constructs/aws-lambda-dynamodb",
       "type": "runtime"
     },
