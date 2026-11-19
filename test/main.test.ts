@@ -84,31 +84,29 @@ test('StackHasLambdas', () => {
   template.resourceCountIs('AWS::Lambda::Function', 9);
 });
 
-test('LoginLambdaCanReadYiviSignicatFlag', () => {
+test('LoginLambdaGetsYiviSignicatFlagFromSsmAtDeployTime', () => {
   const app = new App();
   const keyStack = new KeyStack(app, 'keystack');
   const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key });
   new DNSStack(app, 'dns', { env: mockEnv, configuration: config });
   const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'test', configuration: config });
   const template = Template.fromStack(stack);
+  template.hasParameter('*', {
+    Type: 'AWS::SSM::Parameter::Value<String>',
+    Default: '/cdk/mijn-nijmegen/flags/yiviSignicat',
+  });
   template.hasResourceProperties('AWS::Lambda::Function', {
     Environment: {
       Variables: Match.objectLike({
-        FLAG_YIVI_SIGNICAT_PARAMETER: '/cdk/mijn-nijmegen/flags/yiviSignicat',
+        USE_YIVI_SIGNICAT: Match.anyValue(),
       }),
     },
   });
-  template.hasResourceProperties('AWS::IAM::Policy', {
-    PolicyDocument: {
-      Statement: Match.arrayWith([
-        Match.objectLike({
-          Action: 'ssm:GetParameter',
-          Effect: 'Allow',
-          Resource: Match.anyValue(),
-        }),
-      ]),
-    },
-  });
+  // Resolved at deploy time, so the login lambda needs no runtime SSM access
+  const loginPolicies = Object.entries(template.findResources('AWS::IAM::Policy'))
+    .filter(([id]) => id.startsWith('loginfunction'));
+  expect(loginPolicies).toHaveLength(1);
+  expect(JSON.stringify(loginPolicies)).not.toContain('ssm:GetParameter');
 });
 
 

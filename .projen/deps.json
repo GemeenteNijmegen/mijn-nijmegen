@@ -1,6 +1,10 @@
 {
   "dependencies": [
     {
+      "name": "@aws-sdk/client-ssm",
+      "type": "build"
+    },
+    {
       "name": "@aws-sdk/types",
       "type": "build"
     },
@@ -251,10 +255,6 @@
     },
     {
       "name": "@aws-sdk/client-secrets-manager",
-      "type": "runtime"
-    },
-    {
-      "name": "@aws-sdk/client-ssm",
       "type": "runtime"
     },
     {

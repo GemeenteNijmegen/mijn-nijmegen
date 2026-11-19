@@ -65,7 +65,7 @@ export class ssmParamsConstruct extends Construct {
     new SSM.StringParameter(this, 'ssm_flag_yivi_signicat', {
       stringValue: 'true',
       parameterName: Statics.ssmFlagYiviSignicat,
-      description: 'Runtime feature flag: show Yivi via Signicat on the login page (true/false). Change by hand, no redeploy needed. Keep this default constant so deploys never overwrite a manually set value.',
+      description: 'Feature flag: show Yivi via Signicat on the login page (true/false)',
     });
 
     /**
