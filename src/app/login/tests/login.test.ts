@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
-import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, GetItemCommand, GetItemCommandOutput, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
 import { LoginRequestHandler } from '../loginRequestHandler';
 
@@ -127,6 +127,73 @@ describe('Test login page and urls', () => {
       });
       const result = await handler.handleRequest(requestParams(''), dynamoDBClient);
       expect(result.body).not.toMatch('method=yivi');
+    });
+  });
+
+  describe('useYiviVerId feature flag', () => {
+    const baseProps = {
+      digidScope: 'idp_scoping:digid',
+      oidcScope: 'openid',
+      yiviScope: 'idp_scoping:yivi',
+      yiviBsnAttribute: 'bsn',
+    };
+    function mockedVerId() {
+      return { start: jest.fn().mockResolvedValue({ url: 'https://verid.example.com/authorize?state=verid-state', state: 'verid-state' }) } as any;
+    }
+
+    test('shows the verid button when useYiviVerId is true', async () => {
+      const handler = new LoginRequestHandler({ ...baseProps, useYiviVerId: true, verIdAuthenticator: mockedVerId(), oidc: mockedOidcClient() });
+      const result = await handler.handleRequest(requestParams(''), dynamoDBClient);
+      expect(result.body).toMatch('method=verid');
+    });
+
+    test.each([false, undefined])('hides the verid button when useYiviVerId is %s', async (enabled) => {
+      const handler = new LoginRequestHandler({ ...baseProps, useYiviVerId: enabled, verIdAuthenticator: mockedVerId(), oidc: mockedOidcClient() });
+      const result = await handler.handleRequest(requestParams(''), dynamoDBClient);
+      expect(result.body).not.toMatch('method=verid');
+    });
+
+    test('hides the verid button when no authenticator is configured', async () => {
+      const handler = new LoginRequestHandler({ ...baseProps, useYiviVerId: true, oidc: mockedOidcClient() });
+      const result = await handler.handleRequest(requestParams(''), dynamoDBClient);
+      expect(result.body).not.toMatch('method=verid');
+    });
+
+    test('shows yivi (signicat) and verid side by side when both are enabled', async () => {
+      const handler = new LoginRequestHandler({ ...baseProps, useYiviVerId: true, verIdAuthenticator: mockedVerId(), oidc: mockedOidcClient() });
+      const result = await handler.handleRequest(requestParams(''), dynamoDBClient);
+      expect(result.body).toMatch('method=yivi');
+      expect(result.body).toMatch('method=verid');
+    });
+
+    test('method=verid redirects to the verid url and stores state and method in the session', async () => {
+      const verId = mockedVerId();
+      const handler = new LoginRequestHandler({ ...baseProps, useYiviVerId: true, verIdAuthenticator: verId, oidc: mockedOidcClient() });
+      const result = await handler.handleRequest(requestParams('', 'verid'), dynamoDBClient);
+      expect(result.statusCode).toBe(302);
+      expect(result.headers?.Location).toBe('https://verid.example.com/authorize?state=verid-state');
+      expect(result.cookies).not.toBeUndefined();
+      const stored = JSON.stringify(ddbMock.commandCalls(PutItemCommand)[0].args[0].input);
+      expect(stored).toContain('verid-state');
+      expect(stored).toContain('verid');
+      expect(verId.start).toHaveBeenCalledTimes(1);
+    });
+
+    test('method=verid redirects back to the login page when the flag is off', async () => {
+      const verId = mockedVerId();
+      const handler = new LoginRequestHandler({ ...baseProps, useYiviVerId: false, verIdAuthenticator: verId, oidc: mockedOidcClient() });
+      const result = await handler.handleRequest(requestParams('', 'verid'), dynamoDBClient);
+      expect(result.statusCode).toBe(302);
+      expect(result.headers?.Location).toBe('/login');
+      expect(verId.start).not.toHaveBeenCalled();
+      expect(ddbMock.commandCalls(PutItemCommand)).toHaveLength(0);
+    });
+
+    test('verid is listed with the other methods for yourself when gemachtigd is on', async () => {
+      const handler = new LoginRequestHandler({ ...baseProps, useGemachtigd: true, useYiviVerId: true, verIdAuthenticator: mockedVerId(), oidc: mockedOidcClient() });
+      const result = await handler.handleRequest(requestParams(''), dynamoDBClient);
+      const forMyself = result.body!.split('Namens iemand anders')[0];
+      expect(forMyself).toMatch('method=verid');
     });
   });
 

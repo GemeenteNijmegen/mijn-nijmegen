@@ -7,6 +7,7 @@ import { Session } from '@gemeentenijmegen/session';
 import * as loginTemplate from './templates/login.mustache';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { render } from '../../shared/render';
+import { VerIdAuthenticator } from '../../shared/VerIdAuthenticator';
 
 interface LoginRequestHandlerProps {
   /**
@@ -54,6 +55,17 @@ interface LoginRequestHandlerProps {
    * and `method=yivi` is rejected. Undefined means enabled.
    */
   useYiviSignicatEnabled?: boolean;
+
+  /**
+   * Feature flag for the VerID (multi wallet) login. Requires `verIdAuthenticator`.
+   * Undefined means disabled.
+   */
+  useYiviVerId?: boolean;
+
+  /**
+   * Authenticator for logging in via VerID
+   */
+  verIdAuthenticator?: VerIdAuthenticator;
 
   /**
    * OpenIDConnect client
@@ -116,6 +128,9 @@ export class LoginRequestHandler {
     if (this.config?.yiviScope && this.config.useYiviSignicatEnabled !== false) {
       authMethods.push(this.authMethodData('yivi', 'Yivi'));
     }
+    if (this.config.useYiviVerId && this.config.verIdAuthenticator) {
+      authMethods.push(this.authMethodData('verid', 'een identiteitsapp'));
+    }
     if (this.config?.eHerkenningScope) {
       authMethods.push(this.authMethodData('eherkenning', 'eHerkenning'));
     }
@@ -138,7 +153,7 @@ export class LoginRequestHandler {
     const methodsNamed = (names: string[]) =>
       methods.filter((method) => names.includes(method.methodName));
     const groups: AuthMethodGroup[] = [];
-    const selfMethodNames = ['digid', 'yivi', 'eherkenning'];
+    const selfMethodNames = ['digid', 'yivi', 'verid', 'eherkenning'];
 
     if (this.config?.useGemachtigd) {
       groups.push(
@@ -167,6 +182,11 @@ export class LoginRequestHandler {
       // Flag was switched off while the user had the login page open: show the page again without Yivi
       return Response.redirect('/login');
     }
+    if (method === 'verid' && !this.config.useYiviVerId) {
+      // Flag was switched off while the user had the login page open: show the page again without VerID
+      return Response.redirect('/login');
+    }
+
     const supportedMethod = this.addAuthMethods().find(
       (known) => known.methodName == method,
     );
@@ -176,14 +196,21 @@ export class LoginRequestHandler {
 
     const baseOidcScope = this.config.oidcScope;
 
-    const state = this.config.oidc.generateState();
+    let loginUrl = undefined;
+    let state = this.config.oidc.generateState();
+    if (method === 'verid') {
+      // VerID generates its own state (the PKCE verifier is stored under it)
+      const verIdLogin = await this.config.verIdAuthenticator!.start();
+      state = verIdLogin.state;
+      loginUrl = verIdLogin.url;
+    }
+
     await session.createSession({
       loggedin: { BOOL: false },
       state: { S: state },
       method: { S: method },
     });
 
-    let loginUrl = undefined;
     switch (method) {
       case 'yivi':
         const yiviScope = [baseOidcScope, this.config.yiviScope];
