@@ -1,20 +1,16 @@
 import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'aws-sdk-client-mock';
+import { SessionTableCacheManager } from '../SessionTableCacheManager';
 import { VerIdAuthenticator } from '../VerIdAuthenticator';
 import { verIdAuthenticatorFromEnv } from '../VerIdFromEnv';
 
 // The VerID SDK (via jose) ships ES modules that jest cannot load, same as openid-client.
 // The real SDK is exercised by the esbuild bundle of the lambdas.
 const mockedClient = jest.fn();
-const mockedCache = jest.fn();
 jest.mock('@ver-id/node-client', () => ({
   VeridAuthenticationClient: function (config: any) {
     mockedClient(config);
     return { createSession: jest.fn(), finishSession: jest.fn() };
-  },
-  DynamoDBCacheManager: function (config: any) {
-    mockedCache(config);
-    return {};
   },
 }));
 
@@ -25,7 +21,6 @@ beforeEach(() => {
   secretsMock.reset();
   secretsMock.on(GetSecretValueCommand).resolves({ SecretString: 'the-secret' });
   mockedClient.mockReset();
-  mockedCache.mockReset();
   jest.spyOn(console, 'error').mockImplementation(() => { });
   process.env = {
     ...ORIGINAL_ENV,
@@ -34,7 +29,7 @@ beforeEach(() => {
     VERID_CLIENT_ID: 'flow-id',
     VERID_REDIRECT_URL: 'https://mijn.example.com/auth',
     VERID_CLIENT_SECRET_ARN: 'arn:secret',
-    VERID_CACHE_TABLE: 'verid-cache',
+    SESSION_TABLE: 'sessions',
     AWS_REGION: 'eu-west-1',
   };
 });
@@ -66,9 +61,9 @@ describe('verIdAuthenticatorFromEnv', () => {
     }));
   });
 
-  test('keeps the PKCE verifiers in the DynamoDB table for ten minutes', async () => {
+  test('keeps the PKCE verifiers in the sessions table', async () => {
     await verIdAuthenticatorFromEnv();
-    expect(mockedCache).toHaveBeenCalledWith(expect.objectContaining({ tableName: 'verid-cache', options: { ttlSeconds: 600 } }));
+    expect(mockedClient.mock.calls[0][0].cacheManager).toBeInstanceOf(SessionTableCacheManager);
   });
 
   test('returns nothing instead of throwing when the configuration is broken', async () => {

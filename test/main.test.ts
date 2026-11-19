@@ -128,16 +128,10 @@ test('VerIdWiredIntoLoginAndAuthLambdas', () => {
   const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'test', configuration: config });
   const template = Template.fromStack(stack);
 
-  // Verifier store: partition key pk, TTL on ttl
-  template.hasResourceProperties('AWS::DynamoDB::Table', {
-    KeySchema: [{ AttributeName: 'pk', KeyType: 'HASH' }],
-    TimeToLiveSpecification: { AttributeName: 'ttl', Enabled: true },
-    BillingMode: 'PAY_PER_REQUEST',
-    // Holds tokens with the BSN: encrypted with the customer managed key, like the sessions table
-    SSESpecification: { SSEEnabled: true, SSEType: 'KMS' },
-  });
+  // The PKCE verifiers are kept in the existing sessions table (in another stack): no table of our own
+  template.resourceCountIs('AWS::DynamoDB::Table', 0);
 
-  const verIdEnv = ['USE_YIVI_VERID', 'VERID_ISSUER_URI', 'VERID_CLIENT_ID', 'VERID_REDIRECT_URL', 'VERID_CLIENT_SECRET_ARN', 'VERID_CACHE_TABLE'];
+  const verIdEnv = ['USE_YIVI_VERID', 'VERID_ISSUER_URI', 'VERID_CLIENT_ID', 'VERID_REDIRECT_URL', 'VERID_CLIENT_SECRET_ARN'];
   for (const description of ['Login-pagina voor de Mijn Nijmegen-applicatie.', 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.']) {
     template.hasResourceProperties('AWS::Lambda::Function', {
       Description: description,

@@ -1,7 +1,7 @@
-import { aws_secretsmanager, Duration, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
+import { aws_secretsmanager, Duration, Stack, StackProps } from 'aws-cdk-lib';
 import * as apigatewayv2 from 'aws-cdk-lib/aws-apigatewayv2';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
-import { AttributeType, BillingMode, Table, TableEncryption } from 'aws-cdk-lib/aws-dynamodb';
+import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { ISecret, Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { IStringParameter, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
@@ -49,7 +49,6 @@ export interface ApiStackProps extends StackProps, Configurable {
  */
 export class ApiStack extends Stack implements Configurable {
   private sessionsTable: Table;
-  private verIdCacheTable: Table;
   private verIdClientSecret: ISecret;
   private zakenApiKey?: ISecret;
   private baseUrl: string;
@@ -73,16 +72,6 @@ export class ApiStack extends Stack implements Configurable {
     const subdomain = Statics.subDomain(props.branch);
     this.baseUrl = `https://${subdomain}.nijmegen.nl`;
 
-    // Short lived PKCE verifiers (and tokens of unfinished logins) of VerID: shared between the login and auth lambda
-    this.verIdCacheTable = new Table(this, 'verid-cache-table', {
-      partitionKey: { name: 'pk', type: AttributeType.STRING },
-      billingMode: BillingMode.PAY_PER_REQUEST,
-      timeToLiveAttribute: 'ttl',
-      removalPolicy: RemovalPolicy.DESTROY, // Short lived data only
-      // May hold ID tokens with the BSN of unfinished logins: same key as the sessions table
-      encryption: TableEncryption.CUSTOMER_MANAGED,
-      encryptionKey: this.sessionsTable.encryptionKey,
-    });
     this.verIdClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'verid-client-secret', Statics._VerIdClientSecret);
 
     this.setFunctions(props.configuration);
@@ -98,13 +87,7 @@ export class ApiStack extends Stack implements Configurable {
       VERID_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics._VerIdClientId),
       VERID_REDIRECT_URL: StringParameter.valueForStringParameter(this, Statics._VerIdRedirectUrl),
       VERID_CLIENT_SECRET_ARN: this.verIdClientSecret.secretArn,
-      VERID_CACHE_TABLE: this.verIdCacheTable.tableName,
     };
-  }
-
-  private grantVerIdAccess(lambda: ApiFunction['lambda']) {
-    this.verIdClientSecret.grantRead(lambda);
-    this.verIdCacheTable.grantReadWriteData(lambda);
   }
 
   /**
@@ -330,7 +313,7 @@ export class ApiStack extends Stack implements Configurable {
       },
     });
     oidcSecret.grantRead(loginFunction.lambda);
-    this.grantVerIdAccess(loginFunction.lambda);
+    this.verIdClientSecret.grantRead(loginFunction.lambda);
     return loginFunction;
   }
 
@@ -407,7 +390,7 @@ export class ApiStack extends Stack implements Configurable {
     openKlantConfig.apiKey.grantRead(authFunction.lambda);
     openKlantConfig.endpoint.grantRead(authFunction.lambda);
     oidcSecret.grantRead(authFunction.lambda);
-    this.grantVerIdAccess(authFunction.lambda);
+    this.verIdClientSecret.grantRead(authFunction.lambda);
 
     return authFunction;
   }
