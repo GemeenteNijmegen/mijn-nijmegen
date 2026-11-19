@@ -133,6 +133,8 @@ test('VerIdWiredIntoLoginAndAuthLambdas', () => {
     KeySchema: [{ AttributeName: 'pk', KeyType: 'HASH' }],
     TimeToLiveSpecification: { AttributeName: 'ttl', Enabled: true },
     BillingMode: 'PAY_PER_REQUEST',
+    // Holds tokens with the BSN: encrypted with the customer managed key, like the sessions table
+    SSESpecification: { SSEEnabled: true, SSEType: 'KMS' },
   });
 
   const verIdEnv = ['USE_YIVI_VERID', 'VERID_ISSUER_URI', 'VERID_CLIENT_ID', 'VERID_REDIRECT_URL', 'VERID_CLIENT_SECRET_ARN', 'VERID_CACHE_TABLE'];

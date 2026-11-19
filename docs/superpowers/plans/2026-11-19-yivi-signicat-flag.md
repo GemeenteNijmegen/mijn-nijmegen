@@ -109,9 +109,9 @@ VerID is the other provider behind the **one existing Yivi button** (same `yivi`
 Code:
 - `src/shared/VerIdAuthenticator.ts`: `start()` (scope `openid nin`) and `finish(callbackUrl, expectedState)`; checks the callback `state` against the session state, format `openid`, `nin.identifier_type === 'NL_BSN'` and a valid `Bsn`.
 - `src/shared/VerIdFromEnv.ts`: builds the real client with the SDK's `DynamoDBCacheManager` (PKCE verifiers, TTL 600s) from the lambda environment. Returns nothing when `USE_YIVI_VERID` is not `true` or VerID cannot be set up, so a broken VerID setup never affects DigiD, eHerkenning or Yivi via Signicat. No separate flag props: "authenticator present" means "VerID on".
-- Login: `LoginRequestHandler` gets an optional `verIdAuthenticator`; for `method=yivi` it uses VerID's url and state instead of Signicat's, otherwise unchanged. The session keeps method `yivi`.
-- Callback: `AuthRequestHandler` finishes a `yivi` session with VerID when an authenticator is configured, otherwise via Signicat as before. Any VerID failure redirects to `/login` without a session. (Shortcut: dispatch is on the flag, not on a stored provider, so a Yivi login in flight during a redeploy that flips the flag fails and the user logs in again.)
-- Infra: parameters `/cdk/mijn-nijmegen/useYiviVerId` (default `false`), `/cdk/mijn-nijmegen/verid/{issuer-uri,client-id,redirect-url}` (placeholder `-`), secret `/cdk/mijn-nijmegen/verid/clientsecret`, DynamoDB table (pk, TTL `ttl`, on-demand) in `ApiStack`, env vars and grants on the login and auth Lambdas.
+- Login: `LoginRequestHandler` gets an optional `verIdAuthenticator`; for `method=yivi` it uses VerID's url and state instead of Signicat's, otherwise unchanged. When VerID is used the session also stores `provider: verid`.
+- Callback: `AuthRequestHandler` follows the stored `provider`, not its own flag: `verid` sessions are finished by the authenticator (not the Signicat OIDC client), everything else as before. This keeps login and callback consistent when the two Lambdas differ (e.g. VerID setup failed in one container, or a redeploy flipped the flag mid-login). If VerID is not available in the auth Lambda the user is sent back to `/login`. Any VerID failure redirects to `/login` without a session.
+- Infra: parameters `/cdk/mijn-nijmegen/useYiviVerId` (default `false`), `/cdk/mijn-nijmegen/verid/{issuer-uri,client-id,redirect-url}` (placeholder `-`), secret `/cdk/mijn-nijmegen/verid/clientsecret`, DynamoDB table (pk, TTL `ttl`, on-demand, encrypted with the sessions table's KMS key because it can hold ID tokens with the BSN of unfinished logins) in `ApiStack`, env vars and grants on the login and auth Lambdas.
 - Dependencies: `@ver-id/node-client` pinned at `0.16.0`, `@aws-sdk/lib-dynamodb`.
 - Jest cannot load the SDK's ES-module dependency (`jose`), same as `openid-client`, so the SDK is mocked in `VerIdFromEnv.test.ts`; the real SDK was verified by bundling with esbuild and constructing the client in node.
 
@@ -120,6 +120,10 @@ Code:
 2. Fill the parameters `verid/issuer-uri`, `verid/client-id` (the flow id, must be a UUID), `verid/redirect-url` and the secret `verid/clientsecret`.
 3. Set `useYiviVerId` to `true` (optionally `useYiviSignicat` to `false`) and redeploy.
 4. Verify with a real login: the BSN arrives as `nin.identifier` of type `NL_BSN` (use the `testNin` scope on a test flow first).
+
+### Good to know
+- Switching `useYiviVerId` on replaces Yivi via Signicat, so Yivi KvK login (`useYiviKvk`) is not available while it is on (organisations are out of scope for VerID in this version).
+- If VerID is down or misconfigured at runtime, a click on the Yivi button returns a 500 (other login methods are unaffected). Setup failures at cold start are logged and the button falls back to Signicat (or is hidden when `useYiviSignicat` is off).
 
 ### Not done
 - Organisations (`company` scope) are out of scope for this version.

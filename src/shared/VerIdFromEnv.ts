@@ -9,7 +9,7 @@ import { VerIdAuthenticator } from './VerIdAuthenticator';
  *
  * Returns undefined when the VerID flag (`USE_YIVI_VERID`) is off or when VerID cannot be
  * set up (e.g. parameters or secret not filled in yet). A broken VerID setup must never take
- * down the other login methods: without an authenticator Yivi simply keeps using Signicat.
+ * down the other login methods: without an authenticator Yivi uses Signicat (or is hidden when that flag is off).
  */
 export async function verIdAuthenticatorFromEnv(): Promise<VerIdAuthenticator | undefined> {
   if (process.env.USE_YIVI_VERID !== 'true') {
@@ -30,7 +30,7 @@ export async function verIdAuthenticatorFromEnv(): Promise<VerIdAuthenticator | 
     });
     return new VerIdAuthenticator({ client });
   } catch (error) {
-    console.error('VerID is enabled but could not be set up, Yivi keeps using Signicat', error);
+    console.error('VerID is enabled but could not be set up, VerID login is not available', error);
     return undefined;
   }
 }

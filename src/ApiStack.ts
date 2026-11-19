@@ -1,7 +1,7 @@
 import { aws_secretsmanager, Duration, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import * as apigatewayv2 from 'aws-cdk-lib/aws-apigatewayv2';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
-import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
+import { AttributeType, BillingMode, Table, TableEncryption } from 'aws-cdk-lib/aws-dynamodb';
 import { ISecret, Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { IStringParameter, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
@@ -73,12 +73,15 @@ export class ApiStack extends Stack implements Configurable {
     const subdomain = Statics.subDomain(props.branch);
     this.baseUrl = `https://${subdomain}.nijmegen.nl`;
 
-    // Short lived PKCE verifiers of VerID logins: shared between the login and auth lambda
+    // Short lived PKCE verifiers (and tokens of unfinished logins) of VerID: shared between the login and auth lambda
     this.verIdCacheTable = new Table(this, 'verid-cache-table', {
       partitionKey: { name: 'pk', type: AttributeType.STRING },
       billingMode: BillingMode.PAY_PER_REQUEST,
       timeToLiveAttribute: 'ttl',
-      removalPolicy: RemovalPolicy.DESTROY, // Only holds unfinished logins
+      removalPolicy: RemovalPolicy.DESTROY, // Short lived data only
+      // May hold ID tokens with the BSN of unfinished logins: same key as the sessions table
+      encryption: TableEncryption.CUSTOMER_MANAGED,
+      encryptionKey: this.sessionsTable.encryptionKey,
     });
     this.verIdClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'verid-client-secret', Statics._VerIdClientSecret);
 

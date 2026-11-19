@@ -199,6 +199,8 @@ export class LoginRequestHandler {
       loggedin: { BOOL: false },
       state: { S: state },
       method: { S: method },
+      // The callback follows the provider that started the login, not its own configuration
+      ...(verId && { provider: { S: 'verid' } }),
     });
 
     switch (method) {
