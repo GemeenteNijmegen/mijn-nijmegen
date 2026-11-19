@@ -163,6 +163,10 @@ export class LoginRequestHandler {
   }
 
   private async setupAuthenticationRedirect(session: Session, method: string) {
+    if (method === 'yivi' && this.config.yiviScope && this.config.yiviSignicatEnabled === false) {
+      // Flag was switched off while the user had the login page open: show the page again without Yivi
+      return Response.redirect('/login');
+    }
     const supportedMethod = this.addAuthMethods().find(
       (known) => known.methodName == method,
     );

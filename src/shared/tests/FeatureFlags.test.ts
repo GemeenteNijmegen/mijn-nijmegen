@@ -70,6 +70,12 @@ describe('FeatureFlags', () => {
     expect(await flagsAt({ t: 0 }).isEnabled(PARAM, true)).toBe(true);
   });
 
+  test('returns default when SSM does not answer within the timeout', async () => {
+    ssmMock.on(GetParameterCommand).callsFake(() => new Promise(() => { }));
+    const flags = new FeatureFlags({ ssmClient: new SSMClient({ region: 'eu-west-1' }), timeoutMs: 20 });
+    expect(await flags.isEnabled(PARAM, true)).toBe(true);
+  });
+
   test('does not cache failures', async () => {
     const flags = flagsAt({ t: 0 });
     ssmMock.on(GetParameterCommand).rejectsOnce(new Error('boom')).resolves(paramValue('false'));

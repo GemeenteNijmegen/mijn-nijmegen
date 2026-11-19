@@ -104,10 +104,11 @@ describe('Test login page and urls', () => {
       expect(result.body).toMatch('method=digid');
     });
 
-    test('rejects method=yivi when yiviSignicatEnabled is false', async () => {
+    test('redirects method=yivi back to the login page when yiviSignicatEnabled is false', async () => {
       const handler = new LoginRequestHandler({ ...yiviProps, yiviSignicatEnabled: false, oidc: mockedOidcClient() });
-      await expect(handler.handleRequest(requestParams('', 'yivi'), dynamoDBClient))
-        .rejects.toThrow('Authentication method is not suported!');
+      const result = await handler.handleRequest(requestParams('', 'yivi'), dynamoDBClient);
+      expect(result.statusCode).toBe(302);
+      expect(result.headers?.Location).toBe('/login');
     });
 
     test.each([true, undefined])('shows yivi when yiviSignicatEnabled is %s', async (enabled) => {
