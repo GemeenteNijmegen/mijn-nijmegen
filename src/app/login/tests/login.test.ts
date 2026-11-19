@@ -190,7 +190,13 @@ describe('Test login page and urls', () => {
     });
 
     test('verid is listed with the other methods for yourself when gemachtigd is on', async () => {
-      const handler = new LoginRequestHandler({ ...baseProps, useGemachtigd: true, useYiviVerId: true, verIdAuthenticator: mockedVerId(), oidc: mockedOidcClient() });
+      const handler = new LoginRequestHandler({
+        ...baseProps,
+        useGemachtigd: true,
+        useYiviVerId: true,
+        verIdAuthenticator: mockedVerId(),
+        oidc: mockedOidcClient(),
+      });
       const result = await handler.handleRequest(requestParams(''), dynamoDBClient);
       const forMyself = result.body!.split('Namens iemand anders')[0];
       expect(forMyself).toMatch('method=verid');
