@@ -293,7 +293,7 @@ export class ApiStack extends Stack implements Configurable {
       tablePermissions: 'ReadWrite',
       applicationUrlBase: this.baseUrl,
       apiFunction: LoginFunction,
-      timeout: Duration.seconds(10), // Cold start (secrets) plus the VerID calls do not fit the 3 second default
+      timeout: Duration.seconds(10), // Cold start (secrets) plus the VerID calls maybe will exceed the 3 second default
       environment: {
         // OIDC connection
         OIDC_CLIENT_SECRET_ARN: oidcSecret.secretArn,
