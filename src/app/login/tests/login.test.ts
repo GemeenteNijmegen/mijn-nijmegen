@@ -89,6 +89,47 @@ describe('Test login page and urls', () => {
     }
   });
 
+  describe('useYiviSignicat feature flag', () => {
+    const yiviProps = {
+      digidScope: 'idp_scoping:digid',
+      oidcScope: 'openid',
+      yiviScope: 'idp_scoping:yivi',
+      yiviBsnAttribute: 'bsn',
+    };
+
+    test('hides the yivi button when useYiviSignicatEnabled is false', async () => {
+      const handler = new LoginRequestHandler({ ...yiviProps, useYiviSignicatEnabled: false, oidc: mockedOidcClient() });
+      const result = await handler.handleRequest(requestParams(''), dynamoDBClient);
+      expect(result.body).not.toMatch('method=yivi');
+      expect(result.body).toMatch('method=digid');
+    });
+
+    test('redirects method=yivi back to the login page when useYiviSignicatEnabled is false', async () => {
+      const handler = new LoginRequestHandler({ ...yiviProps, useYiviSignicatEnabled: false, oidc: mockedOidcClient() });
+      const result = await handler.handleRequest(requestParams('', 'yivi'), dynamoDBClient);
+      expect(result.statusCode).toBe(302);
+      expect(result.headers?.Location).toBe('/login');
+    });
+
+    test.each([true, undefined])('shows yivi when useYiviSignicatEnabled is %s', async (enabled) => {
+      const handler = new LoginRequestHandler({ ...yiviProps, useYiviSignicatEnabled: enabled, oidc: mockedOidcClient() });
+      const result = await handler.handleRequest(requestParams(''), dynamoDBClient);
+      expect(result.body).toMatch('method=yivi');
+    });
+
+    test('hides yivi when disabled even with useYiviKvk', async () => {
+      const handler = new LoginRequestHandler({
+        ...yiviProps,
+        yiviCondisconScope: 'condiscon',
+        useYiviKvk: true,
+        useYiviSignicatEnabled: false,
+        oidc: mockedOidcClient(),
+      });
+      const result = await handler.handleRequest(requestParams(''), dynamoDBClient);
+      expect(result.body).not.toMatch('method=yivi');
+    });
+  });
+
   test('Return login page without yivi link', async () => {
     const loginRequestHandler = new LoginRequestHandler({
       digidScope: 'idp_scoping:digid',
