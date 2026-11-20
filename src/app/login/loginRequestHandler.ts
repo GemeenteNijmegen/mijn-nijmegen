@@ -5,6 +5,7 @@ import {
 } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import * as loginTemplate from './templates/login.mustache';
+import { logger } from '../../shared/Logger';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { render } from '../../shared/render';
 import { VerIdAuthenticator } from '../../shared/VerIdAuthenticator';
@@ -96,7 +97,7 @@ export class LoginRequestHandler {
     let session = new Session(params.cookies!, dynamoDBClient);
     await session.init();
     if (session.isLoggedIn() === true) {
-      console.debug('redirect to home');
+      logger.debug('Already logged in, redirect to home');
       return Response.redirect('/');
     }
 
@@ -175,6 +176,7 @@ export class LoginRequestHandler {
   private async setupAuthenticationRedirect(session: Session, method: string) {
     if (method === 'yivi' && !this.yiviEnabled()) {
       // Yivi was switched off while the user had the login page open: show the page again without it
+      logger.warn('Yivi login requested but Yivi is disabled, back to login');
       return Response.redirect('/login');
     }
 
@@ -246,7 +248,7 @@ export class LoginRequestHandler {
     try {
       login = await verId.start();
     } catch (error) {
-      console.error('Starting a VerID login failed', error);
+      logger.error('Starting a VerID login failed', { error });
       return Response.error(503);
     }
     await session.createSession({

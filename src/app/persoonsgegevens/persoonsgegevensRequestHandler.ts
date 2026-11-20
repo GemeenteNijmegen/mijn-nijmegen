@@ -15,6 +15,7 @@ import * as verifyTemplate from './templates/verify-contactgegevens.mustache';
 import { VerificationRateLimiter } from './VerificationRateLimiter';
 import { VerifyFormSchema } from './VerifyForm';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
+import { logger } from '../../shared/Logger';
 import { BreadCrumbs, Navigation, NavigationItem } from '../../shared/Navigation';
 import { NotifyNLApi } from '../../shared/NotifyNLApi';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
@@ -108,17 +109,17 @@ export class PersoonsgegevensRequestHandler {
     // Handle request if loggedin
     if (session.isLoggedIn() == true) {
       if (event.path?.startsWith('/persoonsgegevens/edit')) {
-        console.info('Handling EDIT request');
+        logger.info('Handling request', { page: 'edit' });
         const response = await this.handleEditRequest(session, event);
         console.timeEnd('request');
         return response;
       } else if (event.path?.startsWith('/persoonsgegevens/verify')) {
-        console.info('Handling VERIFY request');
+        logger.info('Handling request', { page: 'verify' });
         const response = await this.handleVerifyRequest(session, event);
         console.timeEnd('request');
         return response;
       } else {
-        console.info('Handling OVERVIEW request');
+        logger.info('Handling request', { page: 'overview' });
         const response = await this.handleLoggedinRequest(session);
         console.timeEnd('request');
         return response;
@@ -158,7 +159,7 @@ export class PersoonsgegevensRequestHandler {
       data.persoonsgegevens = PersoonsgegevensMapper.fromHaalCentraal(brpData);
       console.timeLog('request', 'finished HAAL CENTRAAL BRP API call');
     } catch (error) {
-      console.log(error);
+      logger.error('Fetching BRP data failed', { error });
       data.error = 'Het ophalen van uw persoonsgegevens is misgegaan.';
       data.persoonsgegevens = undefined;
     }
@@ -229,7 +230,7 @@ export class PersoonsgegevensRequestHandler {
 
     const type = parseContactType(event.queryStringParameters?.type || event.body?.type || 'email');
     if (!type) {
-      console.info('Rejected unknown contactgegevens type');
+      logger.warn('Rejected unknown contactgegevens type');
       return Response.error(400);
     }
     const isEmailType = type === 'email';
@@ -254,12 +255,12 @@ export class PersoonsgegevensRequestHandler {
     if (event.method === 'POST') {
       const form = EditFormSchema.safeParse(event.body);
       if (!form.success) {
-        console.info('Bad post request for contactgegevens form');
+        logger.warn('Invalid contactgegevens form post');
         return Response.error(400);
       }
 
       if (form.data.xsrf_token !== xsrfToken) {
-        console.info('XSRF token mismatch');
+        logger.warn('XSRF token mismatch', { form: 'edit' });
         return Response.error(403);
       }
 
@@ -342,10 +343,10 @@ export class PersoonsgegevensRequestHandler {
         });
       }
 
-      console.error(`No NotifyNL template ID provided for ${isEmailType ? 'email' : 'SMS'}`);
+      logger.error('No NotifyNL template id configured', { channel: isEmailType ? 'email' : 'sms' });
 
     } catch (error) {
-      console.error('Failed to send verification code', error);
+      logger.error('Sending verification code failed', { error });
     }
   }
 
@@ -357,7 +358,7 @@ export class PersoonsgegevensRequestHandler {
 
     const type = parseContactType(event.queryStringParameters?.type || event.body?.type || 'email');
     if (!type) {
-      console.info('Rejected unknown contactgegevens type');
+      logger.warn('Rejected unknown contactgegevens type');
       return Response.error(400);
     }
     const isEmailType = type === 'email';
@@ -389,12 +390,12 @@ export class PersoonsgegevensRequestHandler {
     if (event.method === 'POST') {
       const form = VerifyFormSchema.safeParse(event.body);
       if (!form.success) {
-        console.error('Bad post request for verify form');
+        logger.warn('Invalid verify form post');
         return Response.error(400);
       }
 
       if (form.data.xsrf_token !== xsrfToken) {
-        console.error('XSRF token mismatch');
+        logger.warn('XSRF token mismatch', { form: 'verify' });
         return Response.error(403);
       }
 
@@ -435,7 +436,7 @@ export class PersoonsgegevensRequestHandler {
       // Validate code
       if (code === storedCode) {
         if (!this.config.openKlantApi) {
-          console.error('Cannot update contact info: OpenKlant API is not configured');
+          logger.error('Cannot update contact info, OpenKlant API is not configured');
           return renderVerifyPage(verifyOutcome.remaining, 'Er is iets fout gegaan. Probeer het later opnieuw.');
         }
 
@@ -457,7 +458,7 @@ export class PersoonsgegevensRequestHandler {
 
           return Response.redirect('/persoonsgegevens', 302, session.getCookie({ sameSite: 'lax' }));
         } catch (error) {
-          console.error('Failed to update contact info', error);
+          logger.error('Updating contact info failed', { error });
           return renderVerifyPage(verifyOutcome.remaining, 'Er is iets fout gegaan. Probeer het later opnieuw.');
         }
       } else {

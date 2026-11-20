@@ -148,6 +148,21 @@ test('VerIdWiredIntoLoginAndAuthLambdas', () => {
   }
 });
 
+test('Log level follows the configuration, INFO by default', () => {
+  const levelOf = (configuration: Configuration) => {
+    const app = new App();
+    const keyStack = new KeyStack(app, 'keystack');
+    const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key });
+    const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'test', configuration });
+    const apiFunctions = Object.values(Template.fromStack(stack).findResources('AWS::Lambda::Function'))
+      .filter((resource: any) => resource.Properties.Environment?.Variables?.SESSION_TABLE);
+    expect(apiFunctions.length).toBeGreaterThan(0);
+    return new Set(apiFunctions.map((resource: any) => resource.Properties.Environment.Variables.POWERTOOLS_LOG_LEVEL));
+  };
+  expect(levelOf(config)).toEqual(new Set(['INFO']));
+  expect(levelOf({ ...config, logLevel: 'DEBUG' })).toEqual(new Set(['DEBUG']));
+});
+
 test('StackHasParameters', () => {
   const app = new App();
   const stack = new ParameterStack(app, 'test', { configuration: config });

@@ -4,8 +4,9 @@ import {
   Response,
 } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { AWS } from '@gemeentenijmegen/utils';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { APIGatewayProxyEventV2, Context } from 'aws-lambda';
 import { LoginRequestHandler, RequestParams } from './loginRequestHandler';
+import { logger } from '../../shared/Logger';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { VerIdAuthenticator } from '../../shared/VerIdAuthenticator';
 import { verIdAuthenticatorFromEnv } from '../../shared/VerIdFromEnv';
@@ -42,7 +43,9 @@ function parseEvent(event: APIGatewayProxyEventV2): RequestParams {
 
 export async function handler(
   event: APIGatewayProxyEventV2,
+  context?: Context,
 ): Promise<ApiGatewayV2Response> {
+  if (context) logger.addContext(context);
   await init;
 
   const loginRequestHandler = new LoginRequestHandler({
@@ -67,7 +70,7 @@ export async function handler(
     );
     return response;
   } catch (err) {
-    console.error(err);
+    logger.error('Error occurred while handling login request', { error: err });
     return Response.error(500);
   }
 }
