@@ -17,7 +17,7 @@ Vervolgens worden wijzigingen in de verbonden repository in de gekoppelde branch
 Om de workflows (build, selfmutate, upgrade) te kunnen draaien is een token nodig met de naam PROJEN_GITHUB_TOKEN. Zie https://docs.github.com/en/actions/security-guides/automatic-token-authentication#granting-additional-permissions voor meer details.
 
 ## Afhankelijkheden
-Authenticatie vindt plaats via OpenIDConnect, via [Signicat](https://signicat.com). "Als Yivi via VerID is geconfigureerd, loopt de Yivi-login via die flow; zie [Inloggen met Yivi via VerID](Yivi-VerID-login-flow.md). De /login en /auth routes zijn hiervoor verantwoordelijk.
+Authenticatie vindt plaats via OpenIDConnect, via [Signicat](https://signicat.com). Als Yivi via VerID is geconfigureerd, loopt de Yivi-login via die flow; zie [Inloggen met Yivi via VerID](Yivi-VerID-login-flow.md). De /login en /auth routes zijn hiervoor verantwoordelijk.
 
 Aan de bestaande API Gateway kunnen nieuwe routes gekoppeld worden in externe projecten. Een voorbeeld is [Mijn Uitkering](https://github.com/gemeenteNijmegen/mijn-uitkering). Dit project is verder afhankelijk van een bestaande DNS Zone in AWS.
 
