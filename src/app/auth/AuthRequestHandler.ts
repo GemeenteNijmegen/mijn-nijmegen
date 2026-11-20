@@ -9,6 +9,7 @@ import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { OpenIDConnect, OpenIDConnectResult } from '../../shared/OpenIDConnect';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
 import { Organisation, Person, User } from '../../shared/User';
+import { VerIdAuthenticator } from '../../shared/VerIdAuthenticator';
 
 type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
 const eHerkenningKvkNummerClaim = 'urn:etoegang:1.9:EntityConcernedID:KvKnr';
@@ -40,6 +41,11 @@ export interface AuthRequestHandlerProps {
    * old IRMA BRP API.
    */
   haalCentraalApi: HaalCentraalApi;
+
+  /**
+   * When set (the VerID feature flag is on), logins that were started with VerID can be finished.
+   */
+  verIdAuthenticator?: VerIdAuthenticator;
 
   /**
    * OpenKlant API for fetching contact information
@@ -78,8 +84,9 @@ export class AuthRequestHandler {
     const state = session.getValue('state');
     try {
 
-      const result = await this.config.OpenIdConnect.authorize(this.config.fullUrl, state);
-      const user = this.userFromAuthResult(result);
+      const user = session.getValue('provider') === 'verid'
+        ? await this.userFromVerIdLogin(state)
+        : this.userFromAuthResult(await this.config.OpenIdConnect.authorize(this.config.fullUrl, state));
       if (!user) {
         return Response.redirect('/login');
       }
@@ -122,6 +129,18 @@ export class AuthRequestHandler {
       return Response.redirect('/login');
     }
     return Response.redirect('/', 302, [session.getCookie({ sameSite: 'lax' })]);
+  }
+
+  /**
+   * Finish a login that was started with VerID (BSN only, persons)
+   */
+  private async userFromVerIdLogin(state: string | undefined): Promise<User> {
+    if (!this.config.verIdAuthenticator) {
+      throw Error('Login was started with VerID but VerID is not available');
+    }
+    const bsn = await this.config.verIdAuthenticator.finish(this.config.fullUrl, state);
+    new Logger({ serviceName: 'mijnnijmegen' }).info('auth succesful', { method: 'verid' });
+    return new Person(bsn, { haalCentraal: this.config.haalCentraalApi });
   }
 
   private logAuthMethod(authResult: OpenIDConnectResult) {

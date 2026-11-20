@@ -8,6 +8,8 @@ import { ApiClient as ApiClientV2 } from '../../shared/ApiClient';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
+import { VerIdAuthenticator } from '../../shared/VerIdAuthenticator';
+import { verIdAuthenticatorFromEnv } from '../../shared/VerIdFromEnv';
 
 // --- Dev-only import ---
 
@@ -16,6 +18,7 @@ const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 let OIDC: OpenIDConnect | undefined = undefined;
 let haalCentraalApi: HaalCentraalApi | undefined = undefined;
 let openKlantApi: OpenKlantApi | undefined = undefined;
+let verIdAuthenticator: VerIdAuthenticator | undefined = undefined;
 
 async function init() {
   const haalCentraalValues = environmentVariables([
@@ -64,6 +67,9 @@ async function init() {
     wellknown: process.env.OIDC_WELL_KNOWN!,
     clientSecret: await AWS.getSecret(process.env.OIDC_CLIENT_SECRET_ARN!),
   });
+
+  // Undefined when VerID is disabled or not set up, never fails the other login methods
+  verIdAuthenticator = await verIdAuthenticatorFromEnv();
 }
 
 const initaliation = init();
@@ -101,6 +107,7 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<ApiGateway
       useYiviKvk: process.env.USE_YIVI_KVK === 'true',
       haalCentraalApi: haalCentraalApi,
       openKlantApi: openKlantApi,
+      verIdAuthenticator: verIdAuthenticator,
       contactgegevensLive: process.env.CONTACTGEGEVENS_LIVE === 'True',
     });
     return await requestHandler.handleRequest();

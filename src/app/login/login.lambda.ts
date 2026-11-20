@@ -7,10 +7,13 @@ import { AWS } from '@gemeentenijmegen/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { LoginRequestHandler, RequestParams } from './loginRequestHandler';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
+import { VerIdAuthenticator } from '../../shared/VerIdAuthenticator';
+import { verIdAuthenticatorFromEnv } from '../../shared/VerIdFromEnv';
 
 const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
 let OIDC: OpenIDConnect | undefined = undefined;
+let verIdAuthenticator: VerIdAuthenticator | undefined = undefined;
 async function initialize() {
   // Setup ODIC client
   OIDC = new OpenIDConnect({
@@ -23,6 +26,9 @@ async function initialize() {
   if (!process.env.OIDC_SCOPE || !process.env.DIGID_SCOPE) {
     throw Error('No OIDC_SCOPE or DIGID_SCOPE env. param provided');
   }
+
+  // Undefined when VerID is disabled or not set up, never fails the other login methods
+  verIdAuthenticator = await verIdAuthenticatorFromEnv();
 }
 
 const init = initialize();
@@ -49,6 +55,7 @@ export async function handler(
     useYiviKvk: process.env.USE_YIVI_KVK == 'true',
     useGemachtigd: process.env.USE_GEMACHTIGD == 'true',
     useYiviSignicatEnabled: process.env.USE_YIVI_SIGNICAT !== 'false',
+    verIdAuthenticator: verIdAuthenticator,
     oidc: OIDC!,
   });
 
