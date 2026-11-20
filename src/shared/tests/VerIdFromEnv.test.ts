@@ -1,10 +1,21 @@
 import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { mockClient } from 'aws-sdk-client-mock';
+import { VerIdAuthenticator } from '../VerIdAuthenticator';
 import { verIdAuthenticatorFromEnv } from '../VerIdFromEnv';
 
-const mockedCreate = jest.fn();
-jest.mock('../VerIdAuthenticatorFactory', () => ({
-  createVerIdAuthenticator: (config: any) => mockedCreate(config),
+// The VerID SDK (via jose) ships ES modules that jest cannot load, same as openid-client.
+// The real SDK is exercised by the esbuild bundle of the lambdas.
+const mockedClient = jest.fn();
+const mockedCache = jest.fn();
+jest.mock('@ver-id/node-client', () => ({
+  VeridAuthenticationClient: function (config: any) {
+    mockedClient(config);
+    return { createSession: jest.fn(), finishSession: jest.fn() };
+  },
+  DynamoDBCacheManager: function (config: any) {
+    mockedCache(config);
+    return {};
+  },
 }));
 
 const secretsMock = mockClient(SecretsManagerClient);
@@ -13,8 +24,8 @@ const ORIGINAL_ENV = process.env;
 beforeEach(() => {
   secretsMock.reset();
   secretsMock.on(GetSecretValueCommand).resolves({ SecretString: 'the-secret' });
-  mockedCreate.mockReset();
-  mockedCreate.mockReturnValue({ fake: 'authenticator' });
+  mockedClient.mockReset();
+  mockedCache.mockReset();
   jest.spyOn(console, 'error').mockImplementation(() => { });
   process.env = {
     ...ORIGINAL_ENV,
@@ -42,23 +53,26 @@ describe('verIdAuthenticatorFromEnv', () => {
     }
     expect(await verIdAuthenticatorFromEnv()).toBeUndefined();
     expect(secretsMock.commandCalls(GetSecretValueCommand)).toHaveLength(0);
-    expect(mockedCreate).not.toHaveBeenCalled();
+    expect(mockedClient).not.toHaveBeenCalled();
   });
 
   test('creates the authenticator from the environment and the secret when the flag is true', async () => {
-    expect(await verIdAuthenticatorFromEnv()).toEqual({ fake: 'authenticator' });
-    expect(mockedCreate).toHaveBeenCalledWith({
+    expect(await verIdAuthenticatorFromEnv()).toBeInstanceOf(VerIdAuthenticator);
+    expect(mockedClient).toHaveBeenCalledWith(expect.objectContaining({
       issuerUri: 'https://verid.example.com',
       clientId: 'flow-id',
       clientSecret: 'the-secret',
       redirectUri: 'https://mijn.example.com/auth',
-      cacheTableName: 'verid-cache',
-      region: 'eu-west-1',
-    });
+    }));
+  });
+
+  test('keeps the PKCE verifiers in the DynamoDB table for ten minutes', async () => {
+    await verIdAuthenticatorFromEnv();
+    expect(mockedCache).toHaveBeenCalledWith(expect.objectContaining({ tableName: 'verid-cache', options: { ttlSeconds: 600 } }));
   });
 
   test('returns nothing instead of throwing when the configuration is broken', async () => {
-    mockedCreate.mockImplementation(() => {
+    mockedClient.mockImplementation(() => {
       throw new Error('invalid issuer');
     });
     expect(await verIdAuthenticatorFromEnv()).toBeUndefined();

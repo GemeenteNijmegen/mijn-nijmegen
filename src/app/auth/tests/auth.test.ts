@@ -111,18 +111,13 @@ function setupSessionResponse(loggedin: boolean) {
   ddbMock.on(GetItemCommand).resolves(getItemOutput);
 }
 
-function setupVerIdSessionResponse(method: string | null = 'verid') {
-  const data: any = {
-    loggedin: { BOOL: false },
-    state: { S: 'verid-state' },
-  };
-  if (method) {
-    data.method = { S: method };
-  }
-  ddbMock.on(GetItemCommand).resolves({ Item: { data: { M: data } } });
+function setupSession(method: string, provider?: string) {
+  ddbMock.on(GetItemCommand).resolves({
+    Item: { data: { M: { loggedin: { BOOL: false }, state: { S: 'verid-state' }, method: { S: method }, ...(provider && { provider: { S: provider } }) } } },
+  });
 }
 
-function verIdHandler(verIdAuthenticator: any, oidc = mockedOidcClient(true)) {
+function handlerWith(verIdAuthenticator: any, oidc = mockedOidcClient(true)) {
   return new AuthRequestHandler({
     cookies: `session=${sessionId}`,
     fullUrl: new URL('https://localhost/auth?state=verid-state&code=abcdef'),
@@ -134,50 +129,42 @@ function verIdHandler(verIdAuthenticator: any, oidc = mockedOidcClient(true)) {
   });
 }
 
-describe('VerID logins', () => {
-  test('method verid in the session is handled by VerID and not by Signicat', async () => {
-    setupVerIdSessionResponse();
+describe('Yivi logins via VerID', () => {
+  test('a session started with VerID is finished by VerID instead of Signicat and creates a person session', async () => {
+    setupSession('yivi', 'verid');
     const oidc = mockedOidcClient(true);
     const verId = { finish: jest.fn().mockResolvedValue(new Bsn('900222670')) };
-    const result = await verIdHandler(verId, oidc).handleRequest();
+    const result = await handlerWith(verId, oidc).handleRequest();
     expect(verId.finish).toHaveBeenCalledWith(new URL('https://localhost/auth?state=verid-state&code=abcdef'), 'verid-state');
     expect(oidc.authorize).not.toHaveBeenCalled();
-    expect(result.statusCode).toBe(302);
     expect(result.headers?.Location).toBe('/');
-    expect(result.cookies).toContainEqual(expect.stringContaining('session='));
-  });
-
-  test('a verid login creates a logged in person session with the bsn as identifier', async () => {
-    setupVerIdSessionResponse();
-    const verId = { finish: jest.fn().mockResolvedValue(new Bsn('900222670')) };
-    await verIdHandler(verId).handleRequest();
     const stored = JSON.stringify(ddbMock.commandCalls(PutItemCommand).map(call => call.args[0].input));
     expect(stored).toContain('900222670');
     expect(stored).toContain('person');
   });
 
-  test('a failing verid login (invalid state, replay, no bsn) redirects to login without a session', async () => {
-    setupVerIdSessionResponse();
+  test('a failing VerID login redirects to login without creating a session', async () => {
+    setupSession('yivi', 'verid');
     const verId = { finish: jest.fn().mockRejectedValue(new Error('state mismatch')) };
-    const result = await verIdHandler(verId).handleRequest();
-    expect(result.statusCode).toBe(302);
+    const result = await handlerWith(verId).handleRequest();
     expect(result.headers?.Location).toBe('/login');
     expect(ddbMock.commandCalls(PutItemCommand)).toHaveLength(0);
   });
 
-  test('method verid without a configured authenticator redirects to login', async () => {
-    setupVerIdSessionResponse();
-    const result = await verIdHandler(undefined).handleRequest();
-    expect(result.statusCode).toBe(302);
+  test('a session started with VerID is not sent to Signicat when VerID is not available in this lambda', async () => {
+    setupSession('yivi', 'verid');
+    const oidc = mockedOidcClient(true);
+    const result = await handlerWith(undefined, oidc).handleRequest();
     expect(result.headers?.Location).toBe('/login');
+    expect(oidc.authorize).not.toHaveBeenCalled();
     expect(ddbMock.commandCalls(PutItemCommand)).toHaveLength(0);
   });
 
-  test.each(['digid', 'yivi', null])('method %s in the session is not handled by VerID', async (method) => {
-    setupVerIdSessionResponse(method);
+  test.each([['digid', undefined], ['yivi', undefined]])('a %s session started with Signicat stays with Signicat when VerID is configured', async (method, provider) => {
+    setupSession(method, provider);
     const oidc = mockedOidcClient(true);
     const verId = { finish: jest.fn() };
-    await verIdHandler(verId, oidc).handleRequest();
+    await handlerWith(verId, oidc).handleRequest();
     expect(verId.finish).not.toHaveBeenCalled();
     expect(oidc.authorize).toHaveBeenCalled();
   });

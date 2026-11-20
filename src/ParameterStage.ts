@@ -71,7 +71,7 @@ export class ssmParamsConstruct extends Construct {
     new SSM.StringParameter(this, 'ssm_use_yivi_verid', {
       stringValue: 'false',
       parameterName: Statics.ssmUseYiviVerId,
-      description: 'Feature flag: show the VerID (multi wallet) login on the login page (true/false)',
+      description: 'Feature flag: the Yivi button logs in via VerID (multi wallet), takes precedence over useYiviSignicat (true/false)',
     });
 
     /**

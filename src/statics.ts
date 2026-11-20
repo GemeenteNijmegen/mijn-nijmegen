@@ -37,7 +37,7 @@ export abstract class Statics {
 
   /**
    * Feature flag (resolved at deploy time, so changing it needs a redeploy):
-   * 'true' shows the VerID (multi wallet) login on the login page.
+   * 'true' makes the Yivi button log in via VerID (multi wallet) instead of Signicat.
    */
   static readonly ssmUseYiviVerId: string = '/cdk/mijn-nijmegen/useYiviVerId';
 

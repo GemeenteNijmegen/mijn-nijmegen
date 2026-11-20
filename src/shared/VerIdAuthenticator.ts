@@ -53,7 +53,7 @@ export class VerIdAuthenticator {
       throw Error(`Unexpected VerID token format: ${result.format}`);
     }
 
-    const nin = (result.payload as { nin?: { identifier?: string; identifier_type?: string } }).nin;
+    const nin = result.payload.nin;
     if (nin?.identifier_type !== 'NL_BSN' || !nin.identifier) {
       throw Error('No BSN (nin of type NL_BSN) in VerID token');
     }

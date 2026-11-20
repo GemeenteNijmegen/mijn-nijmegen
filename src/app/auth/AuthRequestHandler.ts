@@ -11,7 +11,7 @@ import { OpenKlantApi } from '../../shared/OpenKlantApi';
 import { Organisation, Person, User } from '../../shared/User';
 import { VerIdAuthenticator } from '../../shared/VerIdAuthenticator';
 
-type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning' | 'verid';
+type AuthenticationMethod = 'yivi' | 'digid' | 'eherkenning';
 const eHerkenningKvkNummerClaim = 'urn:etoegang:1.9:EntityConcernedID:KvKnr';
 const eHerkenningCompanyNameClaim = 'urn:etoegang:1.11:attribute-represented:CompanyName';
 
@@ -43,7 +43,7 @@ export interface AuthRequestHandlerProps {
   haalCentraalApi: HaalCentraalApi;
 
   /**
-   * Authenticator for logins that were started with VerID (session method `verid`).
+   * When set (the VerID feature flag is on), logins that were started with VerID can be finished.
    */
   verIdAuthenticator?: VerIdAuthenticator;
 
@@ -82,10 +82,9 @@ export class AuthRequestHandler {
 
     // Start validation of the request
     const state = session.getValue('state');
-    const method = session.getValue('method');
     try {
 
-      const user = method === 'verid'
+      const user = session.getValue('provider') === 'verid'
         ? await this.userFromVerIdLogin(state)
         : this.userFromAuthResult(await this.config.OpenIdConnect.authorize(this.config.fullUrl, state));
       if (!user) {
@@ -137,7 +136,7 @@ export class AuthRequestHandler {
    */
   private async userFromVerIdLogin(state: string | undefined): Promise<User> {
     if (!this.config.verIdAuthenticator) {
-      throw Error('VerID login requested but VerID is not configured');
+      throw Error('Login was started with VerID but VerID is not available');
     }
     const bsn = await this.config.verIdAuthenticator.finish(this.config.fullUrl, state);
     new Logger({ serviceName: 'mijnnijmegen' }).info('auth succesful', { method: 'verid' });
