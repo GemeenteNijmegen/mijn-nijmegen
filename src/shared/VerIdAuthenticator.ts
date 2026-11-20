@@ -1,5 +1,6 @@
 import { Bsn } from '@gemeentenijmegen/utils';
 import type { VeridAuthenticationClient } from '@ver-id/node-client';
+import { logger } from './Logger';
 
 export interface VerIdAuthenticatorProps {
   /**
@@ -32,6 +33,7 @@ export class VerIdAuthenticator {
    * compared on the callback.
    */
   async start(): Promise<{ url: string; state: string }> {
+    logger.debug('Starting VerID login');
     const { url, state } = await this.client.createSession({ scope: SCOPE });
     return { url, state };
   }
@@ -44,6 +46,7 @@ export class VerIdAuthenticator {
    * @param expectedState the state stored in the session when the login was started
    */
   async finish(callbackUrl: URL, expectedState: string | undefined): Promise<Bsn> {
+    logger.debug('Finishing VerID login');
     if (!expectedState || callbackUrl.searchParams.get('state') !== expectedState) {
       throw Error('VerID callback state does not match the state of this session');
     }

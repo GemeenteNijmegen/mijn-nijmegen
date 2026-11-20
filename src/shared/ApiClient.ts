@@ -1,6 +1,7 @@
 import https from 'https';
 import { AWS } from '@gemeentenijmegen/utils';
 import axios, { AxiosInstance } from 'axios';
+import { logger } from './Logger';
 
 export interface ApiClientOptions {
   /**
@@ -154,7 +155,7 @@ export class ApiClient {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log('http status for ' + endpoint + ': ' + error.response.status);
+        logger.info('http status for ' + endpoint + ': ' + error.response.status);
       } else if (error?.code === 'ECONNABORTED') {
         // Check for a timeout
         throw new Error('Het ophalen van gegevens duurt te lang.');
@@ -162,13 +163,13 @@ export class ApiClient {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        console.error(error?.code);
+        logger.error('Error occurred while making request to ' + endpoint, { error: error?.code });
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.error(error.message);
+        logger.error('Error occurred while making request to ' + endpoint, { error: error.message });
       }
     } else {
-      console.error(error.message);
+      logger.error('Error occurred while making request to ' + endpoint, { error: error.message });
     }
 
     throw new Error('Het ophalen van gegevens is misgegaan.');
