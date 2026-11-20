@@ -136,7 +136,7 @@ export async function handler(event: any, context?: Context): Promise<ApiGateway
     return await requestHandler.handleRequest(params);
 
   } catch (err) {
-    console.debug(err);
+    logger.error('Error occurred while handling persoonsgegevens request', { error: err });
     return Response.error(500);
   }
 };
