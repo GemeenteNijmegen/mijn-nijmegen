@@ -8,46 +8,26 @@ Cold start login/auth lambda: verIdAuthenticatorFromEnv() bouwt de client (issue
 sequenceDiagram
   autonumber
   actor U as Browser
-  participant L as Login lambda (/login)
-  participant A as Auth lambda (/auth)
-  participant C as @ver-id/node-client
-  participant VC as DynamoDB VERID_CACHE_TABLE
-  participant S as DynamoDB sessions table
+  participant L as /login
+  participant A as /auth
+  participant VC as VerID cache
+  participant S as Sessies
   participant V as VerID
-  participant Y as Yivi app
 
-  U->>L: GET /login?method=yivi
-  L->>S: session.init() (al ingelogd: redirect /)
-  L->>C: VerIdAuthenticator.start(): createSession({scope: "openid nin"})
-  C->>C: code_verifier = oauth4webapi.generateRandomCodeVerifier()<br/>code_challenge = S256(code_verifier)
-  C->>V: createIntent(client_id, code_challenge, scope) + client secret
-  V-->>C: intent_id
-  C->>C: state = generateRandomState()
-  C->>VC: save(state → code_verifier)
-  C-->>L: { url, state }
-  L->>S: createSession(loggedin=false, state, method=yivi, provider=verid)
-  L-->>U: 302 naar VerID url + sessiecookie (SameSite=Lax)
-
-  U->>V: Hosted VerID flow
-  V->>Y: QR / deeplink: nin (BSN) delen
-  Y-->>V: Disclosure
-  V-->>U: 302 naar VERID_REDIRECT_URL (/auth?code&state)
-
-  U->>A: GET /auth?code=…&state=…
-  A->>S: session.init(): state en provider lezen
-  Note over A: provider = verid: userFromVerIdLogin(state)<br/>(anders het bestaande OIDC-pad)
-  A->>A: VerIdAuthenticator.finish(): callback state == sessie state?
-  A->>C: finishSession({ callbackUrl })
-  C->>VC: get(state): code_verifier
-  C->>V: Token request (code + code_verifier + client secret)
-  V-->>C: Token (openid)
-  C->>VC: save(state → ontvangen token + hash van code)
-  C->>V: Keys ophalen, token verifiëren
-  C->>VC: remove(state)
-  C-->>A: { format: "openid", payload.nin }
-  A->>A: nin.identifier_type == NL_BSN: Bsn → Person
-  A->>S: createSession(loggedin=true, identifier, bsn, user_type, username, xsrf_token [, email, telefoon])
-  A-->>U: 302 naar / + sessiecookie
+  U->>L: Inloggen met Yivi
+  L->>V: Intent met code_challenge
+  L->>VC: Bewaar verifier onder state
+  L->>S: Sessie met state
+  L-->>U: Redirect naar VerID
+  U->>V: BSN delen met Yivi-app
+  V-->>U: Redirect naar /auth met code
+  U->>A: code + state
+  A->>S: Check state
+  A->>VC: Haal verifier op
+  A->>V: Wissel code in
+  V-->>A: Token met BSN
+  A->>S: Ingelogde sessie
+  A-->>U: Redirect naar /
 ```
 
 ## Waar de flow kan stoppen
