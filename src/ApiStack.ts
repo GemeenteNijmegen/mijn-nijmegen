@@ -1,7 +1,7 @@
-import { aws_secretsmanager, Duration, Stack, StackProps } from 'aws-cdk-lib';
+import { aws_secretsmanager, Duration, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import * as apigatewayv2 from 'aws-cdk-lib/aws-apigatewayv2';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
-import { Table } from 'aws-cdk-lib/aws-dynamodb';
+import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { ISecret, Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { IStringParameter, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
@@ -49,6 +49,8 @@ export interface ApiStackProps extends StackProps, Configurable {
  */
 export class ApiStack extends Stack implements Configurable {
   private sessionsTable: Table;
+  private verIdCacheTable: Table;
+  private verIdClientSecret: ISecret;
   private zakenApiKey?: ISecret;
   private baseUrl: string;
   configuration: Configuration;
@@ -71,7 +73,35 @@ export class ApiStack extends Stack implements Configurable {
     const subdomain = Statics.subDomain(props.branch);
     this.baseUrl = `https://${subdomain}.nijmegen.nl`;
 
+    // Short lived PKCE verifiers of VerID logins: shared between the login and auth lambda
+    this.verIdCacheTable = new Table(this, 'verid-cache-table', {
+      partitionKey: { name: 'pk', type: AttributeType.STRING },
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      timeToLiveAttribute: 'ttl',
+      removalPolicy: RemovalPolicy.DESTROY, // Only holds unfinished logins
+    });
+    this.verIdClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'verid-client-secret', Statics._VerIdClientSecret);
+
     this.setFunctions(props.configuration);
+  }
+
+  /**
+   * Environment for lambdas that start or finish a VerID login (login and auth)
+   */
+  private verIdEnvironment() {
+    return {
+      USE_YIVI_VERID: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviVerId), // Feature flag for VerID login
+      VERID_ISSUER_URI: StringParameter.valueForStringParameter(this, Statics._VerIdIssuerUri),
+      VERID_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics._VerIdClientId),
+      VERID_REDIRECT_URL: StringParameter.valueForStringParameter(this, Statics._VerIdRedirectUrl),
+      VERID_CLIENT_SECRET_ARN: this.verIdClientSecret.secretArn,
+      VERID_CACHE_TABLE: this.verIdCacheTable.tableName,
+    };
+  }
+
+  private grantVerIdAccess(lambda: ApiFunction['lambda']) {
+    this.verIdClientSecret.grantRead(lambda);
+    this.verIdCacheTable.grantReadWriteData(lambda);
   }
 
   /**
@@ -293,9 +323,11 @@ export class ApiStack extends Stack implements Configurable {
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
         USE_GEMACHTIGD: this.configuration.useGemachtigd ? 'true' : 'false',
         USE_YIVI_SIGNICAT: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviSignicat),
+        ...this.verIdEnvironment(),
       },
     });
     oidcSecret.grantRead(loginFunction.lambda);
+    this.grantVerIdAccess(loginFunction.lambda);
     return loginFunction;
   }
 
@@ -348,6 +380,7 @@ export class ApiStack extends Stack implements Configurable {
         YIVI_KVK_NAME_ATTRIBUTE: StringParameter.valueForStringParameter(this, Statics.ssmYiviKvkNameAttribute),
         YIVI_KVK_NUMBER_ATTRIBUTE: StringParameter.valueForStringParameter(this, Statics.ssmYiviKvkNumberAttribute),
         USE_YIVI_KVK: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviKvk),
+        ...this.verIdEnvironment(),
 
         // Haal Centraal
         HAAL_CENTRAAL_CERT_SSM: haalCentraalConfig.clientCert.parameterName,
@@ -371,6 +404,7 @@ export class ApiStack extends Stack implements Configurable {
     openKlantConfig.apiKey.grantRead(authFunction.lambda);
     openKlantConfig.endpoint.grantRead(authFunction.lambda);
     oidcSecret.grantRead(authFunction.lambda);
+    this.grantVerIdAccess(authFunction.lambda);
 
     return authFunction;
   }

@@ -110,11 +110,45 @@ test('LoginLambdaGetsuseYiviSignicatFlagFromSsmAtDeployTime', () => {
 });
 
 
+test('VerIdParametersExist', () => {
+  const app = new App();
+  const stack = new ParameterStack(app, 'test', { configuration: config });
+  const template = Template.fromStack(stack);
+  template.hasResourceProperties('AWS::SSM::Parameter', { Name: '/cdk/mijn-nijmegen/useYiviVerId', Value: 'false' });
+  for (const name of ['issuer-uri', 'client-id', 'redirect-url']) {
+    template.hasResourceProperties('AWS::SSM::Parameter', { Name: `/cdk/mijn-nijmegen/verid/${name}` });
+  }
+});
+
+test('VerIdWiredIntoLoginAndAuthLambdas', () => {
+  const app = new App();
+  const keyStack = new KeyStack(app, 'keystack');
+  const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key });
+  new DNSStack(app, 'dns', { env: mockEnv, configuration: config });
+  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'test', configuration: config });
+  const template = Template.fromStack(stack);
+
+  // Verifier store: partition key pk, TTL on ttl
+  template.hasResourceProperties('AWS::DynamoDB::Table', {
+    KeySchema: [{ AttributeName: 'pk', KeyType: 'HASH' }],
+    TimeToLiveSpecification: { AttributeName: 'ttl', Enabled: true },
+    BillingMode: 'PAY_PER_REQUEST',
+  });
+
+  const verIdEnv = ['USE_YIVI_VERID', 'VERID_ISSUER_URI', 'VERID_CLIENT_ID', 'VERID_REDIRECT_URL', 'VERID_CLIENT_SECRET_ARN', 'VERID_CACHE_TABLE'];
+  for (const description of ['Login-pagina voor de Mijn Nijmegen-applicatie.', 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.']) {
+    template.hasResourceProperties('AWS::Lambda::Function', {
+      Description: description,
+      Environment: { Variables: Match.objectLike(Object.fromEntries(verIdEnv.map(name => [name, Match.anyValue()]))) },
+    });
+  }
+});
+
 test('StackHasParameters', () => {
   const app = new App();
   const stack = new ParameterStack(app, 'test', { configuration: config });
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::SSM::Parameter', 29);
+  template.resourceCountIs('AWS::SSM::Parameter', 33);
   template.hasResourceProperties('AWS::SSM::Parameter', {
     Name: '/cdk/mijn-nijmegen/useYiviSignicat',
     Value: 'true',
@@ -126,7 +160,8 @@ test('StackHasSecrets', () => {
   const app = new App();
   const stack = new ParameterStack(app, 'test', { configuration: config });
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::SecretsManager::Secret', 10);
+  template.resourceCountIs('AWS::SecretsManager::Secret', 11);
+  template.hasResourceProperties('AWS::SecretsManager::Secret', { Name: '/cdk/mijn-nijmegen/verid/clientsecret' });
 });
 
 

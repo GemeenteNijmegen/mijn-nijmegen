@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { DynamoDBClient, GetItemCommand, GetItemCommandOutput } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, GetItemCommand, GetItemCommandOutput, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { GetSecretValueCommand, GetSecretValueCommandOutput, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { Bsn } from '@gemeentenijmegen/utils';
 import { mockClient } from 'aws-sdk-client-mock';
@@ -110,6 +110,78 @@ function setupSessionResponse(loggedin: boolean) {
   };
   ddbMock.on(GetItemCommand).resolves(getItemOutput);
 }
+
+function setupVerIdSessionResponse(method: string | null = 'verid') {
+  const data: any = {
+    loggedin: { BOOL: false },
+    state: { S: 'verid-state' },
+  };
+  if (method) {
+    data.method = { S: method };
+  }
+  ddbMock.on(GetItemCommand).resolves({ Item: { data: { M: data } } });
+}
+
+function verIdHandler(verIdAuthenticator: any, oidc = mockedOidcClient(true)) {
+  return new AuthRequestHandler({
+    cookies: `session=${sessionId}`,
+    fullUrl: new URL('https://localhost/auth?state=verid-state&code=abcdef'),
+    dynamoDBClient: new DynamoDBClient({ region: 'eu-west-1' }),
+    haalCentraalApi: new HaalCentraalApi({ baseUrl: 'https://localhost', apiclient: apiClient }),
+    OpenIdConnect: oidc,
+    verIdAuthenticator,
+    ...scopesAndAttributes,
+  });
+}
+
+describe('VerID logins', () => {
+  test('method verid in the session is handled by VerID and not by Signicat', async () => {
+    setupVerIdSessionResponse();
+    const oidc = mockedOidcClient(true);
+    const verId = { finish: jest.fn().mockResolvedValue(new Bsn('900222670')) };
+    const result = await verIdHandler(verId, oidc).handleRequest();
+    expect(verId.finish).toHaveBeenCalledWith(new URL('https://localhost/auth?state=verid-state&code=abcdef'), 'verid-state');
+    expect(oidc.authorize).not.toHaveBeenCalled();
+    expect(result.statusCode).toBe(302);
+    expect(result.headers?.Location).toBe('/');
+    expect(result.cookies).toContainEqual(expect.stringContaining('session='));
+  });
+
+  test('a verid login creates a logged in person session with the bsn as identifier', async () => {
+    setupVerIdSessionResponse();
+    const verId = { finish: jest.fn().mockResolvedValue(new Bsn('900222670')) };
+    await verIdHandler(verId).handleRequest();
+    const stored = JSON.stringify(ddbMock.commandCalls(PutItemCommand).map(call => call.args[0].input));
+    expect(stored).toContain('900222670');
+    expect(stored).toContain('person');
+  });
+
+  test('a failing verid login (invalid state, replay, no bsn) redirects to login without a session', async () => {
+    setupVerIdSessionResponse();
+    const verId = { finish: jest.fn().mockRejectedValue(new Error('state mismatch')) };
+    const result = await verIdHandler(verId).handleRequest();
+    expect(result.statusCode).toBe(302);
+    expect(result.headers?.Location).toBe('/login');
+    expect(ddbMock.commandCalls(PutItemCommand)).toHaveLength(0);
+  });
+
+  test('method verid without a configured authenticator redirects to login', async () => {
+    setupVerIdSessionResponse();
+    const result = await verIdHandler(undefined).handleRequest();
+    expect(result.statusCode).toBe(302);
+    expect(result.headers?.Location).toBe('/login');
+    expect(ddbMock.commandCalls(PutItemCommand)).toHaveLength(0);
+  });
+
+  test.each(['digid', 'yivi', null])('method %s in the session is not handled by VerID', async (method) => {
+    setupVerIdSessionResponse(method);
+    const oidc = mockedOidcClient(true);
+    const verId = { finish: jest.fn() };
+    await verIdHandler(verId, oidc).handleRequest();
+    expect(verId.finish).not.toHaveBeenCalled();
+    expect(oidc.authorize).toHaveBeenCalled();
+  });
+});
 
 describe('Auth handler', () => {
   test('Successful auth redirects to home', async () => {
