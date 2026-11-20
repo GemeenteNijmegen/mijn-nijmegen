@@ -1,4 +1,3 @@
-import { Logger } from '@aws-lambda-powertools/logger';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
@@ -6,6 +5,7 @@ import { Bsn } from '@gemeentenijmegen/utils';
 
 
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
+import { logger } from '../../shared/Logger';
 import { OpenIDConnect, OpenIDConnectResult } from '../../shared/OpenIDConnect';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
 import { Organisation, Person, User } from '../../shared/User';
@@ -69,7 +69,7 @@ export class AuthRequestHandler {
 
     // Handle errors and cancelation by IdP
     if (this.config.queryStringParamError) {
-      console.log('Not starting authentication: ', this.config.queryStringParamError);
+      logger.info('Login cancelled or rejected by the identity provider', { reason: this.config.queryStringParamError });
       return Response.redirect('/login');
     }
 
@@ -77,17 +77,25 @@ export class AuthRequestHandler {
     let session = new Session(this.config.cookies, this.config.dynamoDBClient);
     await session.init();
     if (session.sessionId === false) {
+      // Expired cookie, back button or a bot: not an application error
+      logger.warn('No session on the auth callback, back to login');
       return Response.redirect('/login');
     }
 
     // Start validation of the request
     const state = session.getValue('state');
+    const provider = session.getValue('provider');
     try {
+      logger.debug('Finishing login', { provider });
+      let user;
+      if (provider === 'verid') {
+        user = await this.userFromVerIdLogin(state);
+      } else {
+        user = this.userFromAuthResult(await this.config.OpenIdConnect.authorize(this.config.fullUrl, state));
+      }
 
-      const user = session.getValue('provider') === 'verid'
-        ? await this.userFromVerIdLogin(state)
-        : this.userFromAuthResult(await this.config.OpenIdConnect.authorize(this.config.fullUrl, state));
       if (!user) {
+        logger.warn('Login result has no usable user, back to login', { provider });
         return Response.redirect('/login');
       }
 
@@ -114,18 +122,18 @@ export class AuthRequestHandler {
               sessionData.phonenumber = { S: contactInfo.phonenumber };
             }
           } catch (error) {
-            console.log('Failed to fetch contact info from OpenKlant, continuing without', error);
+            logger.warn('Fetching contact info from OpenKlant failed, continuing without', { error });
           }
         }
 
         await session.createSession(sessionData);
       } catch (error: any) {
-        console.error('creating session failed', error);
+        logger.error('Creating the logged-in session failed', { provider, error });
         return Response.error(500);
       }
 
     } catch (error: any) {
-      console.error(error.message);
+      logger.error('Login failed', { provider, error });
       return Response.redirect('/login');
     }
     return Response.redirect('/', 302, [session.getCookie({ sameSite: 'lax' })]);
@@ -139,12 +147,11 @@ export class AuthRequestHandler {
       throw Error('Login was started with VerID but VerID is not available');
     }
     const bsn = await this.config.verIdAuthenticator.finish(this.config.fullUrl, state);
-    new Logger({ serviceName: 'mijnnijmegen' }).info('auth succesful', { method: 'verid' });
+    logger.info('auth succesful', { method: 'verid' });
     return new Person(bsn, { haalCentraal: this.config.haalCentraalApi });
   }
 
   private logAuthMethod(authResult: OpenIDConnectResult) {
-    const logger = new Logger({ serviceName: 'mijnnijmegen' });
     if (authResult.claims.hasOwnProperty('acr') && authResult.claims.hasOwnProperty('amr')) {
       logger.info('auth succesful', { loa: authResult.claims.acr, method: authResult.claims.amr });
     }
@@ -187,7 +194,7 @@ export class AuthRequestHandler {
     let kvkNameAttribute = this.config.yiviKvkNameAttribute;
     const yiviKvkClaim = authResult.claims[kvkNumberAttribute] as string;
     const yiviNameClaim = authResult.claims[kvkNameAttribute] as string;
-    console.log(yiviKvkClaim, yiviNameClaim);
+    logger.debug('Yivi kvk claims', { hasKvkClaim: !!yiviKvkClaim, hasNameClaim: !!yiviNameClaim });
     if (yiviKvkClaim && yiviNameClaim && Number.isInteger(parseInt(yiviKvkClaim))) {
       return { kvkNumber: yiviKvkClaim, organisationName: yiviNameClaim };
     }
@@ -223,6 +230,7 @@ export class AuthRequestHandler {
     if (authMethod == 'yivi') {
       const bsnClaim = authResult.claims[this.config.yiviBsnAttribute];
       const kvkClaim = authResult.claims[this.config.yiviKvkNumberAttribute];
+      logger.debug('Yivi claims', { hasBsnClaim: !!bsnClaim, hasKvkClaim: !!kvkClaim });
       if (bsnClaim) {
         bsn = this.bsnFromYiviLogin(authResult);
       }
@@ -264,7 +272,7 @@ export class AuthRequestHandler {
    * @returns authentication method that is used
    */
   authMethodFromScope(scopes: string[]): AuthenticationMethod {
-    console.log('Scopes', scopes);
+    logger.debug('Scopes', { scopes });
     const fullScope = scopes.join(' ');
     if (fullScope.includes(this.config.yiviScope)) {
       return 'yivi';

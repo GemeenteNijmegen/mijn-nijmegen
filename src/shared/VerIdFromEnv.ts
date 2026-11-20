@@ -2,6 +2,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { AWS } from '@gemeentenijmegen/utils';
 import { DynamoDBCacheManager, VeridAuthenticationClient } from '@ver-id/node-client';
+import { logger } from './Logger';
 import { VerIdAuthenticator } from './VerIdAuthenticator';
 
 /**
@@ -28,9 +29,10 @@ export async function verIdAuthenticatorFromEnv(): Promise<VerIdAuthenticator | 
         options: { ttlSeconds: 600 },
       }),
     });
+    logger.debug('VerID authenticator ready');
     return new VerIdAuthenticator({ client });
   } catch (error) {
-    console.error('VerID is enabled but could not be set up, VerID login is not available', error);
+    logger.error('VerID is enabled but could not be set up, VerID login is not available', { error });
     return undefined;
   }
 }

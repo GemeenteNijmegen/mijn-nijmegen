@@ -2,10 +2,11 @@ import process from 'process';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { APIGatewayProxyEventV2, Context } from 'aws-lambda';
 import { AuthRequestHandler } from './AuthRequestHandler';
 import { ApiClient as ApiClientV2 } from '../../shared/ApiClient';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
+import { logger } from '../../shared/Logger';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
 import { VerIdAuthenticator } from '../../shared/VerIdAuthenticator';
@@ -83,7 +84,8 @@ function parseEvent(event: APIGatewayProxyEventV2) {
   };
 }
 
-export async function handler(event: APIGatewayProxyEventV2): Promise<ApiGatewayV2Response> {
+export async function handler(event: APIGatewayProxyEventV2, context?: Context): Promise<ApiGatewayV2Response> {
+  if (context) logger.addContext(context);
   await initaliation;
 
   if (!OIDC || !haalCentraalApi) {
@@ -112,7 +114,7 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<ApiGateway
     });
     return await requestHandler.handleRequest();
   } catch (err) {
-    console.error(err);
+    logger.error('Error occurred while handling auth request', { error: err });
     return Response.error(500);
   }
 }

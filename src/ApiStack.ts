@@ -86,6 +86,11 @@ export class ApiStack extends Stack implements Configurable {
     this.verIdClientSecret = aws_secretsmanager.Secret.fromSecretNameV2(this, 'verid-client-secret', Statics._VerIdClientSecret);
 
     this.setFunctions(props.configuration);
+
+    // Level of the shared Powertools logger for every function (DEBUG only where configured: development)
+    this.node.findAll()
+      .filter((construct): construct is ApiFunction => construct instanceof ApiFunction)
+      .forEach(apiFunction => apiFunction.lambda.addEnvironment('POWERTOOLS_LOG_LEVEL', props.configuration.logLevel ?? 'INFO'));
   }
 
   /**
