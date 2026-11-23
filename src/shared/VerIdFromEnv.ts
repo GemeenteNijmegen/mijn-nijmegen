@@ -3,7 +3,7 @@ import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { AWS } from '@gemeentenijmegen/utils';
 import { DynamoDBCacheManager, VeridAuthenticationClient } from '@ver-id/node-client';
 import { logger } from './Logger';
-import { VerIdAuthenticator } from './VerIdAuthenticator';
+import { hasTestNin, VerIdAuthenticator } from './VerIdAuthenticator';
 
 /**
  * Build the VerID authenticator for the login and auth lambdas from their environment.
@@ -14,6 +14,10 @@ import { VerIdAuthenticator } from './VerIdAuthenticator';
  */
 export async function verIdAuthenticatorFromEnv(): Promise<VerIdAuthenticator | undefined> {
   if (process.env.USE_YIVI_VERID !== 'true') {
+    return undefined;
+  }
+  if (hasTestNin(process.env.VERID_SCOPE ?? '') && process.env.VERID_ALLOW_TEST_NIN !== 'true') {
+    logger.error('VerID scope testNin (demo wallets) is not allowed in this environment, VerID login is not available');
     return undefined;
   }
   try {

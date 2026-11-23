@@ -1,5 +1,5 @@
 import { Bsn } from '@gemeentenijmegen/utils';
-import type { VeridAuthenticationClient } from '@ver-id/node-client';
+import type { OpenIdJwtPayload, VeridAuthenticationClient } from '@ver-id/node-client';
 import { logger } from './Logger';
 
 export interface VerIdAuthenticatorProps {
@@ -12,11 +12,20 @@ export interface VerIdAuthenticatorProps {
 
   /**
    * Scopes requested from VerID, per environment (dev uses test wallets).
-   * `nin` makes the wallet disclose the national identification number (BSN) as `nin.identifier`.
+   * `nin` makes the wallet disclose the national identification number (BSN) as `nin.identifier`,
+   * `testNin` (demo wallets) discloses it as `testNin.identifier` instead.
    * @default 'openid nin'
    */
   scope?: string;
 }
+
+/** True when the scope asks for the demo identifier (testNin) demo wallets */
+export function hasTestNin(scope: string): boolean {
+  return scope.split(/\s+/).includes('testNin');
+}
+
+/** The SDK payload type does not know the testNin claim (same shape as nin) */
+type VerIdPayload = OpenIdJwtPayload & { testNin?: OpenIdJwtPayload['nin'] };
 
 /**
  * Thin wrapper around the VerID OAuth (code + PKCE) client for the login and
@@ -25,10 +34,13 @@ export interface VerIdAuthenticatorProps {
 export class VerIdAuthenticator {
   private readonly client: VerIdAuthenticatorProps['client'];
   private readonly scope: string;
+  private readonly ninClaim: 'nin' | 'testNin';
 
   constructor(props: VerIdAuthenticatorProps) {
     this.client = props.client;
     this.scope = props.scope ?? 'openid nin';
+    // Read testNin (demo wallets) only when we asked for it, so production never falls back to it
+    this.ninClaim = hasTestNin(this.scope) ? 'testNin' : 'nin';
   }
 
   /**
@@ -59,9 +71,10 @@ export class VerIdAuthenticator {
       throw Error(`Unexpected VerID token format: ${result.format}`);
     }
 
-    const nin = result.payload.nin;
+    const payload: VerIdPayload = result.payload;
+    const nin = payload[this.ninClaim];
     if (nin?.identifier_type !== 'NL_BSN' || !nin.identifier) {
-      throw Error('No BSN (nin of type NL_BSN) in VerID token');
+      throw Error(`No BSN (${this.ninClaim} of type NL_BSN) in VerID token`);
     }
     return new Bsn(nin.identifier);
   }

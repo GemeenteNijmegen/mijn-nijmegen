@@ -35,6 +35,29 @@ describe('VerIdAuthenticator', () => {
     expect(client.finishSession).toHaveBeenCalledWith({ callbackUrl: CALLBACK });
   });
 
+  test('finish returns the bsn from testNin.identifier when the testNin scope is configured', async () => {
+    const client = fakeClient({
+      finishSession: jest.fn().mockResolvedValue({
+        format: 'openid',
+        payload: { sub: 'x', testNin: { identifier: VALID_BSN, identifier_type: 'NL_BSN' } },
+        rawToken: 'jwt',
+      }),
+    });
+    const bsn = await new VerIdAuthenticator({ client, scope: 'openid testNin' }).finish(CALLBACK, 'the-state');
+    expect(bsn.bsn).toBe(VALID_BSN);
+  });
+
+  test('finish ignores testNin when the testNin scope is not configured', async () => {
+    const client = fakeClient({
+      finishSession: jest.fn().mockResolvedValue({
+        format: 'openid',
+        payload: { sub: 'x', testNin: { identifier: VALID_BSN, identifier_type: 'NL_BSN' } },
+        rawToken: 'jwt',
+      }),
+    });
+    await expect(new VerIdAuthenticator({ client }).finish(CALLBACK, 'the-state')).rejects.toThrow('BSN');
+  });
+
   test('finish rejects a callback whose state differs from the stored state', async () => {
     const client = fakeClient();
     await expect(new VerIdAuthenticator({ client }).finish(CALLBACK, 'other-state'))
