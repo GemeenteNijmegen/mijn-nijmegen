@@ -118,6 +118,7 @@ test('VerIdParametersExist', () => {
   for (const name of ['issuer-uri', 'client-id', 'redirect-url']) {
     template.hasResourceProperties('AWS::SSM::Parameter', { Name: `/cdk/mijn-nijmegen/verid/${name}` });
   }
+  template.hasResourceProperties('AWS::SSM::Parameter', { Name: '/cdk/mijn-nijmegen/verid/scope', Value: 'openid nin' });
 });
 
 test('VerIdWiredIntoLoginAndAuthLambdas', () => {
@@ -137,7 +138,7 @@ test('VerIdWiredIntoLoginAndAuthLambdas', () => {
     SSESpecification: { SSEEnabled: true, SSEType: 'KMS' },
   });
 
-  const verIdEnv = ['USE_YIVI_VERID', 'VERID_ISSUER_URI', 'VERID_CLIENT_ID', 'VERID_REDIRECT_URL', 'VERID_CLIENT_SECRET_ARN', 'VERID_CACHE_TABLE'];
+  const verIdEnv = ['USE_YIVI_VERID', 'VERID_ISSUER_URI', 'VERID_CLIENT_ID', 'VERID_REDIRECT_URL', 'VERID_SCOPE', 'VERID_CLIENT_SECRET_ARN', 'VERID_CACHE_TABLE'];
   for (const description of ['Login-pagina voor de Mijn Nijmegen-applicatie.', 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.']) {
     template.hasResourceProperties('AWS::Lambda::Function', {
       Description: description,
@@ -167,7 +168,7 @@ test('StackHasParameters', () => {
   const app = new App();
   const stack = new ParameterStack(app, 'test', { configuration: config });
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::SSM::Parameter', 33);
+  template.resourceCountIs('AWS::SSM::Parameter', 34);
   template.hasResourceProperties('AWS::SSM::Parameter', {
     Name: '/cdk/mijn-nijmegen/useYiviSignicat',
     Value: 'true',

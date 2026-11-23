@@ -102,6 +102,7 @@ export class ApiStack extends Stack implements Configurable {
       VERID_ISSUER_URI: StringParameter.valueForStringParameter(this, Statics._VerIdIssuerUri),
       VERID_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics._VerIdClientId),
       VERID_REDIRECT_URL: StringParameter.valueForStringParameter(this, Statics._VerIdRedirectUrl),
+      VERID_SCOPE: StringParameter.valueForStringParameter(this, Statics._VerIdScope),
       VERID_CLIENT_SECRET_ARN: this.verIdClientSecret.secretArn,
       VERID_CACHE_TABLE: this.verIdCacheTable.tableName,
     };
