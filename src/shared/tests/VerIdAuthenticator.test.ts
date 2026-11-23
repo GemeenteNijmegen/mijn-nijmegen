@@ -24,8 +24,8 @@ describe('VerIdAuthenticator', () => {
 
   test('start requests the configured scope', async () => {
     const client = fakeClient();
-    await new VerIdAuthenticator({ client, scope: 'openid testnin' }).start();
-    expect(client.createSession).toHaveBeenCalledWith({ scope: 'openid testnin' });
+    await new VerIdAuthenticator({ client, scope: 'openid testNin' }).start();
+    expect(client.createSession).toHaveBeenCalledWith({ scope: 'openid testNin' });
   });
 
   test('finish returns the bsn from nin.identifier', async () => {
