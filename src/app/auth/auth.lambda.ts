@@ -2,12 +2,15 @@ import process from 'process';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { APIGatewayProxyEventV2, Context } from 'aws-lambda';
 import { AuthRequestHandler } from './AuthRequestHandler';
 import { ApiClient as ApiClientV2 } from '../../shared/ApiClient';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
+import { logger } from '../../shared/Logger';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
+import { VerIdAuthenticator } from '../../shared/VerIdAuthenticator';
+import { verIdAuthenticatorFromEnv } from '../../shared/VerIdFromEnv';
 
 // --- Dev-only import ---
 
@@ -16,6 +19,7 @@ const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 let OIDC: OpenIDConnect | undefined = undefined;
 let haalCentraalApi: HaalCentraalApi | undefined = undefined;
 let openKlantApi: OpenKlantApi | undefined = undefined;
+let verIdAuthenticator: VerIdAuthenticator | undefined = undefined;
 
 async function init() {
   const haalCentraalValues = environmentVariables([
@@ -64,6 +68,9 @@ async function init() {
     wellknown: process.env.OIDC_WELL_KNOWN!,
     clientSecret: await AWS.getSecret(process.env.OIDC_CLIENT_SECRET_ARN!),
   });
+
+  // Undefined when VerID is disabled or not set up, never fails the other login methods
+  verIdAuthenticator = await verIdAuthenticatorFromEnv();
 }
 
 const initaliation = init();
@@ -77,8 +84,11 @@ function parseEvent(event: APIGatewayProxyEventV2) {
   };
 }
 
-export async function handler(event: APIGatewayProxyEventV2): Promise<ApiGatewayV2Response> {
+export async function handler(event: APIGatewayProxyEventV2, context?: Context): Promise<ApiGatewayV2Response> {
+  if (context) logger.addContext(context);
   await initaliation;
+  // Retry when VerID setup failed at cold start (e.g. throttled secret fetch), so this container recovers
+  verIdAuthenticator ??= await verIdAuthenticatorFromEnv();
 
   if (!OIDC || !haalCentraalApi) {
     throw Error('Failed to initalize properly');
@@ -101,11 +111,12 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<ApiGateway
       useYiviKvk: process.env.USE_YIVI_KVK === 'true',
       haalCentraalApi: haalCentraalApi,
       openKlantApi: openKlantApi,
+      verIdAuthenticator: verIdAuthenticator,
       contactgegevensLive: process.env.CONTACTGEGEVENS_LIVE === 'True',
     });
     return await requestHandler.handleRequest();
   } catch (err) {
-    console.error(err);
+    logger.error('Error occurred while handling auth request', { error: err });
     return Response.error(500);
   }
 }

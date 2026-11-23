@@ -258,6 +258,10 @@
       "type": "runtime"
     },
     {
+      "name": "@aws-sdk/lib-dynamodb",
+      "type": "runtime"
+    },
+    {
       "name": "@aws-solutions-constructs/aws-lambda-dynamodb",
       "type": "runtime"
     },
@@ -291,6 +295,11 @@
     },
     {
       "name": "@types/mustache",
+      "type": "runtime"
+    },
+    {
+      "name": "@ver-id/node-client",
+      "version": "0.16.0",
       "type": "runtime"
     },
     {

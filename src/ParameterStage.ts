@@ -62,10 +62,23 @@ export class ssmParamsConstruct extends Construct {
       description: 'Feature flag Yivi using KVK',
     });
 
+    new SSM.StringParameter(this, 'ssm_use_yivi_signicat', {
+      stringValue: 'true',
+      parameterName: Statics.ssmUseYiviSignicat,
+      description: 'Feature flag: show Yivi via Signicat on the login page (true/false)',
+    });
+
+    new SSM.StringParameter(this, 'ssm_use_yivi_verid', {
+      stringValue: 'false',
+      parameterName: Statics.ssmUseYiviVerId,
+      description: 'Feature flag: the Yivi button logs in via VerID (multi wallet), takes precedence over useYiviSignicat (true/false)',
+    });
+
     /**
      * authentication parameters
      */
     this.addSignicatOidcParameters();
+    this.addVerIdParameters();
 
     new SSM.StringParameter(this, 'ssm_auth_3', {
       stringValue: 'openid',
@@ -274,6 +287,33 @@ export class ssmParamsConstruct extends Construct {
     });
   }
 
+
+  addVerIdParameters() {
+    new StringParameter(this, 'verid-issuer-uri', {
+      parameterName: Statics._VerIdIssuerUri,
+      description: 'Mijn-Nijmegen VerID Config - OAuth issuer URI (Configuration tab of the authentication flow in VerID Studio)',
+      stringValue: '-',
+    });
+    new StringParameter(this, 'verid-client-id', {
+      parameterName: Statics._VerIdClientId,
+      description: 'Mijn-Nijmegen VerID Config - Authentication flow id (used as OAuth client id)',
+      stringValue: '-',
+    });
+    new Secret(this, 'verid-client-secret', {
+      secretName: Statics._VerIdClientSecret,
+      description: 'Mijn-Nijmegen VerID Config - Client secret (OAUTH secret, key as base64url)',
+    });
+    new StringParameter(this, 'verid-redirect-url', {
+      parameterName: Statics._VerIdRedirectUrl,
+      description: 'Mijn-Nijmegen VerID Config - Redirect URL registered on the flow (our /auth endpoint)',
+      stringValue: '-',
+    });
+    new StringParameter(this, 'verid-scope', {
+      parameterName: Statics._VerIdScope,
+      description: 'Mijn-Nijmegen VerID Config - [Scopes](https://docs.ver.id/platform/authentication/scopes) to request, e.g. \'openid testNin\' for test wallets on dev/acceptance, refused on production (prod: \'openid nin\')',
+      stringValue: 'openid nin',
+    });
+  }
 
   addSignicatOidcParameters() {
     new StringParameter(this, 'oidc-client-id', {

@@ -1,10 +1,11 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ApiGatewayV2Response, Response } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { AWS, environmentVariables } from '@gemeentenijmegen/utils';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { APIGatewayProxyEventV2, Context } from 'aws-lambda';
 import { PersoonsgegevensRequestHandler } from './persoonsgegevensRequestHandler';
 import { ApiClient as ApiClientV2 } from '../../shared/ApiClient';
 import { HaalCentraalApi } from '../../shared/HaalCentraalApi';
+import { logger } from '../../shared/Logger';
 import { NotifyNLApi } from '../../shared/NotifyNLApi';
 import { OpenKlantApi } from '../../shared/OpenKlantApi';
 
@@ -98,7 +99,7 @@ function parseEvent(event: APIGatewayProxyEventV2): any {
       const params = new URLSearchParams(decodedBody);
       body = Object.fromEntries(params.entries());
     } catch (error) {
-      console.log(error);
+      logger.warn('Could not parse the request body, continuing with an empty body', { error });
       body = {};
     }
   }
@@ -111,7 +112,8 @@ function parseEvent(event: APIGatewayProxyEventV2): any {
   };
 }
 
-export async function handler(event: any): Promise<ApiGatewayV2Response> {
+export async function handler(event: any, context?: Context): Promise<ApiGatewayV2Response> {
+  if (context) logger.addContext(context);
   await initialization;
 
   try {
@@ -134,7 +136,7 @@ export async function handler(event: any): Promise<ApiGatewayV2Response> {
     return await requestHandler.handleRequest(params);
 
   } catch (err) {
-    console.debug(err);
+    logger.error('Error occurred while handling persoonsgegevens request', { error: err });
     return Response.error(500);
   }
 };

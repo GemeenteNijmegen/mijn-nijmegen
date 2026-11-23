@@ -29,6 +29,18 @@ export abstract class Statics {
    */
   static readonly ssmUseYiviKvk: string = '/cdk/mijn-nijmegen/useYiviKvk';
 
+  /**
+   * Feature flag (resolved at deploy time like ssmUseYiviKvk, so changing it needs a redeploy):
+   * 'true' shows Yivi via Signicat on the login page, 'false' hides it.
+   */
+  static readonly ssmUseYiviSignicat: string = '/cdk/mijn-nijmegen/useYiviSignicat';
+
+  /**
+   * Feature flag (resolved at deploy time, so changing it needs a redeploy):
+   * 'true' makes the Yivi button log in via VerID (multi wallet) instead of Signicat.
+   */
+  static readonly ssmUseYiviVerId: string = '/cdk/mijn-nijmegen/useYiviVerId';
+
   // MARK: OpenIDConnect
 
   /**
@@ -51,6 +63,16 @@ export abstract class Statics {
   static readonly _OIDCClientWellKnown: string = '/cdk/mijn-nijmegen/oidc/well-knonw-url';
   static readonly _OIDCClientRedirectUrl: string = '/cdk/mijn-nijmegen/oidc/redirect-url';
 
+  // MARK: VerID
+
+  /**
+   * VerID authentication flow configuration (from VerID Studio)
+   */
+  static readonly _VerIdIssuerUri: string = '/cdk/mijn-nijmegen/verid/issuer-uri';
+  static readonly _VerIdClientId: string = '/cdk/mijn-nijmegen/verid/client-id';
+  static readonly _VerIdClientSecret: string = '/cdk/mijn-nijmegen/verid/clientsecret';
+  static readonly _VerIdRedirectUrl: string = '/cdk/mijn-nijmegen/verid/redirect-url';
+  static readonly _VerIdScope: string = '/cdk/mijn-nijmegen/verid/scope';
 
   // MARK: API config (mTLS)
   /**
