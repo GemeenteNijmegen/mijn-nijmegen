@@ -308,6 +308,11 @@ export class ssmParamsConstruct extends Construct {
       description: 'Mijn-Nijmegen VerID Config - Redirect URL registered on the flow (our /auth endpoint)',
       stringValue: '-',
     });
+    new StringParameter(this, 'verid-scope', {
+      parameterName: Statics._VerIdScope,
+      description: 'Mijn-Nijmegen VerID Config - [Scopes](https://docs.ver.id/platform/authentication/scopes) to request, e.g. \'openid testnin\' for test wallets on dev (prod: \'openid nin\')',
+      stringValue: 'openid nin',
+    });
   }
 
   addSignicatOidcParameters() {

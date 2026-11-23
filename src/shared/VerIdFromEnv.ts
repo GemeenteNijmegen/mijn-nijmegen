@@ -30,7 +30,7 @@ export async function verIdAuthenticatorFromEnv(): Promise<VerIdAuthenticator | 
       }),
     });
     logger.debug('VerID authenticator ready');
-    return new VerIdAuthenticator({ client });
+    return new VerIdAuthenticator({ client, scope: process.env.VERID_SCOPE });
   } catch (error) {
     logger.error('VerID is enabled but could not be set up, VerID login is not available', { error });
     return undefined;
