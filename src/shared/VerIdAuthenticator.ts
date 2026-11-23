@@ -9,13 +9,14 @@ export interface VerIdAuthenticatorProps {
    * because the login and the callback are handled by different invocations.
    */
   client: Pick<VeridAuthenticationClient, 'createSession' | 'finishSession'>;
-}
 
-/**
- * Scopes requested from VerID: `nin` makes the wallet disclose the national
- * identification number (BSN) as `nin.identifier`.
- */
-const SCOPE = 'openid nin';
+  /**
+   * Scopes requested from VerID, per environment (dev uses test wallets).
+   * `nin` makes the wallet disclose the national identification number (BSN) as `nin.identifier`.
+   * @default 'openid nin'
+   */
+  scope?: string;
+}
 
 /**
  * Thin wrapper around the VerID OAuth (code + PKCE) client for the login and
@@ -23,9 +24,11 @@ const SCOPE = 'openid nin';
  */
 export class VerIdAuthenticator {
   private readonly client: VerIdAuthenticatorProps['client'];
+  private readonly scope: string;
 
   constructor(props: VerIdAuthenticatorProps) {
     this.client = props.client;
+    this.scope = props.scope ?? 'openid nin';
   }
 
   /**
@@ -34,7 +37,7 @@ export class VerIdAuthenticator {
    */
   async start(): Promise<{ url: string; state: string }> {
     logger.debug('Starting VerID login');
-    const { url, state } = await this.client.createSession({ scope: SCOPE });
+    const { url, state } = await this.client.createSession({ scope: this.scope });
     return { url, state };
   }
 

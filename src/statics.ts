@@ -72,6 +72,7 @@ export abstract class Statics {
   static readonly _VerIdClientId: string = '/cdk/mijn-nijmegen/verid/client-id';
   static readonly _VerIdClientSecret: string = '/cdk/mijn-nijmegen/verid/clientsecret';
   static readonly _VerIdRedirectUrl: string = '/cdk/mijn-nijmegen/verid/redirect-url';
+  static readonly _VerIdScope: string = '/cdk/mijn-nijmegen/verid/scope';
 
   // MARK: API config (mTLS)
   /**

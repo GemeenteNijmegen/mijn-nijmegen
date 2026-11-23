@@ -22,6 +22,12 @@ describe('VerIdAuthenticator', () => {
     expect(result).toEqual({ url: 'https://verid.example.com/authorize?x=1', state: 'the-state' });
   });
 
+  test('start requests the configured scope', async () => {
+    const client = fakeClient();
+    await new VerIdAuthenticator({ client, scope: 'openid testnin' }).start();
+    expect(client.createSession).toHaveBeenCalledWith({ scope: 'openid testnin' });
+  });
+
   test('finish returns the bsn from nin.identifier', async () => {
     const client = fakeClient();
     const bsn = await new VerIdAuthenticator({ client }).finish(CALLBACK, 'the-state');
