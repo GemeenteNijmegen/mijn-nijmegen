@@ -47,6 +47,8 @@ export async function handler(
 ): Promise<ApiGatewayV2Response> {
   if (context) logger.addContext(context);
   await init;
+  // Retry when VerID setup failed at cold start (e.g. throttled secret fetch), so this container recovers
+  verIdAuthenticator ??= await verIdAuthenticatorFromEnv();
 
   const loginRequestHandler = new LoginRequestHandler({
     oidcScope: process.env.OIDC_SCOPE ?? '',

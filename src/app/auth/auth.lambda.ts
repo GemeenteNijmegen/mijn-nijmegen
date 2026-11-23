@@ -87,6 +87,8 @@ function parseEvent(event: APIGatewayProxyEventV2) {
 export async function handler(event: APIGatewayProxyEventV2, context?: Context): Promise<ApiGatewayV2Response> {
   if (context) logger.addContext(context);
   await initaliation;
+  // Retry when VerID setup failed at cold start (e.g. throttled secret fetch), so this container recovers
+  verIdAuthenticator ??= await verIdAuthenticatorFromEnv();
 
   if (!OIDC || !haalCentraalApi) {
     throw Error('Failed to initalize properly');
