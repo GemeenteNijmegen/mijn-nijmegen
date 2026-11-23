@@ -138,7 +138,7 @@ test('VerIdWiredIntoLoginAndAuthLambdas', () => {
     SSESpecification: { SSEEnabled: true, SSEType: 'KMS' },
   });
 
-  const verIdEnv = ['USE_YIVI_VERID', 'VERID_ISSUER_URI', 'VERID_CLIENT_ID', 'VERID_REDIRECT_URL', 'VERID_SCOPE', 'VERID_CLIENT_SECRET_ARN', 'VERID_CACHE_TABLE'];
+  const verIdEnv = ['USE_YIVI_VERID', 'VERID_ISSUER_URI', 'VERID_CLIENT_ID', 'VERID_REDIRECT_URL', 'VERID_SCOPE', 'VERID_ALLOW_TEST_NIN', 'VERID_CLIENT_SECRET_ARN', 'VERID_CACHE_TABLE'];
   for (const description of ['Login-pagina voor de Mijn Nijmegen-applicatie.', 'Authenticatie-lambda voor de Mijn Nijmegen-applicatie.']) {
     template.hasResourceProperties('AWS::Lambda::Function', {
       Description: description,

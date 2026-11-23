@@ -66,6 +66,23 @@ describe('verIdAuthenticatorFromEnv', () => {
     }));
   });
 
+  test.each([undefined, 'false'])('refuses the testNin scope and reads no secret when VERID_ALLOW_TEST_NIN is %s', async (allow) => {
+    process.env.VERID_SCOPE = 'openid testNin';
+    if (allow === undefined) {
+      delete process.env.VERID_ALLOW_TEST_NIN;
+    } else {
+      process.env.VERID_ALLOW_TEST_NIN = allow;
+    }
+    expect(await verIdAuthenticatorFromEnv()).toBeUndefined();
+    expect(secretsMock.commandCalls(GetSecretValueCommand)).toHaveLength(0);
+  });
+
+  test('allows the testNin scope when VERID_ALLOW_TEST_NIN is true', async () => {
+    process.env.VERID_SCOPE = 'openid testNin';
+    process.env.VERID_ALLOW_TEST_NIN = 'true';
+    expect(await verIdAuthenticatorFromEnv()).toBeInstanceOf(VerIdAuthenticator);
+  });
+
   test('keeps the PKCE verifiers in the DynamoDB table for ten minutes', async () => {
     await verIdAuthenticatorFromEnv();
     expect(mockedCache).toHaveBeenCalledWith(expect.objectContaining({ tableName: 'verid-cache', options: { ttlSeconds: 600 } }));
