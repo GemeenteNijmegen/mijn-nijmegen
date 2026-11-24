@@ -165,7 +165,7 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     monitorLoginPage: false,
     useGemachtigd: true,
     gemachtigdePortaalGatewayHost: 'gemachtigd-api.mijn.mijn-dev.csp-nijmegen.nl',
-    useYiviVerId: false,
+    useYiviVerId: true,
   },
   acceptance: {
     branch: 'acceptance',
