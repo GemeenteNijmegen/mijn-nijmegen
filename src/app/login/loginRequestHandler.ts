@@ -5,8 +5,10 @@ import {
 } from '@gemeentenijmegen/apigateway-http/lib/V2/Response';
 import { Session } from '@gemeentenijmegen/session';
 import * as loginTemplate from './templates/login.mustache';
+import { logger } from '../../shared/Logger';
 import { OpenIDConnect } from '../../shared/OpenIDConnect';
 import { render } from '../../shared/render';
+import { VerIdAuthenticator } from '../../shared/VerIdAuthenticator';
 
 interface LoginRequestHandlerProps {
   /**
@@ -50,6 +52,17 @@ interface LoginRequestHandlerProps {
   useGemachtigd?: boolean;
 
   /**
+   * Feature flag for Yivi via Signicat. When false the Yivi login option is hidden
+   * and `method=yivi` is rejected. Undefined means enabled.
+   */
+  useYiviSignicatEnabled?: boolean;
+
+  /**
+   * When set (the VerID feature flag is on), the Yivi button logs in via VerID instead of Signicat
+   */
+  verIdAuthenticator?: VerIdAuthenticator;
+
+  /**
    * OpenIDConnect client
    */
   oidc: OpenIDConnect;
@@ -84,7 +97,7 @@ export class LoginRequestHandler {
     let session = new Session(params.cookies!, dynamoDBClient);
     await session.init();
     if (session.isLoggedIn() === true) {
-      console.debug('redirect to home');
+      logger.debug('Already logged in, redirect to home');
       return Response.redirect('/');
     }
 
@@ -102,12 +115,16 @@ export class LoginRequestHandler {
     return Response.html(html);
   }
 
+  private yiviEnabled() {
+    return !!this.config.verIdAuthenticator || (!!this.config.yiviScope && this.config.useYiviSignicatEnabled !== false);
+  }
+
   private addAuthMethods(): AuthMethod[] {
     const authMethods = [];
     if (this.config?.digidScope) {
       authMethods.push(this.authMethodData('digid', 'DigiD'));
     }
-    if (this.config?.yiviScope) {
+    if (this.yiviEnabled()) {
       authMethods.push(this.authMethodData('yivi', 'Yivi'));
     }
     if (this.config?.eHerkenningScope) {
@@ -115,7 +132,7 @@ export class LoginRequestHandler {
     }
     if (this.config?.useGemachtigd) {
       authMethods.push(this.authMethodData('walletGemachtigd', 'ID Wallet'));
-      authMethods.push(this.authMethodData('digidMachtigen', 'DigiD machtigen' ));
+      authMethods.push(this.authMethodData('digidMachtigen', 'DigiD machtigen'));
     }
     return authMethods;
   }
@@ -157,11 +174,21 @@ export class LoginRequestHandler {
   }
 
   private async setupAuthenticationRedirect(session: Session, method: string) {
+    if (method === 'yivi' && !this.yiviEnabled()) {
+      // Yivi was switched off while the user had the login page open: show the page again without it
+      logger.warn('Yivi login requested but Yivi is disabled, back to login');
+      return Response.redirect('/login');
+    }
+
     const supportedMethod = this.addAuthMethods().find(
       (known) => known.methodName == method,
     );
     if (!supportedMethod) {
       throw Error('Authentication method is not suported!');
+    }
+
+    if (method === 'yivi' && this.config.verIdAuthenticator) {
+      return this.setupVerIdRedirect(session, this.config.verIdAuthenticator);
     }
 
     const baseOidcScope = this.config.oidcScope;
@@ -210,5 +237,27 @@ export class LoginRequestHandler {
     }
 
     return Response.redirect(loginUrl.toString(), 302, session.getCookie({ sameSite: 'lax' }));
+  }
+
+  /**
+   * Yivi via VerID: VerID generates the state itself (the PKCE verifier is stored under it).
+   * If VerID cannot start a login, show the service unavailable error page: the other methods are not affected.
+   */
+  private async setupVerIdRedirect(session: Session, verId: VerIdAuthenticator) {
+    let login;
+    try {
+      login = await verId.start();
+    } catch (error) {
+      logger.error('Starting a VerID login failed', { error });
+      return Response.error(503);
+    }
+    await session.createSession({
+      loggedin: { BOOL: false },
+      state: { S: login.state },
+      method: { S: 'yivi' },
+      // The callback follows the provider that started the login, not its own configuration
+      provider: { S: 'verid' },
+    });
+    return Response.redirect(login.url, 302, session.getCookie({ sameSite: 'lax' }));
   }
 }

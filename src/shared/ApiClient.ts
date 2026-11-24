@@ -1,6 +1,7 @@
 import https from 'https';
 import { AWS } from '@gemeentenijmegen/utils';
 import axios, { AxiosInstance } from 'axios';
+import { logger } from './Logger';
 
 export interface ApiClientOptions {
   /**
@@ -80,7 +81,7 @@ export class ApiClient {
    */
   async postData(endpoint: string, body: any, headers?: any): Promise<any> {
     const config = await this.getRequestConfiguration();
-    console.time('request to ' + endpoint);
+    console.time('request to ' + withoutQuery(endpoint));
     try {
       const response = await this.axios.post(endpoint, body, {
         httpsAgent: config.httpsAgent,
@@ -90,10 +91,10 @@ export class ApiClient {
         },
         timeout: this.options?.timeout,
       });
-      console.timeEnd('request to ' + endpoint);
+      console.timeEnd('request to ' + withoutQuery(endpoint));
       return response.data;
     } catch (error) {
-      console.timeEnd('request to ' + endpoint);
+      console.timeEnd('request to ' + withoutQuery(endpoint));
       this.handleErrors(error, endpoint);
     }
   }
@@ -106,7 +107,7 @@ export class ApiClient {
    */
   async putData(endpoint: string, body: any, headers?: any): Promise<any> {
     const config = await this.getRequestConfiguration();
-    console.time('request to ' + endpoint);
+    console.time('request to ' + withoutQuery(endpoint));
     try {
       const response = await this.axios.put(endpoint, body, {
         httpsAgent: config.httpsAgent,
@@ -116,10 +117,10 @@ export class ApiClient {
         },
         timeout: this.options?.timeout,
       });
-      console.timeEnd('request to ' + endpoint);
+      console.timeEnd('request to ' + withoutQuery(endpoint));
       return response.data;
     } catch (error) {
-      console.timeEnd('request to ' + endpoint);
+      console.timeEnd('request to ' + withoutQuery(endpoint));
       this.handleErrors(error, endpoint);
     }
   }
@@ -131,7 +132,7 @@ export class ApiClient {
    */
   async getData(endpoint: string, headers?: any): Promise<any> {
     const config = await this.getRequestConfiguration();
-    console.time('GET request to ' + endpoint);
+    console.time('GET request to ' + withoutQuery(endpoint));
     try {
       const response = await this.axios.get(endpoint, {
         httpsAgent: config.httpsAgent,
@@ -141,20 +142,21 @@ export class ApiClient {
         },
         timeout: this.options?.timeout,
       });
-      console.timeEnd('GET request to ' + endpoint);
+      console.timeEnd('GET request to ' + withoutQuery(endpoint));
       return response.data;
     } catch (error) {
-      console.timeEnd('GET request to ' + endpoint);
+      console.timeEnd('GET request to ' + withoutQuery(endpoint));
       this.handleErrors(error, endpoint);
     }
   }
 
   private handleErrors(error: any, endpoint: string) {
+    const url = withoutQuery(endpoint);
     if (axios.isAxiosError(error)) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log('http status for ' + endpoint + ': ' + error.response.status);
+        logger.info('Request returned an error status', { url, status: error.response.status });
       } else if (error?.code === 'ECONNABORTED') {
         // Check for a timeout
         throw new Error('Het ophalen van gegevens duurt te lang.');
@@ -162,13 +164,13 @@ export class ApiClient {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        console.error(error?.code);
+        logger.error('Request got no response', { url, code: error.code });
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.error(error.message);
+        logger.error('Request could not be made', { url, error: error.message });
       }
     } else {
-      console.error(error.message);
+      logger.error('Request failed', { url, error: error.message });
     }
 
     throw new Error('Het ophalen van gegevens is misgegaan.');
@@ -230,4 +232,11 @@ export class ApiClient {
 
     return this.privatekey;
   }
+}
+
+/**
+ * The endpoint without its query string, for logs: OpenKlant filters on the BSN in the query
+ */
+function withoutQuery(endpoint: string) {
+  return endpoint.split('?')[0];
 }
