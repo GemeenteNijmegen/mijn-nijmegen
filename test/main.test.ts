@@ -84,29 +84,21 @@ test('StackHasLambdas', () => {
   template.resourceCountIs('AWS::Lambda::Function', 9);
 });
 
-test('LoginLambdaGetsuseYiviSignicatFlagFromSsmAtDeployTime', () => {
-  const app = new App();
-  const keyStack = new KeyStack(app, 'keystack');
-  const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key });
-  new DNSStack(app, 'dns', { env: mockEnv, configuration: config });
-  const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'test', configuration: config });
-  const template = Template.fromStack(stack);
-  template.hasParameter('*', {
-    Type: 'AWS::SSM::Parameter::Value<String>',
-    Default: '/cdk/mijn-nijmegen/useYiviSignicat',
-  });
-  template.hasResourceProperties('AWS::Lambda::Function', {
-    Environment: {
-      Variables: Match.objectLike({
-        USE_YIVI_SIGNICAT: Match.anyValue(),
-      }),
-    },
-  });
-  // Resolved at deploy time, so the login lambda needs no runtime SSM access
-  const loginPolicies = Object.entries(template.findResources('AWS::IAM::Policy'))
-    .filter(([id]) => id.startsWith('loginfunction'));
-  expect(loginPolicies).toHaveLength(1);
-  expect(JSON.stringify(loginPolicies)).not.toContain('ssm:GetParameter');
+test('Yivi feature flags come from the configuration', () => {
+  const envOf = (configuration: Configuration) => {
+    const app = new App();
+    const keyStack = new KeyStack(app, 'keystack');
+    const sessionsStack = new SessionsStack(app, 'test', { key: keyStack.key });
+    const stack = new ApiStack(app, 'api', { sessionsTable: sessionsStack.sessionsTable, branch: 'test', configuration });
+    const login: any = Object.values(Template.fromStack(stack).findResources('AWS::Lambda::Function', {
+      Properties: { Description: 'Login-pagina voor de Mijn Nijmegen-applicatie.' },
+    }))[0];
+    const { USE_YIVI_SIGNICAT, USE_YIVI_VERID } = login.Properties.Environment.Variables;
+    return { USE_YIVI_SIGNICAT, USE_YIVI_VERID };
+  };
+  expect(envOf(config)).toEqual({ USE_YIVI_SIGNICAT: 'true', USE_YIVI_VERID: 'false' });
+  expect(envOf({ ...config, useYiviSignicat: false, useYiviVerId: true }))
+    .toEqual({ USE_YIVI_SIGNICAT: 'false', USE_YIVI_VERID: 'true' });
 });
 
 
@@ -114,7 +106,6 @@ test('VerIdParametersExist', () => {
   const app = new App();
   const stack = new ParameterStack(app, 'test', { configuration: config });
   const template = Template.fromStack(stack);
-  template.hasResourceProperties('AWS::SSM::Parameter', { Name: '/cdk/mijn-nijmegen/useYiviVerId', Value: 'false' });
   for (const name of ['issuer-uri', 'client-id', 'redirect-url']) {
     template.hasResourceProperties('AWS::SSM::Parameter', { Name: `/cdk/mijn-nijmegen/verid/${name}` });
   }
@@ -168,11 +159,7 @@ test('StackHasParameters', () => {
   const app = new App();
   const stack = new ParameterStack(app, 'test', { configuration: config });
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::SSM::Parameter', 34);
-  template.hasResourceProperties('AWS::SSM::Parameter', {
-    Name: '/cdk/mijn-nijmegen/useYiviSignicat',
-    Value: 'true',
-  });
+  template.resourceCountIs('AWS::SSM::Parameter', 32);
 });
 
 

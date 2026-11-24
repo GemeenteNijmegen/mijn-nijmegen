@@ -299,7 +299,6 @@
     },
     {
       "name": "@ver-id/node-client",
-      "version": "0.16.0",
       "type": "runtime"
     },
     {

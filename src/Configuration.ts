@@ -114,6 +114,18 @@ export interface Configuration {
   readonly gemachtigdePortaalGatewayHost?: string;
 
   /**
+   * Feature flag: show Yivi via Signicat on the login page
+   * @default true
+   */
+  readonly useYiviSignicat?: boolean;
+
+  /**
+   * Feature flag: the Yivi button logs in via VerID (multi wallet), takes precedence over useYiviSignicat
+   * @default false
+   */
+  readonly useYiviVerId?: boolean;
+
+  /**
    * Sets the log level for parts of this application
    * @default INFO
    */
@@ -153,6 +165,7 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     monitorLoginPage: false,
     useGemachtigd: true,
     gemachtigdePortaalGatewayHost: 'gemachtigd-api.mijn.mijn-dev.csp-nijmegen.nl',
+    useYiviVerId: true,
   },
   acceptance: {
     branch: 'acceptance',
@@ -169,6 +182,7 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     useZakenFromAggregatorAPI: true,
     mijnProductenLive: true,
     logLevel: 'DEBUG',
+    useYiviVerId: true,
   },
   production: {
     branch: 'production',

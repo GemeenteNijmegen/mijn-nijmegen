@@ -17,7 +17,7 @@ const project = new GemeenteNijmegenCdkApp({
     '@aws-sdk/client-dynamodb',
     '@aws-sdk/client-secrets-manager',
     '@aws-sdk/lib-dynamodb',
-    '@ver-id/node-client@0.16.0',
+    '@ver-id/node-client',
     '@gemeentenijmegen/projen-project-type',
     '@gemeentenijmegen/aws-constructs',
     '@gemeentenijmegen/apiclient',
