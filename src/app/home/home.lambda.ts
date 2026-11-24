@@ -21,7 +21,7 @@ function parseEvent(event: APIGatewayProxyEventV2): eventParams {
 }
 
 export async function handler(event: any, context?: Context): Promise<ApiGatewayV2Response> {
-  if (context) logger.addContext(context);
+  context && logger.addContext(context);
   try {
     const params = parseEvent(event);
     return await requestHandler.handleRequest(params);
