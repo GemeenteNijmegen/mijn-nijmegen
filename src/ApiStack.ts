@@ -98,7 +98,7 @@ export class ApiStack extends Stack implements Configurable {
    */
   private verIdEnvironment() {
     return {
-      USE_YIVI_VERID: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviVerId), // Feature flag for VerID login
+      USE_YIVI_VERID: this.configuration.useYiviVerId ? 'true' : 'false', // Feature flag for VerID login
       VERID_ISSUER_URI: StringParameter.valueForStringParameter(this, Statics._VerIdIssuerUri),
       VERID_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics._VerIdClientId),
       VERID_REDIRECT_URL: StringParameter.valueForStringParameter(this, Statics._VerIdRedirectUrl),
@@ -334,7 +334,7 @@ export class ApiStack extends Stack implements Configurable {
         USE_YIVI_KVK: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviKvk), // Feature flag for kvk bsn conditional disclosure
         NODE_OPTIONS: this.configuration.nodeOptions ?? '',
         USE_GEMACHTIGD: this.configuration.useGemachtigd ? 'true' : 'false',
-        USE_YIVI_SIGNICAT: StringParameter.valueForStringParameter(this, Statics.ssmUseYiviSignicat),
+        USE_YIVI_SIGNICAT: this.configuration.useYiviSignicat === false ? 'false' : 'true',
         ...this.verIdEnvironment(),
       },
     });

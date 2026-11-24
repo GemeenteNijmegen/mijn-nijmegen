@@ -62,18 +62,6 @@ export class ssmParamsConstruct extends Construct {
       description: 'Feature flag Yivi using KVK',
     });
 
-    new SSM.StringParameter(this, 'ssm_use_yivi_signicat', {
-      stringValue: 'true',
-      parameterName: Statics.ssmUseYiviSignicat,
-      description: 'Feature flag: show Yivi via Signicat on the login page (true/false)',
-    });
-
-    new SSM.StringParameter(this, 'ssm_use_yivi_verid', {
-      stringValue: 'false',
-      parameterName: Statics.ssmUseYiviVerId,
-      description: 'Feature flag: the Yivi button logs in via VerID (multi wallet), takes precedence over useYiviSignicat (true/false)',
-    });
-
     /**
      * authentication parameters
      */

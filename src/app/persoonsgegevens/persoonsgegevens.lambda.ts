@@ -113,7 +113,7 @@ function parseEvent(event: APIGatewayProxyEventV2): any {
 }
 
 export async function handler(event: any, context?: Context): Promise<ApiGatewayV2Response> {
-  if (context) logger.addContext(context);
+  context && logger.addContext(context);
   await initialization;
 
   try {
