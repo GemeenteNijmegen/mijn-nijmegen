@@ -52,7 +52,7 @@ interface LoginRequestHandlerProps {
   useGemachtigd?: boolean;
 
   /**
-   * Runtime feature flag (SSM) for Yivi via Signicat. When false the Yivi login option is hidden
+   * Feature flag for Yivi via Signicat. When false the Yivi login option is hidden
    * and `method=yivi` is rejected. Undefined means enabled.
    */
   useYiviSignicatEnabled?: boolean;
