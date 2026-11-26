@@ -197,6 +197,7 @@ const EnvironmentConfigurations: { [key: string]: Configuration } = {
     zakenUseSubmissions: true,
     useZakenFromAggregatorAPI: true,
     nodeOptions: '--no-deprecation', // Too much noise cased by DEP0169 error in node v24.
+    useYiviVerId: true,
   },
 };
 
